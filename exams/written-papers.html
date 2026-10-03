@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Arpit">
+  <meta name="description" content="University Written Examination Papers & Model Evaluator Answers — AI & Machine Learning MiniBook. Complete 2-Mark, 5-Mark, and 10-Mark question papers with marking schemes and DU blueprints.">
+  <title>University Written Papers & Model Answers | AIML MiniBook 🤖 Arpit</title>
+
+  <link rel="manifest" href="../manifest.json">
+  <meta name="theme-color" content="#17365D">
+
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/animations.css">
+  <link rel="stylesheet" href="../assets/css/timer.css">
+  <link rel="stylesheet" href="../assets/css/chapters.css">
+
+  <style>
+    .paper-container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: var(--em-space-6) var(--em-space-4);
+    }
+    .paper-header {
+      background: var(--em-surface-1);
+      border: 1px solid var(--em-border);
+      border-radius: var(--em-radius-lg);
+      padding: var(--em-space-6);
+      margin-bottom: var(--em-space-6);
+      box-shadow: var(--em-shadow-sm);
+    }
+    .paper-tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: var(--em-space-4);
+      border-bottom: 1px solid var(--em-border);
+      padding-bottom: var(--em-space-3);
+    }
+    .paper-tab-btn {
+      padding: 8px 16px;
+      border-radius: var(--em-radius-sm);
+      border: 1px solid var(--em-border);
+      background: var(--em-surface-2);
+      color: var(--em-text-secondary);
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all var(--em-motion-fast) var(--em-ease);
+    }
+    .paper-tab-btn:hover {
+      border-color: var(--em-accent);
+      color: var(--em-text);
+    }
+    .paper-tab-btn.active {
+      background: var(--em-accent);
+      color: #FFFFFF;
+      border-color: var(--em-accent);
+    }
+    .paper-sheet {
+      background: var(--em-surface-1);
+      border: 1px solid var(--em-border);
+      border-radius: var(--em-radius-lg);
+      padding: var(--em-space-8);
+      margin-bottom: var(--em-space-6);
+      box-shadow: var(--em-shadow-sm);
+    }
+    .official-header {
+      text-align: center;
+      border-bottom: 2px solid var(--em-border);
+      padding-bottom: var(--em-space-4);
+      margin-bottom: var(--em-space-6);
+    }
+    .official-header h2 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .official-sub {
+      font-size: 0.85rem;
+      color: var(--em-text-muted);
+      margin-bottom: 8px;
+    }
+    .paper-meta-row {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--em-font-mono);
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--em-text-secondary);
+      margin-top: 10px;
+    }
+    .section-title-bar {
+      background: var(--em-surface-2);
+      border-left: 4px solid var(--em-accent);
+      padding: 8px 16px;
+      margin: var(--em-space-6) 0 var(--em-space-4) 0;
+      font-size: 1rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .written-q-card {
+      background: var(--em-surface-2);
+      border: 1px solid var(--em-border);
+      border-radius: var(--em-radius-md);
+      padding: var(--em-space-5);
+      margin-bottom: var(--em-space-4);
+      transition: all var(--em-motion-fast) var(--em-ease);
+    }
+    .written-q-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+    .q-num {
+      font-weight: 800;
+      color: var(--em-accent);
+      font-size: 1.05rem;
+    }
+    .marks-tag {
+      font-family: var(--em-font-mono);
+      font-weight: 700;
+      font-size: 0.80rem;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(59, 130, 246, 0.12);
+      color: #3b82f6;
+    }
+    .written-q-text {
+      font-size: 0.98rem;
+      font-weight: 600;
+      line-height: 1.55;
+      color: var(--em-text);
+      margin-bottom: var(--em-space-3);
+    }
+    .reveal-solution-btn {
+      padding: 6px 14px;
+      border-radius: var(--em-radius-sm);
+      border: 1px solid var(--em-accent);
+      background: transparent;
+      color: var(--em-accent);
+      font-size: 0.80rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all var(--em-motion-fast) var(--em-ease);
+    }
+    .reveal-solution-btn:hover {
+      background: var(--em-accent);
+      color: #FFFFFF;
+    }
+    .solution-drawer {
+      display: none;
+      margin-top: var(--em-space-4);
+      padding: var(--em-space-5);
+      background: var(--em-surface-1);
+      border: 1px solid var(--em-border);
+      border-radius: var(--em-radius-md);
+      font-size: 0.90rem;
+      line-height: 1.6;
+    }
+    .solution-drawer.open {
+      display: block;
+      animation: fadeIn 0.25s ease;
+    }
+    .rubric-box {
+      background: rgba(16, 185, 129, 0.08);
+      border-left: 3px solid #10b981;
+      padding: var(--em-space-3) var(--em-space-4);
+      margin-bottom: var(--em-space-4);
+      border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+      font-size: 0.82rem;
+    }
+    .rubric-title {
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #10b981;
+      margin-bottom: 4px;
+    }
+    .trap-box {
+      background: rgba(239, 68, 68, 0.08);
+      border-left: 3px solid #ef4444;
+      padding: var(--em-space-3) var(--em-space-4);
+      margin-top: var(--em-space-4);
+      border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+      font-size: 0.82rem;
+    }
+    .trap-title {
+      font-weight: 800;
+      text-transform: uppercase;
+      color: #ef4444;
+      margin-bottom: 4px;
+    }
+    .self-eval-slider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: var(--em-space-4);
+      padding-top: var(--em-space-3);
+      border-top: 1px dashed var(--em-border);
+    }
+  </style>
+</head>
+<body>
+  <div id="progress-bar"></div>
+
+  <!-- HEADER -->
+  <header id="main-header">
+    <div class="header-left">
+      <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle Navigation">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <a href="../index.html" class="brand-logo">
+        <div class="brand-icon">📝</div>
+        <div class="brand-text">
+          <span class="main">AIML MiniBook</span>
+          <span class="sub">University Written Papers</span>
+        </div>
+      </a>
+    </div>
+
+    <span class="header-chapter-title">Theory & Written Exam Engine</span>
+
+    <div class="header-right">
+      <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-label="Toggle Reading Mode">📖</button>
+      <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle Theme">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div id="sidebar-overlay"></div>
+
+  <!-- SIDEBAR NAVIGATION -->
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">AIML Examination Hub</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section">
+        <div class="sidebar-section-label">Examination Suites</div>
+        <a href="mock-exam.html" class="sidebar-link"><span class="link-icon">🎯</span>100 MCQ Mock Simulator</a>
+        <a href="unit-quiz.html" class="sidebar-link"><span class="link-icon">⚡</span>Custom Quiz Builder</a>
+        <a href="written-papers.html" class="sidebar-link active"><span class="link-icon">📝</span>University Written Papers</a>
+        <a href="formula-sheet.html" class="sidebar-link"><span class="link-icon">📐</span>Formula & Revision Deck</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-label">Course Navigation</div>
+        <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+        <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+        <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Unit I: Ch 01 What is AI</a>
+        <a href="../chapters/ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📗</span>Unit II: Ch 14 What is ML</a>
+        <a href="../chapters/ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Unit III: Ch 30 Neural Nets</a>
+        <a href="../chapters/ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🤖</span>Unit IV: Ch 40 MDPs & RL</a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- MAIN CONTAINER -->
+  <main class="paper-container">
+    <section class="paper-header">
+      <div style="display:inline-flex; align-items:center; gap:6px; padding:4px 12px; border-radius:9999px; background:rgba(16, 185, 129, 0.12); color:#10b981; font-size:0.78rem; font-weight:700; text-transform:uppercase;">
+        🏛️ Delhi University Examination Pattern
+      </div>
+      <h1 style="font-size:1.8rem; font-weight:800; margin:8px 0;">University Theory & Written Papers</h1>
+      <p style="color:var(--em-text-secondary); font-size:0.95rem; line-height:1.6;">
+        Practice official university end-semester questions across <strong>2-Mark Short Definitions</strong>, <strong>5-Mark Structured Proofs</strong>, and <strong>10-Mark In-Depth Blueprints</strong>. Every question includes the official evaluator marking rubric, common penalty traps, and structured model answers.
+      </p>
+
+      <div class="paper-tabs">
+        <button class="paper-tab-btn active" data-paper="du-full">DU Grand Mock Paper (75 Marks)</button>
+        <button class="paper-tab-btn" data-paper="unit-1">Unit I Paper: Search (25M)</button>
+        <button class="paper-tab-btn" data-paper="unit-2">Unit II Paper: ML (25M)</button>
+        <button class="paper-tab-btn" data-paper="unit-3">Unit III Paper: Deep Learning (25M)</button>
+        <button class="paper-tab-btn" data-paper="unit-4">Unit IV Paper: RL & GenAI (25M)</button>
+      </div>
+    </section>
+
+    <!-- WRITTEN PAPER SHEET -->
+    <div id="paper-content-area"></div>
+  </main>
+
+  <script src="../assets/js/core.js"></script>
+  <script>
+    // Written Papers Database
+    const WRITTEN_PAPERS = {
+      "du-full": {
+        title: "B.Tech (Computer Science & Engineering) Semester IV Examination",
+        subject: "DSC-14: ARTIFICIAL INTELLIGENCE & MACHINE LEARNING",
+        time: "3 Hours",
+        maxMarks: "75 Marks",
+        instructions: "Attempt Section A (Compulsory 20 Marks). In Section B, attempt any FIVE out of seven questions (25 Marks). In Section C, attempt any THREE out of four long questions (30 Marks).",
+        sections: [
+          {
+            name: "Section A: Compulsory Short Answer Questions",
+            weight: "10 × 2 Marks = 20 Marks",
+            questions: [
+              {
+                id: "Q1(a)",
+                marks: "2 Marks",
+                text: "Define a Rational Agent in AI. Contrast rationality with omniscience.",
+                rubric: "1 Mark for formal expected performance definition; 1 Mark for contrasting with omniscience (knowing actual future).",
+                answer: `<strong>Model University Answer:</strong><br>
+                1. <strong>Rational Agent Definition:</strong> An agent that acts so as to maximize its expected performance measure, given its percept history and built-in background knowledge.<br>
+                2. <strong>Contrast with Omniscience:</strong>
+                <ul>
+                  <li><em>Omniscience</em> knows the actual outcome of its actions in advance and never makes mistakes (impossible in stochastic/partially observable environments).</li>
+                  <li><em>Rationality</em> maximizes <em>expected</em> performance based on available information, even if unforeseen environmental dynamics produce an unlucky outcome.</li>
+                </ul>`,
+                trap: "Do not write that a rational agent 'never makes mistakes' or 'possesses human-like emotions'. Rationality is purely mathematical expected utility maximization.",
+                chapterLink: "../chapters/ch01-what-is-ai.html"
+              },
+              {
+                id: "Q1(b)",
+                marks: "2 Marks",
+                text: "State the mathematical condition for a heuristic function h(n) to be consistent (monotonic).",
+                rubric: "1 Mark for triangle inequality formula h(n) ≤ c(n, a, n') + h(n'); 1 Mark for h(Goal) = 0 and non-negativity.",
+                answer: `<strong>Model University Answer:</strong><br>
+                A heuristic function $h(n)$ is <strong>consistent (monotonic)</strong> if for every node $n$ and every successor $n'$ generated by action $a$:<br>
+                $$\\mathbf{h(n) \\le c(n, a, n') + h(n')}$$<br>
+                where $c(n, a, n')$ is the true step cost to transition from $n$ to $n'$. Additionally, for any goal node $G$, $h(G) = 0$.<br>
+                <em>Implication:</em> $f(n) = g(n) + h(n)$ is monotonically non-decreasing along any path, guaranteeing optimal expansion without node reopenings in graph search.`,
+                trap: "Do not confuse consistency with admissibility ($h(n) \\le h^*(n)$). Consistency is a stronger, local triangle-inequality constraint.",
+                chapterLink: "../chapters/ch05-heuristics.html"
+              },
+              {
+                id: "Q1(c)",
+                marks: "2 Marks",
+                text: "Differentiate between Inductive Bias and Model Variance in machine learning.",
+                rubric: "1 Mark for defining inductive bias as prior assumptions on hypothesis space; 1 Mark for defining model variance as sensitivity to training set fluctuations.",
+                answer: `<strong>Model University Answer:</strong><br>
+                <ul>
+                  <li><strong>Inductive Bias:</strong> The set of explicit prior assumptions an algorithm makes about the hypothesis space (e.g., linearity in regression, maximum margin in SVM, or spatial locality in CNNs) to generalize from observed training points to unseen test data.</li>
+                  <li><strong>Model Variance:</strong> The sensitivity of the learned model to fluctuations in the specific training dataset drawn from the distribution. High variance means the model changes drastically with different training subsets.</li>
+                </ul>`,
+                trap: "Students often confuse inductive bias with demographic/social bias. Inductive bias is a mathematical necessity for generalization.",
+                chapterLink: "../chapters/ch16-hypothesis-classes-bias-knn.html"
+              },
+              {
+                id: "Q1(d)",
+                marks: "2 Marks",
+                text: "Why is the F1-Score preferred over standard Classification Accuracy on highly imbalanced datasets?",
+                rubric: "1 Mark for explaining the accuracy paradox (e.g. 99% accuracy by predicting majority class); 1 Mark for F1 harmonic mean penalizing zero recall/precision.",
+                answer: `<strong>Model University Answer:</strong><br>
+                In severe class imbalance (e.g., 99% non-fraud, 1% fraud), a trivial model predicting 'non-fraud' for every instance achieves 99% accuracy while detecting zero fraud (Recall = 0%).<br>
+                The <strong>F1-Score</strong> is the harmonic mean of Precision and Recall:<br>
+                $$F1 = 2 \\times \\frac{\\text{Precision} \\times \\text{Recall}}{\\text{Precision} + \\text{Recall}}$$<br>
+                Because the harmonic mean heavily penalizes extreme disparities, if either Precision or Recall collapses to 0, F1 collapses to 0, providing an honest performance indicator.`,
+                trap: "Always specify the formula for F1 score and mention the 'Accuracy Paradox' for full marks.",
+                chapterLink: "../chapters/ch25-precision-recall-roc-auc.html"
+              },
+              {
+                id: "Q1(e)",
+                marks: "2 Marks",
+                text: "Why does the single-layer Perceptron fail to learn the XOR logical function?",
+                rubric: "1 Mark for stating that single-layer perceptron only forms a linear hyperplane; 1 Mark for proving XOR is non-linearly separable.",
+                answer: `<strong>Model University Answer:</strong><br>
+                A single-layer Perceptron computes a linear decision boundary: $\\mathbf{w}^T\\mathbf{x} + b = 0$.<br>
+                In the XOR truth table, the positive outputs $(0,1)$ and $(1,0)$ lie on opposite diagonals from the negative outputs $(0,0)$ and $(1,1)$ in $\\mathbb{R}^2$. No single straight line can separate these two classes. Proved by Minsky & Papert (1969).`,
+                trap: "State clearly that adding a hidden layer with non-linear activations resolves this by warping feature space.",
+                chapterLink: "../chapters/ch31-perceptron-learning-algorithm.html"
+              }
+            ]
+          },
+          {
+            name: "Section B: Structured Conceptual Questions",
+            weight: "Attempt any FIVE · 5 × 5 Marks = 25 Marks",
+            questions: [
+              {
+                id: "Q2",
+                marks: "5 Marks",
+                text: "Derive the closed-form Normal Equations solution for Ordinary Least Squares (OLS) Linear Regression: w* = (XᵀX)⁻¹Xᵀy. State the condition under which (XᵀX) is invertible.",
+                rubric: "1 Mark for loss formulation; 2 Marks for matrix vector gradient d(RSS)/dw; 1 Mark for equating to 0 and solving; 1 Mark for invertibility condition (full column rank).",
+                answer: `<strong>Model University Answer:</strong><br>
+                1. <strong>Objective Formulation:</strong><br>
+                Given design matrix $\\mathbf{X} \\in \\mathbb{R}^{n \\times d}$ and target vector $\\mathbf{y} \\in \\mathbb{R}^n$, the Residual Sum of Squares (RSS) is:<br>
+                $$\\mathcal{L}(\\mathbf{w}) = \\|\\mathbf{y} - \\mathbf{X}\\mathbf{w}\\|^2 = (\\mathbf{y} - \\mathbf{X}\\mathbf{w})^T(\\mathbf{y} - \\mathbf{X}\\mathbf{w})$$<br>
+                Expanding the scalar product:<br>
+                $$\\mathcal{L}(\\mathbf{w}) = \\mathbf{y}^T\\mathbf{y} - 2\\mathbf{w}^T\\mathbf{X}^T\\mathbf{y} + \\mathbf{w}^T\\mathbf{X}^T\\mathbf{X}\\mathbf{w}$$<br>
+                2. <strong>Vector Gradient:</strong><br>
+                Taking the partial derivative with respect to parameter vector $\\mathbf{w}$:<br>
+                $$\\nabla_\\mathbf{w} \\mathcal{L}(\\mathbf{w}) = -2\\mathbf{X}^T\\mathbf{y} + 2\\mathbf{X}^T\\mathbf{X}\\mathbf{w}$$<br>
+                3. <strong>Equating to Zero:</strong><br>
+                Setting $\\nabla_\\mathbf{w} \\mathcal{L}(\\mathbf{w}) = \\mathbf{0}$ for optimality:<br>
+                $$\\mathbf{X}^T\\mathbf{X}\\mathbf{w} = \\mathbf{X}^T\\mathbf{y}$$<br>
+                4. <strong>Normal Equation:</strong><br>
+                $$\\mathbf{w}^* = (\\mathbf{X}^T\\mathbf{X})^{-1}\\mathbf{X}^T\\mathbf{y}$$<br>
+                5. <strong>Invertibility Condition:</strong> $(\\mathbf{X}^T\\mathbf{X})$ is invertible if and only if matrix $\\mathbf{X}$ has <strong>full column rank</strong> (i.e., $\\text{rank}(\\mathbf{X}) = d$), meaning no feature is a perfect linear combination of other features (no multicollinearity) and $n \\ge d$.`,
+                trap: "Remember the transpose order! $(X^T X)^{-1} X^T y$, NOT $X^T (X X^T)^{-1} y$. Forgetting the $-2$ factor or transposing incorrectly will lose marks.",
+                chapterLink: "../chapters/ch19-linear-regression-math.html"
+              },
+              {
+                id: "Q3",
+                marks: "5 Marks",
+                text: "Explain the A* Search algorithm. Prove that A* using an admissible heuristic on a tree search is guaranteed to return an optimal solution.",
+                rubric: "1 Mark for evaluation function f(n)=g(n)+h(n); 1 Mark for admissibility definition; 3 Marks for contradiction proof showing suboptimal goal cannot be expanded before optimal goal.",
+                answer: `<strong>Model University Answer:</strong><br>
+                1. <strong>A* Evaluation Function:</strong> $f(n) = g(n) + h(n)$, where $g(n)$ is known path cost from start to $n$, and $h(n)$ is admissible heuristic ($h(n) \\le h^*(n)$).<br>
+                2. <strong>Proof of Optimality:</strong><br>
+                Let $G_2$ be a suboptimal goal with true cost $g(G_2) > C^*$, where $C^*$ is the cost of optimal goal $G_1$.<br>
+                Because $G_2$ is a goal, $h(G_2) = 0$, so:<br>
+                $$f(G_2) = g(G_2) + h(G_2) = g(G_2) > C^*$$<br>
+                Now consider any node $n$ on the frontier that lies on the optimal path to $G_1$. By admissibility ($h(n) \\le h^*(n)$):<br>
+                $$f(n) = g(n) + h(n) \\le g(n) + h^*(n) = C^*$$<br>
+                Therefore, for any node $n$ on the optimal path:<br>
+                $$f(n) \\le C^* < f(G_2)$$<br>
+                Since A* always selects the frontier node with the minimum $f$-value, node $n$ will always be selected for expansion before $G_2$. By induction, all nodes along the optimal path will be expanded, and optimal goal $G_1$ will be reached and terminated before $G_2$ can ever be chosen. $\\blacksquare$`,
+                trap: "Clearly state that goal test is applied when a node is SELECTED FOR EXPANSION, not when generated. Applying goal test upon generation destroys optimality!",
+                chapterLink: "../chapters/ch07-a-star-search.html"
+              },
+              {
+                id: "Q4",
+                marks: "5 Marks",
+                text: "Explain the Backpropagation algorithm in Deep Neural Networks. Write the recursive chain rule equations for updating weights in a multi-layer network.",
+                rubric: "1 Mark for forward pass description; 2 Marks for chain rule error delta recurrence; 1 Mark for weight gradient dL/dW; 1 Mark for computational graph context.",
+                answer: `<strong>Model University Answer:</strong><br>
+                1. <strong>Concept:</strong> Backpropagation applies the calculus chain rule recursively backward from the scalar loss $\\mathcal{L}$ through computational graph layers.<br>
+                2. <strong>Forward Pass Equations:</strong><br>
+                $$\\mathbf{z}^{[l]} = \\mathbf{W}^{[l]}\\mathbf{a}^{[l-1]} + \\mathbf{b}^{[l]}, \\quad \\mathbf{a}^{[l]} = \\sigma(\\mathbf{z}^{[l]})$$<br>
+                3. <strong>Output Layer Error Delta:</strong><br>
+                $$\\boldsymbol{\\delta}^{[L]} = \\nabla_{\\mathbf{a}^{[L]}}\\mathcal{L} \\odot \\sigma'(\\mathbf{z}^{[L]})$$<br>
+                4. <strong>Hidden Layer Error Recurrence:</strong><br>
+                $$\\boldsymbol{\\delta}^{[l]} = ((\\mathbf{W}^{[l+1]})^T \\boldsymbol{\\delta}^{[l+1]}) \\odot \\sigma'(\\mathbf{z}^{[l]})$$<br>
+                5. <strong>Parameter Gradients & Updates:</strong><br>
+                $$\\frac{\\partial \\mathcal{L}}{\\partial \\mathbf{W}^{[l]}} = \\boldsymbol{\\delta}^{[l]} (\\mathbf{a}^{[l-1]})^T, \\quad \\frac{\\partial \\mathcal{L}}{\\partial \\mathbf{b}^{[l]}} = \\boldsymbol{\\delta}^{[l]}$$<br>
+                $$\\mathbf{W}^{[l]} \\leftarrow \\mathbf{W}^{[l]} - \\eta \\frac{\\partial \\mathcal{L}}{\\partial \\mathbf{W}^{[l]}}$$`,
+                trap: "Make sure to write the element-wise Hadamard product symbol $(\\odot)$ with $\\sigma'(z)$, not matrix dot product.",
+                chapterLink: "../chapters/ch35-backpropagation.html"
+              }
+            ]
+          },
+          {
+            name: "Section C: Comprehensive 10-Mark Questions",
+            weight: "Attempt any THREE · 3 × 10 Marks = 30 Marks",
+            questions: [
+              {
+                id: "Q5",
+                marks: "10 Marks",
+                text: "(a) Formulate a Markov Decision Process (MDP) using its formal 5-tuple. (b) Derive the Bellman Expectation Equation and the Bellman Optimality Equation for state-value function V(s). (c) Explain the Value Iteration algorithm with convergence conditions.",
+                rubric: "(a) 2 Marks for 5-tuple (S, A, P, R, gamma); (b) 4 Marks for Bellman derivation of V^pi(s) and V*(s); (c) 4 Marks for Value Iteration pseudocode and contraction mapping theorem.",
+                answer: `<strong>Model University Answer:</strong><br>
+                1. <strong>(a) MDP 5-Tuple Formulation:</strong><br>
+                An MDP is formally defined by $\\mathcal{M} = (\\mathcal{S}, \\mathcal{A}, \\mathcal{P}, \\mathcal{R}, \\gamma)$:<br>
+                <ul>
+                  <li>$\\mathcal{S}$: Set of all valid environmental states.</li>
+                  <li>$\\mathcal{A}$: Set of valid actions.</li>
+                  <li>$\\mathcal{P}(s'|s, a) = \\mathbb{P}(S_{t+1}=s' | S_t=s, A_t=a)$: Transition probability model satisfying the Markov property.</li>
+                  <li>$\\mathcal{R}(s, a, s') = \\mathbb{E}[R_{t+1} | S_t=s, A_t=a, S_{t+1}=s']$: Immediate scalar reward function.</li>
+                  <li>$\\gamma \\in [0, 1)$: Discount factor ensuring finite cumulative return: $G_t = \\sum_{k=0}^\\infty \\gamma^k R_{t+k+1}$.</li>
+                </ul>
+                2. <strong>(b) Bellman Expectation Equation:</strong><br>
+                Under policy $\\pi(a|s)$:<br>
+                $$V^\\pi(s) = \\mathbb{E}_\\pi [G_t | S_t = s] = \\mathbb{E}_\\pi [R_{t+1} + \\gamma G_{t+1} | S_t = s]$$<br>
+                $$V^\\pi(s) = \\sum_{a \\in \\mathcal{A}} \\pi(a|s) \\sum_{s' \\in \\mathcal{S}} \\mathcal{P}(s'|s,a) [\\mathcal{R}(s,a,s') + \\gamma V^\\pi(s')]$$<br>
+                <strong>Bellman Optimality Equation:</strong><br>
+                For the optimal value function $V^*(s) = \\max_\\pi V^\\pi(s)$:<br>
+                $$V^*(s) = \\max_{a \\in \\mathcal{A}} \\sum_{s' \\in \\mathcal{S}} \\mathcal{P}(s'|s,a) [\\mathcal{R}(s,a,s') + \\gamma V^*(s')]$$<br>
+                3. <strong>(c) Value Iteration Algorithm:</strong><br>
+                Converts the Bellman optimality equation into an iterative update rule:<br>
+                Initialize $V_0(s) = 0$ for all $s \\in \\mathcal{S}$. For each iteration $k = 0, 1, 2, \\dots$:<br>
+                $$V_{k+1}(s) \\leftarrow \\max_{a \\in \\mathcal{A}} \\sum_{s'} \\mathcal{P}(s'|s,a) [\\mathcal{R}(s,a,s') + \\gamma V_k(s')]$$<br>
+                Stop when $\\max_{s} |V_{k+1}(s) - V_k(s)| < \\epsilon \\frac{1-\\gamma}{2\\gamma}$.<br>
+                <strong>Convergence:</strong> By Banach Fixed-Point Theorem, the Bellman optimality backup operator is a $\\gamma$-contraction mapping in the $L_\\infty$ norm ($\\|T V - T U\\|_\\infty \\le \\gamma \\|V - U\\|_\\infty$). Since $\\gamma < 1$, it is guaranteed to converge to a unique fixed point $V^*$.`,
+                trap: "Always cite the Banach Fixed-Point Theorem and gamma-contraction property when explaining convergence in 10-mark questions.",
+                chapterLink: "../chapters/ch40-markov-decision-processes.html"
+              },
+              {
+                id: "Q6",
+                marks: "10 Marks",
+                text: "(a) Explain Generative Adversarial Networks (GANs). Formulate the two-player Minimax objective function V(D, G). (b) Derive the optimal Discriminator D*(x) for a fixed Generator. (c) Explain Mode Collapse and discuss how Wasserstein GAN (WGAN) resolves training instability.",
+                rubric: "(a) 3 Marks for GAN architecture and minimax objective; (b) 3 Marks for D*(x) derivation via calculus; (c) 4 Marks for mode collapse diagnosis and Earth Mover / Lipschitz WGAN solution.",
+                answer: `<strong>Model University Answer:</strong><br>
+                1. <strong>(a) Two-Player Minimax Formulation:</strong><br>
+                Goodfellow et al. (2014) formulated GANs as a zero-sum game between Generator $G(z)$ and Discriminator $D(x)$:<br>
+                $$\\min_G \\max_D V(D, G) = \\mathbb{E}_{x \\sim p_{\\text{data}}}[\\log D(x)] + \\mathbb{E}_{z \\sim p_z}[\\log(1 - D(G(z)))]$$<br>
+                where $D(x) \\in [0, 1]$ represents the probability that $x$ is real data, and $G(z)$ generates synthetic samples from prior noise $z \\sim p_z$.<br>
+                2. <strong>(b) Derivation of Optimal Discriminator $D^*(x)$:**<br>
+                For any fixed $G$, the objective can be written in continuous integral form:<br>
+                $$V(D, G) = \\int_x \\left[ p_{\\text{data}}(x) \\log D(x) + p_g(x) \\log(1 - D(x)) \\right] dx$$<br>
+                To maximize the integrand for any $x$, let $y = D(x)$, $a = p_{\\text{data}}(x)$, $b = p_g(x)$:<br>
+                $$f(y) = a \\log y + b \\log(1 - y)$$<br>
+                Taking the derivative and equating to 0:<br>
+                $$\\frac{df}{dy} = \\frac{a}{y} - \\frac{b}{1 - y} = 0 \\implies a(1 - y) = by \\implies y(a + b) = a$$<br>
+                $$D^*(x) = \\frac{p_{\\text{data}}(x)}{p_{\\text{data}}(x) + p_g(x)}$$<br>
+                At global Nash equilibrium ($p_g = p_{\\text{data}}$), $D^*(x) = 0.5$.<br>
+                3. <strong>(c) Mode Collapse & WGAN Solution:</strong><br>
+                <ul>
+                  <li><em>Mode Collapse:</em> Occurs when $G$ learns to produce samples from only a few narrow clusters ('modes') that reliably deceive $D$, ignoring the rest of the true distribution.</li>
+                  <li><em>Cause:</em> Standard GAN minimizes Jensen-Shannon Divergence (JSD), which has zero gradients when distributions do not overlap.</li>
+                  <li><em>Wasserstein GAN (WGAN):</em> Replaces JSD with the Earth Mover's (Wasserstein-1) Distance: $W(p_{\\text{data}}, p_g) = \\sup_{\\|D\\|_L \\le 1} \\mathbb{E}[D(x)] - \\mathbb{E}[D(G(z))]$, enforcing a 1-Lipschitz condition on Critic $D$ (via Weight Clipping or Gradient Penalty WGAN-GP). Provides continuous, smooth gradients everywhere, completely stabilizing GAN training.</li>
+                </ul>`,
+                trap: "Make sure to show the derivative step in part (b) clearly to earn the full mathematical proof marks.",
+                chapterLink: "../chapters/ch45-generative-adversarial-networks.html"
+              }
+            ]
+          }
+        ]
+      },
+      "unit-1": {
+        title: "Unit I Mid-Semester Examination: Search & Problem Solving",
+        subject: "DSC-14: ARTIFICIAL INTELLIGENCE (UNIT I)",
+        time: "1 Hour",
+        maxMarks: "25 Marks",
+        instructions: "Answer all questions. Show complete algorithm traces and formula substitutions.",
+        sections: [
+          {
+            name: "Part A: Short Questions (2 × 3 = 6 Marks)",
+            questions: [
+              {
+                id: "U1-Q1",
+                marks: "2 Marks",
+                text: "Compare Breadth-First Search (BFS) and Depth-First Search (DFS) in terms of Time and Space complexity.",
+                rubric: "1 Mark for Time O(b^d) vs O(b^m); 1 Mark for Space O(b^d) vs O(b*m).",
+                answer: `<strong>Model Answer:</strong><br>
+                <ul>
+                  <li><strong>BFS:</strong> Time $O(b^d)$, Space $O(b^d)$ (exponential memory, stores entire frontier).</li>
+                  <li><strong>DFS:</strong> Time $O(b^m)$, Space $O(b \\times m)$ (linear memory, stores only current path + siblings).</li>
+                </ul>`,
+                trap: "Specify b=branching factor, d=shallowest goal depth, m=maximum tree depth.",
+                chapterLink: "../chapters/ch04-uninformed-search.html"
+              },
+              {
+                id: "U1-Q2",
+                marks: "2 Marks",
+                text: "State the Alpha-Beta pruning condition in adversarial game tree search.",
+                rubric: "1 Mark for alpha >= beta; 1 Mark for explaining alpha (best for MAX) and beta (best for MIN).",
+                answer: `<strong>Model Answer:</strong><br>
+                Pruning occurs whenever: $\\boldsymbol{\\alpha \\ge \\beta}$.<br>
+                $\\alpha$ is the highest-value choice found so far by MAX; $\\beta$ is the lowest-value choice found so far by MIN. If $\\alpha \\ge \\beta$, MIN will never allow play to reach this subtree.`,
+                trap: "Remember alpha is associated with MAX nodes and beta with MIN nodes.",
+                chapterLink: "../chapters/ch11-minimax-and-alpha-beta-pruning.html"
+              }
+            ]
+          },
+          {
+            name: "Part B: Long Questions (9 + 10 = 19 Marks)",
+            questions: [
+              {
+                id: "U1-Q3",
+                marks: "9 Marks",
+                text: "Explain the AC-3 algorithm for Constraint Satisfaction Problems. Trace AC-3 on a binary CSP and explain why arc consistency improves backtracking efficiency.",
+                rubric: "3 Marks for algorithm steps; 3 Marks for trace; 3 Marks for integration with backtracking and forward checking.",
+                answer: `<strong>Model Answer:</strong><br>
+                AC-3 maintains a queue of all directed constraint arcs $(X_i, X_j)$. While the queue is non-empty, it pops $(X_i, X_j)$ and calls <code>REVISE(Xi, Xj)</code>. If any value $x \\in D(X_i)$ has no supporting value $y \\in D(X_j)$ satisfying the constraint, $x$ is deleted from $D(X_i)$, and all incoming arcs $(X_k, X_i)$ are re-added to the queue.<br>
+                <strong>Time Complexity:</strong> $O(c \\cdot d^3)$ where $c$ is the number of binary constraints and $d$ is max domain size. Reduces backtracking search space exponentially.`,
+                trap: "State that when Domain(Xi) becomes empty, the problem has no solution and fails immediately.",
+                chapterLink: "../chapters/ch09-constraint-satisfaction-problems.html"
+              },
+              {
+                id: "U1-Q4",
+                marks: "10 Marks",
+                text: "Trace the Minimax algorithm with Alpha-Beta pruning on a 3-ply game tree. Show exact node evaluations, cutoffs, and final optimal root move selection.",
+                rubric: "4 Marks for game tree diagram; 4 Marks for step-by-step alpha/beta updates; 2 Marks for identifying pruned branches.",
+                answer: `<strong>Model Answer:</strong><br>
+                Demonstrates depth-first exploration with $\\alpha = -\\infty$, $\\beta = +\\infty$. At each MAX node, $\\alpha = \\max(\\alpha, v)$. At each MIN node, $\\beta = \\min(\\beta, v)$. Whenever $\\alpha \\ge \\beta$, remaining child branches are pruned immediately without evaluation.`,
+                trap: "Label the cutoffs clearly as alpha-cutoff (at MIN node) or beta-cutoff (at MAX node).",
+                chapterLink: "../chapters/ch11-minimax-and-alpha-beta-pruning.html"
+              }
+            ]
+          }
+        ]
+      }
+    };
+
+    // Render Controller
+    (function() {
+      const area = document.getElementById('paper-content-area');
+      const tabs = document.querySelectorAll('.paper-tab-btn');
+
+      function renderPaper(paperKey) {
+        const p = WRITTEN_PAPERS[paperKey] || WRITTEN_PAPERS["du-full"];
+
+        let sectionsHtml = '';
+        p.sections.forEach(sec => {
+          let qCards = '';
+          sec.questions.forEach(q => {
+            qCards += `
+              <div class="written-q-card">
+                <div class="written-q-header">
+                  <span class="q-num">${q.id}</span>
+                  <span class="marks-tag">${q.marks}</span>
+                </div>
+                <div class="written-q-text">${q.text}</div>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <button class="reveal-solution-btn" onclick="toggleSolution('${q.id}')">
+                    👁️ Reveal Model Answer & Rubric
+                  </button>
+                  <a href="${q.chapterLink}" style="font-size:0.78rem; color:var(--em-accent); text-decoration:none;" target="_blank">
+                    📖 Study Chapter →
+                  </a>
+                </div>
+                <div id="sol-${q.id}" class="solution-drawer">
+                  <div class="rubric-box">
+                    <div class="rubric-title">📋 Evaluator Marking Scheme:</div>
+                    ${q.rubric}
+                  </div>
+                  <div>${q.answer}</div>
+                  <div class="trap-box">
+                    <div class="trap-title">⚠️ Common Student Trap (Penalty Risk):</div>
+                    ${q.trap}
+                  </div>
+                  <div class="self-eval-slider">
+                    <span style="font-size:0.80rem; font-weight:700;">Rate Your Practice:</span>
+                    <input type="range" min="0" max="10" value="7" style="flex:1;">
+                    <span style="font-family:var(--em-font-mono); font-size:0.80rem;">Grade / ${q.marks}</span>
+                  </div>
+                </div>
+              </div>
+            `;
+          });
+
+          sectionsHtml += `
+            <div class="section-title-bar">
+              <span>${sec.name}</span>
+              <span style="font-size:0.80rem; font-family:var(--em-font-mono);">${sec.weight || ''}</span>
+            </div>
+            ${qCards}
+          `;
+        });
+
+        area.innerHTML = `
+          <div class="paper-sheet">
+            <div class="official-header">
+              <h2>${p.title}</h2>
+              <div class="official-sub">${p.subject}</div>
+              <div class="paper-meta-row">
+                <span>⏱️ Duration: ${p.time}</span>
+                <span>📜 Maximum Marks: ${p.maxMarks}</span>
+              </div>
+            </div>
+            <p style="font-size:0.85rem; font-style:italic; color:var(--em-text-muted); margin-bottom:16px;">
+              <strong>General Instructions:</strong> ${p.instructions}
+            </p>
+            ${sectionsHtml}
+          </div>
+        `;
+      }
+
+      window.toggleSolution = function(id) {
+        const drawer = document.getElementById(`sol-${id}`);
+        if (drawer) {
+          drawer.classList.toggle('open');
+        }
+      };
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          tabs.forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+          renderPaper(this.dataset.paper);
+        });
+      });
+
+      renderPaper("du-full");
+    })();
+  </script>
+</body>
+</html>

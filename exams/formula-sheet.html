@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Arpit">
+  <meta name="description" content="Master Formula Sheet & Rapid Memory Revision Deck — AI & Machine Learning MiniBook. Complete equations across Search, ML, Deep Learning, RL, NLP, and Generative AI.">
+  <title>Master Formula Sheet & Memory Deck | AIML MiniBook 🤖 Arpit</title>
+
+  <link rel="manifest" href="../manifest.json">
+  <meta name="theme-color" content="#17365D">
+
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/animations.css">
+  <link rel="stylesheet" href="../assets/css/timer.css">
+  <link rel="stylesheet" href="../assets/css/chapters.css">
+
+  <style>
+    .deck-container {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: var(--em-space-6) var(--em-space-4);
+    }
+    .deck-header {
+      background: var(--em-surface-1);
+      border: 1px solid var(--em-border);
+      border-radius: var(--em-radius-lg);
+      padding: var(--em-space-6);
+      margin-bottom: var(--em-space-6);
+      box-shadow: var(--em-shadow-sm);
+    }
+    .deck-filter-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: var(--em-space-4);
+      align-items: center;
+      justify-content: space-between;
+    }
+    .filter-btn-group {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 6px 14px;
+      border-radius: var(--em-radius-sm);
+      border: 1px solid var(--em-border);
+      background: var(--em-surface-2);
+      color: var(--em-text-secondary);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all var(--em-motion-fast) var(--em-ease);
+    }
+    .filter-btn:hover {
+      border-color: var(--em-accent);
+      color: var(--em-text);
+    }
+    .filter-btn.active {
+      background: var(--em-accent);
+      color: #FFFFFF;
+      border-color: var(--em-accent);
+    }
+    .view-toggle-btn {
+      padding: 6px 12px;
+      border-radius: var(--em-radius-sm);
+      border: 1px solid var(--em-border);
+      background: var(--em-surface-2);
+      color: var(--em-text);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .formula-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: var(--em-space-4);
+      margin-top: var(--em-space-4);
+    }
+    .formula-card {
+      background: var(--em-surface-1);
+      border: 1px solid var(--em-border);
+      border-radius: var(--em-radius-md);
+      padding: var(--em-space-5);
+      transition: all var(--em-motion-fast) var(--em-ease);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .formula-card:hover {
+      border-color: var(--em-accent);
+      transform: translateY(-2px);
+      box-shadow: var(--em-shadow-sm);
+    }
+    .f-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--em-space-3);
+    }
+    .f-unit-badge {
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      background: var(--em-surface-2);
+      color: var(--em-text-secondary);
+      border: 1px solid var(--em-border);
+    }
+    .f-title {
+      font-size: 1.02rem;
+      font-weight: 700;
+      color: var(--em-text);
+      margin-bottom: var(--em-space-3);
+    }
+    .math-display-box {
+      background: var(--em-surface-2);
+      border: 1px solid var(--em-border);
+      border-radius: var(--em-radius-sm);
+      padding: var(--em-space-3) var(--em-space-4);
+      margin: var(--em-space-2) 0 var(--em-space-3) 0;
+      font-family: var(--em-font-mono);
+      font-size: 0.98rem;
+      color: var(--em-accent);
+      overflow-x: auto;
+      text-align: center;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .f-desc {
+      font-size: 0.85rem;
+      color: var(--em-text-secondary);
+      line-height: 1.5;
+      margin-bottom: var(--em-space-3);
+    }
+    .f-variables {
+      font-size: 0.78rem;
+      color: var(--em-text-muted);
+      border-top: 1px dashed var(--em-border);
+      padding-top: var(--em-space-2);
+      line-height: 1.45;
+    }
+    /* Flip Card Mode */
+    .flashcard-view .math-display-box,
+    .flashcard-view .f-desc,
+    .flashcard-view .f-variables {
+      display: none;
+    }
+    .flashcard-view .formula-card {
+      min-height: 160px;
+      cursor: pointer;
+      border: 2px dashed var(--em-border);
+    }
+    .flashcard-view .formula-card.revealed {
+      border-style: solid;
+      border-color: var(--em-accent);
+    }
+    .flashcard-view .formula-card.revealed .math-display-box,
+    .flashcard-view .formula-card.revealed .f-desc,
+    .flashcard-view .formula-card.revealed .f-variables {
+      display: block;
+    }
+    .flip-prompt {
+      display: none;
+      text-align: center;
+      padding: var(--em-space-4) 0;
+      color: var(--em-text-muted);
+      font-weight: 700;
+      font-size: 0.88rem;
+    }
+    .flashcard-view .flip-prompt {
+      display: block;
+    }
+    .flashcard-view .formula-card.revealed .flip-prompt {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="progress-bar"></div>
+
+  <!-- HEADER -->
+  <header id="main-header">
+    <div class="header-left">
+      <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle Navigation">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <a href="../index.html" class="brand-logo">
+        <div class="brand-icon">📐</div>
+        <div class="brand-text">
+          <span class="main">AIML MiniBook</span>
+          <span class="sub">Formula Sheet & Revision Deck</span>
+        </div>
+      </a>
+    </div>
+
+    <span class="header-chapter-title">Master Formula Sheet</span>
+
+    <div class="header-right">
+      <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-label="Toggle Reading Mode">📖</button>
+      <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle Theme">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div id="sidebar-overlay"></div>
+
+  <!-- SIDEBAR NAVIGATION -->
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">AIML Examination Hub</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section">
+        <div class="sidebar-section-label">Examination Suites</div>
+        <a href="mock-exam.html" class="sidebar-link"><span class="link-icon">🎯</span>100 MCQ Mock Simulator</a>
+        <a href="unit-quiz.html" class="sidebar-link"><span class="link-icon">⚡</span>Custom Quiz Builder</a>
+        <a href="written-papers.html" class="sidebar-link"><span class="link-icon">📝</span>University Written Papers</a>
+        <a href="formula-sheet.html" class="sidebar-link active"><span class="link-icon">📐</span>Formula & Revision Deck</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-label">Course Navigation</div>
+        <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+        <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+        <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Unit I: Ch 01 What is AI</a>
+        <a href="../chapters/ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📗</span>Unit II: Ch 14 What is ML</a>
+        <a href="../chapters/ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Unit III: Ch 30 Neural Nets</a>
+        <a href="../chapters/ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🤖</span>Unit IV: Ch 40 MDPs & RL</a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- MAIN DECK -->
+  <main class="deck-container">
+    <section class="deck-header">
+      <div style="display:inline-flex; align-items:center; gap:6px; padding:4px 12px; border-radius:9999px; background:rgba(245, 158, 11, 0.12); color:#f59e0b; font-size:0.78rem; font-weight:700; text-transform:uppercase;">
+        ⚡ High-Yield Mathematical Quick Reference
+      </div>
+      <h1 style="font-size:1.8rem; font-weight:800; margin:8px 0;">Master Formula Sheet & Memory Deck</h1>
+      <p style="color:var(--em-text-secondary); font-size:0.95rem; line-height:1.6;">
+        Every critical equation, derivation objective, matrix operation, and algorithmic inequality across all 4 Units. Switch to <strong>Flashcard Mode</strong> to hide the formulas and test your active recall before entering exams!
+      </p>
+
+      <div class="deck-filter-bar">
+        <div class="filter-btn-group">
+          <button class="filter-btn active" data-unit="all">All Formulas (30)</button>
+          <button class="filter-btn" data-unit="Unit I">Unit I: Search</button>
+          <button class="filter-btn" data-unit="Unit II">Unit II: Machine Learning</button>
+          <button class="filter-btn" data-unit="Unit III">Unit III: Deep Learning</button>
+          <button class="filter-btn" data-unit="Unit IV">Unit IV: RL & GenAI</button>
+        </div>
+
+        <button id="toggle-flashcard-mode-btn" class="view-toggle-btn">
+          🃏 Switch to Flashcard Mode
+        </button>
+      </div>
+    </section>
+
+    <!-- FORMULA CARDS GRID -->
+    <div id="formula-grid" class="formula-grid"></div>
+  </main>
+
+  <script src="../assets/js/core.js"></script>
+  <script>
+    const FORMULAS_DATA = [
+      // UNIT I
+      {
+        unit: "Unit I",
+        title: "A* Evaluation Function",
+        math: "f(n) = g(n) + h(n)",
+        desc: "Core evaluation function for A* Search. Balances the known past cost with the estimated future cost.",
+        vars: "g(n) = path cost from start to n; h(n) = heuristic estimate from n to goal."
+      },
+      {
+        unit: "Unit I",
+        title: "Heuristic Admissibility Condition",
+        math: "h(n) \\le h^*(n), \\quad h(\\text{Goal}) = 0",
+        desc: "Guarantee that the heuristic never overestimates the true lowest cost h*(n) to reach the goal.",
+        vars: "h*(n) = true shortest path cost from n to goal."
+      },
+      {
+        unit: "Unit I",
+        title: "Heuristic Consistency (Monotonicity)",
+        math: "h(n) \\le c(n, a, n') + h(n')",
+        desc: "Triangle inequality condition preventing node reopening in Graph-Search A*.",
+        vars: "c(n, a, n') = true step cost from n to successor n' via action a."
+      },
+      {
+        unit: "Unit I",
+        title: "Alpha-Beta Pruning Cutoff Condition",
+        math: "\\alpha \\ge \\beta",
+        desc: "Prunes remaining sibling branches in minimax game tree search without affecting final root decision.",
+        vars: "\\alpha = \\text{best choice for MAX}; \\beta = \\text{best choice for MIN}."
+      },
+      {
+        unit: "Unit I",
+        title: "Simulated Annealing Acceptance Probability",
+        math: "P(\\Delta E, T) = e^{-\\frac{\\Delta E}{T}}",
+        desc: "Boltzmann probability of accepting a worse neighbor state in local optimization.",
+        vars: "\\Delta E = \\text{cost increase}; T = \\text{current temperature schedule}."
+      },
+
+      // UNIT II
+      {
+        unit: "Unit II",
+        title: "Bias-Variance Decomposition",
+        math: "\\mathbb{E}[(y - \\hat{f})^2] = \\text{Bias}[\\hat{f}]^2 + \\text{Var}[\\hat{f}] + \\sigma^2",
+        desc: "Decomposition of total expected generalization error into model underfitting, overfitting, and irreducible noise.",
+        vars: "\\sigma^2 = \\text{inherent data noise}; \\text{Bias} = \\mathbb{E}[\\hat{f}] - f; \\text{Var} = \\mathbb{E}[(\\hat{f} - \\mathbb{E}[\\hat{f}])^2]."
+      },
+      {
+        unit: "Unit II",
+        title: "Ordinary Least Squares Normal Equation",
+        math: "\\mathbf{w}^* = (\\mathbf{X}^T\\mathbf{X})^{-1}\\mathbf{X}^T\\mathbf{y}",
+        desc: "Closed-form analytical solution for optimal regression weights minimizing RSS.",
+        vars: "\\mathbf{X} \\in \\mathbb{R}^{n \\times d} = \\text{feature matrix}; \\mathbf{y} \\in \\mathbb{R}^n = \\text{target vector}."
+      },
+      {
+        unit: "Unit II",
+        title: "Sigmoid (Logistic) Function",
+        math: "\\sigma(z) = \\frac{1}{1 + e^{-z}} = \\frac{e^z}{1 + e^z}",
+        desc: "Maps any real-valued logit z to a valid probability in open interval (0, 1).",
+        vars: "z = \\mathbf{w}^T\\mathbf{x} + b; \\sigma'(z) = \\sigma(z)(1 - \\sigma(z))."
+      },
+      {
+        unit: "Unit II",
+        title: "Binary Cross-Entropy Loss",
+        math: "\\mathcal{L}_{\\text{BCE}} = -\\frac{1}{n}\\sum_{i=1}^n [y_i \\ln \\hat{y}_i + (1 - y_i)\\ln(1 - \\hat{y}_i)]",
+        desc: "Negative Log Likelihood for binary classification models with convex loss surface.",
+        vars: "y_i \\in \\{0, 1\\}; \\hat{y}_i = \\sigma(z_i) = P(Y=1|X)."
+      },
+      {
+        unit: "Unit II",
+        title: "Shannon Entropy",
+        math: "H(S) = -\\sum_{i=1}^k p_i \\log_2(p_i)",
+        desc: "Measures impurity/uncertainty in a probability distribution for decision tree splitting.",
+        vars: "p_i = \\text{proportion of samples belonging to class } i."
+      },
+      {
+        unit: "Unit II",
+        title: "Information Gain (ID3 Tree Split)",
+        math: "IG(S, A) = H(S) - \\sum_{v \\in \\text{Values}(A)} \\frac{|S_v|}{|S|} H(S_v)",
+        desc: "Reduction in entropy achieved by partitioning dataset S across attribute A.",
+        vars: "S_v = \\text{subset of samples where attribute } A = v."
+      },
+      {
+        unit: "Unit II",
+        title: "Gini Impurity (CART Tree Split)",
+        math: "\\text{Gini}(S) = 1 - \\sum_{i=1}^k p_i^2",
+        desc: "Splitting criterion used in CART trees. Computationally faster than entropy.",
+        vars: "\\text{Minimum } 0.0 \\text{ (pure)}; \\text{Maximum } 0.5 \\text{ for binary equal split}."
+      },
+      {
+        unit: "Unit II",
+        title: "F1-Score (Harmonic Mean)",
+        math: "F1 = 2 \\times \\frac{\\text{Precision} \\times \\text{Recall}}{\\text{Precision} + \\text{Recall}}",
+        desc: "Balanced metric for imbalanced classification. Penalizes extreme imbalances heavily.",
+        vars: "\\text{Precision} = \\frac{TP}{TP+FP}; \\text{Recall} = \\frac{TP}{TP+FN}."
+      },
+      {
+        unit: "Unit II",
+        title: "Ridge Regression Objective (L2)",
+        math: "\\min_\\mathbf{w} \\|\\mathbf{y} - \\mathbf{X}\\mathbf{w}\\|^2 + \\lambda \\|\\mathbf{w}\\|_2^2",
+        desc: "L2 penalty weight decay that shrinks coefficients smoothly without zeroing them.",
+        vars: "\\lambda \\ge 0 = \\text{regularization strength}; \\mathbf{w}^* = (\\mathbf{X}^T\\mathbf{X} + \\lambda\\mathbf{I})^{-1}\\mathbf{X}^T\\mathbf{y}."
+      },
+      {
+        unit: "Unit II",
+        title: "Lasso Regression Objective (L1)",
+        math: "\\min_\\mathbf{w} \\|\\mathbf{y} - \\mathbf{X}\\mathbf{w}\\|^2 + \\lambda \\|\\mathbf{w}\\|_1",
+        desc: "L1 penalty that forces non-essential feature weights to exact zero (sparse selection).",
+        vars: "\\|\\mathbf{w}\\|_1 = \\sum |w_j|; \\text{non-differentiable at } w=0 \\text{ (uses subgradients)}."
+      },
+
+      // UNIT III
+      {
+        unit: "Unit III",
+        title: "Perceptron Learning Rule",
+        math: "\\mathbf{w} \\leftarrow \\mathbf{w} + \\eta (y - \\hat{y}) \\mathbf{x}",
+        desc: "Updates weights only when a classification mistake occurs (y != y_hat).",
+        vars: "\\eta = \\text{learning rate}; y \\in \\{0, 1\\}; \\hat{y} = \\text{step}(\\mathbf{w}^T\\mathbf{x} + b)."
+      },
+      {
+        unit: "Unit III",
+        title: "Novikoff Perceptron Bound",
+        math: "k \\le \\left(\\frac{R}{\\gamma}\\right)^2",
+        desc: "Maximum number of weight update mistakes before convergence on linearly separable data.",
+        vars: "R = \\max \\|\\mathbf{x}_i\\|; \\gamma = \\text{geometric margin separating hyperplane}."
+      },
+      {
+        unit: "Unit III",
+        title: "Softmax Probability Activation",
+        math: "\\sigma(\\mathbf{z})_i = \\frac{e^{z_i}}{\\sum_{j=1}^K e^{z_j}}",
+        desc: "Normalizes a vector of K real-valued logits into a valid probability distribution summing to 1.0.",
+        vars: "z_i = \\text{unnormalized logit for class } i; \\sum \\sigma(\\mathbf{z})_i = 1.0."
+      },
+      {
+        unit: "Unit III",
+        title: "Backpropagation Error Delta Recurrence",
+        math: "\\boldsymbol{\\delta}^{[l]} = ((\\mathbf{W}^{[l+1]})^T \\boldsymbol{\\delta}^{[l+1]}) \\odot \\sigma'(\\mathbf{z}^{[l]})",
+        desc: "Propagates error gradient backward through hidden layers using the calculus chain rule.",
+        vars: "\\boldsymbol{\\delta}^{[l]} = \\frac{\\partial \\mathcal{L}}{\\partial \\mathbf{z}^{[l]}}; \\odot = \\text{Hadamard element-wise product}."
+      },
+      {
+        unit: "Unit III",
+        title: "CNN Spatial Output Dimension Formula",
+        math: "O = \\left\\lfloor \\frac{W - F + 2P}{S} \\right\\rfloor + 1",
+        desc: "Calculates the spatial resolution of a convolutional feature map.",
+        vars: "W = \\text{input size}; F = \\text{kernel filter size}; P = \\text{padding}; S = \\text{stride}."
+      },
+      {
+        unit: "Unit III",
+        title: "Vanilla RNN Recurrent Transition",
+        math: "\\mathbf{h}_t = \\tanh(\\mathbf{W}_{hh}\\mathbf{h}_{t-1} + \\mathbf{W}_{xh}\\mathbf{x}_t + \\mathbf{b}_h)",
+        desc: "Updates recurrent hidden state at time step t combining past memory with new input.",
+        vars: "\\mathbf{h}_t = \\text{hidden state memory vector}; \\mathbf{x}_t = \\text{current token vector}."
+      },
+      {
+        unit: "Unit III",
+        title: "LSTM Cell State Linear Highway",
+        math: "\\mathbf{C}_t = \\mathbf{f}_t \\odot \\mathbf{C}_{t-1} + \\mathbf{i}_t \\odot \\tilde{\\mathbf{C}}_t",
+        desc: "Constant error carousel preventing vanishing gradients in deep sequential models.",
+        vars: "\\mathbf{f}_t = \\text{forget gate}; \\mathbf{i}_t = \\text{input gate}; \\tilde{\\mathbf{C}}_t = \\text{candidate memory}."
+      },
+
+      // UNIT IV
+      {
+        unit: "Unit IV",
+        title: "Discounted Return in RL",
+        math: "G_t = \\sum_{k=0}^\\infty \\gamma^k R_{t+k+1} = R_{t+1} + \\gamma G_{t+1}",
+        desc: "Total discounted cumulative reward accumulated by an agent from time step t.",
+        vars: "\\gamma \\in [0, 1) = \\text{discount factor}; R_{t+1} = \\text{immediate scalar reward}."
+      },
+      {
+        unit: "Unit IV",
+        title: "Bellman Optimality Equation for V*(s)",
+        math: "V^*(s) = \\max_{a \\in \\mathcal{A}} \\sum_{s'} \\mathcal{P}(s'|s, a) [\\mathcal{R}(s, a, s') + \\gamma V^*(s')]",
+        desc: "Optimal state value equals maximum expected immediate reward plus discounted optimal future value.",
+        vars: "\\mathcal{P}(s'|s,a) = \\text{transition probability}; \\mathcal{R} = \\text{reward function}."
+      },
+      {
+        unit: "Unit IV",
+        title: "Tabular Q-Learning Update Rule",
+        math: "Q(s, a) \\leftarrow Q(s, a) + \\alpha [R + \\gamma \\max_{a'} Q(s', a') - Q(s, a)]",
+        desc: "Off-policy model-free Temporal Difference control algorithm for optimal action-values.",
+        vars: "\\alpha = \\text{learning rate}; [R + \\gamma \\max Q(s', a') - Q(s, a)] = \\text{TD error } \\delta_t."
+      },
+      {
+        unit: "Unit IV",
+        title: "Policy Gradient Theorem (REINFORCE)",
+        math: "\\nabla_\\theta J(\\theta) = \\mathbb{E}_{\\pi_\\theta} [\\nabla_\\theta \\ln \\pi_\\theta(a|s) G_t]",
+        desc: "Calculates the exact gradient of expected total return with respect to policy parameters theta.",
+        vars: "\\pi_\\theta(a|s) = \\text{parameterized stochastic policy}; G_t = \\text{observed cumulative return}."
+      },
+      {
+        unit: "Unit IV",
+        title: "TF-IDF Mathematical Formulation",
+        math: "\\text{TF-IDF}(t, d, D) = \\text{TF}(t, d) \\times \\ln\\left(\\frac{N}{1 + \\text{DF}(t)}\\right)",
+        desc: "Reflects how important a word t is to a document d in a collection or corpus D.",
+        vars: "N = \\text{total documents}; \\text{DF}(t) = \\text{number of documents containing term } t."
+      },
+      {
+        unit: "Unit IV",
+        title: "VAE Reparameterization Trick",
+        math: "\\mathbf{z} = \\boldsymbol{\\mu}(\\mathbf{x}) + \\boldsymbol{\\sigma}(\\mathbf{x}) \\odot \\boldsymbol{\\epsilon}, \\quad \\boldsymbol{\\epsilon} \\sim \\mathcal{N}(\\mathbf{0}, \\mathbf{I})",
+        desc: "Pushes stochastic sampling outside the network, allowing backpropagation through latent variables.",
+        vars: "\\boldsymbol{\\mu}, \\boldsymbol{\\sigma} = \\text{deterministic encoder outputs}; \\boldsymbol{\\epsilon} = \\text{auxiliary noise}."
+      },
+      {
+        unit: "Unit IV",
+        title: "GAN Minimax Objective",
+        math: "\\min_G \\max_D \\mathbb{E}_{x \\sim p_d}[\\ln D(x)] + \\mathbb{E}_{z \\sim p_z}[\\ln(1 - D(G(z)))]",
+        desc: "Zero-sum game between Discriminator D (maximizing real vs fake separation) and Generator G (minimizing detection).",
+        vars: "D(x) \\in [0, 1] = \\text{probability } x \\text{ is real}; G(z) = \\text{synthetic sample from noise } z."
+      },
+      {
+        unit: "Unit IV",
+        title: "Algorithmic Demographic Parity",
+        math: "P(\\hat{Y} = 1 | A = a) = P(\\hat{Y} = 1 | A = b)",
+        desc: "Fairness criterion requiring equal positive prediction rates across protected groups A.",
+        vars: "\\hat{Y} \\in \\{0, 1\\} = \\text{model prediction}; A = \\text{protected demographic attribute}."
+      }
+    ];
+
+    (function() {
+      const grid = document.getElementById('formula-grid');
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      const toggleModeBtn = document.getElementById('toggle-flashcard-mode-btn');
+      let currentUnit = 'all';
+      let isFlashcardMode = false;
+
+      function renderDeck() {
+        grid.innerHTML = '';
+        const items = currentUnit === 'all' ? FORMULAS_DATA : FORMULAS_DATA.filter(f => f.unit === currentUnit);
+
+        items.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'formula-card';
+
+          card.innerHTML = `
+            <div>
+              <div class="f-header">
+                <span class="f-unit-badge">${item.unit}</span>
+              </div>
+              <div class="f-title">${item.title}</div>
+              <div class="flip-prompt">👆 Click to Flip & Reveal Equation</div>
+              <div class="math-display-box">${item.math}</div>
+              <div class="f-desc">${item.desc}</div>
+            </div>
+            <div class="f-variables"><strong>Key Notation:</strong> ${item.vars}</div>
+          `;
+
+          card.addEventListener('click', () => {
+            if (isFlashcardMode) {
+              card.classList.toggle('revealed');
+            }
+          });
+
+          grid.appendChild(card);
+        });
+      }
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          filterBtns.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          currentUnit = this.dataset.unit;
+          renderDeck();
+        });
+      });
+
+      toggleModeBtn.addEventListener('click', () => {
+        isFlashcardMode = !isFlashcardMode;
+        if (isFlashcardMode) {
+          grid.classList.add('flashcard-view');
+          toggleModeBtn.textContent = '📖 Switch to Full Formula Sheet View';
+        } else {
+          grid.classList.remove('flashcard-view');
+          toggleModeBtn.textContent = '🃏 Switch to Flashcard Mode';
+        }
+        renderDeck();
+      });
+
+      renderDeck();
+    })();
+  </script>
+</body>
+</html>

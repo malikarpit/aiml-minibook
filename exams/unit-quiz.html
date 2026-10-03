@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="author" content="Arpit">
-  <meta name="description" content="Custom Interactive Unit Quiz Builder — AI & Machine Learning MiniBook">
-  <title>Custom Quiz Builder | AIML MiniBook 🤖 Arpit</title>
+  <meta name="description" content="Custom Interactive Quiz Builder & Speed Blitz — AI & Machine Learning MiniBook">
+  <title>Custom Quiz Builder & Speed Blitz | AIML MiniBook 🤖 Arpit</title>
 
   <link rel="manifest" href="../manifest.json">
   <meta name="theme-color" content="#17365D">
@@ -17,27 +17,229 @@
   <link rel="stylesheet" href="../assets/css/chapters.css">
 
   <style>
-    .builder-card {
+    .quiz-container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: var(--em-space-6) var(--em-space-4);
+    }
+    .setup-card {
       background: var(--em-surface-1);
       border: 1px solid var(--em-border);
       border-radius: var(--em-radius-lg);
       padding: var(--em-space-6);
       margin-bottom: var(--em-space-6);
+      box-shadow: var(--em-shadow-sm);
     }
-    .builder-controls {
+    .preset-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: var(--em-space-3);
+      margin: var(--em-space-4) 0;
+    }
+    .preset-btn {
       display: flex;
-      gap: var(--em-space-4);
-      flex-wrap: wrap;
-      margin-top: var(--em-space-4);
-      align-items: center;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      padding: var(--em-space-4);
+      border-radius: var(--em-radius-md);
+      border: 1px solid var(--em-border);
+      background: var(--em-surface-2);
+      color: var(--em-text);
+      cursor: pointer;
+      text-align: left;
+      transition: all var(--em-motion-fast) var(--em-ease);
     }
-    .select-input {
+    .preset-btn:hover {
+      border-color: var(--em-accent);
+      transform: translateY(-2px);
+      box-shadow: var(--em-shadow-sm);
+    }
+    .preset-btn .preset-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--em-accent);
+    }
+    .preset-btn .preset-desc {
+      font-size: 0.78rem;
+      color: var(--em-text-muted);
+    }
+    .builder-form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: var(--em-space-4);
+      margin-top: var(--em-space-4);
+      padding-top: var(--em-space-4);
+      border-top: 1px dashed var(--em-border);
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-label {
+      font-size: 0.80rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--em-text-muted);
+    }
+    .form-select {
       padding: 8px 12px;
       border-radius: var(--em-radius-sm);
       border: 1px solid var(--em-border);
       background: var(--em-surface-2);
       color: var(--em-text);
       font-size: 0.90rem;
+      cursor: pointer;
+    }
+    /* Active Quiz Player */
+    .player-card {
+      display: none;
+      background: var(--em-surface-1);
+      border: 1px solid var(--em-border);
+      border-radius: var(--em-radius-lg);
+      padding: var(--em-space-6);
+      box-shadow: var(--em-shadow-md);
+    }
+    .player-card.active {
+      display: block;
+      animation: fadeIn 0.25s ease;
+    }
+    .player-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--em-space-4);
+      padding-bottom: var(--em-space-3);
+      border-bottom: 1px solid var(--em-border);
+    }
+    .player-stats {
+      display: flex;
+      gap: var(--em-space-4);
+      align-items: center;
+      font-family: var(--em-font-mono);
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+    .streak-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: #f59e0b;
+    }
+    .quiz-progress-track {
+      height: 6px;
+      background: var(--em-surface-2);
+      border-radius: 9999px;
+      overflow: hidden;
+      margin-bottom: var(--em-space-5);
+    }
+    .quiz-progress-fill {
+      height: 100%;
+      background: var(--em-accent);
+      transition: width 0.3s ease;
+    }
+    .question-prompt {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--em-text);
+      line-height: 1.6;
+      margin-bottom: var(--em-space-5);
+    }
+    .quiz-options-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--em-space-3);
+      margin-bottom: var(--em-space-6);
+    }
+    .quiz-option-btn {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--em-space-3);
+      padding: var(--em-space-4);
+      border-radius: var(--em-radius-md);
+      border: 1px solid var(--em-border);
+      background: var(--em-surface-2);
+      color: var(--em-text);
+      font-size: 0.95rem;
+      line-height: 1.45;
+      cursor: pointer;
+      text-align: left;
+      transition: all var(--em-motion-fast) var(--em-ease);
+    }
+    .quiz-option-btn:hover {
+      border-color: var(--em-accent);
+      background: var(--em-surface-3);
+    }
+    .quiz-option-btn.selected {
+      border-color: #3b82f6;
+      background: rgba(59, 130, 246, 0.15);
+    }
+    .quiz-option-btn.correct {
+      border-color: #10b981 !important;
+      background: rgba(16, 185, 129, 0.18) !important;
+      color: #10b981 !important;
+    }
+    .quiz-option-btn.wrong {
+      border-color: #ef4444 !important;
+      background: rgba(239, 68, 68, 0.18) !important;
+      color: #ef4444 !important;
+    }
+    .player-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--em-space-4);
+    }
+    .nav-btn {
+      padding: 10px 20px;
+      border-radius: var(--em-radius-md);
+      border: 1px solid var(--em-border);
+      background: var(--em-surface-2);
+      color: var(--em-text);
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all var(--em-motion-fast) var(--em-ease);
+    }
+    .nav-btn:hover {
+      border-color: var(--em-accent);
+    }
+    .nav-btn.primary {
+      background: var(--em-accent);
+      color: #FFFFFF;
+      border-color: var(--em-accent);
+    }
+    .nav-btn.primary:hover {
+      opacity: 0.9;
+    }
+    .quiz-explanation {
+      display: none;
+      padding: var(--em-space-4);
+      background: rgba(59, 130, 246, 0.08);
+      border-left: 3px solid #3b82f6;
+      border-radius: var(--em-radius-sm);
+      margin-bottom: var(--em-space-5);
+      font-size: 0.90rem;
+      color: var(--em-text-secondary);
+      line-height: 1.55;
+    }
+    .quiz-explanation.show {
+      display: block;
+      animation: fadeIn 0.2s ease;
+    }
+    /* Summary Card */
+    .summary-card {
+      display: none;
+      background: var(--em-surface-1);
+      border: 2px solid var(--em-accent);
+      border-radius: var(--em-radius-lg);
+      padding: var(--em-space-6);
+      text-align: center;
+    }
+    .summary-card.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
     }
   </style>
 </head>
@@ -51,102 +253,444 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </button>
       <a href="../index.html" class="brand-logo">
-        <div class="brand-icon">🤖</div>
+        <div class="brand-icon">⚡</div>
         <div class="brand-text">
           <span class="main">AIML MiniBook</span>
-          <span class="sub">Quiz Builder</span>
+          <span class="sub">Quiz Builder & Blitz</span>
         </div>
       </a>
     </div>
 
-    <span class="header-chapter-title">Custom Quiz Builder</span>
+    <span class="header-chapter-title">Interactive Quiz Builder</span>
 
     <div class="header-right">
-      <a href="../index.html" class="icon-btn" title="Home Portal">🏠</a>
-      <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)"></button>
+      <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-label="Toggle Reading Mode">📖</button>
+      <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle Theme">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
     </div>
   </header>
 
-  <!-- SIDEBAR -->
   <div id="sidebar-overlay"></div>
+
+  <!-- SIDEBAR NAVIGATION -->
   <aside id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">AIML Examination Hub</div>
+    </div>
     <nav class="sidebar-nav">
       <div class="sidebar-section">
-        <div class="sidebar-section-label">Navigation</div>
+        <div class="sidebar-section-label">Examination Suites</div>
+        <a href="mock-exam.html" class="sidebar-link"><span class="link-icon">🎯</span>100 MCQ Mock Simulator</a>
+        <a href="unit-quiz.html" class="sidebar-link active"><span class="link-icon">⚡</span>Custom Quiz Builder</a>
+        <a href="written-papers.html" class="sidebar-link"><span class="link-icon">📝</span>University Written Papers</a>
+        <a href="formula-sheet.html" class="sidebar-link"><span class="link-icon">📐</span>Formula & Revision Deck</a>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-label">Course Navigation</div>
         <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
         <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
-        <a href="mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Mock Exam Simulator</a>
-        <a href="unit-quiz.html" class="sidebar-link active"><span class="link-icon">⚡</span>Custom Quiz Builder</a>
+        <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Unit I: Ch 01 What is AI</a>
+        <a href="../chapters/ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📗</span>Unit II: Ch 14 What is ML</a>
+        <a href="../chapters/ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Unit III: Ch 30 Neural Nets</a>
+        <a href="../chapters/ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🤖</span>Unit IV: Ch 40 MDPs & RL</a>
       </div>
     </nav>
   </aside>
 
-  <!-- MAIN READING CANVAS -->
-  <main id="main-content">
-    <div class="content-inner">
+  <!-- MAIN CONTENT -->
+  <main class="quiz-container">
+    <!-- STEP 1: SETUP CARD -->
+    <section id="setup-card" class="setup-card">
+      <h1 style="font-size:1.7rem; font-weight:800; margin-bottom:8px;">⚡ Custom Quiz Builder & Speed Blitz</h1>
+      <p style="color:var(--em-text-secondary); font-size:0.92rem; line-height:1.55;">
+        Configure your personalized practice session: choose your syllabus units, set question counts, toggle instant tutor feedback or race against the clock in <strong>Speed Blitz</strong> mode.
+      </p>
 
-      <div class="builder-card">
-        <span class="part-banner part-ii">Interactive Self-Assessment</span>
-        <h1 style="font-family:var(--font-display); font-size:1.8rem; margin:10px 0 6px;">Custom Topic Quiz Builder</h1>
-        <p style="color:var(--em-text-secondary); font-size:0.92rem;">Filter questions by unit, topic, or difficulty to create a customized study drill.</p>
+      <h3 style="font-size:0.95rem; font-weight:700; margin-top:20px; text-transform:uppercase; color:var(--em-text-muted);">Quick-Start Presets</h3>
+      <div class="preset-grid">
+        <button class="preset-btn" data-unit="Unit I" data-count="15" data-mode="tutor">
+          <span class="preset-title">Unit I: Search Sprint</span>
+          <span class="preset-desc">15 Questions · Instant tutor feedback</span>
+        </button>
+        <button class="preset-btn" data-unit="Unit II" data-count="15" data-mode="tutor">
+          <span class="preset-title">Unit II: ML Algorithms</span>
+          <span class="preset-desc">15 Questions · Instant tutor feedback</span>
+        </button>
+        <button class="preset-btn" data-unit="Unit III" data-count="15" data-mode="tutor">
+          <span class="preset-title">Unit III: Deep Learning</span>
+          <span class="preset-desc">15 Questions · Instant tutor feedback</span>
+        </button>
+        <button class="preset-btn" data-unit="Unit IV" data-count="15" data-mode="tutor">
+          <span class="preset-title">Unit IV: RL & GenAI</span>
+          <span class="preset-desc">15 Questions · Instant tutor feedback</span>
+        </button>
+        <button class="preset-btn" data-unit="all" data-count="20" data-mode="blitz" style="border-color:#f59e0b;">
+          <span class="preset-title" style="color:#f59e0b;">⚡ Speed Blitz Challenge</span>
+          <span class="preset-desc">20 Random Questions · 45s timer per question</span>
+        </button>
+        <button class="preset-btn" data-unit="all" data-count="30" data-mode="exam">
+          <span class="preset-title">Half-Length Mock</span>
+          <span class="preset-desc">30 Mixed Questions · Exam conditions</span>
+        </button>
+      </div>
 
-        <div class="builder-controls">
-          <select id="unit-select" class="select-input" onchange="generateCustomQuiz()">
-            <option value="all">All Units</option>
-            <option value="Unit I">Unit I — Artificial Intelligence &amp; Search</option>
-            <option value="Unit II">Unit II — Machine Learning Foundations &amp; Models</option>
-            <option value="Unit III">Unit III — Deep Learning &amp; Neural Networks</option>
+      <!-- CUSTOM CONFIG FORM -->
+      <h3 style="font-size:0.95rem; font-weight:700; margin-top:20px; text-transform:uppercase; color:var(--em-text-muted);">Custom Configuration</h3>
+      <div class="builder-form-grid">
+        <div class="form-group">
+          <label class="form-label" for="cfg-unit">Target Unit</label>
+          <select id="cfg-unit" class="form-select">
+            <option value="all">All 4 Units (Comprehensive)</option>
+            <option value="Unit I">Unit I: Artificial Intelligence & Search</option>
+            <option value="Unit II">Unit II: Machine Learning Foundations</option>
+            <option value="Unit III">Unit III: Deep Learning & Vision</option>
+            <option value="Unit IV">Unit IV: RL, NLP & Generative AI</option>
           </select>
-          <select id="diff-select" class="select-input" onchange="generateCustomQuiz()">
-            <option value="all">All Difficulties</option>
-            <option value="Easy">Easy</option>
-            <option value="Medium">Medium</option>
-            <option value="Hard">Hard</option>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="cfg-count">Question Count</label>
+          <select id="cfg-count" class="form-select">
+            <option value="10">10 Questions (Quick)</option>
+            <option value="15" selected>15 Questions (Standard)</option>
+            <option value="25">25 Questions (Full Unit)</option>
+            <option value="50">50 Questions (Deep Dive)</option>
           </select>
-          <button class="portal-btn portal-btn-primary" onclick="generateCustomQuiz()">⚡ Generate Quiz</button>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="cfg-diff">Difficulty Level</label>
+          <select id="cfg-diff" class="form-select">
+            <option value="all">Mixed (All Levels)</option>
+            <option value="Easy">Foundation (Easy)</option>
+            <option value="Medium">Standard University (Medium)</option>
+            <option value="Hard">Advanced / GATE (Hard)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="cfg-mode">Attempt Mode</label>
+          <select id="cfg-mode" class="form-select">
+            <option value="tutor" selected>Instant Tutor (Learn as you go)</option>
+            <option value="blitz">Speed Blitz (45s per Question)</option>
+            <option value="exam">Standard Exam (Score at end)</option>
+          </select>
         </div>
       </div>
 
-      <div id="custom-quiz-container"></div>
+      <button id="start-custom-quiz-btn" class="nav-btn primary" style="width:100%; margin-top:20px; padding:12px;">
+        🚀 Launch Quiz
+      </button>
+    </section>
 
-    </div>
+    <!-- STEP 2: ACTIVE QUIZ PLAYER -->
+    <section id="player-card" class="player-card">
+      <div class="player-header">
+        <div>
+          <span id="q-counter" style="font-size:0.85rem; font-weight:700; color:var(--em-accent); text-transform:uppercase;">Question 1 of 15</span>
+          <span id="q-unit-tag" class="badge badge-unit" style="margin-left:8px;">Unit I</span>
+        </div>
+        <div class="player-stats">
+          <div id="blitz-timer-display" style="display:none; color:#ef4444;">⏱️ <span id="blitz-sec">45</span>s</div>
+          <div class="streak-badge">🔥 <span id="streak-count">0</span> Streak</div>
+          <div>Score: <span id="live-score">0</span></div>
+        </div>
+      </div>
+
+      <div class="quiz-progress-track">
+        <div id="quiz-progress-fill" class="quiz-progress-fill" style="width:0%;"></div>
+      </div>
+
+      <div id="q-prompt" class="question-prompt">Question text goes here...</div>
+      <div id="quiz-options-container" class="quiz-options-list"></div>
+
+      <div id="quiz-explanation" class="quiz-explanation">
+        <strong>💡 Insight:</strong> <span id="exp-text"></span>
+      </div>
+
+      <div class="player-actions">
+        <button id="prev-q-btn" class="nav-btn">← Previous</button>
+        <button id="quit-quiz-btn" class="nav-btn" style="color:var(--em-text-muted);">Exit Quiz</button>
+        <button id="next-q-btn" class="nav-btn primary">Next →</button>
+      </div>
+    </section>
+
+    <!-- STEP 3: SUMMARY CARD -->
+    <section id="summary-card" class="summary-card">
+      <div style="font-size:3rem; margin-bottom:12px;">🎉</div>
+      <h2 style="font-size:1.8rem; font-weight:800; margin-bottom:6px;">Quiz Completed!</h2>
+      <p id="summary-feedback" style="color:var(--em-text-secondary); font-size:1rem; margin-bottom:20px;">Great job completing your study session.</p>
+
+      <div style="display:flex; justify-content:center; gap:20px; margin-bottom:24px;">
+        <div style="background:var(--em-surface-2); padding:16px 24px; border-radius:var(--em-radius-md); border:1px solid var(--em-border);">
+          <div id="final-score" style="font-size:2rem; font-weight:800; color:var(--em-accent); font-family:var(--em-font-mono);">0 / 15</div>
+          <div style="font-size:0.75rem; text-transform:uppercase; color:var(--em-text-muted);">Final Score</div>
+        </div>
+        <div style="background:var(--em-surface-2); padding:16px 24px; border-radius:var(--em-radius-md); border:1px solid var(--em-border);">
+          <div id="final-accuracy" style="font-size:2rem; font-weight:800; color:#10b981; font-family:var(--em-font-mono);">0%</div>
+          <div style="font-size:0.75rem; text-transform:uppercase; color:var(--em-text-muted);">Accuracy</div>
+        </div>
+        <div style="background:var(--em-surface-2); padding:16px 24px; border-radius:var(--em-radius-md); border:1px solid var(--em-border);">
+          <div id="final-streak" style="font-size:2rem; font-weight:800; color:#f59e0b; font-family:var(--em-font-mono);">0</div>
+          <div style="font-size:0.75rem; text-transform:uppercase; color:var(--em-text-muted);">Max Streak</div>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:12px; justify-content:center;">
+        <button id="retry-btn" class="nav-btn primary">Try Another Quiz</button>
+        <a href="mock-exam.html" class="nav-btn" style="text-decoration:none; display:inline-flex; align-items:center;">Take Full 100-MCQ Mock</a>
+      </div>
+    </section>
   </main>
 
   <script src="../assets/js/quiz-data.js"></script>
-  <script src="../assets/js/state.js"></script>
   <script src="../assets/js/core.js"></script>
   <script>
-    function generateCustomQuiz() {
-      const unit = document.getElementById('unit-select').value;
-      const diff = document.getElementById('diff-select').value;
-      const container = document.getElementById('custom-quiz-container');
+    (function() {
+      let quizState = {
+        questions: [],
+        currentIndex: 0,
+        userAnswers: {},
+        streak: 0,
+        maxStreak: 0,
+        mode: 'tutor',
+        blitzInterval: null,
+        blitzSeconds: 45
+      };
 
-      const filtered = (typeof AIML_QUIZ_DATA !== 'undefined' ? AIML_QUIZ_DATA : []).filter(q => {
-        const matchUnit = unit === 'all' || q.unit === unit;
-        const matchDiff = diff === 'all' || q.diff === diff;
-        return matchUnit && matchDiff;
-      });
+      const setupCard = document.getElementById('setup-card');
+      const playerCard = document.getElementById('player-card');
+      const summaryCard = document.getElementById('summary-card');
 
-      if (!filtered.length) {
-        container.innerHTML = '<p style="color:var(--em-text-muted); padding:20px 0;">No questions match your filter criteria.</p>';
-        return;
+      const qCounter = document.getElementById('q-counter');
+      const qUnitTag = document.getElementById('q-unit-tag');
+      const qPrompt = document.getElementById('q-prompt');
+      const optionsContainer = document.getElementById('quiz-options-container');
+      const expBox = document.getElementById('quiz-explanation');
+      const expText = document.getElementById('exp-text');
+      const progressFill = document.getElementById('quiz-progress-fill');
+      const liveScoreEl = document.getElementById('live-score');
+      const streakEl = document.getElementById('streak-count');
+      const blitzTimerEl = document.getElementById('blitz-timer-display');
+      const blitzSecEl = document.getElementById('blitz-sec');
+
+      const prevBtn = document.getElementById('prev-q-btn');
+      const nextBtn = document.getElementById('next-q-btn');
+      const quitBtn = document.getElementById('quit-quiz-btn');
+      const retryBtn = document.getElementById('retry-btn');
+
+      function startQuiz(unit, count, diff, mode) {
+        let pool = [...AIML_QUIZ_DATA];
+        if (unit !== 'all') pool = pool.filter(q => q.unit === unit);
+        if (diff !== 'all') pool = pool.filter(q => q.diff === diff);
+
+        // Shuffle
+        pool.sort(() => Math.random() - 0.5);
+        quizState.questions = pool.slice(0, count);
+        quizState.currentIndex = 0;
+        quizState.userAnswers = {};
+        quizState.streak = 0;
+        quizState.maxStreak = 0;
+        quizState.mode = mode;
+
+        if (quizState.questions.length === 0) {
+          alert("No questions matched your filter selection. Please broaden your criteria.");
+          return;
+        }
+
+        setupCard.style.display = 'none';
+        summaryCard.classList.remove('active');
+        playerCard.classList.add('active');
+
+        if (mode === 'blitz') {
+          blitzTimerEl.style.display = 'block';
+        } else {
+          blitzTimerEl.style.display = 'none';
+        }
+
+        renderQuestion();
       }
 
-      container.innerHTML = filtered.map((q, idx) => `
-        <div class="calc-box" style="margin-bottom:var(--em-space-5)">
-          <div class="calc-title">Question ${idx + 1} · ${q.unit} (${q.diff})</div>
-          <p style="font-size:1.02rem; font-weight:600; margin-bottom:12px;">${q.q}</p>
-          <details style="background:var(--em-surface-2); padding:10px 14px; border-radius:var(--em-radius-sm);">
-            <summary style="cursor:pointer; font-weight:600; color:var(--em-accent)">View Answer &amp; Detailed Explanation</summary>
-            <div style="margin-top:10px; font-size:0.90rem; line-height:1.55;">
-              <p><strong>Correct Answer:</strong> Option ${String.fromCharCode(65 + q.ans)}: <em>${q.options[q.ans]}</em></p>
-              <p style="margin-top:6px; color:var(--em-text-secondary);">${q.exp}</p>
-            </div>
-          </details>
-        </div>
-      `).join('');
-    }
-    document.addEventListener('DOMContentLoaded', generateCustomQuiz);
+      function startBlitzTimer() {
+        clearInterval(quizState.blitzInterval);
+        quizState.blitzSeconds = 45;
+        blitzSecEl.textContent = "45";
+        quizState.blitzInterval = setInterval(() => {
+          quizState.blitzSeconds--;
+          blitzSecEl.textContent = quizState.blitzSeconds;
+          if (quizState.blitzSeconds <= 0) {
+            clearInterval(quizState.blitzInterval);
+            // Auto advance
+            if (quizState.userAnswers[quizState.currentIndex] === undefined) {
+              quizState.userAnswers[quizState.currentIndex] = -1; // Unanswered
+              quizState.streak = 0;
+              streakEl.textContent = "0";
+            }
+            advanceQuestion();
+          }
+        }, 1000);
+      }
+
+      function renderQuestion() {
+        const q = quizState.questions[quizState.currentIndex];
+        const isAnswered = quizState.userAnswers[quizState.currentIndex] !== undefined;
+        const userChoice = quizState.userAnswers[quizState.currentIndex];
+
+        qCounter.textContent = `Question ${quizState.currentIndex + 1} of ${quizState.questions.length}`;
+        qUnitTag.textContent = `${q.unit} · ${q.diff}`;
+        qPrompt.textContent = q.q;
+
+        const pct = ((quizState.currentIndex) / quizState.questions.length) * 100;
+        progressFill.style.width = `${pct}%`;
+
+        optionsContainer.innerHTML = '';
+        q.options.forEach((opt, oIdx) => {
+          const btn = document.createElement('button');
+          btn.className = 'quiz-option-btn';
+          if (isAnswered && userChoice === oIdx) btn.classList.add('selected');
+
+          if (isAnswered && quizState.mode === 'tutor') {
+            if (oIdx === q.ans) btn.classList.add('correct');
+            else if (userChoice === oIdx && oIdx !== q.ans) btn.classList.add('wrong');
+          }
+
+          btn.innerHTML = `
+            <span style="font-family:var(--em-font-mono); font-weight:700; color:var(--em-text-muted); min-width:20px;">${String.fromCharCode(65 + oIdx)}.</span>
+            <span>${opt}</span>
+          `;
+
+          btn.addEventListener('click', () => {
+            if (isAnswered && quizState.mode === 'tutor') return;
+            handleAnswer(oIdx);
+          });
+
+          optionsContainer.appendChild(btn);
+        });
+
+        // Explanation in tutor mode
+        if (isAnswered && quizState.mode === 'tutor') {
+          expText.textContent = q.exp;
+          expBox.classList.add('show');
+        } else {
+          expBox.classList.remove('show');
+        }
+
+        // Navigation state
+        prevBtn.style.visibility = quizState.currentIndex > 0 ? 'visible' : 'hidden';
+        nextBtn.textContent = quizState.currentIndex === quizState.questions.length - 1 ? 'Finish 🏁' : 'Next →';
+
+        if (quizState.mode === 'blitz' && !isAnswered) {
+          startBlitzTimer();
+        } else {
+          clearInterval(quizState.blitzInterval);
+        }
+      }
+
+      function handleAnswer(choiceIdx) {
+        clearInterval(quizState.blitzInterval);
+        const q = quizState.questions[quizState.currentIndex];
+        quizState.userAnswers[quizState.currentIndex] = choiceIdx;
+
+        if (choiceIdx === q.ans) {
+          quizState.streak++;
+          if (quizState.streak > quizState.maxStreak) quizState.maxStreak = quizState.streak;
+        } else {
+          quizState.streak = 0;
+        }
+
+        streakEl.textContent = quizState.streak;
+        updateLiveScore();
+        renderQuestion();
+      }
+
+      function updateLiveScore() {
+        let correct = 0;
+        Object.keys(quizState.userAnswers).forEach(idx => {
+          const q = quizState.questions[idx];
+          if (quizState.userAnswers[idx] === q.ans) correct++;
+        });
+        liveScoreEl.textContent = correct;
+      }
+
+      function advanceQuestion() {
+        if (quizState.currentIndex < quizState.questions.length - 1) {
+          quizState.currentIndex++;
+          renderQuestion();
+        } else {
+          showSummary();
+        }
+      }
+
+      function showSummary() {
+        clearInterval(quizState.blitzInterval);
+        playerCard.classList.remove('active');
+        summaryCard.classList.add('active');
+
+        let correct = 0;
+        quizState.questions.forEach((q, idx) => {
+          if (quizState.userAnswers[idx] === q.ans) correct++;
+        });
+
+        const total = quizState.questions.length;
+        const acc = Math.round((correct / total) * 100);
+
+        document.getElementById('final-score').textContent = `${correct} / ${total}`;
+        document.getElementById('final-accuracy').textContent = `${acc}%`;
+        document.getElementById('final-streak').textContent = quizState.maxStreak;
+
+        let feedback = "Solid practice session! Review your weak topics to lock in mastery.";
+        if (acc >= 90) feedback = "🌟 Outstanding performance! You possess comprehensive university-level mastery!";
+        else if (acc >= 75) feedback = "👏 Excellent work! High-probability of distinction in university exams.";
+        else if (acc >= 50) feedback = "👍 Good effort! Focus on reviewing the chapters where you lost streaks.";
+        document.getElementById('summary-feedback').textContent = feedback;
+      }
+
+      // Event Listeners
+      nextBtn.addEventListener('click', advanceQuestion);
+      prevBtn.addEventListener('click', () => {
+        if (quizState.currentIndex > 0) {
+          quizState.currentIndex--;
+          renderQuestion();
+        }
+      });
+
+      quitBtn.addEventListener('click', () => {
+        if (confirm("Exit quiz and return to setup?")) {
+          clearInterval(quizState.blitzInterval);
+          playerCard.classList.remove('active');
+          setupCard.style.display = 'block';
+        }
+      });
+
+      retryBtn.addEventListener('click', () => {
+        summaryCard.classList.remove('active');
+        setupCard.style.display = 'block';
+      });
+
+      // Preset buttons
+      document.querySelectorAll('.preset-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const u = this.dataset.unit;
+          const c = parseInt(this.dataset.count);
+          const m = this.dataset.mode;
+          startQuiz(u, c, 'all', m);
+        });
+      });
+
+      // Custom form
+      document.getElementById('start-custom-quiz-btn').addEventListener('click', () => {
+        const u = document.getElementById('cfg-unit').value;
+        const c = parseInt(document.getElementById('cfg-count').value);
+        const d = document.getElementById('cfg-diff').value;
+        const m = document.getElementById('cfg-mode').value;
+        startQuiz(u, c, d, m);
+      });
+
+    })();
   </script>
 </body>
 </html>

@@ -94,6 +94,34 @@ Hosted on GitHub Pages → [`malikarpit.github.io/aiml-minibook`](https://malika
 
 ---
 
+## 📝 Master Examination & Testing Suites (4 Ways to Attempt)
+
+The MiniBook provides a 4-dimensional examination engine tailored for both multiple-choice tests (GATE / placements) and formal written university theory examinations (Delhi University B.Tech CSE DSC-14):
+
+1. **[100 MCQ Master Mock Exam Simulator](exams/mock-exam.html):**
+   - Comprehensive 100-question timed simulation (120 minutes) covering Units I, II, III, and IV (25 questions each).
+   - Mode Toggle: **Real Exam Mode** (timed conditions, submit at end) vs **Instant Practice Mode** (instant correctness & step-by-step explanations).
+   - 100-Question Sticky Palette Navigator with status indicators (Answered, Flagged for Review, Unvisited).
+   - Post-submission performance analytics, university letter grading, and per-unit accuracy bar charts with weak topic diagnoses.
+
+2. **[Custom Quiz Builder & Speed Blitz](exams/unit-quiz.html):**
+   - 6 Instant Presets: Unit I Sprint, Unit II Sprint, Unit III Sprint, Unit IV Sprint, Speed Blitz Challenge, and Half-Length Mock.
+   - Dynamic Filters: Filter by Unit, Question Count (10, 15, 25, 50), and Difficulty (Easy, Medium, Hard).
+   - Speed Blitz Mode: 45-second timer per question with live streak counters (🔥) and instant answer explanations.
+
+3. **[University Written Papers & Evaluator Marking Engine](exams/written-papers.html):**
+   - Authentic Delhi University Semester Examination Papers:
+     - DU Grand Comprehensive Mock Paper (75 Marks, 3 Hours): Section A (Compulsory 2-Mark definitions), Section B (5-Mark structured questions), and Section C (10-Mark in-depth derivations & proofs).
+     - Individual Unit Written Papers (25 Marks each).
+   - Interactive **"Reveal Model Answer & Rubric"**: Shows exact evaluator point breakdowns, full model answers with equations/diagrams, and "Common Student Traps" where marks are lost.
+   - Self-evaluation scoring sliders for personal assessment.
+
+4. **[Master Formula Sheet & Revision Deck](exams/formula-sheet.html):**
+   - 30 curated mathematical equations, derivations, loss formulations, and algorithm bounds across all 4 Units.
+   - **Active Recall Flashcard Mode**: Hides formulas to test active recall before exams. Click to flip and verify against formal definitions and variable notation.
+
+---
+
 ## 🛠️ Pedagogical System & Dual-Lens Architecture
 
 Every single chapter in the book is engineered around an integrated 4-tier pedagogical system:
