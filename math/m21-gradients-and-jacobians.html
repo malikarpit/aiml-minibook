@@ -1,0 +1,2455 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="MATH-M21: Gradients, Jacobians & Direction of Change — Math Companion for AI & Machine Learning. Gradient Vector, Steepest Ascent Proof, Contour Orthogonality, Jacobian Matrices, and Hessian Curvature">
+<title>MATH-M21: Gradients, Jacobians & Direction of Change | Math Companion 📐 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/math.css">
+</head>
+<body class="math-module track-4">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">📐</div>
+      <div class="brand-text"><span class="main">Math Companion</span><span class="sub">AI &amp; ML Deep Layer</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">MATH-M21: Gradients, Jacobians &amp; Direction of Change</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Foundations & Functions</div>
+  <a href="m01-mathematical-notation.html" class="sidebar-link"><span class="link-icon">📐</span>M01: Mathematical Notation, Symbols &amp; Summation</a>
+  <a href="m02-algebra-foundations.html" class="sidebar-link"><span class="link-icon">📐</span>M02: Algebra Foundations for AI/ML</a>
+  <a href="m03-functions-graphs-logs.html" class="sidebar-link"><span class="link-icon">📐</span>M03: Functions, Graphs, Exponents &amp; Logarithms</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Linear Algebra & Vectors</div>
+  <a href="m04-vectors-and-components.html" class="sidebar-link"><span class="link-icon">⚡</span>M04: Vectors &amp; Components</a>
+  <a href="m05-norms-and-distance.html" class="sidebar-link"><span class="link-icon">⚡</span>M05: Norms, Distance &amp; Geometric Intuition</a>
+  <a href="m06-dot-product-and-orthogonality.html" class="sidebar-link"><span class="link-icon">⚡</span>M06: Dot Product, Inner Product &amp; Orthogonality</a>
+  <a href="m07-matrices-and-indexing.html" class="sidebar-link"><span class="link-icon">⚡</span>M07: Matrices, Dimensions &amp; Indexing</a>
+  <a href="m08-matrix-multiplication-transforms.html" class="sidebar-link"><span class="link-icon">⚡</span>M08: Matrix Multiplication &amp; Linear Transformations</a>
+  <a href="m09-linear-systems-least-squares.html" class="sidebar-link"><span class="link-icon">⚡</span>M09: Linear Systems, Inverses &amp; Least Squares</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Probability & Statistics</div>
+  <a href="m10-probability-foundations.html" class="sidebar-link"><span class="link-icon">🎲</span>M10: Probability Foundations</a>
+  <a href="m11-conditional-prob-bayes.html" class="sidebar-link"><span class="link-icon">🎲</span>M11: Conditional Probability, Bayes &amp; Total Probability</a>
+  <a href="m12-independence.html" class="sidebar-link"><span class="link-icon">🎲</span>M12: Independence &amp; Conditional Independence</a>
+  <a href="m13-random-variables-pmf-pdf-cdf.html" class="sidebar-link"><span class="link-icon">🎲</span>M13: Random Variables, PMF, PDF &amp; CDF</a>
+  <a href="m14-joint-marginal-conditional.html" class="sidebar-link"><span class="link-icon">🎲</span>M14: Joint, Marginal &amp; Conditional Distributions</a>
+  <a href="m15-expectation-expected-value.html" class="sidebar-link"><span class="link-icon">🎲</span>M15: Expectation &amp; Expected Value</a>
+  <a href="m16-variance-standard-deviation.html" class="sidebar-link"><span class="link-icon">🎲</span>M16: Variance &amp; Standard Deviation</a>
+  <a href="m17-covariance-and-correlation.html" class="sidebar-link"><span class="link-icon">🎲</span>M17: Covariance, Correlation &amp; Statistical Relationships</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Calculus & Optimization</div>
+  <a href="m18-derivatives-rates-of-change.html" class="sidebar-link"><span class="link-icon">📈</span>M18: Derivatives &amp; Rates of Change</a>
+  <a href="m19-partial-derivatives.html" class="sidebar-link"><span class="link-icon">📈</span>M19: Partial Derivatives &amp; Multivariable Functions</a>
+  <a href="m20-chain-rule-computational-graphs.html" class="sidebar-link"><span class="link-icon">📈</span>M20: Chain Rule &amp; Computational Graphs</a>
+  <a href="m21-gradients-and-jacobians.html" class="sidebar-link active"><span class="link-icon">📈</span>M21: Gradients, Jacobians &amp; Direction of Change</a>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>M22–M24: Optimization, SGD & Regularization (Upcoming)</span>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">MATH-M21 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why This Lesson Exists</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. One-Minute Intuition</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Gradient Definition</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Why the Gradient Is a Vector</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Worked Example</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Gradient as a Collection of Coordinate Slopes</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Direction Is the Missing Piece</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Unit Direction Vector</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Directional Derivative</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Why the Dot Product Appears</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Directional Derivative Interpretation</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. The Gradient Points Toward Steepest Ascent</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Steepest Descent</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Worked Example — Directional Derivative</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Compare with the Steepest Direction</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. A Useful Bound</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Level Sets and Gradient Geometry</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Geometric Picture</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Local Linear Approximation in Vector Form</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Worked Local Approximation</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Gradient Dimension</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Jacobian — Why We Need a Matrix</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Jacobian Definition</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Row Meaning</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Worked Example — Jacobian of a Vector Function</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Jacobian Dimensions — Exam Habit</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Gradient vs Jacobian</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Scalar Function as a Special Jacobian Case</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Differential View</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Worked Differential Example</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Chain Rule with Jacobians</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Why Matrix Multiplication Appears</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Worked Jacobian Chain Example</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Gradient and Linear Approximation</a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Optimization Connection</a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Why the Gradient Has a Direction</a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Gradient Norm as Sensitivity Magnitude</a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Zero Gradient</a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Gradient vs Direction of Actual Motion</a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Hinglish Teacher Explanation</a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Formula Cards</a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Dimension-Checking Protocol</a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Numerical-Solving Protocol</a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Common Mistakes</a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. Active Recall</a>
+      <a href="#s-46" class="sidebar-link"><span class="link-icon">📌</span>46. Practice Set</a>
+      <a href="#s-47" class="sidebar-link"><span class="link-icon">📌</span>47. Exam Connection</a>
+      <a href="#s-48" class="sidebar-link"><span class="link-icon">📌</span>48. Mastery Gate</a>
+      <a href="#s-49" class="sidebar-link"><span class="link-icon">📌</span>49. The Calculus-to-ML Bridge</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Math Companion</a>
+        <span>/</span>
+        <span>MATH-M21</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-4">Track 4: Calculus & Optimization</span></div>
+      <h1 class="chapter-title">Gradients, Jacobians &amp; Direction of Change</h1>
+      <p class="chapter-desc">Gradient Vector, Steepest Ascent Proof, Contour Orthogonality, Jacobian Matrices, and Hessian Curvature</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~45 min read</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">MATH-INT</span> <span class="chapter-meta-item uni-badge">MATH-CALC</span> <span class="chapter-meta-item uni-badge">MATH-DERIVE</span> <span class="chapter-meta-item uni-badge">MATH-GEO</span>
+      </div>
+
+      <div class="math-meta-grid">
+        <div class="math-meta-box">
+          <div class="math-meta-label">Prerequisites</div>
+          <div class="math-meta-value">M04 Vectors, M19 Partial Derivatives</div>
+        </div>
+        <div class="math-meta-box">
+          <div class="math-meta-label">Feeds Directly Into</div>
+          <div class="math-meta-value">Ch 34 Gradient Descent & Neural Network Optimization, Ch 35 Backpropagation</div>
+        </div>
+        <div class="math-meta-box" style="grid-column: 1 / -1;">
+          <div class="math-meta-label">AI / Machine Learning Connections</div>
+          <div class="math-meta-value">Parameter updates $\mathbf{w} \leftarrow \mathbf{w} - \eta \nabla L$, Multi-output Jacobian in Softmax, Hessian second-order methods</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="math-preamble-card"><h1>MATH-M21 — Gradients, Jacobians &amp; Direction of Change</h1>
+<blockquote>
+<p><strong>Math depth:</strong> <code>MATH-INT</code>, <code>MATH-CALC</code>, <code>MATH-DERIVE</code>, <code>MATH-NUM</code>, <code>MATH-GEO</code><br />
+<strong>Prerequisite:</strong> M19 — Partial Derivatives &amp; Multivariable Functions; M20 — Chain Rule &amp; Computational Graphs; M04 — Vectors &amp; Components; M06 — Dot Product / Inner Product<br />
+<strong>Feeds into:</strong> M22 Optimization &amp; Gradient Descent; linear regression; neural-network training; backpropagation<br />
+<strong>Course-source anchor:</strong> Supplied <code>Lecture09.pdf</code> explicitly describes the gradient as extending the derivative to vector inputs and says it is obtained by stacking partial derivatives. fileciteturn69file0</p>
+<p><strong>Source boundary:</strong> The retrieved lecture excerpt directly supports the gradient definition. The fuller Jacobian, directional-derivative, norm, and geometric treatment below is the mathematical extension needed to build the complete ML foundation; those details should not be read as verbatim claims about the supplied lecture.</p>
+</blockquote>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in MATH-M21 (49 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why This Lesson Exists</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">One-Minute Intuition</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Gradient Definition</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Why the Gradient Is a Vector</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Worked Example</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Gradient as a Collection of Coordinate Slopes</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Direction Is the Missing Piece</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Unit Direction Vector</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Directional Derivative</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Why the Dot Product Appears</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Directional Derivative Interpretation</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">The Gradient Points Toward Steepest Ascent</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Steepest Descent</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Worked Example — Directional Derivative</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Compare with the Steepest Direction</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">A Useful Bound</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Level Sets and Gradient Geometry</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Geometric Picture</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Local Linear Approximation in Vector Form</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Worked Local Approximation</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Gradient Dimension</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Jacobian — Why We Need a Matrix</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Jacobian Definition</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Row Meaning</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Worked Example — Jacobian of a Vector Function</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Jacobian Dimensions — Exam Habit</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Gradient vs Jacobian</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Scalar Function as a Special Jacobian Case</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Differential View</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Worked Differential Example</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Chain Rule with Jacobians</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Why Matrix Multiplication Appears</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Worked Jacobian Chain Example</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Gradient and Linear Approximation</span></a></li>
+        <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Optimization Connection</span></a></li>
+        <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Why the Gradient Has a Direction</span></a></li>
+        <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Gradient Norm as Sensitivity Magnitude</span></a></li>
+        <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Zero Gradient</span></a></li>
+        <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Gradient vs Direction of Actual Motion</span></a></li>
+        <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Hinglish Teacher Explanation</span></a></li>
+        <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Formula Cards</span></a></li>
+        <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Dimension-Checking Protocol</span></a></li>
+        <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Numerical-Solving Protocol</span></a></li>
+        <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Common Mistakes</span></a></li>
+        <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">Active Recall</span></a></li>
+        <li class="toc-item"><a href="#s-46"><span class="toc-num">46</span><span class="toc-name">Practice Set</span></a></li>
+        <li class="toc-item"><a href="#s-47"><span class="toc-num">47</span><span class="toc-name">Exam Connection</span></a></li>
+        <li class="toc-item"><a href="#s-48"><span class="toc-num">48</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-49"><span class="toc-num">49</span><span class="toc-name">The Calculus-to-ML Bridge</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">Why This Lesson Exists</h2>
+      </div>
+      <div class="section-body">
+        <p>M19 gave us:</p>
+<div class="formula-math">\[
+\frac{\partial f}{\partial x_1},
+\frac{\partial f}{\partial x_2},
+\ldots,
+\frac{\partial f}{\partial x_d}.
+\]</div>
+<p>M20 taught us how derivatives flow through compositions.</p>
+<p>Now we need a clean mathematical object that gathers this information.</p>
+<p>For a scalar-valued function:</p>
+<div class="formula-math">\[
+f:\mathbb R^d\to\mathbb R,
+\]</div>
+<p>that object is the <strong>gradient</strong>.</p>
+<p>For a vector-valued function:</p>
+<div class="formula-math">\[
+\mathbf f:\mathbb R^n\to\mathbb R^m,
+\]</div>
+<p>the corresponding general object is the <strong>Jacobian matrix</strong>.</p>
+<p>These objects connect calculus to linear algebra.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">One-Minute Intuition</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Mental Model</div>
+
+Gradient vector $\nabla f$ sabhi partial derivatives ko ek single vector mein pack kar deta hai.
+Iski do sabse important geometric properties hain:
+1. **Contour Lines se Perpendicular:** Gradient hamesha loss ke contour rings se $90^\circ$ par hota hai.
+2. **Steepest Direction:** Ye us raste ki taraf point karta hai jahan chalne par function sabse tezi se badhega!
+Isiliye Gradient Descent ka rule itna simple aur elegant hai:
+$\mathbf{w} \leftarrow \mathbf{w} - \eta \nabla L$. Minus sign ka matlab hai: "Upar chadhne ke bajaye ghaati (valley) mein utro!" 
+
+</div>
+
+<p>Suppose:</p>
+<div class="formula-math">\[
+f(x,y)
+\]</div>
+<p>is the height of a hill.</p>
+<p>At one point, we want to know:</p>
+<div class="ascii-box"><pre>How steep in x?
+How steep in y?
+What happens in an arbitrary direction?
+Which direction climbs fastest?
+Which direction descends fastest?</pre></div>
+<p>The gradient packages these local slopes into one vector.</p>
+<div class="ascii-box"><pre>partial derivatives
+       ↓
+    gradient
+       ↓
+directional change
+       ↓
+steepest ascent / descent
+       ↓
+optimization</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">Gradient Definition</h2>
+      </div>
+      <div class="section-body">
+        <p>For:</p>
+<div class="formula-math">\[
+f:\mathbb R^d\to\mathbb R,
+\]</div>
+<p>the gradient with respect to:</p>
+<div class="formula-math">\[
+\mathbf x=
+\begin{bmatrix}
+x_1\\
+\vdots\\
+x_d
+\end{bmatrix}
+\]</div>
+<p>is:</p>
+<div class="formula-math">\[
+\boxed{
+\nabla_{\mathbf x}f(\mathbf x)
+=
+\begin{bmatrix}
+\frac{\partial f}{\partial x_1}\\
+\frac{\partial f}{\partial x_2}\\
+\vdots\\
+\frac{\partial f}{\partial x_d}
+\end{bmatrix}.
+}
+\]</div>
+<p>The supplied Lecture09 states this exact structural idea: the gradient extends the derivative to vector inputs and is obtained by stacking the partial derivatives with respect to each component. fileciteturn69file0</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Why the Gradient Is a Vector</h2>
+      </div>
+      <div class="section-body">
+        <p>A scalar function with \(d\) inputs has \(d\) coordinate-wise rates of change:</p>
+<div class="formula-math">\[
+\frac{\partial f}{\partial x_1},
+\ldots,
+\frac{\partial f}{\partial x_d}.
+\]</div>
+<p>Therefore they naturally form:</p>
+<div class="formula-math">\[
+d
+\]</div>
+<p>components.</p>
+<p>So:</p>
+<div class="ascii-box"><pre>input dimension = d
+scalar output
+↓
+gradient dimension = d</pre></div>
+<p>For:</p>
+<div class="formula-math">\[
+f:\mathbb R^3\to\mathbb R,
+\]</div>
+<p>the gradient has three components.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Worked Example</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph TD
+    A["Contour Ellipses of Loss Function L(w1, w2)"] --> B["Gradient Vector ∇L = [∂L/∂w1, ∂L/∂w2]ᵀ"]
+    B --> C["Property 1: Perpendicular (90°) to Contour Tangent"]
+    B --> D["Property 2: Points Exactly in Direction of Steepest Ascent"]
+    D --> E["Gradient Descent Rule: Move along -∇L (Steepest Descent into Valley!)"]
+    style B fill:#0f172a,stroke:#a78bfa,color:#a78bfa,stroke-width:2px
+    style E fill:#0369a1,stroke:#38bdf8,color:#ffffff
+</pre></div>
+<p>Let:</p>
+<div class="formula-math">\[
+f(x,y)=x^2+3xy+y^2.
+\]</div>
+<p>From M19:</p>
+<div class="formula-math">\[
+\frac{\partial f}{\partial x}=2x+3y,
+\]</div>
+<div class="formula-math">\[
+\frac{\partial f}{\partial y}=3x+2y.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+\nabla f(x,y)
+=
+\begin{bmatrix}
+2x+3y\\
+3x+2y
+\end{bmatrix}.
+}
+\]</div>
+<p>At:</p>
+<div class="formula-math">\[
+(x,y)=(1,2),
+\]</div>
+<div class="formula-math">\[
+\nabla f(1,2)
+=
+\begin{bmatrix}
+8\\
+7
+\end{bmatrix}.
+\]</div>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+def grad_f(x, y):
+    return np.array([2*x, 6*y])
+
+point = np.array([2.0, 1.0])
+gradient = grad_f(point[0], point[1])
+norm_grad = np.linalg.norm(gradient)
+unit_ascent_dir = gradient / norm_grad
+unit_descent_dir = -unit_ascent_dir
+
+print(&quot;At point (x=2, y=1):&quot;)
+print(&quot;Gradient vector ∇f:&quot;, gradient)
+print(&quot;Magnitude of gradient:&quot;, round(norm_grad, 4))
+print(&quot;Unit steepest descent direction -∇f/||∇f||:&quot;, np.round(unit_descent_dir, 4))</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Gradient as a Collection of Coordinate Slopes</h2>
+      </div>
+      <div class="section-body">
+        <p>At \((1,2)\):</p>
+<div class="formula-math">\[
+\nabla f=
+\begin{bmatrix}
+8\\
+7
+\end{bmatrix}.
+\]</div>
+<p>Interpretation:</p>
+<div class="formula-math">\[
+f_x=8
+\]</div>
+<p>means a local increase in \(x\) increases \(f\) at approximately 8 units per unit of \(x\).</p>
+<p>Similarly:</p>
+<div class="formula-math">\[
+f_y=7.
+\]</div>
+<p>The gradient therefore summarizes local coordinate sensitivity.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Direction Is the Missing Piece</h2>
+      </div>
+      <div class="section-body">
+        <p>Partial derivatives only inspect coordinate directions.</p>
+<p>But suppose we move along:</p>
+<div class="formula-math">\[
+\mathbf u=
+\begin{bmatrix}
+u_1\\
+u_2
+\end{bmatrix}.
+\]</div>
+<p>That can be any direction.</p>
+<p>We want:</p>
+<blockquote>
+<p>“How fast does \(f\) change if I move in direction \(\mathbf u\)?”</p>
+</blockquote>
+<p>That is the <strong>directional derivative</strong>.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">Unit Direction Vector</h2>
+      </div>
+      <div class="section-body">
+        <p>Usually, direction is represented by a <strong>unit vector</strong>:</p>
+<div class="formula-math">\[
+\boxed{
+\|\mathbf u\|_2=1.
+}
+\]</div>
+<p>For:</p>
+<div class="formula-math">\[
+\mathbf u=
+\begin{bmatrix}
+u_1\\
+u_2
+\end{bmatrix},
+\]</div>
+<p>this means:</p>
+<div class="formula-math">\[
+u_1^2+u_2^2=1.
+\]</div>
+<p>Using a unit vector separates:</p>
+<div class="ascii-box"><pre>direction</pre></div>
+<p>from:</p>
+<div class="ascii-box"><pre>step size</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Directional Derivative</h2>
+      </div>
+      <div class="section-body">
+        <p>For differentiable \(f\), the directional derivative along unit vector \(\mathbf u\) is:</p>
+<div class="formula-math">\[
+\boxed{
+D_{\mathbf u}f(\mathbf x)
+=
+\nabla f(\mathbf x)^\top\mathbf u.
+}
+\]</div>
+<p>Equivalently:</p>
+<div class="formula-math">\[
+\boxed{
+D_{\mathbf u}f
+=
+\nabla f\cdot\mathbf u.
+}
+\]</div>
+<p>Expanded:</p>
+<div class="formula-math">\[
+D_{\mathbf u}f
+=
+\sum_{i=1}^d
+\frac{\partial f}{\partial x_i}u_i.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Why the Dot Product Appears</h2>
+      </div>
+      <div class="section-body">
+        <p>Recall from M06:</p>
+<div class="formula-math">\[
+\mathbf a^\top\mathbf b
+=
+\|\mathbf a\|
+\|\mathbf b\|
+\cos\theta.
+\]</div>
+<p>For unit \(\mathbf u\):</p>
+<div class="formula-math">\[
+\|\mathbf u\|=1.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+D_{\mathbf u}f
+=
+\|\nabla f\|\cos\theta.
+\]</div>
+<p>This immediately gives a geometric interpretation.</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+def grad_f(x, y):
+    return np.array([2*x, 6*y])
+
+point = np.array([2.0, 1.0])
+gradient = grad_f(point[0], point[1])
+norm_grad = np.linalg.norm(gradient)
+unit_ascent_dir = gradient / norm_grad
+unit_descent_dir = -unit_ascent_dir
+
+print(&quot;At point (x=2, y=1):&quot;)
+print(&quot;Gradient vector ∇f:&quot;, gradient)
+print(&quot;Magnitude of gradient:&quot;, round(norm_grad, 4))
+print(&quot;Unit steepest descent direction -∇f/||∇f||:&quot;, np.round(unit_descent_dir, 4))</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Directional Derivative Interpretation</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Exam Trap & Common Misconception</div>
+
+**Gradient is a Vector, Jacobian is a Matrix:** Never call $\nabla f$ a scalar! For a scalar loss $f: \mathbb{R}^d \to \mathbb{R}$, $\nabla f$ is a $d \times 1$ vector. For a vector-valued function $F: \mathbb{R}^n \to \mathbb{R}^m$ (like a multi-output neural layer), the derivative is the $m \times n$ **Jacobian matrix** $J_{ij} = \frac{\partial F_i}{\partial x_j}$!
+
+</div>
+
+<p>Let \(\theta\) be the angle between:</p>
+<div class="formula-math">\[
+\nabla f
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\mathbf u.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\boxed{
+D_{\mathbf u}f
+=
+\|\nabla f\|\cos\theta.
+}
+\]</div>
+<p>Therefore:</p>
+<h3>Same direction</h3>
+<div class="formula-math">\[
+\theta=0
+\]</div>
+<p>gives:</p>
+<div class="formula-math">\[
+D_{\mathbf u}f=\|\nabla f\|.
+\]</div>
+<p>Maximum increase.</p>
+<h3>Opposite direction</h3>
+<div class="formula-math">\[
+\theta=\pi
+\]</div>
+<p>gives:</p>
+<div class="formula-math">\[
+D_{\mathbf u}f=-\|\nabla f\|.
+\]</div>
+<p>Maximum decrease.</p>
+<h3>Perpendicular</h3>
+<div class="formula-math">\[
+\theta=\frac{\pi}{2}
+\]</div>
+<p>gives:</p>
+<div class="formula-math">\[
+D_{\mathbf u}f=0.
+\]</div>
+<p>No first-order change.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">The Gradient Points Toward Steepest Ascent</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Exam Trap & Common Misconception</div>
+
+**Gradient is a Vector, Jacobian is a Matrix:** Never call $\nabla f$ a scalar! For a scalar loss $f: \mathbb{R}^d \to \mathbb{R}$, $\nabla f$ is a $d \times 1$ vector. For a vector-valued function $F: \mathbb{R}^n \to \mathbb{R}^m$ (like a multi-output neural layer), the derivative is the $m \times n$ **Jacobian matrix** $J_{ij} = \frac{\partial F_i}{\partial x_j}$!
+
+</div>
+
+<p>Because:</p>
+<div class="formula-math">\[
+\cos\theta\le1,
+\]</div>
+<p>the maximum possible directional derivative is:</p>
+<div class="formula-math">\[
+\boxed{
+\max_{\|\mathbf u\|=1}
+D_{\mathbf u}f
+=
+\|\nabla f\|.
+}
+\]</div>
+<p>This occurs when:</p>
+<div class="formula-math">\[
+\boxed{
+\mathbf u
+=
+\frac{\nabla f}{\|\nabla f\|}
+}
+\]</div>
+<p>provided the gradient is nonzero.</p>
+<p>Thus:</p>
+<div class="formula-math">\[
+\boxed{
+\nabla f
+\text{ points in the direction of steepest local increase.}
+}
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Steepest Descent</h2>
+      </div>
+      <div class="section-body">
+        <p>To reduce the function fastest locally, move in the opposite direction:</p>
+<div class="formula-math">\[
+\boxed{
+-\nabla f.
+}
+\]</div>
+<p>This is the geometric foundation of gradient descent.</p>
+<p>The dedicated optimization file M22 develops the update rule in detail.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Worked Example — Directional Derivative</h2>
+      </div>
+      <div class="section-body">
+        <p>Let:</p>
+<div class="formula-math">\[
+f(x,y)=x^2+y^2.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\nabla f=
+\begin{bmatrix}
+2x\\
+2y
+\end{bmatrix}.
+\]</div>
+<p>At:</p>
+<div class="formula-math">\[
+(1,2),
+\]</div>
+<div class="formula-math">\[
+\nabla f(1,2)
+=
+\begin{bmatrix}
+2\\
+4
+\end{bmatrix}.
+\]</div>
+<p>Suppose:</p>
+<div class="formula-math">\[
+\mathbf u=
+\frac1{\sqrt2}
+\begin{bmatrix}
+1\\
+1
+\end{bmatrix}.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+D_{\mathbf u}f
+=
+\begin{bmatrix}
+2&4
+\end{bmatrix}
+\frac1{\sqrt2}
+\begin{bmatrix}
+1\\
+1
+\end{bmatrix}.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+D_{\mathbf u}f
+=
+\frac{6}{\sqrt2}
+=
+\boxed{3\sqrt2}.
+\]</div>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+def grad_f(x, y):
+    return np.array([2*x, 6*y])
+
+point = np.array([2.0, 1.0])
+gradient = grad_f(point[0], point[1])
+norm_grad = np.linalg.norm(gradient)
+unit_ascent_dir = gradient / norm_grad
+unit_descent_dir = -unit_ascent_dir
+
+print(&quot;At point (x=2, y=1):&quot;)
+print(&quot;Gradient vector ∇f:&quot;, gradient)
+print(&quot;Magnitude of gradient:&quot;, round(norm_grad, 4))
+print(&quot;Unit steepest descent direction -∇f/||∇f||:&quot;, np.round(unit_descent_dir, 4))</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">Compare with the Steepest Direction</h2>
+      </div>
+      <div class="section-body">
+        <p>At \((1,2)\):</p>
+<div class="formula-math">\[
+\nabla f=
+\begin{bmatrix}
+2\\
+4
+\end{bmatrix}.
+\]</div>
+<p>Its norm is:</p>
+<div class="formula-math">\[
+\|\nabla f\|_2
+=
+\sqrt{2^2+4^2}
+=
+\sqrt{20}
+=
+2\sqrt5.
+\]</div>
+<p>The maximum directional derivative is therefore:</p>
+<div class="formula-math">\[
+\boxed{
+2\sqrt5.
+}
+\]</div>
+<p>The chosen direction produced:</p>
+<div class="formula-math">\[
+3\sqrt2.
+\]</div>
+<p>Since:</p>
+<div class="formula-math">\[
+3\sqrt2\lt 2\sqrt5,
+\]</div>
+<p>it is not the steepest direction.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">A Useful Bound</h2>
+      </div>
+      <div class="section-body">
+        <p>By Cauchy–Schwarz:</p>
+<div class="formula-math">\[
+|\mathbf a^\top\mathbf b|
+\le
+\|\mathbf a\|_2\|\mathbf b\|_2.
+\]</div>
+<p>For unit \(\mathbf u\):</p>
+<div class="formula-math">\[
+|D_{\mathbf u}f|
+=
+|\nabla f^\top\mathbf u|
+\le
+\|\nabla f\|.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+|D_{\mathbf u}f|
+\le
+\|\nabla f\|.
+}
+\]</div>
+<p>The gradient norm is the maximum magnitude of first-order directional change.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">Level Sets and Gradient Geometry</h2>
+      </div>
+      <div class="section-body">
+        <p>A <strong>level set</strong> is a set of points where:</p>
+<div class="formula-math">\[
+f(\mathbf x)=c
+\]</div>
+<p>for a constant \(c\).</p>
+<p>Example for:</p>
+<div class="formula-math">\[
+f(x,y)=x^2+y^2:
+\]</div>
+<div class="formula-math">\[
+x^2+y^2=c
+\]</div>
+<p>produces circles.</p>
+<p>Moving along a level set leaves \(f\) unchanged.</p>
+<p>Therefore the directional derivative along a tangent direction is:</p>
+<div class="formula-math">\[
+0.
+\]</div>
+<p>Since:</p>
+<div class="formula-math">\[
+D_{\mathbf u}f
+=
+\nabla f^\top\mathbf u,
+\]</div>
+<p>the gradient is perpendicular to the level-set tangent.</p>
+<p>Thus:</p>
+<div class="formula-math">\[
+\boxed{
+\nabla f
+\perp
+\text{level-set direction}.
+}
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Geometric Picture</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph TD
+    A["Contour Ellipses of Loss Function L(w1, w2)"] --> B["Gradient Vector ∇L = [∂L/∂w1, ∂L/∂w2]ᵀ"]
+    B --> C["Property 1: Perpendicular (90°) to Contour Tangent"]
+    B --> D["Property 2: Points Exactly in Direction of Steepest Ascent"]
+    D --> E["Gradient Descent Rule: Move along -∇L (Steepest Descent into Valley!)"]
+    style B fill:#0f172a,stroke:#a78bfa,color:#a78bfa,stroke-width:2px
+    style E fill:#0369a1,stroke:#38bdf8,color:#ffffff
+</pre></div>
+<p>For:</p>
+<div class="formula-math">\[
+f(x,y)=x^2+y^2,
+\]</div>
+<p>level sets are circles:</p>
+<div class="ascii-box"><pre>↑ ∇f
+          |
+       ---•---
+     /         \
+    |    •      |
+     \         /
+       -------</pre></div>
+<p>The gradient points radially outward.</p>
+<p>It is perpendicular to the circle at the point.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">Local Linear Approximation in Vector Form</h2>
+      </div>
+      <div class="section-body">
+        <p>The one-variable approximation was:</p>
+<div class="formula-math">\[
+f(x+\Delta x)
+\approx
+f(x)+f'(x)\Delta x.
+\]</div>
+<p>In multiple variables:</p>
+<div class="formula-math">\[
+\boxed{
+f(\mathbf x+\Delta\mathbf x)
+\approx
+f(\mathbf x)
++
+\nabla f(\mathbf x)^\top
+\Delta\mathbf x.
+}
+\]</div>
+<p>This formula is fundamental.</p>
+<p>It says:</p>
+<blockquote>
+<p>near \(\mathbf x\), the function behaves approximately like an affine plane.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Worked Local Approximation</h2>
+      </div>
+      <div class="section-body">
+        <p>Let:</p>
+<div class="formula-math">\[
+f(x,y)=x^2+y^2.
+\]</div>
+<p>At:</p>
+<div class="formula-math">\[
+(1,2),
+\]</div>
+<p>we have:</p>
+<div class="formula-math">\[
+f(1,2)=5.
+\]</div>
+<p>And:</p>
+<div class="formula-math">\[
+\nabla f(1,2)=
+\begin{bmatrix}
+2\\
+4
+\end{bmatrix}.
+\]</div>
+<p>Suppose:</p>
+<div class="formula-math">\[
+\Delta\mathbf x=
+\begin{bmatrix}
+0.01\\
+-0.02
+\end{bmatrix}.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+f(\mathbf x+\Delta\mathbf x)
+\approx
+5+
+\begin{bmatrix}
+2&4
+\end{bmatrix}
+\begin{bmatrix}
+0.01\\
+-0.02
+\end{bmatrix}.
+\]</div>
+<p>Calculate:</p>
+<div class="formula-math">\[
+5+(0.02-0.08)
+=
+\boxed{4.94}.
+\]</div>
+<p>The actual function value at:</p>
+<div class="formula-math">\[
+(1.01,1.98)
+\]</div>
+<p>is close to this approximation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">Gradient Dimension</h2>
+      </div>
+      <div class="section-body">
+        <p>If:</p>
+<div class="formula-math">\[
+f:\mathbb R^d\to\mathbb R,
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+\boxed{
+\nabla f\in\mathbb R^d.
+}
+\]</div>
+<p>This dimension check is useful.</p>
+<p>Example:</p>
+<div class="formula-math">\[
+f(w_1,w_2,w_3,w_4,w_5)
+\]</div>
+<p>has a gradient with:</p>
+<div class="formula-math">\[
+\boxed5
+\]</div>
+<p>components.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">Jacobian — Why We Need a Matrix</h2>
+      </div>
+      <div class="section-body">
+        <p>Now consider a vector-valued function:</p>
+<div class="formula-math">\[
+\mathbf f:
+\mathbb R^n\to\mathbb R^m.
+\]</div>
+<p>Write:</p>
+<div class="formula-math">\[
+\mathbf f(\mathbf x)
+=
+\begin{bmatrix}
+f_1(\mathbf x)\\
+f_2(\mathbf x)\\
+\vdots\\
+f_m(\mathbf x)
+\end{bmatrix}.
+\]</div>
+<p>Each output has derivatives with respect to every input.</p>
+<p>We therefore need:</p>
+<div class="ascii-box"><pre>m outputs
+×
+n inputs</pre></div>
+<p>partial derivatives.</p>
+<p>These are arranged into the <strong>Jacobian matrix</strong>.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">Jacobian Definition</h2>
+      </div>
+      <div class="section-body">
+        <p>The Jacobian is:</p>
+<div class="formula-math">\[
+\boxed{
+J_{\mathbf f}(\mathbf x)
+=
+\begin{bmatrix}
+\frac{\partial f_1}{\partial x_1}
+&
+\frac{\partial f_1}{\partial x_2}
+&
+\cdots
+&
+\frac{\partial f_1}{\partial x_n}
+\\
+\frac{\partial f_2}{\partial x_1}
+&
+\frac{\partial f_2}{\partial x_2}
+&
+\cdots
+&
+\frac{\partial f_2}{\partial x_n}
+\\
+\vdots
+&
+\vdots
+&
+\ddots
+&
+\vdots
+\\
+\frac{\partial f_m}{\partial x_1}
+&
+\frac{\partial f_m}{\partial x_2}
+&
+\cdots
+&
+\frac{\partial f_m}{\partial x_n}
+\end{bmatrix}.
+}
+\]</div>
+<p>Thus:</p>
+<div class="formula-math">\[
+\boxed{
+J_{\mathbf f}\in\mathbb R^{m\times n}.
+}
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">Row Meaning</h2>
+      </div>
+      <div class="section-body">
+        <p>Row \(i\) contains:</p>
+<div class="formula-math">\[
+\nabla f_i^\top
+\]</div>
+<p>under the common row-Jacobian convention.</p>
+<p>So:</p>
+<div class="ascii-box"><pre>row i
+→ derivatives of output fᵢ
+  with respect to every input</pre></div>
+<p>This makes the Jacobian a stack of output gradients.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">Worked Example — Jacobian of a Vector Function</h2>
+      </div>
+      <div class="section-body">
+        <p>Let:</p>
+<div class="formula-math">\[
+f_1(x,y)=x^2+y,
+\]</div>
+<div class="formula-math">\[
+f_2(x,y)=xy.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\frac{\partial f_1}{\partial x}=2x,
+\qquad
+\frac{\partial f_1}{\partial y}=1.
+\]</div>
+<p>And:</p>
+<div class="formula-math">\[
+\frac{\partial f_2}{\partial x}=y,
+\qquad
+\frac{\partial f_2}{\partial y}=x.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+J_{\mathbf f}(x,y)
+=
+\begin{bmatrix}
+2x&1\\
+y&x
+\end{bmatrix}.
+}
+\]</div>
+<p>At:</p>
+<div class="formula-math">\[
+(x,y)=(1,2),
+\]</div>
+<div class="formula-math">\[
+\boxed{
+J_{\mathbf f}(1,2)
+=
+\begin{bmatrix}
+2&1\\
+2&1
+\end{bmatrix}.
+}
+\]</div>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+def grad_f(x, y):
+    return np.array([2*x, 6*y])
+
+point = np.array([2.0, 1.0])
+gradient = grad_f(point[0], point[1])
+norm_grad = np.linalg.norm(gradient)
+unit_ascent_dir = gradient / norm_grad
+unit_descent_dir = -unit_ascent_dir
+
+print(&quot;At point (x=2, y=1):&quot;)
+print(&quot;Gradient vector ∇f:&quot;, gradient)
+print(&quot;Magnitude of gradient:&quot;, round(norm_grad, 4))
+print(&quot;Unit steepest descent direction -∇f/||∇f||:&quot;, np.round(unit_descent_dir, 4))</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">Jacobian Dimensions — Exam Habit</h2>
+      </div>
+      <div class="section-body">
+        <p>Always write:</p>
+<div class="formula-math">\[
+\boxed{
+\text{Jacobian dimensions}
+=
+(\text{output dimension})
+\times
+(\text{input dimension}).
+}
+\]</div>
+<p>So for:</p>
+<div class="formula-math">\[
+\mathbf f:\mathbb R^5\to\mathbb R^3,
+\]</div>
+<p>the Jacobian is:</p>
+<div class="formula-math">\[
+\boxed{
+3\times5.
+}
+\]</div>
+<p>This quick dimension check catches many errors.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">Gradient vs Jacobian</h2>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Object</th>
+<th>Function type</th>
+<th>Shape</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Derivative</td>
+<td>\(\mathbb R\to\mathbb R\)</td>
+<td>scalar</td>
+</tr>
+<tr>
+<td>Gradient</td>
+<td>\(\mathbb R^d\to\mathbb R\)</td>
+<td>\(d\)-vector</td>
+</tr>
+<tr>
+<td>Jacobian</td>
+<td>\(\mathbb R^n\to\mathbb R^m\)</td>
+<td>\(m\times n\)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Conceptual hierarchy:</p>
+<div class="ascii-box"><pre>scalar → scalar
+      → derivative
+
+vector → scalar
+      → gradient
+
+vector → vector
+      → Jacobian</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">Scalar Function as a Special Jacobian Case</h2>
+      </div>
+      <div class="section-body">
+        <p>If:</p>
+<div class="formula-math">\[
+m=1,
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+J_f
+\]</div>
+<p>is a:</p>
+<div class="formula-math">\[
+1\times n
+\]</div>
+<p>row matrix containing the partial derivatives.</p>
+<p>Depending on convention, the gradient is commonly represented as the corresponding column vector.</p>
+<p>So:</p>
+<div class="ascii-box"><pre>Jacobian of scalar output
+↔ gradient with a transpose convention</pre></div>
+<p>The important thing is to stay consistent about row vs column orientation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">Differential View</h2>
+      </div>
+      <div class="section-body">
+        <p>For a small input change:</p>
+<div class="formula-math">\[
+\Delta\mathbf x,
+\]</div>
+<p>a differentiable vector-valued function satisfies approximately:</p>
+<div class="formula-math">\[
+\boxed{
+\Delta\mathbf f
+\approx
+J_{\mathbf f}(\mathbf x)\Delta\mathbf x.
+}
+\]</div>
+<p>This is the multivariable analogue of:</p>
+<div class="formula-math">\[
+\Delta y\approx f'(x)\Delta x.
+\]</div>
+<p>So the Jacobian is the local linear transformation that maps small input changes to approximate output changes.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">Worked Differential Example</h2>
+      </div>
+      <div class="section-body">
+        <p>Using:</p>
+<div class="formula-math">\[
+\mathbf f(x,y)
+=
+\begin{bmatrix}
+x^2+y\\
+xy
+\end{bmatrix},
+\]</div>
+<p>at:</p>
+<div class="formula-math">\[
+(1,2),
+\]</div>
+<p>the Jacobian is:</p>
+<div class="formula-math">\[
+J=
+\begin{bmatrix}
+2&1\\
+2&1
+\end{bmatrix}.
+\]</div>
+<p>Take:</p>
+<div class="formula-math">\[
+\Delta\mathbf x=
+\begin{bmatrix}
+0.1\\
+0.2
+\end{bmatrix}.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\Delta\mathbf f
+\approx
+J\Delta\mathbf x
+\]</div>
+<div class="formula-math">\[
+=
+\begin{bmatrix}
+2&1\\
+2&1
+\end{bmatrix}
+\begin{bmatrix}
+0.1\\
+0.2
+\end{bmatrix}
+=
+\begin{bmatrix}
+0.4\\
+0.4
+\end{bmatrix}.
+\]</div>
+<p>Thus the Jacobian predicts the first-order output change.</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+def grad_f(x, y):
+    return np.array([2*x, 6*y])
+
+point = np.array([2.0, 1.0])
+gradient = grad_f(point[0], point[1])
+norm_grad = np.linalg.norm(gradient)
+unit_ascent_dir = gradient / norm_grad
+unit_descent_dir = -unit_ascent_dir
+
+print(&quot;At point (x=2, y=1):&quot;)
+print(&quot;Gradient vector ∇f:&quot;, gradient)
+print(&quot;Magnitude of gradient:&quot;, round(norm_grad, 4))
+print(&quot;Unit steepest descent direction -∇f/||∇f||:&quot;, np.round(unit_descent_dir, 4))</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">Chain Rule with Jacobians</h2>
+      </div>
+      <div class="section-body">
+        <p>For composition:</p>
+<div class="formula-math">\[
+\mathbf z=\mathbf g(\mathbf x),
+\]</div>
+<div class="formula-math">\[
+\mathbf y=\mathbf f(\mathbf z),
+\]</div>
+<p>the Jacobians compose through matrix multiplication:</p>
+<div class="formula-math">\[
+\boxed{
+J_{\mathbf f\circ\mathbf g}(\mathbf x)
+=
+J_{\mathbf f}(\mathbf g(\mathbf x))
+J_{\mathbf g}(\mathbf x).
+}
+\]</div>
+<p>This is the multivariable chain rule.</p>
+<p>Notice the transition:</p>
+<div class="ascii-box"><pre>scalar chain rule
+→ multiply derivatives
+
+vector chain rule
+→ multiply Jacobian matrices</pre></div>
+<p>This is a major conceptual bridge from calculus to ML linear algebra.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">Why Matrix Multiplication Appears</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+\Delta\mathbf z
+\approx
+J_{\mathbf g}\Delta\mathbf x
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\Delta\mathbf y
+\approx
+J_{\mathbf f}\Delta\mathbf z.
+\]</div>
+<p>Substitute:</p>
+<div class="formula-math">\[
+\Delta\mathbf y
+\approx
+J_{\mathbf f}
+J_{\mathbf g}
+\Delta\mathbf x.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+J_{\mathbf f\circ\mathbf g}
+=
+J_{\mathbf f}J_{\mathbf g}.
+}
+\]</div>
+<p>The chain rule becomes matrix multiplication because intermediate vector changes are transformed successively.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Worked Jacobian Chain Example</h2>
+      </div>
+      <div class="section-body">
+        <p>Let:</p>
+<div class="formula-math">\[
+\mathbf g(x,y)
+=
+\begin{bmatrix}
+x+y\\
+xy
+\end{bmatrix}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\mathbf f(u,v)
+=
+\begin{bmatrix}
+u^2\\
+u+v
+\end{bmatrix}.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+J_{\mathbf g}
+=
+\begin{bmatrix}
+1&1\\
+y&x
+\end{bmatrix}.
+\]</div>
+<p>Also:</p>
+<div class="formula-math">\[
+J_{\mathbf f}
+=
+\begin{bmatrix}
+2u&0\\
+1&1
+\end{bmatrix}.
+\]</div>
+<p>Because:</p>
+<div class="formula-math">\[
+u=x+y,\qquad v=xy,
+\]</div>
+<p>the composed Jacobian is:</p>
+<div class="formula-math">\[
+\boxed{
+J_{\mathbf f\circ\mathbf g}
+=
+J_{\mathbf f}
+J_{\mathbf g}.
+}
+\]</div>
+<p>The key lesson is structural: calculate local Jacobians and compose them by multiplication.</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+def grad_f(x, y):
+    return np.array([2*x, 6*y])
+
+point = np.array([2.0, 1.0])
+gradient = grad_f(point[0], point[1])
+norm_grad = np.linalg.norm(gradient)
+unit_ascent_dir = gradient / norm_grad
+unit_descent_dir = -unit_ascent_dir
+
+print(&quot;At point (x=2, y=1):&quot;)
+print(&quot;Gradient vector ∇f:&quot;, gradient)
+print(&quot;Magnitude of gradient:&quot;, round(norm_grad, 4))
+print(&quot;Unit steepest descent direction -∇f/||∇f||:&quot;, np.round(unit_descent_dir, 4))</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Gradient and Linear Approximation</h2>
+      </div>
+      <div class="section-body">
+        <p>For scalar:</p>
+<div class="formula-math">\[
+f(\mathbf x),
+\]</div>
+<p>the Jacobian is effectively the collection of first derivatives.</p>
+<p>The local approximation becomes:</p>
+<div class="formula-math">\[
+\boxed{
+f(\mathbf x+\Delta\mathbf x)
+\approx
+f(\mathbf x)
++
+\nabla f(\mathbf x)^\top\Delta\mathbf x.
+}
+\]</div>
+<p>Thus:</p>
+<div class="ascii-box"><pre>gradient
++
+small input displacement
+→
+predicted scalar change</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-35" class="section-block">
+      <div class="section-header">
+        <span class="section-num">35</span>
+        <h2 class="section-heading">Optimization Connection</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+L(\mathbf w)
+\]</div>
+<p>is a scalar loss.</p>
+<p>Then:</p>
+<div class="formula-math">\[
+\nabla L(\mathbf w)
+\]</div>
+<p>contains all parameter derivatives.</p>
+<p>The local approximation is:</p>
+<div class="formula-math">\[
+L(\mathbf w+\Delta\mathbf w)
+\approx
+L(\mathbf w)
++
+\nabla L(\mathbf w)^\top
+\Delta\mathbf w.
+\]</div>
+<p>Choose:</p>
+<div class="formula-math">\[
+\Delta\mathbf w
+=
+-\eta\nabla L.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+L(\mathbf w+\Delta\mathbf w)
+\approx
+L(\mathbf w)
+-
+\eta
+\|\nabla L\|^2.
+\]</div>
+<p>Since:</p>
+<div class="formula-math">\[
+\|\nabla L\|^2\ge0,
+\]</div>
+<p>the first-order predicted change is non-positive for \(\eta\gt 0\).</p>
+<p>This is the mathematical intuition for gradient descent.</p>
+<p>Detailed step-size and convergence analysis belongs to M22.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-36" class="section-block">
+      <div class="section-header">
+        <span class="section-num">36</span>
+        <h2 class="section-heading">Why the Gradient Has a Direction</h2>
+      </div>
+      <div class="section-body">
+        <p>A gradient is not simply:</p>
+<div class="ascii-box"><pre>a list of numbers</pre></div>
+<p>It also defines a vector direction in parameter space.</p>
+<p>For example:</p>
+<div class="formula-math">\[
+\nabla L=
+\begin{bmatrix}
+3\\
+-4
+\end{bmatrix}.
+\]</div>
+<p>Interpretation:</p>
+<div class="ascii-box"><pre>increase w₁ → locally increases loss
+increase w₂ → locally decreases loss</pre></div>
+<p>To decrease the loss using first-order information, move approximately in:</p>
+<div class="formula-math">\[
+-\nabla L
+=
+\begin{bmatrix}
+-3\\
+4
+\end{bmatrix}.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-37" class="section-block">
+      <div class="section-header">
+        <span class="section-num">37</span>
+        <h2 class="section-heading">Gradient Norm as Sensitivity Magnitude</h2>
+      </div>
+      <div class="section-body">
+        <p>The vector:</p>
+<div class="formula-math">\[
+\nabla f
+\]</div>
+<p>has both:</p>
+<div class="ascii-box"><pre>direction
+magnitude</pre></div>
+<p>Magnitude:</p>
+<div class="formula-math">\[
+\boxed{
+\|\nabla f\|_2
+=
+\sqrt{
+\sum_{i=1}^d
+\left(
+\frac{\partial f}{\partial x_i}
+\right)^2
+}.
+}
+\]</div>
+<p>This is the largest first-order rate of change over unit directions.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-38" class="section-block">
+      <div class="section-header">
+        <span class="section-num">38</span>
+        <h2 class="section-heading">Zero Gradient</h2>
+      </div>
+      <div class="section-body">
+        <p>If:</p>
+<div class="formula-math">\[
+\boxed{
+\nabla f(\mathbf x)=\mathbf0,
+}
+\]</div>
+<p>then every first partial derivative is zero.</p>
+<p>The first-order directional derivative in every direction is therefore zero:</p>
+<div class="formula-math">\[
+D_{\mathbf u}f=0.
+\]</div>
+<p>Such a point is a stationary point.</p>
+<p>As with one-variable calculus, stationary does not by itself prove minimum.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-39" class="section-block">
+      <div class="section-header">
+        <span class="section-num">39</span>
+        <h2 class="section-heading">Gradient vs Direction of Actual Motion</h2>
+      </div>
+      <div class="section-body">
+        <p>Important distinction:</p>
+<div class="ascii-box"><pre>gradient
+→ direction of maximum increase
+
+negative gradient
+→ direction of maximum decrease</pre></div>
+<p>But an optimization algorithm may use:</p>
+<div class="ascii-box"><pre>learning rate
+constraints
+momentum
+normalization
+adaptive scaling</pre></div>
+<p>so its actual step need not have exactly the same magnitude as the gradient.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-40" class="section-block">
+      <div class="section-header">
+        <span class="section-num">40</span>
+        <h2 class="section-heading">Hinglish Teacher Explanation</h2>
+      </div>
+      <div class="section-body">
+        <p>Gradient ko hill example se samjho.</p>
+<p>Tum hill par ek point par ho.</p>
+<p>Tumhare paas infinite directions hain:</p>
+<div class="ascii-box"><pre>left
+right
+up
+down
+diagonal
+...</pre></div>
+<p>Partial derivatives sirf coordinate directions dekhte hain.</p>
+<p>Gradient un sab coordinate slopes ko ek vector mein collect karta hai.</p>
+<div class="formula-math">\[
+\nabla f
+=
+\begin{bmatrix}
+f_{x_1}\\
+f_{x_2}\\
+\vdots
+\end{bmatrix}.
+\]</div>
+<p>Ab kisi direction \(\mathbf u\) mein jaana hai.</p>
+<p>Change ki rate:</p>
+<div class="formula-math">\[
+D_{\mathbf u}f
+=
+\nabla f^\top\mathbf u.
+\]</div>
+<p>Agar direction gradient ke exactly same direction mein hai:</p>
+<div class="formula-math">\[
+D_{\mathbf u}f=\|\nabla f\|
+\]</div>
+<p>— maximum uphill movement.</p>
+<p>Aur opposite direction:</p>
+<div class="formula-math">\[
+-\nabla f
+\]</div>
+<p>— maximum downhill direction.</p>
+<p>Machine learning mein hill ko loss landscape samjho.</p>
+<div class="ascii-box"><pre>gradient
+→ loss sabse fast badhega
+
+negative gradient
+→ loss sabse fast girega</pre></div>
+<p>Ab jab function scalar nahi, vector output deta hai, ek gradient kaafi nahi.</p>
+<p>Har output ke liye input ke respect mein derivatives chahiye.</p>
+<p>Un sab ko matrix mein arrange karo:</p>
+<div class="formula-math">\[
+J.
+\]</div>
+<p>Wahi Jacobian hai.</p>
+<p>ML mein yeh bahut important hai kyunki vector transformations ko locally linear maps ki tarah treat karna possible ho jata hai.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-41" class="section-block">
+      <div class="section-header">
+        <span class="section-num">41</span>
+        <h2 class="section-heading">Formula Cards</h2>
+      </div>
+      <div class="section-body">
+        <h2>F-M21-GRAD-01</h2>
+<div class="formula-math">\[
+\boxed{
+\nabla_{\mathbf x}f
+=
+\begin{bmatrix}
+\partial f/\partial x_1\\
+\vdots\\
+\partial f/\partial x_d
+\end{bmatrix}
+}
+\]</div>
+<p>Directly supported by the supplied Lecture09 gradient formulation. fileciteturn69file0</p>
+<hr />
+<h2>F-M21-DIR-01</h2>
+<div class="formula-math">\[
+\boxed{
+D_{\mathbf u}f
+=
+\nabla f^\top\mathbf u
+}
+\]</div>
+<p>for unit direction \(\mathbf u\).</p>
+<hr />
+<h2>F-M21-MAX-01</h2>
+<div class="formula-math">\[
+\boxed{
+\max_{\|\mathbf u\|=1}
+D_{\mathbf u}f
+=
+\|\nabla f\|
+}
+\]</div>
+<hr />
+<h2>F-M21-MIN-01</h2>
+<div class="formula-math">\[
+\boxed{
+\min_{\|\mathbf u\|=1}
+D_{\mathbf u}f
+=
+-\|\nabla f\|
+}
+\]</div>
+<hr />
+<h2>F-M21-LIN-01</h2>
+<div class="formula-math">\[
+\boxed{
+f(\mathbf x+\Delta\mathbf x)
+\approx
+f(\mathbf x)
++
+\nabla f^\top\Delta\mathbf x
+}
+\]</div>
+<hr />
+<h2>F-M21-JAC-01</h2>
+<p>For:</p>
+<div class="formula-math">\[
+\mathbf f:\mathbb R^n\to\mathbb R^m,
+\]</div>
+<div class="formula-math">\[
+\boxed{
+J_{\mathbf f}\in\mathbb R^{m\times n}.
+}
+\]</div>
+<hr />
+<h2>F-M21-JAC-02</h2>
+<div class="formula-math">\[
+\boxed{
+\Delta\mathbf f
+\approx
+J_{\mathbf f}\Delta\mathbf x
+}
+\]</div>
+<hr />
+<h2>F-M21-CHAIN-01</h2>
+<p>For composition:</p>
+<div class="formula-math">\[
+\mathbf y=\mathbf f(\mathbf g(\mathbf x)),
+\]</div>
+<div class="formula-math">\[
+\boxed{
+J_{\mathbf f\circ\mathbf g}
+=
+J_{\mathbf f}J_{\mathbf g}.
+}
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-42" class="section-block">
+      <div class="section-header">
+        <span class="section-num">42</span>
+        <h2 class="section-heading">Dimension-Checking Protocol</h2>
+      </div>
+      <div class="section-body">
+        <h3>Gradient</h3>
+<p>If:</p>
+<div class="formula-math">\[
+f:\mathbb R^d\to\mathbb R,
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+\nabla f
+\]</div>
+<p>has \(d\) components.</p>
+<h3>Jacobian</h3>
+<p>If:</p>
+<div class="formula-math">\[
+f:\mathbb R^n\to\mathbb R^m,
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+J_f
+\]</div>
+<p>must be:</p>
+<div class="formula-math">\[
+m\times n.
+\]</div>
+<h3>Matrix-chain check</h3>
+<p>If:</p>
+<div class="formula-math">\[
+J_f
+\]</div>
+<p>is:</p>
+<div class="formula-math">\[
+m\times k
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+J_g
+\]</div>
+<p>is:</p>
+<div class="formula-math">\[
+k\times n,
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+J_fJ_g
+\]</div>
+<p>is:</p>
+<div class="formula-math">\[
+m\times n.
+\]</div>
+<p>If dimensions do not multiply correctly, revisit the derivative orientation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-43" class="section-block">
+      <div class="section-header">
+        <span class="section-num">43</span>
+        <h2 class="section-heading">Numerical-Solving Protocol</h2>
+      </div>
+      <div class="section-body">
+        <p>For a gradient:</p>
+<div class="ascii-box"><pre>1. Identify every input variable
+2. Compute one partial derivative per input
+3. Stack them consistently
+4. Substitute the point
+5. Check the vector dimension</pre></div>
+<p>For a directional derivative:</p>
+<div class="ascii-box"><pre>1. Find the gradient
+2. Verify the direction is a unit vector
+3. Compute gradientᵀ × direction
+4. Interpret the sign</pre></div>
+<p>For a Jacobian:</p>
+<div class="ascii-box"><pre>1. List all output components
+2. List all input variables
+3. Differentiate every output wrt every input
+4. Arrange derivatives in output-row/input-column order
+5. Check dimensions</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-44" class="section-block">
+      <div class="section-header">
+        <span class="section-num">44</span>
+        <h2 class="section-heading">Common Mistakes</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Exam Trap & Common Misconception</div>
+
+**Gradient is a Vector, Jacobian is a Matrix:** Never call $\nabla f$ a scalar! For a scalar loss $f: \mathbb{R}^d \to \mathbb{R}$, $\nabla f$ is a $d \times 1$ vector. For a vector-valued function $F: \mathbb{R}^n \to \mathbb{R}^m$ (like a multi-output neural layer), the derivative is the $m \times n$ **Jacobian matrix** $J_{ij} = \frac{\partial F_i}{\partial x_j}$!
+
+</div>
+
+<h3>Mistake 1</h3>
+<p>Treating a gradient as a scalar.</p>
+<p>For:</p>
+<div class="formula-math">\[
+f:\mathbb R^d\to\mathbb R,
+\]</div>
+<p>the gradient generally has \(d\) components.</p>
+<h3>Mistake 2</h3>
+<p>Forgetting to normalize the direction vector when the question asks for a directional derivative along a unit direction.</p>
+<h3>Mistake 3</h3>
+<p>Confusing steepest ascent with steepest descent.</p>
+<div class="formula-math">\[
++\nabla f
+\rightarrow
+\text{increase}
+\]</div>
+<div class="formula-math">\[
+-\nabla f
+\rightarrow
+\text{decrease}
+\]</div>
+<h3>Mistake 4</h3>
+<p>Getting the Jacobian dimensions backwards.</p>
+<p>For:</p>
+<div class="formula-math">\[
+\mathbb R^n\to\mathbb R^m,
+\]</div>
+<p>the common Jacobian convention is:</p>
+<div class="formula-math">\[
+m\times n.
+\]</div>
+<h3>Mistake 5</h3>
+<p>Mixing row-gradient and column-gradient conventions without accounting for transposes.</p>
+<h3>Mistake 6</h3>
+<p>Thinking a zero gradient proves a minimum.</p>
+<p>It only establishes zero first-order change.</p>
+<h3>Mistake 7</h3>
+<p>Assuming the gradient gives the full nonlinear behavior.</p>
+<p>It gives local first-order information.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-45" class="section-block">
+      <div class="section-header">
+        <span class="section-num">45</span>
+        <h2 class="section-heading">Active Recall</h2>
+      </div>
+      <div class="section-body">
+        <p>Without notes:</p>
+<ol>
+<li>Define the gradient.</li>
+<li>Why does a scalar-valued function with \(d\) inputs have a \(d\)-component gradient?</li>
+<li>What is a directional derivative?</li>
+<li>Derive:</li>
+</ol>
+<div class="formula-math">\[
+   D_{\mathbf u}f=\nabla f^\top\mathbf u.
+   \]</div>
+<ol>
+<li>Why does the gradient point toward steepest ascent?</li>
+<li>Why does \(-\nabla f\) point toward steepest descent?</li>
+<li>What is a level set?</li>
+<li>Why is the gradient perpendicular to a level-set tangent?</li>
+<li>Write the multivariable local linear approximation.</li>
+<li>Define the Jacobian.</li>
+<li>What are the dimensions of the Jacobian of:</li>
+</ol>
+<div class="formula-math">\[
+    \mathbb R^4\to\mathbb R^3?
+    \]</div>
+<ol>
+<li>How is a gradient related to a Jacobian?</li>
+<li>State the Jacobian chain rule.</li>
+<li>Why does matrix multiplication appear in the vector chain rule?</li>
+<li>Why is gradient information central to ML optimization?</li>
+</ol>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-46" class="section-block">
+      <div class="section-header">
+        <span class="section-num">46</span>
+        <h2 class="section-heading">Practice Set</h2>
+      </div>
+      <div class="section-body">
+        <h2>Gradient</h2>
+<h3>P-M21-01</h3>
+<p>Find:</p>
+<div class="formula-math">\[
+\nabla f
+\]</div>
+<p>for:</p>
+<div class="formula-math">\[
+f(x,y,z)=x^2+2xy+3z^2.
+\]</div>
+<h3>P-M21-02</h3>
+<p>Evaluate the gradient at:</p>
+<div class="formula-math">\[
+(1,2,-1).
+\]</div>
+<hr />
+<h2>Directional Derivative</h2>
+<h3>P-M21-03</h3>
+<p>For:</p>
+<div class="formula-math">\[
+f(x,y)=x^2+y^2,
+\]</div>
+<p>find the directional derivative at \((1,2)\) in direction:</p>
+<div class="formula-math">\[
+\mathbf u=
+\frac1{\sqrt5}
+\begin{bmatrix}
+1\\
+2
+\end{bmatrix}.
+\]</div>
+<h3>P-M21-04</h3>
+<p>For the same function and point, determine the unit direction of steepest ascent.</p>
+<h3>P-M21-05</h3>
+<p>Determine the unit direction of steepest descent.</p>
+<hr />
+<h2>Jacobian</h2>
+<h3>P-M21-06</h3>
+<p>Find the Jacobian of:</p>
+<div class="formula-math">\[
+\mathbf f(x,y)
+=
+\begin{bmatrix}
+x^2+y\\
+xy\\
+x-y
+\end{bmatrix}.
+\]</div>
+<h3>P-M21-07</h3>
+<p>State the dimensions of the Jacobian for:</p>
+<div class="formula-math">\[
+\mathbb R^7\to\mathbb R^4.
+\]</div>
+<hr />
+<h2>Chain Rule</h2>
+<h3>P-M21-08</h3>
+<p>Suppose:</p>
+<div class="formula-math">\[
+\mathbf z=\mathbf g(\mathbf x)
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\mathbf y=\mathbf f(\mathbf z).
+\]</div>
+<p>Write the Jacobian of:</p>
+<div class="formula-math">\[
+\mathbf y(\mathbf x).
+\]</div>
+<h3>P-M21-09</h3>
+<p>Explain in words why the scalar chain rule becomes matrix multiplication in the vector case.</p>
+<hr />
+<h2>Optimization</h2>
+<h3>P-M21-10</h3>
+<p>Suppose:</p>
+<div class="formula-math">\[
+L(w_1,w_2)
+=
+w_1^2+4w_2^2.
+\]</div>
+<p>Find:</p>
+<div class="formula-math">\[
+\nabla L
+\]</div>
+<p>and write the negative-gradient direction.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-47" class="section-block">
+      <div class="section-header">
+        <span class="section-num">47</span>
+        <h2 class="section-heading">Exam Connection</h2>
+      </div>
+      <div class="section-body">
+        <p>Typical triggers:</p>
+<div class="ascii-box"><pre>“gradient of f”
+→ stack partial derivatives
+
+“directional derivative”
+→ ∇fᵀu
+
+“steepest ascent”
+→ +gradient
+
+“steepest descent”
+→ −gradient
+
+“level curve/surface”
+→ gradient perpendicular
+
+“local approximation”
+→ f(x+Δx)≈f(x)+∇fᵀΔx
+
+“Jacobian”
+→ output × input dimensions
+
+“vector chain rule”
+→ Jacobian multiplication</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-48" class="section-block">
+      <div class="section-header">
+        <span class="section-num">48</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <p>You should now be able to:</p>
+<div class="ascii-box"><pre>construct gradients
+evaluate gradients
+calculate directional derivatives
+explain steepest ascent/descent
+use gradient geometry
+perform first-order vector approximations
+construct Jacobians
+check Jacobian dimensions
+apply the vector chain rule
+connect gradients to optimization</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-49" class="section-block">
+      <div class="section-header">
+        <span class="section-num">49</span>
+        <h2 class="section-heading">The Calculus-to-ML Bridge</h2>
+      </div>
+      <div class="section-body">
+        <p>At this point the mathematical chain is:</p>
+<div class="ascii-box"><pre>M18
+Derivatives
+   ↓
+M19
+Partial Derivatives
+   ↓
+M20
+Chain Rule + Computational Graphs
+   ↓
+M21
+Gradient + Jacobian + Direction
+   ↓
+M22
+Optimization + Gradient Descent
+   ↓
+M23
+SGD + Mini-Batches + Optimization Behaviour</pre></div>
+<p>And the machine-learning interpretation is:</p>
+<div class="ascii-box"><pre>function
+↓
+local change
+↓
+parameter sensitivity
+↓
+gradient
+↓
+loss-reducing direction
+↓
+parameter update
+↓
+learning</pre></div>
+<p>The next file turns this mathematics into the optimization machinery used to train models.</p>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="m20-chain-rule-computational-graphs.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← M20 — Chain Rule & Graphs</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">📐 Math Index</span>
+      </a>
+      <a href="index.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: Math Companion Hub →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search math modules, formulas, proofs, theorems…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">📐</span>Math Hub</a>
+  <a href="m21-gradients-and-jacobians.html" class="mobile-nav-btn active"><span class="icon">📖</span>MATH-M21</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

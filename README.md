@@ -150,8 +150,12 @@ A self-contained mathematical depth layer that deepens derivations, vector geome
 - **[M16: Variance & Standard Deviation](math/m16-variance-standard-deviation.html):** Distribution spread, scaling rules $\text{Var}(aX+b) = a^2\text{Var}(X)$, bias-variance tradeoff.
 - **[M17: Covariance, Correlation & Statistical Relationships](math/m17-covariance-and-correlation.html):** Joint variability $\text{Cov}(X,Y)$, Pearson correlation $\rho \in [-1, 1]$, covariance matrix $\Sigma$.
 
-### Track 4: Calculus, Gradients & Optimization (Upcoming Drop)
-- Forward-compatible architecture ready to absorb M18–M24 (derivatives, partial derivatives, chain rule on computational graphs, multivariate gradients, SGD dynamics, L1/L2 regularization geometry, and MATH-99 Master Compendium).
+### Track 4: Calculus, Gradients & Optimization (4 Live · 3 Upcoming)
+- **[M18: Derivatives & Rates of Change](math/m18-derivatives-rates-of-change.html):** Limits, tangent slopes, sensitivity analysis, derivatives of activation functions (ReLU, Sigmoid, Tanh).
+- **[M19: Partial Derivatives & Multivariable Functions](math/m19-partial-derivatives.html):** Multivariable loss surfaces $L(w_1, \dots, w_d, b)$, coordinate slices, holding variables constant.
+- **[M20: Chain Rule & Computational Graphs](math/m20-chain-rule-computational-graphs.html):** Composite functions, intermediate variables, DAG forward/backward passes, backpropagation engine.
+- **[M21: Gradients, Jacobians & Direction of Change](math/m21-gradients-and-jacobians.html):** Gradient vector $\nabla f$, proof of steepest ascent, contour orthogonality, Jacobian matrix $J_{ij} = \frac{\partial F_i}{\partial x_j}$, Hessian curvature.
+- *Upcoming in next drop:* M22 (Gradient Descent Dynamics), M23 (Stochastic Gradient Descent & Mini-batching), M24 (L1/L2 Regularization Geometry), MATH-99 (Master Compendium).
 
 ---
 

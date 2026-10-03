@@ -137,7 +137,11 @@
 </div>
 <div class="sidebar-section">
   <div class="sidebar-section-label">Track 4: Calculus & Optimization</div>
-  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>M18–M24: Derivatives, Gradients & SGD (Upcoming)</span>
+  <a href="m18-derivatives-rates-of-change.html" class="sidebar-link"><span class="link-icon">📈</span>M18: Derivatives &amp; Rates of Change</a>
+  <a href="m19-partial-derivatives.html" class="sidebar-link"><span class="link-icon">📈</span>M19: Partial Derivatives &amp; Multivariable Functions</a>
+  <a href="m20-chain-rule-computational-graphs.html" class="sidebar-link"><span class="link-icon">📈</span>M20: Chain Rule &amp; Computational Graphs</a>
+  <a href="m21-gradients-and-jacobians.html" class="sidebar-link"><span class="link-icon">📈</span>M21: Gradients, Jacobians &amp; Direction of Change</a>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>M22–M24: Optimization, SGD & Regularization (Upcoming)</span>
 </div>
   </nav>
 </aside>
@@ -152,18 +156,18 @@
         <span class="track-badge track-1">Track 1: Foundations</span>
         <span class="track-badge track-2">Track 2: Linear Algebra</span>
         <span class="track-badge track-3">Track 3: Probability</span>
-        <span class="track-badge track-4">Track 4: Calculus (Upcoming)</span>
+        <span class="track-badge track-4">Track 4: Calculus &amp; Optimization</span>
       </div>
       <h1 class="hub-title">The Mathematical Engine of AI &amp; Machine Learning</h1>
       <p class="hub-subtitle">
         "Why does the formula work, and how do I calculate it myself?"<br>
-        A self-contained mathematical depth layer connecting vector geometry, linear transformations, probability distributions, and optimization directly to AI/ML algorithms.
+        A self-contained mathematical depth layer connecting vector geometry, linear transformations, probability distributions, multivariate calculus, and optimization directly to AI/ML algorithms.
       </p>
 
       <div class="chapter-meta" style="justify-content:center;">
-        <span class="chapter-meta-item">📚 17 Deep Modules</span>
-        <span class="chapter-meta-item">📌 776 Sections</span>
-        <span class="chapter-meta-item">🧮 2,300+ Verified Formulas</span>
+        <span class="chapter-meta-item">📚 21 Deep Modules Live</span>
+        <span class="chapter-meta-item">📌 936 Sections</span>
+        <span class="chapter-meta-item">🧮 2,800+ Verified Formulas</span>
         <span class="chapter-meta-item uni-badge">🎓 DU B.Tech DSC-14</span>
       </div>
     </div>
@@ -176,8 +180,9 @@
         Har formula ke peeche ek simple physical ya geometric idea hota hai:
         <strong>Dot product</strong> ka matlab hai <em>alignment</em>, 
         <strong>Matrix multiplication</strong> ka matlab hai <em>space transformation</em>, 
-        <strong>Bayes' Theorem</strong> ka matlab hai <em>evidence aane par belief update</em>, aur 
-        <strong>Normal Equation</strong> ka matlab hai <em>least squares projection</em>.
+        <strong>Bayes' Theorem</strong> ka matlab hai <em>evidence aane par belief update</em>, 
+        <strong>Chain Rule</strong> ka matlab hai <em>gradient backpropagation</em>, aur 
+        <strong>Gradient Vector</strong> ka matlab hai <em>steepest ascent direction</em>.
         Math Companion aapko formulas se darna band karwayega aur unhe first-principles se derive karna sikhayega!
       </p>
     </div>
@@ -207,16 +212,23 @@ graph TD
     M15 --> M16["M16: Variance & Std Deviation"]
     M15 & M16 --> M17["M17: Covariance & Correlation"]
 
+    M03 --> M18["M18: Derivatives & Rates of Change"]
+    M18 --> M19["M19: Partial Derivatives"]
+    M19 --> M20["M20: Chain Rule & Computational Graphs"]
+    M04 & M19 --> M21["M21: Gradients & Jacobians"]
+
     M09 --> ML1["Ch 18-19: Linear Regression & OLS"]
     M03 & M06 --> ML2["Ch 20-21: Logistic Regression"]
     M05 --> ML3["Ch 27-29: Ridge & Lasso Regularization"]
     M11 & M12 --> ML4["Ch 16: Naive Bayes Classification"]
     M16 --> ML5["Ch 17: Bias-Variance Decomposition"]
+    M20 & M21 --> ML6["Ch 34-35: Backprop & Optimization"]
 
     style M01 fill:#0369a1,stroke:#38bdf8,color:#ffffff
     style M09 fill:#047857,stroke:#34d399,color:#ffffff
     style M11 fill:#b45309,stroke:#fbbf24,color:#ffffff
-    style M17 fill:#b45309,stroke:#fbbf24,color:#ffffff
+    style M20 fill:#7c3aed,stroke:#a78bfa,color:#ffffff
+    style M21 fill:#7c3aed,stroke:#a78bfa,color:#ffffff
       </pre>
     </div>
 
@@ -443,23 +455,60 @@ graph TD
       </a>
     </div>
 
-    <!-- TRACK 4 (UPCOMING) -->
-    <div class="track-section-header" style="opacity: 0.85;">
+    <!-- TRACK 4 -->
+    <div class="track-section-header">
       <div class="track-section-title">
-        <span class="track-badge track-4">Track 4 (Upcoming Drop)</span>
+        <span class="track-badge track-4">Track 4</span>
         <span>Calculus, Gradients &amp; Optimization</span>
       </div>
-      <span class="track-count-badge">7 Modules Arriving Next</span>
+      <span class="track-count-badge">4 Modules Live · 3 Upcoming</span>
     </div>
-    <div class="math-hub-grid" style="opacity: 0.85;">
-      <div class="math-module-card" style="border-style: dashed;">
+    <div class="math-hub-grid">
+      
+      <a href="m18-derivatives-rates-of-change.html" class="math-module-card">
         <div>
-          <div class="math-card-num"><span class="track-badge track-4">M18–M21</span> • CALCULUS</div>
-          <div class="math-card-title">Derivatives, Partials, Chain Rule &amp; Gradients</div>
-          <div class="math-card-desc">Computational graphs, backpropagation sensitivities, directional derivatives, and multivariate gradient vectors.</div>
+          <div class="math-card-num"><span class="track-badge track-4">M18</span> • MATH-INT</div>
+          <div class="math-card-title">Derivatives &amp; Rates of Change</div>
+          <div class="math-card-desc">Limits, Tangent Slopes, Sensitivity Analysis, and Derivatives of Common Machine Learning Activations</div>
         </div>
-        <div class="math-card-footer"><span>⏳ Ready to absorb</span><span>Upcoming →</span></div>
-      </div>
+        <div class="math-card-footer">
+          <span>⏱️ ~35 min read</span>
+          <span>Start Learning →</span>
+        </div>
+      </a>
+      <a href="m19-partial-derivatives.html" class="math-module-card">
+        <div>
+          <div class="math-card-num"><span class="track-badge track-4">M19</span> • MATH-INT</div>
+          <div class="math-card-title">Partial Derivatives &amp; Multivariable Functions</div>
+          <div class="math-card-desc">3D Loss Landscapes, Coordinate Plane Slices, Holding Variables Constant, and Weights Sensitivity</div>
+        </div>
+        <div class="math-card-footer">
+          <span>⏱️ ~35 min read</span>
+          <span>Start Learning →</span>
+        </div>
+      </a>
+      <a href="m20-chain-rule-computational-graphs.html" class="math-module-card">
+        <div>
+          <div class="math-card-num"><span class="track-badge track-4">M20</span> • MATH-INT</div>
+          <div class="math-card-title">Chain Rule &amp; Computational Graphs</div>
+          <div class="math-card-desc">Composite Functions, Intermediate Variables, Branching Summation, Forward vs Backward Passes, and Backprop Engine</div>
+        </div>
+        <div class="math-card-footer">
+          <span>⏱️ ~35 min read</span>
+          <span>Start Learning →</span>
+        </div>
+      </a>
+      <a href="m21-gradients-and-jacobians.html" class="math-module-card">
+        <div>
+          <div class="math-card-num"><span class="track-badge track-4">M21</span> • MATH-INT</div>
+          <div class="math-card-title">Gradients, Jacobians &amp; Direction of Change</div>
+          <div class="math-card-desc">Gradient Vector, Steepest Ascent Proof, Contour Orthogonality, Jacobian Matrices, and Hessian Curvature</div>
+        </div>
+        <div class="math-card-footer">
+          <span>⏱️ ~45 min read</span>
+          <span>Start Learning →</span>
+        </div>
+      </a>
       <div class="math-module-card" style="border-style: dashed;">
         <div>
           <div class="math-card-num"><span class="track-badge track-4">M22–M24</span> • OPTIMIZATION</div>
