@@ -644,12 +644,18 @@
             ${sectionsHtml}
           </div>
         `;
+        if (window.MathJax && MathJax.typesetPromise) {
+          MathJax.typesetPromise([area]).catch(() => {});
+        }
       }
 
       window.toggleSolution = function(id) {
         const drawer = document.getElementById(`sol-${id}`);
         if (drawer) {
           drawer.classList.toggle('open');
+          if (drawer.classList.contains('open') && window.MathJax && MathJax.typesetPromise) {
+            MathJax.typesetPromise([drawer]).catch(() => {});
+          }
         }
       };
 
@@ -664,5 +670,19 @@
       renderPaper("du-full");
     })();
   </script>
+
+  <!-- MATHJAX CONFIGURATION -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>

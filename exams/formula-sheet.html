@@ -513,7 +513,7 @@
               </div>
               <div class="f-title">${item.title}</div>
               <div class="flip-prompt">👆 Click to Flip & Reveal Equation</div>
-              <div class="math-display-box">${item.math}</div>
+              <div class="math-display-box">$$${item.math}$$</div>
               <div class="f-desc">${item.desc}</div>
             </div>
             <div class="f-variables"><strong>Key Notation:</strong> ${item.vars}</div>
@@ -522,11 +522,18 @@
           card.addEventListener('click', () => {
             if (isFlashcardMode) {
               card.classList.toggle('revealed');
+              if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise([card]).catch(() => {});
+              }
             }
           });
 
           grid.appendChild(card);
         });
+
+        if (window.MathJax && MathJax.typesetPromise) {
+          MathJax.typesetPromise([grid]).catch(() => {});
+        }
       }
 
       filterBtns.forEach(btn => {
@@ -553,5 +560,19 @@
       renderDeck();
     })();
   </script>
+
+  <!-- MATHJAX CONFIGURATION -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 </html>
