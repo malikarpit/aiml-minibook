@@ -122,6 +122,39 @@ The MiniBook provides a 4-dimensional examination engine tailored for both multi
 
 ---
 
+## 📐 Math Companion Layer (17 Modules · 776 Sections · 2,300+ Formulas)
+
+The Math Companion answers: *"Why does the formula work, and how do I calculate it myself?"*
+A self-contained mathematical depth layer that deepens derivations, vector geometry, linear transformations, probability distributions, and statistics:
+
+### Track 1: Foundations, Symbols & Functions
+- **[M01: Mathematical Notation, Symbols & Summation](math/m01-mathematical-notation.html):** Inside-out formula reading, summation loops $\sum$, Greek alphabet ($\eta, \theta, \lambda$), loss summations.
+- **[M02: Algebra Foundations for AI/ML](math/m02-algebra-foundations.html):** Linear equations, quadratic forms $x^T A x$, polynomial expansions, decision hyperplanes.
+- **[M03: Functions, Graphs, Exponents & Logarithms](math/m03-functions-graphs-logs.html):** Sigmoid $\sigma(z)$, cross-entropy log-loss penalty $-\log(p)$, Softmax, numerical stability.
+
+### Track 2: Linear Algebra, Vector Spaces & Geometry
+- **[M04: Vectors & Components](math/m04-vectors-and-components.html):** Geometric arrows, column vectors, linear combinations, span, basis.
+- **[M05: Norms, Distance & Geometric Intuition](math/m05-norms-and-distance.html):** $L_1$ Manhattan diamond vs $L_2$ Euclidean circle unit contours, KNN metrics, Lasso sparsity.
+- **[M06: Dot Product, Inner Product & Orthogonality](math/m06-dot-product-and-orthogonality.html):** Vector alignment, projection onto planes, cosine similarity, orthogonal decomposition.
+- **[M07: Matrices, Dimensions & Indexing](math/m07-matrices-and-indexing.html):** Design matrices $X \in \mathbb{R}^{n \times d}$, weight matrices $W$, transpose properties $(AB)^T = B^T A^T$.
+- **[M08: Matrix Multiplication & Linear Transformations](math/m08-matrix-multiplication-transforms.html):** Space rotation/shearing, non-commutativity $AB \neq BA$, neural network feedforward layers.
+- **[M09: Linear Systems, Inverses & Least Squares](math/m09-linear-systems-least-squares.html):** $Ax = b$, determinants, rank, overdetermined systems, Normal Equations $(X^TX)w = X^Ty$, OLS geometry.
+
+### Track 3: Probability, Random Variables & Statistics
+- **[M10: Probability Foundations](math/m10-probability-foundations.html):** Sample space $\Omega$, Kolmogorov axioms, inclusion-exclusion principle, event algebra.
+- **[M11: Conditional Probability, Bayes & Total Probability](math/m11-conditional-prob-bayes.html):** Conditioning, Law of Total Probability, Bayes' Theorem prior $\to$ posterior updates.
+- **[M12: Independence & Conditional Independence](math/m12-independence.html):** Pairwise vs mutual independence, conditional independence, Naive Bayes factorization.
+- **[M13: Random Variables, PMF, PDF & CDF](math/m13-random-variables-pmf-pdf-cdf.html):** Discrete PMF, continuous PDF curves, CDF integrals, Gaussian distributions.
+- **[M14: Joint, Marginal & Conditional Distributions](math/m14-joint-marginal-conditional.html):** 2D joint tables, marginalization $\sum_y p(x,y)$, conditional probability slices.
+- **[M15: Expectation & Expected Value](math/m15-expectation-expected-value.html):** Center of mass fulcrum, linearity of expectation $E[aX+bY] = aE[X]+bE[Y]$, LOTUS.
+- **[M16: Variance & Standard Deviation](math/m16-variance-standard-deviation.html):** Distribution spread, scaling rules $\text{Var}(aX+b) = a^2\text{Var}(X)$, bias-variance tradeoff.
+- **[M17: Covariance, Correlation & Statistical Relationships](math/m17-covariance-and-correlation.html):** Joint variability $\text{Cov}(X,Y)$, Pearson correlation $\rho \in [-1, 1]$, covariance matrix $\Sigma$.
+
+### Track 4: Calculus, Gradients & Optimization (Upcoming Drop)
+- Forward-compatible architecture ready to absorb M18–M24 (derivatives, partial derivatives, chain rule on computational graphs, multivariate gradients, SGD dynamics, L1/L2 regularization geometry, and MATH-99 Master Compendium).
+
+---
+
 ## 🛠️ Pedagogical System & Dual-Lens Architecture
 
 Every single chapter in the book is engineered around an integrated 4-tier pedagogical system:

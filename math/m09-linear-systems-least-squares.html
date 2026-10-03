@@ -1,0 +1,2245 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="MATH-M09: Linear Systems, Inverses & Least Squares — Math Companion for AI & Machine Learning. Ax = b, Row vs Column Views, Determinants, Invertibility, Normal Equations, and OLS Geometry">
+<title>MATH-M09: Linear Systems, Inverses & Least Squares | Math Companion 📐 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/math.css">
+</head>
+<body class="math-module track-2">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">📐</div>
+      <div class="brand-text"><span class="main">Math Companion</span><span class="sub">AI &amp; ML Deep Layer</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">MATH-M09: Linear Systems, Inverses &amp; Least Squares</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Foundations & Functions</div>
+  <a href="m01-mathematical-notation.html" class="sidebar-link"><span class="link-icon">📐</span>M01: Mathematical Notation, Symbols &amp; Summation</a>
+  <a href="m02-algebra-foundations.html" class="sidebar-link"><span class="link-icon">📐</span>M02: Algebra Foundations for AI/ML</a>
+  <a href="m03-functions-graphs-logs.html" class="sidebar-link"><span class="link-icon">📐</span>M03: Functions, Graphs, Exponents &amp; Logarithms</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Linear Algebra & Vectors</div>
+  <a href="m04-vectors-and-components.html" class="sidebar-link"><span class="link-icon">⚡</span>M04: Vectors &amp; Components</a>
+  <a href="m05-norms-and-distance.html" class="sidebar-link"><span class="link-icon">⚡</span>M05: Norms, Distance &amp; Geometric Intuition</a>
+  <a href="m06-dot-product-and-orthogonality.html" class="sidebar-link"><span class="link-icon">⚡</span>M06: Dot Product, Inner Product &amp; Orthogonality</a>
+  <a href="m07-matrices-and-indexing.html" class="sidebar-link"><span class="link-icon">⚡</span>M07: Matrices, Dimensions &amp; Indexing</a>
+  <a href="m08-matrix-multiplication-transforms.html" class="sidebar-link"><span class="link-icon">⚡</span>M08: Matrix Multiplication &amp; Linear Transformations</a>
+  <a href="m09-linear-systems-least-squares.html" class="sidebar-link active"><span class="link-icon">⚡</span>M09: Linear Systems, Inverses &amp; Least Squares</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Probability & Statistics</div>
+  <a href="m10-probability-foundations.html" class="sidebar-link"><span class="link-icon">🎲</span>M10: Probability Foundations</a>
+  <a href="m11-conditional-prob-bayes.html" class="sidebar-link"><span class="link-icon">🎲</span>M11: Conditional Probability, Bayes &amp; Total Probability</a>
+  <a href="m12-independence.html" class="sidebar-link"><span class="link-icon">🎲</span>M12: Independence &amp; Conditional Independence</a>
+  <a href="m13-random-variables-pmf-pdf-cdf.html" class="sidebar-link"><span class="link-icon">🎲</span>M13: Random Variables, PMF, PDF &amp; CDF</a>
+  <a href="m14-joint-marginal-conditional.html" class="sidebar-link"><span class="link-icon">🎲</span>M14: Joint, Marginal &amp; Conditional Distributions</a>
+  <a href="m15-expectation-expected-value.html" class="sidebar-link"><span class="link-icon">🎲</span>M15: Expectation &amp; Expected Value</a>
+  <a href="m16-variance-standard-deviation.html" class="sidebar-link"><span class="link-icon">🎲</span>M16: Variance &amp; Standard Deviation</a>
+  <a href="m17-covariance-and-correlation.html" class="sidebar-link"><span class="link-icon">🎲</span>M17: Covariance, Correlation &amp; Statistical Relationships</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Calculus & Optimization</div>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>M18–M24: Derivatives, Gradients & SGD (Upcoming)</span>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">MATH-M09 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why This Lesson Exists</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. One-Minute Intuition</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. A Simple Linear System</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Matrix Form of a Linear System</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Three Possible Outcomes</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Geometric Interpretation in 2D</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Gaussian Elimination — Intuition</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Elementary Row Operations</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Worked Example — Elimination</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Inverse Matrix</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Why Not Every Matrix Has an Inverse</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Determinant — 2×2 Preview</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. 2×2 Inverse Formula</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Linear Regression as an Approximate System</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Why Square the Residual?</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Least-Squares Objective</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Expand the Objective</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Residual Geometry</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Orthogonality of the Optimal Residual</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Normal Equations</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Closed-Form Least-Squares Solution</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. What If \(X^TX\) Is Not Invertible?</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Gradient Connection</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Why the Gradient Has \(X^T\)</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Least Squares and Projection</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Tiny Geometric Example</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Intercept and Design Matrix</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Least-Squares Numerical Example</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Worked Example — Normal Equation with Two Parameters</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Least Squares vs Gradient Descent</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Why Use Gradient Descent?</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Convexity Preview</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Singular / Nearly Singular Systems</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Ridge as a Mathematical Extension</a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Hinglish Teacher Explanation</a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. AI/ML Connection Map</a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Common Mistakes</a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Formula Cards</a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Derivation Ladder</a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Numerical Solving Protocol</a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Active Recall</a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Practice Set</a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Exam Connection</a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Mastery Gate</a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. Linear-Algebra Foundation Complete</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Math Companion</a>
+        <span>/</span>
+        <span>MATH-M09</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-2">Track 2: Linear Algebra & Vector Geometry</span></div>
+      <h1 class="chapter-title">Linear Systems, Inverses &amp; Least Squares</h1>
+      <p class="chapter-desc">Ax = b, Row vs Column Views, Determinants, Invertibility, Normal Equations, and OLS Geometry</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~45 min read</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">MATH-INT</span> <span class="chapter-meta-item uni-badge">MATH-CALC</span> <span class="chapter-meta-item uni-badge">MATH-DERIVE</span> <span class="chapter-meta-item uni-badge">MATH-GEO</span>
+      </div>
+
+      <div class="math-meta-grid">
+        <div class="math-meta-box">
+          <div class="math-meta-label">Prerequisites</div>
+          <div class="math-meta-value">M06 Dot Product, M07 Matrices, M08 Matrix Mult</div>
+        </div>
+        <div class="math-meta-box">
+          <div class="math-meta-label">Feeds Directly Into</div>
+          <div class="math-meta-value">Ch 19 Linear Regression Mathematics & Least Squares</div>
+        </div>
+        <div class="math-meta-box" style="grid-column: 1 / -1;">
+          <div class="math-meta-label">AI / Machine Learning Connections</div>
+          <div class="math-meta-value">Ordinary Least Squares closed form $w^* = (X^TX)^{-1}X^Ty$, Pseudoinverse, Multicollinearity breakdown</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="math-preamble-card"><h1>MATH-M09 — Linear Systems, Inverses &amp; Least Squares</h1>
+<blockquote>
+<p><strong>Math depth:</strong> <code>MATH-INT</code>, <code>MATH-CALC</code>, <code>MATH-DERIVE</code>, <code>MATH-NUM</code>, <code>MATH-GEO</code><br />
+<strong>Prerequisite:</strong> M07 — Matrices; M08 — Matrix Multiplication &amp; Linear Transformations<br />
+<strong>Feeds into:</strong> Linear Regression, Ridge, optimization, normal equations<br />
+<strong>Course-source anchors:</strong> <code>Lecture04.pdf</code> for matrix/vector structure; <code>Lecture09.pdf</code> and the completed Main Book linear-regression mathematics chapter for least-squares, gradient and normal-equation development.</p>
+</blockquote>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in MATH-M09 (45 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why This Lesson Exists</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">One-Minute Intuition</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">A Simple Linear System</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Matrix Form of a Linear System</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Three Possible Outcomes</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Geometric Interpretation in 2D</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Gaussian Elimination — Intuition</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Elementary Row Operations</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Worked Example — Elimination</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Inverse Matrix</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Why Not Every Matrix Has an Inverse</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Determinant — 2×2 Preview</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">2×2 Inverse Formula</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Linear Regression as an Approximate System</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Why Square the Residual?</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Least-Squares Objective</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Expand the Objective</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Residual Geometry</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Orthogonality of the Optimal Residual</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Normal Equations</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Closed-Form Least-Squares Solution</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">What If \(X^TX\) Is Not Invertible?</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Gradient Connection</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Why the Gradient Has \(X^T\)</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Least Squares and Projection</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Tiny Geometric Example</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Intercept and Design Matrix</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Least-Squares Numerical Example</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Worked Example — Normal Equation with Two Parameters</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Least Squares vs Gradient Descent</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Why Use Gradient Descent?</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Convexity Preview</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Singular / Nearly Singular Systems</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Ridge as a Mathematical Extension</span></a></li>
+        <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Hinglish Teacher Explanation</span></a></li>
+        <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">AI/ML Connection Map</span></a></li>
+        <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Common Mistakes</span></a></li>
+        <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Formula Cards</span></a></li>
+        <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Derivation Ladder</span></a></li>
+        <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Numerical Solving Protocol</span></a></li>
+        <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Active Recall</span></a></li>
+        <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Practice Set</span></a></li>
+        <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Exam Connection</span></a></li>
+        <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">Linear-Algebra Foundation Complete</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">Why This Lesson Exists</h2>
+      </div>
+      <div class="section-body">
+        <p>Many mathematical problems have the form:</p>
+<div class="formula-math">\[
+\boxed{
+Ax=b
+}
+\]</div>
+<p>where:</p>
+<ul>
+<li>\(A\) is known;</li>
+<li>\(b\) is known;</li>
+<li>\(x\) is unknown.</li>
+</ul>
+<p>This is a <strong>system of linear equations</strong>.</p>
+<p>Linear regression turns model fitting into a closely related problem:</p>
+<div class="formula-math">\[
+\boxed{
+Xw\approx y.
+}
+\]</div>
+<p>Usually, there is no exact \(w\) satisfying:</p>
+<div class="formula-math">\[
+Xw=y.
+\]</div>
+<p>So instead we choose the \(w\) that makes the error as small as possible.</p>
+<p>That gives:</p>
+<div class="formula-math">\[
+\boxed{
+\min_w\|Xw-y\|_2^2.
+}
+\]</div>
+<p>This is the mathematical heart of ordinary least squares.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">One-Minute Intuition</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Mental Model</div>
+
+Jab hamare paas $n$ data points hain aur sirf $d$ features ($n \gt  d$), toh aisa koi straight line ya hyperplane nahi hota jo sabhi points ko exactly touch kare ($Xw = y$ has no exact solution).
+Toh sabse accha kya kar sakte hain?
+$y$ ka ek orthogonal projection (perpendicular shadow) banao feature plane ke upar!
+Is projection par jo error vector $e = y - \hat{y}$ banta hai, woh feature columns se $90^\circ$ perpendicular hota hai: $X^T e = 0 \implies X^T (y - Xw) = 0 \implies w^* = (X^T X)^{-1} X^T y$. Ye Linear Regression ka core derivation hai!
+
+</div>
+
+<p>Suppose:</p>
+<div class="ascii-box"><pre>equations
+↓
+Ax=b</pre></div>
+<p>If a perfect solution exists, we solve for \(x\).</p>
+<p>But ML data usually contains:</p>
+<div class="ascii-box"><pre>noise
+measurement error
+many observations
+more equations than unknowns</pre></div>
+<p>so an exact solution may not exist.</p>
+<p>Instead:</p>
+<div class="ascii-box"><pre>choose x
+↓
+compute prediction Ax
+↓
+compare with b
+↓
+measure error
+↓
+minimize error</pre></div>
+<p>That is least squares.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">A Simple Linear System</h2>
+      </div>
+      <div class="section-body">
+        <p>Consider:</p>
+<div class="formula-math">\[
+x+y=5
+\]</div>
+<div class="formula-math">\[
+2x+y=7.
+\]</div>
+<p>Subtract the first equation:</p>
+<div class="formula-math">\[
+x=2.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+2+y=5
+\]</div>
+<p>so:</p>
+<div class="formula-math">\[
+y=3.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+x=2,\quad y=3.
+}
+\]</div>
+<p>In matrix form:</p>
+<div class="formula-math">\[
+\boxed{
+\begin{bmatrix}
+1&1\\
+2&1
+\end{bmatrix}
+\begin{bmatrix}
+x\\y
+\end{bmatrix}
+=
+\begin{bmatrix}
+5\\7
+\end{bmatrix}.
+}
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Matrix Form of a Linear System</h2>
+      </div>
+      <div class="section-body">
+        <p>A system:</p>
+<div class="formula-math">\[
+a_{11}x_1+\cdots+a_{1n}x_n=b_1
+\]</div>
+<div class="formula-math">\[
+a_{21}x_1+\cdots+a_{2n}x_n=b_2
+\]</div>
+<p>and so on becomes:</p>
+<div class="formula-math">\[
+\boxed{
+Ax=b.
+}
+\]</div>
+<p>This compact form is essential in ML.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Three Possible Outcomes</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph TD
+    A["Target Vector y ∉ Col(X) (Overdetermined System)"] --> B["Orthogonal Projection onto Column Space of X"]
+    B --> C["Fitted Values y_hat = X · w* ∈ Col(X)"]
+    C --> D["Residual Vector e = y - y_hat is Perpendicular to Col(X)"]
+    D --> E["Normal Equation: X^T (y - X w*) = 0"]
+    E --> F["Closed-Form Solution: w* = (X^T X)⁻¹ X^T y"]
+    style F fill:#0f172a,stroke:#34d399,color:#34d399,stroke-width:2px
+</pre></div>
+<p>A linear system can have:</p>
+<h3>One solution</h3>
+<p>Exactly one \(x\).</p>
+<h3>No solution</h3>
+<p>The equations contradict each other.</p>
+<h3>Infinitely many solutions</h3>
+<p>The equations do not provide enough independent constraints to determine a unique \(x\).</p>
+<p>This is related to:</p>
+<div class="ascii-box"><pre>rank
+linear independence
+null space
+column space
+invertibility</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Geometric Interpretation in 2D</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph TD
+    A["Target Vector y ∉ Col(X) (Overdetermined System)"] --> B["Orthogonal Projection onto Column Space of X"]
+    B --> C["Fitted Values y_hat = X · w* ∈ Col(X)"]
+    C --> D["Residual Vector e = y - y_hat is Perpendicular to Col(X)"]
+    D --> E["Normal Equation: X^T (y - X w*) = 0"]
+    E --> F["Closed-Form Solution: w* = (X^T X)⁻¹ X^T y"]
+    style F fill:#0f172a,stroke:#34d399,color:#34d399,stroke-width:2px
+</pre></div>
+<p>Each linear equation:</p>
+<div class="formula-math">\[
+a x+b y=c
+\]</div>
+<p>represents a line.</p>
+<p>Two equations can produce:</p>
+<div class="ascii-box"><pre>intersect once
+→ one solution
+
+parallel distinct lines
+→ no solution
+
+same line
+→ infinitely many solutions</pre></div>
+<p>So solving a system means finding a point satisfying all equations simultaneously.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Gaussian Elimination — Intuition</h2>
+      </div>
+      <div class="section-body">
+        <p>Gaussian elimination transforms a system into a simpler equivalent system.</p>
+<p>Typical process:</p>
+<div class="ascii-box"><pre>original equations
+↓
+eliminate variables
+↓
+upper-triangular / echelon structure
+↓
+back substitution
+↓
+solution</pre></div>
+<p>The operation preserves the solution set when valid row operations are used.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">Elementary Row Operations</h2>
+      </div>
+      <div class="section-body">
+        <p>Three standard operations:</p>
+<h3>Swap rows</h3>
+<div class="formula-math">\[
+R_i\leftrightarrow R_j
+\]</div>
+<h3>Multiply a row by a nonzero scalar</h3>
+<div class="formula-math">\[
+R_i\leftarrow cR_i
+\]</div>
+<h3>Add a multiple of one row to another</h3>
+<div class="formula-math">\[
+R_i\leftarrow R_i+cR_j
+\]</div>
+<p>These are the basic moves used by Gaussian elimination.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Worked Example — Elimination</h2>
+      </div>
+      <div class="section-body">
+        <p>Solve:</p>
+<div class="formula-math">\[
+x+y=5
+\]</div>
+<div class="formula-math">\[
+2x+y=7.
+\]</div>
+<p>Write:</p>
+<div class="formula-math">\[
+\left[
+\begin{array}{cc|c}
+1&1&5\\
+2&1&7
+\end{array}
+\right].
+\]</div>
+<p>Perform:</p>
+<div class="formula-math">\[
+R_2\leftarrow R_2-2R_1.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\left[
+\begin{array}{cc|c}
+1&1&5\\
+0&-1&-3
+\end{array}
+\right].
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+-y=-3
+\Rightarrow y=3.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+x+3=5
+\Rightarrow x=2.
+\]</div>
+<p>Final:</p>
+<div class="formula-math">\[
+\boxed{
+(x,y)=(2,3).
+}
+\]</div>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+# Simple regression: y = 2*x + 1 with noise
+X_raw = np.array([1.0, 2.0, 3.0, 4.0, 5.0])
+y = np.array([3.1, 4.9, 7.2, 8.8, 11.1])
+
+X = np.column_stack([np.ones_like(X_raw), X_raw])
+
+w_opt = np.linalg.inv(X.T @ X) @ X.T @ y
+
+print(&quot;Design Matrix X:\n&quot;, X)
+print(&quot;Calculated Parameters [bias, weight]:&quot;, np.round(w_opt, 4))
+w_lstsq, _, _, _ = np.linalg.lstsq(X, y, rcond=None)
+print(&quot;np.linalg.lstsq solution:&quot;, np.round(w_lstsq, 4))</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Inverse Matrix</h2>
+      </div>
+      <div class="section-body">
+        <p>For a square invertible matrix \(A\):</p>
+<div class="formula-math">\[
+\boxed{
+A^{-1}A=AA^{-1}=I.
+}
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+Ax=b
+\]</div>
+<p>can be rearranged:</p>
+<div class="formula-math">\[
+A^{-1}Ax=A^{-1}b
+\]</div>
+<p>so:</p>
+<div class="formula-math">\[
+\boxed{
+x=A^{-1}b.
+}
+\]</div>
+<p>This is the matrix analogue of dividing by a nonzero scalar.</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+# Simple regression: y = 2*x + 1 with noise
+X_raw = np.array([1.0, 2.0, 3.0, 4.0, 5.0])
+y = np.array([3.1, 4.9, 7.2, 8.8, 11.1])
+
+X = np.column_stack([np.ones_like(X_raw), X_raw])
+
+w_opt = np.linalg.inv(X.T @ X) @ X.T @ y
+
+print(&quot;Design Matrix X:\n&quot;, X)
+print(&quot;Calculated Parameters [bias, weight]:&quot;, np.round(w_opt, 4))
+w_lstsq, _, _, _ = np.linalg.lstsq(X, y, rcond=None)
+print(&quot;np.linalg.lstsq solution:&quot;, np.round(w_lstsq, 4))</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Why Not Every Matrix Has an Inverse</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Exam Trap & Common Misconception</div>
+
+**Invertibility Condition for OLS:** The normal equation solution $w^* = (X^T X)^{-1} X^T y$ requires that $(X^T X)$ is NON-SINGULAR (invertible). If two features are perfectly correlated (collinear), $\det(X^T X) = 0$, meaning the inverse does not exist! This exact failure motivates Ridge Regression where $\lambda I$ is added to guarantee invertibility.
+
+</div>
+
+<p>A matrix is not invertible if it loses essential information.</p>
+<p>Example:</p>
+<div class="formula-math">\[
+A=
+\begin{bmatrix}
+1&2\\
+2&4
+\end{bmatrix}.
+\]</div>
+<p>The second row is:</p>
+<div class="formula-math">\[
+2\times\text{first row}.
+\]</div>
+<p>The rows are dependent.</p>
+<p>The transformation collapses some information.</p>
+<p>Therefore the matrix is singular and has no ordinary inverse.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Determinant — 2×2 Preview</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Exam Trap & Common Misconception</div>
+
+**Invertibility Condition for OLS:** The normal equation solution $w^* = (X^T X)^{-1} X^T y$ requires that $(X^T X)$ is NON-SINGULAR (invertible). If two features are perfectly correlated (collinear), $\det(X^T X) = 0$, meaning the inverse does not exist! This exact failure motivates Ridge Regression where $\lambda I$ is added to guarantee invertibility.
+
+</div>
+
+<p>For:</p>
+<div class="formula-math">\[
+A=
+\begin{bmatrix}
+a&b\\
+c&d
+\end{bmatrix},
+\]</div>
+<p>the determinant is:</p>
+<div class="formula-math">\[
+\boxed{
+\det(A)=ad-bc.
+}
+\]</div>
+<p>For a \(2\times2\) matrix:</p>
+<div class="formula-math">\[
+\boxed{
+\det(A)\ne0
+\Rightarrow
+A\text{ is invertible}.
+}
+\]</div>
+<p>If:</p>
+<div class="formula-math">\[
+\det(A)=0,
+\]</div>
+<p>the matrix is singular.</p>
+<p>The determinant also has a geometric interpretation as a signed area/volume scaling factor.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">2×2 Inverse Formula</h2>
+      </div>
+      <div class="section-body">
+        <p>If:</p>
+<div class="formula-math">\[
+A=
+\begin{bmatrix}
+a&b\\
+c&d
+\end{bmatrix}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+ad-bc\ne0,
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+\boxed{
+A^{-1}
+=
+\frac1{ad-bc}
+\begin{bmatrix}
+d&-b\\
+-c&a
+\end{bmatrix}.
+}
+\]</div>
+<p>This formula is useful for small numerical examples.</p>
+<p>For larger ML matrices, directly forming an explicit inverse is generally not the preferred computational strategy; solving systems or using stable factorizations is usually more appropriate.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Linear Regression as an Approximate System</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+X\in\mathbb R^{n\times d}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+w\in\mathbb R^d.
+\]</div>
+<p>Predictions:</p>
+<div class="formula-math">\[
+\boxed{
+\hat y=Xw.
+}
+\]</div>
+<p>We would like:</p>
+<div class="formula-math">\[
+Xw=y.
+\]</div>
+<p>But real data often prevents exact equality.</p>
+<p>Therefore define the residual:</p>
+<div class="formula-math">\[
+\boxed{
+r=Xw-y.
+}
+\]</div>
+<p>Then minimize its squared length:</p>
+<div class="formula-math">\[
+\boxed{
+\min_w\|Xw-y\|_2^2.
+}
+\]</div>
+<p>This is ordinary least squares.</p>
+<p>The completed Main Book's linear-regression mathematics chapter uses this exact sequence: prediction, residual, least-squares objective, gradient and normal equation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">Why Square the Residual?</h2>
+      </div>
+      <div class="section-body">
+        <p>If we simply summed residuals:</p>
+<div class="formula-math">\[
+\sum_i(y_i-\hat y_i),
+\]</div>
+<p>positive and negative errors could cancel.</p>
+<p>Example:</p>
+<div class="formula-math">\[
++3+(-3)=0.
+\]</div>
+<p>That would incorrectly suggest no total error.</p>
+<p>Squared residuals avoid cancellation:</p>
+<div class="formula-math">\[
+3^2+(-3)^2=18.
+\]</div>
+<p>Thus:</p>
+<div class="formula-math">\[
+\boxed{
+\sum_i(y_i-\hat y_i)^2
+}
+\]</div>
+<p>measures overall squared error.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">Least-Squares Objective</h2>
+      </div>
+      <div class="section-body">
+        <p>Define:</p>
+<div class="formula-math">\[
+\boxed{
+L(w)=\|Xw-y\|_2^2.
+}
+\]</div>
+<p>Using the identity:</p>
+<div class="formula-math">\[
+\|r\|_2^2=r^Tr,
+\]</div>
+<p>we get:</p>
+<div class="formula-math">\[
+\boxed{
+L(w)=(Xw-y)^T(Xw-y).
+}
+\]</div>
+<p>This is a scalar.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">Expand the Objective</h2>
+      </div>
+      <div class="section-body">
+        <p>Start:</p>
+<div class="formula-math">\[
+L(w)
+=
+(Xw-y)^T(Xw-y).
+\]</div>
+<p>Using:</p>
+<div class="formula-math">\[
+(A-B)^T=A^T-B^T,
+\]</div>
+<p>we obtain:</p>
+<div class="formula-math">\[
+L(w)
+=
+(w^TX^T-y^T)(Xw-y).
+\]</div>
+<p>Expand:</p>
+<div class="formula-math">\[
+\boxed{
+L(w)
+=
+w^TX^TXw
+-
+w^TX^Ty
+-
+y^TXw
++
+y^Ty.
+}
+\]</div>
+<p>Since the middle two terms are equal scalars:</p>
+<div class="formula-math">\[
+\boxed{
+L(w)
+=
+w^TX^TXw
+-
+2w^TX^Ty
++
+y^Ty.
+}
+\]</div>
+<p>This expansion is useful for understanding the normal equations.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Residual Geometry</h2>
+      </div>
+      <div class="section-body">
+        <p>The residual:</p>
+<div class="formula-math">\[
+r=Xw-y
+\]</div>
+<p>is the difference between:</p>
+<div class="ascii-box"><pre>model prediction Xw
+and
+actual target y.</pre></div>
+<p>Least squares tries to make:</p>
+<div class="formula-math">\[
+\|r\|_2
+\]</div>
+<p>as small as possible.</p>
+<p>Geometrically, the prediction \(Xw\) is restricted to the <strong>column space of \(X\)</strong>.</p>
+<p>So we want the point in the column space closest to \(y\).</p>
+<p>This is the key projection intuition behind ordinary least squares.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">Orthogonality of the Optimal Residual</h2>
+      </div>
+      <div class="section-body">
+        <p>At the least-squares optimum, the residual is orthogonal to the column space of \(X\).</p>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+X^T(Xw-y)=0.
+}
+\]</div>
+<p>This says:</p>
+<blockquote>
+<p>The residual has zero inner product with every column of \(X\).</p>
+</blockquote>
+<p>That is the geometric form of the normal equations.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Normal Equations</h2>
+      </div>
+      <div class="section-body">
+        <p>Starting from:</p>
+<div class="formula-math">\[
+X^T(Xw-y)=0,
+\]</div>
+<p>expand:</p>
+<div class="formula-math">\[
+X^TXw-X^Ty=0.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+X^TXw=X^Ty.
+}
+\]</div>
+<p>These are the <strong>normal equations</strong>.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">Closed-Form Least-Squares Solution</h2>
+      </div>
+      <div class="section-body">
+        <p>If:</p>
+<div class="formula-math">\[
+X^TX
+\]</div>
+<p>is invertible, then:</p>
+<div class="formula-math">\[
+X^TXw=X^Ty.
+\]</div>
+<p>Multiply by:</p>
+<div class="formula-math">\[
+(X^TX)^{-1}.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\boxed{
+w=(X^TX)^{-1}X^Ty.
+}
+\]</div>
+<p>This is the familiar normal-equation solution.</p>
+<p>The completed Main Book chapter states this same closed-form result and explicitly notes the invertibility condition.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">What If \(X^TX\) Is Not Invertible?</h2>
+      </div>
+      <div class="section-body">
+        <p>The ordinary inverse formula may fail.</p>
+<p>Possible reasons include:</p>
+<div class="ascii-box"><pre>linearly dependent columns
+redundant features
+insufficient rank
+strong exact multicollinearity</pre></div>
+<p>A generalized inverse/pseudoinverse can provide a least-squares solution under broader conditions.</p>
+<p>The important exam statement is:</p>
+<blockquote>
+<p>The inverse-form solution requires \(X^TX\) to be invertible; otherwise a pseudoinverse or another numerical method may be used.</p>
+</blockquote>
+<p>Do not pretend the ordinary inverse always exists.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">Gradient Connection</h2>
+      </div>
+      <div class="section-body">
+        <p>The least-squares objective is:</p>
+<div class="formula-math">\[
+L(w)=\|Xw-y\|_2^2.
+\]</div>
+<p>Its gradient is:</p>
+<div class="formula-math">\[
+\boxed{
+\nabla_wL
+=
+2X^T(Xw-y).
+}
+\]</div>
+<p>Set the gradient to zero:</p>
+<div class="formula-math">\[
+2X^T(Xw-y)=0.
+\]</div>
+<p>Divide by 2:</p>
+<div class="formula-math">\[
+X^T(Xw-y)=0.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\boxed{
+X^TXw=X^Ty.
+}
+\]</div>
+<p>So:</p>
+<div class="ascii-box"><pre>least squares
+→ gradient
+→ stationary point
+→ normal equations
+→ closed-form solution when invertible</pre></div>
+<p>This progression is the central mathematical bridge to ML optimization.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">Why the Gradient Has \(X^T\)</h2>
+      </div>
+      <div class="section-body">
+        <p>Consider:</p>
+<div class="formula-math">\[
+r=Xw-y.
+\]</div>
+<p>Changing \(w\) changes all components of \(r\).</p>
+<p>The matrix \(X\) maps parameter changes into prediction changes.</p>
+<p>The transpose:</p>
+<div class="formula-math">\[
+X^T
+\]</div>
+<p>maps residual information back into parameter space.</p>
+<p>Therefore:</p>
+<div class="formula-math">\[
+X^Tr
+\]</div>
+<p>collects how the residual aligns with each feature direction.</p>
+<p>At the optimum:</p>
+<div class="formula-math">\[
+X^Tr=0.
+\]</div>
+<p>So no feature direction has a remaining first-order correlation with the residual.</p>
+<p>This gives an intuitive reason for the transpose.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">Least Squares and Projection</h2>
+      </div>
+      <div class="section-body">
+        <p>The column space of \(X\):</p>
+<div class="formula-math">\[
+Col(X)
+\]</div>
+<p>contains every vector that can be written as:</p>
+<div class="formula-math">\[
+Xw.
+\]</div>
+<p>But \(y\) may not lie in that space.</p>
+<p>Therefore least squares finds:</p>
+<div class="formula-math">\[
+\hat y=Xw
+\]</div>
+<p>that is closest to \(y\).</p>
+<p>Geometrically:</p>
+<div class="ascii-box"><pre>y
+│\
+│ \
+│  \
+│   •  closest prediction ŷ
+│  /
+│ /
+└────────────────
+ column space of X</pre></div>
+<p>The residual:</p>
+<div class="formula-math">\[
+y-\hat y
+\]</div>
+<p>is perpendicular to the column space at the optimum.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">Tiny Geometric Example</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph TD
+    A["Target Vector y ∉ Col(X) (Overdetermined System)"] --> B["Orthogonal Projection onto Column Space of X"]
+    B --> C["Fitted Values y_hat = X · w* ∈ Col(X)"]
+    C --> D["Residual Vector e = y - y_hat is Perpendicular to Col(X)"]
+    D --> E["Normal Equation: X^T (y - X w*) = 0"]
+    E --> F["Closed-Form Solution: w* = (X^T X)⁻¹ X^T y"]
+    style F fill:#0f172a,stroke:#34d399,color:#34d399,stroke-width:2px
+</pre></div>
+<p>Suppose the model can only produce vectors along a line.</p>
+<p>Then:</p>
+<div class="ascii-box"><pre>all possible predictions
+→ one line
+
+actual target y
+→ point somewhere off line
+
+least squares
+→ nearest point on the line</pre></div>
+<p>The connecting residual is perpendicular to the line.</p>
+<p>This is the simplest visual model for least squares.</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+# Simple regression: y = 2*x + 1 with noise
+X_raw = np.array([1.0, 2.0, 3.0, 4.0, 5.0])
+y = np.array([3.1, 4.9, 7.2, 8.8, 11.1])
+
+X = np.column_stack([np.ones_like(X_raw), X_raw])
+
+w_opt = np.linalg.inv(X.T @ X) @ X.T @ y
+
+print(&quot;Design Matrix X:\n&quot;, X)
+print(&quot;Calculated Parameters [bias, weight]:&quot;, np.round(w_opt, 4))
+w_lstsq, _, _, _ = np.linalg.lstsq(X, y, rcond=None)
+print(&quot;np.linalg.lstsq solution:&quot;, np.round(w_lstsq, 4))</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">Intercept and Design Matrix</h2>
+      </div>
+      <div class="section-body">
+        <p>A linear model with intercept:</p>
+<div class="formula-math">\[
+\hat y=Xw+b
+\]</div>
+<p>can be converted into a pure matrix product by augmenting the data with a column of ones.</p>
+<p>Define:</p>
+<div class="formula-math">\[
+\tilde X=
+\begin{bmatrix}
+1&x_{11}&\cdots&x_{1d}\\
+1&x_{21}&\cdots&x_{2d}\\
+\vdots&\vdots&&\vdots\\
+1&x_{n1}&\cdots&x_{nd}
+\end{bmatrix}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\tilde w=
+\begin{bmatrix}
+b\\
+w_1\\
+\vdots\\
+w_d
+\end{bmatrix}.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\boxed{
+\hat y=\tilde X\tilde w.
+}
+\]</div>
+<p>This is a useful mathematical convention for deriving the normal equations.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">Least-Squares Numerical Example</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+X=
+\begin{bmatrix}
+1\\
+2
+\end{bmatrix},
+\qquad
+y=
+\begin{bmatrix}
+2\\
+4
+\end{bmatrix}.
+\]</div>
+<p>We want:</p>
+<div class="formula-math">\[
+\min_w\|Xw-y\|_2^2.
+\]</div>
+<p>Compute:</p>
+<div class="formula-math">\[
+X^TX
+=
+[1\ \ 2]
+\begin{bmatrix}
+1\\2
+\end{bmatrix}
+=
+1+4
+=
+5.
+\]</div>
+<p>Compute:</p>
+<div class="formula-math">\[
+X^Ty
+=
+[1\ \ 2]
+\begin{bmatrix}
+2\\4
+\end{bmatrix}
+=
+2+8
+=
+10.
+\]</div>
+<p>Normal equation:</p>
+<div class="formula-math">\[
+5w=10.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{w=2}.
+\]</div>
+<p>Check prediction:</p>
+<div class="formula-math">\[
+Xw=
+\begin{bmatrix}
+1\\2
+\end{bmatrix}(2)
+=
+\begin{bmatrix}
+2\\4
+\end{bmatrix}
+=y.
+\]</div>
+<p>Residual:</p>
+<div class="formula-math">\[
+r=0.
+\]</div>
+<p>Perfect fit in this simple example.</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+# Simple regression: y = 2*x + 1 with noise
+X_raw = np.array([1.0, 2.0, 3.0, 4.0, 5.0])
+y = np.array([3.1, 4.9, 7.2, 8.8, 11.1])
+
+X = np.column_stack([np.ones_like(X_raw), X_raw])
+
+w_opt = np.linalg.inv(X.T @ X) @ X.T @ y
+
+print(&quot;Design Matrix X:\n&quot;, X)
+print(&quot;Calculated Parameters [bias, weight]:&quot;, np.round(w_opt, 4))
+w_lstsq, _, _, _ = np.linalg.lstsq(X, y, rcond=None)
+print(&quot;np.linalg.lstsq solution:&quot;, np.round(w_lstsq, 4))</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">Worked Example — Normal Equation with Two Parameters</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+X=
+\begin{bmatrix}
+1&1\\
+1&2\\
+1&3
+\end{bmatrix},
+\quad
+y=
+\begin{bmatrix}
+2\\4\\6
+\end{bmatrix}.
+\]</div>
+<p>Compute:</p>
+<div class="formula-math">\[
+X^TX
+=
+\begin{bmatrix}
+1&1&1\\
+1&2&3
+\end{bmatrix}
+\begin{bmatrix}
+1&1\\
+1&2\\
+1&3
+\end{bmatrix}
+=
+\begin{bmatrix}
+3&6\\
+6&14
+\end{bmatrix}.
+\]</div>
+<p>Compute:</p>
+<div class="formula-math">\[
+X^Ty
+=
+\begin{bmatrix}
+1&1&1\\
+1&2&3
+\end{bmatrix}
+\begin{bmatrix}
+2\\4\\6
+\end{bmatrix}
+=
+\begin{bmatrix}
+12\\
+28
+\end{bmatrix}.
+\]</div>
+<p>Normal equations:</p>
+<div class="formula-math">\[
+\begin{bmatrix}
+3&6\\
+6&14
+\end{bmatrix}
+\begin{bmatrix}
+b\\w
+\end{bmatrix}
+=
+\begin{bmatrix}
+12\\28
+\end{bmatrix}.
+\]</div>
+<p>Solve:</p>
+<div class="formula-math">\[
+3b+6w=12
+\]</div>
+<div class="formula-math">\[
+6b+14w=28.
+\]</div>
+<p>From the first:</p>
+<div class="formula-math">\[
+b+2w=4.
+\]</div>
+<p>So:</p>
+<div class="formula-math">\[
+b=4-2w.
+\]</div>
+<p>Substitute:</p>
+<div class="formula-math">\[
+6(4-2w)+14w=28
+\]</div>
+<div class="formula-math">\[
+24-12w+14w=28
+\]</div>
+<div class="formula-math">\[
+2w=4
+\]</div>
+<div class="formula-math">\[
+w=2.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+b=0.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+\hat y=2x.
+}
+\]</div>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+# Simple regression: y = 2*x + 1 with noise
+X_raw = np.array([1.0, 2.0, 3.0, 4.0, 5.0])
+y = np.array([3.1, 4.9, 7.2, 8.8, 11.1])
+
+X = np.column_stack([np.ones_like(X_raw), X_raw])
+
+w_opt = np.linalg.inv(X.T @ X) @ X.T @ y
+
+print(&quot;Design Matrix X:\n&quot;, X)
+print(&quot;Calculated Parameters [bias, weight]:&quot;, np.round(w_opt, 4))
+w_lstsq, _, _, _ = np.linalg.lstsq(X, y, rcond=None)
+print(&quot;np.linalg.lstsq solution:&quot;, np.round(w_lstsq, 4))</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">Least Squares vs Gradient Descent</h2>
+      </div>
+      <div class="section-body">
+        <p>Two ways to minimize the same objective:</p>
+<h3>Closed-form route</h3>
+<div class="formula-math">\[
+X^TXw=X^Ty
+\]</div>
+<p>then solve.</p>
+<h3>Optimization route</h3>
+<p>Start with \(w_0\), then repeatedly:</p>
+<div class="formula-math">\[
+\boxed{
+w_{t+1}
+=
+w_t-\eta\nabla L(w_t).
+}
+\]</div>
+<p>Using:</p>
+<div class="formula-math">\[
+\nabla L(w_t)=2X^T(Xw_t-y).
+\]</div>
+<p>So:</p>
+<div class="formula-math">\[
+\boxed{
+w_{t+1}
+=
+w_t
+-
+2\eta X^T(Xw_t-y).
+}
+\]</div>
+<p>They are two solution strategies for the same least-squares problem.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">Why Use Gradient Descent?</h2>
+      </div>
+      <div class="section-body">
+        <p>The closed-form expression becomes less attractive computationally for very large systems.</p>
+<p>Gradient-based optimization can instead use:</p>
+<div class="ascii-box"><pre>prediction
+→ loss
+→ gradient
+→ update
+→ repeat</pre></div>
+<p>It works with large datasets and forms the conceptual foundation for much broader ML optimization.</p>
+<p>This is why linear regression is an excellent bridge from linear algebra to calculus and optimization.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">Convexity Preview</h2>
+      </div>
+      <div class="section-body">
+        <p>Squared-error linear regression has a convex objective in \(w\).</p>
+<p>Intuitively:</p>
+<div class="ascii-box"><pre>one global bowl-like minimum</pre></div>
+<p>rather than a landscape containing multiple separated local minima.</p>
+<p>This is why stationary-point reasoning is especially clean for ordinary least squares.</p>
+<p>A full convexity treatment belongs with optimization in M22.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Singular / Nearly Singular Systems</h2>
+      </div>
+      <div class="section-body">
+        <p>If columns of \(X\) are exactly dependent, then:</p>
+<div class="formula-math">\[
+X^TX
+\]</div>
+<p>is singular.</p>
+<p>Even when columns are almost dependent, the system can be numerically ill-conditioned.</p>
+<p>Interpretation:</p>
+<div class="ascii-box"><pre>features contain redundant / near-redundant information
+→ parameter estimates can become unstable</pre></div>
+<p>This motivates regularization such as Ridge later.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Ridge as a Mathematical Extension</h2>
+      </div>
+      <div class="section-body">
+        <p>Ordinary least squares:</p>
+<div class="formula-math">\[
+\min_w\|Xw-y\|_2^2.
+\]</div>
+<p>Ridge:</p>
+<div class="formula-math">\[
+\boxed{
+\min_w
+\left[
+\|Xw-y\|_2^2
++
+\lambda\|w\|_2^2
+\right].
+}
+\]</div>
+<p>The corresponding normal-equation-style solution is:</p>
+<div class="formula-math">\[
+\boxed{
+w=
+(X^TX+\lambda I)^{-1}X^Ty
+}
+\]</div>
+<p>under the stated inverse conditions.</p>
+<p>Notice the mathematical connection:</p>
+<div class="ascii-box"><pre>least squares
+→ XᵀX
+
+Ridge
+→ XᵀX + λI</pre></div>
+<p>The identity matrix from M07 returns here.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-35" class="section-block">
+      <div class="section-header">
+        <span class="section-num">35</span>
+        <h2 class="section-heading">Hinglish Teacher Explanation</h2>
+      </div>
+      <div class="section-body">
+        <p>Linear system:</p>
+<div class="formula-math">\[
+Ax=b
+\]</div>
+<p>ko samjho:</p>
+<blockquote>
+<p>“Mujhe aisa \(x\) chahiye jo exactly \(b\) produce kare.”</p>
+</blockquote>
+<p>Lekin ML mein data usually perfect nahi hota.</p>
+<p>So instead:</p>
+<div class="formula-math">\[
+Xw\approx y.
+\]</div>
+<p>Ab question hai:</p>
+<blockquote>
+<p>“Kaunsa \(w\) prediction ko actual \(y\) ke sabse paas laata hai?”</p>
+</blockquote>
+<p>Difference:</p>
+<div class="formula-math">\[
+r=Xw-y.
+\]</div>
+<p>Uska squared size:</p>
+<div class="formula-math">\[
+\|r\|^2
+\]</div>
+<p>minimize karte hain.</p>
+<p>Matlab:</p>
+<blockquote>
+<p><strong>prediction aur reality ke beech ka total squared gap kam karo.</strong></p>
+</blockquote>
+<p>Optimal point par:</p>
+<div class="formula-math">\[
+X^T(Xw-y)=0.
+\]</div>
+<p>Simple intuition:</p>
+<blockquote>
+<p>Residual ab feature directions mein koi remaining first-order alignment nahi rakhta.</p>
+</blockquote>
+<p>Then:</p>
+<div class="formula-math">\[
+X^TXw=X^Ty.
+\]</div>
+<p>Aur agar inverse exist karta hai:</p>
+<div class="formula-math">\[
+w=(X^TX)^{-1}X^Ty.
+\]</div>
+<p>Isliye normal equation ko alag se yaad karne ki jagah story yaad rakho:</p>
+<div class="ascii-box"><pre>predict
+→ residual
+→ squared residual
+→ minimize
+→ gradient zero
+→ normal equation
+→ solve</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-36" class="section-block">
+      <div class="section-header">
+        <span class="section-num">36</span>
+        <h2 class="section-heading">AI/ML Connection Map</h2>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Mathematics</th>
+<th>AI/ML use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>\(Ax=b\)</td>
+<td>linear equations</td>
+</tr>
+<tr>
+<td>inverse</td>
+<td>solving square systems</td>
+</tr>
+<tr>
+<td>column space</td>
+<td>possible predictions</td>
+</tr>
+<tr>
+<td>null space</td>
+<td>lost directions</td>
+</tr>
+<tr>
+<td>residual</td>
+<td>prediction error</td>
+</tr>
+<tr>
+<td>\(L_2^2\) residual</td>
+<td>least squares</td>
+</tr>
+<tr>
+<td>projection</td>
+<td>regression geometry</td>
+</tr>
+<tr>
+<td>normal equation</td>
+<td>closed-form linear regression</td>
+</tr>
+<tr>
+<td>gradient</td>
+<td>optimization</td>
+</tr>
+<tr>
+<td>\(X^TX\)</td>
+<td>regression geometry</td>
+</tr>
+<tr>
+<td>\(X^TX+\lambda I\)</td>
+<td>Ridge</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-37" class="section-block">
+      <div class="section-header">
+        <span class="section-num">37</span>
+        <h2 class="section-heading">Common Mistakes</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Exam Trap & Common Misconception</div>
+
+**Invertibility Condition for OLS:** The normal equation solution $w^* = (X^T X)^{-1} X^T y$ requires that $(X^T X)$ is NON-SINGULAR (invertible). If two features are perfectly correlated (collinear), $\det(X^T X) = 0$, meaning the inverse does not exist! This exact failure motivates Ridge Regression where $\lambda I$ is added to guarantee invertibility.
+
+</div>
+
+<h3>Mistake 1 — Writing inverse formula without condition</h3>
+<p>Do not say:</p>
+<div class="formula-math">\[
+w=(X^TX)^{-1}X^Ty
+\]</div>
+<p>always.</p>
+<p>Say:</p>
+<blockquote>
+<p>when \(X^TX\) is invertible.</p>
+</blockquote>
+<h3>Mistake 2 — Confusing residual sign</h3>
+<div class="formula-math">\[
+r=Xw-y
+\]</div>
+<p>versus:</p>
+<div class="formula-math">\[
+r=y-Xw.
+\]</div>
+<p>Both can be used if the objective is squared, but gradients and intermediate expressions change accordingly. Keep one convention consistent.</p>
+<h3>Mistake 3 — Forgetting the transpose</h3>
+<p>Least-squares gradient:</p>
+<div class="formula-math">\[
+2X^T(Xw-y).
+\]</div>
+<p>Not:</p>
+<div class="formula-math">\[
+2X(Xw-y).
+\]</div>
+<h3>Mistake 4 — Thinking exact equality usually holds in noisy data</h3>
+<p>Regression is typically:</p>
+<div class="formula-math">\[
+Xw\approx y.
+\]</div>
+<h3>Mistake 5 — Thinking inverse is the only way to solve systems</h3>
+<p>Gaussian elimination, factorizations and pseudoinverse-based methods are alternatives.</p>
+<h3>Mistake 6 — Summing raw residuals</h3>
+<p>Positive and negative errors can cancel.</p>
+<h3>Mistake 7 — Confusing \(X^TX\) with \(XX^T\)</h3>
+<p>They generally have different shapes:</p>
+<p>If:</p>
+<div class="formula-math">\[
+X\in\mathbb R^{n\times d},
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+X^TX\in\mathbb R^{d\times d}
+\]</div>
+<p>while:</p>
+<div class="formula-math">\[
+XX^T\in\mathbb R^{n\times n}.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-38" class="section-block">
+      <div class="section-header">
+        <span class="section-num">38</span>
+        <h2 class="section-heading">Formula Cards</h2>
+      </div>
+      <div class="section-body">
+        <h2>F-M09-SYS-01 — Linear System</h2>
+<div class="formula-math">\[
+\boxed{
+Ax=b
+}
+\]</div>
+<hr />
+<h2>F-M09-INV-01 — Inverse</h2>
+<div class="formula-math">\[
+\boxed{
+A^{-1}A=AA^{-1}=I
+}
+\]</div>
+<hr />
+<h2>F-M09-DET-01 — 2×2 Determinant</h2>
+<div class="formula-math">\[
+\boxed{
+\det
+\begin{bmatrix}
+a&b\\
+c&d
+\end{bmatrix}
+=
+ad-bc
+}
+\]</div>
+<hr />
+<h2>F-M09-LS-01 — Least Squares</h2>
+<div class="formula-math">\[
+\boxed{
+\min_w\|Xw-y\|_2^2
+}
+\]</div>
+<hr />
+<h2>F-M09-RES-01 — Residual</h2>
+<div class="formula-math">\[
+\boxed{
+r=Xw-y
+}
+\]</div>
+<hr />
+<h2>F-M09-GRAD-01 — Least-Squares Gradient</h2>
+<div class="formula-math">\[
+\boxed{
+\nabla_wL=
+2X^T(Xw-y)
+}
+\]</div>
+<p>for:</p>
+<div class="formula-math">\[
+L(w)=\|Xw-y\|_2^2.
+\]</div>
+<hr />
+<h2>F-M09-NORMAL-01 — Normal Equations</h2>
+<div class="formula-math">\[
+\boxed{
+X^TXw=X^Ty
+}
+\]</div>
+<hr />
+<h2>F-M09-CLOSED-01 — Closed Form</h2>
+<div class="formula-math">\[
+\boxed{
+w=(X^TX)^{-1}X^Ty
+}
+\]</div>
+<p>when the inverse exists.</p>
+<hr />
+<h2>F-M09-RIDGE-01 — Ridge Extension</h2>
+<div class="formula-math">\[
+\boxed{
+w=(X^TX+\lambda I)^{-1}X^Ty
+}
+\]</div>
+<p>under the appropriate invertibility conditions for the stated objective.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-39" class="section-block">
+      <div class="section-header">
+        <span class="section-num">39</span>
+        <h2 class="section-heading">Derivation Ladder</h2>
+      </div>
+      <div class="section-body">
+        <p>For an exam derivation:</p>
+<div class="ascii-box"><pre>Model
+↓
+ŷ = Xw
+
+Residual
+↓
+r = Xw − y
+
+Loss
+↓
+L = ||Xw−y||²
+
+Gradient
+↓
+∇L = 2Xᵀ(Xw−y)
+
+Stationary point
+↓
+∇L = 0
+
+Therefore
+↓
+Xᵀ(Xw−y)=0
+
+Rearrange
+↓
+XᵀXw=Xᵀy
+
+Solve if invertible
+↓
+w=(XᵀX)⁻¹Xᵀy</pre></div>
+<p>This is one of the most important derivation chains in the Math Companion.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-40" class="section-block">
+      <div class="section-header">
+        <span class="section-num">40</span>
+        <h2 class="section-heading">Numerical Solving Protocol</h2>
+      </div>
+      <div class="section-body">
+        <p>For a least-squares numerical:</p>
+<div class="ascii-box"><pre>1. Identify X and y.
+2. Check their dimensions.
+3. Compute XᵀX.
+4. Compute Xᵀy.
+5. Solve the normal equations.
+6. If required, compute predictions Xw.
+7. Compute residuals.
+8. Compute residual norm/loss.
+9. Interpret.</pre></div>
+<p>Do not jump immediately to the inverse formula.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-41" class="section-block">
+      <div class="section-header">
+        <span class="section-num">41</span>
+        <h2 class="section-heading">Active Recall</h2>
+      </div>
+      <div class="section-body">
+        <ol>
+<li>What does \(Ax=b\) represent?</li>
+<li>Name the three possible solution cases.</li>
+<li>What does an inverse do?</li>
+<li>When is a 2×2 matrix invertible?</li>
+<li>Why can linear regression be written \(Xw\approx y\)?</li>
+<li>Why are squared residuals used?</li>
+<li>Define the residual.</li>
+<li>Write the least-squares objective.</li>
+<li>Why does \(X^T\) appear in the gradient?</li>
+<li>Write the least-squares gradient.</li>
+<li>Derive the normal equations.</li>
+<li>State the condition for the ordinary inverse solution.</li>
+<li>Give the geometric meaning of least squares.</li>
+<li>What happens when \(X^TX\) is singular?</li>
+<li>How does Ridge modify the normal equation?</li>
+</ol>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-42" class="section-block">
+      <div class="section-header">
+        <span class="section-num">42</span>
+        <h2 class="section-heading">Practice Set</h2>
+      </div>
+      <div class="section-body">
+        <h2>Foundation</h2>
+<h3>P-M09-01</h3>
+<p>Solve:</p>
+<div class="formula-math">\[
+x+y=6
+\]</div>
+<div class="formula-math">\[
+x-y=2.
+\]</div>
+<h3>P-M09-02</h3>
+<p>Find the determinant of:</p>
+<div class="formula-math">\[
+\begin{bmatrix}
+2&3\\
+1&4
+\end{bmatrix}.
+\]</div>
+<h3>P-M09-03</h3>
+<p>State whether:</p>
+<div class="formula-math">\[
+\begin{bmatrix}
+1&2\\
+2&4
+\end{bmatrix}
+\]</div>
+<p>is invertible.</p>
+<h3>P-M09-04</h3>
+<p>Write the matrix form of:</p>
+<div class="formula-math">\[
+2x+y=5
+\]</div>
+<div class="formula-math">\[
+3x+4y=10.
+\]</div>
+<hr />
+<h2>Least-Squares Practice</h2>
+<h3>P-M09-05</h3>
+<p>Given:</p>
+<div class="formula-math">\[
+X=
+\begin{bmatrix}
+1\\2
+\end{bmatrix},
+\quad
+y=
+\begin{bmatrix}
+2\\4
+\end{bmatrix},
+\]</div>
+<p>find the least-squares \(w\).</p>
+<h3>P-M09-06</h3>
+<p>For:</p>
+<div class="formula-math">\[
+X=
+\begin{bmatrix}
+1&1\\
+1&2\\
+1&3
+\end{bmatrix},
+\quad
+w=
+\begin{bmatrix}
+0\\
+2
+\end{bmatrix},
+\]</div>
+<p>calculate:</p>
+<div class="formula-math">\[
+Xw
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+r=Xw-y
+\]</div>
+<p>for:</p>
+<div class="formula-math">\[
+y=
+\begin{bmatrix}
+2\\4\\6
+\end{bmatrix}.
+\]</div>
+<h3>P-M09-07</h3>
+<p>Derive:</p>
+<div class="formula-math">\[
+X^TXw=X^Ty
+\]</div>
+<p>from:</p>
+<div class="formula-math">\[
+L(w)=\|Xw-y\|_2^2.
+\]</div>
+<h3>P-M09-08</h3>
+<p>Explain geometrically why the optimal residual is orthogonal to the column space of \(X\).</p>
+<h3>P-M09-09</h3>
+<p>Suppose \(X^TX\) is singular. What does that tell you about the ordinary inverse formula?</p>
+<h3>P-M09-10</h3>
+<p>Explain why Ridge adds:</p>
+<div class="formula-math">\[
+\lambda I
+\]</div>
+<p>to the \(X^TX\) matrix in the closed-form solution.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-43" class="section-block">
+      <div class="section-header">
+        <span class="section-num">43</span>
+        <h2 class="section-heading">Exam Connection</h2>
+      </div>
+      <div class="section-body">
+        <p>This lesson directly prepares:</p>
+<div class="ascii-box"><pre>Linear Regression Mathematics
+Normal equations
+Least-squares derivation
+Gradient questions
+Matrix-shape numericals
+Ridge regularization</pre></div>
+<h3>Common exam triggers</h3>
+<div class="ascii-box"><pre>“least squares”
+→ ||Xw−y||²
+
+“residual”
+→ Xw−y
+
+“derive normal equation”
+→ gradient = 0
+
+“closed-form solution”
+→ (XᵀX)⁻¹Xᵀy
+
+“geometric meaning”
+→ projection onto column space
+
+“inverse does not exist”
+→ singularity / rank issue / pseudoinverse</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-44" class="section-block">
+      <div class="section-header">
+        <span class="section-num">44</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <p>Move to M10 when you can:</p>
+<div class="ascii-box"><pre>solve basic Ax=b systems
+understand inverse conditions
+calculate small determinants
+explain singularity
+write residuals
+write least-squares objective
+derive normal equations
+solve a small least-squares numerical
+explain projection geometry
+connect XᵀX to regression
+explain why Ridge changes XᵀX to XᵀX+λI</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-45" class="section-block">
+      <div class="section-header">
+        <span class="section-num">45</span>
+        <h2 class="section-heading">Linear-Algebra Foundation Complete</h2>
+      </div>
+      <div class="section-body">
+        <p>You have now built:</p>
+<div class="ascii-box"><pre>M04  Vectors
+ ↓
+M05  Norms / Distance
+ ↓
+M06  Dot Product / Orthogonality
+ ↓
+M07  Matrices
+ ↓
+M08  Matrix Multiplication / Transformations
+ ↓
+M09  Linear Systems / Least Squares</pre></div>
+<p>This is the first major mathematical backbone of DSC-14.</p>
+<p>It supports the next branch:</p>
+<div class="ascii-box"><pre>LINEAR ALGEBRA
+                         │
+            ┌────────────┴────────────┐
+            ↓                         ↓
+       LINEAR MODELS             NEURAL NETWORKS
+            │                         │
+      Regression                  MLP
+      Logistic                   CNN/RNN
+      Ridge/Lasso                LSTM</pre></div>
+<p>And another major branch:</p>
+<div class="ascii-box"><pre>PROBABILITY
+   ↓
+M10–M17
+   ↓
+ML evaluation / RL / uncertainty</pre></div>
+<p>The next chapter begins the probability branch with <strong>MATH-M10 — Probability Foundations</strong>.</p>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="m08-matrix-multiplication-transforms.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← M08 — Matrix Mult & Transforms</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">📐 Math Index</span>
+      </a>
+      <a href="m10-probability-foundations.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: M10 — Probability Foundations →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search math modules, formulas, proofs, theorems…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">📐</span>Math Hub</a>
+  <a href="m09-linear-systems-least-squares.html" class="mobile-nav-btn active"><span class="icon">📖</span>MATH-M09</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

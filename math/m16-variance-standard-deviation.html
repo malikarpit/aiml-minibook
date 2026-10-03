@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="MATH-M16: Variance & Standard Deviation — Math Companion for AI & Machine Learning. Spread Around the Mean, Second Moment Decomposition, Linear Scaling, and Bias-Variance Tradeoff">
+<title>MATH-M16: Variance & Standard Deviation | Math Companion 📐 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/math.css">
+</head>
+<body class="math-module track-3">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">📐</div>
+      <div class="brand-text"><span class="main">Math Companion</span><span class="sub">AI &amp; ML Deep Layer</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">MATH-M16: Variance &amp; Standard Deviation</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Foundations & Functions</div>
+  <a href="m01-mathematical-notation.html" class="sidebar-link"><span class="link-icon">📐</span>M01: Mathematical Notation, Symbols &amp; Summation</a>
+  <a href="m02-algebra-foundations.html" class="sidebar-link"><span class="link-icon">📐</span>M02: Algebra Foundations for AI/ML</a>
+  <a href="m03-functions-graphs-logs.html" class="sidebar-link"><span class="link-icon">📐</span>M03: Functions, Graphs, Exponents &amp; Logarithms</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Linear Algebra & Vectors</div>
+  <a href="m04-vectors-and-components.html" class="sidebar-link"><span class="link-icon">⚡</span>M04: Vectors &amp; Components</a>
+  <a href="m05-norms-and-distance.html" class="sidebar-link"><span class="link-icon">⚡</span>M05: Norms, Distance &amp; Geometric Intuition</a>
+  <a href="m06-dot-product-and-orthogonality.html" class="sidebar-link"><span class="link-icon">⚡</span>M06: Dot Product, Inner Product &amp; Orthogonality</a>
+  <a href="m07-matrices-and-indexing.html" class="sidebar-link"><span class="link-icon">⚡</span>M07: Matrices, Dimensions &amp; Indexing</a>
+  <a href="m08-matrix-multiplication-transforms.html" class="sidebar-link"><span class="link-icon">⚡</span>M08: Matrix Multiplication &amp; Linear Transformations</a>
+  <a href="m09-linear-systems-least-squares.html" class="sidebar-link"><span class="link-icon">⚡</span>M09: Linear Systems, Inverses &amp; Least Squares</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Probability & Statistics</div>
+  <a href="m10-probability-foundations.html" class="sidebar-link"><span class="link-icon">🎲</span>M10: Probability Foundations</a>
+  <a href="m11-conditional-prob-bayes.html" class="sidebar-link"><span class="link-icon">🎲</span>M11: Conditional Probability, Bayes &amp; Total Probability</a>
+  <a href="m12-independence.html" class="sidebar-link"><span class="link-icon">🎲</span>M12: Independence &amp; Conditional Independence</a>
+  <a href="m13-random-variables-pmf-pdf-cdf.html" class="sidebar-link"><span class="link-icon">🎲</span>M13: Random Variables, PMF, PDF &amp; CDF</a>
+  <a href="m14-joint-marginal-conditional.html" class="sidebar-link"><span class="link-icon">🎲</span>M14: Joint, Marginal &amp; Conditional Distributions</a>
+  <a href="m15-expectation-expected-value.html" class="sidebar-link"><span class="link-icon">🎲</span>M15: Expectation &amp; Expected Value</a>
+  <a href="m16-variance-standard-deviation.html" class="sidebar-link active"><span class="link-icon">🎲</span>M16: Variance &amp; Standard Deviation</a>
+  <a href="m17-covariance-and-correlation.html" class="sidebar-link"><span class="link-icon">🎲</span>M17: Covariance, Correlation &amp; Statistical Relationships</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Calculus & Optimization</div>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>M18–M24: Derivatives, Gradients & SGD (Upcoming)</span>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">MATH-M16 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why This Lesson Exists</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. One-Minute Intuition</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Definition of Variance</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Why Do We Subtract the Mean?</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Why Square the Deviation?</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Discrete Variance</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Continuous Variance</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. The Computational Formula</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Derivation of the Computational Formula</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Two Variance Routes</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Variance Is Never Negative</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. When Is Variance Zero?</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Worked Example — Simple Discrete PMF</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Same Example — Definition Route</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Standard Deviation</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Worked Example — Standard Deviation</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Variance vs Standard Deviation</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Scaling Property</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Shift Property</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Combined Affine Transformation</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Why the Mean Shift Does Not Matter</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Uniform Distribution Example</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Exponential Distribution Example</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Variance as a Measure of Uncertainty</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Expectation and Variance Work Together</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. AI/ML Connection — Feature Scaling</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. AI/ML Connection — Bias–Variance</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Common Mistakes</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Formula Cards</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Numerical-Solving Protocol</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Active Recall</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Practice Set</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Exam Connection</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Mastery Gate</a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Next Dependency</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Math Companion</a>
+        <span>/</span>
+        <span>MATH-M16</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-3">Track 3: Probability & Statistics</span></div>
+      <h1 class="chapter-title">Variance &amp; Standard Deviation</h1>
+      <p class="chapter-desc">Spread Around the Mean, Second Moment Decomposition, Linear Scaling, and Bias-Variance Tradeoff</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~35 min read</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">MATH-INT</span> <span class="chapter-meta-item uni-badge">MATH-CALC</span> <span class="chapter-meta-item uni-badge">MATH-DERIVE</span>
+      </div>
+
+      <div class="math-meta-grid">
+        <div class="math-meta-box">
+          <div class="math-meta-label">Prerequisites</div>
+          <div class="math-meta-value">M15 Expectation</div>
+        </div>
+        <div class="math-meta-box">
+          <div class="math-meta-label">Feeds Directly Into</div>
+          <div class="math-meta-value">M17 Covariance, Ch 17 Bias-Variance Tradeoff, Normalization</div>
+        </div>
+        <div class="math-meta-box" style="grid-column: 1 / -1;">
+          <div class="math-meta-label">AI / Machine Learning Connections</div>
+          <div class="math-meta-value">Bias-Variance tradeoff, Feature standardization $z = (x - \mu)/\sigma$, Mini-batch gradient variance</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="math-preamble-card"><h1>MATH-M16 — Variance &amp; Standard Deviation</h1>
+<blockquote>
+<p><strong>Math depth:</strong> <code>MATH-INT</code>, <code>MATH-CALC</code>, <code>MATH-NUM</code>, <code>MATH-DERIVE</code><br />
+<strong>Prerequisite:</strong> M15 — Expectation &amp; Expected Value<br />
+<strong>Feeds into:</strong> M17 — Covariance &amp; Correlation; bias–variance; model evaluation; probability distributions; optimization and regularization<br />
+<strong>Course-source anchor:</strong> The supplied <code>Lecture02.pdf</code> defines variance as \(E[(X-E[X])^2]\), gives the computational identity \(E[X^2]-E[X]^2\), defines standard deviation, and works examples for Uniform\((0,1)\) and the Exponential distribution. fileciteturn67file4</p>
+</blockquote>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in MATH-M16 (35 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why This Lesson Exists</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">One-Minute Intuition</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Definition of Variance</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Why Do We Subtract the Mean?</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Why Square the Deviation?</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Discrete Variance</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Continuous Variance</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">The Computational Formula</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Derivation of the Computational Formula</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Two Variance Routes</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Variance Is Never Negative</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">When Is Variance Zero?</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Worked Example — Simple Discrete PMF</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Same Example — Definition Route</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Standard Deviation</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Worked Example — Standard Deviation</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Variance vs Standard Deviation</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Scaling Property</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Shift Property</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Combined Affine Transformation</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Why the Mean Shift Does Not Matter</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Uniform Distribution Example</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Exponential Distribution Example</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Variance as a Measure of Uncertainty</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Expectation and Variance Work Together</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">AI/ML Connection — Feature Scaling</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">AI/ML Connection — Bias–Variance</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Common Mistakes</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Formula Cards</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Numerical-Solving Protocol</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Active Recall</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Practice Set</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Exam Connection</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Next Dependency</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">Why This Lesson Exists</h2>
+      </div>
+      <div class="section-body">
+        <p>Expectation tells us the <strong>center</strong> of a random variable.</p>
+<p>But two random variables can have the same expectation and behave very differently.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>A: values usually close to 5
+B: values sometimes near 0 and sometimes near 10</pre></div>
+<p>Both may have:</p>
+<div class="formula-math">\[
+E[X]=5.
+\]</div>
+<p>But B is much more spread out.</p>
+<p>We therefore need a second summary:</p>
+<div class="formula-math">\[
+\boxed{\text{How far does }X\text{ tend to move away from its mean?}}
+\]</div>
+<p>That is the purpose of <strong>variance</strong>.</p>
+<p>Its square root is the <strong>standard deviation</strong>.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">One-Minute Intuition</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Mental Model</div>
+
+Mean batata hai distribution kahan center hai; Variance batata hai distribution kitna bikhra hua hai (spread)!
+Agar do models ka average accuracy 80% hai, lekin ek model har test par 79-81% deta hai (low variance) aur doosra model kabhi 40% kabhi 100% deta hai (high variance), toh low variance model production ke liye 100 times better hai!
+
+</div>
+
+<p>Suppose:</p>
+<div class="formula-math">\[
+E[X]=10.
+\]</div>
+<p>An outcome:</p>
+<div class="formula-math">\[
+X=11
+\]</div>
+<p>is only 1 unit away from the mean.</p>
+<p>An outcome:</p>
+<div class="formula-math">\[
+X=20
+\]</div>
+<p>is 10 units away.</p>
+<p>Variance measures these deviations while making them nonnegative and emphasizing large deviations.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>value
+ ↓
+distance from mean
+ ↓
+square distance
+ ↓
+probability-weighted average
+ ↓
+variance</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">Definition of Variance</h2>
+      </div>
+      <div class="section-body">
+        <p>The variance of \(X\) is:</p>
+<div class="formula-math">\[
+\boxed{
+Var(X)
+=
+E\left[(X-E[X])^2\right].
+}
+\]</div>
+<p>The supplied Lecture02 gives this definition directly. fileciteturn67file4</p>
+<p>Let:</p>
+<div class="formula-math">\[
+\mu=E[X].
+\]</div>
+<p>Then the same formula becomes:</p>
+<div class="formula-math">\[
+\boxed{
+Var(X)=E[(X-\mu)^2].
+}
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Why Do We Subtract the Mean?</h2>
+      </div>
+      <div class="section-body">
+        <p>The mean represents the center.</p>
+<p>Therefore:</p>
+<div class="formula-math">\[
+X-\mu
+\]</div>
+<p>measures the <strong>deviation from the center</strong>.</p>
+<p>Example:</p>
+<div class="formula-math">\[
+\mu=10.
+\]</div>
+<p>If:</p>
+<div class="formula-math">\[
+X=12,
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+X-\mu=2.
+\]</div>
+<p>If:</p>
+<div class="formula-math">\[
+X=8,
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+X-\mu=-2.
+\]</div>
+<p>Without squaring, positive and negative deviations could cancel.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Why Square the Deviation?</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph TD
+    A["Expected Mean: μ = E[X]"] --> B["Deviations from Mean: (X - μ)"]
+    B --> C["Square Deviations: (X - μ)² (Guarantees Positive Penalties)"]
+    C --> D["Variance: Var(X) = E[(X - μ)²] = E[X²] - (E[X])²"]
+    D --> E["Standard Deviation: σ = √Var(X) (Original Feature Units)"]
+    style D fill:#0f172a,stroke:#fbbf24,color:#fbbf24,stroke-width:2px
+</pre></div>
+<p>Consider:</p>
+<div class="formula-math">\[
++2,\quad -2.
+\]</div>
+<p>Their ordinary average is:</p>
+<div class="formula-math">\[
+\frac{2+(-2)}2=0.
+\]</div>
+<p>That would incorrectly suggest no spread.</p>
+<p>Square them:</p>
+<div class="formula-math">\[
+2^2=4,
+\]</div>
+<div class="formula-math">\[
+(-2)^2=4.
+\]</div>
+<p>Now both contribute positively.</p>
+<p>So:</p>
+<div class="formula-math">\[
+(X-\mu)^2
+\]</div>
+<p>turns distance into a nonnegative quantity.</p>
+<p>Large deviations are also penalized more strongly.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Discrete Variance</h2>
+      </div>
+      <div class="section-body">
+        <p>For a discrete random variable:</p>
+<div class="formula-math">\[
+\boxed{
+Var(X)
+=
+\sum_x
+(x-\mu)^2p_X(x)
+}
+\]</div>
+<p>where:</p>
+<div class="formula-math">\[
+\mu=E[X].
+\]</div>
+<p>Read it as:</p>
+<blockquote>
+<p>deviation² × probability, summed over every possible value.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Continuous Variance</h2>
+      </div>
+      <div class="section-body">
+        <p>For a continuous random variable:</p>
+<div class="formula-math">\[
+\boxed{
+Var(X)
+=
+\int_{-\infty}^{\infty}
+(x-\mu)^2f_X(x)\,dx.
+}
+\]</div>
+<p>So the familiar probability pattern continues:</p>
+<div class="ascii-box"><pre>discrete
+→ summation
+
+continuous
+→ integration</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">The Computational Formula</h2>
+      </div>
+      <div class="section-body">
+        <p>Directly calculating:</p>
+<div class="formula-math">\[
+E[(X-\mu)^2]
+\]</div>
+<p>can be inconvenient.</p>
+<p>A highly useful identity is:</p>
+<div class="formula-math">\[
+\boxed{
+Var(X)
+=
+E[X^2]-E[X]^2.
+}
+\]</div>
+<p>The supplied Lecture02 explicitly gives this identity. fileciteturn67file4</p>
+<p>In terms of \(\mu\):</p>
+<div class="formula-math">\[
+\boxed{
+Var(X)=E[X^2]-\mu^2.
+}
+\]</div>
+<p>This is often the fastest route in numerical problems.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Derivation of the Computational Formula</h2>
+      </div>
+      <div class="section-body">
+        <p>Start with:</p>
+<div class="formula-math">\[
+Var(X)=E[(X-\mu)^2].
+\]</div>
+<p>Expand:</p>
+<div class="formula-math">\[
+(X-\mu)^2=X^2-2\mu X+\mu^2.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+Var(X)
+=
+E[X^2-2\mu X+\mu^2].
+\]</div>
+<p>Using linearity:</p>
+<div class="formula-math">\[
+=
+E[X^2]-2\mu E[X]+E[\mu^2].
+\]</div>
+<p>Because \(\mu\) is a constant:</p>
+<div class="formula-math">\[
+E[\mu^2]=\mu^2.
+\]</div>
+<p>And:</p>
+<div class="formula-math">\[
+E[X]=\mu.
+\]</div>
+<p>So:</p>
+<div class="formula-math">\[
+Var(X)
+=
+E[X^2]-2\mu^2+\mu^2.
+\]</div>
+<p>Hence:</p>
+<div class="formula-math">\[
+\boxed{
+Var(X)=E[X^2]-\mu^2
+=
+E[X^2]-E[X]^2.
+}
+\]</div>
+<p>This identity should be understood, not merely memorized.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Two Variance Routes</h2>
+      </div>
+      <div class="section-body">
+        <h2>Route A — Definition</h2>
+<div class="formula-math">\[
+\boxed{
+Var(X)=E[(X-\mu)^2]
+}
+\]</div>
+<p>Use when deviation-from-mean intuition is important.</p>
+<h2>Route B — Shortcut</h2>
+<div class="formula-math">\[
+\boxed{
+Var(X)=E[X^2]-E[X]^2
+}
+\]</div>
+<p>Use when \(E[X]\) and \(E[X^2]\) are easy to obtain.</p>
+<p>Memory:</p>
+<div class="ascii-box"><pre>variance
+=
+mean of squared deviations
+
+or
+
+second moment
+−
+square of first moment</pre></div>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+data = np.array([2.0, 4.0, 4.0, 4.0, 5.0, 5.0, 7.0, 9.0])
+mean = np.mean(data)
+var_sample = np.var(data, ddof=1)
+std_dev = np.std(data, ddof=1)
+
+print(&quot;Data:&quot;, data)
+print(&quot;Mean μ:&quot;, mean)
+print(&quot;Sample Variance s²:&quot;, var_sample)
+print(&quot;Sample Std Dev s:&quot;, np.round(std_dev, 4))</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Variance Is Never Negative</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Exam Trap & Common Misconception</div>
+
+**Variance Linear Scaling Rule:** $\text{Var}(aX + b) = a^2 \text{Var}(X)$! The additive constant $b$ shifts every point equally without stretching the spread, so its contribution to variance is EXACTLY ZERO! The multiplier $a$ is squared ($a^2$). Writing $\text{Var}(aX+b) = a\text{Var}(X) + b$ is an automatic zero in exams!
+
+</div>
+
+<p>Because:</p>
+<div class="formula-math">\[
+(X-\mu)^2\ge0
+\]</div>
+<p>for every outcome:</p>
+<div class="formula-math">\[
+E[(X-\mu)^2]\ge0.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+Var(X)\ge0.
+}
+\]</div>
+<p>A negative variance is mathematically impossible and indicates an error.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">When Is Variance Zero?</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Exam Trap & Common Misconception</div>
+
+**Variance Linear Scaling Rule:** $\text{Var}(aX + b) = a^2 \text{Var}(X)$! The additive constant $b$ shifts every point equally without stretching the spread, so its contribution to variance is EXACTLY ZERO! The multiplier $a$ is squared ($a^2$). Writing $\text{Var}(aX+b) = a\text{Var}(X) + b$ is an automatic zero in exams!
+
+</div>
+
+<p>If:</p>
+<div class="formula-math">\[
+Var(X)=0,
+\]</div>
+<p>then the squared deviation is zero with probability 1.</p>
+<p>Hence:</p>
+<div class="formula-math">\[
+X=\mu
+\]</div>
+<p>almost surely.</p>
+<p>Informally:</p>
+<blockquote>
+<p>there is no randomness left; the value is effectively constant.</p>
+</blockquote>
+<p>Example:</p>
+<div class="formula-math">\[
+X=7
+\]</div>
+<p>always gives:</p>
+<div class="formula-math">\[
+E[X]=7,
+\]</div>
+<div class="formula-math">\[
+Var(X)=0.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Worked Example — Simple Discrete PMF</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th style="text-align: right;">\(x\)</th>
+<th style="text-align: right;">\(p_X(x)\)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.2</td>
+</tr>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.5</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.3</td>
+</tr>
+</tbody>
+</table></div>
+<p>From M15:</p>
+<div class="formula-math">\[
+E[X]=1.1.
+\]</div>
+<p>Now:</p>
+<div class="formula-math">\[
+E[X^2]
+=
+0^2(0.2)+1^2(0.5)+2^2(0.3)
+=
+1.7.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+Var(X)
+=
+1.7-(1.1)^2
+\]</div>
+<div class="formula-math">\[
+=
+1.7-1.21
+=
+\boxed{0.49}.
+\]</div>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+data = np.array([2.0, 4.0, 4.0, 4.0, 5.0, 5.0, 7.0, 9.0])
+mean = np.mean(data)
+var_sample = np.var(data, ddof=1)
+std_dev = np.std(data, ddof=1)
+
+print(&quot;Data:&quot;, data)
+print(&quot;Mean μ:&quot;, mean)
+print(&quot;Sample Variance s²:&quot;, var_sample)
+print(&quot;Sample Std Dev s:&quot;, np.round(std_dev, 4))</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Same Example — Definition Route</h2>
+      </div>
+      <div class="section-body">
+        <p>Using:</p>
+<div class="formula-math">\[
+\mu=1.1.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+Var(X)
+=
+(0-1.1)^2(0.2)
++
+(1-1.1)^2(0.5)
++
+(2-1.1)^2(0.3).
+\]</div>
+<p>Calculate:</p>
+<div class="formula-math">\[
+1.21(0.2)+0.01(0.5)+0.81(0.3)
+\]</div>
+<div class="formula-math">\[
+=
+0.242+0.005+0.243
+=
+\boxed{0.49}.
+\]</div>
+<p>Both routes agree.</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+data = np.array([2.0, 4.0, 4.0, 4.0, 5.0, 5.0, 7.0, 9.0])
+mean = np.mean(data)
+var_sample = np.var(data, ddof=1)
+std_dev = np.std(data, ddof=1)
+
+print(&quot;Data:&quot;, data)
+print(&quot;Mean μ:&quot;, mean)
+print(&quot;Sample Variance s²:&quot;, var_sample)
+print(&quot;Sample Std Dev s:&quot;, np.round(std_dev, 4))</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">Standard Deviation</h2>
+      </div>
+      <div class="section-body">
+        <p>Variance is measured in <strong>squared units</strong>.</p>
+<p>If \(X\) is measured in:</p>
+<div class="ascii-box"><pre>metres</pre></div>
+<p>then variance is measured in:</p>
+<div class="ascii-box"><pre>metres²</pre></div>
+<p>That is sometimes inconvenient for interpretation.</p>
+<p>The <strong>standard deviation</strong> returns to the original unit:</p>
+<div class="formula-math">\[
+\boxed{
+\sigma_X
+=
+\sqrt{Var(X)}.
+}
+\]</div>
+<p>The supplied Lecture02 defines standard deviation as the square root of variance. fileciteturn67file4</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">Worked Example — Standard Deviation</h2>
+      </div>
+      <div class="section-body">
+        <p>From the previous example:</p>
+<div class="formula-math">\[
+Var(X)=0.49.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\sigma_X
+=
+\sqrt{0.49}
+=
+\boxed{0.7}.
+\]</div>
+<p>So:</p>
+<div class="ascii-box"><pre>Mean = 1.1
+Variance = 0.49
+Standard deviation = 0.7</pre></div>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+data = np.array([2.0, 4.0, 4.0, 4.0, 5.0, 5.0, 7.0, 9.0])
+mean = np.mean(data)
+var_sample = np.var(data, ddof=1)
+std_dev = np.std(data, ddof=1)
+
+print(&quot;Data:&quot;, data)
+print(&quot;Mean μ:&quot;, mean)
+print(&quot;Sample Variance s²:&quot;, var_sample)
+print(&quot;Sample Std Dev s:&quot;, np.round(std_dev, 4))</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">Variance vs Standard Deviation</h2>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Quantity</th>
+<th>Formula</th>
+<th>Unit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Variance</td>
+<td>\(E[(X-\mu)^2]\)</td>
+<td>squared unit</td>
+</tr>
+<tr>
+<td>Standard deviation</td>
+<td>\(\sqrt{Var(X)}\)</td>
+<td>original unit</td>
+</tr>
+</tbody>
+</table></div>
+<p>Memory:</p>
+<blockquote>
+<p><strong>Variance squares. Standard deviation unsquares.</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Scaling Property</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+Y=aX.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\boxed{
+Var(aX)=a^2Var(X).
+}
+\]</div>
+<p>Why the square?</p>
+<p>Because:</p>
+<div class="formula-math">\[
+aX-E[aX]
+=
+a(X-E[X]),
+\]</div>
+<p>and squaring gives:</p>
+<div class="formula-math">\[
+a^2(X-E[X])^2.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+Std(aX)=|a|Std(X).
+}
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">Shift Property</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+Y=X+b.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\boxed{
+Var(X+b)=Var(X).
+}
+\]</div>
+<p>Adding a constant moves the entire distribution without changing its spread.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>shift center
+→ spread unchanged</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Combined Affine Transformation</h2>
+      </div>
+      <div class="section-body">
+        <p>For:</p>
+<div class="formula-math">\[
+Y=aX+b,
+\]</div>
+<p>the mean is:</p>
+<div class="formula-math">\[
+E[Y]=aE[X]+b
+\]</div>
+<p>and the variance is:</p>
+<div class="formula-math">\[
+\boxed{
+Var(Y)=a^2Var(X).
+}
+\]</div>
+<p>The shift \(b\) does not affect variance.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">Why the Mean Shift Does Not Matter</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose two datasets are:</p>
+<div class="ascii-box"><pre>1, 2, 3</pre></div>
+<p>and:</p>
+<div class="ascii-box"><pre>101, 102, 103</pre></div>
+<p>Their centers differ by 100, but their spread is identical.</p>
+<p>Adding a constant changes location:</p>
+<div class="formula-math">\[
+X\rightarrow X+b
+\]</div>
+<p>but not dispersion.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">Uniform Distribution Example</h2>
+      </div>
+      <div class="section-body">
+        <p>The supplied Lecture02 works with:</p>
+<div class="formula-math">\[
+X\sim Uniform(0,1).
+\]</div>
+<p>For this distribution:</p>
+<div class="formula-math">\[
+E[X]=\frac12
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\boxed{
+Var(X)=\frac1{12}.
+}
+\]</div>
+<p>The lecture derives the second moment:</p>
+<div class="formula-math">\[
+E[X^2]
+=
+\int_0^1x^2dx
+=
+\frac13
+\]</div>
+<p>and therefore:</p>
+<div class="formula-math">\[
+Var(X)
+=
+\frac13-\frac14
+=
+\frac1{12}.
+\]</div>
+<p>fileciteturn67file4</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+data = np.array([2.0, 4.0, 4.0, 4.0, 5.0, 5.0, 7.0, 9.0])
+mean = np.mean(data)
+var_sample = np.var(data, ddof=1)
+std_dev = np.std(data, ddof=1)
+
+print(&quot;Data:&quot;, data)
+print(&quot;Mean μ:&quot;, mean)
+print(&quot;Sample Variance s²:&quot;, var_sample)
+print(&quot;Sample Std Dev s:&quot;, np.round(std_dev, 4))</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">Exponential Distribution Example</h2>
+      </div>
+      <div class="section-body">
+        <p>For:</p>
+<div class="formula-math">\[
+X\sim Exp(\lambda)
+\]</div>
+<p>with density:</p>
+<div class="formula-math">\[
+f_X(x)=\lambda e^{-\lambda x},
+\qquad x\ge0,
+\]</div>
+<p>the supplied Lecture02 gives:</p>
+<div class="formula-math">\[
+\boxed{
+E[X]=\frac1\lambda
+}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\boxed{
+Var(X)=\frac1{\lambda^2}.
+}
+\]</div>
+<p>fileciteturn67file4</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+data = np.array([2.0, 4.0, 4.0, 4.0, 5.0, 5.0, 7.0, 9.0])
+mean = np.mean(data)
+var_sample = np.var(data, ddof=1)
+std_dev = np.std(data, ddof=1)
+
+print(&quot;Data:&quot;, data)
+print(&quot;Mean μ:&quot;, mean)
+print(&quot;Sample Variance s²:&quot;, var_sample)
+print(&quot;Sample Std Dev s:&quot;, np.round(std_dev, 4))</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">Variance as a Measure of Uncertainty</h2>
+      </div>
+      <div class="section-body">
+        <p>Two distributions can share the same mean but have different variance.</p>
+<div class="ascii-box"><pre>small variance
+→ tightly concentrated around mean
+
+large variance
+→ more dispersed around mean</pre></div>
+<p>This is why variance is often used as a simple measure of uncertainty.</p>
+<p>But remember:</p>
+<blockquote>
+<p>variance is sensitive to squared deviations, so unusually large deviations can have strong influence.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">Expectation and Variance Work Together</h2>
+      </div>
+      <div class="section-body">
+        <p>A useful mental pair is:</p>
+<div class="formula-math">\[
+\boxed{
+E[X]\rightarrow \text{center}
+}
+\]</div>
+<div class="formula-math">\[
+\boxed{
+Var(X)\rightarrow \text{spread}
+}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\boxed{
+Std(X)\rightarrow \text{spread in original units}.
+}
+\]</div>
+<p>Think:</p>
+<div class="ascii-box"><pre>mean
+  ↓
+where is the distribution centered?
+
+variance/std
+  ↓
+how dispersed is it?</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">AI/ML Connection — Feature Scaling</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose a feature \(X\) has:</p>
+<div class="formula-math">\[
+E[X]=50,
+\qquad
+Std(X)=10.
+\]</div>
+<p>Standardization uses:</p>
+<div class="formula-math">\[
+\boxed{
+Z=\frac{X-\mu}{\sigma}.
+}
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+E[Z]=0
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+Var(Z)=1
+\]</div>
+<p>when \(\mu,\sigma\) are the true mean and standard deviation with \(\sigma\gt 0\).</p>
+<p>This makes variance directly relevant to preprocessing and optimization.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">AI/ML Connection — Bias–Variance</h2>
+      </div>
+      <div class="section-body">
+        <p>The supplied <code>Lecture08.pdf</code> uses variance as one component of expected test error:</p>
+<div class="formula-math">\[
+\boxed{
+Expected\ Test\ Error
+=
+Bias^2+Variance+Irreducible\ Error.
+}
+\]</div>
+<p>It describes variance as error due to sensitivity of the learned model to the training data. fileciteturn67file5</p>
+<p>Important distinction:</p>
+<div class="ascii-box"><pre>M16 variance of a random variable</pre></div>
+<p>and:</p>
+<div class="ascii-box"><pre>model variance in bias–variance analysis</pre></div>
+<p>are related mathematically through expected squared deviations, but they refer to different random quantities.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">Common Mistakes</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Exam Trap & Common Misconception</div>
+
+**Variance Linear Scaling Rule:** $\text{Var}(aX + b) = a^2 \text{Var}(X)$! The additive constant $b$ shifts every point equally without stretching the spread, so its contribution to variance is EXACTLY ZERO! The multiplier $a$ is squared ($a^2$). Writing $\text{Var}(aX+b) = a\text{Var}(X) + b$ is an automatic zero in exams!
+
+</div>
+
+<h3>Mistake 1</h3>
+<p>Writing:</p>
+<div class="formula-math">\[
+Var(X)=E[X]^2-E[X^2].
+\]</div>
+<p>Wrong sign.</p>
+<p>Correct:</p>
+<div class="formula-math">\[
+\boxed{
+Var(X)=E[X^2]-E[X]^2.
+}
+\]</div>
+<h3>Mistake 2</h3>
+<p>Forgetting the square:</p>
+<div class="formula-math">\[
+E[X-\mu]
+\]</div>
+<p>is zero, not variance.</p>
+<h3>Mistake 3</h3>
+<p>Taking square root too early.</p>
+<p>First compute variance, then:</p>
+<div class="formula-math">\[
+\sigma=\sqrt{Var(X)}.
+\]</div>
+<h3>Mistake 4</h3>
+<p>Thinking adding a constant changes variance.</p>
+<p>It does not.</p>
+<h3>Mistake 5</h3>
+<p>Thinking multiplying by \(a\) multiplies variance by \(a\).</p>
+<p>It multiplies variance by:</p>
+<div class="formula-math">\[
+a^2.
+\]</div>
+<h3>Mistake 6</h3>
+<p>Using standard deviation and variance interchangeably.</p>
+<p>They have different units and different formulas.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">Formula Cards</h2>
+      </div>
+      <div class="section-body">
+        <h2>F-M16-VAR-01 — Definition</h2>
+<div class="formula-math">\[
+\boxed{
+Var(X)=E[(X-E[X])^2]
+}
+\]</div>
+<hr />
+<h2>F-M16-VAR-02 — Shortcut</h2>
+<div class="formula-math">\[
+\boxed{
+Var(X)=E[X^2]-E[X]^2
+}
+\]</div>
+<hr />
+<h2>F-M16-STD-01</h2>
+<div class="formula-math">\[
+\boxed{
+\sigma_X=\sqrt{Var(X)}
+}
+\]</div>
+<hr />
+<h2>F-M16-AFFINE-01</h2>
+<div class="formula-math">\[
+\boxed{
+Var(aX+b)=a^2Var(X)
+}
+\]</div>
+<hr />
+<h2>F-M16-SHIFT-01</h2>
+<div class="formula-math">\[
+\boxed{
+Var(X+b)=Var(X)
+}
+\]</div>
+<hr />
+<h2>F-M16-SCALE-01</h2>
+<div class="formula-math">\[
+\boxed{
+Std(aX)=|a|Std(X)
+}
+\]</div>
+<hr />
+<h2>F-M16-UNIF-01</h2>
+<p>For:</p>
+<div class="formula-math">\[
+X\sim Uniform(0,1):
+\]</div>
+<div class="formula-math">\[
+\boxed{
+E[X]=\frac12,\qquad Var(X)=\frac1{12}
+}
+\]</div>
+<hr />
+<h2>F-M16-EXP-01</h2>
+<p>For:</p>
+<div class="formula-math">\[
+X\sim Exp(\lambda):
+\]</div>
+<div class="formula-math">\[
+\boxed{
+E[X]=\frac1\lambda,
+\qquad
+Var(X)=\frac1{\lambda^2}
+}
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">Numerical-Solving Protocol</h2>
+      </div>
+      <div class="section-body">
+        <p>When asked for variance:</p>
+<div class="ascii-box"><pre>1. Find E[X]
+2. Find E[X²]
+3. Use Var(X)=E[X²]−E[X]²
+4. If needed, take sqrt for SD
+5. Check Var(X) ≥ 0
+6. Check units</pre></div>
+<p>Alternative:</p>
+<div class="ascii-box"><pre>1. Find μ
+2. Compute (x−μ)²
+3. Weight by probability
+4. Sum/integrate</pre></div>
+<p>Choose the simpler route.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">Active Recall</h2>
+      </div>
+      <div class="section-body">
+        <p>Without notes:</p>
+<ol>
+<li>Define variance.</li>
+<li>Why do we square deviations?</li>
+<li>Derive:</li>
+</ol>
+<div class="formula-math">\[
+   Var(X)=E[X^2]-E[X]^2.
+   \]</div>
+<ol>
+<li>Why can variance never be negative?</li>
+<li>When is variance zero?</li>
+<li>Define standard deviation.</li>
+<li>Why is standard deviation easier to interpret than variance?</li>
+<li>What happens to variance under \(X\to X+b\)?</li>
+<li>What happens under \(X\to aX\)?</li>
+<li>What is the variance of \(Uniform(0,1)\)?</li>
+<li>What are the mean and variance of \(Exp(\lambda)\) according to the supplied lecture?</li>
+<li>How is variance used in bias–variance analysis?</li>
+<li>Distinguish random-variable variance from model variance.</li>
+</ol>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">Practice Set</h2>
+      </div>
+      <div class="section-body">
+        <h3>P-M16-01</h3>
+<p>For:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th style="text-align: right;">\(x\)</th>
+<th style="text-align: right;">\(p(x)\)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.2</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.5</td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0.3</td>
+</tr>
+</tbody>
+</table></div>
+<p>find:</p>
+<div class="formula-math">\[
+E[X]
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+Var(X).
+\]</div>
+<h3>P-M16-02</h3>
+<p>Using the same distribution, find standard deviation.</p>
+<h3>P-M16-03</h3>
+<p>If:</p>
+<div class="formula-math">\[
+Var(X)=9,
+\]</div>
+<p>find:</p>
+<div class="formula-math">\[
+Std(X).
+\]</div>
+<h3>P-M16-04</h3>
+<p>If:</p>
+<div class="formula-math">\[
+Var(X)=4,
+\]</div>
+<p>find:</p>
+<div class="formula-math">\[
+Var(5X+10).
+\]</div>
+<h3>P-M16-05</h3>
+<p>If:</p>
+<div class="formula-math">\[
+E[X]=3,\quad E[X^2]=14,
+\]</div>
+<p>find:</p>
+<div class="formula-math">\[
+Var(X).
+\]</div>
+<h3>P-M16-06</h3>
+<p>For:</p>
+<div class="formula-math">\[
+X\sim Uniform(0,1),
+\]</div>
+<p>verify:</p>
+<div class="formula-math">\[
+Var(X)=\frac1{12}.
+\]</div>
+<h3>P-M16-07</h3>
+<p>For:</p>
+<div class="formula-math">\[
+X\sim Exp(2),
+\]</div>
+<p>find mean and variance.</p>
+<h3>P-M16-08</h3>
+<p>Explain why:</p>
+<div class="formula-math">\[
+Var(X+100)=Var(X).
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Exam Connection</h2>
+      </div>
+      <div class="section-body">
+        <p>Typical triggers:</p>
+<div class="ascii-box"><pre>“variance”
+→ E[(X−μ)²]
+
+“using shortcut”
+→ E[X²]−E[X]²
+
+“standard deviation”
+→ √Var(X)
+
+“transformed random variable”
+→ Var(aX+b)=a²Var(X)
+
+“Uniform(0,1)”
+→ 1/12 variance
+
+“Exponential”
+→ 1/λ² variance</pre></div>
+<p>A common exam trap is to stop at variance when the question asks for standard deviation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <p>Move to M17 when you can:</p>
+<div class="ascii-box"><pre>explain variance intuitively
+calculate variance from a PMF
+use E[X²]−E[X]²
+derive the shortcut
+calculate standard deviation
+handle affine transformations
+derive the Uniform(0,1) result
+use Exponential mean/variance
+connect variance to bias–variance and scaling</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-35" class="section-block">
+      <div class="section-header">
+        <span class="section-num">35</span>
+        <h2 class="section-heading">Next Dependency</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>M15 Expectation
+      ↓
+M16 Variance
+      ↓
+M17 Covariance &amp; Correlation
+      ↓
+probabilistic relationships</pre></div>
+<p>M17 now asks:</p>
+<blockquote>
+<p><strong>“How do two random variables vary together?”</strong></p>
+</blockquote>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="m15-expectation-expected-value.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← M15 — Expectation & Expected Value</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">📐 Math Index</span>
+      </a>
+      <a href="m17-covariance-and-correlation.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: M17 — Covariance & Correlation →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search math modules, formulas, proofs, theorems…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">📐</span>Math Hub</a>
+  <a href="m16-variance-standard-deviation.html" class="mobile-nav-btn active"><span class="icon">📖</span>MATH-M16</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

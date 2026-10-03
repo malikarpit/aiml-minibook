@@ -1,0 +1,1905 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="MATH-M17: Covariance, Correlation & Statistical Relationships — Math Companion for AI & Machine Learning. Joint Variability, Pearson Correlation Coefficient, Covariance Matrices, and Collinearity">
+<title>MATH-M17: Covariance, Correlation & Statistical Relationships | Math Companion 📐 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/math.css">
+</head>
+<body class="math-module track-3">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">📐</div>
+      <div class="brand-text"><span class="main">Math Companion</span><span class="sub">AI &amp; ML Deep Layer</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">MATH-M17: Covariance, Correlation &amp; Statistical Relationships</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Foundations & Functions</div>
+  <a href="m01-mathematical-notation.html" class="sidebar-link"><span class="link-icon">📐</span>M01: Mathematical Notation, Symbols &amp; Summation</a>
+  <a href="m02-algebra-foundations.html" class="sidebar-link"><span class="link-icon">📐</span>M02: Algebra Foundations for AI/ML</a>
+  <a href="m03-functions-graphs-logs.html" class="sidebar-link"><span class="link-icon">📐</span>M03: Functions, Graphs, Exponents &amp; Logarithms</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Linear Algebra & Vectors</div>
+  <a href="m04-vectors-and-components.html" class="sidebar-link"><span class="link-icon">⚡</span>M04: Vectors &amp; Components</a>
+  <a href="m05-norms-and-distance.html" class="sidebar-link"><span class="link-icon">⚡</span>M05: Norms, Distance &amp; Geometric Intuition</a>
+  <a href="m06-dot-product-and-orthogonality.html" class="sidebar-link"><span class="link-icon">⚡</span>M06: Dot Product, Inner Product &amp; Orthogonality</a>
+  <a href="m07-matrices-and-indexing.html" class="sidebar-link"><span class="link-icon">⚡</span>M07: Matrices, Dimensions &amp; Indexing</a>
+  <a href="m08-matrix-multiplication-transforms.html" class="sidebar-link"><span class="link-icon">⚡</span>M08: Matrix Multiplication &amp; Linear Transformations</a>
+  <a href="m09-linear-systems-least-squares.html" class="sidebar-link"><span class="link-icon">⚡</span>M09: Linear Systems, Inverses &amp; Least Squares</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Probability & Statistics</div>
+  <a href="m10-probability-foundations.html" class="sidebar-link"><span class="link-icon">🎲</span>M10: Probability Foundations</a>
+  <a href="m11-conditional-prob-bayes.html" class="sidebar-link"><span class="link-icon">🎲</span>M11: Conditional Probability, Bayes &amp; Total Probability</a>
+  <a href="m12-independence.html" class="sidebar-link"><span class="link-icon">🎲</span>M12: Independence &amp; Conditional Independence</a>
+  <a href="m13-random-variables-pmf-pdf-cdf.html" class="sidebar-link"><span class="link-icon">🎲</span>M13: Random Variables, PMF, PDF &amp; CDF</a>
+  <a href="m14-joint-marginal-conditional.html" class="sidebar-link"><span class="link-icon">🎲</span>M14: Joint, Marginal &amp; Conditional Distributions</a>
+  <a href="m15-expectation-expected-value.html" class="sidebar-link"><span class="link-icon">🎲</span>M15: Expectation &amp; Expected Value</a>
+  <a href="m16-variance-standard-deviation.html" class="sidebar-link"><span class="link-icon">🎲</span>M16: Variance &amp; Standard Deviation</a>
+  <a href="m17-covariance-and-correlation.html" class="sidebar-link active"><span class="link-icon">🎲</span>M17: Covariance, Correlation &amp; Statistical Relationships</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Calculus & Optimization</div>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>M18–M24: Derivatives, Gradients & SGD (Upcoming)</span>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">MATH-M17 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why This Lesson Exists</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. One-Minute Intuition</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Start with Deviations</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Sign of the Deviation Product</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Covariance Definition</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Covariance Computational Formula</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Interpretation of Covariance Sign</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Covariance Is Not Automatically “Strong” or “Weak”</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Correlation Coefficient</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Why Divide by Standard Deviations?</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Correlation Range</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Perfect Positive Correlation</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Perfect Negative Correlation</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Zero Correlation Does Not Mean Independence</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Why Independence Implies Zero Covariance</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Why the Converse Fails</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Worked Example — Positive Covariance</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Worked Example — Correlation for a Positive Linear Transform</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Worked Example — Correlation for a Negative Linear Transform</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Covariance with Itself</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Correlation with Itself</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Covariance Under Scaling</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Adding Constants to Covariance</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Correlation Is Scale-Invariant</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Covariance and Expected Products</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Joint Distribution Connection</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Continuous Version</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Covariance Matrix Preview</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. AI/ML Connection — Feature Relationships</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. AI/ML Connection — Regression</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. AI/ML Connection — Standardization</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Hinglish Teacher Explanation</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Relationship Map</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Covariance vs Correlation</a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Independent vs Uncorrelated</a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Common Mistakes</a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Formula Cards</a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Numerical-Solving Protocol</a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Active Recall</a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Practice Set</a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Exam Connection</a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Mastery Gate</a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Probability Branch Complete</a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Next Mathematical Branch</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Math Companion</a>
+        <span>/</span>
+        <span>MATH-M17</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-3">Track 3: Probability & Statistics</span></div>
+      <h1 class="chapter-title">Covariance, Correlation &amp; Statistical Relationships</h1>
+      <p class="chapter-desc">Joint Variability, Pearson Correlation Coefficient, Covariance Matrices, and Collinearity</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~40 min read</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">MATH-INT</span> <span class="chapter-meta-item uni-badge">MATH-CALC</span> <span class="chapter-meta-item uni-badge">MATH-DERIVE</span>
+      </div>
+
+      <div class="math-meta-grid">
+        <div class="math-meta-box">
+          <div class="math-meta-label">Prerequisites</div>
+          <div class="math-meta-value">M15 Expectation, M16 Variance</div>
+        </div>
+        <div class="math-meta-box">
+          <div class="math-meta-label">Feeds Directly Into</div>
+          <div class="math-meta-value">PCA (Principal Component Analysis), Feature Selection, Multicollinearity in Regression</div>
+        </div>
+        <div class="math-meta-box" style="grid-column: 1 / -1;">
+          <div class="math-meta-label">AI / Machine Learning Connections</div>
+          <div class="math-meta-value">Covariance matrix $\Sigma = \frac{1}{n} X^T X$ in PCA, Multicollinearity detection, Mahalanobis distance</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="math-preamble-card"><h1>MATH-M17 — Covariance, Correlation &amp; Statistical Relationships</h1>
+<blockquote>
+<p><strong>Math depth:</strong> <code>MATH-INT</code>, <code>MATH-CALC</code>, <code>MATH-NUM</code>, <code>MATH-DERIVE</code><br />
+<strong>Prerequisite:</strong> M14 — Joint/Marginal/Conditional Distributions; M15 — Expectation; M16 — Variance &amp; Standard Deviation<br />
+<strong>Feeds into:</strong> linear relationships, feature analysis, statistics, regression intuition, multivariate ML<br />
+<strong>Course-source anchor:</strong> The supplied <code>Lecture02.pdf</code> defines covariance and Pearson correlation, states that correlation captures the presence and noise of a linear relationship, and distinguishes independence from zero correlation. fileciteturn67file3 fileciteturn67file0</p>
+</blockquote>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in MATH-M17 (44 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why This Lesson Exists</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">One-Minute Intuition</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Start with Deviations</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Sign of the Deviation Product</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Covariance Definition</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Covariance Computational Formula</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Interpretation of Covariance Sign</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Covariance Is Not Automatically “Strong” or “Weak”</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Correlation Coefficient</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Why Divide by Standard Deviations?</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Correlation Range</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Perfect Positive Correlation</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Perfect Negative Correlation</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Zero Correlation Does Not Mean Independence</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Why Independence Implies Zero Covariance</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Why the Converse Fails</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Worked Example — Positive Covariance</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Worked Example — Correlation for a Positive Linear Transform</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Worked Example — Correlation for a Negative Linear Transform</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Covariance with Itself</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Correlation with Itself</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Covariance Under Scaling</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Adding Constants to Covariance</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Correlation Is Scale-Invariant</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Covariance and Expected Products</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Joint Distribution Connection</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Continuous Version</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Covariance Matrix Preview</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">AI/ML Connection — Feature Relationships</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">AI/ML Connection — Regression</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">AI/ML Connection — Standardization</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Hinglish Teacher Explanation</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Relationship Map</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Covariance vs Correlation</span></a></li>
+        <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Independent vs Uncorrelated</span></a></li>
+        <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Common Mistakes</span></a></li>
+        <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Formula Cards</span></a></li>
+        <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Numerical-Solving Protocol</span></a></li>
+        <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Active Recall</span></a></li>
+        <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Practice Set</span></a></li>
+        <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Exam Connection</span></a></li>
+        <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Probability Branch Complete</span></a></li>
+        <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Next Mathematical Branch</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">Why This Lesson Exists</h2>
+      </div>
+      <div class="section-body">
+        <p>Variance describes one random variable:</p>
+<blockquote>
+<p>How much does \(X\) vary around its mean?</p>
+</blockquote>
+<p>Now consider two variables:</p>
+<div class="ascii-box"><pre>X = study hours
+Y = exam score</pre></div>
+<p>We may ask:</p>
+<blockquote>
+<p>When \(X\) is above its average, is \(Y\) also usually above its average?</p>
+</blockquote>
+<p>Or:</p>
+<div class="ascii-box"><pre>Do they rise together?
+Do they move in opposite directions?
+Is there no linear relationship?</pre></div>
+<p>This requires a measure of <strong>joint variation</strong>.</p>
+<p>That measure is covariance.</p>
+<p>Correlation then rescales covariance into a standardized number between \(-1\) and \(1\).</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">One-Minute Intuition</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Mental Model</div>
+
+Covariance batata hai do features ek sath move karte hain ya opposite:
+- Agar $X$ badhne par $Y$ bhi badhe, $\text{Cov}(X, Y) \gt  0$.
+- Agar $X$ badhne par $Y$ ghate, $\text{Cov}(X, Y) \lt  0$.
+Lekin Covariance units par depend karta hai (jaise rupees $\times$ kilograms).
+Isiliye hum use standard deviations se divide karke **Pearson Correlation $\rho$** bana dete hain jo hamesha $[-1, +1]$ ke beech lock ho jata hai!
+
+</div>
+
+<p>Imagine plotting:</p>
+<div class="ascii-box"><pre>Y
+        ↑
+        |       •
+        |     •
+        |   •
+        | •
+        +------------→ X</pre></div>
+<p>As \(X\) rises, \(Y\) also rises.</p>
+<p>That suggests positive linear association.</p>
+<p>Now:</p>
+<div class="ascii-box"><pre>Y
+        ↑
+        | •
+        |   •
+        |     •
+        |       •
+        +------------→ X</pre></div>
+<p>As \(X\) rises, \(Y\) falls.</p>
+<p>That suggests negative linear association.</p>
+<p>Covariance captures the joint direction of deviation.</p>
+<p>Correlation makes that measure scale-free.</p>
+<p>The supplied Lecture02 specifically describes correlation as capturing the presence of a linear relationship and how noisy that relationship is. fileciteturn67file3</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">Start with Deviations</h2>
+      </div>
+      <div class="section-body">
+        <p>Let:</p>
+<div class="formula-math">\[
+\mu_X=E[X],
+\]</div>
+<div class="formula-math">\[
+\mu_Y=E[Y].
+\]</div>
+<p>Define deviations:</p>
+<div class="formula-math">\[
+X-\mu_X
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+Y-\mu_Y.
+\]</div>
+<p>Now multiply them:</p>
+<div class="formula-math">\[
+(X-\mu_X)(Y-\mu_Y).
+\]</div>
+<p>This product tells us whether their deviations point in the same or opposite directions.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Sign of the Deviation Product</h2>
+      </div>
+      <div class="section-body">
+        <h3>Both above their means</h3>
+<div class="formula-math">\[
+X-\mu_X\gt 0
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+Y-\mu_Y\gt 0.
+\]</div>
+<p>Product:</p>
+<div class="formula-math">\[
+(+)(+)=(+).
+\]</div>
+<h3>Both below their means</h3>
+<div class="formula-math">\[
+(-)(-)=(+).
+\]</div>
+<h3>One above and one below</h3>
+<div class="formula-math">\[
+(+)(-) = (-).
+\]</div>
+<p>Therefore:</p>
+<div class="ascii-box"><pre>same side of means
+→ positive product
+
+opposite sides
+→ negative product</pre></div>
+<p>Covariance averages these products.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Covariance Definition</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph LR
+    A["Covariance: Cov(X, Y) = E[(X-μ_x)(Y-μ_y)]"] --> B["Measures Direction of Linear Co-movement"]
+    B --> C["Scale Dependent (Units of X × Units of Y)"]
+    C --> D["Normalize by σ_x · σ_y"]
+    D --> E["Pearson Correlation ρ ∈ [-1, +1]"]
+    E --> F["ρ = +1: Perfect Positive Linear Alignment"]
+    E --> G["ρ = 0: No Linear Correlation"]
+    E --> H["ρ = -1: Perfect Negative Linear Alignment"]
+    style E fill:#0f172a,stroke:#fbbf24,color:#fbbf24,stroke-width:2px
+</pre></div>
+<p>The covariance of \(X,Y\) is:</p>
+<div class="formula-math">\[
+\boxed{
+Cov(X,Y)
+=
+E[(X-E[X])(Y-E[Y])]
+}
+\]</div>
+<p>The supplied Lecture02 gives this exact definition. fileciteturn67file3</p>
+<p>Using:</p>
+<div class="formula-math">\[
+\mu_X=E[X],\quad \mu_Y=E[Y],
+\]</div>
+<p>we can write:</p>
+<div class="formula-math">\[
+\boxed{
+Cov(X,Y)
+=
+E[(X-\mu_X)(Y-\mu_Y)].
+}
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Covariance Computational Formula</h2>
+      </div>
+      <div class="section-body">
+        <p>Expand the product:</p>
+<div class="formula-math">\[
+(X-\mu_X)(Y-\mu_Y)
+\]</div>
+<div class="formula-math">\[
+=
+XY-\mu_XY-\mu_YX+\mu_X\mu_Y.
+\]</div>
+<p>Take expectation:</p>
+<div class="formula-math">\[
+Cov(X,Y)
+=
+E[XY]
+-\mu_XE[Y]
+-\mu_YE[X]
++\mu_X\mu_Y.
+\]</div>
+<p>Because:</p>
+<div class="formula-math">\[
+E[X]=\mu_X,
+\]</div>
+<div class="formula-math">\[
+E[Y]=\mu_Y,
+\]</div>
+<p>we obtain:</p>
+<div class="formula-math">\[
+\boxed{
+Cov(X,Y)
+=
+E[XY]-E[X]E[Y].
+}
+\]</div>
+<p>The supplied Lecture02 gives this identity directly. fileciteturn67file3</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Interpretation of Covariance Sign</h2>
+      </div>
+      <div class="section-body">
+        <h3>Positive covariance</h3>
+<div class="formula-math">\[
+Cov(X,Y)\gt 0
+\]</div>
+<p>means the variables tend to move in the same direction relative to their means.</p>
+<h3>Negative covariance</h3>
+<div class="formula-math">\[
+Cov(X,Y)\lt 0
+\]</div>
+<p>means they tend to move in opposite directions relative to their means.</p>
+<h3>Zero covariance</h3>
+<div class="formula-math">\[
+Cov(X,Y)=0
+\]</div>
+<p>means there is no linear co-variation captured by covariance.</p>
+<p>The supplied Lecture02 defines uncorrelated variables through zero covariance. fileciteturn67file3</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">Covariance Is Not Automatically “Strong” or “Weak”</h2>
+      </div>
+      <div class="section-body">
+        <p>A major limitation is scale.</p>
+<p>Suppose:</p>
+<div class="ascii-box"><pre>X = height in metres</pre></div>
+<p>versus:</p>
+<div class="ascii-box"><pre>X = height in centimetres</pre></div>
+<p>Changing units changes covariance numerically.</p>
+<p>So covariance is useful for direction and joint variation, but raw magnitude is not directly comparable across arbitrary scales.</p>
+<p>That motivates correlation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Correlation Coefficient</h2>
+      </div>
+      <div class="section-body">
+        <p>The Pearson correlation coefficient is:</p>
+<div class="formula-math">\[
+\boxed{
+\rho_{X,Y}
+=
+\frac{Cov(X,Y)}
+{\sqrt{Var(X)Var(Y)}}
+}
+\]</div>
+<p>provided both variances are positive.</p>
+<p>The supplied Lecture02 gives this formula and states:</p>
+<div class="formula-math">\[
+\boxed{
+\rho_{X,Y}\in[-1,1].
+}
+\]</div>
+<p>fileciteturn67file3</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Why Divide by Standard Deviations?</h2>
+      </div>
+      <div class="section-body">
+        <p>Since:</p>
+<div class="formula-math">\[
+Std(X)=\sqrt{Var(X)},
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+Std(Y)=\sqrt{Var(Y)},
+\]</div>
+<p>correlation can be written:</p>
+<div class="formula-math">\[
+\boxed{
+\rho_{X,Y}
+=
+\frac{Cov(X,Y)}
+{Std(X)Std(Y)}.
+}
+\]</div>
+<p>This normalizes covariance by the spreads of the two variables.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>covariance
+↓
+remove scale dependence
+↓
+correlation</pre></div>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+hours = np.array([2.0, 3.0, 5.0, 7.0, 9.0])
+marks = np.array([50.0, 58.0, 74.0, 85.0, 96.0])
+
+cov_matrix = np.cov(hours, marks)
+corr_matrix = np.corrcoef(hours, marks)
+
+print(&quot;Covariance Matrix:\n&quot;, np.round(cov_matrix, 2))
+print(&quot;Sample Covariance Cov(X, Y):&quot;, round(cov_matrix[0, 1], 2))
+print(&quot;Pearson Correlation r:&quot;, round(corr_matrix[0, 1], 4))</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Correlation Range</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Exam Trap & Common Misconception</div>
+
+**Zero Correlation does NOT imply Independence:** $\text{Cov}(X, Y) = 0$ means there is no LINEAR relationship. A strong NON-LINEAR relationship can exist with exact zero covariance! Classic counterexample: Let $X \in \{-1, 0, 1\}$ with equal probability, and $Y = X^2$. Here $E[X] = 0$, $E[XY] = E[X^3] = 0 \implies \text{Cov}(X, Y) = 0$, but $Y$ is 100% deterministically dependent on $X$!
+
+</div>
+
+<div class="formula-math">\[
+\boxed{
+-1\le\rho_{X,Y}\le1.
+}
+\]</div>
+<p>Interpretation:</p>
+<div class="ascii-box"><pre>+1
+→ perfect positive linear relation
+
+0
+→ no linear correlation
+
+−1
+→ perfect negative linear relation</pre></div>
+<p>Be careful:</p>
+<div class="formula-math">\[
+\rho=0
+\]</div>
+<p>does <strong>not</strong> mean:</p>
+<blockquote>
+<p>absolutely no relationship of any kind.</p>
+</blockquote>
+<p>It means no linear correlation under Pearson's measure.</p>
+<p>The supplied Lecture02 explicitly warns that correlation does not capture nonlinear relationships. fileciteturn67file0</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Perfect Positive Correlation</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Exam Trap & Common Misconception</div>
+
+**Zero Correlation does NOT imply Independence:** $\text{Cov}(X, Y) = 0$ means there is no LINEAR relationship. A strong NON-LINEAR relationship can exist with exact zero covariance! Classic counterexample: Let $X \in \{-1, 0, 1\}$ with equal probability, and $Y = X^2$. Here $E[X] = 0$, $E[XY] = E[X^3] = 0 \implies \text{Cov}(X, Y) = 0$, but $Y$ is 100% deterministically dependent on $X$!
+
+</div>
+
+<p>A perfect positive linear relationship has the form:</p>
+<div class="formula-math">\[
+Y=aX+b
+\]</div>
+<p>with:</p>
+<div class="formula-math">\[
+a\gt 0
+\]</div>
+<p>under non-degenerate variation.</p>
+<p>Then:</p>
+<div class="formula-math">\[
+\boxed{
+\rho_{X,Y}=1.
+}
+\]</div>
+<p>The points lie exactly along an increasing straight line.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Perfect Negative Correlation</h2>
+      </div>
+      <div class="section-body">
+        <p>If:</p>
+<div class="formula-math">\[
+Y=aX+b
+\]</div>
+<p>with:</p>
+<div class="formula-math">\[
+a\lt 0,
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+\boxed{
+\rho_{X,Y}=-1.
+}
+\]</div>
+<p>The points lie exactly along a decreasing straight line.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Zero Correlation Does Not Mean Independence</h2>
+      </div>
+      <div class="section-body">
+        <p>This distinction is emphasized in the supplied Lecture02:</p>
+<div class="formula-math">\[
+\boxed{
+Independent \Rightarrow Uncorrelated
+}
+\]</div>
+<p>but:</p>
+<div class="formula-math">\[
+\boxed{
+Uncorrelated \not\Rightarrow Independent.
+}
+\]</div>
+<p>fileciteturn67file0</p>
+<p>This is a high-value conceptual point.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">Why Independence Implies Zero Covariance</h2>
+      </div>
+      <div class="section-body">
+        <p>If \(X,Y\) are independent:</p>
+<div class="formula-math">\[
+E[XY]=E[X]E[Y].
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+Cov(X,Y)
+=
+E[XY]-E[X]E[Y]
+=
+0.
+\]</div>
+<p>Hence:</p>
+<div class="formula-math">\[
+\boxed{
+X\perp Y
+\Rightarrow
+Cov(X,Y)=0.
+}
+\]</div>
+<p>And therefore:</p>
+<div class="formula-math">\[
+\boxed{
+X\perp Y
+\Rightarrow
+\rho_{X,Y}=0
+}
+\]</div>
+<p>when the correlation is defined.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">Why the Converse Fails</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+Y=X^2
+\]</div>
+<p>and \(X\) is symmetric around zero, for example:</p>
+<div class="formula-math">\[
+X\sim Uniform(-1,1).
+\]</div>
+<p>There is a clear nonlinear relationship:</p>
+<div class="formula-math">\[
+Y=X^2.
+\]</div>
+<p>But:</p>
+<div class="formula-math">\[
+E[X]=0.
+\]</div>
+<p>Also:</p>
+<div class="formula-math">\[
+E[XY]
+=
+E[X^3].
+\]</div>
+<p>For a symmetric distribution around zero:</p>
+<div class="formula-math">\[
+E[X^3]=0.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+Cov(X,Y)
+=
+E[X^3]-E[X]E[X^2]
+=
+0-0\cdot E[X^2]
+=
+0.
+\]</div>
+<p>Yet \(Y\) is completely determined by \(X\), so the variables are certainly not independent.</p>
+<p>This illustrates the limitation of correlation for nonlinear relationships, exactly the distinction highlighted by the supplied Lecture02. fileciteturn67file0</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">Worked Example — Positive Covariance</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+X=
+\begin{cases}
+0,&0.5\\
+2,&0.5
+\end{cases}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+Y=
+\begin{cases}
+0,&0.5\\
+4,&0.5.
+\end{cases}
+\]</div>
+<p>Assume the high values occur together and low values occur together.</p>
+<p>Then:</p>
+<div class="formula-math">\[
+E[X]=1,
+\]</div>
+<div class="formula-math">\[
+E[Y]=2.
+\]</div>
+<p>Also:</p>
+<div class="formula-math">\[
+E[XY]
+=
+0(0)(0.5)+2(4)(0.5)
+=
+4.
+\]</div>
+<p>Thus:</p>
+<div class="formula-math">\[
+Cov(X,Y)
+=
+4-(1)(2)
+=
+\boxed2.
+\]</div>
+<p>Positive covariance reflects their tendency to move together.</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+hours = np.array([2.0, 3.0, 5.0, 7.0, 9.0])
+marks = np.array([50.0, 58.0, 74.0, 85.0, 96.0])
+
+cov_matrix = np.cov(hours, marks)
+corr_matrix = np.corrcoef(hours, marks)
+
+print(&quot;Covariance Matrix:\n&quot;, np.round(cov_matrix, 2))
+print(&quot;Sample Covariance Cov(X, Y):&quot;, round(cov_matrix[0, 1], 2))
+print(&quot;Pearson Correlation r:&quot;, round(corr_matrix[0, 1], 4))</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Worked Example — Correlation for a Positive Linear Transform</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+Y=3X+5
+\]</div>
+<p>and \(X\) has nonzero variance.</p>
+<p>Then the relationship is perfectly increasing and linear, so:</p>
+<div class="formula-math">\[
+\boxed{
+\rho_{X,Y}=1.
+}
+\]</div>
+<p>The exact scaling of \(X\) does not affect the standardized linear association.</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+hours = np.array([2.0, 3.0, 5.0, 7.0, 9.0])
+marks = np.array([50.0, 58.0, 74.0, 85.0, 96.0])
+
+cov_matrix = np.cov(hours, marks)
+corr_matrix = np.corrcoef(hours, marks)
+
+print(&quot;Covariance Matrix:\n&quot;, np.round(cov_matrix, 2))
+print(&quot;Sample Covariance Cov(X, Y):&quot;, round(cov_matrix[0, 1], 2))
+print(&quot;Pearson Correlation r:&quot;, round(corr_matrix[0, 1], 4))</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">Worked Example — Correlation for a Negative Linear Transform</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+Y=-2X+7.
+\]</div>
+<p>Then the relationship is perfectly decreasing and linear.</p>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+\rho_{X,Y}=-1.
+}
+\]</div>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+hours = np.array([2.0, 3.0, 5.0, 7.0, 9.0])
+marks = np.array([50.0, 58.0, 74.0, 85.0, 96.0])
+
+cov_matrix = np.cov(hours, marks)
+corr_matrix = np.corrcoef(hours, marks)
+
+print(&quot;Covariance Matrix:\n&quot;, np.round(cov_matrix, 2))
+print(&quot;Sample Covariance Cov(X, Y):&quot;, round(cov_matrix[0, 1], 2))
+print(&quot;Pearson Correlation r:&quot;, round(corr_matrix[0, 1], 4))</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Covariance with Itself</h2>
+      </div>
+      <div class="section-body">
+        <p>Set:</p>
+<div class="formula-math">\[
+Y=X.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+Cov(X,X)
+=
+E[(X-E[X])^2].
+\]</div>
+<p>But this is exactly variance:</p>
+<div class="formula-math">\[
+\boxed{
+Cov(X,X)=Var(X).
+}
+\]</div>
+<p>So covariance generalizes variance.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">Correlation with Itself</h2>
+      </div>
+      <div class="section-body">
+        <p>If \(Var(X)\gt 0\):</p>
+<div class="formula-math">\[
+\rho_{X,X}
+=
+\frac{Var(X)}
+{\sqrt{Var(X)Var(X)}}
+\]</div>
+<div class="formula-math">\[
+=
+\frac{Var(X)}{Var(X)}
+=
+\boxed1.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">Covariance Under Scaling</h2>
+      </div>
+      <div class="section-body">
+        <p>For constants \(a,b\):</p>
+<div class="formula-math">\[
+\boxed{
+Cov(aX,bY)=ab\,Cov(X,Y).
+}
+\]</div>
+<p>Why?</p>
+<p>The deviations become:</p>
+<div class="formula-math">\[
+a(X-E[X])
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+b(Y-E[Y]).
+\]</div>
+<p>Their product gains a factor:</p>
+<div class="formula-math">\[
+ab.
+\]</div>
+<p>This is useful when interpreting units and transformations.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">Adding Constants to Covariance</h2>
+      </div>
+      <div class="section-body">
+        <p>For constants \(c,d\):</p>
+<div class="formula-math">\[
+\boxed{
+Cov(X+c,Y+d)=Cov(X,Y).
+}
+\]</div>
+<p>Shifting either variable does not change its deviations from its own mean.</p>
+<p>Therefore covariance cares about joint variation, not absolute location.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">Correlation Is Scale-Invariant</h2>
+      </div>
+      <div class="section-body">
+        <p>For positive scaling:</p>
+<div class="formula-math">\[
+Y=aX+b,
+\quad a\gt 0,
+\]</div>
+<p>correlation remains:</p>
+<div class="formula-math">\[
+\rho_{X,Y}=1.
+\]</div>
+<p>If scale is reversed:</p>
+<div class="formula-math">\[
+a\lt 0,
+\]</div>
+<p>the sign reverses:</p>
+<div class="formula-math">\[
+\rho_{X,Y}=-1.
+\]</div>
+<p>Thus correlation is unaffected by positive changes of units and sensitive to direction reversal.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">Covariance and Expected Products</h2>
+      </div>
+      <div class="section-body">
+        <p>Recall:</p>
+<div class="formula-math">\[
+Cov(X,Y)
+=
+E[XY]-E[X]E[Y].
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+E[XY]
+=
+Cov(X,Y)+E[X]E[Y].
+}
+\]</div>
+<p>This rearrangement is useful in many derivations.</p>
+<p>Special case:</p>
+<p>If:</p>
+<div class="formula-math">\[
+Cov(X,Y)=0,
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+E[XY]=E[X]E[Y].
+\]</div>
+<p>But zero covariance alone does not establish independence.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">Joint Distribution Connection</h2>
+      </div>
+      <div class="section-body">
+        <p>M14 introduced:</p>
+<div class="formula-math">\[
+p_{X,Y}(x,y).
+\]</div>
+<p>That joint distribution lets us calculate:</p>
+<div class="formula-math">\[
+E[XY]
+=
+\sum_x\sum_y
+xy\,p_{X,Y}(x,y).
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+Cov(X,Y)
+=
+\sum_x\sum_y
+xy\,p_{X,Y}(x,y)
+-
+E[X]E[Y]
+}
+\]</div>
+<p>for discrete variables.</p>
+<p>This shows exactly how joint information enters covariance.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">Continuous Version</h2>
+      </div>
+      <div class="section-body">
+        <p>For continuous variables:</p>
+<div class="formula-math">\[
+E[XY]
+=
+\int\int
+xy\,f_{X,Y}(x,y)\,dx\,dy.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\boxed{
+Cov(X,Y)
+=
+\int\int
+xy\,f_{X,Y}(x,y)\,dx\,dy
+-
+E[X]E[Y].
+}
+\]</div>
+<p>The supplied lecture focuses on the definitions and examples of covariance/correlation; this is the corresponding continuous formulation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">Covariance Matrix Preview</h2>
+      </div>
+      <div class="section-body">
+        <p>For several random variables:</p>
+<div class="formula-math">\[
+X=
+\begin{bmatrix}
+X_1\\
+X_2\\
+\vdots\\
+X_d
+\end{bmatrix},
+\]</div>
+<p>we can arrange variances and covariances into a matrix:</p>
+<div class="formula-math">\[
+\boxed{
+\Sigma=
+\begin{bmatrix}
+Var(X_1)&Cov(X_1,X_2)&\cdots\\
+Cov(X_2,X_1)&Var(X_2)&\cdots\\
+\vdots&\vdots&\ddots
+\end{bmatrix}.
+}
+\]</div>
+<p>This is called a <strong>covariance matrix</strong>.</p>
+<p>It becomes important in multivariate statistics and ML.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">AI/ML Connection — Feature Relationships</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose features are:</p>
+<div class="ascii-box"><pre>X₁ = house area
+X₂ = number of rooms</pre></div>
+<p>If their covariance is positive, larger homes may tend to have more rooms.</p>
+<p>If covariance is negative, one variable may tend to fall as the other rises.</p>
+<p>But covariance magnitude depends on units.</p>
+<p>Correlation gives a normalized measure:</p>
+<div class="formula-math">\[
+\rho_{X_1,X_2}.
+\]</div>
+<p>This is why correlation is commonly used for comparing linear relationships between features.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">AI/ML Connection — Regression</h2>
+      </div>
+      <div class="section-body">
+        <p>Correlation can give intuition about linear association between an input and target.</p>
+<p>However:</p>
+<div class="formula-math">\[
+\boxed{
+correlation \ne causation
+}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\boxed{
+correlation \ne proof\ of\ predictive\ sufficiency.
+}
+\]</div>
+<p>A feature can have low linear correlation but still contain useful nonlinear information.</p>
+<p>This is consistent with Lecture02's statement that correlation does not capture nonlinear relationships. fileciteturn67file0</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">AI/ML Connection — Standardization</h2>
+      </div>
+      <div class="section-body">
+        <p>Recall:</p>
+<div class="formula-math">\[
+Z_X=\frac{X-\mu_X}{\sigma_X}.
+\]</div>
+<p>For standardized variables:</p>
+<div class="formula-math">\[
+E[Z_X]=0,
+\]</div>
+<div class="formula-math">\[
+Var(Z_X)=1.
+\]</div>
+<p>For two standardized variables:</p>
+<div class="formula-math">\[
+Cov(Z_X,Z_Y)
+=
+\rho_{X,Y}.
+\]</div>
+<p>Thus correlation can be understood as the covariance of standardized variables.</p>
+<p>This gives a strong conceptual link among:</p>
+<div class="ascii-box"><pre>mean
+→ variance
+→ standard deviation
+→ covariance
+→ correlation</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">Hinglish Teacher Explanation</h2>
+      </div>
+      <div class="section-body">
+        <p>Covariance ko simple language mein:</p>
+<blockquote>
+<p>“Do variables apne average se ek saath kis direction mein move karte hain?”</p>
+</blockquote>
+<p>samjho.</p>
+<p>Suppose:</p>
+<div class="ascii-box"><pre>X = study hours
+Y = marks</pre></div>
+<p>Agar:</p>
+<div class="ascii-box"><pre>X average se upar
+Y bhi average se upar</pre></div>
+<p>toh:</p>
+<div class="formula-math">\[
+(X-\mu_X)(Y-\mu_Y)\gt 0.
+\]</div>
+<p>Agar dono average se neeche hain:</p>
+<div class="formula-math">\[
+(-)(-)=+.
+\]</div>
+<p>Agar ek upar aur ek neeche:</p>
+<div class="formula-math">\[
+(+)(-)=-.
+\]</div>
+<p>In products ka expected average:</p>
+<div class="formula-math">\[
+Cov(X,Y).
+\]</div>
+<p>Ab problem hai scale ki.</p>
+<p>Ek variable rupees mein ho aur doosra kilometres mein, covariance ka number directly compare karna useful nahi.</p>
+<p>Isliye normalize karte hain:</p>
+<div class="formula-math">\[
+\rho_{X,Y}
+=
+\frac{Cov(X,Y)}
+{Std(X)Std(Y)}.
+\]</div>
+<p>Yahi correlation hai.</p>
+<p>Correlation:</p>
+<div class="ascii-box"><pre>+1 → perfect positive linear
+ 0 → no linear correlation
+-1 → perfect negative linear</pre></div>
+<p>Lekin ek bahut important trap:</p>
+<blockquote>
+<p>zero correlation ka matlab independent nahi hota.</p>
+</blockquote>
+<p>Independence se zero correlation imply ho sakta hai, lekin zero correlation se independence prove nahi hoti.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Relationship Map</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>variance
+                 │
+                 ▼
+        standard deviation
+                 │
+                 ▼
+X deviation × Y deviation
+                 │
+                 ▼
+             covariance
+                 │
+       divide by Std(X)Std(Y)
+                 │
+                 ▼
+            correlation</pre></div>
+<p>And from probability:</p>
+<div class="ascii-box"><pre>joint distribution
+      │
+      ▼
+   E[XY]
+      │
+      ▼
+Cov(X,Y)=E[XY]−E[X]E[Y]</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Covariance vs Correlation</h2>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Property</th>
+<th>Covariance</th>
+<th>Correlation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Measures joint variation</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Captures linear association</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Scale-dependent</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Fixed range</td>
+<td>No</td>
+<td>\([-1,1]\)</td>
+</tr>
+<tr>
+<td>Unit-dependent</td>
+<td>Yes</td>
+<td>Dimensionless</td>
+</tr>
+<tr>
+<td>Zero means no linear co-variation</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Independence implies zero</td>
+<td>Yes</td>
+<td>Yes, when defined</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-35" class="section-block">
+      <div class="section-header">
+        <span class="section-num">35</span>
+        <h2 class="section-heading">Independent vs Uncorrelated</h2>
+      </div>
+      <div class="section-body">
+        <h2>Independent</h2>
+<p>Knowledge of one does not change the distribution of the other.</p>
+<p>This is a distribution-level statement.</p>
+<h2>Uncorrelated</h2>
+<div class="formula-math">\[
+Cov(X,Y)=0.
+\]</div>
+<p>This is a linear-association statement.</p>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+Independent
+\Rightarrow
+Uncorrelated
+}
+\]</div>
+<p>but:</p>
+<div class="formula-math">\[
+\boxed{
+Uncorrelated
+\not\Rightarrow
+Independent.
+}
+\]</div>
+<p>This exact logical distinction is highlighted in the supplied Lecture02. fileciteturn67file0</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-36" class="section-block">
+      <div class="section-header">
+        <span class="section-num">36</span>
+        <h2 class="section-heading">Common Mistakes</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Exam Trap & Common Misconception</div>
+
+**Zero Correlation does NOT imply Independence:** $\text{Cov}(X, Y) = 0$ means there is no LINEAR relationship. A strong NON-LINEAR relationship can exist with exact zero covariance! Classic counterexample: Let $X \in \{-1, 0, 1\}$ with equal probability, and $Y = X^2$. Here $E[X] = 0$, $E[XY] = E[X^3] = 0 \implies \text{Cov}(X, Y) = 0$, but $Y$ is 100% deterministically dependent on $X$!
+
+</div>
+
+<h3>Mistake 1</h3>
+<p>Confusing:</p>
+<div class="formula-math">\[
+Cov(X,Y)
+\]</div>
+<p>with:</p>
+<div class="formula-math">\[
+Var(X).
+\]</div>
+<p>Variance is the special case:</p>
+<div class="formula-math">\[
+Cov(X,X)=Var(X).
+\]</div>
+<h3>Mistake 2</h3>
+<p>Using covariance as a scale-free measure.</p>
+<p>It is not.</p>
+<h3>Mistake 3</h3>
+<p>Assuming:</p>
+<div class="formula-math">\[
+\rho=0
+\]</div>
+<p>means independence.</p>
+<p>It does not.</p>
+<h3>Mistake 4</h3>
+<p>Assuming zero correlation means no relationship.</p>
+<p>It only means no linear relationship captured by Pearson correlation.</p>
+<h3>Mistake 5</h3>
+<p>Forgetting standard deviations in the correlation denominator.</p>
+<p>Correct:</p>
+<div class="formula-math">\[
+\sqrt{Var(X)Var(Y)}.
+\]</div>
+<h3>Mistake 6</h3>
+<p>Calling correlation evidence of causation.</p>
+<p>It is not.</p>
+<h3>Mistake 7</h3>
+<p>Ignoring zero-variance variables.</p>
+<p>If \(Var(X)=0\) or \(Var(Y)=0\), Pearson correlation is not defined by the standard formula.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-37" class="section-block">
+      <div class="section-header">
+        <span class="section-num">37</span>
+        <h2 class="section-heading">Formula Cards</h2>
+      </div>
+      <div class="section-body">
+        <h2>F-M17-COV-01 — Definition</h2>
+<div class="formula-math">\[
+\boxed{
+Cov(X,Y)
+=
+E[(X-E[X])(Y-E[Y])]
+}
+\]</div>
+<hr />
+<h2>F-M17-COV-02 — Computational Form</h2>
+<div class="formula-math">\[
+\boxed{
+Cov(X,Y)
+=
+E[XY]-E[X]E[Y]
+}
+\]</div>
+<hr />
+<h2>F-M17-CORR-01</h2>
+<div class="formula-math">\[
+\boxed{
+\rho_{X,Y}
+=
+\frac{Cov(X,Y)}
+{\sqrt{Var(X)Var(Y)}}
+}
+\]</div>
+<hr />
+<h2>F-M17-RANGE-01</h2>
+<div class="formula-math">\[
+\boxed{
+-1\le\rho_{X,Y}\le1
+}
+\]</div>
+<hr />
+<h2>F-M17-VAR-01</h2>
+<div class="formula-math">\[
+\boxed{
+Cov(X,X)=Var(X)
+}
+\]</div>
+<hr />
+<h2>F-M17-SCALE-01</h2>
+<div class="formula-math">\[
+\boxed{
+Cov(aX,bY)=ab\,Cov(X,Y)
+}
+\]</div>
+<hr />
+<h2>F-M17-SHIFT-01</h2>
+<div class="formula-math">\[
+\boxed{
+Cov(X+c,Y+d)=Cov(X,Y)
+}
+\]</div>
+<hr />
+<h2>F-M17-INDEP-01</h2>
+<div class="formula-math">\[
+\boxed{
+X,Y\text{ independent}
+\Rightarrow
+Cov(X,Y)=0
+}
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-38" class="section-block">
+      <div class="section-header">
+        <span class="section-num">38</span>
+        <h2 class="section-heading">Numerical-Solving Protocol</h2>
+      </div>
+      <div class="section-body">
+        <h3>Covariance</h3>
+<div class="ascii-box"><pre>1. Find E[X]
+2. Find E[Y]
+3. Find E[XY]
+4. Compute E[XY]−E[X]E[Y]
+5. Interpret sign</pre></div>
+<h3>Correlation</h3>
+<div class="ascii-box"><pre>1. Find covariance
+2. Find Var(X)
+3. Find Var(Y)
+4. Take √(Var(X)Var(Y))
+5. Divide covariance by denominator
+6. Check answer ∈ [−1,1]</pre></div>
+<h3>Independence test</h3>
+<p>Do not use correlation alone.</p>
+<p>Use a distribution-level condition such as:</p>
+<div class="formula-math">\[
+p_{X,Y}(x,y)=p_X(x)p_Y(y)
+\]</div>
+<p>for all relevant values in the discrete case.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-39" class="section-block">
+      <div class="section-header">
+        <span class="section-num">39</span>
+        <h2 class="section-heading">Active Recall</h2>
+      </div>
+      <div class="section-body">
+        <p>Without notes:</p>
+<ol>
+<li>Why do we need covariance after variance?</li>
+<li>Define covariance.</li>
+<li>Derive:</li>
+</ol>
+<div class="formula-math">\[
+   Cov(X,Y)=E[XY]-E[X]E[Y].
+   \]</div>
+<ol>
+<li>What does positive covariance mean?</li>
+<li>What does negative covariance mean?</li>
+<li>What does zero covariance mean?</li>
+<li>Define Pearson correlation.</li>
+<li>Why is correlation scale-free while covariance is not?</li>
+<li>Why does correlation lie between \(-1\) and \(1\)?</li>
+<li>What is the relationship between covariance and variance?</li>
+<li>Does independence imply zero covariance?</li>
+<li>Does zero covariance imply independence?</li>
+<li>Give a nonlinear example where covariance can be zero despite dependence.</li>
+<li>Why can Pearson correlation miss nonlinear relationships?</li>
+<li>What happens to covariance when constants are added?</li>
+<li>What happens to covariance under scaling?</li>
+</ol>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-40" class="section-block">
+      <div class="section-header">
+        <span class="section-num">40</span>
+        <h2 class="section-heading">Practice Set</h2>
+      </div>
+      <div class="section-body">
+        <h2>Foundation</h2>
+<h3>P-M17-01</h3>
+<p>Suppose:</p>
+<div class="formula-math">\[
+E[X]=2,
+\quad
+E[Y]=5,
+\quad
+E[XY]=13.
+\]</div>
+<p>Find:</p>
+<div class="formula-math">\[
+Cov(X,Y).
+\]</div>
+<h3>P-M17-02</h3>
+<p>Suppose:</p>
+<div class="formula-math">\[
+Var(X)=4,
+\quad
+Var(Y)=9,
+\quad
+Cov(X,Y)=3.
+\]</div>
+<p>Find:</p>
+<div class="formula-math">\[
+\rho_{X,Y}.
+\]</div>
+<h3>P-M17-03</h3>
+<p>If:</p>
+<div class="formula-math">\[
+Cov(X,Y)=0,
+\]</div>
+<p>what can you conclude about their linear relationship?</p>
+<h3>P-M17-04</h3>
+<p>If:</p>
+<div class="formula-math">\[
+Y=4X+7,
+\]</div>
+<p>what is the correlation between \(X\) and \(Y\), assuming \(Var(X)\gt 0\)?</p>
+<h3>P-M17-05</h3>
+<p>If:</p>
+<div class="formula-math">\[
+Y=-3X+2,
+\]</div>
+<p>what is the correlation?</p>
+<hr />
+<h2>Joint Distribution</h2>
+<h3>P-M17-06</h3>
+<p>Given a joint PMF \(p_{X,Y}(x,y)\), explain how you would calculate:</p>
+<div class="formula-math">\[
+E[XY].
+\]</div>
+<h3>P-M17-07</h3>
+<p>Explain how covariance can be calculated directly from a joint-PMF table.</p>
+<hr />
+<h2>Conceptual</h2>
+<h3>P-M17-08</h3>
+<p>Explain the difference between:</p>
+<div class="ascii-box"><pre>independent
+uncorrelated
+nonlinearly related</pre></div>
+<h3>P-M17-09</h3>
+<p>Explain why:</p>
+<div class="formula-math">\[
+Y=X^2
+\]</div>
+<p>can have zero covariance with symmetric \(X\) while still being completely dependent on \(X\).</p>
+<h3>P-M17-10</h3>
+<p>Why might correlation be preferred over covariance when comparing relationships between features with different units?</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-41" class="section-block">
+      <div class="section-header">
+        <span class="section-num">41</span>
+        <h2 class="section-heading">Exam Connection</h2>
+      </div>
+      <div class="section-body">
+        <p>Typical triggers:</p>
+<div class="ascii-box"><pre>“covariance”
+→ E[XY]−E[X]E[Y]
+
+“correlation coefficient”
+→ Cov/(σXσY)
+
+“range of correlation”
+→ [−1,1]
+
+“independent?”
+→ test the distribution factorization
+
+“uncorrelated?”
+→ Cov=0
+
+“same variable”
+→ Cov(X,X)=Var(X)
+
+“linear relation”
+→ correlation is especially relevant</pre></div>
+<p>The independence/uncorrelated distinction is a particularly important conceptual exam point.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-42" class="section-block">
+      <div class="section-header">
+        <span class="section-num">42</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <p>Complete the probability/statistics branch when you can:</p>
+<div class="ascii-box"><pre>work with joint distributions
+marginalize
+condition
+calculate expectation
+calculate variance
+calculate standard deviation
+calculate covariance
+calculate correlation
+distinguish independence from uncorrelatedness
+explain linear vs nonlinear relationships</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-43" class="section-block">
+      <div class="section-header">
+        <span class="section-num">43</span>
+        <h2 class="section-heading">Probability Branch Complete</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>M10  Probability Foundations
+  ↓
+M11  Conditional Probability &amp; Bayes
+  ↓
+M12  Independence &amp; Conditional Independence
+  ↓
+M13  Random Variables / PMF / PDF / CDF
+  ↓
+M14  Joint / Marginal / Conditional Distributions
+  ↓
+M15  Expectation
+  ↓
+M16  Variance / Standard Deviation
+  ↓
+M17  Covariance / Correlation</pre></div>
+<p>This branch now provides the probability foundation needed for later:</p>
+<div class="ascii-box"><pre>regression
+classification
+bias–variance
+loss functions
+gradient methods
+reinforcement learning</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-44" class="section-block">
+      <div class="section-header">
+        <span class="section-num">44</span>
+        <h2 class="section-heading">Next Mathematical Branch</h2>
+      </div>
+      <div class="section-body">
+        <p>The next files move into calculus:</p>
+<div class="ascii-box"><pre>M18 — Derivatives &amp; Rates of Change
+M19 — Partial Derivatives &amp; Multivariable Functions
+M20 — Chain Rule &amp; Computational Graphs
+M21 — Gradients, Jacobians &amp; Direction of Change
+M22 — Optimization, Loss Functions &amp; Gradient Descent
+M23 — SGD, Mini-Batch Learning &amp; Optimization Behaviour
+M24 — L1/L2 Norms, Regularization &amp; Geometric Intuition</pre></div>
+<p>The immediate next question is:</p>
+<blockquote>
+<p><strong>“How does a function change when its input changes?”</strong></p>
+</blockquote>
+<p>That is the foundation of derivatives.</p>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="m16-variance-standard-deviation.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← M16 — Variance & Std Dev</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">📐 Math Index</span>
+      </a>
+      <a href="index.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: Math Companion Hub →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search math modules, formulas, proofs, theorems…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">📐</span>Math Hub</a>
+  <a href="m17-covariance-and-correlation.html" class="mobile-nav-btn active"><span class="icon">📖</span>MATH-M17</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

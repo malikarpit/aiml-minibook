@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="MATH-M12: Independence & Conditional Independence — Math Companion for AI & Machine Learning. Factorization, Pairwise vs Mutual Independence, Conditional Independence, and Graphical Models">
+<title>MATH-M12: Independence & Conditional Independence | Math Companion 📐 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/math.css">
+</head>
+<body class="math-module track-3">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">📐</div>
+      <div class="brand-text"><span class="main">Math Companion</span><span class="sub">AI &amp; ML Deep Layer</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">MATH-M12: Independence &amp; Conditional Independence</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Foundations & Functions</div>
+  <a href="m01-mathematical-notation.html" class="sidebar-link"><span class="link-icon">📐</span>M01: Mathematical Notation, Symbols &amp; Summation</a>
+  <a href="m02-algebra-foundations.html" class="sidebar-link"><span class="link-icon">📐</span>M02: Algebra Foundations for AI/ML</a>
+  <a href="m03-functions-graphs-logs.html" class="sidebar-link"><span class="link-icon">📐</span>M03: Functions, Graphs, Exponents &amp; Logarithms</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Linear Algebra & Vectors</div>
+  <a href="m04-vectors-and-components.html" class="sidebar-link"><span class="link-icon">⚡</span>M04: Vectors &amp; Components</a>
+  <a href="m05-norms-and-distance.html" class="sidebar-link"><span class="link-icon">⚡</span>M05: Norms, Distance &amp; Geometric Intuition</a>
+  <a href="m06-dot-product-and-orthogonality.html" class="sidebar-link"><span class="link-icon">⚡</span>M06: Dot Product, Inner Product &amp; Orthogonality</a>
+  <a href="m07-matrices-and-indexing.html" class="sidebar-link"><span class="link-icon">⚡</span>M07: Matrices, Dimensions &amp; Indexing</a>
+  <a href="m08-matrix-multiplication-transforms.html" class="sidebar-link"><span class="link-icon">⚡</span>M08: Matrix Multiplication &amp; Linear Transformations</a>
+  <a href="m09-linear-systems-least-squares.html" class="sidebar-link"><span class="link-icon">⚡</span>M09: Linear Systems, Inverses &amp; Least Squares</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Probability & Statistics</div>
+  <a href="m10-probability-foundations.html" class="sidebar-link"><span class="link-icon">🎲</span>M10: Probability Foundations</a>
+  <a href="m11-conditional-prob-bayes.html" class="sidebar-link"><span class="link-icon">🎲</span>M11: Conditional Probability, Bayes &amp; Total Probability</a>
+  <a href="m12-independence.html" class="sidebar-link active"><span class="link-icon">🎲</span>M12: Independence &amp; Conditional Independence</a>
+  <a href="m13-random-variables-pmf-pdf-cdf.html" class="sidebar-link"><span class="link-icon">🎲</span>M13: Random Variables, PMF, PDF &amp; CDF</a>
+  <a href="m14-joint-marginal-conditional.html" class="sidebar-link"><span class="link-icon">🎲</span>M14: Joint, Marginal &amp; Conditional Distributions</a>
+  <a href="m15-expectation-expected-value.html" class="sidebar-link"><span class="link-icon">🎲</span>M15: Expectation &amp; Expected Value</a>
+  <a href="m16-variance-standard-deviation.html" class="sidebar-link"><span class="link-icon">🎲</span>M16: Variance &amp; Standard Deviation</a>
+  <a href="m17-covariance-and-correlation.html" class="sidebar-link"><span class="link-icon">🎲</span>M17: Covariance, Correlation &amp; Statistical Relationships</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Calculus & Optimization</div>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>M18–M24: Derivatives, Gradients & SGD (Upcoming)</span>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">MATH-M12 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why This Lesson Exists</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. One-Minute Intuition</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Event Independence</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Meaning of Independence</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Independence vs Conditional Probability</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Worked Example — Two Coin Tosses</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. A Fast Independence Test</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Worked Example — Not Independent</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Independence with Three Events</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Pairwise vs Mutual Independence</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Independence of Random Variables</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Why Joint Distribution Matters</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Joint Table Independence Test</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Worked Example — Joint PMF Test</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Conditional Independence</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. The Key Intuition</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Hidden-Variable Example</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Independent Given a Variable vs Independent</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Conditional Distribution</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Independence Simplifies Conditional Distribution</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Conditional Expectation Preview</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Independence and Expectation</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Linearity of Expectation Does Not Require Independence</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Independence and Covariance</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. But Zero Covariance Does Not Imply Independence</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Why Correlation Can Miss Nonlinear Dependence</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Worked Example — Independent Variables and Product Expectation</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Worked Example — Detecting Dependence from a Function</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Conditional Independence in AI/ML</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Classification Connection</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Hinglish Teacher Explanation</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. AI/ML Connection Map</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Common Mistakes</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Formula Cards</a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Numerical-Solving Protocol</a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Active Recall</a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Practice Set</a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Exam Connection</a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Mastery Gate</a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Next Dependency</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Math Companion</a>
+        <span>/</span>
+        <span>MATH-M12</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-3">Track 3: Probability & Statistics</span></div>
+      <h1 class="chapter-title">Independence &amp; Conditional Independence</h1>
+      <p class="chapter-desc">Factorization, Pairwise vs Mutual Independence, Conditional Independence, and Graphical Models</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~35 min read</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">MATH-INT</span> <span class="chapter-meta-item uni-badge">MATH-CALC</span>
+      </div>
+
+      <div class="math-meta-grid">
+        <div class="math-meta-box">
+          <div class="math-meta-label">Prerequisites</div>
+          <div class="math-meta-value">M11 Conditional Probability</div>
+        </div>
+        <div class="math-meta-box">
+          <div class="math-meta-label">Feeds Directly Into</div>
+          <div class="math-meta-value">M14 Joint Distributions, Ch 16 Naive Bayes, Markov Decision Processes</div>
+        </div>
+        <div class="math-meta-box" style="grid-column: 1 / -1;">
+          <div class="math-meta-label">AI / Machine Learning Connections</div>
+          <div class="math-meta-value">Naive Bayes conditional feature independence $P(x_1, \dots, x_d | y) = \prod P(x_i | y)$, Markov property in RL</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="math-preamble-card"><h1>MATH-M12 — Independence &amp; Conditional Independence</h1>
+<blockquote>
+<p><strong>Math depth:</strong> <code>MATH-INT</code>, <code>MATH-CALC</code>, <code>MATH-NUM</code>, <code>MATH-DERIVE</code><br />
+<strong>Prerequisite:</strong> M10 — Probability Foundations; M11 — Conditional Probability, Bayes &amp; Total Probability<br />
+<strong>Feeds into:</strong> M13–M17, probabilistic ML, graphical-model intuition, feature/reward reasoning, joint distributions<br />
+<strong>Course-source anchors:</strong> <code>Lecture01.pdf</code> covers event independence and conditional independence; <code>Lecture02.pdf</code> extends independence to random variables. fileciteturn64file5 fileciteturn64file6 fileciteturn64file7</p>
+</blockquote>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in MATH-M12 (40 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why This Lesson Exists</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">One-Minute Intuition</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Event Independence</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Meaning of Independence</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Independence vs Conditional Probability</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Worked Example — Two Coin Tosses</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">A Fast Independence Test</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Worked Example — Not Independent</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Independence with Three Events</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Pairwise vs Mutual Independence</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Independence of Random Variables</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Why Joint Distribution Matters</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Joint Table Independence Test</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Worked Example — Joint PMF Test</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Conditional Independence</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">The Key Intuition</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Hidden-Variable Example</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Independent Given a Variable vs Independent</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Conditional Distribution</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Independence Simplifies Conditional Distribution</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Conditional Expectation Preview</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Independence and Expectation</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Linearity of Expectation Does Not Require Independence</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Independence and Covariance</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">But Zero Covariance Does Not Imply Independence</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Why Correlation Can Miss Nonlinear Dependence</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Worked Example — Independent Variables and Product Expectation</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Worked Example — Detecting Dependence from a Function</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Conditional Independence in AI/ML</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Classification Connection</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Hinglish Teacher Explanation</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">AI/ML Connection Map</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Common Mistakes</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Formula Cards</span></a></li>
+        <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Numerical-Solving Protocol</span></a></li>
+        <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Active Recall</span></a></li>
+        <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Practice Set</span></a></li>
+        <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Exam Connection</span></a></li>
+        <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Next Dependency</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">Why This Lesson Exists</h2>
+      </div>
+      <div class="section-body">
+        <p>Probability often becomes manageable because we can sometimes decompose a complicated problem into simpler pieces.</p>
+<p>The key question is:</p>
+<blockquote>
+<p><strong>Can knowing one variable/event change what we know about another?</strong></p>
+</blockquote>
+<p>If not, we may have <strong>independence</strong>.</p>
+<p>This idea matters throughout AI/ML because many probabilistic calculations become simpler when variables can be factorized.</p>
+<p>But there is an important warning:</p>
+<div class="formula-math">\[
+\boxed{
+\text{independence is a precise mathematical condition, not a vague notion of “unrelated”.}
+}
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">One-Minute Intuition</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Mental Model</div>
+
+Independence ka definition factorization se aata hai:
+$P(A \cap B) = P(A) \cdot P(B)$.
+Lekin AI mein sabse powerful concept hai **Conditional Independence**:
+Fever aur Cough aapas mein strongly correlated hain. Lekin agar hume pata chal jaye ki patient ko Flu hai (condition $C$), toh fever ka aana cough ki extra information nahi deta: $P(\text{Fever}, \text{Cough} | \text{Flu}) = P(\text{Fever} | \text{Flu}) \times P(\text{Cough} | \text{Flu})$. Yahi 'Naive Bayes' ka magic foundation hai!
+
+</div>
+
+<p>Suppose you toss two fair coins.</p>
+<p>The result of the first toss does not change the probability of the second toss.</p>
+<p>So:</p>
+<div class="ascii-box"><pre>Toss 1 information
+       ↓
+does not change
+       ↓
+Toss 2 probability</pre></div>
+<p>That is independence.</p>
+<p>But now imagine:</p>
+<div class="ascii-box"><pre>choose one biased coin
+↓
+toss it twice</pre></div>
+<p>The two tosses can become statistically related because they share the hidden choice of which coin was selected.</p>
+<p>This is where <strong>conditional independence</strong> becomes important.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">Event Independence</h2>
+      </div>
+      <div class="section-body">
+        <p>Events \(A\) and \(B\) are independent if:</p>
+<div class="formula-math">\[
+\boxed{
+P(A\cap B)=P(A)P(B).
+}
+\]</div>
+<p>When:</p>
+<div class="formula-math">\[
+P(B)\gt 0,
+\]</div>
+<p>the equivalent form is:</p>
+<div class="formula-math">\[
+\boxed{
+P(A|B)=P(A).
+}
+\]</div>
+<p>Similarly, when \(P(A)\gt 0\):</p>
+<div class="formula-math">\[
+P(B|A)=P(B).
+\]</div>
+<p>These formulations are given in the supplied Lecture01. fileciteturn64file5</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Meaning of Independence</h2>
+      </div>
+      <div class="section-body">
+        <p>The equation:</p>
+<div class="formula-math">\[
+P(A|B)=P(A)
+\]</div>
+<p>means:</p>
+<blockquote>
+<p>once we know \(B\) occurred, our probability for \(A\) does not change.</p>
+</blockquote>
+<p>So \(B\) provides no probabilistic information about \(A\), under the model.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Independence vs Conditional Probability</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph LR
+    subgraph MarginalDependence ["Marginally Dependent Features"]
+        X["Fever (x1)"] <--> Y["Cough (x2)"]
+    end
+    subgraph ConditionalIndependence ["Conditionally Independent given Disease (C)"]
+        C["Disease (Class Y)"] --> X2["Fever (x1)"]
+        C --> Y2["Cough (x2)"]
+    end
+    style ConditionalIndependence fill:#1e293b,stroke:#fbbf24,color:#f8fafc
+</pre></div>
+<p>Conditional probability asks:</p>
+<div class="formula-math">\[
+P(A|B).
+\]</div>
+<p>Independence asks whether the condition \(B\) matters:</p>
+<div class="formula-math">\[
+\boxed{
+P(A|B)\stackrel{?}{=}P(A).
+}
+\]</div>
+<p>So independence can be viewed as a <strong>special case of conditional probability where the condition makes no difference</strong>.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Worked Example — Two Coin Tosses</h2>
+      </div>
+      <div class="section-body">
+        <p>Let:</p>
+<div class="formula-math">\[
+A=\{\text{Head on first toss}\}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+B=\{\text{Head on second toss}\}.
+\]</div>
+<p>For fair independent tosses:</p>
+<div class="formula-math">\[
+P(A)=\frac12,
+\qquad
+P(B)=\frac12.
+\]</div>
+<p>Also:</p>
+<div class="formula-math">\[
+P(A\cap B)=\frac14.
+\]</div>
+<p>Since:</p>
+<div class="formula-math">\[
+P(A)P(B)
+=
+\frac12\cdot\frac12
+=
+\frac14,
+\]</div>
+<p>we get:</p>
+<div class="formula-math">\[
+\boxed{
+A\text{ and }B\text{ are independent}.
+}
+\]</div>
+<p>The supplied Lecture01 uses this exact experiment as an independence exercise. fileciteturn64file5</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+n = 100000
+coin1 = np.random.randint(0, 2, size=n)
+coin2 = np.random.randint(0, 2, size=n)
+
+p_c1_heads = np.mean(coin1 == 1)
+p_c2_heads = np.mean(coin2 == 1)
+p_both_heads = np.mean((coin1 == 1) &amp; (coin2 == 1))
+
+print(&quot;P(Coin 1 = Heads):&quot;, p_c1_heads)
+print(&quot;P(Coin 2 = Heads):&quot;, p_c2_heads)
+print(&quot;P(Both Heads) Empirical:&quot;, p_both_heads)
+print(&quot;P(C1) * P(C2) Theoretical:&quot;, p_c1_heads * p_c2_heads)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">A Fast Independence Test</h2>
+      </div>
+      <div class="section-body">
+        <p>When a numerical question asks whether \(A\) and \(B\) are independent:</p>
+<div class="ascii-box"><pre>1. Compute P(A)P(B).
+2. Compute P(A ∩ B).
+3. Compare them.</pre></div>
+<p>If:</p>
+<div class="formula-math">\[
+P(A\cap B)=P(A)P(B),
+\]</div>
+<p>then independent.</p>
+<p>Otherwise:</p>
+<div class="formula-math">\[
+\boxed{\text{not independent}.}
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">Worked Example — Not Independent</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+P(A)=0.4
+\]</div>
+<div class="formula-math">\[
+P(B)=0.5
+\]</div>
+<div class="formula-math">\[
+P(A\cap B)=0.3.
+\]</div>
+<p>Compute:</p>
+<div class="formula-math">\[
+P(A)P(B)=0.4(0.5)=0.2.
+\]</div>
+<p>Since:</p>
+<div class="formula-math">\[
+0.3\ne0.2,
+\]</div>
+<p>the events are:</p>
+<div class="formula-math">\[
+\boxed{\text{not independent}.}
+\]</div>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+n = 100000
+coin1 = np.random.randint(0, 2, size=n)
+coin2 = np.random.randint(0, 2, size=n)
+
+p_c1_heads = np.mean(coin1 == 1)
+p_c2_heads = np.mean(coin2 == 1)
+p_both_heads = np.mean((coin1 == 1) &amp; (coin2 == 1))
+
+print(&quot;P(Coin 1 = Heads):&quot;, p_c1_heads)
+print(&quot;P(Coin 2 = Heads):&quot;, p_c2_heads)
+print(&quot;P(Both Heads) Empirical:&quot;, p_both_heads)
+print(&quot;P(C1) * P(C2) Theoretical:&quot;, p_c1_heads * p_c2_heads)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Independence with Three Events</h2>
+      </div>
+      <div class="section-body">
+        <p>For three events \(A,B,C\), mutual independence requires more than pairwise independence.</p>
+<p>The supplied Lecture01 states that mutual independence requires:</p>
+<div class="formula-math">\[
+P(A\cap B)=P(A)P(B),
+\]</div>
+<div class="formula-math">\[
+P(B\cap C)=P(B)P(C),
+\]</div>
+<div class="formula-math">\[
+P(A\cap C)=P(A)P(C),
+\]</div>
+<p>and also:</p>
+<div class="formula-math">\[
+\boxed{
+P(A\cap B\cap C)
+=
+P(A)P(B)P(C).
+}
+\]</div>
+<p>Pairwise independence alone is not sufficient. fileciteturn64file6</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Pairwise vs Mutual Independence</h2>
+      </div>
+      <div class="section-body">
+        <h3>Pairwise independence</h3>
+<p>Every pair is independent.</p>
+<p>For three events:</p>
+<div class="ascii-box"><pre>A ⟂ B
+A ⟂ C
+B ⟂ C</pre></div>
+<h3>Mutual independence</h3>
+<p>The joint intersection must also factorize:</p>
+<div class="formula-math">\[
+P(A\cap B\cap C)
+=
+P(A)P(B)P(C),
+\]</div>
+<p>along with the required lower-order conditions.</p>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+\text{mutual independence}
+\Rightarrow
+\text{pairwise independence}
+}
+\]</div>
+<p>but the reverse does not generally hold.</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+n = 100000
+coin1 = np.random.randint(0, 2, size=n)
+coin2 = np.random.randint(0, 2, size=n)
+
+p_c1_heads = np.mean(coin1 == 1)
+p_c2_heads = np.mean(coin2 == 1)
+p_both_heads = np.mean((coin1 == 1) &amp; (coin2 == 1))
+
+print(&quot;P(Coin 1 = Heads):&quot;, p_c1_heads)
+print(&quot;P(Coin 2 = Heads):&quot;, p_c2_heads)
+print(&quot;P(Both Heads) Empirical:&quot;, p_both_heads)
+print(&quot;P(C1) * P(C2) Theoretical:&quot;, p_c1_heads * p_c2_heads)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Independence of Random Variables</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Exam Trap & Common Misconception</div>
+
+**Disjoint vs Independent Confusion:** Mutually Exclusive (disjoint, $A \cap B = \emptyset$) does NOT mean Independent! If $A$ and $B$ are mutually exclusive with positive probabilities, they are STRONGLY DEPENDENT because if $A$ occurs, $B$ is guaranteed NOT to occur ($P(B|A) = 0 \neq P(B)$)!
+
+</div>
+
+<p>For discrete random variables \(X,Y\), independence means:</p>
+<div class="formula-math">\[
+\boxed{
+p_{X,Y}(x,y)
+=
+p_X(x)p_Y(y)
+}
+\]</div>
+<p>for all valid \(x,y\).</p>
+<p>This is the random-variable analogue of event independence.</p>
+<p>The supplied Lecture02 gives this definition explicitly and uses a joint-PMF example to test independence. fileciteturn64file7</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Why Joint Distribution Matters</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Exam Trap & Common Misconception</div>
+
+**Disjoint vs Independent Confusion:** Mutually Exclusive (disjoint, $A \cap B = \emptyset$) does NOT mean Independent! If $A$ and $B$ are mutually exclusive with positive probabilities, they are STRONGLY DEPENDENT because if $A$ occurs, $B$ is guaranteed NOT to occur ($P(B|A) = 0 \neq P(B)$)!
+
+</div>
+
+<p>Knowing:</p>
+<div class="formula-math">\[
+p_X(x)
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+p_Y(y)
+\]</div>
+<p>does not generally tell us the joint distribution:</p>
+<div class="formula-math">\[
+p_{X,Y}(x,y).
+\]</div>
+<p>Different dependence structures can have the same marginals.</p>
+<p>If \(X,Y\) are independent, however:</p>
+<div class="formula-math">\[
+\boxed{
+p_{X,Y}(x,y)
+=
+p_X(x)p_Y(y).
+}
+\]</div>
+<p>Therefore independence gives a powerful factorization.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Joint Table Independence Test</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose a joint PMF table is given.</p>
+<p>To test independence:</p>
+<div class="ascii-box"><pre>1. Compute row marginal pX(x).
+2. Compute column marginal pY(y).
+3. Pick a cell (x,y).
+4. Compare pXY(x,y) with pX(x)pY(y).
+5. If even one valid cell disagrees → not independent.</pre></div>
+<p>To prove independence, verify the equality for all relevant cells.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Worked Example — Joint PMF Test</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+p_{X,Y}(1,1)=0.25
+\]</div>
+<p>while:</p>
+<div class="formula-math">\[
+p_X(1)=0.55
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+p_Y(1)=0.45.
+\]</div>
+<p>If independent:</p>
+<div class="formula-math">\[
+p_X(1)p_Y(1)
+=
+0.55(0.45)
+=
+0.2475.
+\]</div>
+<p>But:</p>
+<div class="formula-math">\[
+0.2475\ne0.25.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+X,Y\text{ are not independent}.
+}
+\]</div>
+<p>This is the same numerical comparison used in Lecture02. fileciteturn64file7</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+n = 100000
+coin1 = np.random.randint(0, 2, size=n)
+coin2 = np.random.randint(0, 2, size=n)
+
+p_c1_heads = np.mean(coin1 == 1)
+p_c2_heads = np.mean(coin2 == 1)
+p_both_heads = np.mean((coin1 == 1) &amp; (coin2 == 1))
+
+print(&quot;P(Coin 1 = Heads):&quot;, p_c1_heads)
+print(&quot;P(Coin 2 = Heads):&quot;, p_c2_heads)
+print(&quot;P(Both Heads) Empirical:&quot;, p_both_heads)
+print(&quot;P(C1) * P(C2) Theoretical:&quot;, p_c1_heads * p_c2_heads)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">Conditional Independence</h2>
+      </div>
+      <div class="section-body">
+        <p>Events \(A,B\) are conditionally independent given \(C\) when:</p>
+<div class="formula-math">\[
+\boxed{
+P(A\cap B|C)
+=
+P(A|C)P(B|C)
+}
+\]</div>
+<p>for:</p>
+<div class="formula-math">\[
+P(C)\gt 0.
+\]</div>
+<p>This was introduced in Lecture01. fileciteturn64file6</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">The Key Intuition</h2>
+      </div>
+      <div class="section-body">
+        <p>Conditional independence means:</p>
+<blockquote>
+<p><strong>A and B may be dependent generally, but once C is known, that dependence disappears under the conditional model.</strong></p>
+</blockquote>
+<p>Visual:</p>
+<div class="ascii-box"><pre>without C:
+A ←→ B
+
+given C:
+A    B
+ \   /
+   C</pre></div>
+<p>This is an intuition only; a graph alone does not establish conditional independence unless the underlying probability model supports the claim.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">Hidden-Variable Example</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose there are two coins:</p>
+<div class="ascii-box"><pre>Coin 1 → P(H)=0.9
+Coin 2 → P(H)=0.1</pre></div>
+<p>Choose one coin at random, then toss the chosen coin twice.</p>
+<p>Let:</p>
+<div class="formula-math">\[
+H_1=\{\text{Head on toss 1}\}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+H_2=\{\text{Head on toss 2}\}.
+\]</div>
+<p>Marginally, the two tosses can become dependent because both share the hidden coin-selection variable.</p>
+<p>But given:</p>
+<div class="formula-math">\[
+C=\{\text{Coin 1 was chosen}\},
+\]</div>
+<p>the tosses are independent under the coin model:</p>
+<div class="formula-math">\[
+\boxed{
+P(H_1\cap H_2|C)
+=
+P(H_1|C)P(H_2|C).
+}
+\]</div>
+<p>The supplied Lecture01 uses this experiment to introduce conditional independence. fileciteturn64file6</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+n = 100000
+coin1 = np.random.randint(0, 2, size=n)
+coin2 = np.random.randint(0, 2, size=n)
+
+p_c1_heads = np.mean(coin1 == 1)
+p_c2_heads = np.mean(coin2 == 1)
+p_both_heads = np.mean((coin1 == 1) &amp; (coin2 == 1))
+
+print(&quot;P(Coin 1 = Heads):&quot;, p_c1_heads)
+print(&quot;P(Coin 2 = Heads):&quot;, p_c2_heads)
+print(&quot;P(Both Heads) Empirical:&quot;, p_both_heads)
+print(&quot;P(C1) * P(C2) Theoretical:&quot;, p_c1_heads * p_c2_heads)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Independent Given a Variable vs Independent</h2>
+      </div>
+      <div class="section-body">
+        <p>These are not the same statement.</p>
+<h3>Marginal independence</h3>
+<div class="formula-math">\[
+X\perp Y.
+\]</div>
+<h3>Conditional independence</h3>
+<div class="formula-math">\[
+X\perp Y\mid Z.
+\]</div>
+<p>It is possible for:</p>
+<div class="formula-math">\[
+X\not\!\perp Y
+\]</div>
+<p>but:</p>
+<div class="formula-math">\[
+X\perp Y\mid Z.
+\]</div>
+<p>A hidden/common variable \(Z\) can create apparent dependence.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">Conditional Distribution</h2>
+      </div>
+      <div class="section-body">
+        <p>For discrete random variables:</p>
+<div class="formula-math">\[
+\boxed{
+p_{X|Y}(x|y)
+=
+\frac{p_{X,Y}(x,y)}
+{p_Y(y)}
+}
+\]</div>
+<p>when:</p>
+<div class="formula-math">\[
+p_Y(y)\gt 0.
+\]</div>
+<p>This lets us move between joint and conditional descriptions.</p>
+<p>From the multiplication rule:</p>
+<div class="formula-math">\[
+\boxed{
+p_{X,Y}(x,y)
+=
+p_{X|Y}(x|y)p_Y(y).
+}
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Independence Simplifies Conditional Distribution</h2>
+      </div>
+      <div class="section-body">
+        <p>If \(X,Y\) are independent:</p>
+<div class="formula-math">\[
+p_{X,Y}(x,y)=p_X(x)p_Y(y).
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+p_{X|Y}(x|y)
+=
+\frac{p_X(x)p_Y(y)}{p_Y(y)}
+=
+\boxed{p_X(x)}.
+\]</div>
+<p>So knowing \(Y\) does not change the distribution of \(X\).</p>
+<p>This is the random-variable equivalent of:</p>
+<div class="formula-math">\[
+P(A|B)=P(A).
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">Conditional Expectation Preview</h2>
+      </div>
+      <div class="section-body">
+        <p>If \(X,Y\) are discrete:</p>
+<div class="formula-math">\[
+\boxed{
+E[Y|X=x]
+=
+\sum_y y\,p_{Y|X}(y|x).
+}
+\]</div>
+<p>This is not yet the focus of M12, but it shows why conditional distributions matter later.</p>
+<p>The supplied Lecture02 explicitly defines conditional expectation in this form. fileciteturn64file7</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">Independence and Expectation</h2>
+      </div>
+      <div class="section-body">
+        <p>If \(X,Y\) are independent, then:</p>
+<div class="formula-math">\[
+\boxed{
+E[XY]=E[X]E[Y]
+}
+\]</div>
+<p>when the expectations exist.</p>
+<p>The supplied Lecture02 gives this as a useful identity while emphasizing that:</p>
+<div class="formula-math">\[
+E[X+Y]=E[X]+E[Y]
+\]</div>
+<p>does <strong>not</strong> require independence. fileciteturn64file7</p>
+<p>This distinction is important.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">Linearity of Expectation Does Not Require Independence</h2>
+      </div>
+      <div class="section-body">
+        <p>Always remember:</p>
+<div class="formula-math">\[
+\boxed{
+E[X+Y]=E[X]+E[Y]
+}
+\]</div>
+<p>even if \(X,Y\) are dependent.</p>
+<p>But:</p>
+<div class="formula-math">\[
+\boxed{
+E[XY]=E[X]E[Y]
+}
+\]</div>
+<p>generally requires independence.</p>
+<p>Therefore:</p>
+<div class="ascii-box"><pre>sum
+→ linearity is enough
+
+product
+→ independence may be needed</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">Independence and Covariance</h2>
+      </div>
+      <div class="section-body">
+        <p>For independent random variables, assuming the needed expectations exist:</p>
+<div class="formula-math">\[
+\boxed{
+Cov(X,Y)=0.
+}
+\]</div>
+<p>Why?</p>
+<div class="formula-math">\[
+Cov(X,Y)
+=
+E[XY]-E[X]E[Y].
+\]</div>
+<p>Independence gives:</p>
+<div class="formula-math">\[
+E[XY]=E[X]E[Y].
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+Cov(X,Y)=0.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">But Zero Covariance Does Not Imply Independence</h2>
+      </div>
+      <div class="section-body">
+        <p>The reverse statement is false in general:</p>
+<div class="formula-math">\[
+\boxed{
+Cov(X,Y)=0
+\not\Rightarrow
+X\perp Y.
+}
+\]</div>
+<p>The supplied Lecture02 gives a concrete counterexample:</p>
+<div class="formula-math">\[
+X\sim Uniform(-1,1),
+\]</div>
+<div class="formula-math">\[
+Y=X^2.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+Cov(X,Y)=0,
+\]</div>
+<p>yet \(Y\) is completely determined by \(X\), so they are dependent. fileciteturn64file7</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">Why Correlation Can Miss Nonlinear Dependence</h2>
+      </div>
+      <div class="section-body">
+        <p>Pearson correlation measures linear association.</p>
+<p>A relationship such as:</p>
+<div class="formula-math">\[
+Y=X^2
+\]</div>
+<p>can be strongly dependent but have zero linear correlation under a symmetric distribution.</p>
+<p>Therefore:</p>
+<div class="ascii-box"><pre>correlation ≈ linear relationship
+independence = much stronger probabilistic condition</pre></div>
+<p>This distinction is fundamental.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">Worked Example — Independent Variables and Product Expectation</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+E[X]=2,
+\quad
+E[Y]=3,
+\]</div>
+<p>and \(X,Y\) are independent.</p>
+<p>Then:</p>
+<div class="formula-math">\[
+E[XY]
+=
+E[X]E[Y]
+=
+2(3)
+=
+\boxed6.
+\]</div>
+<p>Without independence, the value cannot generally be determined from the two means alone.</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+n = 100000
+coin1 = np.random.randint(0, 2, size=n)
+coin2 = np.random.randint(0, 2, size=n)
+
+p_c1_heads = np.mean(coin1 == 1)
+p_c2_heads = np.mean(coin2 == 1)
+p_both_heads = np.mean((coin1 == 1) &amp; (coin2 == 1))
+
+print(&quot;P(Coin 1 = Heads):&quot;, p_c1_heads)
+print(&quot;P(Coin 2 = Heads):&quot;, p_c2_heads)
+print(&quot;P(Both Heads) Empirical:&quot;, p_both_heads)
+print(&quot;P(C1) * P(C2) Theoretical:&quot;, p_c1_heads * p_c2_heads)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">Worked Example — Detecting Dependence from a Function</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+Y=X^2.
+\]</div>
+<p>Then if \(X\) is known, \(Y\) is known exactly.</p>
+<p>So \(Y\) carries information about \(X\) and vice versa in general.</p>
+<p>They cannot be independent unless the distribution is degenerate in a special way.</p>
+<p>The supplied Lecture02 uses exactly this deterministic relationship as a dependence example. fileciteturn64file7</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+n = 100000
+coin1 = np.random.randint(0, 2, size=n)
+coin2 = np.random.randint(0, 2, size=n)
+
+p_c1_heads = np.mean(coin1 == 1)
+p_c2_heads = np.mean(coin2 == 1)
+p_both_heads = np.mean((coin1 == 1) &amp; (coin2 == 1))
+
+print(&quot;P(Coin 1 = Heads):&quot;, p_c1_heads)
+print(&quot;P(Coin 2 = Heads):&quot;, p_c2_heads)
+print(&quot;P(Both Heads) Empirical:&quot;, p_both_heads)
+print(&quot;P(C1) * P(C2) Theoretical:&quot;, p_c1_heads * p_c2_heads)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">Conditional Independence in AI/ML</h2>
+      </div>
+      <div class="section-body">
+        <p>Conditional independence is useful because complex probability distributions can sometimes be factorized.</p>
+<p>Conceptually:</p>
+<div class="formula-math">\[
+P(A,B,C)
+\]</div>
+<p>may be expressed through:</p>
+<div class="formula-math">\[
+P(A|C)P(B|C)P(C)
+\]</div>
+<p>when:</p>
+<div class="formula-math">\[
+A\perp B|C.
+\]</div>
+<p>This type of factorization is one of the mathematical ideas behind probabilistic graphical models.</p>
+<p>It is not necessary to study full graphical-model machinery for the basic DSC-14 syllabus, but recognizing the factorization pattern is valuable.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">Classification Connection</h2>
+      </div>
+      <div class="section-body">
+        <p>A probabilistic classifier estimates something like:</p>
+<div class="formula-math">\[
+P(y|x).
+\]</div>
+<p>If features have conditional independence given the class, a model can factor:</p>
+<div class="formula-math">\[
+P(x_1,\ldots,x_d|y)
+=
+\prod_{j=1}^{d}P(x_j|y).
+\]</div>
+<p>This is the core mathematical assumption behind naive Bayes.</p>
+<p>Naive Bayes is not listed as a core DSC-14 topic in the supplied course map, so this equation is an <strong>extension example</strong>, not a required course topic.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">Hinglish Teacher Explanation</h2>
+      </div>
+      <div class="section-body">
+        <p>Independence ka easiest idea:</p>
+<blockquote>
+<p>“B ke baare mein pata chalne ke baad A ki probability change nahi hui.”</p>
+</blockquote>
+<p>Mathematically:</p>
+<div class="formula-math">\[
+P(A|B)=P(A).
+\]</div>
+<p>Ya:</p>
+<div class="formula-math">\[
+P(A\cap B)=P(A)P(B).
+\]</div>
+<p>Random variables ke case mein:</p>
+<div class="formula-math">\[
+p_{X,Y}(x,y)=p_X(x)p_Y(y).
+\]</div>
+<p>Ab conditional independence:</p>
+<blockquote>
+<p>“A aur B generally related ho sakte hain, lekin C pata chalne ke baad unka relationship disappear ho jata hai.”</p>
+</blockquote>
+<div class="formula-math">\[
+P(A\cap B|C)
+=
+P(A|C)P(B|C).
+\]</div>
+<p>Coin example mein:</p>
+<div class="ascii-box"><pre>randomly coin choose karo
+↓
+same coin ko do baar toss karo</pre></div>
+<p>Dono tosses marginally related ho sakte hain because same hidden coin dono ko affect kar raha hai.</p>
+<p>Lekin agar pata chal gaya:</p>
+<blockquote>
+<p>“Coin 1 select hua tha”</p>
+</blockquote>
+<p>toh dono tosses phir independent ho sakte hain.</p>
+<p>Ek aur important point:</p>
+<blockquote>
+<p><strong>Independence se covariance zero hota hai, lekin covariance zero hone se independence guarantee nahi hoti.</strong></p>
+</blockquote>
+<p>Example:</p>
+<div class="formula-math">\[
+Y=X^2.
+\]</div>
+<p>Dependence clear hai because \(X\) pata ho toh \(Y\) exact pata hai.</p>
+<p>Phir bhi symmetric \(X\) ke case mein covariance zero ho sakta hai.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">AI/ML Connection Map</h2>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Probability idea</th>
+<th>AI/ML relevance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>independence</td>
+<td>factorization</td>
+</tr>
+<tr>
+<td>conditional independence</td>
+<td>structured probabilistic models</td>
+</tr>
+<tr>
+<td>joint factorization</td>
+<td>efficient probability calculations</td>
+</tr>
+<tr>
+<td>\(p_{X,Y}=p_Xp_Y\)</td>
+<td>independent-variable models</td>
+</tr>
+<tr>
+<td>\(p_{X|Y}=p_X\)</td>
+<td>no-information condition</td>
+</tr>
+<tr>
+<td>\(E[XY]=E[X]E[Y]\)</td>
+<td>simplifying product expectations</td>
+</tr>
+<tr>
+<td>covariance</td>
+<td>linear dependence</td>
+</tr>
+<tr>
+<td>zero covariance</td>
+<td>not sufficient for independence</td>
+</tr>
+<tr>
+<td>conditional independence</td>
+<td>hidden-variable reasoning</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Common Mistakes</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Exam Trap & Common Misconception</div>
+
+**Disjoint vs Independent Confusion:** Mutually Exclusive (disjoint, $A \cap B = \emptyset$) does NOT mean Independent! If $A$ and $B$ are mutually exclusive with positive probabilities, they are STRONGLY DEPENDENT because if $A$ occurs, $B$ is guaranteed NOT to occur ($P(B|A) = 0 \neq P(B)$)!
+
+</div>
+
+<h3>Mistake 1 — Independence means mutually exclusive</h3>
+<p>Wrong.</p>
+<p>Independent events can occur together.</p>
+<h3>Mistake 2 — \(P(A|B)=P(B|A)\)</h3>
+<p>Wrong in general.</p>
+<h3>Mistake 3 — Pairwise independence means mutual independence</h3>
+<p>Not generally.</p>
+<h3>Mistake 4 — Zero covariance means independence</h3>
+<p>Wrong in general.</p>
+<h3>Mistake 5 — Linearity of expectation needs independence</h3>
+<p>It does not.</p>
+<h3>Mistake 6 — Conditional independence automatically implies marginal independence</h3>
+<p>Not generally.</p>
+<h3>Mistake 7 — Checking only intuition</h3>
+<p>Always use the mathematical definition for an exam proof/numerical.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Formula Cards</h2>
+      </div>
+      <div class="section-body">
+        <h2>F-M12-EVENT-INDEP-01</h2>
+<div class="formula-math">\[
+\boxed{
+P(A\cap B)=P(A)P(B)
+}
+\]</div>
+<hr />
+<h2>F-M12-EVENT-INDEP-02</h2>
+<div class="formula-math">\[
+\boxed{
+P(A|B)=P(A)
+}
+\]</div>
+<p>when \(P(B)\gt 0\).</p>
+<hr />
+<h2>F-M12-RV-INDEP-01</h2>
+<div class="formula-math">\[
+\boxed{
+p_{X,Y}(x,y)=p_X(x)p_Y(y)
+}
+\]</div>
+<p>for all valid \(x,y\).</p>
+<hr />
+<h2>F-M12-COND-INDEP-01</h2>
+<div class="formula-math">\[
+\boxed{
+P(A\cap B|C)
+=
+P(A|C)P(B|C)
+}
+\]</div>
+<hr />
+<h2>F-M12-COND-RV-01</h2>
+<div class="formula-math">\[
+\boxed{
+p_{X|Y}(x|y)
+=
+\frac{p_{X,Y}(x,y)}
+{p_Y(y)}
+}
+\]</div>
+<hr />
+<h2>F-M12-PROD-EXP-01</h2>
+<p>If \(X,Y\) are independent:</p>
+<div class="formula-math">\[
+\boxed{
+E[XY]=E[X]E[Y].
+}
+\]</div>
+<hr />
+<h2>F-M12-COV-01</h2>
+<div class="formula-math">\[
+\boxed{
+Cov(X,Y)=E[XY]-E[X]E[Y].
+}
+\]</div>
+<p>Independence implies:</p>
+<div class="formula-math">\[
+Cov(X,Y)=0.
+\]</div>
+<p>The reverse does not generally hold. fileciteturn64file7</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-35" class="section-block">
+      <div class="section-header">
+        <span class="section-num">35</span>
+        <h2 class="section-heading">Numerical-Solving Protocol</h2>
+      </div>
+      <div class="section-body">
+        <p>For an independence question:</p>
+<div class="ascii-box"><pre>Identify the variables/events
+↓
+write the relevant definition
+↓
+compute left side
+↓
+compute right side
+↓
+compare
+↓
+state conclusion</pre></div>
+<p>For conditional independence:</p>
+<div class="ascii-box"><pre>condition on C
+↓
+compute conditional joint
+↓
+compute product of conditional marginals
+↓
+compare</pre></div>
+<p>Never write merely:</p>
+<blockquote>
+<p>“They appear independent.”</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-36" class="section-block">
+      <div class="section-header">
+        <span class="section-num">36</span>
+        <h2 class="section-heading">Active Recall</h2>
+      </div>
+      <div class="section-body">
+        <p>Without notes:</p>
+<ol>
+<li>Define event independence.</li>
+<li>Give two equivalent formulations.</li>
+<li>How do you test independence numerically?</li>
+<li>Define mutual independence for three events.</li>
+<li>Why is pairwise independence insufficient?</li>
+<li>Define random-variable independence.</li>
+<li>Why do marginal distributions not generally determine a joint distribution?</li>
+<li>Define conditional independence.</li>
+<li>Give a hidden-variable example.</li>
+<li>Does conditional independence imply marginal independence?</li>
+<li>Does independence imply zero covariance?</li>
+<li>Does zero covariance imply independence?</li>
+<li>Does \(E[X+Y]=E[X]+E[Y]\) need independence?</li>
+<li>When can \(E[XY]=E[X]E[Y]\) be used?</li>
+<li>Why does conditional independence help probabilistic models?</li>
+</ol>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-37" class="section-block">
+      <div class="section-header">
+        <span class="section-num">37</span>
+        <h2 class="section-heading">Practice Set</h2>
+      </div>
+      <div class="section-body">
+        <h2>Foundation</h2>
+<h3>P-M12-01</h3>
+<p>Given:</p>
+<div class="formula-math">\[
+P(A)=0.4,\quad P(B)=0.6,\quad P(A\cap B)=0.24,
+\]</div>
+<p>determine whether \(A,B\) are independent.</p>
+<h3>P-M12-02</h3>
+<p>Given:</p>
+<div class="formula-math">\[
+P(A)=0.4,\quad P(B)=0.6,\quad P(A\cap B)=0.3,
+\]</div>
+<p>determine whether they are independent.</p>
+<h3>P-M12-03</h3>
+<p>Explain why two positive-probability disjoint events cannot be independent.</p>
+<h3>P-M12-04</h3>
+<p>For three events, explain the difference between pairwise and mutual independence.</p>
+<hr />
+<h2>Random-Variable Practice</h2>
+<h3>P-M12-05</h3>
+<p>A joint PMF has:</p>
+<div class="formula-math">\[
+p_{X,Y}(1,1)=0.25,
+\]</div>
+<p>while:</p>
+<div class="formula-math">\[
+p_X(1)=0.5,\qquad p_Y(1)=0.5.
+\]</div>
+<p>Does this cell satisfy the independence equation?</p>
+<h3>P-M12-06</h3>
+<p>Suppose:</p>
+<div class="formula-math">\[
+E[X]=4,\quad E[Y]=5
+\]</div>
+<p>and \(X,Y\) are independent. Find \(E[XY]\).</p>
+<h3>P-M12-07</h3>
+<p>Give an example of dependent variables with zero covariance.</p>
+<h3>P-M12-08</h3>
+<p>Explain why \(Y=X^2\) creates dependence even if correlation can be zero.</p>
+<hr />
+<h2>Conditional Independence</h2>
+<h3>P-M12-09</h3>
+<p>Let a hidden variable \(C\) determine which of two biased coins is used. Explain why the two tosses may be dependent marginally but conditionally independent given \(C\).</p>
+<h3>P-M12-10</h3>
+<p>Write the mathematical definition of:</p>
+<div class="formula-math">\[
+A\perp B|C.
+\]</div>
+<h3>P-M12-11</h3>
+<p>Explain the difference between:</p>
+<div class="formula-math">\[
+P(A\cap B)=P(A)P(B)
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+P(A\cap B|C)=P(A|C)P(B|C).
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-38" class="section-block">
+      <div class="section-header">
+        <span class="section-num">38</span>
+        <h2 class="section-heading">Exam Connection</h2>
+      </div>
+      <div class="section-body">
+        <p>Typical triggers:</p>
+<div class="ascii-box"><pre>“independent?”
+→ compare P(A∩B) with P(A)P(B)
+
+“joint PMF factorization”
+→ independence
+
+“conditional independence”
+→ condition on C
+
+“no information”
+→ P(A|B)=P(A)
+
+“pairwise vs mutual”
+→ check joint intersections
+
+“uncorrelated?”
+→ covariance = 0
+
+“independent?”
+→ stronger than zero covariance</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-39" class="section-block">
+      <div class="section-header">
+        <span class="section-num">39</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <p>Move to M13 when you can:</p>
+<div class="ascii-box"><pre>test event independence
+test RV independence
+distinguish pairwise/mutual independence
+explain conditional independence
+use conditional-PMF formulas
+connect independence to expectation
+distinguish covariance from independence
+recognize hidden-variable dependence</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-40" class="section-block">
+      <div class="section-header">
+        <span class="section-num">40</span>
+        <h2 class="section-heading">Next Dependency</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>M10 Probability
+ ↓
+M11 Conditional Probability / Bayes
+ ↓
+M12 Independence
+ ↓
+M13 Random Variables + PMF/PDF/CDF
+ ↓
+M14 Joint / Marginal / Conditional Distributions
+ ↓
+M15 Expectation
+M16 Variance
+M17 Covariance / Correlation</pre></div>
+<p>Now we turn an event's outcome into a <strong>numerical random variable</strong>, so probability can describe quantities rather than only sets of outcomes.</p>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="m11-conditional-prob-bayes.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← M11 — Conditional Prob & Bayes</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">📐 Math Index</span>
+      </a>
+      <a href="m13-random-variables-pmf-pdf-cdf.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: M13 — Random Variables →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search math modules, formulas, proofs, theorems…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">📐</span>Math Hub</a>
+  <a href="m12-independence.html" class="mobile-nav-btn active"><span class="icon">📖</span>MATH-M12</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

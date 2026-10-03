@@ -3,8 +3,8 @@
  * Network-First for Navigation (always fresh HTML) + Cache-First for static assets
  */
 
-const CACHE_NAME    = 'aiml-minibook-v4';
-const RUNTIME_CACHE = 'aiml-minibook-runtime-v4';
+const CACHE_NAME    = 'aiml-minibook-v5';
+const RUNTIME_CACHE = 'aiml-minibook-runtime-v5';
 const ASSETS = [
   './',
   './index.html',
@@ -13,11 +13,30 @@ const ASSETS = [
   './exams/unit-quiz.html',
   './exams/written-papers.html',
   './exams/formula-sheet.html',
+  './math/index.html',
+  './math/m01-mathematical-notation.html',
+  './math/m02-algebra-foundations.html',
+  './math/m03-functions-graphs-logs.html',
+  './math/m04-vectors-and-components.html',
+  './math/m05-norms-and-distance.html',
+  './math/m06-dot-product-and-orthogonality.html',
+  './math/m07-matrices-and-indexing.html',
+  './math/m08-matrix-multiplication-transforms.html',
+  './math/m09-linear-systems-least-squares.html',
+  './math/m10-probability-foundations.html',
+  './math/m11-conditional-prob-bayes.html',
+  './math/m12-independence.html',
+  './math/m13-random-variables-pmf-pdf-cdf.html',
+  './math/m14-joint-marginal-conditional.html',
+  './math/m15-expectation-expected-value.html',
+  './math/m16-variance-standard-deviation.html',
+  './math/m17-covariance-and-correlation.html',
   './assets/js/quiz-data.js',
   './assets/css/main.css',
   './assets/css/components.css',
   './assets/css/chapters.css',
   './assets/css/animations.css',
+  './assets/css/math.css',
   './chapters/ch01-what-is-ai.html',
   './chapters/ch02-intelligent-agents.html',
   './chapters/ch03-problem-formulation.html',

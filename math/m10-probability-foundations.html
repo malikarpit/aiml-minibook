@@ -1,0 +1,1844 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="MATH-M10: Probability Foundations — Math Companion for AI & Machine Learning. Sample Spaces, Kolmogorov Axioms, Event Algebra, Inclusion-Exclusion, and Uncertainty">
+<title>MATH-M10: Probability Foundations | Math Companion 📐 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/math.css">
+</head>
+<body class="math-module track-3">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">📐</div>
+      <div class="brand-text"><span class="main">Math Companion</span><span class="sub">AI &amp; ML Deep Layer</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">MATH-M10: Probability Foundations</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Foundations & Functions</div>
+  <a href="m01-mathematical-notation.html" class="sidebar-link"><span class="link-icon">📐</span>M01: Mathematical Notation, Symbols &amp; Summation</a>
+  <a href="m02-algebra-foundations.html" class="sidebar-link"><span class="link-icon">📐</span>M02: Algebra Foundations for AI/ML</a>
+  <a href="m03-functions-graphs-logs.html" class="sidebar-link"><span class="link-icon">📐</span>M03: Functions, Graphs, Exponents &amp; Logarithms</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Linear Algebra & Vectors</div>
+  <a href="m04-vectors-and-components.html" class="sidebar-link"><span class="link-icon">⚡</span>M04: Vectors &amp; Components</a>
+  <a href="m05-norms-and-distance.html" class="sidebar-link"><span class="link-icon">⚡</span>M05: Norms, Distance &amp; Geometric Intuition</a>
+  <a href="m06-dot-product-and-orthogonality.html" class="sidebar-link"><span class="link-icon">⚡</span>M06: Dot Product, Inner Product &amp; Orthogonality</a>
+  <a href="m07-matrices-and-indexing.html" class="sidebar-link"><span class="link-icon">⚡</span>M07: Matrices, Dimensions &amp; Indexing</a>
+  <a href="m08-matrix-multiplication-transforms.html" class="sidebar-link"><span class="link-icon">⚡</span>M08: Matrix Multiplication &amp; Linear Transformations</a>
+  <a href="m09-linear-systems-least-squares.html" class="sidebar-link"><span class="link-icon">⚡</span>M09: Linear Systems, Inverses &amp; Least Squares</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Probability & Statistics</div>
+  <a href="m10-probability-foundations.html" class="sidebar-link active"><span class="link-icon">🎲</span>M10: Probability Foundations</a>
+  <a href="m11-conditional-prob-bayes.html" class="sidebar-link"><span class="link-icon">🎲</span>M11: Conditional Probability, Bayes &amp; Total Probability</a>
+  <a href="m12-independence.html" class="sidebar-link"><span class="link-icon">🎲</span>M12: Independence &amp; Conditional Independence</a>
+  <a href="m13-random-variables-pmf-pdf-cdf.html" class="sidebar-link"><span class="link-icon">🎲</span>M13: Random Variables, PMF, PDF &amp; CDF</a>
+  <a href="m14-joint-marginal-conditional.html" class="sidebar-link"><span class="link-icon">🎲</span>M14: Joint, Marginal &amp; Conditional Distributions</a>
+  <a href="m15-expectation-expected-value.html" class="sidebar-link"><span class="link-icon">🎲</span>M15: Expectation &amp; Expected Value</a>
+  <a href="m16-variance-standard-deviation.html" class="sidebar-link"><span class="link-icon">🎲</span>M16: Variance &amp; Standard Deviation</a>
+  <a href="m17-covariance-and-correlation.html" class="sidebar-link"><span class="link-icon">🎲</span>M17: Covariance, Correlation &amp; Statistical Relationships</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Calculus & Optimization</div>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>M18–M24: Derivatives, Gradients & SGD (Upcoming)</span>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">MATH-M10 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why This Lesson Exists</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. One-Minute Intuition</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Random Experiment</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Sample Space</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Sample Space Examples</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Finite, Countable and Uncountable</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Event</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Event vs Outcome</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Empty Event and Certain Event</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Complement of an Event</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Union of Events</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Intersection of Events</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Disjoint Events</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Mutually Exclusive vs Independent</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Collection of Events</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Probability Measure</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Probability Axioms</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Why Countable Additivity Matters</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Derived Property: Empty Event</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Monotonicity</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Inclusion-Exclusion</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Disjoint Special Case</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Three-Event Inclusion-Exclusion</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Union Bound</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Equally Likely Finite Outcomes</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Discrete Probability</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Continuous Probability</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Important Continuous-Probability Lesson</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Probability as a Language for ML</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Worked Example A — Die Event</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Worked Example B — Complement</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Worked Example C — Inclusion-Exclusion</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Worked Example D — Union Bound</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Worked Example E — Countable Sample Space</a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Worked Example F — Continuous Interval</a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Hinglish Teacher Explanation</a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. AI/ML Connection Map</a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Common Mistakes</a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Formula Cards</a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Active Recall</a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Practice Set</a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Exam Connection</a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Mastery Gate</a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Next Dependency</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Math Companion</a>
+        <span>/</span>
+        <span>MATH-M10</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-3">Track 3: Probability & Statistics</span></div>
+      <h1 class="chapter-title">Probability Foundations</h1>
+      <p class="chapter-desc">Sample Spaces, Kolmogorov Axioms, Event Algebra, Inclusion-Exclusion, and Uncertainty</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~35 min read</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">MATH-INT</span> <span class="chapter-meta-item uni-badge">MATH-CALC</span>
+      </div>
+
+      <div class="math-meta-grid">
+        <div class="math-meta-box">
+          <div class="math-meta-label">Prerequisites</div>
+          <div class="math-meta-value">M01 Notation</div>
+        </div>
+        <div class="math-meta-box">
+          <div class="math-meta-label">Feeds Directly Into</div>
+          <div class="math-meta-value">M11 Bayes, M12 Independence, M13 Random Variables, Ch 20 Logistic Regression</div>
+        </div>
+        <div class="math-meta-box" style="grid-column: 1 / -1;">
+          <div class="math-meta-label">AI / Machine Learning Connections</div>
+          <div class="math-meta-value">Classification confidence scores, Generative modeling, Randomized search algorithms</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="math-preamble-card"><h1>MATH-M10 — Probability Foundations</h1>
+<blockquote>
+<p><strong>Math depth:</strong> <code>MATH-INT</code>, <code>MATH-CALC</code>, <code>MATH-NUM</code><br />
+<strong>Prerequisite:</strong> M01–M03<br />
+<strong>Feeds into:</strong> M11–M17, probabilistic ML, classification, reinforcement learning, NLP<br />
+<strong>Course-source anchor:</strong> The supplied <code>Lecture01.pdf</code> introduces sample spaces, events, probability axioms, discrete/continuous probability measures and derived probability properties. fileciteturn64file0 fileciteturn64file2 fileciteturn64file3</p>
+</blockquote>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in MATH-M10 (44 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why This Lesson Exists</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">One-Minute Intuition</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Random Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Sample Space</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Sample Space Examples</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Finite, Countable and Uncountable</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Event</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Event vs Outcome</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Empty Event and Certain Event</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Complement of an Event</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Union of Events</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Intersection of Events</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Disjoint Events</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Mutually Exclusive vs Independent</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Collection of Events</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Probability Measure</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Probability Axioms</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Why Countable Additivity Matters</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Derived Property: Empty Event</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Monotonicity</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Inclusion-Exclusion</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Disjoint Special Case</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Three-Event Inclusion-Exclusion</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Union Bound</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Equally Likely Finite Outcomes</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Discrete Probability</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Continuous Probability</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Important Continuous-Probability Lesson</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Probability as a Language for ML</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Worked Example A — Die Event</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Worked Example B — Complement</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Worked Example C — Inclusion-Exclusion</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Worked Example D — Union Bound</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Worked Example E — Countable Sample Space</span></a></li>
+        <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Worked Example F — Continuous Interval</span></a></li>
+        <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Hinglish Teacher Explanation</span></a></li>
+        <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">AI/ML Connection Map</span></a></li>
+        <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Common Mistakes</span></a></li>
+        <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Formula Cards</span></a></li>
+        <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Active Recall</span></a></li>
+        <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Practice Set</span></a></li>
+        <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Exam Connection</span></a></li>
+        <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Next Dependency</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">Why This Lesson Exists</h2>
+      </div>
+      <div class="section-body">
+        <p>Machine learning works with data, but many real-world processes are uncertain.</p>
+<p>Examples:</p>
+<div class="ascii-box"><pre>Will a transaction be fraudulent?
+Will a patient have a condition?
+Will a user click an advertisement?
+Which word comes next?
+Which action will produce a reward?</pre></div>
+<p>Probability gives us a mathematical language for uncertainty.</p>
+<p>The foundation is:</p>
+<div class="ascii-box"><pre>random experiment
+↓
+possible outcomes
+↓
+sample space
+↓
+events
+↓
+probability</pre></div>
+<p>Once that foundation is clear, conditional probability, Bayes, random variables and expectation become much easier.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">One-Minute Intuition</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Mental Model</div>
+
+Probability duniya ki uncertainty ko measure karne ka scale hai: 0 matlab impossible, 1 matlab absolutely guaranteed.
+AI mein hum deterministic algorithms se hatkar probabilistic models banate hain kyunki real-world data mein noise hota hai.
+Jab ek classifier kehta hai `p = 0.92`, woh keh raha hai ki 92% confidence hai ki patient ko disease hai.
+Kolmogorov ke teen axioms is poori theory ki neev hain!
+
+</div>
+
+<p>Think of probability as a system for assigning numerical measures of uncertainty.</p>
+<p>A random experiment has many possible outcomes.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>experiment → toss a coin
+outcomes   → H, T</pre></div>
+<p>The complete set of possibilities is:</p>
+<div class="formula-math">\[
+\Omega=\{H,T\}.
+\]</div>
+<p>The event:</p>
+<blockquote>
+<p>“A head occurs”</p>
+</blockquote>
+<p>is:</p>
+<div class="formula-math">\[
+A=\{H\}.
+\]</div>
+<p>Probability then assigns:</p>
+<div class="formula-math">\[
+P(A)=0.5
+\]</div>
+<p>for a fair coin.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">Random Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>A <strong>random experiment</strong> is an experiment with an uncertain outcome.</p>
+<p>Examples:</p>
+<div class="ascii-box"><pre>toss a coin
+roll a die
+select a student
+measure a dart&#x27;s distance from center
+observe tomorrow&#x27;s rainfall</pre></div>
+<p>The experiment itself defines what counts as an outcome.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Sample Space</h2>
+      </div>
+      <div class="section-body">
+        <p>The sample space is the set of all possible outcomes.</p>
+<div class="formula-math">\[
+\boxed{
+\Omega=\text{set of all outcomes}
+}
+\]</div>
+<p>An individual outcome is often written:</p>
+<div class="formula-math">\[
+\omega\in\Omega.
+\]</div>
+<p>The supplied Lecture01 uses this exact notation. fileciteturn64file0</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Sample Space Examples</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph TD
+    subgraph Omega ["Sample Space Ω (Total Probability = 1.0)"]
+        A["Event A"]
+        B["Event B"]
+        AB["Intersection A ∩ B"]
+    end
+    Omega --> Axiom1["Axiom 1: P(E) ≥ 0 for all E"]
+    Omega --> Axiom2["Axiom 2: P(Ω) = 1.0"]
+    Omega --> Axiom3["Axiom 3: P(A ∪ B) = P(A) + P(B) if A ∩ B = ∅"]
+    style Omega fill:#1e293b,stroke:#fbbf24,color:#f8fafc
+</pre></div>
+<h2>Coin toss</h2>
+<div class="formula-math">\[
+\boxed{
+\Omega=\{H,T\}
+}
+\]</div>
+<h2>Six-sided die</h2>
+<div class="formula-math">\[
+\boxed{
+\Omega=\{1,2,3,4,5,6\}
+}
+\]</div>
+<h2>Toss until first head</h2>
+<p>Suppose the outcome is the number of tosses until the first head.</p>
+<p>Possible outcomes:</p>
+<div class="formula-math">\[
+\boxed{
+\Omega=\{1,2,3,\ldots\}
+}
+\]</div>
+<p>because the first head could occur on toss 1, 2, 3, and so on.</p>
+<p>The supplied lecture uses this example to show an infinite countable sample space. fileciteturn64file1</p>
+<h2>Dart experiment</h2>
+<p>If the observed outcome is distance \(r\) from the center of a board of radius \(R\):</p>
+<div class="formula-math">\[
+\boxed{
+\Omega=[0,R].
+}
+\]</div>
+<p>This is an uncountable sample space. fileciteturn64file3</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+n_simulations = 100000
+rolls = np.random.randint(1, 7, size=(n_simulations, 2))
+
+sums = rolls[:, 0] + rolls[:, 1]
+prob_sum_7 = np.mean(sums == 7)
+
+print(&quot;Simulated Probability of rolling a sum of 7:&quot;, prob_sum_7)
+print(&quot;Theoretical Probability (6/36):&quot;, 6/36)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Finite, Countable and Uncountable</h2>
+      </div>
+      <div class="section-body">
+        <h2>Finite</h2>
+<p>A finite number of outcomes.</p>
+<p>Example:</p>
+<div class="formula-math">\[
+\{H,T\}.
+\]</div>
+<h2>Countably infinite</h2>
+<p>The outcomes can be listed:</p>
+<div class="formula-math">\[
+\omega_1,\omega_2,\omega_3,\ldots
+\]</div>
+<p>Example:</p>
+<div class="formula-math">\[
+\{1,2,3,\ldots\}.
+\]</div>
+<h2>Uncountable</h2>
+<p>Cannot be put into a one-to-one list indexed by positive integers.</p>
+<p>Example:</p>
+<div class="formula-math">\[
+[0,1].
+\]</div>
+<h3>Why this distinction matters</h3>
+<p>It affects how probabilities are represented and computed.</p>
+<div class="ascii-box"><pre>finite/countable
+→ individual outcomes can have probability masses
+
+continuous/unccountable
+→ individual points may have probability 0
+→ intervals/regions carry probability</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Event</h2>
+      </div>
+      <div class="section-body">
+        <p>An event is a subset of the sample space:</p>
+<div class="formula-math">\[
+\boxed{
+A\subseteq\Omega.
+}
+\]</div>
+<p>It represents a condition or collection of outcomes we care about.</p>
+<p>Example:</p>
+<p>Die:</p>
+<div class="formula-math">\[
+\Omega=\{1,2,3,4,5,6\}.
+\]</div>
+<p>Event “even number”:</p>
+<div class="formula-math">\[
+\boxed{
+E=\{2,4,6\}.
+}
+\]</div>
+<p>Event “at least 4”:</p>
+<div class="formula-math">\[
+\boxed{
+H=\{4,5,6\}.
+}
+\]</div>
+<p>These examples follow the supplied Lecture01 framing. fileciteturn64file1</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">Event vs Outcome</h2>
+      </div>
+      <div class="section-body">
+        <p>Do not confuse these.</p>
+<h3>Outcome</h3>
+<p>One particular possibility:</p>
+<div class="formula-math">\[
+\omega=4.
+\]</div>
+<h3>Event</h3>
+<p>A collection of outcomes:</p>
+<div class="formula-math">\[
+E=\{2,4,6\}.
+\]</div>
+<p>So:</p>
+<div class="ascii-box"><pre>outcome → one element
+event   → subset</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Empty Event and Certain Event</h2>
+      </div>
+      <div class="section-body">
+        <p>The empty set:</p>
+<div class="formula-math">\[
+\boxed{
+\varnothing
+}
+\]</div>
+<p>means an impossible event.</p>
+<p>The entire sample space:</p>
+<div class="formula-math">\[
+\boxed{
+\Omega
+}
+\]</div>
+<p>represents the certain event.</p>
+<p>Therefore:</p>
+<div class="formula-math">\[
+P(\varnothing)=0
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+P(\Omega)=1.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Complement of an Event</h2>
+      </div>
+      <div class="section-body">
+        <p>The complement of \(A\) contains all outcomes that are not in \(A\):</p>
+<div class="formula-math">\[
+\boxed{
+A^c=\Omega\setminus A.
+}
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+P(A^c)=1-P(A).
+}
+\]</div>
+<p>Example:</p>
+<p>If:</p>
+<div class="formula-math">\[
+P(A)=0.7,
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+P(A^c)=0.3.
+\]</div>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+n_simulations = 100000
+rolls = np.random.randint(1, 7, size=(n_simulations, 2))
+
+sums = rolls[:, 0] + rolls[:, 1]
+prob_sum_7 = np.mean(sums == 7)
+
+print(&quot;Simulated Probability of rolling a sum of 7:&quot;, prob_sum_7)
+print(&quot;Theoretical Probability (6/36):&quot;, 6/36)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Union of Events</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Exam Trap & Common Misconception</div>
+
+**Inclusion-Exclusion Forgotten Term:** If events $A$ and $B$ are not mutually exclusive, $P(A \cup B) = P(A) + P(B) - P(A \cap B)$. Writing $P(A \cup B) = P(A) + P(B)$ without checking if $A \cap B = \emptyset$ is the most frequent beginner error!
+
+</div>
+
+<div class="formula-math">\[
+\boxed{
+A\cup B
+}
+\]</div>
+<p>means:</p>
+<blockquote>
+<p>\(A\) occurs or \(B\) occurs or both occur.</p>
+</blockquote>
+<p>Example:</p>
+<div class="formula-math">\[
+A=\{1,2,3\},
+\quad
+B=\{3,4,5\}.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+A\cup B=
+\{1,2,3,4,5\}.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Intersection of Events</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Exam Trap & Common Misconception</div>
+
+**Inclusion-Exclusion Forgotten Term:** If events $A$ and $B$ are not mutually exclusive, $P(A \cup B) = P(A) + P(B) - P(A \cap B)$. Writing $P(A \cup B) = P(A) + P(B)$ without checking if $A \cap B = \emptyset$ is the most frequent beginner error!
+
+</div>
+
+<div class="formula-math">\[
+\boxed{
+A\cap B
+}
+\]</div>
+<p>means:</p>
+<blockquote>
+<p>Both \(A\) and \(B\) occur.</p>
+</blockquote>
+<p>For the previous example:</p>
+<div class="formula-math">\[
+A\cap B=\{3\}.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Disjoint Events</h2>
+      </div>
+      <div class="section-body">
+        <p>Events are disjoint if they cannot happen together:</p>
+<div class="formula-math">\[
+\boxed{
+A\cap B=\varnothing.
+}
+\]</div>
+<p>Example:</p>
+<p>For one die roll:</p>
+<div class="formula-math">\[
+A=\{1\},
+\quad
+B=\{2\}.
+\]</div>
+<p>They cannot both occur.</p>
+<p>Therefore:</p>
+<div class="formula-math">\[
+P(A\cap B)=0.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Mutually Exclusive vs Independent</h2>
+      </div>
+      <div class="section-body">
+        <p>These ideas are different.</p>
+<h3>Mutually exclusive</h3>
+<div class="formula-math">\[
+A\cap B=\varnothing.
+\]</div>
+<p>They cannot occur together.</p>
+<h3>Independent</h3>
+<p>Knowing one occurred does not change the probability of the other.</p>
+<p>For positive-probability events:</p>
+<div class="formula-math">\[
+P(A|B)=P(A).
+\]</div>
+<p>Do not use these terms interchangeably.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">Collection of Events</h2>
+      </div>
+      <div class="section-body">
+        <p>Probability theory considers a collection of events, often represented by:</p>
+<div class="formula-math">\[
+\mathcal F.
+\]</div>
+<p>For a rigorous treatment, \(\mathcal F\) is a \(\sigma\)-algebra.</p>
+<p>The supplied Lecture01 notes this explicitly but defer measure-theoretic details. fileciteturn64file5</p>
+<p>For DSC-14 mathematical learning, the most important practical idea is:</p>
+<blockquote>
+<p>\(\mathcal F\) is the collection of events for which probability is defined.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">Probability Measure</h2>
+      </div>
+      <div class="section-body">
+        <p>A probability measure assigns a number to each event:</p>
+<div class="formula-math">\[
+\boxed{
+P:\mathcal F\rightarrow[0,1].
+}
+\]</div>
+<p>Interpretation:</p>
+<div class="ascii-box"><pre>event
+↓
+probability between 0 and 1</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">Probability Axioms</h2>
+      </div>
+      <div class="section-body">
+        <p>The supplied Lecture01 gives the two displayed axioms in its formulation:</p>
+<h2>Normalization</h2>
+<div class="formula-math">\[
+\boxed{
+P(\Omega)=1.
+}
+\]</div>
+<p>The entire sample space has probability 1.</p>
+<h2>Countable additivity</h2>
+<p>For disjoint events:</p>
+<div class="formula-math">\[
+A_1,A_2,\ldots
+\]</div>
+<p>with:</p>
+<div class="formula-math">\[
+A_i\cap A_j=\varnothing
+\quad
+(i\ne j),
+\]</div>
+<p>we have:</p>
+<div class="formula-math">\[
+\boxed{
+P\left(\bigcup_iA_i\right)
+=
+\sum_iP(A_i).
+}
+\]</div>
+<p>These are the course-source foundations for the probability measure. fileciteturn64file0</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Why Countable Additivity Matters</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+A=\{2,4\}
+\]</div>
+<p>for a fair die.</p>
+<p>The individual probabilities are:</p>
+<div class="formula-math">\[
+P(2)=\frac16,
+\quad
+P(4)=\frac16.
+\]</div>
+<p>Because they are disjoint:</p>
+<div class="formula-math">\[
+P(A)
+=
+P(2)+P(4)
+=
+\frac26
+=
+\frac13.
+\]</div>
+<p>This is the discrete event-calculation idea emphasized in Lecture01. fileciteturn64file2</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">Derived Property: Empty Event</h2>
+      </div>
+      <div class="section-body">
+        <p>Because:</p>
+<div class="formula-math">\[
+\Omega=A\cup A^c
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+A\cap A^c=\varnothing,
+\]</div>
+<p>we get:</p>
+<div class="formula-math">\[
+P(\Omega)=P(A)+P(A^c)=1.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+P(A^c)=1-P(A).
+}
+\]</div>
+<p>The supplied lecture lists this as a derived property. fileciteturn64file2</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Monotonicity</h2>
+      </div>
+      <div class="section-body">
+        <p>If:</p>
+<div class="formula-math">\[
+A\subseteq B,
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+\boxed{
+P(A)\le P(B).
+}
+\]</div>
+<p>Intuition:</p>
+<blockquote>
+<p>If every outcome in \(A\) is also in \(B\), \(A\) cannot be more probable than \(B\).</p>
+</blockquote>
+<p>This is another derived property listed in Lecture01. fileciteturn64file2</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">Inclusion-Exclusion</h2>
+      </div>
+      <div class="section-body">
+        <p>For two events:</p>
+<div class="formula-math">\[
+\boxed{
+P(A\cup B)
+=
+P(A)+P(B)-P(A\cap B).
+}
+\]</div>
+<p>Why subtract the intersection?</p>
+<p>Because:</p>
+<div class="ascii-box"><pre>P(A)
++
+P(B)</pre></div>
+<p>counts the overlap twice.</p>
+<p>Subtract one copy:</p>
+<div class="formula-math">\[
+P(A\cap B).
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">Disjoint Special Case</h2>
+      </div>
+      <div class="section-body">
+        <p>If:</p>
+<div class="formula-math">\[
+A\cap B=\varnothing,
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+P(A\cap B)=0.
+\]</div>
+<p>So:</p>
+<div class="formula-math">\[
+\boxed{
+P(A\cup B)=P(A)+P(B).
+}
+\]</div>
+<p>This is the familiar addition rule for mutually exclusive events.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">Three-Event Inclusion-Exclusion</h2>
+      </div>
+      <div class="section-body">
+        <div class="formula-math">\[
+\boxed{
+\begin{aligned}
+P(A\cup B\cup C)
+={}&P(A)+P(B)+P(C)\\
+&-P(A\cap B)-P(B\cap C)-P(C\cap A)\\
+&+P(A\cap B\cap C).
+\end{aligned}
+}
+\]</div>
+<p>The pattern is:</p>
+<div class="ascii-box"><pre>add singles
+→ subtract pairwise overlaps
+→ add triple overlap</pre></div>
+<p>The supplied Lecture01 explicitly includes this form. fileciteturn64file2</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">Union Bound</h2>
+      </div>
+      <div class="section-body">
+        <p>For two events:</p>
+<div class="formula-math">\[
+\boxed{
+P(A\cup B)\le P(A)+P(B).
+}
+\]</div>
+<p>This remains true because:</p>
+<div class="formula-math">\[
+P(A\cap B)\ge0.
+\]</div>
+<p>For many events:</p>
+<div class="formula-math">\[
+\boxed{
+P\left(\bigcup_iA_i\right)
+\le
+\sum_iP(A_i).
+}
+\]</div>
+<p>The supplied course notes introduce the union bound alongside inclusion-exclusion. fileciteturn64file0</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">Equally Likely Finite Outcomes</h2>
+      </div>
+      <div class="section-body">
+        <p>If a finite sample space has \(N\) equally likely outcomes and event \(A\) contains \(k\) outcomes:</p>
+<div class="formula-math">\[
+\boxed{
+P(A)=\frac{k}{N}.
+}
+\]</div>
+<p>Example:</p>
+<p>Fair die:</p>
+<div class="formula-math">\[
+N=6.
+\]</div>
+<p>Even event:</p>
+<div class="formula-math">\[
+k=3.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+P(E)=\frac36=\frac12.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">Discrete Probability</h2>
+      </div>
+      <div class="section-body">
+        <p>For a countable sample space, probabilities of individual outcomes can determine event probabilities through countable additivity.</p>
+<p>Example:</p>
+<div class="formula-math">\[
+\Omega=\{1,2,3,4,5,6\}
+\]</div>
+<p>with:</p>
+<div class="formula-math">\[
+P(i)=\frac16.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+P(\{2,5\})
+=
+P(2)+P(5)
+=
+\frac26
+=
+\frac13.
+\]</div>
+<p>This is directly aligned with Lecture01's discrete-probability discussion. fileciteturn64file2</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">Continuous Probability</h2>
+      </div>
+      <div class="section-body">
+        <p>For a continuous sample space, a particular point can have probability zero.</p>
+<p>For a uniform distribution on \([0,1]\):</p>
+<div class="formula-math">\[
+P(X=0.34786)=0.
+\]</div>
+<p>But:</p>
+<div class="formula-math">\[
+P(0.2\le X\le0.5)=0.3.
+\]</div>
+<p>The supplied Lecture01 uses exactly this example to emphasize that intervals/regions carry probability in the continuous setting. fileciteturn64file3</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">Important Continuous-Probability Lesson</h2>
+      </div>
+      <div class="section-body">
+        <p>Do not interpret:</p>
+<div class="formula-math">\[
+P(X=x)=0
+\]</div>
+<p>as:</p>
+<blockquote>
+<p>“the value \(x\) cannot occur.”</p>
+</blockquote>
+<p>In a continuous model, individual points can have probability zero while intervals have positive probability.</p>
+<p>The crucial object is the probability assigned to regions/intervals.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">Probability as a Language for ML</h2>
+      </div>
+      <div class="section-body">
+        <p>Probability appears in:</p>
+<div class="ascii-box"><pre>classification
+→ P(y|x)
+
+Bayesian reasoning
+→ P(model|data)
+
+language
+→ P(next token | previous context)
+
+reinforcement learning
+→ stochastic transitions / policies
+
+evaluation
+→ expected performance
+
+uncertainty
+→ predicted distributions</pre></div>
+<p>This chapter supplies the foundation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">Worked Example A — Die Event</h2>
+      </div>
+      <div class="section-body">
+        <p>Fair die:</p>
+<div class="formula-math">\[
+\Omega=\{1,2,3,4,5,6\}.
+\]</div>
+<p>Event:</p>
+<div class="formula-math">\[
+A=\{2,4,6\}.
+\]</div>
+<p>There are 3 favourable outcomes out of 6:</p>
+<div class="formula-math">\[
+P(A)=\frac36.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+P(A)=\frac12.
+}
+\]</div>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+n_simulations = 100000
+rolls = np.random.randint(1, 7, size=(n_simulations, 2))
+
+sums = rolls[:, 0] + rolls[:, 1]
+prob_sum_7 = np.mean(sums == 7)
+
+print(&quot;Simulated Probability of rolling a sum of 7:&quot;, prob_sum_7)
+print(&quot;Theoretical Probability (6/36):&quot;, 6/36)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">Worked Example B — Complement</h2>
+      </div>
+      <div class="section-body">
+        <p>If:</p>
+<div class="formula-math">\[
+P(A)=0.32,
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+P(A^c)=1-0.32=0.68.
+\]</div>
+<div class="formula-math">\[
+\boxed{
+P(A^c)=0.68.
+}
+\]</div>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+n_simulations = 100000
+rolls = np.random.randint(1, 7, size=(n_simulations, 2))
+
+sums = rolls[:, 0] + rolls[:, 1]
+prob_sum_7 = np.mean(sums == 7)
+
+print(&quot;Simulated Probability of rolling a sum of 7:&quot;, prob_sum_7)
+print(&quot;Theoretical Probability (6/36):&quot;, 6/36)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">Worked Example C — Inclusion-Exclusion</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+P(A)=0.6,
+\quad
+P(B)=0.5,
+\quad
+P(A\cap B)=0.2.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+P(A\cup B)
+=
+0.6+0.5-0.2
+=
+\boxed{0.9}.
+\]</div>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+n_simulations = 100000
+rolls = np.random.randint(1, 7, size=(n_simulations, 2))
+
+sums = rolls[:, 0] + rolls[:, 1]
+prob_sum_7 = np.mean(sums == 7)
+
+print(&quot;Simulated Probability of rolling a sum of 7:&quot;, prob_sum_7)
+print(&quot;Theoretical Probability (6/36):&quot;, 6/36)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Worked Example D — Union Bound</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+P(A)=0.2,
+\quad
+P(B)=0.3.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+P(A\cup B)\le0.2+0.3.
+\]</div>
+<p>So:</p>
+<div class="formula-math">\[
+\boxed{
+P(A\cup B)\le0.5.
+}
+\]</div>
+<p>This is a bound, not necessarily the exact probability.</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+n_simulations = 100000
+rolls = np.random.randint(1, 7, size=(n_simulations, 2))
+
+sums = rolls[:, 0] + rolls[:, 1]
+prob_sum_7 = np.mean(sums == 7)
+
+print(&quot;Simulated Probability of rolling a sum of 7:&quot;, prob_sum_7)
+print(&quot;Theoretical Probability (6/36):&quot;, 6/36)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Worked Example E — Countable Sample Space</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+P(1)=0.2,\quad
+P(2)=0.3,\quad
+P(3)=0.1,\quad
+P(4)=0.4.
+\]</div>
+<p>Find:</p>
+<div class="formula-math">\[
+P(\{2,4\}).
+\]</div>
+<p>Since the outcomes are disjoint:</p>
+<div class="formula-math">\[
+P(2,4)=0.3+0.4=\boxed{0.7}.
+\]</div>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+n_simulations = 100000
+rolls = np.random.randint(1, 7, size=(n_simulations, 2))
+
+sums = rolls[:, 0] + rolls[:, 1]
+prob_sum_7 = np.mean(sums == 7)
+
+print(&quot;Simulated Probability of rolling a sum of 7:&quot;, prob_sum_7)
+print(&quot;Theoretical Probability (6/36):&quot;, 6/36)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-35" class="section-block">
+      <div class="section-header">
+        <span class="section-num">35</span>
+        <h2 class="section-heading">Worked Example F — Continuous Interval</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose \(X\) is uniformly distributed on:</p>
+<div class="formula-math">\[
+[0,10].
+\]</div>
+<p>Under the uniform model, an interval's probability is proportional to its length.</p>
+<p>Find:</p>
+<div class="formula-math">\[
+P(2\le X\le5).
+\]</div>
+<p>Interval length:</p>
+<div class="formula-math">\[
+5-2=3.
+\]</div>
+<p>Total length:</p>
+<div class="formula-math">\[
+10.
+\]</div>
+<p>Thus:</p>
+<div class="formula-math">\[
+\boxed{
+P(2\le X\le5)=\frac3{10}=0.3.
+}
+\]</div>
+<p>The interpretation mirrors the continuous-probability treatment in Lecture01. fileciteturn64file3</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+n_simulations = 100000
+rolls = np.random.randint(1, 7, size=(n_simulations, 2))
+
+sums = rolls[:, 0] + rolls[:, 1]
+prob_sum_7 = np.mean(sums == 7)
+
+print(&quot;Simulated Probability of rolling a sum of 7:&quot;, prob_sum_7)
+print(&quot;Theoretical Probability (6/36):&quot;, 6/36)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-36" class="section-block">
+      <div class="section-header">
+        <span class="section-num">36</span>
+        <h2 class="section-heading">Hinglish Teacher Explanation</h2>
+      </div>
+      <div class="section-body">
+        <p>Probability ko simple language mein:</p>
+<blockquote>
+<p><strong>“Kisi event ke hone ki mathematical likelihood.”</strong></p>
+</blockquote>
+<p>Sabse pehle sample space samjho.</p>
+<p>Coin toss:</p>
+<div class="formula-math">\[
+\Omega=\{H,T\}.
+\]</div>
+<p>Matlab possible outcomes sirf H aur T hain.</p>
+<p>Agar event:</p>
+<div class="formula-math">\[
+A=\{H\}
+\]</div>
+<p>hai, toh hum pooch rahe hain:</p>
+<blockquote>
+<p>“Head aane ki probability kya hai?”</p>
+</blockquote>
+<p>Fair coin ke liye:</p>
+<div class="formula-math">\[
+P(A)=\frac12.
+\]</div>
+<p>Die ke liye:</p>
+<div class="formula-math">\[
+\Omega=\{1,2,3,4,5,6\}.
+\]</div>
+<p>Even event:</p>
+<div class="formula-math">\[
+A=\{2,4,6\}.
+\]</div>
+<p>Toh:</p>
+<div class="formula-math">\[
+P(A)=\frac36=\frac12.
+\]</div>
+<p>Event ko “outcome” mat samajhna.</p>
+<blockquote>
+<p>Outcome = ek possibility.<br />
+Event = possibilities ka set jiske baare mein question pooch rahe ho.</p>
+</blockquote>
+<p>Continuous case mein aur interesting hai:</p>
+<div class="formula-math">\[
+P(X=x)=0
+\]</div>
+<p>ho sakta hai, phir bhi \(x\) possible hai.</p>
+<p>Matlab continuous probability mein point se zyada <strong>interval/region</strong> important hota hai.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-37" class="section-block">
+      <div class="section-header">
+        <span class="section-num">37</span>
+        <h2 class="section-heading">AI/ML Connection Map</h2>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Probability concept</th>
+<th>AI/ML connection</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sample space</td>
+<td>possible model/environment outcomes</td>
+</tr>
+<tr>
+<td>event</td>
+<td>condition of interest</td>
+</tr>
+<tr>
+<td>complement</td>
+<td>failure/not-event probability</td>
+</tr>
+<tr>
+<td>union</td>
+<td>either-or events</td>
+</tr>
+<tr>
+<td>intersection</td>
+<td>simultaneous events</td>
+</tr>
+<tr>
+<td>conditional probability</td>
+<td>prediction under information</td>
+</tr>
+<tr>
+<td>probability distribution</td>
+<td>uncertain outputs</td>
+</tr>
+<tr>
+<td>expectation</td>
+<td>average/random outcome value</td>
+</tr>
+<tr>
+<td>independence</td>
+<td>simplifying assumptions</td>
+</tr>
+<tr>
+<td>Bayes</td>
+<td>updating beliefs</td>
+</tr>
+<tr>
+<td>probability bounds</td>
+<td>uncertainty/risk reasoning</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-38" class="section-block">
+      <div class="section-header">
+        <span class="section-num">38</span>
+        <h2 class="section-heading">Common Mistakes</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Exam Trap & Common Misconception</div>
+
+**Inclusion-Exclusion Forgotten Term:** If events $A$ and $B$ are not mutually exclusive, $P(A \cup B) = P(A) + P(B) - P(A \cap B)$. Writing $P(A \cup B) = P(A) + P(B)$ without checking if $A \cap B = \emptyset$ is the most frequent beginner error!
+
+</div>
+
+<h3>Mistake 1 — Confusing outcome and event</h3>
+<div class="formula-math">\[
+4
+\]</div>
+<p>is an outcome.</p>
+<div class="formula-math">\[
+\{2,4,6\}
+\]</div>
+<p>is an event.</p>
+<h3>Mistake 2 — Adding overlapping probabilities without correction</h3>
+<p>Wrong:</p>
+<div class="formula-math">\[
+P(A\cup B)=P(A)+P(B)
+\]</div>
+<p>unless \(A,B\) are disjoint.</p>
+<p>Correct:</p>
+<div class="formula-math">\[
+P(A\cup B)=P(A)+P(B)-P(A\cap B).
+\]</div>
+<h3>Mistake 3 — Treating probability as allowed outside \([0,1]\)</h3>
+<p>A probability must satisfy:</p>
+<div class="formula-math">\[
+0\le P(A)\le1.
+\]</div>
+<h3>Mistake 4 — Thinking probability zero means impossible in every setting</h3>
+<p>This is false for continuous random variables.</p>
+<h3>Mistake 5 — Confusing independent and disjoint</h3>
+<p>They are different concepts.</p>
+<p>For nontrivial positive-probability events, disjointness and independence are generally incompatible.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-39" class="section-block">
+      <div class="section-header">
+        <span class="section-num">39</span>
+        <h2 class="section-heading">Formula Cards</h2>
+      </div>
+      <div class="section-body">
+        <h2>F-M10-SP-01 — Sample Space</h2>
+<div class="formula-math">\[
+\boxed{
+\Omega=\{\text{all possible outcomes}\}
+}
+\]</div>
+<hr />
+<h2>F-M10-EVENT-01 — Event</h2>
+<div class="formula-math">\[
+\boxed{
+A\subseteq\Omega
+}
+\]</div>
+<hr />
+<h2>F-M10-NORM-01 — Normalization</h2>
+<div class="formula-math">\[
+\boxed{
+P(\Omega)=1
+}
+\]</div>
+<hr />
+<h2>F-M10-COMP-01 — Complement</h2>
+<div class="formula-math">\[
+\boxed{
+P(A^c)=1-P(A)
+}
+\]</div>
+<hr />
+<h2>F-M10-UNION-01 — Inclusion-Exclusion</h2>
+<div class="formula-math">\[
+\boxed{
+P(A\cup B)=P(A)+P(B)-P(A\cap B)
+}
+\]</div>
+<hr />
+<h2>F-M10-UNION-02 — Union Bound</h2>
+<div class="formula-math">\[
+\boxed{
+P(A\cup B)\le P(A)+P(B)
+}
+\]</div>
+<hr />
+<h2>F-M10-EQUI-01 — Equally Likely Outcomes</h2>
+<div class="formula-math">\[
+\boxed{
+P(A)=\frac{|A|}{|\Omega|}
+}
+\]</div>
+<p>when the finite outcomes are equally likely.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-40" class="section-block">
+      <div class="section-header">
+        <span class="section-num">40</span>
+        <h2 class="section-heading">Active Recall</h2>
+      </div>
+      <div class="section-body">
+        <p>Without notes:</p>
+<ol>
+<li>Define a random experiment.</li>
+<li>What is a sample space?</li>
+<li>What is an outcome?</li>
+<li>What is an event?</li>
+<li>What are \(\varnothing\) and \(\Omega\)?</li>
+<li>Define complement.</li>
+<li>Define union and intersection.</li>
+<li>What does disjoint mean?</li>
+<li>State probability normalization.</li>
+<li>State countable additivity.</li>
+<li>What is monotonicity?</li>
+<li>State inclusion-exclusion.</li>
+<li>State the union bound.</li>
+<li>Difference between finite/countable and continuous sample spaces?</li>
+<li>Why can a point have probability zero in a continuous model?</li>
+<li>Why does probability matter in ML?</li>
+</ol>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-41" class="section-block">
+      <div class="section-header">
+        <span class="section-num">41</span>
+        <h2 class="section-heading">Practice Set</h2>
+      </div>
+      <div class="section-body">
+        <h2>Foundation</h2>
+<h3>P-M10-01</h3>
+<p>For:</p>
+<div class="formula-math">\[
+\Omega=\{1,2,3,4,5,6\},
+\]</div>
+<p>write the events:</p>
+<div class="ascii-box"><pre>even
+greater than 4
+less than or equal to 3</pre></div>
+<h3>P-M10-02</h3>
+<p>If:</p>
+<div class="formula-math">\[
+P(A)=0.4,
+\]</div>
+<p>find:</p>
+<div class="formula-math">\[
+P(A^c).
+\]</div>
+<h3>P-M10-03</h3>
+<p>Given:</p>
+<div class="formula-math">\[
+P(A)=0.5,\quad P(B)=0.4,\quad P(A\cap B)=0.1,
+\]</div>
+<p>find:</p>
+<div class="formula-math">\[
+P(A\cup B).
+\]</div>
+<h3>P-M10-04</h3>
+<p>If two events are disjoint and:</p>
+<div class="formula-math">\[
+P(A)=0.2,\quad P(B)=0.3,
+\]</div>
+<p>find:</p>
+<div class="formula-math">\[
+P(A\cup B).
+\]</div>
+<h3>P-M10-05</h3>
+<p>Explain why:</p>
+<div class="formula-math">\[
+P(A\cup B)\le P(A)+P(B).
+\]</div>
+<hr />
+<h2>AI/ML Practice</h2>
+<h3>P-M10-06</h3>
+<p>A model has three possible outcomes:</p>
+<div class="formula-math">\[
+\Omega=\{1,2,3\}
+\]</div>
+<p>with probabilities:</p>
+<div class="formula-math">\[
+0.2,\ 0.5,\ 0.3.
+\]</div>
+<p>Find the probability of event:</p>
+<div class="formula-math">\[
+A=\{1,3\}.
+\]</div>
+<h3>P-M10-07</h3>
+<p>A continuous variable is uniformly distributed on \([0,20]\). Find:</p>
+<div class="formula-math">\[
+P(5\le X\le11).
+\]</div>
+<h3>P-M10-08</h3>
+<p>Explain why the event:</p>
+<div class="formula-math">\[
+A=\{\text{model detects fraud}\}
+\]</div>
+<p>is not the same mathematical object as the outcome:</p>
+<blockquote>
+<p>“transaction #17 was detected as fraud.”</p>
+</blockquote>
+<h3>P-M10-09</h3>
+<p>Explain the difference between:</p>
+<div class="ascii-box"><pre>mutually exclusive
+independent</pre></div>
+<h3>P-M10-10</h3>
+<p>Explain why probability provides a useful language for machine-learning predictions.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-42" class="section-block">
+      <div class="section-header">
+        <span class="section-num">42</span>
+        <h2 class="section-heading">Exam Connection</h2>
+      </div>
+      <div class="section-body">
+        <p>Typical triggers:</p>
+<div class="ascii-box"><pre>“all possible outcomes”
+→ sample space
+
+“condition/event”
+→ subset of Ω
+
+“not A”
+→ complement
+
+“A or B”
+→ union
+
+“A and B”
+→ intersection
+
+“cannot happen together”
+→ disjoint
+
+“at least”
+→ often complement/inclusion-exclusion reasoning
+
+“probability of either”
+→ union rule
+
+“bound on union”
+→ union bound</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-43" class="section-block">
+      <div class="section-header">
+        <span class="section-num">43</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <p>You are ready for M11 when you can:</p>
+<div class="ascii-box"><pre>construct a sample space
+define events
+calculate complements
+calculate unions/intersections
+apply inclusion-exclusion
+apply the union bound
+distinguish disjointness and independence
+distinguish discrete and continuous settings
+explain probability in ML language</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-44" class="section-block">
+      <div class="section-header">
+        <span class="section-num">44</span>
+        <h2 class="section-heading">Next Dependency</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>M10
+Probability Foundations
+ ↓
+M11
+Conditional Probability + Bayes + Total Probability
+ ↓
+M12
+Independence &amp; Conditional Independence
+ ↓
+M13–M17
+Random Variables + Expectation + Variance</pre></div>
+<p>M11 changes the question from:</p>
+<blockquote>
+<p>“How likely is A?”</p>
+</blockquote>
+<p>to:</p>
+<blockquote>
+<p><strong>“How likely is A when I already know B?”</strong></p>
+</blockquote>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="m09-linear-systems-least-squares.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← M09 — Linear Systems & OLS</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">📐 Math Index</span>
+      </a>
+      <a href="m11-conditional-prob-bayes.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: M11 — Conditional Prob & Bayes →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search math modules, formulas, proofs, theorems…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">📐</span>Math Hub</a>
+  <a href="m10-probability-foundations.html" class="mobile-nav-btn active"><span class="icon">📖</span>MATH-M10</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

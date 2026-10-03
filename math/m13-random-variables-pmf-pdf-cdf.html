@@ -1,0 +1,1937 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="MATH-M13: Random Variables, PMF, PDF & CDF — Math Companion for AI & Machine Learning. Discrete vs Continuous Mappings, Probability Mass Functions, Density Functions, and CDF Integrals">
+<title>MATH-M13: Random Variables, PMF, PDF & CDF | Math Companion 📐 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/math.css">
+</head>
+<body class="math-module track-3">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">📐</div>
+      <div class="brand-text"><span class="main">Math Companion</span><span class="sub">AI &amp; ML Deep Layer</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">MATH-M13: Random Variables, PMF, PDF &amp; CDF</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Foundations & Functions</div>
+  <a href="m01-mathematical-notation.html" class="sidebar-link"><span class="link-icon">📐</span>M01: Mathematical Notation, Symbols &amp; Summation</a>
+  <a href="m02-algebra-foundations.html" class="sidebar-link"><span class="link-icon">📐</span>M02: Algebra Foundations for AI/ML</a>
+  <a href="m03-functions-graphs-logs.html" class="sidebar-link"><span class="link-icon">📐</span>M03: Functions, Graphs, Exponents &amp; Logarithms</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Linear Algebra & Vectors</div>
+  <a href="m04-vectors-and-components.html" class="sidebar-link"><span class="link-icon">⚡</span>M04: Vectors &amp; Components</a>
+  <a href="m05-norms-and-distance.html" class="sidebar-link"><span class="link-icon">⚡</span>M05: Norms, Distance &amp; Geometric Intuition</a>
+  <a href="m06-dot-product-and-orthogonality.html" class="sidebar-link"><span class="link-icon">⚡</span>M06: Dot Product, Inner Product &amp; Orthogonality</a>
+  <a href="m07-matrices-and-indexing.html" class="sidebar-link"><span class="link-icon">⚡</span>M07: Matrices, Dimensions &amp; Indexing</a>
+  <a href="m08-matrix-multiplication-transforms.html" class="sidebar-link"><span class="link-icon">⚡</span>M08: Matrix Multiplication &amp; Linear Transformations</a>
+  <a href="m09-linear-systems-least-squares.html" class="sidebar-link"><span class="link-icon">⚡</span>M09: Linear Systems, Inverses &amp; Least Squares</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Probability & Statistics</div>
+  <a href="m10-probability-foundations.html" class="sidebar-link"><span class="link-icon">🎲</span>M10: Probability Foundations</a>
+  <a href="m11-conditional-prob-bayes.html" class="sidebar-link"><span class="link-icon">🎲</span>M11: Conditional Probability, Bayes &amp; Total Probability</a>
+  <a href="m12-independence.html" class="sidebar-link"><span class="link-icon">🎲</span>M12: Independence &amp; Conditional Independence</a>
+  <a href="m13-random-variables-pmf-pdf-cdf.html" class="sidebar-link active"><span class="link-icon">🎲</span>M13: Random Variables, PMF, PDF &amp; CDF</a>
+  <a href="m14-joint-marginal-conditional.html" class="sidebar-link"><span class="link-icon">🎲</span>M14: Joint, Marginal &amp; Conditional Distributions</a>
+  <a href="m15-expectation-expected-value.html" class="sidebar-link"><span class="link-icon">🎲</span>M15: Expectation &amp; Expected Value</a>
+  <a href="m16-variance-standard-deviation.html" class="sidebar-link"><span class="link-icon">🎲</span>M16: Variance &amp; Standard Deviation</a>
+  <a href="m17-covariance-and-correlation.html" class="sidebar-link"><span class="link-icon">🎲</span>M17: Covariance, Correlation &amp; Statistical Relationships</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Calculus & Optimization</div>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>M18–M24: Derivatives, Gradients & SGD (Upcoming)</span>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">MATH-M13 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why This Lesson Exists</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. One-Minute Intuition</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Formal Definition</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Important Idea: A Random Variable Is a Function</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Random Variable Example — One Coin</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Random Variable Example — Number of Heads</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Range / Support</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Discrete vs Continuous</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. PMF</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. PMF Properties</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Two-Coin PMF</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. PMF Table</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Calculating an Event from a PMF</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. CDF</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. CDF Interpretation</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. CDF of the Two-Coin Variable</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. PMF vs CDF</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. CDF Intervals</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Discrete CDF as Sum of PMF</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Continuous Random Variable</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. PDF</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. PDF Is Not a Probability</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Total Area Under a PDF</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. CDF from PDF</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Worked Example — Uniform PDF</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Worked Example — Uniform Interval Probability</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Worked Example — CDF of Uniform Distribution</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Discrete CDF Shape vs Continuous CDF Shape</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. PMF / PDF / CDF Comparison</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. A Common Trap: PDF &gt; 1</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Probability of a Point in Continuous Models</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Random Variable Transformation Preview</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Why Random Variables Matter in AI/ML</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Reinforcement-Learning Connection</a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Hinglish Teacher Explanation</a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. AI/ML Connection Map</a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Common Mistakes</a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Formula Cards</a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Discrete ↔ Continuous Translation</a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Numerical-Solving Protocol</a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Active Recall</a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Practice Set</a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Exam Connection</a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Mastery Gate</a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. Next Dependency</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Math Companion</a>
+        <span>/</span>
+        <span>MATH-M13</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-3">Track 3: Probability & Statistics</span></div>
+      <h1 class="chapter-title">Random Variables, PMF, PDF &amp; CDF</h1>
+      <p class="chapter-desc">Discrete vs Continuous Mappings, Probability Mass Functions, Density Functions, and CDF Integrals</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~40 min read</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">MATH-INT</span> <span class="chapter-meta-item uni-badge">MATH-CALC</span> <span class="chapter-meta-item uni-badge">MATH-GEO</span>
+      </div>
+
+      <div class="math-meta-grid">
+        <div class="math-meta-box">
+          <div class="math-meta-label">Prerequisites</div>
+          <div class="math-meta-value">M10 Probability</div>
+        </div>
+        <div class="math-meta-box">
+          <div class="math-meta-label">Feeds Directly Into</div>
+          <div class="math-meta-value">M14 Joint Distributions, M15 Expectation, M16 Variance, Gaussian ML</div>
+        </div>
+        <div class="math-meta-box" style="grid-column: 1 / -1;">
+          <div class="math-meta-label">AI / Machine Learning Connections</div>
+          <div class="math-meta-value">Class labels $Y \in \{0, 1\}$, Regression noise $\epsilon \sim \mathcal{N}(0, \sigma^2)$, State transitions in MDPs</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="math-preamble-card"><h1>MATH-M13 — Random Variables, PMF, PDF &amp; CDF</h1>
+<blockquote>
+<p><strong>Math depth:</strong> <code>MATH-INT</code>, <code>MATH-CALC</code>, <code>MATH-NUM</code>, <code>MATH-GEO</code><br />
+<strong>Prerequisite:</strong> M10 — Probability Foundations; M11 — Conditional Probability; M12 — Independence<br />
+<strong>Feeds into:</strong> M14–M17, expectation, variance, probabilistic ML, reinforcement learning<br />
+<strong>Course-source anchor:</strong> The supplied <code>Lecture02.pdf</code> defines random variables as maps from the outcome space to real numbers and develops discrete/continuous random variables, range/support, PMF, CDF and PDF. fileciteturn64file7</p>
+</blockquote>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in MATH-M13 (45 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why This Lesson Exists</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">One-Minute Intuition</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Formal Definition</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Important Idea: A Random Variable Is a Function</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Random Variable Example — One Coin</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Random Variable Example — Number of Heads</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Range / Support</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Discrete vs Continuous</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">PMF</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">PMF Properties</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Two-Coin PMF</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">PMF Table</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Calculating an Event from a PMF</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">CDF</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">CDF Interpretation</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">CDF of the Two-Coin Variable</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">PMF vs CDF</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">CDF Intervals</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Discrete CDF as Sum of PMF</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Continuous Random Variable</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">PDF</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">PDF Is Not a Probability</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Total Area Under a PDF</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">CDF from PDF</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Worked Example — Uniform PDF</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Worked Example — Uniform Interval Probability</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Worked Example — CDF of Uniform Distribution</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Discrete CDF Shape vs Continuous CDF Shape</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">PMF / PDF / CDF Comparison</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">A Common Trap: PDF &gt; 1</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Probability of a Point in Continuous Models</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Random Variable Transformation Preview</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Why Random Variables Matter in AI/ML</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Reinforcement-Learning Connection</span></a></li>
+        <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Hinglish Teacher Explanation</span></a></li>
+        <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">AI/ML Connection Map</span></a></li>
+        <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Common Mistakes</span></a></li>
+        <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Formula Cards</span></a></li>
+        <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Discrete ↔ Continuous Translation</span></a></li>
+        <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Numerical-Solving Protocol</span></a></li>
+        <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Active Recall</span></a></li>
+        <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Practice Set</span></a></li>
+        <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Exam Connection</span></a></li>
+        <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">Next Dependency</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">Why This Lesson Exists</h2>
+      </div>
+      <div class="section-body">
+        <p>Events are useful:</p>
+<div class="formula-math">\[
+A=\{\text{rain}\}.
+\]</div>
+<p>But AI/ML often works with numerical quantities:</p>
+<div class="ascii-box"><pre>number of heads
+temperature
+reward
+prediction score
+error
+waiting time
+age
+probability</pre></div>
+<p>A <strong>random variable</strong> converts uncertain outcomes into numbers.</p>
+<p>That lets us perform:</p>
+<div class="ascii-box"><pre>probability
++
+summation/integration
++
+expectation
++
+variance
++
+statistical analysis</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">One-Minute Intuition</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Mental Model</div>
+
+Random Variable koi normal variable nahi hai—ye asal mein ek **Function** hai jo outcome ko ek real number par map karta hai!
+Discrete distribution mein har point par probability mass hota hai ($P(X = 3) = 0.2$).
+Continuous distribution mein kisi EXACT point ki probability ZERO hoti hai ($P(X = 1.73205) = 0$)! Probability sirf kisi range ke andar area under curve se aati hai: $\int_a^b f(x) dx$.
+
+</div>
+
+<p>A random variable is like a translator:</p>
+<div class="ascii-box"><pre>random experiment
+      ↓
+outcome ω
+      ↓
+random variable X
+      ↓
+number X(ω)</pre></div>
+<p>For example, toss a coin twice.</p>
+<p>Outcomes:</p>
+<div class="formula-math">\[
+HH,HT,TH,TT.
+\]</div>
+<p>Let:</p>
+<div class="formula-math">\[
+X=\text{number of heads}.
+\]</div>
+<p>Then:</p>
+<div class="ascii-box"><pre>HH → 2
+HT → 1
+TH → 1
+TT → 0</pre></div>
+<p>The supplied Lecture02 uses this exact example. fileciteturn64file7</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">Formal Definition</h2>
+      </div>
+      <div class="section-body">
+        <p>A random variable is a function:</p>
+<div class="formula-math">\[
+\boxed{
+X:\Omega\rightarrow\mathbb R.
+}
+\]</div>
+<p>It maps each outcome:</p>
+<div class="formula-math">\[
+\omega\in\Omega
+\]</div>
+<p>to a real number:</p>
+<div class="formula-math">\[
+X(\omega).
+\]</div>
+<p>The supplied Lecture02 explicitly gives this definition and notation. fileciteturn64file7</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Important Idea: A Random Variable Is a Function</h2>
+      </div>
+      <div class="section-body">
+        <p>The word “variable” can be misleading.</p>
+<p>Mathematically:</p>
+<div class="formula-math">\[
+X
+\]</div>
+<p>is a function.</p>
+<p>It is random because its input outcome is random.</p>
+<p>Example:</p>
+<div class="formula-math">\[
+X(H)=1,
+\quad
+X(T)=0.
+\]</div>
+<p>So:</p>
+<div class="ascii-box"><pre>outcome
+→ function
+→ numerical value</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Random Variable Example — One Coin</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph TD
+    A["Sample Space Ω (e.g. Outcomes of Experiment)"] -->|Mapping X: Ω → ℝ| B["Random Variable X"]
+    B --> C["Discrete RV: PMF p(x) = P(X = x)"]
+    B --> D["Continuous RV: PDF f(x) where P(a ≤ X ≤ b) = ∫ f(x) dx"]
+    C --> E["CDF F(x) = P(X ≤ x) [Staircase Curve]"]
+    D --> F["CDF F(x) = ∫_{-∞}^x f(t) dt [Smooth S-Curve]"]
+    style B fill:#0f172a,stroke:#fbbf24,color:#fbbf24,stroke-width:2px
+</pre></div>
+<p>Experiment:</p>
+<blockquote>
+<p>Toss a fair coin once.</p>
+</blockquote>
+<p>Sample space:</p>
+<div class="formula-math">\[
+\Omega=\{H,T\}.
+\]</div>
+<p>Define:</p>
+<div class="formula-math">\[
+X=
+\begin{cases}
+1,&H\\
+0,&T
+\end{cases}
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+X(H)=1,
+\qquad
+X(T)=0.
+\]</div>
+<p>This random variable is discrete.</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+def normal_pdf(x, mu=0.0, sigma=1.0):
+    return (1.0 / (sigma * np.sqrt(2 * np.pi))) * np.exp(-0.5 * ((x - mu) / sigma)**2)
+
+x_vals = np.array([-2.0, -1.0, 0.0, 1.0, 2.0])
+densities = normal_pdf(x_vals, mu=0.0, sigma=1.0)
+
+print(&quot;Standard Normal PDF values at&quot;, x_vals)
+print(&quot;Densities f(x):&quot;, np.round(densities, 4))
+print(&quot;Peak density at mu=0 is ~0.3989&quot;)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Random Variable Example — Number of Heads</h2>
+      </div>
+      <div class="section-body">
+        <p>Toss a fair coin twice.</p>
+<div class="formula-math">\[
+\Omega=\{HH,HT,TH,TT\}.
+\]</div>
+<p>Let:</p>
+<div class="formula-math">\[
+X=\#\text{heads}.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+X(HH)=2
+\]</div>
+<div class="formula-math">\[
+X(HT)=1
+\]</div>
+<div class="formula-math">\[
+X(TH)=1
+\]</div>
+<div class="formula-math">\[
+X(TT)=0.
+\]</div>
+<p>The range/support is:</p>
+<div class="formula-math">\[
+\boxed{
+\mathcal X=\{0,1,2\}.
+}
+\]</div>
+<p>The supplied Lecture02 gives this example and support set. fileciteturn64file7</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+def normal_pdf(x, mu=0.0, sigma=1.0):
+    return (1.0 / (sigma * np.sqrt(2 * np.pi))) * np.exp(-0.5 * ((x - mu) / sigma)**2)
+
+x_vals = np.array([-2.0, -1.0, 0.0, 1.0, 2.0])
+densities = normal_pdf(x_vals, mu=0.0, sigma=1.0)
+
+print(&quot;Standard Normal PDF values at&quot;, x_vals)
+print(&quot;Densities f(x):&quot;, np.round(densities, 4))
+print(&quot;Peak density at mu=0 is ~0.3989&quot;)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Range / Support</h2>
+      </div>
+      <div class="section-body">
+        <p>The range of \(X\) is the set of values it can take:</p>
+<div class="formula-math">\[
+\boxed{
+\mathcal X=\{X(\omega):\omega\in\Omega\}.
+}
+\]</div>
+<p>For a discrete random variable, the range is finite or countably infinite.</p>
+<p>For the two-coin example:</p>
+<div class="formula-math">\[
+\mathcal X=\{0,1,2\}.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">Discrete vs Continuous</h2>
+      </div>
+      <div class="section-body">
+        <h2>Discrete random variable</h2>
+<p>Takes values in a finite or countably infinite set.</p>
+<p>Examples:</p>
+<div class="ascii-box"><pre>number of heads
+number of customers
+number of errors
+number of clicks</pre></div>
+<h2>Continuous random variable</h2>
+<p>Can take values over intervals of real numbers.</p>
+<p>Examples:</p>
+<div class="ascii-box"><pre>height
+temperature
+time
+distance</pre></div>
+<p>The supplied Lecture02 explicitly separates discrete and continuous random variables. fileciteturn64file7</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">PMF</h2>
+      </div>
+      <div class="section-body">
+        <p>For a discrete random variable \(X\), the probability mass function is:</p>
+<div class="formula-math">\[
+\boxed{
+p_X(x)=P(X=x).
+}
+\]</div>
+<p>It tells us the probability assigned to each possible value.</p>
+<p>The supplied Lecture02 gives this definition. fileciteturn64file7</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">PMF Properties</h2>
+      </div>
+      <div class="section-body">
+        <p>For every valid \(x\):</p>
+<div class="formula-math">\[
+\boxed{
+p_X(x)\ge0
+}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\boxed{
+\sum_{x\in\mathcal X}p_X(x)=1.
+}
+\]</div>
+<p>For a set \(A\subseteq\mathcal X\):</p>
+<div class="formula-math">\[
+\boxed{
+P(X\in A)
+=
+\sum_{x\in A}p_X(x).
+}
+\]</div>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+def normal_pdf(x, mu=0.0, sigma=1.0):
+    return (1.0 / (sigma * np.sqrt(2 * np.pi))) * np.exp(-0.5 * ((x - mu) / sigma)**2)
+
+x_vals = np.array([-2.0, -1.0, 0.0, 1.0, 2.0])
+densities = normal_pdf(x_vals, mu=0.0, sigma=1.0)
+
+print(&quot;Standard Normal PDF values at&quot;, x_vals)
+print(&quot;Densities f(x):&quot;, np.round(densities, 4))
+print(&quot;Peak density at mu=0 is ~0.3989&quot;)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Two-Coin PMF</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Exam Trap & Common Misconception</div>
+
+**PDF Value is NOT a Probability:** For continuous variables, $f(x)$ is a probability DENSITY, not a probability! $f(x)$ can easily exceed 1.0 (for instance, a uniform distribution on $[0, 0.5]$ has $f(x) = 2.0$). Only the integral (area) over an interval represents probability and cannot exceed 1.0.
+
+</div>
+
+<p>For:</p>
+<div class="formula-math">\[
+X=\text{number of heads in two fair tosses},
+\]</div>
+<p>possible values:</p>
+<div class="formula-math">\[
+0,1,2.
+\]</div>
+<h3>\(X=0\)</h3>
+<p>Only:</p>
+<div class="formula-math">\[
+TT.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+p_X(0)=\frac14.
+\]</div>
+<h3>\(X=1\)</h3>
+<p>Outcomes:</p>
+<div class="formula-math">\[
+HT,TH.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+p_X(1)=\frac24=\frac12.
+\]</div>
+<h3>\(X=2\)</h3>
+<p>Only:</p>
+<div class="formula-math">\[
+HH.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+p_X(2)=\frac14.
+\]</div>
+<p>So:</p>
+<div class="formula-math">\[
+\boxed{
+p_X(0)=\frac14,\quad
+p_X(1)=\frac12,\quad
+p_X(2)=\frac14.
+}
+\]</div>
+<p>The supplied Lecture02 gives these exact values and verifies that the total mass is 1. fileciteturn64file7</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">PMF Table</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Exam Trap & Common Misconception</div>
+
+**PDF Value is NOT a Probability:** For continuous variables, $f(x)$ is a probability DENSITY, not a probability! $f(x)$ can easily exceed 1.0 (for instance, a uniform distribution on $[0, 0.5]$ has $f(x) = 2.0$). Only the integral (area) over an interval represents probability and cannot exceed 1.0.
+
+</div>
+
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th style="text-align: right;">\(x\)</th>
+<th style="text-align: right;">\(p_X(x)\)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">\(1/4\)</td>
+</tr>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">\(1/2\)</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">\(1/4\)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Check:</p>
+<div class="formula-math">\[
+\frac14+\frac12+\frac14=1.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Calculating an Event from a PMF</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+p_X(0)=0.2,\quad
+p_X(1)=0.5,\quad
+p_X(2)=0.3.
+\]</div>
+<p>Find:</p>
+<div class="formula-math">\[
+P(X\in\{1,2\}).
+\]</div>
+<p>Add the relevant masses:</p>
+<div class="formula-math">\[
+0.5+0.3
+=
+\boxed{0.8}.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">CDF</h2>
+      </div>
+      <div class="section-body">
+        <p>The cumulative distribution function exists for <strong>any</strong> random variable.</p>
+<p>Definition:</p>
+<div class="formula-math">\[
+\boxed{
+F_X(x)=P(X\le x).
+}
+\]</div>
+<p>The supplied Lecture02 explicitly states this definition. fileciteturn64file7</p>
+<p>It accumulates probability from the left.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">CDF Interpretation</h2>
+      </div>
+      <div class="section-body">
+        <p>Think:</p>
+<div class="ascii-box"><pre>move from −∞ toward x
+↓
+keep collecting probability
+↓
+F_X(x)</pre></div>
+<p>Therefore \(F_X(x)\) can never decrease.</p>
+<div class="formula-math">\[
+\boxed{
+F_X(x)\text{ is non-decreasing}.
+}
+\]</div>
+<p>Also:</p>
+<div class="formula-math">\[
+\boxed{
+\lim_{x\to-\infty}F_X(x)=0
+}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\boxed{
+\lim_{x\to+\infty}F_X(x)=1.
+}
+\]</div>
+<p>These properties are given in Lecture02. fileciteturn64file7</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">CDF of the Two-Coin Variable</h2>
+      </div>
+      <div class="section-body">
+        <p>Recall:</p>
+<div class="formula-math">\[
+P(X=0)=\frac14
+\]</div>
+<div class="formula-math">\[
+P(X=1)=\frac12
+\]</div>
+<div class="formula-math">\[
+P(X=2)=\frac14.
+\]</div>
+<p>Then:</p>
+<h3>At \(x\lt 0\)</h3>
+<div class="formula-math">\[
+F_X(x)=0.
+\]</div>
+<h3>At \(0\le x\lt 1\)</h3>
+<div class="formula-math">\[
+F_X(x)=\frac14.
+\]</div>
+<h3>At \(1\le x\lt 2\)</h3>
+<div class="formula-math">\[
+F_X(x)=\frac14+\frac12
+=
+\frac34.
+\]</div>
+<h3>At \(x\ge2\)</h3>
+<div class="formula-math">\[
+F_X(x)=1.
+\]</div>
+<p>So the discrete CDF is a step function.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">PMF vs CDF</h2>
+      </div>
+      <div class="section-body">
+        <h3>PMF</h3>
+<div class="formula-math">\[
+p_X(x)=P(X=x).
+\]</div>
+<p>Question:</p>
+<blockquote>
+<p>Probability at this specific discrete value?</p>
+</blockquote>
+<h3>CDF</h3>
+<div class="formula-math">\[
+F_X(x)=P(X\le x).
+\]</div>
+<p>Question:</p>
+<blockquote>
+<p>Probability accumulated up to this value?</p>
+</blockquote>
+<p>Memory:</p>
+<div class="ascii-box"><pre>PMF = point mass
+CDF = cumulative mass</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">CDF Intervals</h2>
+      </div>
+      <div class="section-body">
+        <p>For any random variable and \(a\lt b\):</p>
+<div class="formula-math">\[
+\boxed{
+P(a\lt X\le b)
+=
+F_X(b)-F_X(a).
+}
+\]</div>
+<p>The supplied Lecture02 states this identity explicitly. fileciteturn64file7</p>
+<p>This formula is extremely useful because it works for both discrete and continuous distributions, with the endpoint convention shown.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">Discrete CDF as Sum of PMF</h2>
+      </div>
+      <div class="section-body">
+        <p>For discrete \(X\):</p>
+<div class="formula-math">\[
+\boxed{
+F_X(x)
+=
+\sum_{y\le x}p_X(y).
+}
+\]</div>
+<p>So:</p>
+<div class="ascii-box"><pre>PMF
+↓ cumulative sum
+CDF</pre></div>
+<p>This is exactly the relationship shown in the supplied Lecture02. fileciteturn64file4</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Continuous Random Variable</h2>
+      </div>
+      <div class="section-body">
+        <p>A continuous random variable can take values over an interval.</p>
+<p>Example:</p>
+<div class="formula-math">\[
+X\sim Uniform[2,2.5].
+\]</div>
+<p>There are infinitely many possible values.</p>
+<p>For a particular point such as:</p>
+<div class="formula-math">\[
+x=2.25,
+\]</div>
+<p>we have:</p>
+<div class="formula-math">\[
+\boxed{
+P(X=2.25)=0.
+}
+\]</div>
+<p>This does not mean 2.25 is impossible.</p>
+<p>It means a single point has zero probability under the continuous model.</p>
+<p>The supplied Lecture02 highlights this distinction. fileciteturn64file7</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">PDF</h2>
+      </div>
+      <div class="section-body">
+        <p>For a continuous random variable, the probability density function is:</p>
+<div class="formula-math">\[
+\boxed{
+f_X(x)=\frac{dF_X(x)}{dx}
+}
+\]</div>
+<p>where the derivative exists.</p>
+<p>The supplied Lecture02 states that the PDF is the derivative of the CDF. fileciteturn64file7</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">PDF Is Not a Probability</h2>
+      </div>
+      <div class="section-body">
+        <p>This is one of the most important traps.</p>
+<p>A PDF satisfies:</p>
+<div class="formula-math">\[
+f_X(x)\ge0.
+\]</div>
+<p>But:</p>
+<div class="formula-math">\[
+\boxed{
+f_X(x)\text{ itself is not generally a probability}.
+}
+\]</div>
+<p>It can even be greater than 1.</p>
+<p>The probability of an interval is the <strong>area under the PDF</strong>:</p>
+<div class="formula-math">\[
+\boxed{
+P(a\le X\le b)
+=
+\int_a^b f_X(t)\,dt.
+}
+\]</div>
+<p>This distinction is explicitly emphasized in Lecture02. fileciteturn64file7</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">Total Area Under a PDF</h2>
+      </div>
+      <div class="section-body">
+        <p>Because total probability is 1:</p>
+<div class="formula-math">\[
+\boxed{
+\int_{-\infty}^{\infty}
+f_X(t)\,dt=1.
+}
+\]</div>
+<p>Therefore a valid PDF must have total area exactly 1.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">CDF from PDF</h2>
+      </div>
+      <div class="section-body">
+        <p>For a continuous random variable:</p>
+<div class="formula-math">\[
+\boxed{
+F_X(x)
+=
+\int_{-\infty}^{x}
+f_X(t)\,dt.
+}
+\]</div>
+<p>So:</p>
+<div class="ascii-box"><pre>PDF
+→ integrate
+→ CDF
+
+CDF
+→ differentiate
+→ PDF</pre></div>
+<p>when the required regularity conditions hold.</p>
+<p>The supplied Lecture02 gives both relationships. fileciteturn64file7</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">Worked Example — Uniform PDF</h2>
+      </div>
+      <div class="section-body">
+        <p>Let:</p>
+<div class="formula-math">\[
+X\sim Uniform[2,2.5].
+\]</div>
+<p>The interval width is:</p>
+<div class="formula-math">\[
+2.5-2=0.5.
+\]</div>
+<p>For a uniform density:</p>
+<div class="formula-math">\[
+f_X(x)=c
+\]</div>
+<p>inside the interval.</p>
+<p>Total area must be 1:</p>
+<div class="formula-math">\[
+\int_2^{2.5}c\,dx=1.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+0.5c=1
+\]</div>
+<p>so:</p>
+<div class="formula-math">\[
+\boxed{
+c=2.
+}
+\]</div>
+<p>Thus:</p>
+<div class="formula-math">\[
+f_X(x)=
+\begin{cases}
+2,&2\le x\le2.5\\
+0,&\text{otherwise}.
+\end{cases}
+\]</div>
+<p>This is the exact normalization calculation from Lecture02. fileciteturn64file7</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+def normal_pdf(x, mu=0.0, sigma=1.0):
+    return (1.0 / (sigma * np.sqrt(2 * np.pi))) * np.exp(-0.5 * ((x - mu) / sigma)**2)
+
+x_vals = np.array([-2.0, -1.0, 0.0, 1.0, 2.0])
+densities = normal_pdf(x_vals, mu=0.0, sigma=1.0)
+
+print(&quot;Standard Normal PDF values at&quot;, x_vals)
+print(&quot;Densities f(x):&quot;, np.round(densities, 4))
+print(&quot;Peak density at mu=0 is ~0.3989&quot;)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">Worked Example — Uniform Interval Probability</h2>
+      </div>
+      <div class="section-body">
+        <p>Using:</p>
+<div class="formula-math">\[
+X\sim Uniform[2,2.5]
+\]</div>
+<p>calculate:</p>
+<div class="formula-math">\[
+P(2.25\le X\le2.5).
+\]</div>
+<p>Use the PDF:</p>
+<div class="formula-math">\[
+P=
+\int_{2.25}^{2.5}2\,dx.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+=
+2(2.5-2.25)
+\]</div>
+<div class="formula-math">\[
+=
+2(0.25)
+=
+\boxed{0.5}.
+\]</div>
+<p>This is the same interval-probability example in Lecture02. fileciteturn64file7</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+def normal_pdf(x, mu=0.0, sigma=1.0):
+    return (1.0 / (sigma * np.sqrt(2 * np.pi))) * np.exp(-0.5 * ((x - mu) / sigma)**2)
+
+x_vals = np.array([-2.0, -1.0, 0.0, 1.0, 2.0])
+densities = normal_pdf(x_vals, mu=0.0, sigma=1.0)
+
+print(&quot;Standard Normal PDF values at&quot;, x_vals)
+print(&quot;Densities f(x):&quot;, np.round(densities, 4))
+print(&quot;Peak density at mu=0 is ~0.3989&quot;)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">Worked Example — CDF of Uniform Distribution</h2>
+      </div>
+      <div class="section-body">
+        <p>For:</p>
+<div class="formula-math">\[
+X\sim Uniform[a,b],
+\]</div>
+<p>the CDF is:</p>
+<div class="formula-math">\[
+F_X(x)=
+\begin{cases}
+0,&x\lt a\\
+\frac{x-a}{b-a},&a\le x\le b\\
+1,&x\gt b.
+\end{cases}
+\]</div>
+<p>For:</p>
+<div class="formula-math">\[
+Uniform[2,2.5],
+\]</div>
+<p>this becomes:</p>
+<div class="formula-math">\[
+\boxed{
+F_X(x)=
+\begin{cases}
+0,&x\lt 2\\
+\dfrac{x-2}{0.5},&2\le x\le2.5\\
+1,&x\gt 2.5.
+\end{cases}
+}
+\]</div>
+<p>At:</p>
+<div class="formula-math">\[
+x=2.25,
+\]</div>
+<div class="formula-math">\[
+F_X(2.25)
+=
+\frac{0.25}{0.5}
+=
+\boxed{0.5}.
+\]</div>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+def normal_pdf(x, mu=0.0, sigma=1.0):
+    return (1.0 / (sigma * np.sqrt(2 * np.pi))) * np.exp(-0.5 * ((x - mu) / sigma)**2)
+
+x_vals = np.array([-2.0, -1.0, 0.0, 1.0, 2.0])
+densities = normal_pdf(x_vals, mu=0.0, sigma=1.0)
+
+print(&quot;Standard Normal PDF values at&quot;, x_vals)
+print(&quot;Densities f(x):&quot;, np.round(densities, 4))
+print(&quot;Peak density at mu=0 is ~0.3989&quot;)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">Discrete CDF Shape vs Continuous CDF Shape</h2>
+      </div>
+      <div class="section-body">
+        <h3>Discrete</h3>
+<div class="ascii-box"><pre>step-like
+____
+    |____
+         |____</pre></div>
+<h3>Continuous</h3>
+<p>Typically smooth for common continuous distributions:</p>
+<div class="ascii-box"><pre>___
+   __/
+__/</pre></div>
+<p>The exact shape depends on the distribution.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">PMF / PDF / CDF Comparison</h2>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Object</th>
+<th>Discrete</th>
+<th>Continuous</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PMF</td>
+<td>yes</td>
+<td>no</td>
+</tr>
+<tr>
+<td>PDF</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>CDF</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Point probability</td>
+<td>can be &gt; 0</td>
+<td>typically 0</td>
+</tr>
+<tr>
+<td>Probability calculation</td>
+<td>sum masses</td>
+<td>integrate density</td>
+</tr>
+<tr>
+<td>Total</td>
+<td>sum = 1</td>
+<td>integral = 1</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">A Common Trap: PDF &gt; 1</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+f_X(x)=2
+\]</div>
+<p>over an interval of length \(0.5\).</p>
+<p>That is completely valid because:</p>
+<div class="formula-math">\[
+2(0.5)=1.
+\]</div>
+<p>So:</p>
+<div class="formula-math">\[
+\boxed{
+f_X(x)\gt 1
+}
+\]</div>
+<p>is possible.</p>
+<p>What must remain true is:</p>
+<div class="ascii-box"><pre>PDF ≥ 0
+total area = 1</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">Probability of a Point in Continuous Models</h2>
+      </div>
+      <div class="section-body">
+        <p>For a continuous random variable with a PDF:</p>
+<div class="formula-math">\[
+P(X=x)=0.
+\]</div>
+<p>But:</p>
+<div class="formula-math">\[
+P(a\le X\le b)
+\]</div>
+<p>can be positive.</p>
+<p>This is why:</p>
+<div class="ascii-box"><pre>point
+→ zero probability
+
+interval
+→ area under PDF</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">Random Variable Transformation Preview</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+Y=g(X).
+\]</div>
+<p>Then \(Y\) is another random variable.</p>
+<p>Example:</p>
+<div class="formula-math">\[
+Y=X^2.
+\]</div>
+<p>The supplied Lecture02 introduces functions of random variables and notes that expectations can be computed through:</p>
+<div class="formula-math">\[
+E[g(X)].
+\]</div>
+<p>The full transformation machinery for distributions is beyond the immediate scope of this lesson. fileciteturn64file7</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Why Random Variables Matter in AI/ML</h2>
+      </div>
+      <div class="section-body">
+        <p>An uncertain real-world quantity can be represented mathematically.</p>
+<p>Examples:</p>
+<h3>Reward</h3>
+<div class="formula-math">\[
+R
+\]</div>
+<p>may be a random variable.</p>
+<h3>Prediction score</h3>
+<div class="formula-math">\[
+S
+\]</div>
+<p>may have a distribution.</p>
+<h3>Error</h3>
+<div class="formula-math">\[
+E=y-\hat y
+\]</div>
+<p>is a numerical random quantity across randomly sampled examples.</p>
+<h3>Input uncertainty</h3>
+<p>Features can themselves be modelled as random variables.</p>
+<p>This lets AI/ML use:</p>
+<div class="ascii-box"><pre>expectation
+variance
+conditional distributions
+probability models</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Reinforcement-Learning Connection</h2>
+      </div>
+      <div class="section-body">
+        <p>In RL:</p>
+<div class="ascii-box"><pre>state
+→ action
+→ reward
+→ next state</pre></div>
+<p>can be stochastic.</p>
+<p>A reward \(R_t\) is therefore naturally treated as a random variable.</p>
+<p>The return:</p>
+<div class="formula-math">\[
+G_t
+\]</div>
+<p>is also a random quantity.</p>
+<p>Expectation later gives:</p>
+<div class="formula-math">\[
+V^\pi(s)=E[G_t|S_t=s].
+\]</div>
+<p>Thus random-variable mathematics eventually becomes the foundation for value functions.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-35" class="section-block">
+      <div class="section-header">
+        <span class="section-num">35</span>
+        <h2 class="section-heading">Hinglish Teacher Explanation</h2>
+      </div>
+      <div class="section-body">
+        <p>Random variable ko ek <strong>converter</strong> samjho.</p>
+<p>Experiment ke actual outcome ko directly use karne ki jagah hum usko number mein convert karte hain.</p>
+<p>Two coin tosses:</p>
+<div class="ascii-box"><pre>HH → 2
+HT → 1
+TH → 1
+TT → 0</pre></div>
+<p>So:</p>
+<div class="formula-math">\[
+X=\text{number of heads}.
+\]</div>
+<p>Ab X ke possible values:</p>
+<div class="formula-math">\[
+\{0,1,2\}.
+\]</div>
+<p>PMF:</p>
+<blockquote>
+<p>“X exactly x hone ki probability kitni hai?”</p>
+</blockquote>
+<div class="formula-math">\[
+p_X(x)=P(X=x).
+\]</div>
+<p>CDF:</p>
+<blockquote>
+<p>“X x se chhota ya equal hone ki cumulative probability kitni hai?”</p>
+</blockquote>
+<div class="formula-math">\[
+F_X(x)=P(X\le x).
+\]</div>
+<p>Continuous case mein PMF nahi hota.</p>
+<p>Wahan PDF hota hai:</p>
+<div class="formula-math">\[
+f_X(x).
+\]</div>
+<p>Lekin sabse important trap:</p>
+<blockquote>
+<p><strong>PDF khud probability nahi hai.</strong></p>
+</blockquote>
+<p>Probability nikalti hai area se:</p>
+<div class="formula-math">\[
+P(a\le X\le b)
+=
+\int_a^b f_X(x)\,dx.
+\]</div>
+<p>Isliye PDF 2 bhi ho sakta hai.</p>
+<p>Bas total area 1 hona chahiye.</p>
+<p>Memory:</p>
+<div class="ascii-box"><pre>Discrete:
+PMF → exact point mass
+CDF → cumulative sum
+
+Continuous:
+PDF → density
+CDF → cumulative area</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-36" class="section-block">
+      <div class="section-header">
+        <span class="section-num">36</span>
+        <h2 class="section-heading">AI/ML Connection Map</h2>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Math object</th>
+<th>AI/ML use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>random variable</td>
+<td>uncertain model/data quantity</td>
+</tr>
+<tr>
+<td>support</td>
+<td>possible numerical values</td>
+</tr>
+<tr>
+<td>PMF</td>
+<td>discrete outcome probabilities</td>
+</tr>
+<tr>
+<td>PDF</td>
+<td>continuous density</td>
+</tr>
+<tr>
+<td>CDF</td>
+<td>cumulative probability</td>
+</tr>
+<tr>
+<td>expectation</td>
+<td>average predicted/reward value</td>
+</tr>
+<tr>
+<td>variance</td>
+<td>spread/uncertainty</td>
+</tr>
+<tr>
+<td>conditional distribution</td>
+<td>prediction under evidence</td>
+</tr>
+<tr>
+<td>reward variable</td>
+<td>RL</td>
+</tr>
+<tr>
+<td>return variable</td>
+<td>RL value functions</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-37" class="section-block">
+      <div class="section-header">
+        <span class="section-num">37</span>
+        <h2 class="section-heading">Common Mistakes</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Exam Trap & Common Misconception</div>
+
+**PDF Value is NOT a Probability:** For continuous variables, $f(x)$ is a probability DENSITY, not a probability! $f(x)$ can easily exceed 1.0 (for instance, a uniform distribution on $[0, 0.5]$ has $f(x) = 2.0$). Only the integral (area) over an interval represents probability and cannot exceed 1.0.
+
+</div>
+
+<h3>Mistake 1 — PMF for a continuous variable</h3>
+<p>Continuous variables use a PDF, not a PMF.</p>
+<h3>Mistake 2 — PDF is probability</h3>
+<p>Wrong.</p>
+<div class="formula-math">\[
+f_X(x)
+\]</div>
+<p>is density.</p>
+<h3>Mistake 3 — PDF must be ≤1</h3>
+<p>False.</p>
+<p>Only total area must equal 1.</p>
+<h3>Mistake 4 — CDF can decrease</h3>
+<p>False.</p>
+<div class="formula-math">\[
+F_X(x)
+\]</div>
+<p>is non-decreasing.</p>
+<h3>Mistake 5 — \(P(X=x)=0\) means impossible</h3>
+<p>Not in continuous models.</p>
+<h3>Mistake 6 — CDF is only for continuous variables</h3>
+<p>False.</p>
+<p>CDF exists for every random variable.</p>
+<h3>Mistake 7 — PMF values need not sum to 1</h3>
+<p>They must:</p>
+<div class="formula-math">\[
+\sum_xp_X(x)=1.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-38" class="section-block">
+      <div class="section-header">
+        <span class="section-num">38</span>
+        <h2 class="section-heading">Formula Cards</h2>
+      </div>
+      <div class="section-body">
+        <h2>F-M13-RV-01 — Random Variable</h2>
+<div class="formula-math">\[
+\boxed{
+X:\Omega\rightarrow\mathbb R
+}
+\]</div>
+<hr />
+<h2>F-M13-PMF-01 — PMF</h2>
+<div class="formula-math">\[
+\boxed{
+p_X(x)=P(X=x)
+}
+\]</div>
+<p>for discrete \(X\).</p>
+<hr />
+<h2>F-M13-PMF-02 — PMF Normalization</h2>
+<div class="formula-math">\[
+\boxed{
+\sum_xp_X(x)=1
+}
+\]</div>
+<hr />
+<h2>F-M13-EVENT-01 — Event from PMF</h2>
+<div class="formula-math">\[
+\boxed{
+P(X\in A)=\sum_{x\in A}p_X(x)
+}
+\]</div>
+<hr />
+<h2>F-M13-CDF-01 — CDF</h2>
+<div class="formula-math">\[
+\boxed{
+F_X(x)=P(X\le x)
+}
+\]</div>
+<hr />
+<h2>F-M13-CDF-02 — Interval Probability</h2>
+<div class="formula-math">\[
+\boxed{
+P(a\lt X\le b)=F_X(b)-F_X(a)
+}
+\]</div>
+<hr />
+<h2>F-M13-PDF-01 — PDF from CDF</h2>
+<div class="formula-math">\[
+\boxed{
+f_X(x)=\frac{dF_X(x)}{dx}
+}
+\]</div>
+<p>where differentiable.</p>
+<hr />
+<h2>F-M13-PDF-02 — Probability from PDF</h2>
+<div class="formula-math">\[
+\boxed{
+P(a\le X\le b)
+=
+\int_a^b f_X(t)\,dt
+}
+\]</div>
+<hr />
+<h2>F-M13-PDF-03 — PDF Normalization</h2>
+<div class="formula-math">\[
+\boxed{
+\int_{-\infty}^{\infty}f_X(t)\,dt=1
+}
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-39" class="section-block">
+      <div class="section-header">
+        <span class="section-num">39</span>
+        <h2 class="section-heading">Discrete ↔ Continuous Translation</h2>
+      </div>
+      <div class="section-body">
+        <p>A powerful memory map:</p>
+<div class="ascii-box"><pre>DISCRETE                    CONTINUOUS
+
+PMF                         PDF
+pX(x)                       fX(x)
+
+sum                         integral
+
+Σ pX(x)=1                   ∫fX(x)dx=1
+
+point mass                  density/area
+
+CDF = cumulative sum        CDF = cumulative integral</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-40" class="section-block">
+      <div class="section-header">
+        <span class="section-num">40</span>
+        <h2 class="section-heading">Numerical-Solving Protocol</h2>
+      </div>
+      <div class="section-body">
+        <h3>If given a PMF</h3>
+<div class="ascii-box"><pre>Identify possible x values
+↓
+pick required values
+↓
+add the relevant probabilities</pre></div>
+<h3>If given a CDF</h3>
+<div class="ascii-box"><pre>write F(b)
+− F(a)</pre></div>
+<p>with the exact endpoint convention required.</p>
+<h3>If given a PDF</h3>
+<div class="ascii-box"><pre>identify interval
+↓
+integrate PDF over interval
+↓
+check result lies in [0,1]</pre></div>
+<h3>If given a discrete RV</h3>
+<div class="ascii-box"><pre>build support
+↓
+map outcomes → numbers
+↓
+calculate PMF
+↓
+check total = 1</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-41" class="section-block">
+      <div class="section-header">
+        <span class="section-num">41</span>
+        <h2 class="section-heading">Active Recall</h2>
+      </div>
+      <div class="section-body">
+        <p>Without notes:</p>
+<ol>
+<li>Define random variable.</li>
+<li>Why is a random variable technically a function?</li>
+<li>What is its support/range?</li>
+<li>Difference between discrete and continuous RV?</li>
+<li>Define PMF.</li>
+<li>State PMF properties.</li>
+<li>Define CDF.</li>
+<li>Why is CDF non-decreasing?</li>
+<li>Does every random variable have a CDF?</li>
+<li>Define PDF.</li>
+<li>Why is a PDF not itself a probability?</li>
+<li>Can a PDF exceed 1?</li>
+<li>How do you calculate interval probability from a PDF?</li>
+<li>How do you obtain a CDF from a PDF?</li>
+<li>What happens to point probabilities in a continuous model?</li>
+<li>Why are random variables important in RL?</li>
+</ol>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-42" class="section-block">
+      <div class="section-header">
+        <span class="section-num">42</span>
+        <h2 class="section-heading">Practice Set</h2>
+      </div>
+      <div class="section-body">
+        <h2>Foundation</h2>
+<h3>P-M13-01</h3>
+<p>A fair coin is tossed once. Define a Bernoulli-style random variable \(X\) where Head = 1 and Tail = 0. Write its support and PMF.</p>
+<h3>P-M13-02</h3>
+<p>A fair coin is tossed twice and \(X\) counts heads. Construct the PMF.</p>
+<h3>P-M13-03</h3>
+<p>Using the same \(X\), calculate:</p>
+<div class="formula-math">\[
+P(X\le1).
+\]</div>
+<h3>P-M13-04</h3>
+<p>Using the same \(X\), calculate:</p>
+<div class="formula-math">\[
+P(X=1).
+\]</div>
+<h3>P-M13-05</h3>
+<p>Write the full CDF of \(X\).</p>
+<hr />
+<h2>Continuous Practice</h2>
+<h3>P-M13-06</h3>
+<p>Suppose:</p>
+<div class="formula-math">\[
+X\sim Uniform[2,2.5].
+\]</div>
+<p>Find the constant PDF.</p>
+<h3>P-M13-07</h3>
+<p>For the same variable, find:</p>
+<div class="formula-math">\[
+P(2.25\le X\le2.5).
+\]</div>
+<h3>P-M13-08</h3>
+<p>For the same variable, calculate:</p>
+<div class="formula-math">\[
+F_X(2.25).
+\]</div>
+<h3>P-M13-09</h3>
+<p>Explain why:</p>
+<div class="formula-math">\[
+P(X=2.25)=0.
+\]</div>
+<h3>P-M13-10</h3>
+<p>Give an example of a valid PDF value greater than 1 and explain why it can still be valid.</p>
+<hr />
+<h2>Interpretation</h2>
+<h3>P-M13-11</h3>
+<p>A model's reward \(R\) can take values \(0,1,2\). Explain how you would represent its uncertainty using a PMF.</p>
+<h3>P-M13-12</h3>
+<p>Explain the difference between:</p>
+<div class="ascii-box"><pre>PMF
+PDF
+CDF</pre></div>
+<p>without using formulas.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-43" class="section-block">
+      <div class="section-header">
+        <span class="section-num">43</span>
+        <h2 class="section-heading">Exam Connection</h2>
+      </div>
+      <div class="section-body">
+        <p>Typical triggers:</p>
+<div class="ascii-box"><pre>“maps outcomes to numbers”
+→ random variable
+
+“probability of X=x”
+→ PMF
+
+“P(X≤x)”
+→ CDF
+
+“continuous density”
+→ PDF
+
+“probability between a and b”
+→ integrate PDF / use CDF difference
+
+“total probability”
+→ sum PMF / integrate PDF
+
+“step function”
+→ discrete CDF
+
+“PDF greater than 1?”
+→ possible; density ≠ probability</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-44" class="section-block">
+      <div class="section-header">
+        <span class="section-num">44</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <p>Move to M14 when you can:</p>
+<div class="ascii-box"><pre>define a random variable
+build its support
+construct a discrete PMF
+construct/read a CDF
+calculate interval probabilities
+distinguish PMF/PDF/CDF
+normalize a PDF
+explain continuous point probability
+switch between PDF and CDF
+recognize these objects in AI/ML</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-45" class="section-block">
+      <div class="section-header">
+        <span class="section-num">45</span>
+        <h2 class="section-heading">Next Dependency</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>M13
+Random Variables + PMF/PDF/CDF
+ ↓
+M14
+Joint, Marginal &amp; Conditional Distributions
+ ↓
+M15
+Expectation
+ ↓
+M16
+Variance
+ ↓
+M17
+Covariance &amp; Correlation</pre></div>
+<p>The next chapter moves from one random variable to <strong>multiple random variables together</strong>, which is where joint, marginal and conditional distributions become necessary.</p>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="m12-independence.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← M12 — Independence</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">📐 Math Index</span>
+      </a>
+      <a href="m14-joint-marginal-conditional.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: M14 — Joint & Marginal Distributions →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search math modules, formulas, proofs, theorems…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">📐</span>Math Hub</a>
+  <a href="m13-random-variables-pmf-pdf-cdf.html" class="mobile-nav-btn active"><span class="icon">📖</span>MATH-M13</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

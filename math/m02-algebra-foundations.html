@@ -1,0 +1,2004 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="MATH-M02: Algebra Foundations for AI/ML — Math Companion for AI & Machine Learning. Linear Equations, Quadratic Forms, Polynomial Expansions, and Inequalities in Optimization">
+<title>MATH-M02: Algebra Foundations for AI/ML | Math Companion 📐 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/math.css">
+</head>
+<body class="math-module track-1">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">📐</div>
+      <div class="brand-text"><span class="main">Math Companion</span><span class="sub">AI &amp; ML Deep Layer</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">MATH-M02: Algebra Foundations for AI/ML</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Foundations & Functions</div>
+  <a href="m01-mathematical-notation.html" class="sidebar-link"><span class="link-icon">📐</span>M01: Mathematical Notation, Symbols &amp; Summation</a>
+  <a href="m02-algebra-foundations.html" class="sidebar-link active"><span class="link-icon">📐</span>M02: Algebra Foundations for AI/ML</a>
+  <a href="m03-functions-graphs-logs.html" class="sidebar-link"><span class="link-icon">📐</span>M03: Functions, Graphs, Exponents &amp; Logarithms</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Linear Algebra & Vectors</div>
+  <a href="m04-vectors-and-components.html" class="sidebar-link"><span class="link-icon">⚡</span>M04: Vectors &amp; Components</a>
+  <a href="m05-norms-and-distance.html" class="sidebar-link"><span class="link-icon">⚡</span>M05: Norms, Distance &amp; Geometric Intuition</a>
+  <a href="m06-dot-product-and-orthogonality.html" class="sidebar-link"><span class="link-icon">⚡</span>M06: Dot Product, Inner Product &amp; Orthogonality</a>
+  <a href="m07-matrices-and-indexing.html" class="sidebar-link"><span class="link-icon">⚡</span>M07: Matrices, Dimensions &amp; Indexing</a>
+  <a href="m08-matrix-multiplication-transforms.html" class="sidebar-link"><span class="link-icon">⚡</span>M08: Matrix Multiplication &amp; Linear Transformations</a>
+  <a href="m09-linear-systems-least-squares.html" class="sidebar-link"><span class="link-icon">⚡</span>M09: Linear Systems, Inverses &amp; Least Squares</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Probability & Statistics</div>
+  <a href="m10-probability-foundations.html" class="sidebar-link"><span class="link-icon">🎲</span>M10: Probability Foundations</a>
+  <a href="m11-conditional-prob-bayes.html" class="sidebar-link"><span class="link-icon">🎲</span>M11: Conditional Probability, Bayes &amp; Total Probability</a>
+  <a href="m12-independence.html" class="sidebar-link"><span class="link-icon">🎲</span>M12: Independence &amp; Conditional Independence</a>
+  <a href="m13-random-variables-pmf-pdf-cdf.html" class="sidebar-link"><span class="link-icon">🎲</span>M13: Random Variables, PMF, PDF &amp; CDF</a>
+  <a href="m14-joint-marginal-conditional.html" class="sidebar-link"><span class="link-icon">🎲</span>M14: Joint, Marginal &amp; Conditional Distributions</a>
+  <a href="m15-expectation-expected-value.html" class="sidebar-link"><span class="link-icon">🎲</span>M15: Expectation &amp; Expected Value</a>
+  <a href="m16-variance-standard-deviation.html" class="sidebar-link"><span class="link-icon">🎲</span>M16: Variance &amp; Standard Deviation</a>
+  <a href="m17-covariance-and-correlation.html" class="sidebar-link"><span class="link-icon">🎲</span>M17: Covariance, Correlation &amp; Statistical Relationships</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Calculus & Optimization</div>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>M18–M24: Derivatives, Gradients & SGD (Upcoming)</span>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">MATH-M02 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why This Lesson Exists</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. One-Minute Intuition</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. The Three Most Important Algebra Skills</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Terms, Factors and Expressions</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Like Terms</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Distributive Law</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Common Algebraic Identities</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Why Signs Matter in ML</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Fractions</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Dividing by a Fraction</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Exponents</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Negative Exponents</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Square Roots and Fractional Powers</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Absolute Value</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Equation Solving</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Solving a Linear Equation in ML Form</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Rearranging a Formula</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Inequalities</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Why Inequalities Matter in AI/ML</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Ratios</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Proportion</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Cross-Multiplication</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Ratios in Confusion-Matrix Metrics</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Functions as Algebraic Objects</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Function Composition</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Linear vs Affine Expressions</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Polynomial Expression</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Factoring</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Quadratic Equations</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Completing the Square</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Substitution as a Core ML Skill</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Order of Operations</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Worked Example A — Rearranging a Model</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Worked Example B — Simplifying a Loss</a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Worked Example C — Expand a Squared Error</a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Worked Example D — Derivation Setup</a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Worked Example E — Inequality Direction</a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Worked Example F — Composition</a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Hinglish Teacher Explanation</a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. AI/ML Connection Map</a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Common Mistakes</a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Formula Card — Algebraic Square</a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Formula Card — Distributive Law</a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Formula Card — Quadratic Formula</a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. Active Recall</a>
+      <a href="#s-46" class="sidebar-link"><span class="link-icon">📌</span>46. Practice Set</a>
+      <a href="#s-47" class="sidebar-link"><span class="link-icon">📌</span>47. Exam Connection</a>
+      <a href="#s-48" class="sidebar-link"><span class="link-icon">📌</span>48. Mastery Gate</a>
+      <a href="#s-49" class="sidebar-link"><span class="link-icon">📌</span>49. Next Dependency</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Math Companion</a>
+        <span>/</span>
+        <span>MATH-M02</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-1">Track 1: Foundations & Functions</span></div>
+      <h1 class="chapter-title">Algebra Foundations for AI/ML</h1>
+      <p class="chapter-desc">Linear Equations, Quadratic Forms, Polynomial Expansions, and Inequalities in Optimization</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~30 min read</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">MATH-INT</span> <span class="chapter-meta-item uni-badge">MATH-CALC</span> <span class="chapter-meta-item uni-badge">MATH-GEO</span>
+      </div>
+
+      <div class="math-meta-grid">
+        <div class="math-meta-box">
+          <div class="math-meta-label">Prerequisites</div>
+          <div class="math-meta-value">M01 Mathematical Notation</div>
+        </div>
+        <div class="math-meta-box">
+          <div class="math-meta-label">Feeds Directly Into</div>
+          <div class="math-meta-value">M03 Functions, M04 Vectors, M09 Linear Systems</div>
+        </div>
+        <div class="math-meta-box" style="grid-column: 1 / -1;">
+          <div class="math-meta-label">AI / Machine Learning Connections</div>
+          <div class="math-meta-value">Linear decision boundaries $w^Tx+b=0$, Quadratic loss bowls, Polynomial feature expansion, Constraint sets</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="math-preamble-card"><h1>MATH-M02 — Algebra Foundations for AI/ML</h1>
+<blockquote>
+<p><strong>Math depth:</strong> <code>MATH-INT</code>, <code>MATH-CALC</code><br />
+<strong>Prerequisite:</strong> MATH-M01<br />
+<strong>Feeds into:</strong> M03, M04, M07, M08, M09, M18–M24<br />
+<strong>AI/ML connections:</strong> model equations, loss functions, gradient updates, matrix expressions, regularization, probability manipulation</p>
+</blockquote>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in MATH-M02 (49 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why This Lesson Exists</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">One-Minute Intuition</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">The Three Most Important Algebra Skills</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Terms, Factors and Expressions</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Like Terms</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Distributive Law</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Common Algebraic Identities</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Why Signs Matter in ML</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Fractions</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Dividing by a Fraction</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Exponents</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Negative Exponents</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Square Roots and Fractional Powers</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Absolute Value</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Equation Solving</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Solving a Linear Equation in ML Form</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Rearranging a Formula</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Inequalities</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Why Inequalities Matter in AI/ML</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Ratios</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Proportion</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Cross-Multiplication</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Ratios in Confusion-Matrix Metrics</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Functions as Algebraic Objects</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Function Composition</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Linear vs Affine Expressions</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Polynomial Expression</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Factoring</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Quadratic Equations</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Completing the Square</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Substitution as a Core ML Skill</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Order of Operations</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Worked Example A — Rearranging a Model</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Worked Example B — Simplifying a Loss</span></a></li>
+        <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Worked Example C — Expand a Squared Error</span></a></li>
+        <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Worked Example D — Derivation Setup</span></a></li>
+        <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Worked Example E — Inequality Direction</span></a></li>
+        <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Worked Example F — Composition</span></a></li>
+        <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Hinglish Teacher Explanation</span></a></li>
+        <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">AI/ML Connection Map</span></a></li>
+        <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Common Mistakes</span></a></li>
+        <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Formula Card — Algebraic Square</span></a></li>
+        <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Formula Card — Distributive Law</span></a></li>
+        <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Formula Card — Quadratic Formula</span></a></li>
+        <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">Active Recall</span></a></li>
+        <li class="toc-item"><a href="#s-46"><span class="toc-num">46</span><span class="toc-name">Practice Set</span></a></li>
+        <li class="toc-item"><a href="#s-47"><span class="toc-num">47</span><span class="toc-name">Exam Connection</span></a></li>
+        <li class="toc-item"><a href="#s-48"><span class="toc-num">48</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-49"><span class="toc-num">49</span><span class="toc-name">Next Dependency</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">Why This Lesson Exists</h2>
+      </div>
+      <div class="section-body">
+        <p>Before vectors, matrices and calculus become comfortable, the underlying algebra must be automatic.</p>
+<p>A large part of AI/ML mathematics is not “advanced mathematics” in isolation. It is the ability to:</p>
+<div class="ascii-box"><pre>read an expression
+→ rearrange it
+→ substitute values
+→ simplify it
+→ compare equivalent forms
+→ solve for an unknown</pre></div>
+<p>For example:</p>
+<div class="formula-math">\[
+w^Tx+b=\hat y
+\]</div>
+<p>later becomes:</p>
+<div class="formula-math">\[
+w^Tx=\hat y-b
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+w^Tx-y
+\]</div>
+<p>may become part of a loss derivative.</p>
+<p>If basic algebra is slow, advanced ML mathematics feels much harder than it actually is.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">One-Minute Intuition</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Mental Model</div>
+
+School algebra mein hum $y = mx + c$ seekhte the jahan ek straight line banti thi.
+AI/ML mein bas itna badalta hai ki $m$ ek single number nahi balki weights ka vector $w$ ban jata hai, aur $x$ features ka vector:
+$f(x) = w_1 x_1 + w_2 x_2 + \dots + w_d x_d + b$.
+Jab $f(x) = 0$ set karte hain, toh 2D mein ek line, 3D mein ek plane, aur $d$-D space mein ek **hyperplane** ban jata hai jo do classes ko alag karta hai!
+
+</div>
+
+<p>Algebra is the language of <strong>relationships between quantities</strong>.</p>
+<p>Arithmetic asks:</p>
+<blockquote>
+<p>What is \(3+5\)?</p>
+</blockquote>
+<p>Algebra asks:</p>
+<blockquote>
+<p>What happens when an unknown quantity \(x\) is added, multiplied, squared or transformed?</p>
+</blockquote>
+<p>AI/ML constantly manipulates unknown parameters.</p>
+<div class="ascii-box"><pre>input
++
+parameters
+→
+prediction
+→
+error
+→
+loss
+→
+gradient
+→
+updated parameters</pre></div>
+<p>Algebra lets us follow that chain.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">The Three Most Important Algebra Skills</h2>
+      </div>
+      <div class="section-body">
+        <p>For AI/ML, become very comfortable with:</p>
+<h3>Skill A — Equivalent expressions</h3>
+<div class="formula-math">\[
+2(x+3)=2x+6
+\]</div>
+<h3>Skill B — Solving equations</h3>
+<div class="formula-math">\[
+3x+2=11
+\]</div>
+<h3>Skill C — Substitution</h3>
+<p>If:</p>
+<div class="formula-math">\[
+x=4,\quad w=2,\quad b=1
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+wx+b=2(4)+1=9.
+\]</div>
+<p>These three skills appear throughout the course.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Terms, Factors and Expressions</h2>
+      </div>
+      <div class="section-body">
+        <p>Consider:</p>
+<div class="formula-math">\[
+3x^2+5x-7.
+\]</div>
+<p>The terms are:</p>
+<div class="formula-math">\[
+3x^2,\quad 5x,\quad -7.
+\]</div>
+<p>In:</p>
+<div class="formula-math">\[
+3x^2
+\]</div>
+<p>the coefficient is \(3\), and \(x^2\) is the variable factor.</p>
+<p>An <strong>expression</strong> does not need an equality sign.</p>
+<p>Example:</p>
+<div class="formula-math">\[
+3x+4.
+\]</div>
+<p>An <strong>equation</strong> contains equality:</p>
+<div class="formula-math">\[
+3x+4=10.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Like Terms</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph LR
+    A["Linear Form: w^T x + b = 0"] --> B["Flat Hyperplane Decision Boundary"]
+    C["Quadratic Form: x^T A x"] --> D["Convex Loss Bowl (MSE Landscape)"]
+    E["Polynomial Expansion: [x, x^2, ...]"] --> F["Nonlinear Curve Fitting"]
+    style A fill:#1e293b,stroke:#38bdf8,color:#f8fafc
+    style C fill:#1e293b,stroke:#34d399,color:#f8fafc
+    style E fill:#1e293b,stroke:#fbbf24,color:#f8fafc
+</pre></div>
+<p>Like terms have the same variable part.</p>
+<div class="formula-math">\[
+3x+5x=8x.
+\]</div>
+<p>But:</p>
+<div class="formula-math">\[
+3x+5x^2
+\]</div>
+<p>cannot be combined into a single \(x\)-term because \(x\) and \(x^2\) are different powers.</p>
+<p>Similarly:</p>
+<div class="formula-math">\[
+2x_1+5x_2
+\]</div>
+<p>are not normally combined because they refer to different components.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Distributive Law</h2>
+      </div>
+      <div class="section-body">
+        <div class="formula-math">\[
+\boxed{
+a(b+c)=ab+ac
+}
+\]</div>
+<p>Example:</p>
+<div class="formula-math">\[
+3(x+4)=3x+12.
+\]</div>
+<p>Reverse direction:</p>
+<div class="formula-math">\[
+3x+12=3(x+4).
+\]</div>
+<p>This is called factoring.</p>
+<h3>ML connection</h3>
+<p>When simplifying objectives, expanding or factoring terms often makes differentiation easier.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Common Algebraic Identities</h2>
+      </div>
+      <div class="section-body">
+        <p>Memorize these.</p>
+<h2>Square of a sum</h2>
+<div class="formula-math">\[
+\boxed{
+(a+b)^2=a^2+2ab+b^2
+}
+\]</div>
+<h2>Square of a difference</h2>
+<div class="formula-math">\[
+\boxed{
+(a-b)^2=a^2-2ab+b^2
+}
+\]</div>
+<h2>Difference of squares</h2>
+<div class="formula-math">\[
+\boxed{
+a^2-b^2=(a-b)(a+b)
+}
+\]</div>
+<p>These appear in squared loss, variance derivations and optimization algebra.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">Why Signs Matter in ML</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+y=5,\quad \hat y=7.
+\]</div>
+<p>Error:</p>
+<div class="formula-math">\[
+y-\hat y=5-7=-2.
+\]</div>
+<p>Squared error:</p>
+<div class="formula-math">\[
+(-2)^2=4.
+\]</div>
+<p>If you accidentally change:</p>
+<div class="formula-math">\[
+y-\hat y
+\]</div>
+<p>into:</p>
+<div class="formula-math">\[
+\hat y-y,
+\]</div>
+<p>the sign changes.</p>
+<p>For squared error, the final value remains the same:</p>
+<div class="formula-math">\[
+(-2)^2=(2)^2.
+\]</div>
+<p>But during differentiation, the sign can matter.</p>
+<p>Therefore:</p>
+<blockquote>
+<p>Never change an expression merely because two forms “look similar.”</p>
+</blockquote>
+<p>Prove equivalence algebraically.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Fractions</h2>
+      </div>
+      <div class="section-body">
+        <p>Basic rules:</p>
+<div class="formula-math">\[
+\frac ab+\frac cb
+=
+\frac{a+c}{b}
+\]</div>
+<p>when the denominator is the same.</p>
+<p>For different denominators:</p>
+<div class="formula-math">\[
+\frac ab+\frac cd
+=
+\frac{ad+bc}{bd}.
+\]</div>
+<p>Example:</p>
+<div class="formula-math">\[
+\frac12+\frac13
+=
+\frac{3+2}{6}
+=
+\frac56.
+\]</div>
+<h3>ML connection</h3>
+<p>Fractions are everywhere:</p>
+<div class="ascii-box"><pre>mean
+probability
+precision
+recall
+normalization
+gradient averages</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Dividing by a Fraction</h2>
+      </div>
+      <div class="section-body">
+        <div class="formula-math">\[
+\boxed{
+\frac{a}{b/c}
+=
+a\frac cb
+}
+\]</div>
+<p>because:</p>
+<div class="formula-math">\[
+\frac1{b/c}=\frac cb.
+\]</div>
+<p>Example:</p>
+<div class="formula-math">\[
+\frac{6}{1/2}=12.
+\]</div>
+<p>This becomes useful when manipulating normalization and probability expressions.</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+# Quadratic form calculation: Q(x) = x^T * A * x
+A = np.array([[3.0, 1.0],
+              [1.0, 2.0]])  # Positive definite matrix (bowl-shaped surface)
+x = np.array([1.5, -2.0])
+
+# Compute quadratic form
+q_val = x.T @ A @ x
+print(&quot;Vector x:&quot;, x)
+print(&quot;Matrix A:\n&quot;, A)
+print(&quot;Quadratic Value x^T A x:&quot;, q_val)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Exponents</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Exam Trap & Common Misconception</div>
+
+**Division by Zero / Unknown Parameter Trap:** When simplifying algebraic expressions in AI proofs (like solving for optimal $w$), never divide both sides by an expression without explicitly verifying it is non-zero! In matrix terms, never write $A^{-1}$ without stating $\det(A) \neq 0$.
+
+</div>
+
+<p>Rules:</p>
+<div class="formula-math">\[
+\boxed{
+a^m a^n=a^{m+n}
+}
+\]</div>
+<div class="formula-math">\[
+\boxed{
+\frac{a^m}{a^n}=a^{m-n}
+}
+\]</div>
+<div class="formula-math">\[
+\boxed{
+(a^m)^n=a^{mn}
+}
+\]</div>
+<div class="formula-math">\[
+\boxed{
+a^{-n}=\frac1{a^n}
+}
+\]</div>
+<div class="formula-math">\[
+\boxed{
+a^0=1
+}
+\]</div>
+<p>for nonzero \(a\).</p>
+<p>Example:</p>
+<div class="formula-math">\[
+x^3x^2=x^5.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Negative Exponents</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Exam Trap & Common Misconception</div>
+
+**Division by Zero / Unknown Parameter Trap:** When simplifying algebraic expressions in AI proofs (like solving for optimal $w$), never divide both sides by an expression without explicitly verifying it is non-zero! In matrix terms, never write $A^{-1}$ without stating $\det(A) \neq 0$.
+
+</div>
+
+<div class="formula-math">\[
+x^{-1}=\frac1x.
+\]</div>
+<div class="formula-math">\[
+x^{-2}=\frac1{x^2}.
+\]</div>
+<p>For example:</p>
+<div class="formula-math">\[
+e^{-z}=\frac1{e^z}.
+\]</div>
+<p>This is useful when reading the sigmoid:</p>
+<div class="formula-math">\[
+\sigma(z)=\frac1{1+e^{-z}}.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Square Roots and Fractional Powers</h2>
+      </div>
+      <div class="section-body">
+        <div class="formula-math">\[
+\sqrt{x}=x^{1/2}.
+\]</div>
+<div class="formula-math">\[
+\sqrt[3]{x}=x^{1/3}.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+x^{m/n}=\sqrt[n]{x^m}
+\]</div>
+<p>under the appropriate real-number conditions.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Absolute Value</h2>
+      </div>
+      <div class="section-body">
+        <div class="formula-math">\[
+\boxed{|x|}
+\]</div>
+<p>means distance from zero on the real number line.</p>
+<p>Thus:</p>
+<div class="formula-math">\[
+|5|=5
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+|-5|=5.
+\]</div>
+<p>Piecewise:</p>
+<div class="formula-math">\[
+|x|=
+\begin{cases}
+x,&x\ge0\\
+-x,&x\lt 0
+\end{cases}
+\]</div>
+<h3>AI/ML connection</h3>
+<p>L1 regularization:</p>
+<div class="formula-math">\[
+\|w\|_1=\sum_j|w_j|.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">Equation Solving</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+3x+5=17.
+\]</div>
+<p>Subtract 5:</p>
+<div class="formula-math">\[
+3x=12.
+\]</div>
+<p>Divide by 3:</p>
+<div class="formula-math">\[
+\boxed{x=4}.
+\]</div>
+<h3>Golden rule</h3>
+<p>Whatever you do to one side of an equation, do the equivalent operation to the other side.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">Solving a Linear Equation in ML Form</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+wx+b=y.
+\]</div>
+<p>Solve for \(w\).</p>
+<p>Subtract \(b\):</p>
+<div class="formula-math">\[
+wx=y-b.
+\]</div>
+<p>Divide by \(x\), assuming \(x\ne0\):</p>
+<div class="formula-math">\[
+\boxed{
+w=\frac{y-b}{x}
+}.
+\]</div>
+<p>This is simple algebra, but the same habit scales to more complicated equations.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">Rearranging a Formula</h2>
+      </div>
+      <div class="section-body">
+        <p>Given:</p>
+<div class="formula-math">\[
+f=g+h
+\]</div>
+<p>solve for \(h\):</p>
+<div class="formula-math">\[
+\boxed{
+h=f-g
+}
+\]</div>
+<p>Given:</p>
+<div class="formula-math">\[
+f=g+h
+\]</div>
+<p>solve for \(g\):</p>
+<div class="formula-math">\[
+\boxed{
+g=f-h
+}
+\]</div>
+<p>This is the same algebra used to isolate variables in A*, linear regression and RL equations.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Inequalities</h2>
+      </div>
+      <div class="section-body">
+        <p>An inequality works much like an equation, except one important rule changes.</p>
+<p>If multiplying or dividing by a <strong>negative</strong> number, reverse the inequality sign.</p>
+<p>Example:</p>
+<div class="formula-math">\[
+2x\lt 6.
+\]</div>
+<p>Divide by \(2\):</p>
+<div class="formula-math">\[
+x\lt 3.
+\]</div>
+<p>But:</p>
+<div class="formula-math">\[
+-2x\lt 6.
+\]</div>
+<p>Divide by \(-2\):</p>
+<div class="formula-math">\[
+\boxed{x\gt -3}.
+\]</div>
+<p>The direction changes.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">Why Inequalities Matter in AI/ML</h2>
+      </div>
+      <div class="section-body">
+        <p>Many theoretical conditions are inequalities.</p>
+<p>Examples:</p>
+<h3>A* admissibility</h3>
+<div class="formula-math">\[
+h(n)\le h^*(n).
+\]</div>
+<h3>Consistency</h3>
+<div class="formula-math">\[
+h(n)\le c(n,n')+h(n').
+\]</div>
+<h3>Regularization constraints</h3>
+<p>Parameter norm may be constrained:</p>
+<div class="formula-math">\[
+\|w\|_2\le C.
+\]</div>
+<h3>Probability</h3>
+<p>A valid probability satisfies:</p>
+<div class="formula-math">\[
+0\le P(A)\le1.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Ratios</h2>
+      </div>
+      <div class="section-body">
+        <p>A ratio compares quantities.</p>
+<p>Example:</p>
+<div class="formula-math">\[
+2:3.
+\]</div>
+<p>Equivalent fraction:</p>
+<div class="formula-math">\[
+\frac23.
+\]</div>
+<p>Ratios matter in:</p>
+<div class="ascii-box"><pre>class frequencies
+feature scaling
+probability
+train/test splits
+precision/recall interpretation</pre></div>
+<p>Always determine which quantity belongs in the numerator and denominator.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">Proportion</h2>
+      </div>
+      <div class="section-body">
+        <p>If:</p>
+<div class="formula-math">\[
+\frac{x}{y}=0.2
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+x=0.2y.
+\]</div>
+<p>This style of reasoning appears constantly when interpreting rates such as:</p>
+<div class="formula-math">\[
+Recall=\frac{TP}{TP+FN}.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">Cross-Multiplication</h2>
+      </div>
+      <div class="section-body">
+        <p>Given:</p>
+<div class="formula-math">\[
+\frac ab=\frac cd,
+\]</div>
+<p>assuming denominators are nonzero:</p>
+<div class="formula-math">\[
+\boxed{ad=bc}.
+\]</div>
+<p>Example:</p>
+<div class="formula-math">\[
+\frac{x}{5}=\frac{6}{10}.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+10x=30.
+\]</div>
+<p>So:</p>
+<div class="formula-math">\[
+x=3.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">Ratios in Confusion-Matrix Metrics</h2>
+      </div>
+      <div class="section-body">
+        <p>Consider:</p>
+<div class="formula-math">\[
+Precision=\frac{TP}{TP+FP}.
+\]</div>
+<p>The denominator is <strong>not</strong> all observations.</p>
+<p>It is:</p>
+<div class="formula-math">\[
+TP+FP
+\]</div>
+<p>because the question is:</p>
+<blockquote>
+<p>Among predicted positives, how many are correct?</p>
+</blockquote>
+<p>Similarly:</p>
+<div class="formula-math">\[
+Recall=\frac{TP}{TP+FN}.
+\]</div>
+<p>The denominator is:</p>
+<div class="formula-math">\[
+TP+FN
+\]</div>
+<p>because the question is:</p>
+<blockquote>
+<p>Among actual positives, how many were found?</p>
+</blockquote>
+<p>Algebra alone cannot decide the denominator.</p>
+<p>You must understand the meaning of the quantity.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">Functions as Algebraic Objects</h2>
+      </div>
+      <div class="section-body">
+        <p>Given:</p>
+<div class="formula-math">\[
+f(x)=2x+3.
+\]</div>
+<p>Substitute \(x=4\):</p>
+<div class="formula-math">\[
+f(4)=11.
+\]</div>
+<p>Given another function:</p>
+<div class="formula-math">\[
+g(x)=x^2.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+f(g(x))
+=
+2x^2+3.
+\]</div>
+<p>This composition idea becomes important in neural networks:</p>
+<div class="ascii-box"><pre>layer 1
+→ function
+→ layer 2
+→ function
+→ output</pre></div>
+<p>An MLP is essentially a composition of parameterized functions and nonlinearities.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">Function Composition</h2>
+      </div>
+      <div class="section-body">
+        <div class="formula-math">\[
+\boxed{
+(f\circ g)(x)=f(g(x))
+}
+\]</div>
+<p>Example:</p>
+<div class="formula-math">\[
+g(x)=x+1
+\]</div>
+<div class="formula-math">\[
+f(x)=2x.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+(f\circ g)(x)
+=
+f(x+1)
+=
+2(x+1)
+=
+2x+2.
+\]</div>
+<p>But:</p>
+<div class="formula-math">\[
+(g\circ f)(x)
+=
+g(2x)
+=
+2x+1.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+f(g(x))\ne g(f(x))
+\]</div>
+<p>in general.</p>
+<h3>ML connection</h3>
+<p>The order of neural-network layers matters.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">Linear vs Affine Expressions</h2>
+      </div>
+      <div class="section-body">
+        <p>A common expression is:</p>
+<div class="formula-math">\[
+wx+b.
+\]</div>
+<p>The exact mathematical terminology is:</p>
+<blockquote>
+<p>affine in \(x\) when \(b\) is included.</p>
+</blockquote>
+<p>The simpler linear form through the origin is:</p>
+<div class="formula-math">\[
+wx.
+\]</div>
+<p>In many ML contexts people informally call:</p>
+<div class="formula-math">\[
+wx+b
+\]</div>
+<p>a linear model.</p>
+<p>For mathematical precision:</p>
+<div class="ascii-box"><pre>wx
+→ linear map in x
+
+wx+b
+→ affine map in x</pre></div>
+<p>This distinction becomes useful later with matrix transformations and neural networks.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">Polynomial Expression</h2>
+      </div>
+      <div class="section-body">
+        <p>A polynomial contains nonnegative integer powers of a variable.</p>
+<p>Example:</p>
+<div class="formula-math">\[
+f(x)=3x^4-2x^2+x+5.
+\]</div>
+<p>A higher-degree polynomial is more flexible as a function class than a simple line.</p>
+<p>This connects directly to overfitting:</p>
+<div class="ascii-box"><pre>higher flexibility
+→ can fit more complex patterns
+→ may fit noise
+→ potential overfitting</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">Factoring</h2>
+      </div>
+      <div class="section-body">
+        <p>Example:</p>
+<div class="formula-math">\[
+x^2+5x+6.
+\]</div>
+<p>Find two numbers whose product is 6 and sum is 5:</p>
+<div class="formula-math">\[
+2,\ 3.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+x^2+5x+6=(x+2)(x+3)
+}
+\]</div>
+<p>Factoring is useful in algebraic simplification and solving equations.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">Quadratic Equations</h2>
+      </div>
+      <div class="section-body">
+        <p>General:</p>
+<div class="formula-math">\[
+ax^2+bx+c=0.
+\]</div>
+<p>Quadratic formula:</p>
+<div class="formula-math">\[
+\boxed{
+x=
+\frac{-b\pm\sqrt{b^2-4ac}}{2a}
+}
+\]</div>
+<p>The discriminant is:</p>
+<div class="formula-math">\[
+\boxed{
+\Delta=b^2-4ac.
+}
+\]</div>
+<p>It determines the type of real roots:</p>
+<div class="ascii-box"><pre>Δ &gt; 0 → two distinct real roots
+Δ = 0 → one repeated real root
+Δ &lt; 0 → no real roots</pre></div>
+<p>This is not a central AI/ML formula, but understanding quadratic behaviour helps when interpreting optimization and loss curves.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">Completing the Square</h2>
+      </div>
+      <div class="section-body">
+        <p>A quadratic can be rewritten in vertex form.</p>
+<p>Example:</p>
+<div class="formula-math">\[
+x^2+4x+3.
+\]</div>
+<p>Add/subtract 4:</p>
+<div class="formula-math">\[
+x^2+4x+4-1
+\]</div>
+<div class="formula-math">\[
+=(x+2)^2-1.
+\]</div>
+<p>The minimum occurs at:</p>
+<div class="formula-math">\[
+x=-2.
+\]</div>
+<p>This is an intuitive bridge to optimization:</p>
+<div class="ascii-box"><pre>objective
+→ shape
+→ minimum
+→ parameter value</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">Substitution as a Core ML Skill</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+\hat y=2x+1
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+x=3.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\hat y=2(3)+1=7.
+\]</div>
+<p>Now suppose:</p>
+<div class="formula-math">\[
+L=(y-\hat y)^2
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+y=10.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+L=(10-7)^2=9.
+\]</div>
+<p>The chain is:</p>
+<div class="ascii-box"><pre>x=3
+↓
+prediction=7
+↓
+target=10
+↓
+error=3
+↓
+loss=9</pre></div>
+<p>This is exactly the computational pattern behind many exam numericals.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">Order of Operations</h2>
+      </div>
+      <div class="section-body">
+        <p>Use:</p>
+<div class="ascii-box"><pre>Parentheses
+Exponents
+Multiplication / Division
+Addition / Subtraction</pre></div>
+<p>Example:</p>
+<div class="formula-math">\[
+2+3(4)=14.
+\]</div>
+<p>Not:</p>
+<div class="formula-math">\[
+20.
+\]</div>
+<p>For ML expressions, parentheses are often essential:</p>
+<div class="formula-math">\[
+\frac12(y-\hat y)^2
+\]</div>
+<p>means:</p>
+<div class="ascii-box"><pre>difference
+→ square
+→ multiply by 1/2</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Worked Example A — Rearranging a Model</h2>
+      </div>
+      <div class="section-body">
+        <p>Given:</p>
+<div class="formula-math">\[
+\hat y=3x+2.
+\]</div>
+<p>Find \(x\) in terms of \(\hat y\).</p>
+<p>Subtract 2:</p>
+<div class="formula-math">\[
+\hat y-2=3x.
+\]</div>
+<p>Divide by 3:</p>
+<div class="formula-math">\[
+\boxed{
+x=\frac{\hat y-2}{3}
+}
+\]</div>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+# Quadratic form calculation: Q(x) = x^T * A * x
+A = np.array([[3.0, 1.0],
+              [1.0, 2.0]])  # Positive definite matrix (bowl-shaped surface)
+x = np.array([1.5, -2.0])
+
+# Compute quadratic form
+q_val = x.T @ A @ x
+print(&quot;Vector x:&quot;, x)
+print(&quot;Matrix A:\n&quot;, A)
+print(&quot;Quadratic Value x^T A x:&quot;, q_val)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Worked Example B — Simplifying a Loss</h2>
+      </div>
+      <div class="section-body">
+        <p>Given:</p>
+<div class="formula-math">\[
+L=(y-(wx+b))^2.
+\]</div>
+<p>First remove the nested subtraction:</p>
+<div class="formula-math">\[
+y-wx-b.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+L=(y-wx-b)^2
+}
+\]</div>
+<p>Both forms are equivalent.</p>
+<p>The first is often easier for conceptual interpretation.</p>
+<p>The second may be convenient for expansion.</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+# Quadratic form calculation: Q(x) = x^T * A * x
+A = np.array([[3.0, 1.0],
+              [1.0, 2.0]])  # Positive definite matrix (bowl-shaped surface)
+x = np.array([1.5, -2.0])
+
+# Compute quadratic form
+q_val = x.T @ A @ x
+print(&quot;Vector x:&quot;, x)
+print(&quot;Matrix A:\n&quot;, A)
+print(&quot;Quadratic Value x^T A x:&quot;, q_val)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-35" class="section-block">
+      <div class="section-header">
+        <span class="section-num">35</span>
+        <h2 class="section-heading">Worked Example C — Expand a Squared Error</h2>
+      </div>
+      <div class="section-body">
+        <div class="formula-math">\[
+L=(y-\hat y)^2.
+\]</div>
+<p>Use:</p>
+<div class="formula-math">\[
+(a-b)^2=a^2-2ab+b^2.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+L=y^2-2y\hat y+\hat y^2
+}
+\]</div>
+<p>This expansion is useful in derivations.</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+# Quadratic form calculation: Q(x) = x^T * A * x
+A = np.array([[3.0, 1.0],
+              [1.0, 2.0]])  # Positive definite matrix (bowl-shaped surface)
+x = np.array([1.5, -2.0])
+
+# Compute quadratic form
+q_val = x.T @ A @ x
+print(&quot;Vector x:&quot;, x)
+print(&quot;Matrix A:\n&quot;, A)
+print(&quot;Quadratic Value x^T A x:&quot;, q_val)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-36" class="section-block">
+      <div class="section-header">
+        <span class="section-num">36</span>
+        <h2 class="section-heading">Worked Example D — Derivation Setup</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+J(w)=\sum_i(y_i-wx_i)^2.
+\]</div>
+<p>Expand each term:</p>
+<div class="formula-math">\[
+(y_i-wx_i)^2
+=
+y_i^2-2y_iwx_i+w^2x_i^2.
+\]</div>
+<p>Thus:</p>
+<div class="formula-math">\[
+J(w)
+=
+\sum_i y_i^2
+-
+2w\sum_i y_ix_i
++
+w^2\sum_i x_i^2.
+\]</div>
+<p>The important lesson is not yet the final derivative.</p>
+<p>It is learning how to transform a complicated objective into simpler algebraic pieces.</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+# Quadratic form calculation: Q(x) = x^T * A * x
+A = np.array([[3.0, 1.0],
+              [1.0, 2.0]])  # Positive definite matrix (bowl-shaped surface)
+x = np.array([1.5, -2.0])
+
+# Compute quadratic form
+q_val = x.T @ A @ x
+print(&quot;Vector x:&quot;, x)
+print(&quot;Matrix A:\n&quot;, A)
+print(&quot;Quadratic Value x^T A x:&quot;, q_val)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-37" class="section-block">
+      <div class="section-header">
+        <span class="section-num">37</span>
+        <h2 class="section-heading">Worked Example E — Inequality Direction</h2>
+      </div>
+      <div class="section-body">
+        <p>Solve:</p>
+<div class="formula-math">\[
+-3x+6\gt 0.
+\]</div>
+<p>Subtract 6:</p>
+<div class="formula-math">\[
+-3x\gt -6.
+\]</div>
+<p>Divide by \(-3\), reversing the sign:</p>
+<div class="formula-math">\[
+\boxed{x\lt 2}.
+\]</div>
+<h3>Trap</h3>
+<p>Writing \(x\gt 2\) is incorrect.</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+# Quadratic form calculation: Q(x) = x^T * A * x
+A = np.array([[3.0, 1.0],
+              [1.0, 2.0]])  # Positive definite matrix (bowl-shaped surface)
+x = np.array([1.5, -2.0])
+
+# Compute quadratic form
+q_val = x.T @ A @ x
+print(&quot;Vector x:&quot;, x)
+print(&quot;Matrix A:\n&quot;, A)
+print(&quot;Quadratic Value x^T A x:&quot;, q_val)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-38" class="section-block">
+      <div class="section-header">
+        <span class="section-num">38</span>
+        <h2 class="section-heading">Worked Example F — Composition</h2>
+      </div>
+      <div class="section-body">
+        <p>Let:</p>
+<div class="formula-math">\[
+f(x)=2x+1
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+g(x)=x^2.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+f(g(x))
+=
+2x^2+1.
+\]</div>
+<p>But:</p>
+<div class="formula-math">\[
+g(f(x))
+=
+(2x+1)^2.
+\]</div>
+<p>These are generally different.</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+# Quadratic form calculation: Q(x) = x^T * A * x
+A = np.array([[3.0, 1.0],
+              [1.0, 2.0]])  # Positive definite matrix (bowl-shaped surface)
+x = np.array([1.5, -2.0])
+
+# Compute quadratic form
+q_val = x.T @ A @ x
+print(&quot;Vector x:&quot;, x)
+print(&quot;Matrix A:\n&quot;, A)
+print(&quot;Quadratic Value x^T A x:&quot;, q_val)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-39" class="section-block">
+      <div class="section-header">
+        <span class="section-num">39</span>
+        <h2 class="section-heading">Hinglish Teacher Explanation</h2>
+      </div>
+      <div class="section-body">
+        <p>Algebra ko AI/ML mein aap <strong>model ko manipulate karne ki language</strong> samjho.</p>
+<p>Agar model hai:</p>
+<div class="formula-math">\[
+\hat y=wx+b,
+\]</div>
+<p>toh:</p>
+<ul>
+<li>\(x\) input hai,</li>
+<li>\(w\) weight hai,</li>
+<li>\(b\) bias/intercept hai,</li>
+<li>\(\hat y\) prediction hai.</li>
+</ul>
+<p>Ab agar teacher bole:</p>
+<blockquote>
+<p>“\(w\) ko isolate karo.”</p>
+</blockquote>
+<p>Aapko simply:</p>
+<div class="formula-math">\[
+\hat y=wx+b
+\]</div>
+<p>se:</p>
+<div class="formula-math">\[
+\hat y-b=wx
+\]</div>
+<p>aur:</p>
+<div class="formula-math">\[
+w=\frac{\hat y-b}{x}
+\]</div>
+<p>tak jaana hai.</p>
+<p>Isi tarah loss:</p>
+<div class="formula-math">\[
+(y-\hat y)^2
+\]</div>
+<p>mein pehle error, phir square.</p>
+<p>Matlab algebra ka main kaam hai:</p>
+<blockquote>
+<p><strong>formula ko todna, rearrange karna, substitute karna aur simplify karna.</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-40" class="section-block">
+      <div class="section-header">
+        <span class="section-num">40</span>
+        <h2 class="section-heading">AI/ML Connection Map</h2>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Algebra skill</th>
+<th>AI/ML use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>substitution</td>
+<td>prediction/loss numericals</td>
+</tr>
+<tr>
+<td>rearranging equations</td>
+<td>decision boundaries, updates</td>
+</tr>
+<tr>
+<td>fractions</td>
+<td>probability and evaluation metrics</td>
+</tr>
+<tr>
+<td>exponents</td>
+<td>sigmoid, softmax</td>
+</tr>
+<tr>
+<td>absolute value</td>
+<td>MAE, L1</td>
+</tr>
+<tr>
+<td>squares</td>
+<td>MSE, L2</td>
+</tr>
+<tr>
+<td>composition</td>
+<td>neural-network layers</td>
+</tr>
+<tr>
+<td>inequalities</td>
+<td>A* conditions, constraints</td>
+</tr>
+<tr>
+<td>polynomials</td>
+<td>model flexibility</td>
+</tr>
+<tr>
+<td>factoring/expansion</td>
+<td>derivations</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-41" class="section-block">
+      <div class="section-header">
+        <span class="section-num">41</span>
+        <h2 class="section-heading">Common Mistakes</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Exam Trap & Common Misconception</div>
+
+**Division by Zero / Unknown Parameter Trap:** When simplifying algebraic expressions in AI proofs (like solving for optimal $w$), never divide both sides by an expression without explicitly verifying it is non-zero! In matrix terms, never write $A^{-1}$ without stating $\det(A) \neq 0$.
+
+</div>
+
+<h3>Mistake 1</h3>
+<div class="formula-math">\[
+(a+b)^2=a^2+b^2
+\]</div>
+<p>Wrong.</p>
+<p>Correct:</p>
+<div class="formula-math">\[
+(a+b)^2=a^2+2ab+b^2.
+\]</div>
+<h3>Mistake 2</h3>
+<p>Forgetting the sign reversal when dividing an inequality by a negative number.</p>
+<h3>Mistake 3</h3>
+<p>Treating:</p>
+<div class="formula-math">\[
+x^2+x
+\]</div>
+<p>as:</p>
+<div class="formula-math">\[
+2x^2.
+\]</div>
+<h3>Mistake 4</h3>
+<p>Removing parentheses incorrectly:</p>
+<div class="formula-math">\[
+-(a-b)\ne-a-b.
+\]</div>
+<p>Correct:</p>
+<div class="formula-math">\[
+-(a-b)=-a+b.
+\]</div>
+<h3>Mistake 5</h3>
+<p>Assuming:</p>
+<div class="formula-math">\[
+f(g(x))=g(f(x)).
+\]</div>
+<p>Not true in general.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-42" class="section-block">
+      <div class="section-header">
+        <span class="section-num">42</span>
+        <h2 class="section-heading">Formula Card — Algebraic Square</h2>
+      </div>
+      <div class="section-body">
+        <div class="formula-math">\[
+\boxed{
+(a-b)^2=a^2-2ab+b^2
+}
+\]</div>
+<h3>Why it matters</h3>
+<p>Squared losses appear everywhere in regression and neural-network training.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-43" class="section-block">
+      <div class="section-header">
+        <span class="section-num">43</span>
+        <h2 class="section-heading">Formula Card — Distributive Law</h2>
+      </div>
+      <div class="section-body">
+        <div class="formula-math">\[
+\boxed{
+a(b+c)=ab+ac
+}
+\]</div>
+<h3>Why it matters</h3>
+<p>Used when expanding objectives and derivatives.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-44" class="section-block">
+      <div class="section-header">
+        <span class="section-num">44</span>
+        <h2 class="section-heading">Formula Card — Quadratic Formula</h2>
+      </div>
+      <div class="section-body">
+        <div class="formula-math">\[
+\boxed{
+x=
+\frac{-b\pm\sqrt{b^2-4ac}}{2a}
+}
+\]</div>
+<h3>Trigger</h3>
+<p>Equation of the form:</p>
+<div class="formula-math">\[
+ax^2+bx+c=0.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-45" class="section-block">
+      <div class="section-header">
+        <span class="section-num">45</span>
+        <h2 class="section-heading">Active Recall</h2>
+      </div>
+      <div class="section-body">
+        <p>Close the file and answer:</p>
+<ol>
+<li>Difference between expression and equation?</li>
+<li>What are like terms?</li>
+<li>State the distributive law.</li>
+<li>Expand \((a-b)^2\).</li>
+<li>What happens to an inequality when divided by a negative number?</li>
+<li>What does \(x^{-1}\) mean?</li>
+<li>Why is \(f(g(x))\) not generally equal to \(g(f(x))\)?</li>
+<li>Distinguish \(wx\) from \(wx+b\).</li>
+<li>Why do squared and absolute errors behave differently?</li>
+<li>Why is algebra important before calculus?</li>
+</ol>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-46" class="section-block">
+      <div class="section-header">
+        <span class="section-num">46</span>
+        <h2 class="section-heading">Practice Set</h2>
+      </div>
+      <div class="section-body">
+        <h2>Foundation</h2>
+<h3>P-M02-01</h3>
+<p>Simplify:</p>
+<div class="formula-math">\[
+3x+5x-2.
+\]</div>
+<h3>P-M02-02</h3>
+<p>Expand:</p>
+<div class="formula-math">\[
+(x+4)^2.
+\]</div>
+<h3>P-M02-03</h3>
+<p>Factor:</p>
+<div class="formula-math">\[
+x^2+7x+12.
+\]</div>
+<h3>P-M02-04</h3>
+<p>Solve:</p>
+<div class="formula-math">\[
+4x-3=17.
+\]</div>
+<h3>P-M02-05</h3>
+<p>Solve:</p>
+<div class="formula-math">\[
+-2x+8\le0.
+\]</div>
+<h3>P-M02-06</h3>
+<p>Simplify:</p>
+<div class="formula-math">\[
+\frac12+\frac14.
+\]</div>
+<hr />
+<h2>AI/ML-style</h2>
+<h3>P-M02-07</h3>
+<p>Given:</p>
+<div class="formula-math">\[
+\hat y=2x+3,\quad x=5,
+\]</div>
+<p>find \(\hat y\).</p>
+<h3>P-M02-08</h3>
+<p>Given:</p>
+<div class="formula-math">\[
+y=10,\quad \hat y=7,
+\]</div>
+<p>calculate:</p>
+<div class="formula-math">\[
+(y-\hat y)^2.
+\]</div>
+<h3>P-M02-09</h3>
+<p>Expand:</p>
+<div class="formula-math">\[
+(y-wx-b)^2.
+\]</div>
+<h3>P-M02-10</h3>
+<p>Show algebraically that:</p>
+<div class="formula-math">\[
+2(x+3)=2x+6.
+\]</div>
+<h3>P-M02-11</h3>
+<p>If:</p>
+<div class="formula-math">\[
+\frac{x}{8}=\frac34,
+\]</div>
+<p>find \(x\).</p>
+<h3>P-M02-12</h3>
+<p>Let:</p>
+<div class="formula-math">\[
+f(x)=x+2,\quad g(x)=3x.
+\]</div>
+<p>Calculate both:</p>
+<div class="formula-math">\[
+f(g(x))
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+g(f(x)).
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-47" class="section-block">
+      <div class="section-header">
+        <span class="section-num">47</span>
+        <h2 class="section-heading">Exam Connection</h2>
+      </div>
+      <div class="section-body">
+        <p>M02 supports nearly every mathematical numerical in the course.</p>
+<p>Especially:</p>
+<div class="ascii-box"><pre>Linear Regression
+Logistic Regression
+Decision-tree metrics
+Ridge/Lasso
+Neural-network forward pass
+Backpropagation
+Q-learning
+Probability
+NLP weighting formulas</pre></div>
+<p>For a formula-heavy exam question, algebraic fluency often determines whether the final derivation is clean or error-prone.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-48" class="section-block">
+      <div class="section-header">
+        <span class="section-num">48</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <p>You are ready to move to M03 when you can:</p>
+<div class="ascii-box"><pre>simplify expressions
+expand/factor
+solve equations
+solve basic inequalities
+handle fractions
+handle powers
+substitute values
+rearrange formulas
+compose functions
+read nested expressions</pre></div>
+<p>without repeatedly stopping to reconstruct basic algebra.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-49" class="section-block">
+      <div class="section-header">
+        <span class="section-num">49</span>
+        <h2 class="section-heading">Next Dependency</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>M01
+Notation
+ ↓
+M02
+Algebra
+ ↓
+M03
+Functions, Graphs, Exponents &amp; Logarithms
+ ↓
+M04
+Vectors</pre></div>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="m01-mathematical-notation.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← M01 — Notation & Summation</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">📐 Math Index</span>
+      </a>
+      <a href="m03-functions-graphs-logs.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: M03 — Functions, Graphs & Logs →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search math modules, formulas, proofs, theorems…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">📐</span>Math Hub</a>
+  <a href="m02-algebra-foundations.html" class="mobile-nav-btn active"><span class="icon">📖</span>MATH-M02</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

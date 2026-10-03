@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="AI & Machine Learning Math Companion — Standalone mathematical depth layer for DSC-14 Artificial Intelligence and Machine Learning. Vectors, Matrices, Probability, and Calculus.">
+<title>Math Companion Hub 📐 | AI &amp; Machine Learning MiniBook | Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/math.css">
+<style>
+  .hub-hero {
+    text-align: center;
+    padding: var(--em-space-10) var(--em-space-4) var(--em-space-8);
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-border);
+    border-radius: var(--em-radius-lg);
+    margin-bottom: var(--em-space-8);
+    box-shadow: var(--sh-md);
+  }
+  .hub-badge-strip {
+    display: flex;
+    justify-content: center;
+    gap: var(--em-space-2);
+    flex-wrap: wrap;
+    margin-bottom: var(--em-space-4);
+  }
+  .hub-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 5vw, 3.6rem);
+    font-weight: 700;
+    color: var(--em-text);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--em-space-3);
+  }
+  .hub-subtitle {
+    font-size: 1.15rem;
+    color: var(--em-text-secondary);
+    max-width: 68ch;
+    margin: 0 auto var(--em-space-6);
+    line-height: 1.6;
+  }
+  .track-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: var(--em-space-8) 0 var(--em-space-4);
+    border-bottom: 2px solid var(--em-border);
+    padding-bottom: var(--em-space-3);
+  }
+  .track-section-title {
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: var(--em-text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .track-count-badge {
+    font-size: 0.80rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: var(--em-radius-full);
+    background: var(--em-surface-2);
+    color: var(--em-text-muted);
+  }
+</style>
+</head>
+<body class="math-hub">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">📐</div>
+      <div class="brand-text"><span class="main">Math Companion</span><span class="sub">AI &amp; ML Deep Layer</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Math Companion Hub</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link active"><span class="link-icon">📐</span>Math Companion Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Conceptual Book</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Examination Suite</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Foundations & Functions</div>
+  <a href="m01-mathematical-notation.html" class="sidebar-link"><span class="link-icon">📐</span>M01: Mathematical Notation, Symbols &amp; Summation</a>
+  <a href="m02-algebra-foundations.html" class="sidebar-link"><span class="link-icon">📐</span>M02: Algebra Foundations for AI/ML</a>
+  <a href="m03-functions-graphs-logs.html" class="sidebar-link"><span class="link-icon">📐</span>M03: Functions, Graphs, Exponents &amp; Logarithms</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Linear Algebra & Vectors</div>
+  <a href="m04-vectors-and-components.html" class="sidebar-link"><span class="link-icon">⚡</span>M04: Vectors &amp; Components</a>
+  <a href="m05-norms-and-distance.html" class="sidebar-link"><span class="link-icon">⚡</span>M05: Norms, Distance &amp; Geometric Intuition</a>
+  <a href="m06-dot-product-and-orthogonality.html" class="sidebar-link"><span class="link-icon">⚡</span>M06: Dot Product, Inner Product &amp; Orthogonality</a>
+  <a href="m07-matrices-and-indexing.html" class="sidebar-link"><span class="link-icon">⚡</span>M07: Matrices, Dimensions &amp; Indexing</a>
+  <a href="m08-matrix-multiplication-transforms.html" class="sidebar-link"><span class="link-icon">⚡</span>M08: Matrix Multiplication &amp; Linear Transformations</a>
+  <a href="m09-linear-systems-least-squares.html" class="sidebar-link"><span class="link-icon">⚡</span>M09: Linear Systems, Inverses &amp; Least Squares</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Probability & Statistics</div>
+  <a href="m10-probability-foundations.html" class="sidebar-link"><span class="link-icon">🎲</span>M10: Probability Foundations</a>
+  <a href="m11-conditional-prob-bayes.html" class="sidebar-link"><span class="link-icon">🎲</span>M11: Conditional Probability, Bayes &amp; Total Probability</a>
+  <a href="m12-independence.html" class="sidebar-link"><span class="link-icon">🎲</span>M12: Independence &amp; Conditional Independence</a>
+  <a href="m13-random-variables-pmf-pdf-cdf.html" class="sidebar-link"><span class="link-icon">🎲</span>M13: Random Variables, PMF, PDF &amp; CDF</a>
+  <a href="m14-joint-marginal-conditional.html" class="sidebar-link"><span class="link-icon">🎲</span>M14: Joint, Marginal &amp; Conditional Distributions</a>
+  <a href="m15-expectation-expected-value.html" class="sidebar-link"><span class="link-icon">🎲</span>M15: Expectation &amp; Expected Value</a>
+  <a href="m16-variance-standard-deviation.html" class="sidebar-link"><span class="link-icon">🎲</span>M16: Variance &amp; Standard Deviation</a>
+  <a href="m17-covariance-and-correlation.html" class="sidebar-link"><span class="link-icon">🎲</span>M17: Covariance, Correlation &amp; Statistical Relationships</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Calculus & Optimization</div>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>M18–M24: Derivatives, Gradients & SGD (Upcoming)</span>
+</div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- HUB HERO -->
+    <div class="hub-hero">
+      <div class="hub-badge-strip">
+        <span class="track-badge track-1">Track 1: Foundations</span>
+        <span class="track-badge track-2">Track 2: Linear Algebra</span>
+        <span class="track-badge track-3">Track 3: Probability</span>
+        <span class="track-badge track-4">Track 4: Calculus (Upcoming)</span>
+      </div>
+      <h1 class="hub-title">The Mathematical Engine of AI &amp; Machine Learning</h1>
+      <p class="hub-subtitle">
+        "Why does the formula work, and how do I calculate it myself?"<br>
+        A self-contained mathematical depth layer connecting vector geometry, linear transformations, probability distributions, and optimization directly to AI/ML algorithms.
+      </p>
+
+      <div class="chapter-meta" style="justify-content:center;">
+        <span class="chapter-meta-item">📚 17 Deep Modules</span>
+        <span class="chapter-meta-item">📌 776 Sections</span>
+        <span class="chapter-meta-item">🧮 2,300+ Verified Formulas</span>
+        <span class="chapter-meta-item uni-badge">🎓 DU B.Tech DSC-14</span>
+      </div>
+    </div>
+
+    <!-- METHODOLOGY BANNER -->
+    <div class="teacher-box">
+      <div class="teacher-box-title"><span>💡</span> The "Why Before Formula" Learning Rule</div>
+      <p>
+        AI/ML mein mathematics ko bina intuition ke ratna sabse badi galti hai.
+        Har formula ke peeche ek simple physical ya geometric idea hota hai:
+        <strong>Dot product</strong> ka matlab hai <em>alignment</em>, 
+        <strong>Matrix multiplication</strong> ka matlab hai <em>space transformation</em>, 
+        <strong>Bayes' Theorem</strong> ka matlab hai <em>evidence aane par belief update</em>, aur 
+        <strong>Normal Equation</strong> ka matlab hai <em>least squares projection</em>.
+        Math Companion aapko formulas se darna band karwayega aur unhe first-principles se derive karna sikhayega!
+      </p>
+    </div>
+
+    <!-- MASTER PREREQUISITE GRAPH -->
+    <div class="diagram-box">
+      <div style="font-weight:700; margin-bottom:12px; font-size:1.1rem; color:var(--em-text);">Master Mathematical Dependency Network</div>
+      <pre class="mermaid">
+graph TD
+    M01["M01: Notation & Summation"] --> M02["M02: Algebra Foundations"]
+    M01 --> M03["M03: Functions & Logs"]
+    M01 --> M04["M04: Vectors & Components"]
+    M01 --> M10["M10: Probability Foundations"]
+    
+    M04 --> M05["M05: Norms & Distance"]
+    M04 --> M06["M06: Dot Product & Orthogonality"]
+    M04 --> M07["M07: Matrices & Indexing"]
+    
+    M06 & M07 --> M08["M08: Matrix Multiplication & Transforms"]
+    M07 & M08 --> M09["M09: Linear Systems & Least Squares"]
+    
+    M10 --> M11["M11: Conditional Prob & Bayes"]
+    M10 --> M12["M12: Independence"]
+    M10 --> M13["M13: Random Variables (PMF/PDF/CDF)"]
+    M11 & M13 --> M14["M14: Joint & Marginal Distributions"]
+    M13 & M14 --> M15["M15: Expectation & Expected Value"]
+    M15 --> M16["M16: Variance & Std Deviation"]
+    M15 & M16 --> M17["M17: Covariance & Correlation"]
+
+    M09 --> ML1["Ch 18-19: Linear Regression & OLS"]
+    M03 & M06 --> ML2["Ch 20-21: Logistic Regression"]
+    M05 --> ML3["Ch 27-29: Ridge & Lasso Regularization"]
+    M11 & M12 --> ML4["Ch 16: Naive Bayes Classification"]
+    M16 --> ML5["Ch 17: Bias-Variance Decomposition"]
+
+    style M01 fill:#0369a1,stroke:#38bdf8,color:#ffffff
+    style M09 fill:#047857,stroke:#34d399,color:#ffffff
+    style M11 fill:#b45309,stroke:#fbbf24,color:#ffffff
+    style M17 fill:#b45309,stroke:#fbbf24,color:#ffffff
+      </pre>
+    </div>
+
+    <!-- TRACK 1 -->
+    <div class="track-section-header">
+      <div class="track-section-title">
+        <span class="track-badge track-1">Track 1</span>
+        <span>Foundations, Symbols &amp; Functions</span>
+      </div>
+      <span class="track-count-badge">3 Modules</span>
+    </div>
+    <div class="math-hub-grid">
+      
+      <a href="m01-mathematical-notation.html" class="math-module-card">
+        <div>
+          <div class="math-card-num"><span class="track-badge track-1">M01</span> • MATH-INT</div>
+          <div class="math-card-title">Mathematical Notation, Symbols &amp; Summation</div>
+          <div class="math-card-desc">Summation, Indexing, Greek Symbols, Inside-Out Reading, and Model Notation Fluency</div>
+        </div>
+        <div class="math-card-footer">
+          <span>⏱️ ~35 min read</span>
+          <span>Start Learning →</span>
+        </div>
+      </a>
+      <a href="m02-algebra-foundations.html" class="math-module-card">
+        <div>
+          <div class="math-card-num"><span class="track-badge track-1">M02</span> • MATH-INT</div>
+          <div class="math-card-title">Algebra Foundations for AI/ML</div>
+          <div class="math-card-desc">Linear Equations, Quadratic Forms, Polynomial Expansions, and Inequalities in Optimization</div>
+        </div>
+        <div class="math-card-footer">
+          <span>⏱️ ~30 min read</span>
+          <span>Start Learning →</span>
+        </div>
+      </a>
+      <a href="m03-functions-graphs-logs.html" class="math-module-card">
+        <div>
+          <div class="math-card-num"><span class="track-badge track-1">M03</span> • MATH-INT</div>
+          <div class="math-card-title">Functions, Graphs, Exponents &amp; Logarithms</div>
+          <div class="math-card-desc">Domains, Sigmoid / Logistic Curves, Softmax, Natural Logarithms, and Information Theory</div>
+        </div>
+        <div class="math-card-footer">
+          <span>⏱️ ~40 min read</span>
+          <span>Start Learning →</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- TRACK 2 -->
+    <div class="track-section-header">
+      <div class="track-section-title">
+        <span class="track-badge track-2">Track 2</span>
+        <span>Linear Algebra, Vector Spaces &amp; Geometry</span>
+      </div>
+      <span class="track-count-badge">6 Modules</span>
+    </div>
+    <div class="math-hub-grid">
+      
+      <a href="m04-vectors-and-components.html" class="math-module-card">
+        <div>
+          <div class="math-card-num"><span class="track-badge track-2">M04</span> • MATH-INT</div>
+          <div class="math-card-title">Vectors &amp; Components</div>
+          <div class="math-card-desc">Geometric Arrows, Feature Arrays, Vector Spaces, Linear Combinations, and Basis</div>
+        </div>
+        <div class="math-card-footer">
+          <span>⏱️ ~35 min read</span>
+          <span>Start Learning →</span>
+        </div>
+      </a>
+      <a href="m05-norms-and-distance.html" class="math-module-card">
+        <div>
+          <div class="math-card-num"><span class="track-badge track-2">M05</span> • MATH-INT</div>
+          <div class="math-card-title">Norms, Distance &amp; Geometric Intuition</div>
+          <div class="math-card-desc">L1 Manhattan, L2 Euclidean, L-infinity Norms, Unit Balls, and Distance Metrics</div>
+        </div>
+        <div class="math-card-footer">
+          <span>⏱️ ~35 min read</span>
+          <span>Start Learning →</span>
+        </div>
+      </a>
+      <a href="m06-dot-product-and-orthogonality.html" class="math-module-card">
+        <div>
+          <div class="math-card-num"><span class="track-badge track-2">M06</span> • MATH-INT</div>
+          <div class="math-card-title">Dot Product, Inner Product &amp; Orthogonality</div>
+          <div class="math-card-desc">Algebraic Sums, Geometric Cosine Projections, Orthogonality, and Cosine Similarity</div>
+        </div>
+        <div class="math-card-footer">
+          <span>⏱️ ~35 min read</span>
+          <span>Start Learning →</span>
+        </div>
+      </a>
+      <a href="m07-matrices-and-indexing.html" class="math-module-card">
+        <div>
+          <div class="math-card-num"><span class="track-badge track-2">M07</span> • MATH-INT</div>
+          <div class="math-card-title">Matrices, Dimensions &amp; Indexing</div>
+          <div class="math-card-desc">Design Matrices, Row vs Column Ordering, Transpose Properties, Symmetric &amp; Identity Matrices</div>
+        </div>
+        <div class="math-card-footer">
+          <span>⏱️ ~35 min read</span>
+          <span>Start Learning →</span>
+        </div>
+      </a>
+      <a href="m08-matrix-multiplication-transforms.html" class="math-module-card">
+        <div>
+          <div class="math-card-num"><span class="track-badge track-2">M08</span> • MATH-INT</div>
+          <div class="math-card-title">Matrix Multiplication &amp; Linear Transformations</div>
+          <div class="math-card-desc">Dot Product vs Column Combination View, Grid Shearing, Rotation, Non-Commutativity, and Neural Layers</div>
+        </div>
+        <div class="math-card-footer">
+          <span>⏱️ ~40 min read</span>
+          <span>Start Learning →</span>
+        </div>
+      </a>
+      <a href="m09-linear-systems-least-squares.html" class="math-module-card">
+        <div>
+          <div class="math-card-num"><span class="track-badge track-2">M09</span> • MATH-INT</div>
+          <div class="math-card-title">Linear Systems, Inverses &amp; Least Squares</div>
+          <div class="math-card-desc">Ax = b, Row vs Column Views, Determinants, Invertibility, Normal Equations, and OLS Geometry</div>
+        </div>
+        <div class="math-card-footer">
+          <span>⏱️ ~45 min read</span>
+          <span>Start Learning →</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- TRACK 3 -->
+    <div class="track-section-header">
+      <div class="track-section-title">
+        <span class="track-badge track-3">Track 3</span>
+        <span>Probability, Random Variables &amp; Statistics</span>
+      </div>
+      <span class="track-count-badge">8 Modules</span>
+    </div>
+    <div class="math-hub-grid">
+      
+      <a href="m10-probability-foundations.html" class="math-module-card">
+        <div>
+          <div class="math-card-num"><span class="track-badge track-3">M10</span> • MATH-INT</div>
+          <div class="math-card-title">Probability Foundations</div>
+          <div class="math-card-desc">Sample Spaces, Kolmogorov Axioms, Event Algebra, Inclusion-Exclusion, and Uncertainty</div>
+        </div>
+        <div class="math-card-footer">
+          <span>⏱️ ~35 min read</span>
+          <span>Start Learning →</span>
+        </div>
+      </a>
+      <a href="m11-conditional-prob-bayes.html" class="math-module-card">
+        <div>
+          <div class="math-card-num"><span class="track-badge track-3">M11</span> • MATH-INT</div>
+          <div class="math-card-title">Conditional Probability, Bayes &amp; Total Probability</div>
+          <div class="math-card-desc">Conditioning, Law of Total Probability, Bayes Theorem, Prior to Posterior Updates</div>
+        </div>
+        <div class="math-card-footer">
+          <span>⏱️ ~40 min read</span>
+          <span>Start Learning →</span>
+        </div>
+      </a>
+      <a href="m12-independence.html" class="math-module-card">
+        <div>
+          <div class="math-card-num"><span class="track-badge track-3">M12</span> • MATH-INT</div>
+          <div class="math-card-title">Independence &amp; Conditional Independence</div>
+          <div class="math-card-desc">Factorization, Pairwise vs Mutual Independence, Conditional Independence, and Graphical Models</div>
+        </div>
+        <div class="math-card-footer">
+          <span>⏱️ ~35 min read</span>
+          <span>Start Learning →</span>
+        </div>
+      </a>
+      <a href="m13-random-variables-pmf-pdf-cdf.html" class="math-module-card">
+        <div>
+          <div class="math-card-num"><span class="track-badge track-3">M13</span> • MATH-INT</div>
+          <div class="math-card-title">Random Variables, PMF, PDF &amp; CDF</div>
+          <div class="math-card-desc">Discrete vs Continuous Mappings, Probability Mass Functions, Density Functions, and CDF Integrals</div>
+        </div>
+        <div class="math-card-footer">
+          <span>⏱️ ~40 min read</span>
+          <span>Start Learning →</span>
+        </div>
+      </a>
+      <a href="m14-joint-marginal-conditional.html" class="math-module-card">
+        <div>
+          <div class="math-card-num"><span class="track-badge track-3">M14</span> • MATH-INT</div>
+          <div class="math-card-title">Joint, Marginal &amp; Conditional Distributions</div>
+          <div class="math-card-desc">2D Grids, Marginalization, Summing Out Variables, Conditional Slices, and Generative vs Discriminative Models</div>
+        </div>
+        <div class="math-card-footer">
+          <span>⏱️ ~35 min read</span>
+          <span>Start Learning →</span>
+        </div>
+      </a>
+      <a href="m15-expectation-expected-value.html" class="math-module-card">
+        <div>
+          <div class="math-card-num"><span class="track-badge track-3">M15</span> • MATH-INT</div>
+          <div class="math-card-title">Expectation &amp; Expected Value</div>
+          <div class="math-card-desc">Probability-Weighted Averages, Center of Mass Fulcrum, Linearity of Expectation, and LOTUS</div>
+        </div>
+        <div class="math-card-footer">
+          <span>⏱️ ~40 min read</span>
+          <span>Start Learning →</span>
+        </div>
+      </a>
+      <a href="m16-variance-standard-deviation.html" class="math-module-card">
+        <div>
+          <div class="math-card-num"><span class="track-badge track-3">M16</span> • MATH-INT</div>
+          <div class="math-card-title">Variance &amp; Standard Deviation</div>
+          <div class="math-card-desc">Spread Around the Mean, Second Moment Decomposition, Linear Scaling, and Bias-Variance Tradeoff</div>
+        </div>
+        <div class="math-card-footer">
+          <span>⏱️ ~35 min read</span>
+          <span>Start Learning →</span>
+        </div>
+      </a>
+      <a href="m17-covariance-and-correlation.html" class="math-module-card">
+        <div>
+          <div class="math-card-num"><span class="track-badge track-3">M17</span> • MATH-INT</div>
+          <div class="math-card-title">Covariance, Correlation &amp; Statistical Relationships</div>
+          <div class="math-card-desc">Joint Variability, Pearson Correlation Coefficient, Covariance Matrices, and Collinearity</div>
+        </div>
+        <div class="math-card-footer">
+          <span>⏱️ ~40 min read</span>
+          <span>Start Learning →</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- TRACK 4 (UPCOMING) -->
+    <div class="track-section-header" style="opacity: 0.85;">
+      <div class="track-section-title">
+        <span class="track-badge track-4">Track 4 (Upcoming Drop)</span>
+        <span>Calculus, Gradients &amp; Optimization</span>
+      </div>
+      <span class="track-count-badge">7 Modules Arriving Next</span>
+    </div>
+    <div class="math-hub-grid" style="opacity: 0.85;">
+      <div class="math-module-card" style="border-style: dashed;">
+        <div>
+          <div class="math-card-num"><span class="track-badge track-4">M18–M21</span> • CALCULUS</div>
+          <div class="math-card-title">Derivatives, Partials, Chain Rule &amp; Gradients</div>
+          <div class="math-card-desc">Computational graphs, backpropagation sensitivities, directional derivatives, and multivariate gradient vectors.</div>
+        </div>
+        <div class="math-card-footer"><span>⏳ Ready to absorb</span><span>Upcoming →</span></div>
+      </div>
+      <div class="math-module-card" style="border-style: dashed;">
+        <div>
+          <div class="math-card-num"><span class="track-badge track-4">M22–M24</span> • OPTIMIZATION</div>
+          <div class="math-card-title">Gradient Descent, Mini-Batch SGD &amp; Regularization</div>
+          <div class="math-card-desc">Convex loss landscapes, learning rate dynamics, momentum, and L1 vs L2 constraint geometries.</div>
+        </div>
+        <div class="math-card-footer"><span>⏳ Ready to absorb</span><span>Upcoming →</span></div>
+      </div>
+      <div class="math-module-card" style="border-style: dashed;">
+        <div>
+          <div class="math-card-num"><span class="track-badge track-4">MATH-99</span> • COMPENDIUM</div>
+          <div class="math-card-title">Master Mathematical Formula Compendium</div>
+          <div class="math-card-desc">University 10-mark derivation walkthroughs, rapid formula cards, and active recall mastery sheets.</div>
+        </div>
+        <div class="math-card-footer"><span>⏳ Ready to absorb</span><span>Upcoming →</span></div>
+      </div>
+    </div>
+
+    <!-- CONCEPT-TO-MATH MAPPING MATRIX -->
+    <div class="track-section-header">
+      <div class="track-section-title">
+        <span>🗺️ AI/ML Curriculum to Math Companion Cross-Reference</span>
+      </div>
+    </div>
+    <div class="concept-table-wrap">
+      <table class="concept-table">
+        <thead>
+          <tr>
+            <th>Course Topic</th>
+            <th>Primary Math Dependency</th>
+            <th>Math Companion Module</th>
+            <th>Key Formula / Idea</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Linear Regression (Ch 18–19)</strong></td>
+            <td>Dot Products, Vectors, Normal Equations</td>
+            <td><a href="m04-vectors-and-components.html">M04</a>, <a href="m06-dot-product-and-orthogonality.html">M06</a>, <a href="m09-linear-systems-least-squares.html">M09</a></td>
+            <td>$\hat{y} = w^T x + b$, $w^* = (X^T X)^{-1} X^T y$</td>
+          </tr>
+          <tr>
+            <td><strong>Logistic Regression (Ch 20–21)</strong></td>
+            <td>Sigmoid Curve, Logarithms, Probability</td>
+            <td><a href="m03-functions-graphs-logs.html">M03</a>, <a href="m10-probability-foundations.html">M10</a></td>
+            <td>$\sigma(z) = \frac{1}{1 + e^{-z}}$, $J(w) = -\sum y \log(\hat{y})$</td>
+          </tr>
+          <tr>
+            <td><strong>K-Nearest Neighbors (Ch 16)</strong></td>
+            <td>Vector Norms, Distance Metrics</td>
+            <td><a href="m04-vectors-and-components.html">M04</a>, <a href="m05-norms-and-distance.html">M05</a></td>
+            <td>$d_2(x, x') = \sqrt{\sum (x_i - x'_i)^2}$</td>
+          </tr>
+          <tr>
+            <td><strong>Ridge &amp; Lasso (Ch 27–29)</strong></td>
+            <td>$L_1$ and $L_2$ Norms, Inverses</td>
+            <td><a href="m05-norms-and-distance.html">M05</a>, <a href="m09-linear-systems-least-squares.html">M09</a></td>
+            <td>$\lambda \|w\|_2^2$ (Ridge), $\lambda \|w\|_1$ (Lasso)</td>
+          </tr>
+          <tr>
+            <td><strong>Decision Trees (Ch 22–23)</strong></td>
+            <td>Logarithms, Empirical Probabilities</td>
+            <td><a href="m03-functions-graphs-logs.html">M03</a>, <a href="m10-probability-foundations.html">M10</a></td>
+            <td>$H(S) = -\sum p_i \log_2(p_i)$ (Entropy)</td>
+          </tr>
+          <tr>
+            <td><strong>Naive Bayes (Ch 16)</strong></td>
+            <td>Bayes' Theorem, Conditional Independence</td>
+            <td><a href="m11-conditional-prob-bayes.html">M11</a>, <a href="m12-independence.html">M12</a></td>
+            <td>$P(y | x) \propto P(y) \prod_{i=1}^d P(x_i | y)$</td>
+          </tr>
+          <tr>
+            <td><strong>Neural Networks (Ch 30–35)</strong></td>
+            <td>Matrix Products, Linear Transformations</td>
+            <td><a href="m07-matrices-and-indexing.html">M07</a>, <a href="m08-matrix-multiplication-transforms.html">M08</a></td>
+            <td>$z^{[l]} = W^{[l]} a^{[l-1]} + b^{[l]}$</td>
+          </tr>
+          <tr>
+            <td><strong>Bias-Variance Tradeoff (Ch 17)</strong></td>
+            <td>Expectation, Variance, Second Moments</td>
+            <td><a href="m15-expectation-expected-value.html">M15</a>, <a href="m16-variance-standard-deviation.html">M16</a></td>
+            <td>$\text{MSE} = \text{Bias}^2 + \text{Variance} + \sigma^2$</td>
+          </tr>
+          <tr>
+            <td><strong>PCA &amp; Feature Correlation</strong></td>
+            <td>Covariance Matrices, Dot Products</td>
+            <td><a href="m06-dot-product-and-orthogonality.html">M06</a>, <a href="m17-covariance-and-correlation.html">M17</a></td>
+            <td>$\Sigma = \frac{1}{n} X^T X$, $\rho = \frac{\text{Cov}(X, Y)}{\sigma_X \sigma_Y}$</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search math modules, formulas, proofs, theorems…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="index.html" class="mobile-nav-btn active"><span class="icon">📐</span>Math Hub</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/notes.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>
