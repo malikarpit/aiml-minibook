@@ -430,7 +430,7 @@ My move
 Opponent move
    ↓
 ...</pre></div>
-<p>The supplied game-playing lecture makes the key point that when the opponent is unpredictable from your perspective, a solution is a <strong>strategy specifying a move for every possible opponent reply</strong>. fileciteturn18file0L1-L9</p>
+<p>The supplied game-playing lecture makes the key point that when the opponent is unpredictable from your perspective, a solution is a <strong>strategy specifying a move for every possible opponent reply</strong>.</p>
 <p>That is why game-playing search is not just ordinary path search.</p>
 <hr />
     </div>
@@ -564,7 +564,7 @@ Their strongest counter</pre></div>
 IF opponent does Y → I do B
 IF opponent does Z → I do C</pre></div>
 <p>The exact solution therefore becomes a <strong>strategy tree</strong> rather than one predetermined path.</p>
-<p>The lecture also notes that time limits make exact search impractical, so practical game-playing systems often use finite horizons and approximate evaluation. fileciteturn18file0L4-L10</p>
+<p>The lecture also notes that time limits make exact search impractical, so practical game-playing systems often use finite horizons and approximate evaluation.</p>
 <hr />
     </div>
   </section>
@@ -581,7 +581,7 @@ IF opponent does Z → I do C</pre></div>
 <li>Is there <strong>chance</strong>?</li>
 <li>Do players have <strong>perfect information</strong>?</li>
 </ol>
-<p>The supplied lecture gives this classification: fileciteturn18file0L4-L10</p>
+<p>The supplied lecture gives this classification:</p>
 <div class="table-wrap"><table class="data-table">
 <thead>
 <tr>
@@ -627,7 +627,7 @@ IF opponent does Z → I do C</pre></div>
 <li>a clear objective,</li>
 <li>and a strong requirement to reason about future responses.</li>
 </ul>
-<p>The lecture gives an approximate chess branching factor of about 35 and game depths around 100 for reasonable games, making exhaustive exact search infeasible. fileciteturn18file0L9-L10</p>
+<p>The lecture gives an approximate chess branching factor of about 35 and game depths around 100 for reasonable games, making exhaustive exact search infeasible.</p>
 <p>This motivates the tools we study next:</p>
 <div class="ascii-box"><pre>Game tree
    ↓
@@ -740,7 +740,7 @@ Loss → -1</pre></div>
      ├── Draw →  0
      └── Loss → -1</pre></div>
 <p>The numerical values are just a convenient representation of preference ordering.</p>
-<p>Your supplied lecture later emphasizes that, in deterministic games, only the ordering of evaluation values matters under monotonic transformations. fileciteturn18file0L21-L30</p>
+<p>Your supplied lecture later emphasizes that, in deterministic games, only the ordering of evaluation values matters under monotonic transformations.</p>
 <hr />
     </div>
   </section>
@@ -776,7 +776,7 @@ Loss → -1</pre></div>
     </div>
     <div class="section-body">
       <p>A perfect-play strategy is one that assumes both players act optimally.</p>
-<p>The supplied lecture describes minimax as the method for perfect play in deterministic, perfect-information games. fileciteturn18file0L8-L10</p>
+<p>The supplied lecture describes minimax as the method for perfect play in deterministic, perfect-information games.</p>
 <p>The central assumption is:</p>
 <blockquote>
 <p><strong>If I choose an action, my opponent will respond in the way that is best for them.</strong></p>
@@ -804,7 +804,7 @@ Loss → -1</pre></div>
 <li>\(m\) = search depth.</li>
 </ul>
 <p>Even a moderately large branching factor makes deep exact search huge.</p>
-<p>The lecture illustrates this using chess and concludes that exact exhaustive solution is completely infeasible for such search depths. fileciteturn18file0L9-L10</p>
+<p>The lecture illustrates this using chess and concludes that exact exhaustive solution is completely infeasible for such search depths.</p>
 <hr />
     </div>
   </section>
@@ -837,7 +837,6 @@ replace with
 <blockquote>
 <p>“What is the estimated quality of this position at the depth we can afford?”</p>
 </blockquote>
-<p>fileciteturn18file0L21-L25</p>
 <hr />
     </div>
   </section>
@@ -858,7 +857,7 @@ replace with
 <div class="formula-math">\[
 \boxed{Eval(s)=w_1f_1(s)+w_2f_2(s)+\cdots+w_nf_n(s)}
 \]</div>
-<p>where the features may represent things such as differences in piece counts or positional characteristics. fileciteturn18file0L22-L25</p>
+<p>where the features may represent things such as differences in piece counts or positional characteristics.</p>
 <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
 
 > Terminal utility bolega **“end mein kya result hua?”**
@@ -913,7 +912,7 @@ Extract features
 Learn weights
           ↓
 Evaluation function</pre></div>
-<p>The lecture also mentions learning evaluation functions through self-play. fileciteturn18file0L24-L25</p>
+<p>The lecture also mentions learning evaluation functions through self-play.</p>
 <p>This is an important bridge between classical AI and machine learning:</p>
 <blockquote>
 <p><strong>Search can provide the decision structure, while ML can help learn how to evaluate states.</strong></p>
@@ -934,7 +933,7 @@ Evaluation function</pre></div>
 <p>But immediately after that cutoff, a major loss occurs.</p>
 <p>The algorithm may fail to see the danger because the dangerous event is beyond the horizon it searched.</p>
 <p>This is called the <strong>horizon effect</strong>.</p>
-<p>The lecture defines it as a situation in which an adverse outcome can be delayed but not avoided, yet limited search may prefer the delay. fileciteturn18file0L25-L27</p>
+<p>The lecture defines it as a situation in which an adverse outcome can be delayed but not avoided, yet limited search may prefer the delay.</p>
 <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
 
 > Tum future ko sirf ek fixed distance tak dekh pa rahe ho. Problem us distance ke just bahar chhupi hui hai.
@@ -954,7 +953,7 @@ Evaluation function</pre></div>
     <div class="section-body">
       <p>Another concern is evaluating an <strong>unstable</strong> position too early.</p>
 <p>For example, a chess position might look good numerically, but a queen could be lost on the next move.</p>
-<p>The lecture calls for deeper search of game-changing moves in such unstable positions. fileciteturn18file0L25-L27</p>
+<p>The lecture calls for deeper search of game-changing moves in such unstable positions.</p>
 <p>The idea is:</p>
 <blockquote>
 <p><strong>Do not evaluate a position too early when important tactical changes are still unfolding.</strong></p>
@@ -974,7 +973,7 @@ Evaluation function</pre></div>
 <blockquote>
 <p>stop exploring clearly bad-looking moves before reaching the maximum depth.</p>
 </blockquote>
-<p>This can save computation, but it is <strong>risky</strong> because a move that initially looks inferior may lead to a much better later position. fileciteturn18file0L27-L28</p>
+<p>This can save computation, but it is <strong>risky</strong> because a move that initially looks inferior may lead to a much better later position.</p>
 <p>This gives a useful general lesson:</p>
 <blockquote>
 <p><strong>Any shortcut that discards possibilities before proving they are irrelevant can introduce errors.</strong></p>
@@ -997,7 +996,7 @@ Evaluation function</pre></div>
 <li>opening-move libraries;</li>
 <li>endgame databases.</li>
 </ul>
-<p>These can replace search/evaluation for situations that have already been analysed or solved. fileciteturn18file0L27-L30</p>
+<p>These can replace search/evaluation for situations that have already been analysed or solved.</p>
 <p>This is a useful systems idea:</p>
 <blockquote>
 <p><strong>If a difficult subproblem can be precomputed, store the answer and avoid recomputing it.</strong></p>
@@ -1020,7 +1019,7 @@ Evaluation function</pre></div>
 <li>card shuffling;</li>
 <li>random draws.</li>
 </ul>
-<p>The lecture uses backgammon and coin-flipping as examples of nondeterministic games. fileciteturn18file0L31-L34</p>
+<p>The lecture uses backgammon and coin-flipping as examples of nondeterministic games.</p>
 <p>Now the tree has a third type of node:</p>
 <div class="ascii-box"><pre>MAX node
    ↓
@@ -1055,7 +1054,7 @@ V(s)=\frac{1}{k}\sum_{i=1}^{k}V(s_i)
 <div class="formula-math">\[
 V(s)=\sum_i P(s_i\mid s) V(s_i)
 \]</div>
-<p>The lecture's algorithm describes the chance-node value as the average of successor expectiminimax values in the simplified equally likely case. fileciteturn18file0L31-L35</p>
+<p>The lecture's algorithm describes the chance-node value as the average of successor expectiminimax values in the simplified equally likely case.</p>
 <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
 
 > Chance node par tum “best” ya “worst” directly choose nahi karte. Tum probability ke hisaab se **expected value** nikalte ho.
@@ -1074,7 +1073,7 @@ V(s)=\sum_i P(s_i\mid s) V(s_i)
     </div>
     <div class="section-body">
       <p>Some games hide important information.</p>
-<p>Examples in the lecture include card games where an opponent's cards are unknown. fileciteturn2file7L1-L8</p>
+<p>Examples in the lecture include card games where an opponent's cards are unknown.</p>
 <p>In these settings, the player does not know the exact world state.</p>
 <p>Instead, decision quality may depend on an <strong>information state</strong> or <strong>belief state</strong>.</p>
 <p>That changes the nature of the search problem again.</p>
@@ -1083,7 +1082,7 @@ V(s)=\sum_i P(s_i\mid s) V(s_i)
 + What I do not know
 + What I believe may be true
 + How my actions affect future information</pre></div>
-<p>The lecture notes that rational behaviour can include acting to obtain information, signalling, or deliberately randomizing to reduce information disclosure. fileciteturn2file7L1-L8</p>
+<p>The lecture notes that rational behaviour can include acting to obtain information, signalling, or deliberately randomizing to reduce information disclosure.</p>
 <hr />
     </div>
   </section>
@@ -1103,7 +1102,7 @@ V(s)=\sum_i P(s_i\mid s) V(s_i)
 <li>multiple non-cooperative players;</li>
 <li>bluffing and deception.</li>
 </ul>
-<p>It therefore cannot be treated like a simple deterministic perfect-information game. fileciteturn2file7L1-L8</p>
+<p>It therefore cannot be treated like a simple deterministic perfect-information game.</p>
 <hr />
     </div>
   </section>
@@ -1127,7 +1126,7 @@ Early chess programs
 Machine learning for better evaluation
         ↓
 Pruning for deeper search</pre></div>
-<p>The lecture attributes milestones to Babbage, Zermelo, von Neumann, Zuse, Wiener, Shannon, Turing, Samuel and McCarthy across the historical sequence. fileciteturn18file0L4-L10</p>
+<p>The lecture attributes milestones to Babbage, Zermelo, von Neumann, Zuse, Wiener, Shannon, Turing, Samuel and McCarthy across the historical sequence.</p>
 <p>The important conceptual evolution is more useful than memorising every date:</p>
 <blockquote>
 <p><strong>Search → approximation → pruning → learned evaluation.</strong></p>
@@ -1144,7 +1143,7 @@ Pruning for deeper search</pre></div>
     </div>
     <div class="section-body">
       <p>This chapter connects directly to later ML topics.</p>
-<p>The supplied lecture explicitly describes learning evaluation weights from game databases and self-play. fileciteturn18file0L24-L25</p>
+<p>The supplied lecture explicitly describes learning evaluation weights from game databases and self-play.</p>
 <p>So you should recognize this pattern:</p>
 <div class="formula-math">\[
 \text{Game state}
@@ -1292,7 +1291,7 @@ Pruning for deeper search</pre></div>
 <blockquote>
 <p>“Alpha-beta changes minimax's answer.”</p>
 </blockquote>
-<p>Under standard minimax assumptions, alpha-beta <strong>prunes computations while preserving the final minimax value</strong>. fileciteturn18file0L18-L20</p>
+<p>Under standard minimax assumptions, alpha-beta <strong>prunes computations while preserving the final minimax value</strong>.</p>
 <hr />
 <h2>Misconception 5</h2>
 <blockquote>
