@@ -1,0 +1,2263 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 2: Intelligent Agents &amp; Task Environments — AI & Machine Learning MiniBook. Agent–Environment Interaction, Formal Agent Function f:P*→A, Rationality vs Omniscience, Agent Architectures, and Environment Classifications">
+<title>Ch 2 — Intelligent Agents &amp; Task Environments | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-i">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 2 — Intelligent Agents &amp; Task Environments</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 2 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. First question: what is an agent? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. The agent–environment loop <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Agent kya dekhta hai? — Percepts <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Agent kya karta hai? — Actions <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. The formal agent function <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Vacuum Cleaner World — your first complete agent example <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Percept → decision → action </a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. What makes an agent “intelligent”? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Rationality <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Performance measure — how do we decide whether an action is good? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Performance measure is not the same as the agent&#x27;s internal goal statement </a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. A deeper view of rational action </a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Properties of an agent </a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Agent types — why different agents exist <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Table-driven agent <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Simple reflex agent <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Why memory is necessary </a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Agent with memory / internal state <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Goal-based agent <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Utility-based agent <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Goal vs utility </a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Environment properties <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Accessible vs inaccessible <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Deterministic vs nondeterministic <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Episodic vs sequential <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Static vs dynamic <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Discrete vs continuous <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Intelligent adversaries </a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Environment classification examples <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Example: self-driving car </a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. A universal extension: PEAS <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Why agent architecture matters </a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Agent architecture summary </a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. A simple ladder for remembering the agent types </a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Rationality in one example </a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Rationality is not “always choose the action that turned out best” </a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Common beginner mistakes <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Visual recall challenge </a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Active recall — close the book now <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Answer key — compact </a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Exam lens <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Universal lens vs course lens </a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Connection to the next chapter </a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Resource shelf </a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. Mastery test </a>
+      <a href="#s-46" class="sidebar-link"><span class="link-icon">📌</span>46. Final mental model </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link active"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit I</span><span>›</span><span>Part I — Foundations of AI & Agents</span><span>›</span><span style="color:var(--em-text)">Chapter 2</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 2 · Unit I · Part I</div>
+    <div class="chapter-part-banner part-i">
+      <span class="part-banner-badge">Unit I · Part I</span>
+      <span>Foundations of AI & Agents</span>
+    </div>
+    <h1 class="chapter-title">Intelligent Agents &amp; Task Environments</h1>
+    <div class="concept-id-tag">[CONCEPT-AI-002]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: High Yield (10-mark guarantee)</span>
+      <span class="chapter-meta-item">📖 ~45 min read</span>
+      <span class="chapter-meta-item">🎯 46 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>Intelligent Agents:</strong> Sensors, Percepts, Effectors, Actions, Agent Function \(f:P^*\rightarrow A\), Rationality, Performance Measures, Autonomy, Agent Architectures (Table-Driven, Reflex, Goal-Based, Utility-Based), Environment Properties, PEAS Framework, and Vacuum/Self-Driving Case Studies.</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">First question: what is an agent?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">The agent–environment loop</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Agent kya dekhta hai? — Percepts</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Agent kya karta hai? — Actions</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">The formal agent function</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Vacuum Cleaner World — your first complete agent example</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Percept → decision → action</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">What makes an agent “intelligent”?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Rationality</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Performance measure — how do we decide whether an action is good?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Performance measure is not the same as the agent&#x27;s internal goal statement</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">A deeper view of rational action</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Properties of an agent</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Agent types — why different agents exist</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Table-driven agent</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Simple reflex agent</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Why memory is necessary</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Agent with memory / internal state</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Goal-based agent</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Utility-based agent</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Goal vs utility</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Environment properties</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Accessible vs inaccessible</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Deterministic vs nondeterministic</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Episodic vs sequential</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Static vs dynamic</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Discrete vs continuous</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Intelligent adversaries</span></a></li>
+      <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Environment classification examples</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Example: self-driving car</span></a></li>
+      <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">A universal extension: PEAS</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Why agent architecture matters</span></a></li>
+      <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Agent architecture summary</span></a></li>
+      <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">A simple ladder for remembering the agent types</span></a></li>
+      <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Rationality in one example</span></a></li>
+      <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Rationality is not “always choose the action that turned out best”</span></a></li>
+      <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Common beginner mistakes</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Visual recall challenge</span></a></li>
+      <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Active recall — close the book now</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Answer key — compact</span></a></li>
+      <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Exam lens</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Universal lens vs course lens</span></a></li>
+      <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Connection to the next chapter</span></a></li>
+      <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Resource shelf</span></a></li>
+      <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">Mastery test</span></a></li>
+      <li class="toc-item"><a href="#s-46"><span class="toc-num">46</span><span class="toc-name">Final mental model</span></a></li>
+    </ul>
+  </div>
+
+  <div class="chapter-preamble-card"><h1>MAIN-U1-C02 — Intelligent Agents</h1>
+<p><strong>Book:</strong> AI &amp; Machine Learning — Complete Visual &amp; Mathematical Textbook<br />
+<strong>Part:</strong> Unit I — Artificial Intelligence<br />
+<strong>Chapter ID:</strong> <code>AI-I-02</code><br />
+<strong>Prerequisites:</strong> MAIN-U1-C01 — What Is Artificial Intelligence?<br />
+<strong>Course connection:</strong> Unit I — Introduction to Artificial Intelligence<br />
+<strong>Primary course source:</strong> <code>lecture-intelligent-agents.pdf</code> (Philipp Koehn, <em>Artificial Intelligence: Intelligent Agents</em>, 5 February 2026)<br />
+<strong>Learning level:</strong> Beginner → conceptual mastery → exam-ready</p>
+<hr />
+<h2>0. What you should be able to do after this chapter</h2>
+<p>By the end of this chapter, you should be able to:</p>
+<ul>
+<li>explain what an <strong>agent</strong> is in plain English and in formal terms;</li>
+<li>explain the relationship between an <strong>agent</strong> and its <strong>environment</strong>;</li>
+<li>distinguish <strong>sensor</strong>, <strong>percept</strong>, <strong>percept sequence</strong>, <strong>effector</strong>, and <strong>action</strong>;</li>
+<li>explain the agent function</li>
+</ul>
+<div class="formula-math">\[
+  f:P^*\rightarrow A
+  \]</div>
+<p>and understand what each symbol means;
+- explain <strong>rationality</strong> without confusing it with perfection, omniscience, or guaranteed success;
+- identify and design a suitable <strong>performance measure</strong>;
+- understand <strong>autonomy</strong>, reactivity, proactivity, and interaction with other agents;
+- classify environments using properties such as accessible/inaccessible, deterministic/nondeterministic, episodic/sequential, static/dynamic, discrete/continuous, and the presence of intelligent adversaries;
+- explain the major agent types in the supplied lecture: table-driven, simple reflex, memory-based, goal-based, and utility-based agents;
+- understand why internal state, goals, and utility become necessary as environments become more complicated;
+- work through the <strong>vacuum-cleaner world</strong> and <strong>self-driving-car</strong> examples;
+- identify where the course material ends and where a universal extension begins;
+- connect intelligent agents to the search algorithms studied in the next chapters.</p>
+<hr /></div>
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 1: First question: what is an agent? -->
+  <section id="s-01" data-search-section="First question: what is an agent?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>1. First question: what is an agent?</h2>
+      <button class="bookmark-btn" data-id="s-01" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Before learning the formal definition, imagine a few ordinary things:</p>
+<ul>
+<li>A person crossing a road.</li>
+<li>A thermostat controlling a room.</li>
+<li>A robot vacuum cleaning a floor.</li>
+<li>A navigation system choosing a route.</li>
+<li>A software assistant reacting to a user's request.</li>
+</ul>
+<p>All of them have a common pattern:</p>
+<blockquote>
+<p><strong>Something exists in some world, receives information about that world, and does something in response.</strong></p>
+</blockquote>
+<p>That “something” is the <strong>agent</strong>.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish intuition</div>
+
+Socho agent ko ek aise worker ki tarah jo duniya ko directly nahi, balki apne **sensors ke through** samajhta hai. Jo information usse milti hai uske basis par woh action leta hai.
+
+> **Dekho → samjho → decide karo → action lo.**
+
+This cycle is the heart of intelligent-agent thinking.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 2: The agent–environment loop -->
+  <section id="s-02" data-search-section="The agent–environment loop" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. The agent–environment loop</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>2.1 The most important diagram in this chapter</h2>
+<div class="diagram-box"><pre class="mermaid">
+flowchart LR
+    E[Environment] -->|Percepts / observations| S[Sensors]
+    S --> A[Agent]
+    A -->|Actions| F[Effectors / Actuators]
+    F --> E
+</pre></div>
+<h3>How to read the diagram</h3>
+<p>There are four main pieces:</p>
+<p><strong>Environment</strong><br />
+The world in which the agent operates.</p>
+<p><strong>Sensors</strong><br />
+The mechanisms through which the agent receives information.</p>
+<p><strong>Agent</strong><br />
+The decision-making system.</p>
+<p><strong>Effectors / actuators</strong><br />
+The mechanisms through which the agent changes or interacts with the environment.</p>
+<p>The supplied lecture uses the same basic agent–environment idea and describes the agent function as a mapping from percept histories to actions. [<code>lecture-intelligent-agents.pdf</code>, slides 1–2]</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher explanation — English</div>
+
+The agent does not normally have magical access to the entire world. It receives **percepts**, processes them using its internal mechanism, and produces **actions**. Those actions may change the environment, which then changes what the agent perceives next.
+
+This creates a loop:
+
+
+
+<div class="formula-math">\[
+\text{Environment}
+\rightarrow
+\text{Percept}
+\rightarrow
+\text{Agent decision}
+\rightarrow
+\text{Action}
+\rightarrow
+\text{Environment changes}
+\rightarrow \cdots
+\]</div>
+
+
+
+</div>
+
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher explanation — Hinglish</div>
+
+Agent ek room ke andar baitha hua insaan samjho. Uske paas camera, microphone ya temperature sensor ho sakta hai. Woh room ko directly “dekh” nahi raha; sensors se information aa rahi hai. Phir agent decide karta hai ki kya karna hai. Action ke baad room ki state badal sakti hai, aur next moment sensors ko different information mil sakti hai.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: Agent kya dekhta hai? — Percepts -->
+  <section id="s-03" data-search-section="Agent kya dekhta hai? — Percepts" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>3. Agent kya dekhta hai? — Percepts</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A <strong>percept</strong> is the information an agent receives from the environment through its sensors at a particular point in time.</p>
+<p>The lecture uses examples such as a person's visual/audio/touch information and gives a vacuum cleaner percept such as:</p>
+<div class="formula-math">\[
+[A,\ Dirty]
+\]</div>
+<p>meaning, in that simplified world, the agent is at location <strong>A</strong> and the location contains <strong>dirt</strong>.</p>
+<h3>Important distinction</h3>
+<p>Do not confuse these three:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Sensor</strong></td>
+<td>The mechanism that collects information</td>
+</tr>
+<tr>
+<td><strong>Percept</strong></td>
+<td>The information received</td>
+</tr>
+<tr>
+<td><strong>Percept sequence</strong></td>
+<td>The history of percepts received so far</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Example: human</h3>
+<p><strong>Sensor:</strong> eyes<br />
+<strong>Percept:</strong> “There is a red car in front of me.”<br />
+<strong>Percept sequence:</strong> what you have seen over the last several moments.</p>
+<p>The lecture notes that percepts can be described at different levels of abstraction: at a lower level they may be raw sensor signals; after preprocessing they can represent objects, locations, textures, colors, auditory features, and so on. [<code>lecture-intelligent-agents.pdf</code>, slide 7]</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+Sensor **dekhne/sunne/measure karne ka instrument** hai. Percept **jo information mili** woh hai. Aur percept sequence matlab **ab tak jo information mili uska history**.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: Agent kya karta hai? — Actions -->
+  <section id="s-04" data-search-section="Agent kya karta hai? — Actions" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>4. Agent kya karta hai? — Actions</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>An <strong>action</strong> is what the agent does through its effectors/actuators.</p>
+<p>Examples from the supplied material:</p>
+<ul>
+<li>move left;</li>
+<li>move right;</li>
+<li>suck dirt;</li>
+<li>steer;</li>
+<li>accelerate;</li>
+<li>brake;</li>
+<li>speak/display.</li>
+</ul>
+<h3>Sensor vs effector</h3>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Receives information</th>
+<th>Produces action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sensor</td>
+<td>Effector / actuator</td>
+</tr>
+<tr>
+<td>Camera</td>
+<td>Motor</td>
+</tr>
+<tr>
+<td>Microphone</td>
+<td>Wheel steering system</td>
+</tr>
+<tr>
+<td>GPS</td>
+<td>Brake system</td>
+</tr>
+<tr>
+<td>Temperature sensor</td>
+<td>Heater control</td>
+</tr>
+</tbody>
+</table></div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+**Sensor = input side**  
+**Effector = output/action side**
+
+Ek simple memory trick:
+
+> **Sensor se information IN. Effector se action OUT.**
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: The formal agent function -->
+  <section id="s-05" data-search-section="The formal agent function" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>5. The formal agent function</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The lecture gives the agent function as:</p>
+<div class="formula-math">\[
+f:P^*\rightarrow A
+\]</div>
+<p>This looks intimidating initially, but it is simple once every symbol is decoded.</p>
+<h2>5.1 What is \(P\)?</h2>
+<p>\(P\) represents the set of possible percepts.</p>
+<p>For a tiny vacuum world, percepts might include:</p>
+<div class="formula-math">\[
+[A,Clean],\quad [A,Dirty],\quad [B,Clean],\quad [B,Dirty]
+\]</div>
+<h2>5.2 What is \(P^*\)?</h2>
+<p>The superscript <code>*</code> here means <strong>a sequence of percepts of arbitrary finite length</strong>, including the possibility of a sequence with no percepts yet.</p>
+<p>So instead of looking at only the current percept, the function can conceptually take the entire percept history.</p>
+<h2>5.3 What is \(A\)?</h2>
+<p>\(A\) is the set of possible actions.</p>
+<p>For the vacuum world:</p>
+<div class="formula-math">\[
+A=\{Left,Right,Suck,NoOp\}
+\]</div>
+<h2>5.4 What is the function saying?</h2>
+<p>The equation:</p>
+<div class="formula-math">\[
+f:P^*\rightarrow A
+\]</div>
+<p>means:</p>
+<blockquote>
+<p><strong>Given a percept sequence, the agent function specifies which action should be taken.</strong></p>
+</blockquote>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+Simple language mein:
+
+> **Jo information ab tak mili hai → uske basis par kya action lena hai.**
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: Vacuum Cleaner World — your first complete agent example -->
+  <section id="s-06" data-search-section="Vacuum Cleaner World — your first complete agent example" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>6. Vacuum Cleaner World — your first complete agent example</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The vacuum world is one of the most important teaching examples in the supplied lecture.</p>
+<h2>6.1 The simplified world</h2>
+<p>Imagine two locations:</p>
+<div class="ascii-box"><pre>+-----------+-----------+
+|     A     |     B     |
+|  🧹       |           |
+|           |   dirt    |
++-----------+-----------+</pre></div>
+<p>The agent can be in either A or B.</p>
+<p>Each square can be:</p>
+<ul>
+<li>clean;</li>
+<li>dirty.</li>
+</ul>
+<p>The agent has possible actions:</p>
+<div class="formula-math">\[
+Left, Right, Suck, NoOp
+\]</div>
+<p>The course notes explicitly give percepts such as <code>[A, Dirty]</code> and actions Left, Right, Suck and NoOp. [<code>lecture-intelligent-agents.pdf</code>, slides 2–3]</p>
+<hr />
+<h2>6.2 A simple reflex behaviour</h2>
+<p>Suppose the current percept is:</p>
+<div class="formula-math">\[
+[A,Dirty]
+\]</div>
+<p>The obvious action is:</p>
+<div class="formula-math">\[
+Suck
+\]</div>
+<p>Suppose the percept is:</p>
+<div class="formula-math">\[
+[A,Clean]
+\]</div>
+<p>Then the simple table/program in the lecture chooses:</p>
+<div class="formula-math">\[
+Right
+\]</div>
+<p>Likewise:</p>
+<div class="formula-math">\[
+[B,Clean]\rightarrow Left
+\]</div>
+<div class="formula-math">\[
+[B,Dirty]\rightarrow Suck
+\]</div>
+<p>This is the idea of mapping perception to action.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: Percept → decision → action -->
+  <section id="s-07" data-search-section="Percept → decision → action" class="content-section">
+    <div class="section-header">
+      <h2>7. Percept → decision → action</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Let's slow this down.</p>
+<p>Suppose:</p>
+<div class="ascii-box"><pre>Agent at A
+Room A = Dirty</pre></div>
+<p>The sensor detects dirt.</p>
+<h3>Stage 1 — Perception</h3>
+<div class="formula-math">\[
+P_t=[A,Dirty]
+\]</div>
+<h3>Stage 2 — Agent processing</h3>
+<p>The program asks:</p>
+<blockquote>
+<p>“What should I do when I am at A and it is dirty?”</p>
+</blockquote>
+<h3>Stage 3 — Action</h3>
+<div class="formula-math">\[
+A_t=Suck
+\]</div>
+<h3>Stage 4 — Environment changes</h3>
+<p>The square becomes clean.</p>
+<h3>Stage 5 — Next percept</h3>
+<p>The next percept may be:</p>
+<div class="formula-math">\[
+[A,Clean]
+\]</div>
+<p>The cycle continues.</p>
+<h3>The mental model</h3>
+<div class="ascii-box"><pre>perceive
+Environment ---------&gt; Agent
+     ^                  |
+     |                  |
+     +------ action &lt;---+</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: What makes an agent “intelligent”? -->
+  <section id="s-08" data-search-section="What makes an agent “intelligent”?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>8. What makes an agent “intelligent”?</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A common beginner misunderstanding is:</p>
+<blockquote>
+<p>“If something reacts, it must be intelligent.”</p>
+</blockquote>
+<p>Not necessarily.</p>
+<p>A system can have a fixed reaction rule without having sophisticated intelligence.</p>
+<p>The supplied lecture defines an intelligent agent as one that <strong>perceives its environment via sensors and acts rationally upon that environment with its effectors</strong>. [<code>lecture-intelligent-agents.pdf</code>, slide 6]</p>
+<p>So an important word is:</p>
+<h1><strong>Rationally</strong></h1>
+<p>That leads to the central idea of this chapter.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: Rationality -->
+  <section id="s-09" data-search-section="Rationality" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>9. Rationality</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>9.1 What does rational mean here?</h2>
+<p>The lecture describes a rational agent as one that chooses the action expected to maximize its performance measure based on the information available so far and its available knowledge.</p>
+<p>In simplified form:</p>
+<div class="formula-math">\[
+\text{Choose the action with the highest expected performance.}
+\]</div>
+<p>This is <strong>not</strong> the same as:</p>
+<ul>
+<li>always being correct;</li>
+<li>knowing everything;</li>
+<li>always succeeding;</li>
+<li>predicting the future perfectly.</li>
+</ul>
+<p>The supplied lecture explicitly separates rationality from omniscience and clairvoyance and notes that a rational agent is not necessarily successful because its percepts may be incomplete and action outcomes may be uncertain. [<code>lecture-intelligent-agents.pdf</code>, slides 4 and 9]</p>
+<hr />
+<h2>9.2 Rational ≠ omniscient</h2>
+<p><strong>Omniscient</strong> means knowing everything that is relevant, including the eventual consequences of actions.</p>
+<p>Real agents usually do not have that knowledge.</p>
+<h3>Example</h3>
+<p>You leave home carrying an umbrella because the weather looks uncertain.</p>
+<p>You later discover that it never rained.</p>
+<p>Was taking the umbrella irrational?</p>
+<p>Not necessarily.</p>
+<p>You acted using the information available at decision time.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+Rational agent ka matlab future dekhne wala agent nahi hai.
+
+> **Us time jo information available thi, uske basis par best reasonable decision lena = rationality.**
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: Performance measure — how do we decide whether an action is good? -->
+  <section id="s-10" data-search-section="Performance measure — how do we decide whether an action is good?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>10. Performance measure — how do we decide whether an action is good?</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>An agent needs a way to judge how well it is accomplishing its task.</p>
+<p>That is the <strong>performance measure</strong>.</p>
+<p>The lecture gives examples such as:</p>
+<ul>
+<li>false-alarm rate;</li>
+<li>false-dismissal rate;</li>
+<li>speed;</li>
+<li>resources required;</li>
+<li>environmental impact.</li>
+</ul>
+<p>[<code>lecture-intelligent-agents.pdf</code>, slide 9]</p>
+<h3>Why this matters</h3>
+<p>Suppose two navigation agents reach the same destination.</p>
+<p><strong>Agent A:</strong> takes 30 minutes and uses more fuel.<br />
+<strong>Agent B:</strong> takes 35 minutes but uses far less fuel.</p>
+<p>Which one is better?</p>
+<p>There is no answer until we define what “better” means.</p>
+<p>If our performance measure is only:</p>
+<blockquote>
+<p><strong>minimize travel time</strong></p>
+</blockquote>
+<p>Agent A may be preferred.</p>
+<p>If it is:</p>
+<blockquote>
+<p><strong>minimize fuel while safely reaching the destination</strong></p>
+</blockquote>
+<p>Agent B may be preferred.</p>
+<h3>Core lesson</h3>
+<blockquote>
+<p><strong>Rationality is always relative to a performance measure.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: Performance measure is not the same as the agent&#x27;s internal goal statement -->
+  <section id="s-11" data-search-section="Performance measure is not the same as the agent&#x27;s internal goal statement" class="content-section">
+    <div class="section-header">
+      <h2>11. Performance measure is not the same as the agent&#x27;s internal goal statement</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Do not mix these ideas.</p>
+<p>A designer may describe a desired task in words:</p>
+<blockquote>
+<p>“Clean the room.”</p>
+</blockquote>
+<p>But a measurable performance criterion could be:</p>
+<blockquote>
+<p>“Keep every square clean for as many time steps as possible while minimizing unnecessary movement.”</p>
+</blockquote>
+<p>The second is measurable.</p>
+<p>That makes it useful for evaluating behaviour.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+Goal ko sentence mein bolna easy hai. Performance measure ko **measure kar paana** zaroori hai.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: A deeper view of rational action -->
+  <section id="s-12" data-search-section="A deeper view of rational action" class="content-section">
+    <div class="section-header">
+      <h2>12. A deeper view of rational action</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The lecture's idealized rational-agent idea can be represented conceptually as:</p>
+<div class="ascii-box"><pre>Current percept history
+        +
+Built-in knowledge
+        +
+Acquired knowledge
+        ↓
+Possible actions
+        ↓
+Expected outcomes
+        ↓
+Performance measure
+        ↓
+Choose action with greatest expected value</pre></div>
+<p>This explains why rationality involves <strong>information gathering</strong> as well.</p>
+<p>The lecture explicitly notes that rationality is not “rational ignorance”: if information can materially improve a decision, an agent may need to seek that information. [<code>lecture-intelligent-agents.pdf</code>, slide 9]</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: Properties of an agent -->
+  <section id="s-13" data-search-section="Properties of an agent" class="content-section">
+    <div class="section-header">
+      <h2>13. Properties of an agent</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied lecture identifies several useful properties.</p>
+<h2>13.1 Discrete agent</h2>
+<p>A discrete agent receives percepts and produces actions in discrete steps.</p>
+<h2>13.2 Reactive</h2>
+<p>It responds to what is happening in the environment.</p>
+<h2>13.3 Proactive / goal-directed</h2>
+<p>It can act because it wants to reach some future desirable state, not merely because of a current stimulus.</p>
+<h2>13.4 Autonomous</h2>
+<p>Its behaviour is determined by its own experience rather than being completely dictated by a designer.</p>
+<p>The lecture explicitly defines autonomy in terms of the agent using its own experience and notes that surviving agents need enough built-in knowledge plus the ability to learn. [<code>lecture-intelligent-agents.pdf</code>, slides 10–11]</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish mental model</div>
+
+- **Reactive:** “Jo abhi hua uska response do.”
+- **Proactive:** “Aage kya hoga, socho aur plan karo.”
+- **Autonomous:** “Har baar designer ka instruction wait mat karo; experience se khud decide karo.”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: Agent types — why different agents exist -->
+  <section id="s-14" data-search-section="Agent types — why different agents exist" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>14. Agent types — why different agents exist</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A major theme of the lecture is that different environments require different agent designs.</p>
+<p>The supplied lecture includes:</p>
+<ol>
+<li>Table-driven agents</li>
+<li>Simple reflex agents</li>
+<li>Agents with memory</li>
+<li>Goal-based agents</li>
+<li>Utility-based agents</li>
+</ol>
+<p>The important question is not only:</p>
+<blockquote>
+<p>“What are their definitions?”</p>
+</blockquote>
+<p>but:</p>
+<blockquote>
+<p><strong>“Why do we need increasingly sophisticated agent architectures?”</strong></p>
+</blockquote>
+<p>The progression is roughly:</p>
+<div class="ascii-box"><pre>Fixed lookup
+   ↓
+Current percept only
+   ↓
+Current percept + internal state
+   ↓
+State + goals + future reasoning
+   ↓
+State + utility + trade-offs</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: Table-driven agent -->
+  <section id="s-15" data-search-section="Table-driven agent" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>15. Table-driven agent</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Idea</h2>
+<p>A table-driven agent stores a table that maps percept sequences to actions.</p>
+<p>Conceptually:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Percept sequence</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[A, Dirty]</code></td>
+<td>Suck</td>
+</tr>
+<tr>
+<td><code>[A, Clean]</code></td>
+<td>Right</td>
+</tr>
+<tr>
+<td><code>[B, Dirty]</code></td>
+<td>Suck</td>
+</tr>
+<tr>
+<td><code>[B, Clean]</code></td>
+<td>Left</td>
+</tr>
+</tbody>
+</table></div>
+<p>The supplied lecture describes this as using a percept-sequence/action table stored in memory and notes that it can require a very large lookup table. [<code>lecture-intelligent-agents.pdf</code>, slide 13]</p>
+<h2>Analogy</h2>
+<p>Imagine trying to prepare for <strong>every possible conversation</strong> by memorizing one response for every complete conversation history.</p>
+<p>The table could become enormous.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+Ye approach basically bolti hai:
+
+> “Jo situation ki exact history table mein mili, uska answer nikaal do.”
+
+Simple, but scalability is terrible.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: Simple reflex agent -->
+  <section id="s-16" data-search-section="Simple reflex agent" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>16. Simple reflex agent</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A simple reflex agent uses <strong>condition–action rules</strong>.</p>
+<p>General structure:</p>
+<div class="ascii-box"><pre>IF condition
+THEN action</pre></div>
+<p>Example:</p>
+<div class="ascii-box"><pre>IF dirt detected
+THEN suck</pre></div>
+<p>The supplied lecture describes these agents as <strong>stateless</strong>: they do not retain memory of past world states. [<code>lecture-intelligent-agents.pdf</code>, slide 13]</p>
+<h2>Real-life analogy</h2>
+<p>A bathroom motion light:</p>
+<div class="ascii-box"><pre>IF motion detected
+→ turn light ON</pre></div>
+<p>It reacts to the current condition.</p>
+<h3>Strength</h3>
+<p>Simple and fast.</p>
+<h3>Limitation</h3>
+<p>If the current percept does not contain enough information to decide correctly, the agent can fail.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: Why memory is necessary -->
+  <section id="s-17" data-search-section="Why memory is necessary" class="content-section">
+    <div class="section-header">
+      <h2>17. Why memory is necessary</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine two different world situations produce the same current percept.</p>
+<p>If the agent looks only at the present percept, it cannot tell them apart.</p>
+<p>This is why the lecture introduces <strong>internal state</strong>.</p>
+<p>The lecture explains that sensors do not usually reveal the complete world state at every instant, so an agent can encode past percepts through an internal state. [<code>lecture-intelligent-agents.pdf</code>, slide 18]</p>
+<h2>Analogy: walking in a building</h2>
+<p>Suppose you enter a corridor and see exactly the same three doors you saw earlier.</p>
+<p>Your current visual input may look similar.</p>
+<p>But your memory of:</p>
+<blockquote>
+<p>“I already checked the left door.”</p>
+</blockquote>
+<p>changes what you should do next.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+Current camera frame same ho sakta hai, lekin **history different** ho sakti hai. Isliye memory agent ko context deti hai.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: Agent with memory / internal state -->
+  <section id="s-18" data-search-section="Agent with memory / internal state" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>18. Agent with memory / internal state</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Conceptually:</p>
+<div class="ascii-box"><pre>Current percept
+      +
+Previous internal state
+      ↓
+New internal state
+      ↓
+Action</pre></div>
+<p>A useful abstraction is:</p>
+<div class="formula-math">\[
+state_t = UPDATE(state_{t-1},\ percept_t)
+\]</div>
+<p>This equation is a <strong>universal explanatory abstraction</strong>, not a verbatim course equation. Its purpose is to show the role of memory.</p>
+<h3>Important idea</h3>
+<p>An agent's internal state is a compact representation of relevant history.</p>
+<p>It does <strong>not</strong> necessarily store every raw percept forever.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: Goal-based agent -->
+  <section id="s-19" data-search-section="Goal-based agent" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>19. Goal-based agent</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Sometimes knowing what the world currently looks like is not enough.</p>
+<p>The agent also needs to know:</p>
+<blockquote>
+<p><strong>What state am I trying to reach?</strong></p>
+</blockquote>
+<p>The supplied lecture defines a goal as a description of a desirable situation and describes goal-based agents as considering future events and possible action sequences. [<code>lecture-intelligent-agents.pdf</code>, slide 21]</p>
+<h2>Example</h2>
+<p>Navigation agent:</p>
+<p>Current state:</p>
+<blockquote>
+<p>At Delhi</p>
+</blockquote>
+<p>Goal:</p>
+<blockquote>
+<p>Reach Jaipur</p>
+</blockquote>
+<p>There may be many possible actions. The goal tells the agent what counts as success.</p>
+<h3>Why this changes the architecture</h3>
+<p>A reflex agent can say:</p>
+<blockquote>
+<p>“Road is blocked → turn right.”</p>
+</blockquote>
+<p>A goal-based agent asks:</p>
+<blockquote>
+<p>“Which sequence of actions eventually gets me to Jaipur?”</p>
+</blockquote>
+<p>That question leads directly into <strong>search algorithms</strong>.</p>
+<h3>Important bridge</h3>
+<blockquote>
+<p><strong>Goal-based reasoning is one of the reasons Unit I moves from agents into search.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: Utility-based agent -->
+  <section id="s-20" data-search-section="Utility-based agent" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>20. Utility-based agent</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A goal can be too coarse when multiple successful outcomes exist.</p>
+<p>Suppose a car has three possible routes:</p>
+<ul>
+<li>fastest but expensive;</li>
+<li>slower but safer;</li>
+<li>moderate time and moderate cost.</li>
+</ul>
+<p>A binary goal such as:</p>
+<blockquote>
+<p>“Reach destination.”</p>
+</blockquote>
+<p>cannot distinguish among these successful outcomes.</p>
+<p>A <strong>utility function</strong> gives a numerical measure of desirability.</p>
+<p>The supplied lecture writes:</p>
+<div class="formula-math">\[
+U:State\rightarrow\mathbb{R}
+\]</div>
+<p>and describes utility as a measure of success/happiness associated with a state. It notes that utility-based decision-making supports trade-offs between conflicting goals and between the probability and importance of outcomes. [<code>lecture-intelligent-agents.pdf</code>, slide 23]</p>
+<h3>Interpretation</h3>
+<div class="formula-math">\[
+U(state)=\text{how desirable that state is}
+\]</div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+Goal bolta hai:
+
+> “Mujhe destination tak pahunchna hai.”
+
+Utility poochta hai:
+
+> “Destination tak **kaise** pahunchna sabse worthwhile hai?”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: Goal vs utility -->
+  <section id="s-21" data-search-section="Goal vs utility" class="content-section">
+    <div class="section-header">
+      <h2>21. Goal vs utility</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This distinction is extremely important for exams.</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Goal-based</th>
+<th>Utility-based</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Asks whether a desirable state is achieved</td>
+<td>Measures how desirable states are</td>
+</tr>
+<tr>
+<td>Can be binary/satisficing</td>
+<td>Supports graded preferences</td>
+</tr>
+<tr>
+<td>Good for “reach / don’t reach”</td>
+<td>Good for trade-offs</td>
+</tr>
+<tr>
+<td>Does not by itself rank all successful states</td>
+<td>Can rank alternatives</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Simple analogy</h3>
+<p>Suppose you are buying a laptop.</p>
+<p><strong>Goal:</strong> Buy a laptop that can run your software.</p>
+<p>Many laptops satisfy this.</p>
+<p><strong>Utility:</strong> Among them, compare price, battery life, performance, weight and display quality.</p>
+<p>Utility gives you a way to rank the alternatives.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: Environment properties -->
+  <section id="s-22" data-search-section="Environment properties" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>22. Environment properties</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Agent design depends heavily on the environment.</p>
+<p>The supplied lecture classifies environments by several properties:</p>
+<ol>
+<li>Accessible vs inaccessible</li>
+<li>Deterministic vs nondeterministic</li>
+<li>Episodic vs sequential</li>
+<li>Static vs dynamic</li>
+<li>Discrete vs continuous</li>
+<li>With or without intelligent adversaries</li>
+</ol>
+<p>[<code>lecture-intelligent-agents.pdf</code>, slides 25–27]</p>
+<p>We will learn these one by one.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: Accessible vs inaccessible -->
+  <section id="s-23" data-search-section="Accessible vs inaccessible" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>23. Accessible vs inaccessible</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Accessible</h2>
+<p>An environment is accessible when the agent's sensors provide access to the complete state information needed to choose an action.</p>
+<h3>Example</h3>
+<p>A small digital board where every relevant variable is visible.</p>
+<h2>Inaccessible</h2>
+<p>Some relevant information is hidden or unavailable to the sensors.</p>
+<h3>Example</h3>
+<p>Driving a car:</p>
+<p>You cannot directly see:</p>
+<ul>
+<li>around a building;</li>
+<li>what another driver's hidden intention is;</li>
+<li>everything behind you without sensors/mirrors/cameras.</li>
+</ul>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+**Accessible:** “Jo decision ke liye zaroori hai, woh information mujhe mil rahi hai.”
+
+**Inaccessible:** “Kuch important information hidden/missing hai.”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: Deterministic vs nondeterministic -->
+  <section id="s-24" data-search-section="Deterministic vs nondeterministic" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>24. Deterministic vs nondeterministic</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Deterministic</h2>
+<p>Given the current state and your action, the next state is fully determined.</p>
+<p>Conceptually:</p>
+<div class="formula-math">\[
+(current\ state, action)\rightarrow one\ known\ next\ state
+\]</div>
+<h2>Nondeterministic</h2>
+<p>The same action may lead to different possible outcomes.</p>
+<h3>Example</h3>
+<p>You press a physical elevator button. You expect a particular response, but external events can interfere.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+**Deterministic:** “Action karunga to result fixed hai.”
+
+**Nondeterministic:** “Same action se multiple possible results aa sakte hain.”
+
+The lecture notes that in an accessible and deterministic environment, the agent does not need to deal with the same kind of uncertainty associated with inaccessible/nondeterministic settings. [`lecture-intelligent-agents.pdf`, slide 25]
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: Episodic vs sequential -->
+  <section id="s-25" data-search-section="Episodic vs sequential" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>25. Episodic vs sequential</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Episodic</h2>
+<p>Each episode is largely independent of previous episodes.</p>
+<p>The action in one episode does not meaningfully affect the next episode.</p>
+<h3>Example</h3>
+<p>Classifying an isolated image.</p>
+<h2>Sequential</h2>
+<p>Current actions affect future situations.</p>
+<h3>Example</h3>
+<p>Driving a car.</p>
+<p>Your steering decision now changes where the vehicle is one second later.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+**Episodic:** “Ye problem khatam, next problem fresh.”
+
+**Sequential:** “Aaj jo action liya, uska effect agle step par padega.”
+
+Sequential environments therefore create a greater need for planning.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: Static vs dynamic -->
+  <section id="s-26" data-search-section="Static vs dynamic" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>26. Static vs dynamic</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Static</h2>
+<p>The environment does not change while the agent is thinking.</p>
+<h2>Dynamic</h2>
+<p>The environment may change while the agent is deciding.</p>
+<h3>Example</h3>
+<p>A printed Sudoku puzzle is essentially static while you think.</p>
+<p>A road full of moving vehicles is dynamic.</p>
+<h3>Why this matters</h3>
+<p>In a dynamic world:</p>
+<blockquote>
+<p><strong>Thinking itself takes time, and the world can move while you think.</strong></p>
+</blockquote>
+<p>This is a crucial AI-system-design issue.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: Discrete vs continuous -->
+  <section id="s-27" data-search-section="Discrete vs continuous" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>27. Discrete vs continuous</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Discrete</h2>
+<p>There is a limited set of distinct percepts/actions/states relevant to the model.</p>
+<p>Examples can include board-game positions or a small finite command set.</p>
+<h2>Continuous</h2>
+<p>Important variables can take values over a continuous range.</p>
+<p>Examples:</p>
+<ul>
+<li>speed;</li>
+<li>steering angle;</li>
+<li>temperature;</li>
+<li>time;</li>
+<li>physical position.</li>
+</ul>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+**Discrete:** “Countable separate choices.”
+
+**Continuous:** “Values smoothly change over a range.”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: Intelligent adversaries -->
+  <section id="s-28" data-search-section="Intelligent adversaries" class="content-section">
+    <div class="section-header">
+      <h2>28. Intelligent adversaries</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Some environments contain other agents that actively reason and try to improve their own outcomes.</p>
+<p>In such environments, your agent cannot assume that the world is simply passive.</p>
+<p>The supplied lecture specifically notes that intelligent adversaries introduce strategic/game-theoretic considerations. [<code>lecture-intelligent-agents.pdf</code>, slide 26]</p>
+<h3>Example</h3>
+<p>Chess.</p>
+<p>Your opponent is not a wall or a tree.</p>
+<p>They are also choosing actions.</p>
+<p>That is why <strong>game playing</strong> becomes a separate AI topic later in Unit I.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 29: Environment classification examples -->
+  <section id="s-29" data-search-section="Environment classification examples" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>29. Environment classification examples</h2>
+      <button class="bookmark-btn" data-id="s-29" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The lecture gives a classification table for examples including image classification, solitaire, backgammon, customer-support chat, and taxi driving. [<code>lecture-intelligent-agents.pdf</code>, slide 27]</p>
+<p>A useful reading exercise is to ask five questions about any environment:</p>
+<ol>
+<li>Can the agent access the relevant information?</li>
+<li>Does an action have one guaranteed result?</li>
+<li>Does the current decision affect the future?</li>
+<li>Can the world change while the agent thinks?</li>
+<li>Are there other intelligent actors making decisions?</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 30: Example: self-driving car -->
+  <section id="s-30" data-search-section="Example: self-driving car" class="content-section">
+    <div class="section-header">
+      <h2>30. Example: self-driving car</h2>
+      <button class="bookmark-btn" data-id="s-30" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied lecture gives a self-driving car example.</p>
+<h3>Percepts</h3>
+<ul>
+<li>video;</li>
+<li>lidar;</li>
+<li>speedometer;</li>
+<li>odometer;</li>
+<li>engine sensors;</li>
+<li>keyboard input;</li>
+<li>microphone;</li>
+<li>GPS.</li>
+</ul>
+<h3>Actions</h3>
+<ul>
+<li>steer;</li>
+<li>accelerate;</li>
+<li>brake;</li>
+<li>horn;</li>
+<li>speak/display.</li>
+</ul>
+<h3>Goals</h3>
+<p>The lecture includes goals such as:</p>
+<ul>
+<li>safety;</li>
+<li>reaching the destination;</li>
+<li>obeying laws;</li>
+<li>managing speed;</li>
+<li>passenger comfort;</li>
+<li>fuel/tire-wear considerations.</li>
+</ul>
+<h3>Environment</h3>
+<p>The lecture describes urban roads, freeways, traffic, pedestrians, weather, customers and related real-world conditions. [<code>lecture-intelligent-agents.pdf</code>, slide 8]</p>
+<h3>Why this is an excellent example</h3>
+<p>One vehicle combines almost every difficult environment property:</p>
+<ul>
+<li>partially/incompletely observed reality;</li>
+<li>uncertainty;</li>
+<li>sequential decisions;</li>
+<li>dynamic changes;</li>
+<li>continuous values;</li>
+<li>interactions with other decision-making entities.</li>
+</ul>
+<p>This is why the self-driving example appears repeatedly in AI teaching.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 31: A universal extension: PEAS -->
+  <section id="s-31" data-search-section="A universal extension: PEAS" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>31. A universal extension: PEAS</h2>
+      <button class="bookmark-btn" data-id="s-31" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <blockquote>
+<p><strong>Source note:</strong> PEAS is a standard AI framework often used to specify an agent's task environment. It is included here as a <strong>universal extension</strong>, not as a verbatim item from the supplied <code>lecture-intelligent-agents.pdf</code> text.</p>
+</blockquote>
+<p>PEAS stands for:</p>
+<ul>
+<li><strong>P</strong> — Performance measure</li>
+<li><strong>E</strong> — Environment</li>
+<li><strong>A</strong> — Actuators</li>
+<li><strong>S</strong> — Sensors</li>
+</ul>
+<h3>Example: self-driving car</h3>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>PEAS element</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Performance</td>
+<td>safety, arrival, comfort, efficiency</td>
+</tr>
+<tr>
+<td>Environment</td>
+<td>roads, traffic, pedestrians, weather</td>
+</tr>
+<tr>
+<td>Actuators</td>
+<td>steering, brakes, accelerator, horn</td>
+</tr>
+<tr>
+<td>Sensors</td>
+<td>camera, lidar, GPS, speed sensors</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Why PEAS is useful</h3>
+<p>PEAS gives you a compact checklist for describing an agent task before designing the agent.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+PEAS ko ek **job description form** samjho:
+
+> Kaam kitna achha hua? → P  
+> Kaam kahaan ho raha hai? → E  
+> Agent kya move kar sakta hai? → A  
+> Agent kya dekh/sense kar sakta hai? → S
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 32: Why agent architecture matters -->
+  <section id="s-32" data-search-section="Why agent architecture matters" class="content-section">
+    <div class="section-header">
+      <h2>32. Why agent architecture matters</h2>
+      <button class="bookmark-btn" data-id="s-32" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>We can now see the progression more clearly.</p>
+<div class="ascii-box"><pre>Simple world
+   ↓
+Simple reaction may be enough
+   ↓
+More hidden information
+   ↓
+Need internal state / memory
+   ↓
+Multiple possible futures
+   ↓
+Need goals
+   ↓
+Multiple competing good outcomes
+   ↓
+Need utility
+   ↓
+Strategic adversaries
+   ↓
+Need game-theoretic reasoning</pre></div>
+<p>This is not just a list of agent types.</p>
+<p>It is a story of <strong>increasing decision-making difficulty</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 33: Agent architecture summary -->
+  <section id="s-33" data-search-section="Agent architecture summary" class="content-section">
+    <div class="section-header">
+      <h2>33. Agent architecture summary</h2>
+      <button class="bookmark-btn" data-id="s-33" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Agent type</th>
+<th>Main idea</th>
+<th style="text-align: right;">Memory?</th>
+<th style="text-align: right;">Future reasoning?</th>
+<th style="text-align: right;">Trade-offs?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Table-driven</td>
+<td>Lookup percept sequence in a table</td>
+<td style="text-align: right;">Stored table</td>
+<td style="text-align: right;">Not conceptually necessary</td>
+<td style="text-align: right;">No</td>
+</tr>
+<tr>
+<td>Simple reflex</td>
+<td>Condition → action</td>
+<td style="text-align: right;">No internal state</td>
+<td style="text-align: right;">No</td>
+<td style="text-align: right;">No</td>
+</tr>
+<tr>
+<td>Memory-based</td>
+<td>Maintain internal state</td>
+<td style="text-align: right;">Yes</td>
+<td style="text-align: right;">Limited/depends on design</td>
+<td style="text-align: right;">Not necessarily</td>
+</tr>
+<tr>
+<td>Goal-based</td>
+<td>Choose actions to achieve goals</td>
+<td style="text-align: right;">Usually state</td>
+<td style="text-align: right;">Yes</td>
+<td style="text-align: right;">Limited compared with utility</td>
+</tr>
+<tr>
+<td>Utility-based</td>
+<td>Rank outcomes with utility</td>
+<td style="text-align: right;">Usually state</td>
+<td style="text-align: right;">Yes</td>
+<td style="text-align: right;">Yes</td>
+</tr>
+</tbody>
+</table></div>
+<p>Do not memorize the table blindly.</p>
+<p>Understand <strong>why each additional capability exists</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 34: A simple ladder for remembering the agent types -->
+  <section id="s-34" data-search-section="A simple ladder for remembering the agent types" class="content-section">
+    <div class="section-header">
+      <h2>34. A simple ladder for remembering the agent types</h2>
+      <button class="bookmark-btn" data-id="s-34" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Use this sentence:</p>
+<blockquote>
+<p><strong>Look up → React → Remember → Reach → Rank</strong></p>
+</blockquote>
+<ul>
+<li><strong>Look up</strong> → table-driven</li>
+<li><strong>React</strong> → simple reflex</li>
+<li><strong>Remember</strong> → memory-based</li>
+<li><strong>Reach</strong> → goal-based</li>
+<li><strong>Rank</strong> → utility-based</li>
+</ul>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish memory line</div>
+
+> **Table dekho → react karo → yaad rakho → goal tak jao → options ko rank karo.**
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 35: Rationality in one example -->
+  <section id="s-35" data-search-section="Rationality in one example" class="content-section">
+    <div class="section-header">
+      <h2>35. Rationality in one example</h2>
+      <button class="bookmark-btn" data-id="s-35" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a robot must clean a room.</p>
+<p>Possible actions:</p>
+<ul>
+<li>move to A;</li>
+<li>move to B;</li>
+<li>suck;</li>
+<li>do nothing.</li>
+</ul>
+<p>Suppose the robot currently senses:</p>
+<div class="formula-math">\[
+[B,Dirty]
+\]</div>
+<p>A rational response is likely to be:</p>
+<div class="formula-math">\[
+Suck
+\]</div>
+<p>But imagine the robot's battery is critically low and the performance measure heavily penalizes energy use.</p>
+<p>Now the best action may be different.</p>
+<p>This shows:</p>
+<blockquote>
+<p><strong>Rational action depends not only on the current percept, but also on the task, performance measure, knowledge and possible consequences.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 36: Rationality is not “always choose the action that turned out best” -->
+  <section id="s-36" data-search-section="Rationality is not “always choose the action that turned out best”" class="content-section">
+    <div class="section-header">
+      <h2>36. Rationality is not “always choose the action that turned out best”</h2>
+      <button class="bookmark-btn" data-id="s-36" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This is a classic conceptual trap.</p>
+<p>Suppose action A had a high expected value based on the information available, but an unlikely event caused a poor result.</p>
+<p>Calling the action irrational merely because the outcome was bad is incorrect.</p>
+<p>The rationality question is:</p>
+<blockquote>
+<p><strong>Was the decision appropriate given the information and knowledge available when the action was chosen?</strong></p>
+</blockquote>
+<p>Not:</p>
+<blockquote>
+<p><strong>Did the action guarantee the best possible outcome?</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 37: Common beginner mistakes -->
+  <section id="s-37" data-search-section="Common beginner mistakes" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>37. Common beginner mistakes</h2>
+      <button class="bookmark-btn" data-id="s-37" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Mistake 1 — Agent = robot</div>
+
+False.
+
+The lecture explicitly includes humans, robots, softbots and thermostats as examples of agents. [`lecture-intelligent-agents.pdf`, slide 2]
+
+</div>
+
+<div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Mistake 2 — Sensor = percept</div>
+
+False.
+
+A sensor collects information; the percept is the information received.
+
+</div>
+
+<div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Mistake 3 — Rational = omniscient</div>
+
+False.
+
+A rational agent can lack complete information.
+
+</div>
+
+<div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Mistake 4 — Rational = guaranteed successful</div>
+
+False.
+
+The environment can be uncertain or partially observed.
+
+</div>
+
+<div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Mistake 5 — Goal and utility are identical</div>
+
+Not exactly.
+
+Goals identify desirable states; utility provides a graded measure of desirability.
+
+</div>
+
+<div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Mistake 6 — Memory means storing every past sensor reading</div>
+
+Not necessarily.
+
+The lecture's idea is an **internal state** that captures relevant history.
+
+</div>
+
+<div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Mistake 7 — Dynamic means nondeterministic</div>
+
+No.
+
+These are different dimensions.
+
+- **Dynamic:** environment changes over time.
+- **Nondeterministic:** action outcomes are not uniquely determined.
+
+An environment can be dynamic and deterministic, or dynamic and nondeterministic.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 38: Visual recall challenge -->
+  <section id="s-38" data-search-section="Visual recall challenge" class="content-section">
+    <div class="section-header">
+      <h2>38. Visual recall challenge</h2>
+      <button class="bookmark-btn" data-id="s-38" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Without looking back, draw this from memory:</p>
+<div class="ascii-box"><pre>[ Environment ]
+        ↓
+     sensors
+        ↓
+     [ Agent ]
+        ↓
+ effectors / actuators
+        ↓
+[ Environment changes ]</pre></div>
+<p>Then label:</p>
+<ul>
+<li>percept;</li>
+<li>action;</li>
+<li>percept sequence;</li>
+<li>performance measure;</li>
+<li>goal;</li>
+<li>utility.</li>
+</ul>
+<p>If you cannot draw it, reread Sections 2–10.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 39: Active recall — close the book now -->
+  <section id="s-39" data-search-section="Active recall — close the book now" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>39. Active recall — close the book now</h2>
+      <button class="bookmark-btn" data-id="s-39" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Try answering without looking.</p>
+<h3>Q1</h3>
+<p>What is an intelligent agent?</p>
+<h3>Q2</h3>
+<p>What is the difference between a sensor and a percept?</p>
+<h3>Q3</h3>
+<p>What does</p>
+<div class="formula-math">\[
+f:P^*\rightarrow A
+\]</div>
+<p>mean?</p>
+<h3>Q4</h3>
+<p>Why is rationality different from omniscience?</p>
+<h3>Q5</h3>
+<p>Why do we need a performance measure?</p>
+<h3>Q6</h3>
+<p>What is autonomy?</p>
+<h3>Q7</h3>
+<p>What is the difference between a reflex agent and an agent with memory?</p>
+<h3>Q8</h3>
+<p>Why does a goal-based agent need future reasoning?</p>
+<h3>Q9</h3>
+<p>Why is utility useful when many successful outcomes exist?</p>
+<h3>Q10</h3>
+<p>Differentiate deterministic and nondeterministic environments.</p>
+<h3>Q11</h3>
+<p>Differentiate episodic and sequential environments.</p>
+<h3>Q12</h3>
+<p>Differentiate static and dynamic environments.</p>
+<h3>Q13</h3>
+<p>Name the major agent types covered in the supplied lecture.</p>
+<h3>Q14</h3>
+<p>Why is a self-driving car a difficult agent-environment problem?</p>
+<h3>Q15</h3>
+<p>Why does game playing require a different kind of reasoning from a passive environment?</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 40: Answer key — compact -->
+  <section id="s-40" data-search-section="Answer key — compact" class="content-section">
+    <div class="section-header">
+      <h2>40. Answer key — compact</h2>
+      <button class="bookmark-btn" data-id="s-40" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p><strong>A1:</strong> An intelligent agent perceives its environment through sensors and acts rationally using effectors.<br />
+<strong>A2:</strong> Sensor = information-gathering mechanism; percept = information received.<br />
+<strong>A3:</strong> It maps a percept sequence to an action.<br />
+<strong>A4:</strong> Rationality uses available information; omniscience assumes complete knowledge.<br />
+<strong>A5:</strong> It defines how success is measured.<br />
+<strong>A6:</strong> Acting based on the agent's own experience rather than being completely controlled by the designer.<br />
+<strong>A7:</strong> Reflex uses current percept/rules; memory-based agents maintain internal state.<br />
+<strong>A8:</strong> Because actions are chosen partly for their effect on reaching a future desirable state.<br />
+<strong>A9:</strong> It lets the agent rank alternatives and trade off competing objectives.<br />
+<strong>A10:</strong> Deterministic → action uniquely determines the next state; nondeterministic → multiple outcomes may be possible.<br />
+<strong>A11:</strong> Episodic → episodes are independent; sequential → current actions affect future states.<br />
+<strong>A12:</strong> Static → world does not change while thinking; dynamic → it may change while thinking.<br />
+<strong>A13:</strong> Table-driven, simple reflex, memory-based, goal-based, utility-based.<br />
+<strong>A14:</strong> It has incomplete information, uncertainty, sequential decisions, dynamic changes, continuous variables and interactions with other agents.<br />
+<strong>A15:</strong> An intelligent opponent actively chooses responses, so the agent must consider strategic consequences.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 41: Exam lens -->
+  <section id="s-41" data-search-section="Exam lens" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>41. Exam lens</h2>
+      <button class="bookmark-btn" data-id="s-41" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>2-mark questions likely to appear</h2>
+<ul>
+<li>Define an intelligent agent.</li>
+<li>What is a percept?</li>
+<li>What is an action?</li>
+<li>Define rational agent.</li>
+<li>What is a performance measure?</li>
+<li>What is autonomy?</li>
+<li>Name the types of agents.</li>
+<li>What is an accessible environment?</li>
+<li>Define deterministic environment.</li>
+<li>Define utility function.</li>
+</ul>
+<h2>5-mark questions</h2>
+<ul>
+<li>Explain the agent–environment interaction with a diagram.</li>
+<li>Explain rationality and performance measures.</li>
+<li>Explain simple reflex and memory-based agents.</li>
+<li>Explain goal-based and utility-based agents.</li>
+<li>Explain environment properties with examples.</li>
+<li>Explain the vacuum-cleaner world as an intelligent-agent problem.</li>
+</ul>
+<h2>10-mark questions</h2>
+<ul>
+<li>Explain intelligent agents, their architecture and types with suitable diagrams and examples.</li>
+<li>Discuss different properties of task environments and explain their effect on agent design.</li>
+<li>Compare table-driven, reflex, memory-based, goal-based and utility-based agents.</li>
+<li>Explain rationality with the self-driving-car or vacuum-world example.</li>
+</ul>
+<h3>Exam-writing skeleton: “Explain an intelligent agent.”</h3>
+<ol>
+<li>Definition</li>
+<li>Agent–environment diagram</li>
+<li>Sensors/percepts</li>
+<li>Agent function</li>
+<li>Effectors/actions</li>
+<li>Rationality</li>
+<li>Performance measure</li>
+<li>One example</li>
+<li>Short conclusion</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 42: Universal lens vs course lens -->
+  <section id="s-42" data-search-section="Universal lens vs course lens" class="content-section">
+    <div class="section-header">
+      <h2>42. Universal lens vs course lens</h2>
+      <button class="bookmark-btn" data-id="s-42" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Universal lens</h2>
+<p>An agent is a decision-making system situated in an environment: it receives observations, maintains whatever internal information is needed, and chooses actions according to its objective and information.</p>
+<h2>Course lens</h2>
+<p>Your supplied lecture specifically emphasizes:</p>
+<ul>
+<li>percept history → action mapping;</li>
+<li>rational action;</li>
+<li>performance measure;</li>
+<li>autonomy;</li>
+<li>table-driven, reflex, memory-based, goal-based and utility-based agents;</li>
+<li>environment properties;</li>
+<li>vacuum-world and self-driving examples.</li>
+</ul>
+<p>The course lens is the one to prioritize when answering your university exam.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 43: Connection to the next chapter -->
+  <section id="s-43" data-search-section="Connection to the next chapter" class="content-section">
+    <div class="section-header">
+      <h2>43. Connection to the next chapter</h2>
+      <button class="bookmark-btn" data-id="s-43" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This chapter answers:</p>
+<blockquote>
+<p><strong>Who is making the decision?</strong></p>
+</blockquote>
+<p>The next chapter asks:</p>
+<blockquote>
+<p><strong>How do we formulate a problem so that the agent can search for a solution?</strong></p>
+</blockquote>
+<p>That transition is fundamental:</p>
+<div class="ascii-box"><pre>Intelligent Agent
+      ↓
+Goal
+      ↓
+Problem formulation
+      ↓
+State space
+      ↓
+Search
+      ↓
+Solution / action sequence</pre></div>
+<p>This is why the course naturally moves from <strong>agents → problem solving → search</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 44: Resource shelf -->
+  <section id="s-44" data-search-section="Resource shelf" class="content-section">
+    <div class="section-header">
+      <h2>44. Resource shelf</h2>
+      <button class="bookmark-btn" data-id="s-44" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Primary course source</h2>
+<p><strong><code>lecture-intelligent-agents.pdf</code></strong><br />
+Philipp Koehn, <em>Artificial Intelligence: Intelligent Agents</em>, 5 February 2026.</p>
+<p>Key areas used in this chapter:</p>
+<ul>
+<li>Slides 1–3 — agents, environments and vacuum world</li>
+<li>Slides 4–5 — rationality/performance measure</li>
+<li>Slides 6–11 — intelligent agent, sensors/effectors, self-driving car, rationality, autonomy</li>
+<li>Slide 13 onward — agent types</li>
+<li>Slides 18–23 — internal state, goal-based and utility-based agents</li>
+<li>Slides 25–27 — environment properties</li>
+<li>Summary section — agent overview</li>
+</ul>
+<h2>Deeper universal reading</h2>
+<p><strong>Russell &amp; Norvig — <em>Artificial Intelligence: A Modern Approach</em></strong></p>
+<p>Use the intelligent-agent and task-environment material when you want a broader textbook treatment.</p>
+<h2>Video use</h2>
+<p>For this chapter, prioritize a clear visual introduction to:</p>
+<ul>
+<li>intelligent agents;</li>
+<li>rational agents;</li>
+<li>task environments;</li>
+<li>simple reflex vs goal-based vs utility-based agents.</li>
+</ul>
+<p>Do not watch multiple full courses for this chapter. One clear conceptual video + your lecture + this chapter is enough for the first pass.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 45: Mastery test -->
+  <section id="s-45" data-search-section="Mastery test" class="content-section">
+    <div class="section-header">
+      <h2>45. Mastery test</h2>
+      <button class="bookmark-btn" data-id="s-45" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Do not mark this chapter complete until you can answer <strong>yes</strong> to all of these.</p>
+<h3>Concept</h3>
+<ul>
+<li>[ ] I can explain an agent without using the word “AI” as the explanation.</li>
+<li>[ ] I can distinguish environment, sensor, percept, agent, effector and action.</li>
+<li>[ ] I understand the agent–environment loop.</li>
+<li>[ ] I understand the agent function.</li>
+</ul>
+<h3>Reasoning</h3>
+<ul>
+<li>[ ] I can explain rationality.</li>
+<li>[ ] I know why rationality does not mean omniscience.</li>
+<li>[ ] I can design a performance measure for a simple task.</li>
+<li>[ ] I understand autonomy.</li>
+</ul>
+<h3>Agent architectures</h3>
+<ul>
+<li>[ ] I can explain each agent type.</li>
+<li>[ ] I can explain why memory becomes necessary.</li>
+<li>[ ] I can explain why goals are needed.</li>
+<li>[ ] I can explain why utility goes beyond goals.</li>
+</ul>
+<h3>Environment</h3>
+<ul>
+<li>[ ] I can classify an environment using the six properties.</li>
+<li>[ ] I can give my own examples.</li>
+</ul>
+<h3>Exam</h3>
+<ul>
+<li>[ ] I can draw the agent–environment diagram from memory.</li>
+<li>[ ] I can write a 5-mark answer on intelligent agents.</li>
+<li>[ ] I can write a 10-mark comparison of agent types.</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 46: Final mental model -->
+  <section id="s-46" data-search-section="Final mental model" class="content-section">
+    <div class="section-header">
+      <h2>46. Final mental model</h2>
+      <button class="bookmark-btn" data-id="s-46" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Remember the chapter with this chain:</p>
+<blockquote>
+<p><strong>Agent = perceive + decide + act</strong></p>
+</blockquote>
+<p>Then make it richer:</p>
+<blockquote>
+<p><strong>Perceive → remember → pursue goals → compare utilities → act rationally</strong></p>
+</blockquote>
+<p>And remember the environment side:</p>
+<blockquote>
+<p><strong>What the agent can see + how the world changes + how uncertain the world is + who else is acting</strong></p>
+</blockquote>
+<p>That is the foundation for the search problems that come next.</p>
+<hr />
+<h2>Source integrity note</h2>
+<p>This chapter expands and pedagogically reorganizes the supplied <code>lecture-intelligent-agents.pdf</code>. Course-specific terminology and framing are retained. The PEAS section and the <code>state_t = UPDATE(...)</code> abstraction are explicitly marked as universal extensions rather than being represented as verbatim content from the supplied lecture.</p>
+<p><strong>Next chapter:</strong> <code>MAIN-U1-C03 — Problem Formulation &amp; State-Space Thinking</code></p>
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="ch01-what-is-ai.html" class="nav-btn">← Ch 1 — What Is AI?</a>
+    <a href="ch03-problem-formulation.html" class="nav-btn primary">Next: Ch 3 — Problem Formulation →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch02-intelligent-agents.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 2</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

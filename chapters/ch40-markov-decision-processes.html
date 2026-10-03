@@ -1,0 +1,2261 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 40: Markov Decision Processes (MDPs) — AI & Machine Learning MiniBook. States, Actions, Transition Probabilities, Rewards, Discount Factor, Bellman Expectation &amp; Optimality Equations, and Value Iteration">
+<title>Ch 40 — Markov Decision Processes (MDPs) | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-xvii">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 40 — Markov Decision Processes (MDPs)</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 40 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why This Chapter Exists <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Source Boundary — What Comes From Your Course Map <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. The One-Minute Intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Real-World Analogy — Choosing a Route During a Trip </a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. The Five Core Ingredients <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. State — “Where Am I?” <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. The Markov Property <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Action — “What Can I Do?” <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Transition Model — “Where Do I Go Next?” <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Deterministic vs Stochastic Transitions <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Reward — “How Good Was That Consequence?” <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Policy — “What Will I Do?” <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Return — Immediate Reward Is Not the Whole Story <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Why Do We Discount the Future? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Value Function — “How Good Is This State?” <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Action-Value Function — “How Good Is This State-Action Choice?” <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. The Relationship Between V and Q <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Bellman Idea — Break a Long Problem Into One Step + The Rest <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Reading the Bellman Equation Slowly <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Bellman Optimality Idea <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Worked Example 1 — Simple Deterministic Chain <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Worked Example 2 — Stochastic Transition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Worked Example 3 — Why Greedy Immediate Reward Can Fail </a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. MDP as a Graph <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Episodic vs Continuing Tasks </a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Terminal State </a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Why an MDP Is More Than a Markov Chain </a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Why the MDP Model Matters for Reinforcement Learning </a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. MDP vs Supervised Learning </a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. MDP vs Contextual Decision Making </a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Policy Evaluation vs Control </a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Exploration vs Exploitation — Preview </a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Formula Card — Discounted Return <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Formula Card — State Value <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Formula Card — Action Value <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Formula Card — Bellman Expectation Equation <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Formula Card — Bellman Optimality for Q <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. How the Mathematics Connects </a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Common Mistakes </a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Exam Lens <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Active Recall — Blank MDP Diagram </a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Active Recall — Explain in One Breath </a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Practice Set A — Quick Check </a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Practice Set B — Numerical </a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. Chapter Exit Test </a>
+      <a href="#s-46" class="sidebar-link"><span class="link-icon">📌</span>46. Memory Anchors </a>
+      <a href="#s-47" class="sidebar-link"><span class="link-icon">📌</span>47. Resource Shelf </a>
+      <a href="#s-48" class="sidebar-link"><span class="link-icon">📌</span>48. Connection to the Next Chapter </a>
+      <a href="#s-49" class="sidebar-link"><span class="link-icon">📌</span>49. Source Boundary Summary </a>
+      <a href="#s-50" class="sidebar-link"><span class="link-icon">📌</span>50. Final Mental Model </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link active"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit IV</span><span>›</span><span>Part XVII — Reinforcement Learning & Sequential Decisions</span><span>›</span><span style="color:var(--em-text)">Chapter 40</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 40 · Unit IV · Part XVII</div>
+    <div class="chapter-part-banner part-xvii">
+      <span class="part-banner-badge">Unit IV · Part XVII</span>
+      <span>Reinforcement Learning & Sequential Decisions</span>
+    </div>
+    <h1 class="chapter-title">Markov Decision Processes (MDPs)</h1>
+    <div class="concept-id-tag">[CONCEPT-RL-040]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: Highest Yield (10-mark guarantee)</span>
+      <span class="chapter-meta-item">📖 ~55 min read</span>
+      <span class="chapter-meta-item">🎯 50 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>Markov Decision Processes (MDP):</strong> 5-Tuple formulation \((S, A, P, R, \gamma)\), Markov property, Transition probability matrix, Discounted return \(G_t = \sum \gamma^k R_{t+k+1}\), State-value function \(V(s)\), Action-value function \(Q(s, a)\), Bellman Expectation Equations, Bellman Optimality Equations, and Value Iteration algorithm.</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why This Chapter Exists</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Source Boundary — What Comes From Your Course Map</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">The One-Minute Intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Real-World Analogy — Choosing a Route During a Trip</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">The Five Core Ingredients</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">State — “Where Am I?”</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">The Markov Property</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Action — “What Can I Do?”</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Transition Model — “Where Do I Go Next?”</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Deterministic vs Stochastic Transitions</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Reward — “How Good Was That Consequence?”</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Policy — “What Will I Do?”</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Return — Immediate Reward Is Not the Whole Story</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Why Do We Discount the Future?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Value Function — “How Good Is This State?”</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Action-Value Function — “How Good Is This State-Action Choice?”</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">The Relationship Between V and Q</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Bellman Idea — Break a Long Problem Into One Step + The Rest</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Reading the Bellman Equation Slowly</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Bellman Optimality Idea</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Worked Example 1 — Simple Deterministic Chain</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Worked Example 2 — Stochastic Transition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Worked Example 3 — Why Greedy Immediate Reward Can Fail</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">MDP as a Graph</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Episodic vs Continuing Tasks</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Terminal State</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Why an MDP Is More Than a Markov Chain</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Why the MDP Model Matters for Reinforcement Learning</span></a></li>
+      <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">MDP vs Supervised Learning</span></a></li>
+      <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">MDP vs Contextual Decision Making</span></a></li>
+      <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Policy Evaluation vs Control</span></a></li>
+      <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Exploration vs Exploitation — Preview</span></a></li>
+      <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Formula Card — Discounted Return</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Formula Card — State Value</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Formula Card — Action Value</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Formula Card — Bellman Expectation Equation</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Formula Card — Bellman Optimality for Q</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">How the Mathematics Connects</span></a></li>
+      <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Common Mistakes</span></a></li>
+      <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Exam Lens</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Active Recall — Blank MDP Diagram</span></a></li>
+      <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Active Recall — Explain in One Breath</span></a></li>
+      <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Practice Set A — Quick Check</span></a></li>
+      <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Practice Set B — Numerical</span></a></li>
+      <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">Chapter Exit Test</span></a></li>
+      <li class="toc-item"><a href="#s-46"><span class="toc-num">46</span><span class="toc-name">Memory Anchors</span></a></li>
+      <li class="toc-item"><a href="#s-47"><span class="toc-num">47</span><span class="toc-name">Resource Shelf</span></a></li>
+      <li class="toc-item"><a href="#s-48"><span class="toc-num">48</span><span class="toc-name">Connection to the Next Chapter</span></a></li>
+      <li class="toc-item"><a href="#s-49"><span class="toc-num">49</span><span class="toc-name">Source Boundary Summary</span></a></li>
+      <li class="toc-item"><a href="#s-50"><span class="toc-num">50</span><span class="toc-name">Final Mental Model</span></a></li>
+    </ul>
+  </div>
+
+  
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 1: Why This Chapter Exists -->
+  <section id="s-01" data-search-section="Why This Chapter Exists" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>1. Why This Chapter Exists</h2>
+      <button class="bookmark-btn" data-id="s-01" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>In supervised learning, the usual story is:</p>
+<div class="ascii-box"><pre>data → prediction → loss → parameter update</pre></div>
+<p>In reinforcement learning, the story changes:</p>
+<div class="ascii-box"><pre>environment
+                    ↑   ↓
+                 reward  state
+                    ↑   ↓
+                  action
+                    ↑
+                   agent</pre></div>
+<p>The agent is not simply given the correct answer for every situation.</p>
+<p>Instead, it repeatedly:</p>
+<ol>
+<li>observes a situation;</li>
+<li>chooses an action;</li>
+<li>receives a reward or penalty;</li>
+<li>moves to another situation;</li>
+<li>uses experience to improve future decisions.</li>
+</ol>
+<p>An <strong>MDP</strong> is the mathematical framework used to describe this kind of sequential decision problem.</p>
+<p>The central idea is:</p>
+<blockquote>
+<p><strong>An MDP represents decision making as states, actions, probabilistic transitions, rewards, and a rule for choosing actions.</strong></p>
+</blockquote>
+<p>This chapter is the bridge from the general idea of reinforcement learning to <strong>Q-learning</strong> in C41.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 2: Source Boundary — What Comes From Your Course Map -->
+  <section id="s-02" data-search-section="Source Boundary — What Comes From Your Course Map" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. Source Boundary — What Comes From Your Course Map</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your AI/ML resource guide places MDPs at the beginning of Unit IV and identifies the main learning targets as:</p>
+<ul>
+<li>states;</li>
+<li>actions;</li>
+<li>rewards;</li>
+<li>transitions;</li>
+<li>policy;</li>
+<li>value.</li>
+</ul>
+<p>It recommends the NPTEL Reinforcement Learning course as the structured source for Unit IV and explicitly lists MDPs and Bellman equations there. The same guide maps Q-learning immediately after MDPs.</p>
+<p>The supplied lecture-note set does <strong>not</strong> contain a complete dedicated MDP chapter. Therefore this chapter uses the syllabus/resource guide for the course boundary and gives the necessary mathematical reinforcement-learning treatment as a <strong>standard expansion</strong>.</p>
+<p><strong>Course boundary:</strong> learn the MDP components, Markov property, reward/return, discounting, policy, value functions, Bellman equations and the ideas needed to understand Q-learning. </p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: The One-Minute Intuition -->
+  <section id="s-03" data-search-section="The One-Minute Intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>3. The One-Minute Intuition</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine a robot in a small warehouse.</p>
+<p>At every moment the robot is in some location.</p>
+<p>It can choose actions such as:</p>
+<div class="ascii-box"><pre>UP
+DOWN
+LEFT
+RIGHT</pre></div>
+<p>Some moves are safe and useful.
+Others may take it closer to a wall.
+Some actions may accidentally slip and produce a different next location.
+Reaching the charging station gives a positive reward.
+Hitting a restricted zone gives a negative reward.</p>
+<p>The robot therefore needs to answer:</p>
+<blockquote>
+<p>“Given where I am now, what should I do, knowing that my action changes what situation I will face next?”</p>
+</blockquote>
+<p>That is exactly the kind of problem an MDP describes.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: Real-World Analogy — Choosing a Route During a Trip -->
+  <section id="s-04" data-search-section="Real-World Analogy — Choosing a Route During a Trip" class="content-section">
+    <div class="section-header">
+      <h2>4. Real-World Analogy — Choosing a Route During a Trip</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose you are travelling through a city.</p>
+<h3>State</h3>
+<p>Where you are now.</p>
+<div class="ascii-box"><pre>Metro station A</pre></div>
+<h3>Action</h3>
+<p>What you decide to do.</p>
+<div class="ascii-box"><pre>Take metro
+Take bus
+Walk</pre></div>
+<h3>Transition</h3>
+<p>What happens after your choice.</p>
+<p>The bus may take you to station B with high probability, but traffic can cause different outcomes.</p>
+<h3>Reward</h3>
+<p>A numerical signal for how desirable the result was.</p>
+<p>For example:</p>
+<div class="ascii-box"><pre>Arrive quickly          +10
+Small delay              +2
+Major delay              -5
+Missed connection      -20</pre></div>
+<h3>Policy</h3>
+<p>Your rule for deciding what action to take from each state.</p>
+<div class="ascii-box"><pre>At A → take metro
+At B → walk
+At C → take bus</pre></div>
+<p>This is not yet “the best policy.” It is simply a policy.</p>
+<p>The mathematics of an MDP allows us to define and evaluate such policies.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: The Five Core Ingredients -->
+  <section id="s-05" data-search-section="The Five Core Ingredients" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>5. The Five Core Ingredients</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="diagram-box"><pre class="mermaid">
+graph LR
+    subgraph Agent["🤖 Intelligent Agent"]
+        POLICY["Policy π(a|s)"]
+    end
+    subgraph Env["🌍 Task Environment"]
+        TRANS["Dynamics P(s'|s, a)"]
+        REW["Reward Function R(s, a, s')"]
+    end
+    POLICY -->|"Action: A_t"| Env
+    TRANS -->|"New State: S_{t+1}"| Agent
+    REW -->|"Immediate Reward: R_{t+1}"| Agent
+</pre></div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher explanation — Hinglish</div>
+
+MDP sequential decisions lene ki mathematical bhasha hai. Isme agent aur environment ka ek continuous loop chalta hai:
+1. Agent dekhta hai current **State** ($S_t$).
+2. Apni **Policy** ($\pi$) ke hisab se ek **Action** ($A_t$) chunta hai.
+3. Environment palat kar do cheezein deta hai: ek naya state $S_{t+1}$ (transition probability $P$ ke tehat) aur ek immediate **Reward** ($R_{t+1}$).
+Har decision ka asar sirf aaj ke reward par nahi, balki kal milne wale naye maukon par bhi padta hai!
+
+
+
+
+<div class="diagram-box"><pre class="mermaid">
+graph LR
+    subgraph Agent["🤖 Intelligent Agent"]
+        POLICY["Policy π(a|s)"]
+    end
+    subgraph Env["🌍 Task Environment"]
+        TRANS["Dynamics P(s'|s, a)"]
+        REW["Reward Function R(s, a, s')"]
+    end
+    POLICY -->|"Action: A_t"| Env
+    TRANS -->|"New State: S_{t+1}"| Agent
+    REW -->|"Immediate Reward: R_{t+1}"| Agent
+</pre></div>
+
+
+
+</div>
+
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher explanation — Hinglish</div>
+
+MDP sequential decisions lene ki mathematical bhasha hai. Isme agent aur environment ka ek continuous loop chalta hai:
+1. Agent dekhta hai current **State** ($S_t$).
+2. Apni **Policy** ($\pi$) ke hisab se ek **Action** ($A_t$) chunta hai.
+3. Environment palat kar do cheezein deta hai: ek naya state $S_{t+1}$ (transition probability $P$ ke tehat) aur ek immediate **Reward** ($R_{t+1}$).
+Har decision ka asar sirf aaj ke reward par nahi, balki kal milne wale naye maukon par bhi padta hai!
+
+
+A common compact description is:
+
+
+
+<div class="formula-math">\[
+\boxed{(\mathcal S,\mathcal A,P,R,\gamma)}
+\]</div>
+
+
+
+where:
+
+| Symbol | Meaning |
+|---|---|
+| \(\mathcal S\) | set of states |
+| \(\mathcal A\) | set of actions |
+| \(P\) | transition model |
+| \(R\) | reward function |
+| \(\gamma\) | discount factor |
+
+A policy \(\pi\) is also central because it specifies how actions are selected.
+
+So the mental picture is:
+
+
+
+<div class="ascii-box"><pre>MDP
+│
+├── States S
+├── Actions A
+├── Transition model P
+├── Reward function R
+└── Discount γ
+       │
+       ↓
+    Policy π
+       │
+       ↓
+    Behaviour</pre></div>
+
+
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: State — “Where Am I?” -->
+  <section id="s-06" data-search-section="State — “Where Am I?”" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>6. State — “Where Am I?”</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A <strong>state</strong> contains the information needed to describe the agent's current decision situation.</p>
+<p>Examples:</p>
+<ul>
+<li>robot location;</li>
+<li>board configuration in a game;</li>
+<li>current inventory level;</li>
+<li>current traffic condition;</li>
+<li>current position of a game character.</li>
+</ul>
+<p>We write a state as:</p>
+<div class="formula-math">\[
+s\in\mathcal S.
+\]</div>
+<p>The set of all possible states is:</p>
+<div class="formula-math">\[
+\mathcal S.
+\]</div>
+<h3>Important distinction</h3>
+<p>A state is not necessarily the entire history of everything that has happened.</p>
+<p>An MDP relies on the <strong>Markov property</strong> so that the relevant future can be conditioned on the current state rather than requiring the entire history.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: The Markov Property -->
+  <section id="s-07" data-search-section="The Markov Property" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>7. The Markov Property</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The word “Markov” is the key word in MDP.</p>
+<p>The simplified intuition is:</p>
+<blockquote>
+<p><strong>Given the current state and action, the distribution of the next state does not need the entire past history.</strong></p>
+</blockquote>
+<p>Formally:</p>
+<div class="formula-math">\[
+P(S_{t+1}=s'\mid S_t=s,A_t=a,S_{t-1},A_{t-1},\ldots)
+=
+P(S_{t+1}=s'\mid S_t=s,A_t=a).
+\]</div>
+<p>The past is not necessarily irrelevant in the real world; rather, the <strong>state is assumed to summarize all past information needed for the future transition dynamics</strong>.</p>
+<h3>Example</h3>
+<p>If the state is:</p>
+<div class="ascii-box"><pre>current chess board position</pre></div>
+<p>then we do not need the complete move history to define the legal next moves in ordinary chess mechanics.</p>
+<p>But if some hidden historical information changes the rules or available actions, then the chosen state representation may be insufficient.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: Action — “What Can I Do?” -->
+  <section id="s-08" data-search-section="Action — “What Can I Do?”" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>8. Action — “What Can I Do?”</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>An <strong>action</strong> is a choice available to the agent.</p>
+<p>We write:</p>
+<div class="formula-math">\[
+a\in\mathcal A(s)
+\]</div>
+<p>when the set of legal actions depends on the current state.</p>
+<p>In some simplified treatments we use one global action set \(\mathcal A\).</p>
+<p>Examples:</p>
+<div class="ascii-box"><pre>Robot:       {up, down, left, right}
+Game agent:  {move 1, move 2, move 3, ...}
+Finance:     {buy, hold, sell}</pre></div>
+<p>The important point is that the agent <strong>chooses actions</strong>, unlike ordinary supervised learning where the target label is supplied in advance.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: Transition Model — “Where Do I Go Next?” -->
+  <section id="s-09" data-search-section="Transition Model — “Where Do I Go Next?”" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>9. Transition Model — “Where Do I Go Next?”</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The transition model describes how an action changes the state.</p>
+<p>For a stochastic MDP:</p>
+<div class="formula-math">\[
+\boxed{P(s'\mid s,a)}
+\]</div>
+<p>means:</p>
+<blockquote>
+<p>the probability that the next state is \(s'\) when action \(a\) is taken in state \(s\).</p>
+</blockquote>
+<p>For every fixed \((s,a)\), the transition probabilities over all possible next states should satisfy:</p>
+<div class="formula-math">\[
+P(s'\mid s,a)\ge 0
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\sum_{s'\in\mathcal S}P(s'\mid s,a)=1
+\]</div>
+<p>for a finite state space.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: Deterministic vs Stochastic Transitions -->
+  <section id="s-10" data-search-section="Deterministic vs Stochastic Transitions" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>10. Deterministic vs Stochastic Transitions</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Deterministic</h3>
+<p>The chosen action produces exactly one next state.</p>
+<div class="ascii-box"><pre>s --a--&gt; s&#x27;</pre></div>
+<p>Probability:</p>
+<div class="formula-math">\[
+P(s'\mid s,a)=1.
+\]</div>
+<h3>Stochastic</h3>
+<p>The same action can lead to multiple possible next states.</p>
+<div class="ascii-box"><pre>→ s₁  (0.8)
+s --a--------→ s₂  (0.15)
+             → s₃  (0.05)</pre></div>
+<p>The environment contains uncertainty.</p>
+<p>This distinction matters because expected future reward depends on the transition distribution.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: Reward — “How Good Was That Consequence?” -->
+  <section id="s-11" data-search-section="Reward — “How Good Was That Consequence?”" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>11. Reward — “How Good Was That Consequence?”</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A reward is a numerical feedback signal associated with the agent's interaction.</p>
+<p>A simple notation is:</p>
+<div class="formula-math">\[
+R(s,a,s')
+\]</div>
+<p>meaning the reward associated with taking action \(a\) in state \(s\) and transitioning to \(s'\).</p>
+<p>Some simplified formulations write:</p>
+<div class="formula-math">\[
+R(s,a)
+\]</div>
+<p>instead.</p>
+<h3>Important idea</h3>
+<p>Reward is not the same as a label such as “cat” or “class 2.”</p>
+<p>It is a signal that tells the agent how desirable the outcome is.</p>
+<div class="ascii-box"><pre>positive reward → encourage behaviour
+negative reward → discourage behaviour
+zero/small reward → little immediate signal</pre></div>
+<p>The meaning of a “good” reward comes entirely from the reward design.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: Policy — “What Will I Do?” -->
+  <section id="s-12" data-search-section="Policy — “What Will I Do?”" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>12. Policy — “What Will I Do?”</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A <strong>policy</strong> defines how the agent chooses actions based on states.</p>
+<p>A deterministic policy can be written as:</p>
+<div class="formula-math">\[
+\boxed{\pi(s)=a}
+\]</div>
+<p>A stochastic policy is represented as:</p>
+<div class="formula-math">\[
+\boxed{\pi(a\mid s)}
+\]</div>
+<p>which means the probability of choosing action \(a\) in state \(s\).</p>
+<h3>Deterministic policy</h3>
+<div class="ascii-box"><pre>state A → action RIGHT
+state B → action LEFT</pre></div>
+<h3>Stochastic policy</h3>
+<div class="ascii-box"><pre>state A:
+RIGHT = 0.8
+UP    = 0.2</pre></div>
+<p>Policy gradients in a later Unit IV chapter work directly with parameterized stochastic policies, so understanding this definition now is important.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: Return — Immediate Reward Is Not the Whole Story -->
+  <section id="s-13" data-search-section="Return — Immediate Reward Is Not the Whole Story" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>13. Return — Immediate Reward Is Not the Whole Story</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose an agent receives rewards:</p>
+<div class="ascii-box"><pre>rₜ       now
+rₜ₊₁     next step
+rₜ₊₂     later
+...</pre></div>
+<p>The cumulative discounted return from time \(t\) is commonly defined as:</p>
+<div class="formula-math">\[
+\boxed{
+G_t=r_t+\gamma r_{t+1}+\gamma^2r_{t+2}+\cdots
+}
+\]</div>
+<p>where:</p>
+<div class="formula-math">\[
+0\le \gamma\lt 1
+\]</div>
+<p>is the discount factor in the usual infinite-horizon setting.</p>
+<p>The agent therefore does not simply ask:</p>
+<blockquote>
+<p>“Which action gives the biggest immediate reward?”</p>
+</blockquote>
+<p>It asks, conceptually:</p>
+<blockquote>
+<p>“Which action leads to the largest expected long-term return?”</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: Why Do We Discount the Future? -->
+  <section id="s-14" data-search-section="Why Do We Discount the Future?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>14. Why Do We Discount the Future?</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Misconception — Common Exam Trap</div>
+
+**Mistake:** Discount factor $\gamma$ ko log sirf ek arbitrary mathematical trick samajhte hain.
+**Reality:** Discount factor $0 \le \gamma < 1$ ke teen zaroori maksad hain:
+1. **Convergence:** Infinite-horizon tasks mein infinite rewards ka sum finite banata hai ($\sum_{t=0}^{\infty} \gamma^t R_{max} = \frac{R_{max}}{1 - \gamma}$).
+2. **Uncertainty:** Future inherently uncertain hota hai; kal milne wala 10 rupaye aaj milne wale 10 rupaye se kam valuable hai.
+3. **Animal & Human Psychology:** Immediate gratification ko prioritize karne ki natural tendency ko accurately model karta hai.
+
+</div>
+
+<div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Misconception — Common Exam Trap</div>
+
+**Mistake:** Discount factor $\gamma$ ko log sirf ek arbitrary mathematical trick samajhte hain.
+**Reality:** Discount factor $0 \le \gamma < 1$ ke teen zaroori maksad hain:
+1. **Convergence:** Infinite-horizon tasks mein infinite rewards ka sum finite banata hai ($\sum_{t=0}^{\infty} \gamma^t R_{max} = \frac{R_{max}}{1 - \gamma}$).
+2. **Uncertainty:** Future inherently uncertain hota hai; kal milne wala 10 rupaye aaj milne wale 10 rupaye se kam valuable hai.
+3. **Animal & Human Psychology:** Immediate gratification ko prioritize karne ki natural tendency ko accurately model karta hai.
+
+
+The discount factor \(\gamma\) controls how strongly future rewards matter relative to immediate rewards.
+
+</div>
+
+<h3>\(\gamma\approx0\)</h3>
+<p>The agent behaves almost myopically.</p>
+<div class="ascii-box"><pre>reward now &gt;&gt;&gt; reward later</pre></div>
+<h3>\(\gamma\approx1\)</h3>
+<p>Future rewards matter much more.</p>
+<div class="ascii-box"><pre>reward now ≈ reward later</pre></div>
+<h3>Simple calculation</h3>
+<p>Suppose:</p>
+<div class="formula-math">\[
+r_t=5,
+\qquad r_{t+1}=10,
+\qquad \gamma=0.5.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+G_t=5+0.5(10)=10.
+\]</div>
+<p>Notice that the future reward contributes 5 rather than 10.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: Value Function — “How Good Is This State?” -->
+  <section id="s-15" data-search-section="Value Function — “How Good Is This State?”" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>15. Value Function — “How Good Is This State?”</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A <strong>value function</strong> estimates expected future return from a state under a policy.</p>
+<p>The state-value function is:</p>
+<div class="formula-math">\[
+\boxed{
+V^\pi(s)=\mathbb E_\pi[G_t\mid S_t=s]
+}
+\]</div>
+<p>Read this as:</p>
+<blockquote>
+<p>“Starting in state \(s\), and following policy \(\pi\), what is the expected discounted return?”</p>
+</blockquote>
+<p>This is a central idea because a state can be valuable even when its immediate reward is small.</p>
+<h3>Example intuition</h3>
+<div class="ascii-box"><pre>State A → immediate reward 0, then excellent future
+State B → immediate reward +5, then terrible future</pre></div>
+<p>A short-sighted agent may prefer B.
+An agent maximizing long-term return may prefer A.</p>
+<p>Value functions let us mathematically express this difference.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: Action-Value Function — “How Good Is This State-Action Choice?” -->
+  <section id="s-16" data-search-section="Action-Value Function — “How Good Is This State-Action Choice?”" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>16. Action-Value Function — “How Good Is This State-Action Choice?”</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The action-value function is:</p>
+<div class="formula-math">\[
+\boxed{
+Q^\pi(s,a)=\mathbb E_\pi[G_t\mid S_t=s,A_t=a]
+}
+\]</div>
+<p>It answers:</p>
+<blockquote>
+<p>“If I am in state \(s\), take action \(a\) now, and then continue according to policy \(\pi\), what return should I expect?”</p>
+</blockquote>
+<p>This distinction is critical for Q-learning.</p>
+<div class="ascii-box"><pre>V(s)
+= value of being in state s
+
+Q(s,a)
+= value of taking action a in state s</pre></div>
+<p>Q-learning learns an approximation of the optimal action-value function.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: The Relationship Between V and Q -->
+  <section id="s-17" data-search-section="The Relationship Between V and Q" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>17. The Relationship Between V and Q</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For a deterministic policy:</p>
+<div class="formula-math">\[
+V^\pi(s)=Q^\pi(s,\pi(s)).
+\]</div>
+<p>For a stochastic policy:</p>
+<div class="formula-math">\[
+V^\pi(s)
+=
+\sum_a\pi(a\mid s)Q^\pi(s,a).
+\]</div>
+<p>So the state value can be understood as an average of action values according to the policy's action probabilities.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: Bellman Idea — Break a Long Problem Into One Step + The Rest -->
+  <section id="s-18" data-search-section="Bellman Idea — Break a Long Problem Into One Step + The Rest" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>18. Bellman Idea — Break a Long Problem Into One Step + The Rest</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The Bellman viewpoint is one of the most important mathematical ideas in reinforcement learning.</p>
+<p>Instead of evaluating the entire long sequence at once, we write:</p>
+<div class="ascii-box"><pre>value now
+   =
+immediate reward
+   +
+ discounted value of what comes next</pre></div>
+<p>For a policy \(\pi\), the Bellman expectation equation is:</p>
+<div class="formula-math">\[
+\boxed{
+V^\pi(s)=
+\sum_a\pi(a\mid s)
+\sum_{s'}P(s'\mid s,a)
+\left[R(s,a,s')+\gamma V^\pi(s')\right]
+}
+\]</div>
+<p>This formula combines all four core quantities:</p>
+<ul>
+<li>policy;</li>
+<li>transition probabilities;</li>
+<li>reward;</li>
+<li>discount factor.</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: Reading the Bellman Equation Slowly -->
+  <section id="s-19" data-search-section="Reading the Bellman Equation Slowly" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>19. Reading the Bellman Equation Slowly</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Look at:</p>
+<div class="formula-math">\[
+V^\pi(s)=
+\sum_a\pi(a\mid s)
+\sum_{s'}P(s'\mid s,a)
+[R(s,a,s')+\gamma V^\pi(s')].
+\]</div>
+<p>Read from the inside out.</p>
+<h3>Step 1</h3>
+<div class="formula-math">\[
+R(s,a,s')
+\]</div>
+<p>Immediate reward.</p>
+<h3>Step 2</h3>
+<div class="formula-math">\[
+\gamma V^\pi(s')
+\]</div>
+<p>Discounted value after the transition.</p>
+<h3>Step 3</h3>
+<div class="formula-math">\[
+R+\gamma V
+\]</div>
+<p>Total one-step-plus-future value.</p>
+<h3>Step 4</h3>
+<p>Multiply by:</p>
+<div class="formula-math">\[
+P(s'\mid s,a)
+\]</div>
+<p>because some next states may be more likely than others.</p>
+<h3>Step 5</h3>
+<p>Average over actions using:</p>
+<div class="formula-math">\[
+\pi(a\mid s).
+\]</div>
+<p>That gives the expected value of following policy \(\pi\).</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: Bellman Optimality Idea -->
+  <section id="s-20" data-search-section="Bellman Optimality Idea" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>20. Bellman Optimality Idea</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+def value_iteration_step(num_states, num_actions, P, R, gamma, V):
+    &quot;&quot;&quot;
+    Performs one synchronous Bellman Optimality backup across all states:
+    V(s) = max_a sum_{s&#x27;} P(s&#x27;|s, a) * [R(s, a, s&#x27;) + gamma * V(s&#x27;)]
+    &quot;&quot;&quot;
+    new_V = np.zeros(num_states)
+    for s in range(num_states):
+        action_values = []
+        for a in range(num_actions):
+            # Q(s, a) = sum_{s&#x27;} P(s&#x27;|s,a) * (R(s,a,s&#x27;) + gamma * V(s&#x27;))
+            expected_return = np.sum(P[s, a] * (R[s, a] + gamma * V))
+            action_values.append(expected_return)
+        new_V[s] = np.max(action_values)
+    return new_V
+
+# Toy 3-state chain MDP demonstration
+num_states, num_actions, gamma = 3, 2, 0.90
+V = np.zeros(num_states)
+# Transition and Reward matrices
+P = np.zeros((num_states, num_actions, num_states))
+R = np.zeros((num_states, num_actions, num_states))
+# Define transitions: Action 0 moves left, Action 1 moves right toward goal state 2
+P[0, 1, 1] = 1.0; P[1, 1, 2] = 1.0; R[1, 1, 2] = 10.0
+P[2, :, 2] = 1.0  # Terminal absorb
+
+for step in range(5):
+    V = value_iteration_step(num_states, num_actions, P, R, gamma, V)
+    print(f&quot;Iteration {step+1}: V = {np.round(V, 2)}&quot;)</code></pre></div>
+<p>Suppose we are not evaluating a fixed policy.</p>
+<p>Suppose instead we want the <strong>best achievable</strong> value.</p>
+<p>Then the optimal state-value function is:</p>
+<div class="formula-math">\[
+\boxed{
+V^*(s)=
+\max_a
+\sum_{s'}P(s'\mid s,a)
+\left[R(s,a,s')+\gamma V^*(s')\right]
+}
+\]</div>
+<p>The optimal action-value function satisfies:</p>
+<div class="formula-math">\[
+\boxed{
+Q^*(s,a)=
+\sum_{s'}P(s'\mid s,a)
+\left[R(s,a,s')+\gamma\max_{a'}Q^*(s',a')\right]
+}
+\]</div>
+<p>This equation is especially important because the Q-learning update later uses the same structure <strong>without requiring the transition model to be explicitly known</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: Worked Example 1 — Simple Deterministic Chain -->
+  <section id="s-21" data-search-section="Worked Example 1 — Simple Deterministic Chain" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>21. Worked Example 1 — Simple Deterministic Chain</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Consider:</p>
+<div class="ascii-box"><pre>S₀ --RIGHT--&gt; S₁ --RIGHT--&gt; GOAL</pre></div>
+<p>Rewards:</p>
+<div class="ascii-box"><pre>S₀ → S₁       reward 0
+S₁ → GOAL     reward +10</pre></div>
+<p>Let:</p>
+<div class="formula-math">\[
+\gamma=0.9.
+\]</div>
+<p>Then the return from \(S_1\) for the action leading to the goal is:</p>
+<div class="formula-math">\[
+G_1=10.
+\]</div>
+<p>From \(S_0\):</p>
+<div class="formula-math">\[
+G_0=0+0.9(10)=9.
+\]</div>
+<p>So the first state can have value 9 even though its immediate reward is 0.</p>
+<p><strong>Memory anchor:</strong></p>
+<blockquote>
+<p>A state can be valuable because of what it makes possible later.</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: Worked Example 2 — Stochastic Transition -->
+  <section id="s-22" data-search-section="Worked Example 2 — Stochastic Transition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>22. Worked Example 2 — Stochastic Transition</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose state \(S\) has one action \(a\).</p>
+<p>The environment behaves as:</p>
+<div class="ascii-box"><pre>S --a--&gt; S₁ with probability 0.8
+S --a--&gt; S₂ with probability 0.2</pre></div>
+<p>Rewards:</p>
+<div class="formula-math">\[
+R(S,a,S_1)=5
+\]</div>
+<div class="formula-math">\[
+R(S,a,S_2)=-2
+\]</div>
+<p>Suppose:</p>
+<div class="formula-math">\[
+V(S_1)=10,
+\qquad
+V(S_2)=4,
+\qquad
+\gamma=0.5.
+\]</div>
+<p>The expected value is:</p>
+<div class="formula-math">\[
+V(S)
+=
+0.8[5+0.5(10)]
++
+0.2[-2+0.5(4)].
+\]</div>
+<p>First branch:</p>
+<div class="formula-math">\[
+5+5=10.
+\]</div>
+<p>Second branch:</p>
+<div class="formula-math">\[
+-2+2=0.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+V(S)=0.8(10)+0.2(0)=8.
+\]</div>
+<p>The agent evaluates not only the reward of each outcome but also its probability.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: Worked Example 3 — Why Greedy Immediate Reward Can Fail -->
+  <section id="s-23" data-search-section="Worked Example 3 — Why Greedy Immediate Reward Can Fail" class="content-section">
+    <div class="section-header">
+      <h2>23. Worked Example 3 — Why Greedy Immediate Reward Can Fail</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose there are two choices from state \(S\):</p>
+<div class="ascii-box"><pre>Action A → immediate reward +5 → terminal
+
+Action B → immediate reward +1 → state T
+          state T → reward +20 → terminal</pre></div>
+<p>With \(\gamma=0.9\):</p>
+<p>Action A return:</p>
+<div class="formula-math">\[
+G_A=5.
+\]</div>
+<p>Action B return:</p>
+<div class="formula-math">\[
+G_B=1+0.9(20)=19.
+\]</div>
+<p>Therefore long-term return distinguishes the two choices.</p>
+<p>The important reinforcement-learning lesson is not the particular numbers.</p>
+<p>It is:</p>
+<blockquote>
+<p><strong>An action should be judged by its consequences over time, not just by the next reward.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: MDP as a Graph -->
+  <section id="s-24" data-search-section="MDP as a Graph" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>24. MDP as a Graph</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A useful visual model is a directed state-transition graph.</p>
+<div class="ascii-box"><pre>action a₁
+      ┌─────────────────┐
+      │                 ▼
+   [S₀] ────────────→ [S₁]
+     │                  │
+     │ action a₂        │ action a₃
+     ▼                  ▼
+   [S₂] ────────────→ [GOAL]</pre></div>
+<p>Each transition can carry:</p>
+<ul>
+<li>action label;</li>
+<li>probability;</li>
+<li>reward.</li>
+</ul>
+<p>For example:</p>
+<div class="ascii-box"><pre>S₀ --a / p=0.8 / r=+2--&gt; S₁</pre></div>
+<p>This graph representation is especially useful for exam questions where you are given a tiny environment and asked to calculate values.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: Episodic vs Continuing Tasks -->
+  <section id="s-25" data-search-section="Episodic vs Continuing Tasks" class="content-section">
+    <div class="section-header">
+      <h2>25. Episodic vs Continuing Tasks</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Episodic</h3>
+<p>The interaction eventually reaches a terminal condition.</p>
+<p>Examples:</p>
+<ul>
+<li>a game round;</li>
+<li>a maze solved or failed;</li>
+<li>a robot delivery episode.</li>
+</ul>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>start → states → terminal</pre></div>
+<h3>Continuing</h3>
+<p>There may be no natural terminal state.</p>
+<p>Examples:</p>
+<ul>
+<li>continuous traffic control;</li>
+<li>server resource allocation;</li>
+<li>long-running industrial control.</li>
+</ul>
+<p>The return formulation and convergence considerations can differ depending on the task formulation.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: Terminal State -->
+  <section id="s-26" data-search-section="Terminal State" class="content-section">
+    <div class="section-header">
+      <h2>26. Terminal State</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A terminal state ends an episode.</p>
+<p>It has no ordinary future actions after termination.</p>
+<p>A common convention is:</p>
+<div class="formula-math">\[
+V(terminal)=0
+\]</div>
+<p>when there is no additional reward beyond termination.</p>
+<p>Then the final transition is simply interpreted through its immediate reward.</p>
+<h3>Exam trap</h3>
+<p>Do not automatically insert a future value term after a terminal state.</p>
+<p>If the next state is terminal and its continuation value is defined as zero:</p>
+<div class="formula-math">\[
+R+\gamma(0)=R.
+\]</div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: Why an MDP Is More Than a Markov Chain -->
+  <section id="s-27" data-search-section="Why an MDP Is More Than a Markov Chain" class="content-section">
+    <div class="section-header">
+      <h2>27. Why an MDP Is More Than a Markov Chain</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A Markov chain describes stochastic transitions between states but does not give the agent explicit control through chosen actions in the same way.</p>
+<p>An MDP adds decision making:</p>
+<div class="ascii-box"><pre>Markov chain
+state → probabilistic next state
+
+MDP
+state + chosen action → probabilistic next state + reward</pre></div>
+<p>This is a useful conceptual distinction.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: Why the MDP Model Matters for Reinforcement Learning -->
+  <section id="s-28" data-search-section="Why the MDP Model Matters for Reinforcement Learning" class="content-section">
+    <div class="section-header">
+      <h2>28. Why the MDP Model Matters for Reinforcement Learning</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The MDP creates a formal language for asking:</p>
+<blockquote>
+<p>What is the environment?<br />
+What can the agent do?<br />
+What happens after each action?<br />
+How desirable is each consequence?<br />
+How should immediate and future reward be balanced?</p>
+</blockquote>
+<p>Once those questions are formalized, reinforcement-learning algorithms can be defined.</p>
+<div class="ascii-box"><pre>MDP
+ │
+ ├── states
+ ├── actions
+ ├── transitions
+ ├── rewards
+ └── discounting
+       │
+       ↓
+ value / Q-value concepts
+       │
+       ↓
+ Bellman relationships
+       │
+       ↓
+ Q-learning</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 29: MDP vs Supervised Learning -->
+  <section id="s-29" data-search-section="MDP vs Supervised Learning" class="content-section">
+    <div class="section-header">
+      <h2>29. MDP vs Supervised Learning</h2>
+      <button class="bookmark-btn" data-id="s-29" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Feature</th>
+<th>Supervised learning</th>
+<th>MDP / RL setting</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Feedback</td>
+<td>target label/value</td>
+<td>reward signal</td>
+</tr>
+<tr>
+<td>Basic unit</td>
+<td>independent/structured examples</td>
+<td>sequential interaction</td>
+</tr>
+<tr>
+<td>Correct action explicitly given?</td>
+<td>Usually yes through target</td>
+<td>No direct target action</td>
+</tr>
+<tr>
+<td>Future consequences matter?</td>
+<td>Not inherently sequential</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>State transition</td>
+<td>Not usually central</td>
+<td>Central</td>
+</tr>
+<tr>
+<td>Policy</td>
+<td>Not the central object</td>
+<td>Central</td>
+</tr>
+<tr>
+<td>Value function</td>
+<td>Not normally required</td>
+<td>Central</td>
+</tr>
+</tbody>
+</table></div>
+<p>This is why reinforcement learning deserves its own mathematical framework.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 30: MDP vs Contextual Decision Making -->
+  <section id="s-30" data-search-section="MDP vs Contextual Decision Making" class="content-section">
+    <div class="section-header">
+      <h2>30. MDP vs Contextual Decision Making</h2>
+      <button class="bookmark-btn" data-id="s-30" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A one-step decision problem asks:</p>
+<div class="ascii-box"><pre>observe situation → choose action → receive reward</pre></div>
+<p>An MDP adds repeated consequences:</p>
+<div class="ascii-box"><pre>state₀
+  ↓ action
+reward + state₁
+  ↓ action
+reward + state₂
+  ↓
+...</pre></div>
+<p>The action now changes the future state distribution.</p>
+<p>That is what makes sequential decision making fundamentally different.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 31: Policy Evaluation vs Control -->
+  <section id="s-31" data-search-section="Policy Evaluation vs Control" class="content-section">
+    <div class="section-header">
+      <h2>31. Policy Evaluation vs Control</h2>
+      <button class="bookmark-btn" data-id="s-31" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Two broad questions appear repeatedly in reinforcement learning.</p>
+<h3>Policy evaluation</h3>
+<p>Given a policy \(\pi\), how good is it?</p>
+<p>That means estimating:</p>
+<div class="formula-math">\[
+V^\pi(s)
+\]</div>
+<p>or:</p>
+<div class="formula-math">\[
+Q^\pi(s,a).
+\]</div>
+<h3>Control</h3>
+<p>How can we find a policy that is optimal, or approaches optimal behaviour?</p>
+<p>That means seeking:</p>
+<div class="formula-math">\[
+V^*(s),\qquad Q^*(s,a).
+\]</div>
+<p>Q-learning belongs to the <strong>control</strong> family because it learns action values that support choosing high-value actions.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 32: Exploration vs Exploitation — Preview -->
+  <section id="s-32" data-search-section="Exploration vs Exploitation — Preview" class="content-section">
+    <div class="section-header">
+      <h2>32. Exploration vs Exploitation — Preview</h2>
+      <button class="bookmark-btn" data-id="s-32" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>An RL agent faces a basic conflict.</p>
+<h3>Exploitation</h3>
+<p>Choose the action currently believed to be best.</p>
+<h3>Exploration</h3>
+<p>Try another action to learn whether its value is actually better.</p>
+<div class="ascii-box"><pre>Exploit
+→ use current knowledge
+
+Explore
+→ gather new knowledge</pre></div>
+<p>This will become explicit in Q-learning through strategies such as <strong>epsilon-greedy action selection</strong>.</p>
+<p>The detailed update rule belongs to C41.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 33: Formula Card — Discounted Return -->
+  <section id="s-33" data-search-section="Formula Card — Discounted Return" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>33. Formula Card — Discounted Return</h2>
+      <button class="bookmark-btn" data-id="s-33" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Formula</h3>
+<div class="formula-math">\[
+\boxed{
+G_t=\sum_{k=0}^{\infty}\gamma^k r_{t+k}
+}
+\]</div>
+<h3>Symbols</h3>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>\(G_t\)</td>
+<td>return from time \(t\)</td>
+</tr>
+<tr>
+<td>\(r_{t+k}\)</td>
+<td>reward received \(k\) steps after \(t\)</td>
+</tr>
+<tr>
+<td>\(\gamma\)</td>
+<td>discount factor</td>
+</tr>
+<tr>
+<td>\(k\)</td>
+<td>how far into the future we look</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Why it exists</h3>
+<p>It converts a sequence of rewards into one quantity that can be maximized in expectation.</p>
+<h3>Common mistake</h3>
+<p>Forgetting the powers of \(\gamma\).</p>
+<p>Correct:</p>
+<div class="formula-math">\[
+r_t+\gamma r_{t+1}+\gamma^2r_{t+2}+\cdots
+\]</div>
+<p>Not:</p>
+<div class="formula-math">\[
+r_t+\gamma r_{t+1}+\gamma r_{t+2}+\cdots
+\]</div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 34: Formula Card — State Value -->
+  <section id="s-34" data-search-section="Formula Card — State Value" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>34. Formula Card — State Value</h2>
+      <button class="bookmark-btn" data-id="s-34" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="formula-math">\[
+\boxed{
+V^\pi(s)=\mathbb E_\pi[G_t\mid S_t=s]
+}
+\]</div>
+<p>Meaning:</p>
+<blockquote>
+<p>expected long-term return from state \(s\) under policy \(\pi\).</p>
+</blockquote>
+<p>Memory anchor:</p>
+<div class="ascii-box"><pre>V → Value of the state</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 35: Formula Card — Action Value -->
+  <section id="s-35" data-search-section="Formula Card — Action Value" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>35. Formula Card — Action Value</h2>
+      <button class="bookmark-btn" data-id="s-35" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="formula-math">\[
+\boxed{
+Q^\pi(s,a)=\mathbb E_\pi[G_t\mid S_t=s,A_t=a]
+}
+\]</div>
+<p>Meaning:</p>
+<blockquote>
+<p>expected long-term return when we take action \(a\) in state \(s\), then continue according to policy \(\pi\).</p>
+</blockquote>
+<p>Memory anchor:</p>
+<div class="ascii-box"><pre>Q → Quality of this state-action choice</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 36: Formula Card — Bellman Expectation Equation -->
+  <section id="s-36" data-search-section="Formula Card — Bellman Expectation Equation" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>36. Formula Card — Bellman Expectation Equation</h2>
+      <button class="bookmark-btn" data-id="s-36" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="formula-math">\[
+\boxed{
+V^\pi(s)=
+\sum_a\pi(a\mid s)
+\sum_{s'}P(s'\mid s,a)
+[R(s,a,s')+\gamma V^\pi(s')]
+}
+\]</div>
+<h3>Why it exists</h3>
+<p>It expresses a long-horizon value recursively:</p>
+<div class="ascii-box"><pre>present value
+=
+expected immediate reward
++
+discounted expected future value</pre></div>
+<h3>Exam trigger</h3>
+<p>When a question gives:</p>
+<ul>
+<li>a policy;</li>
+<li>transition probabilities;</li>
+<li>rewards;</li>
+<li>a discount factor;</li>
+</ul>
+<p>expect a Bellman-style value calculation.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 37: Formula Card — Bellman Optimality for Q -->
+  <section id="s-37" data-search-section="Formula Card — Bellman Optimality for Q" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>37. Formula Card — Bellman Optimality for Q</h2>
+      <button class="bookmark-btn" data-id="s-37" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="formula-math">\[
+\boxed{
+Q^*(s,a)=
+\sum_{s'}P(s'\mid s,a)
+[R(s,a,s')+\gamma\max_{a'}Q^*(s',a')]
+}
+\]</div>
+<p>This is the model-based optimality equation.</p>
+<p>Q-learning will use a sample-based version of its target.</p>
+<p>That bridge is one of the most important things to understand before C41.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 38: How the Mathematics Connects -->
+  <section id="s-38" data-search-section="How the Mathematics Connects" class="content-section">
+    <div class="section-header">
+      <h2>38. How the Mathematics Connects</h2>
+      <button class="bookmark-btn" data-id="s-38" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The dependency chain is:</p>
+<div class="ascii-box"><pre>Probability
+   ↓
+transition probabilities
+   ↓
+expected reward / expected return
+   ↓
+value functions
+   ↓
+Bellman equations
+   ↓
+Q-values
+   ↓
+Q-learning update</pre></div>
+<p>So your earlier probability foundations are not separate from RL.
+They are directly used in the definition of an MDP.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 39: Common Mistakes -->
+  <section id="s-39" data-search-section="Common Mistakes" class="content-section">
+    <div class="section-header">
+      <h2>39. Common Mistakes</h2>
+      <button class="bookmark-btn" data-id="s-39" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Mistake 1 — State = reward</div>
+
+Wrong.
+
+The state describes the decision situation; reward gives feedback about consequences.
+
+</div>
+
+<div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Mistake 2 — Policy = value function</div>
+
+Wrong.
+
+Policy chooses actions.
+Value evaluates states or state-action choices.
+
+</div>
+
+<div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Mistake 3 — MDP always means deterministic transitions</div>
+
+Wrong.
+
+MDPs may be stochastic.
+
+</div>
+
+<div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Mistake 4 — Maximizing immediate reward is always optimal</div>
+
+Wrong.
+
+The objective is generally long-term expected return.
+
+</div>
+
+<div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Mistake 5 — \(Q(s)\) and \(Q(s,a)\) mean the same thing</div>
+
+Be precise: the standard action-value notation is:
+
+
+
+<div class="formula-math">\[
+Q(s,a).
+\]</div>
+
+
+
+</div>
+
+<div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Mistake 6 — Markov means “future is independent of everything”</div>
+
+Too strong.
+
+The Markov property says the current state contains the information needed so that the future transition depends on the current state/action rather than requiring the entire past.
+
+</div>
+
+<div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Mistake 7 — Every negative reward is bad for the total objective</div>
+
+Not necessarily.
+
+A temporary negative reward can be worthwhile if it leads to larger future return.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 40: Exam Lens -->
+  <section id="s-40" data-search-section="Exam Lens" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>40. Exam Lens</h2>
+      <button class="bookmark-btn" data-id="s-40" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>2-mark questions</h2>
+<ul>
+<li>Define an MDP.</li>
+<li>State the Markov property.</li>
+<li>What is a policy?</li>
+<li>What is a reward function?</li>
+<li>Define the discount factor.</li>
+<li>Define \(V^\pi(s)\).</li>
+<li>Define \(Q^\pi(s,a)\).</li>
+</ul>
+<h2>5-mark questions</h2>
+<ul>
+<li>Explain the five components of an MDP with an example.</li>
+<li>Differentiate state, action, reward, transition and policy.</li>
+<li>Explain the Markov property.</li>
+<li>Explain discounted return and the role of \(\gamma\).</li>
+<li>Explain value and action-value functions.</li>
+</ul>
+<h2>Numerical questions</h2>
+<p>Expect:</p>
+<ul>
+<li>discounted return;</li>
+<li>transition-probability expectations;</li>
+<li>Bellman value calculation;</li>
+<li>comparison of actions using future rewards.</li>
+</ul>
+<h2>Long-answer question</h2>
+<p>A common high-value structure is:</p>
+<div class="ascii-box"><pre>definition
+→ components
+→ diagram
+→ Markov property
+→ return
+→ value functions
+→ Bellman equation
+→ example
+→ application</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 41: Active Recall — Blank MDP Diagram -->
+  <section id="s-41" data-search-section="Active Recall — Blank MDP Diagram" class="content-section">
+    <div class="section-header">
+      <h2>41. Active Recall — Blank MDP Diagram</h2>
+      <button class="bookmark-btn" data-id="s-41" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Fill this without looking:</p>
+<div class="ascii-box"><pre>┌───────────────┐
+                    │  ENVIRONMENT  │
+                    └───────┬───────┘
+                            │
+                    state / reward
+                            │
+                            ▼
+                       ┌─────────┐
+                       │  AGENT  │
+                       └────┬────┘
+                            │
+                          action
+                            │
+                            ▼
+                       environment</pre></div>
+<p>Now label:</p>
+<div class="ascii-box"><pre>S = __________________________
+A = __________________________
+P = __________________________
+R = __________________________
+π = __________________________
+γ = __________________________</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 42: Active Recall — Explain in One Breath -->
+  <section id="s-42" data-search-section="Active Recall — Explain in One Breath" class="content-section">
+    <div class="section-header">
+      <h2>42. Active Recall — Explain in One Breath</h2>
+      <button class="bookmark-btn" data-id="s-42" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Try saying this without notes:</p>
+<blockquote>
+<p>An MDP is a framework for sequential decision making in which an agent interacts with an environment represented by states, actions, transition dynamics, rewards and discounting, and uses a policy to select actions while maximizing expected long-term return.</p>
+</blockquote>
+<p>Then explain it in Hinglish:</p>
+<blockquote>
+<p>“Agent ek state mein hai, action leta hai, environment next state aur reward deta hai. Ye process repeat hota hai, aur agent sirf immediate reward nahi balki future reward ka bhi sochta hai.”</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 43: Practice Set A — Quick Check -->
+  <section id="s-43" data-search-section="Practice Set A — Quick Check" class="content-section">
+    <div class="section-header">
+      <h2>43. Practice Set A — Quick Check</h2>
+      <button class="bookmark-btn" data-id="s-43" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Q1</h3>
+<p>Which component specifies how the environment changes after an action?</p>
+<p>A. Policy<br />
+B. Transition model<br />
+C. Value function<br />
+D. Discount factor</p>
+<p><strong>Answer:</strong> B</p>
+<h3>Q2</h3>
+<p>What does \(\gamma\) control?</p>
+<p>A. Number of actions<br />
+B. Learning-rate size<br />
+C. Relative importance of future rewards<br />
+D. Number of states</p>
+<p><strong>Answer:</strong> C</p>
+<h3>Q3</h3>
+<p>What does \(V^\pi(s)\) represent?</p>
+<p>A. Immediate reward only<br />
+B. Expected return from state \(s\) under policy \(\pi\)<br />
+C. Probability of entering \(s\)<br />
+D. Number of available actions</p>
+<p><strong>Answer:</strong> B</p>
+<h3>Q4</h3>
+<p>What does \(Q^\pi(s,a)\) evaluate?</p>
+<p>A. A state only<br />
+B. An action independent of state<br />
+C. A state-action choice<br />
+D. A transition probability only</p>
+<p><strong>Answer:</strong> C</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 44: Practice Set B — Numerical -->
+  <section id="s-44" data-search-section="Practice Set B — Numerical" class="content-section">
+    <div class="section-header">
+      <h2>44. Practice Set B — Numerical</h2>
+      <button class="bookmark-btn" data-id="s-44" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A state has one action. It moves to \(s_1\) with probability 0.7 and \(s_2\) with probability 0.3.</p>
+<p>Rewards are:</p>
+<div class="formula-math">\[
+R(s,a,s_1)=4,
+\qquad
+R(s,a,s_2)=1.
+\]</div>
+<p>Given:</p>
+<div class="formula-math">\[
+V(s_1)=8,
+\quad
+V(s_2)=2,
+\quad
+\gamma=0.5,
+\]</div>
+<p>calculate the Bellman expected value.</p>
+<p>Set up:</p>
+<div class="formula-math">\[
+V(s)=
+0.7[4+0.5(8)]
++
+0.3[1+0.5(2)].
+\]</div>
+<p>Then evaluate each branch first.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 45: Chapter Exit Test -->
+  <section id="s-45" data-search-section="Chapter Exit Test" class="content-section">
+    <div class="section-header">
+      <h2>45. Chapter Exit Test</h2>
+      <button class="bookmark-btn" data-id="s-45" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You are ready to move to Q-learning only when you can answer these without looking:</p>
+<ol>
+<li>Why does reinforcement learning need a different framework from supervised learning?</li>
+<li>What are the components of an MDP?</li>
+<li>State the Markov property in words.</li>
+<li>What is \(P(s'\mid s,a)\)?</li>
+<li>What is the difference between deterministic and stochastic transitions?</li>
+<li>What is the purpose of a reward function?</li>
+<li>What is a policy?</li>
+<li>Why do we use discounted return?</li>
+<li>Define \(V^\pi(s)\).</li>
+<li>Define \(Q^\pi(s,a)\).</li>
+<li>What is the Bellman idea?</li>
+<li>Why is \(Q^*(s,a)\) more directly useful for action selection than \(V^*(s)\)?</li>
+<li>Explain the difference between policy evaluation and control.</li>
+<li>Explain exploration vs exploitation at a conceptual level.</li>
+<li>Explain why Q-learning can be connected to the Bellman optimality equation.</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 46: Memory Anchors -->
+  <section id="s-46" data-search-section="Memory Anchors" class="content-section">
+    <div class="section-header">
+      <h2>46. Memory Anchors</h2>
+      <button class="bookmark-btn" data-id="s-46" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>MDP = decision-making world model
+
+S = where I am
+A = what I can do
+P = where I may go
+R = feedback
+γ = how much I care about later
+π = what I choose
+V = how good a state is
+Q = how good a state-action choice is</pre></div>
+<p>The shortest chain:</p>
+<div class="ascii-box"><pre>STATE
+  ↓ choose
+ACTION
+  ↓ environment uses
+TRANSITION
+  ↓ produces
+NEXT STATE + REWARD
+  ↓ repeated over time
+RETURN
+  ↓ evaluated by
+VALUE / Q-VALUE</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 47: Resource Shelf -->
+  <section id="s-47" data-search-section="Resource Shelf" class="content-section">
+    <div class="section-header">
+      <h2>47. Resource Shelf</h2>
+      <button class="bookmark-btn" data-id="s-47" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Primary structured resource</h2>
+<p><strong>NPTEL — Reinforcement Learning (IIT Madras)</strong><br />
+https://nptel.ac.in/courses/106106143</p>
+<p>Use this for the structured Unit IV progression through MDPs, Bellman equations, Q-learning and policy-gradient ideas.</p>
+<h2>Supporting resources from your master guide</h2>
+<ul>
+<li><strong>StatQuest video index:</strong> https://statquest.org/video_index.html</li>
+<li><strong>Kevin Murphy — Machine Learning: A Probabilistic Perspective:</strong> useful for probabilistic ML/RL foundations.</li>
+<li><strong>Russell &amp; Norvig — Artificial Intelligence: A Modern Approach:</strong> useful for agents and sequential decision-making context.</li>
+</ul>
+<h2>How to study this chapter</h2>
+<div class="ascii-box"><pre>Read this chapter
+      ↓
+watch an RL/MDP explanation
+      ↓
+draw a 3–5 state MDP yourself
+      ↓
+calculate one return
+      ↓
+calculate one Bellman value
+      ↓
+move immediately to C41 Q-learning</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 48: Connection to the Next Chapter -->
+  <section id="s-48" data-search-section="Connection to the Next Chapter" class="content-section">
+    <div class="section-header">
+      <h2>48. Connection to the Next Chapter</h2>
+      <button class="bookmark-btn" data-id="s-48" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>C40 answered:</p>
+<blockquote>
+<p><strong>What is the mathematical world in which reinforcement learning happens?</strong></p>
+</blockquote>
+<p>C41 answers:</p>
+<blockquote>
+<p><strong>How can an agent learn action values from experience without having the transition model explicitly given?</strong></p>
+</blockquote>
+<p>That algorithm is <strong>Q-learning</strong>.</p>
+<p>The bridge is:</p>
+<div class="formula-math">\[
+\boxed{
+Q^*(s,a)=
+\mathbb E\left[r+\gamma\max_{a'}Q^*(s',a')\mid s,a\right]
+}
+\]</div>
+<p>Q-learning turns this optimality idea into an iterative sample-based update.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 49: Source Boundary Summary -->
+  <section id="s-49" data-search-section="Source Boundary Summary" class="content-section">
+    <div class="section-header">
+      <h2>49. Source Boundary Summary</h2>
+      <button class="bookmark-btn" data-id="s-49" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Content</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MDP listed in official Unit IV scope</td>
+<td><strong>Course-core</strong></td>
+</tr>
+<tr>
+<td>States, actions, rewards, transitions</td>
+<td><strong>Course-core</strong></td>
+</tr>
+<tr>
+<td>Policy and value</td>
+<td><strong>Course-core</strong></td>
+</tr>
+<tr>
+<td>Bellman equations</td>
+<td><strong>Standard reinforcement-learning expansion required for depth</strong></td>
+</tr>
+<tr>
+<td>Markov property formalization</td>
+<td><strong>Standard expansion supporting the syllabus topic</strong></td>
+</tr>
+<tr>
+<td>Discounted return</td>
+<td><strong>Standard expansion supporting value/Q-learning</strong></td>
+</tr>
+<tr>
+<td>Detailed numerical Bellman examples</td>
+<td><strong>Main Book teaching expansion</strong></td>
+</tr>
+<tr>
+<td>Q-learning update</td>
+<td><strong>Next chapter: C41</strong></td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 50: Final Mental Model -->
+  <section id="s-50" data-search-section="Final Mental Model" class="content-section">
+    <div class="section-header">
+      <h2>50. Final Mental Model</h2>
+      <button class="bookmark-btn" data-id="s-50" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The entire chapter reduces to one picture:</p>
+<div class="ascii-box"><pre>┌───────────────┐
+                       │  ENVIRONMENT  │
+                       └───────┬───────┘
+                               │
+                         state + reward
+                               │
+                               ▼
+                          ┌─────────┐
+                          │  AGENT  │
+                          └────┬────┘
+                               │
+                            action
+                               │
+                               ▼
+                       environment changes
+                               │
+                               ▼
+                           next state
+                               │
+                               ▼
+                     future rewards matter
+                               │
+                               ▼
+                     return / value / Q-value
+                               │
+                               ▼
+                    Bellman relationships
+                               │
+                               ▼
+                         Q-learning</pre></div>
+<blockquote>
+<p><strong>MDP gives reinforcement learning its language; Q-learning gives the agent a way to learn useful action values from interaction.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="ch39-unit-3-consolidation.html" class="nav-btn">← Ch 39 — Unit III Consolidation</a>
+    <a href="ch41-q-learning.html" class="nav-btn primary">Next: Ch 41 — Q-Learning →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch40-markov-decision-processes.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 40</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

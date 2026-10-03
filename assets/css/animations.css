@@ -1,0 +1,382 @@
+/*
+ * Engineering Minibooks · Computer Networks
+ * animations.css — restrained motion layer
+ *
+ * Contract:
+ * - Keeps the existing animation class/keyframe names used by the book.
+ * - Removes neon/glow/gradient motion from the reading experience.
+ * - Uses the shared --em-* motion tokens supplied by main.css.
+ * - All non-essential motion respects prefers-reduced-motion.
+ */
+
+:root {
+  --anim-enter: 180ms;
+  --anim-exit: 140ms;
+  --anim-distance-sm: 8px;
+  --anim-distance-md: 14px;
+}
+
+/* ------------------------------------------------------------------
+   Keyframes
+   ------------------------------------------------------------------ */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translate3d(0, var(--anim-distance-md), 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translate3d(0, calc(var(--anim-distance-md) * -1), 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translate3d(calc(var(--anim-distance-md) * -1), 0, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: .78; }
+}
+
+/* Loading indication without the old animated-gradient treatment. */
+@keyframes shimmer {
+  0%, 100% { opacity: .62; }
+  50%      { opacity: .92; }
+}
+
+/* Retained for compatibility with .anim-glow; intentionally not a glow. */
+@keyframes glow-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: .9; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Retained for existing hero/utility hooks; reduced to a quiet lift. */
+@keyframes float {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50%      { transform: translate3d(0, -3px, 0); }
+}
+
+/* Compatibility keyframe. Decorative gradient motion is intentionally gone. */
+@keyframes gradient-x {
+  from, to { background-position: 50% 50%; }
+}
+
+@keyframes progress-fill {
+  from { width: 0%; }
+  to   { width: var(--target-w, 100%); }
+}
+
+@keyframes count-up {
+  from { opacity: 0; transform: translate3d(0, var(--anim-distance-sm), 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes tab-slide-in {
+  from { opacity: 0; transform: translate3d(var(--anim-distance-sm), 0, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+/* ------------------------------------------------------------------
+   Public animation utility classes
+   ------------------------------------------------------------------ */
+.anim-fade {
+  animation: fadeIn var(--t-base, 260ms) var(--em-ease, ease) both;
+}
+
+.anim-slide-up {
+  animation: slideUp var(--t-slow, 420ms) var(--em-ease-soft, ease-out) both;
+}
+
+.anim-slide-in {
+  animation: slideInLeft var(--t-slow, 420ms) var(--em-ease-soft, ease-out) both;
+}
+
+.anim-float {
+  animation: float 3.4s ease-in-out infinite;
+}
+
+.anim-glow {
+  animation: glow-pulse 2.2s ease-in-out infinite;
+}
+
+.anim-spin {
+  animation: spin 900ms linear infinite;
+}
+
+.anim-enter {
+  animation-duration: var(--anim-enter);
+  animation-timing-function: var(--em-ease, ease);
+}
+
+.anim-exit {
+  animation-duration: var(--anim-exit);
+  animation-timing-function: var(--em-ease, ease);
+}
+
+/* ------------------------------------------------------------------
+   Staggered entrance — useful for opener metadata and study controls.
+   Keep the stagger deliberately short so reading does not feel delayed.
+   ------------------------------------------------------------------ */
+.stagger-children > * {
+  opacity: 0;
+  animation: slideUp var(--t-slow, 420ms) var(--em-ease-soft, ease-out) both;
+}
+
+.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2) { animation-delay: 50ms; }
+.stagger-children > *:nth-child(3) { animation-delay: 100ms; }
+.stagger-children > *:nth-child(4) { animation-delay: 150ms; }
+.stagger-children > *:nth-child(5) { animation-delay: 200ms; }
+.stagger-children > *:nth-child(6) { animation-delay: 250ms; }
+.stagger-children > *:nth-child(7) { animation-delay: 300ms; }
+.stagger-children > *:nth-child(8) { animation-delay: 350ms; }
+
+/* ------------------------------------------------------------------
+   Legacy compatibility hooks
+   ------------------------------------------------------------------ */
+.hero-gradient {
+  /* Preserve the class without reintroducing an animated gradient. */
+  background: var(--bg-surface, var(--em-surface-2, #f3f1eb));
+  background-size: auto;
+  animation: none;
+}
+
+.shimmer {
+  background: var(--bg-elevated, var(--em-surface-2, #f3f1eb));
+  border-radius: var(--r-md, var(--em-radius-md, 10px));
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+
+.page-enter {
+  animation: slideUp var(--em-motion-medium, 260ms) var(--em-ease-soft, ease-out) both;
+}
+
+.mode-uni,
+.mode-gate,
+.mode-adv {
+  transition:
+    opacity var(--em-motion-medium, 260ms) var(--em-ease, ease),
+    transform var(--em-motion-medium, 260ms) var(--em-ease, ease),
+    max-height var(--em-motion-slow, 420ms) var(--em-ease, ease);
+}
+
+.mode-uni.mode-hiding,
+.mode-gate.mode-hiding,
+.mode-adv.mode-hiding {
+  opacity: 0;
+  transform: translate3d(-6px, 0, 0);
+}
+
+.gantt-bar {
+  transition: width var(--em-motion-medium, 260ms) var(--em-ease, ease);
+  overflow: hidden;
+  animation: progress-fill 600ms var(--em-ease-soft, ease-out) both;
+}
+
+/* Active navigation indicator: no glow, only a quiet semantic marker. */
+.sidebar-link::after {
+  content: '';
+  position: absolute;
+  right: var(--sp-3, 12px);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent, #46645f);
+  opacity: 0;
+  transition: opacity var(--em-motion-fast, 160ms) var(--em-ease, ease);
+}
+
+.sidebar-link.active::after {
+  opacity: 1;
+}
+
+/* ------------------------------------------------------------------
+   Hero motif / background dots
+   ------------------------------------------------------------------ */
+.hero-dots {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hero-dot {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent, #46645f);
+  opacity: .10;
+  animation: none;
+}
+
+/* ------------------------------------------------------------------
+   Scroll reveal
+   ------------------------------------------------------------------ */
+.reveal {
+  opacity: 0;
+  transform: translate3d(0, 16px, 0);
+  transition:
+    opacity 420ms var(--em-ease-soft, ease-out),
+    transform 420ms var(--em-ease-soft, ease-out);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+/* ------------------------------------------------------------------
+   Navigation indicator
+   ------------------------------------------------------------------ */
+.nav-indicator {
+  position: absolute;
+  left: 0;
+  width: 2px;
+  background: var(--accent, #46645f);
+  border-radius: 0 2px 2px 0;
+  transition:
+    top var(--em-motion-fast, 160ms) var(--em-ease, ease),
+    height var(--em-motion-fast, 160ms) var(--em-ease, ease);
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------------
+   Toast notifications
+   ------------------------------------------------------------------ */
+#toast-container {
+  position: fixed;
+  bottom: var(--sp-10, 40px);
+  right: var(--sp-6, 24px);
+  z-index: var(--z-toast, 1300);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2, 8px);
+  pointer-events: none;
+}
+
+#toast-container .toast {
+  background: var(--bg-elevated, var(--em-surface-2, #f3f1eb));
+  border: 1px solid var(--bd-default, var(--em-border, #d6d3cb));
+  border-radius: var(--r-md, 10px);
+  padding: var(--sp-3, 12px) var(--sp-4, 16px);
+  font-size: var(--text-sm, .85rem);
+  color: var(--tx-primary, var(--em-text, #252624));
+  box-shadow: var(--sh-md, 0 10px 26px rgba(0, 0, 0, .08));
+  animation: slideInLeft var(--em-motion-medium, 260ms) var(--em-ease-soft, ease-out) both;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3, 12px);
+  min-width: 200px;
+  max-width: 320px;
+}
+
+#toast-container .toast.success { border-color: var(--success-border, rgba(94, 101, 79, .28)); }
+#toast-container .toast.info    { border-color: var(--accent-border, rgba(70, 100, 95, .24)); }
+
+/* ------------------------------------------------------------------
+   Section number badge
+   ------------------------------------------------------------------ */
+.section-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--r-sm, 6px);
+  background: var(--accent-soft, #e7eeec);
+  color: var(--accent-text, var(--accent, #46645f));
+  font-size: var(--text-xs, .72rem);
+  font-weight: 700;
+  border: 1px solid var(--accent-border, rgba(70, 100, 95, .24));
+  flex-shrink: 0;
+}
+
+/* ------------------------------------------------------------------
+   Chapter checklist
+   ------------------------------------------------------------------ */
+.chapter-checklist label {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3, 12px);
+  padding: var(--sp-2, 8px) var(--sp-3, 12px);
+  border-radius: var(--r-sm, 6px);
+  cursor: pointer;
+  font-size: var(--text-sm, .85rem);
+  color: var(--tx-secondary, #5f615c);
+  transition:
+    background-color var(--em-motion-fast, 160ms) var(--em-ease, ease),
+    color var(--em-motion-fast, 160ms) var(--em-ease, ease);
+}
+
+.chapter-checklist label:hover {
+  background: var(--accent-soft, #e7eeec);
+  color: var(--tx-primary, #252624);
+}
+
+.chapter-checklist input[type='checkbox'] {
+  accent-color: var(--accent, #46645f);
+  width: 14px;
+  height: 14px;
+}
+
+.chapter-checklist label.done {
+  text-decoration: line-through;
+  color: var(--tx-muted, #777a74);
+}
+
+/* ------------------------------------------------------------------
+   Reduced motion
+   ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .anim-fade,
+  .anim-slide-up,
+  .anim-slide-in,
+  .anim-float,
+  .anim-glow,
+  .anim-spin,
+  .hero-gradient,
+  .shimmer,
+  .page-enter,
+  .gantt-bar,
+  .sidebar-link::after,
+  .hero-dot,
+  .reveal,
+  .nav-indicator,
+  #toast-container .toast,
+  .chapter-checklist label,
+  .mode-uni,
+  .mode-gate,
+  .mode-adv {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .reveal,
+  .reveal.visible,
+  .mode-uni.mode-hiding,
+  .mode-gate.mode-hiding,
+  .mode-adv.mode-hiding {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

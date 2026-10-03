@@ -1,0 +1,1944 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 6: Greedy Best-First Search — AI & Machine Learning MiniBook. Evaluation Function f(n) = h(n), Priority Queue Frontier, Susceptibility to False Leads, Incompleteness on Infinite Graphs, and Comparison with BFS/DFS">
+<title>Ch 6 — Greedy Best-First Search | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-ii">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 6 — Greedy Best-First Search</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 6 — Sections</div>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. One-minute intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. The analogy — choosing a restaurant in an unfamiliar mall <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Visual — from blind search to heuristic-guided search <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. What is Best-First Search? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. The key idea: `h(n)` <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Heuristic is an estimate, not the solution </a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Why call it “Greedy”? </a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Greedy Best-First Search evaluation function </a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. What Greedy does **not** look at <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. The Romania example </a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Step-by-step Greedy example <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Why Greedy can be fooled </a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. A concrete trap: “closest-looking” is not “cheapest route” </a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Greedy Search algorithm <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. What does “priority queue” mean here? </a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Tree Search vs Graph Search </a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Completeness <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Optimality </a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Time complexity <span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Space complexity </a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Why is Greedy sometimes very effective? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Greedy vs BFS — same problem, different attitude </a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Greedy vs Uniform-Cost Search </a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Greedy vs A* — the essential comparison <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Mathematical lens </a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Formula Card </a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Worked Numerical — selecting a node </a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Worked Numerical — Greedy ignores path cost </a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Common misconceptions <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Failure Case — heuristic trap </a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Course-specific example — Greedy Search on Romania <span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Course property table </a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Active Recall — close the book </a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Recall Answers <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Practice Set </a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Exam Lens </a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Memory Anchor </a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Math Companion Connection </a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Exam Book Connection <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Resource Shelf </a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Chapter Exit Test </a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. What comes next? </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link active"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit I</span><span>›</span><span>Part II — Classical Search & Problem Solving</span><span>›</span><span style="color:var(--em-text)">Chapter 6</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 6 · Unit I · Part II</div>
+    <div class="chapter-part-banner part-ii">
+      <span class="part-banner-badge">Unit I · Part II</span>
+      <span>Classical Search & Problem Solving</span>
+    </div>
+    <h1 class="chapter-title">Greedy Best-First Search</h1>
+    <div class="concept-id-tag">[CONCEPT-AI-006]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: Core Exam Topic</span>
+      <span class="chapter-meta-item">📖 ~40 min read</span>
+      <span class="chapter-meta-item">🎯 42 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>Informed Search (Greedy Best-First):</strong> Evaluation by estimated cost to goal h(n), tracing Greedy on Romania map, time and space complexity O(b^m), failure modes and lack of optimality.</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">One-minute intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">The analogy — choosing a restaurant in an unfamiliar mall</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Visual — from blind search to heuristic-guided search</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">What is Best-First Search?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">The key idea: `h(n)`</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Heuristic is an estimate, not the solution</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Why call it “Greedy”?</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Greedy Best-First Search evaluation function</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">What Greedy does **not** look at</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">The Romania example</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Step-by-step Greedy example</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Why Greedy can be fooled</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">A concrete trap: “closest-looking” is not “cheapest route”</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Greedy Search algorithm</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">What does “priority queue” mean here?</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Tree Search vs Graph Search</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Completeness</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Optimality</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Time complexity</span><span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Space complexity</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Why is Greedy sometimes very effective?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Greedy vs BFS — same problem, different attitude</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Greedy vs Uniform-Cost Search</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Greedy vs A* — the essential comparison</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Mathematical lens</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Formula Card</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Worked Numerical — selecting a node</span></a></li>
+      <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Worked Numerical — Greedy ignores path cost</span></a></li>
+      <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Common misconceptions</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Failure Case — heuristic trap</span></a></li>
+      <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Course-specific example — Greedy Search on Romania</span><span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a></li>
+      <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Course property table</span></a></li>
+      <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Active Recall — close the book</span></a></li>
+      <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Recall Answers</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Practice Set</span></a></li>
+      <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Exam Lens</span></a></li>
+      <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Memory Anchor</span></a></li>
+      <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Math Companion Connection</span></a></li>
+      <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Exam Book Connection</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Resource Shelf</span></a></li>
+      <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Chapter Exit Test</span></a></li>
+      <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">What comes next?</span></a></li>
+    </ul>
+  </div>
+
+  
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 2: One-minute intuition -->
+  <section id="s-02" data-search-section="One-minute intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. One-minute intuition</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>English</h3>
+<p>Greedy Best-First Search says:</p>
+<blockquote>
+<p><strong>“I don't care very much about how much I have already spent. I mainly care about which option currently looks closest to the goal.”</strong></p>
+</blockquote>
+<p>So if three nodes are waiting in the frontier:</p>
+<div class="ascii-box"><pre>A → h(A) = 20
+B → h(B) = 8
+C → h(C) = 13</pre></div>
+<p>Greedy chooses <strong>B</strong>, because <code>8</code> is the smallest heuristic value.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> **Greedy ka mindset:** “Jo option abhi destination ke sabse paas *lag raha hai*, usko pehle try karo.”
+
+Usko yeh primary concern nahi hai ki tum us node tak pahunchne mein pehle kitna cost kar chuke ho.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: The analogy — choosing a restaurant in an unfamiliar mall -->
+  <section id="s-03" data-search-section="The analogy — choosing a restaurant in an unfamiliar mall" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>3. The analogy — choosing a restaurant in an unfamiliar mall</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose you want to reach a restaurant on the top floor of a huge shopping mall.</p>
+<p>You have several possible corridors in front of you.</p>
+<p>A shopkeeper tells you approximate distances to the restaurant:</p>
+<div class="ascii-box"><pre>Corridor A → looks 120 m away
+Corridor B → looks 70 m away
+Corridor C → looks 40 m away</pre></div>
+<p>A simple greedy decision is:</p>
+<blockquote>
+<p>“Go toward C. It looks closest.”</p>
+</blockquote>
+<p>That is exactly the role of <code>h(n)</code>.</p>
+<h3>Where the analogy breaks</h3>
+<p>Real roads, corridors and search graphs may have obstacles, one-way paths, stairs, blocked passages or expensive detours.</p>
+<p>So:</p>
+<blockquote>
+<p><strong>“Looks closer” is not the same as “is part of the cheapest complete route.”</strong></p>
+</blockquote>
+<p>That distinction is the reason Greedy Search is not generally optimal.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: Visual — from blind search to heuristic-guided search -->
+  <section id="s-04" data-search-section="Visual — from blind search to heuristic-guided search" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>4. Visual — from blind search to heuristic-guided search</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>UNINFORMED SEARCH
+
+          Search problem
+                │
+                ▼
+          Available nodes
+                │
+                ▼
+       Fixed search strategy
+          (BFS / DFS / UCS)
+                │
+                ▼
+       Next node to expand
+
+
+INFORMED SEARCH
+
+          Search problem
+                │
+                ▼
+          Available nodes
+                │
+        + heuristic knowledge
+                │
+                ▼
+              h(n)
+                │
+                ▼
+       Rank candidate nodes
+                │
+                ▼
+       Next node to expand</pre></div>
+<h3>How to read the visual</h3>
+<p>The search problem still exists exactly as before. The difference is that informed search adds <strong>problem-specific information</strong> to help decide which candidate should be explored first.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: What is Best-First Search? -->
+  <section id="s-05" data-search-section="What is Best-First Search?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>5. What is Best-First Search?</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied lecture frames Best-First Search as follows:</p>
+<blockquote>
+<p>Use an evaluation function for each node, interpret that value as an estimate of desirability, and expand the most desirable unexpanded node.</p>
+</blockquote>
+<p>The fringe/frontier is kept ordered according to that evaluation. The lecture then identifies <strong>Greedy Search</strong> and <strong>A</strong>* as important special cases. <span class="source-marker">Course source: <code>lecture-informed-search.pdf</code>, slides 5–6.</span></p>
+<p>So the general pattern is:</p>
+<div class="ascii-box"><pre>Best-First Search
+                        │
+             choose an evaluation function
+                        │
+               score candidate nodes
+                        │
+             expand the best candidate
+                      /     \
+                     /       \
+                Greedy         A*
+                 h(n)        g(n) + h(n)</pre></div>
+<p>The difference between these two will become the central comparison in C07.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: The key idea: `h(n)` -->
+  <section id="s-06" data-search-section="The key idea: `h(n)`" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>6. The key idea: `h(n)`</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The heuristic function is written as:</p>
+<div class="formula-math">\[
+\boxed{h(n)}
+\]</div>
+<p>where <code>n</code> is a node/state being considered.</p>
+<p>The supplied course lecture defines:</p>
+<div class="formula-math">\[
+\boxed{h(n)=\text{estimated cost from }n\text{ to the closest goal}}
+\]</div>
+<p>For road navigation, the lecture uses straight-line distance to Bucharest as the example heuristic. <span class="source-marker">Course source: <code>lecture-informed-search.pdf</code>, slide 9.</span></p>
+<h3>Symbol-by-symbol</h3>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>n</code></td>
+<td>current candidate node</td>
+</tr>
+<tr>
+<td><code>h(n)</code></td>
+<td>estimated remaining cost from <code>n</code> to a goal</td>
+</tr>
+<tr>
+<td>goal</td>
+<td>state we are trying to reach</td>
+</tr>
+</tbody>
+</table></div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> `h(n)` basically poochta hai: **“Agar main abhi is node par hoon, toh goal tak roughly kitna aur jaana padega?”**
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: Heuristic is an estimate, not the solution -->
+  <section id="s-07" data-search-section="Heuristic is an estimate, not the solution" class="content-section">
+    <div class="section-header">
+      <h2>7. Heuristic is an estimate, not the solution</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<div class="formula-math">\[
+h(A)=15
+\]</div>
+<p>This does <strong>not</strong> mean the actual remaining cost is exactly 15.</p>
+<p>It means:</p>
+<blockquote>
+<p>According to our chosen heuristic, the remaining cost is estimated to be 15.</p>
+</blockquote>
+<p>There may be an actual cheapest remaining cost of 18, 15, 11, or another value, depending on the problem and the heuristic.</p>
+<p>This is why you must not write:</p>
+<blockquote>
+<p>“<code>h(n)</code> is the remaining cost.”</p>
+</blockquote>
+<p>Instead write:</p>
+<blockquote>
+<p><strong>“<code>h(n)</code> is an estimate of the remaining cost.”</strong></p>
+</blockquote>
+<p>That single word — <strong>estimate</strong> — matters.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: Why call it “Greedy”? -->
+  <section id="s-08" data-search-section="Why call it “Greedy”?" class="content-section">
+    <div class="section-header">
+      <h2>8. Why call it “Greedy”?</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The word <strong>greedy</strong> means that at each decision point the algorithm makes the locally attractive choice according to its current information.</p>
+<p>It does not begin by solving the whole route optimally in its head.</p>
+<p>It asks:</p>
+<blockquote>
+<p>“Which available option looks best right now?”</p>
+</blockquote>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish memory</div>
+
+> **Greedy = “Abhi jo best lag raha hai, woh karo.”**
+
+This is useful because the name itself should remind you of the algorithm's behavior.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: Greedy Best-First Search evaluation function -->
+  <section id="s-09" data-search-section="Greedy Best-First Search evaluation function" class="content-section">
+    <div class="section-header">
+      <h2>9. Greedy Best-First Search evaluation function</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For Greedy Best-First Search:</p>
+<div class="formula-math">\[
+\boxed{f(n)=h(n)}
+\]</div>
+<p>In other words, the search priority is determined directly by the heuristic.</p>
+<p>The algorithm therefore expands the node with the <strong>smallest <code>h(n)</code></strong> when lower values represent closer estimated distance/cost.</p>
+<h3>Example</h3>
+<p>Suppose the frontier is:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Node</th>
+<th style="text-align: right;"><code>h(n)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr>
+<td>B</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr>
+<td>C</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr>
+<td>D</td>
+<td style="text-align: right;">18</td>
+</tr>
+</tbody>
+</table></div>
+<p>Greedy chooses:</p>
+<div class="formula-math">\[
+\boxed{B}
+\]</div>
+<p>because:</p>
+<div class="formula-math">\[
+5 \lt  9 \lt  12 \lt  18
+\]</div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “Sabse chhota heuristic value = sabse promising lag raha hai.”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: What Greedy does **not** look at -->
+  <section id="s-10" data-search-section="What Greedy does **not** look at" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>10. What Greedy does **not** look at</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This is the most important setup for understanding A*.</p>
+<p>Suppose:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Node</th>
+<th style="text-align: right;">Cost already spent <code>g(n)</code></th>
+<th style="text-align: right;">Estimated remaining <code>h(n)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr>
+<td>B</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">4</td>
+</tr>
+</tbody>
+</table></div>
+<p>Greedy looks only at <code>h(n)</code>:</p>
+<div class="formula-math">\[
+h(A)=10,\qquad h(B)=4
+\]</div>
+<p>Therefore it prefers <strong>B</strong>.</p>
+<p>But B has already cost 100 to reach.</p>
+<p>Greedy does not combine these two quantities in its decision rule.</p>
+<h3>The important mental contrast</h3>
+<div class="ascii-box"><pre>GREEDY
+
+“How close does this node look?”
+             ↓
+           h(n)
+
+A* (next chapter)
+
+“How expensive has my route been + how much seems left?”
+             ↓
+        g(n) + h(n)</pre></div>
+<p>This is the central conceptual bridge from C06 to C07.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: The Romania example -->
+  <section id="s-11" data-search-section="The Romania example" class="content-section">
+    <div class="section-header">
+      <h2>11. The Romania example</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied lecture uses the classic Romania route-finding problem and defines the heuristic as the <strong>straight-line distance to Bucharest</strong>.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>Current city
+     │
+     │  straight-line estimate
+     ▼
+Bucharest</pre></div>
+<p>The road network itself may require turns and detours, but straight-line distance provides a quick estimate of how far the destination appears to be.</p>
+<h3>A small original example</h3>
+<p>Suppose the frontier contains:</p>
+<div class="ascii-box"><pre>Arad      h = 366
+Sibiu     h = 253
+Fagaras   h = 178
+Pitesti   h = 98</pre></div>
+<p>Greedy would prefer <strong>Pitesti</strong>, because 98 is the smallest heuristic.</p>
+<p>The exact values and the full Romania expansion sequence in the supplied course slides should be followed from the course example rather than replaced by this teaching example.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: Step-by-step Greedy example -->
+  <section id="s-12" data-search-section="Step-by-step Greedy example" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>12. Step-by-step Greedy example</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Consider this original search graph:</p>
+<div class="ascii-box"><pre>Start
+                 /     \
+                A       B
+              /  \     / \
+             C    D   E   F
+                  |       |
+                  G       Goal</pre></div>
+<p>Suppose the heuristic values are:</p>
+<div class="ascii-box"><pre>A = 8
+B = 5
+C = 7
+D = 2
+E = 6
+F = 1
+G = 3
+Goal = 0</pre></div>
+<h3>Step 0</h3>
+<p>Frontier:</p>
+<div class="ascii-box"><pre>[A, B]</pre></div>
+<p>Values:</p>
+<div class="ascii-box"><pre>A → 8
+B → 5</pre></div>
+<p>Greedy picks <strong>B</strong>.</p>
+<h3>Step 1</h3>
+<p>Expand B.</p>
+<p>New frontier:</p>
+<div class="ascii-box"><pre>[A, E, F]</pre></div>
+<p>Values:</p>
+<div class="ascii-box"><pre>A → 8
+E → 6
+F → 1</pre></div>
+<p>Greedy picks <strong>F</strong>.</p>
+<h3>Step 2</h3>
+<p>Expand F.</p>
+<p>Its successor is Goal.</p>
+<p>Frontier now contains:</p>
+<div class="ascii-box"><pre>[A, E, Goal]</pre></div>
+<p>Since:</p>
+<div class="formula-math">\[
+h(Goal)=0
+\]</div>
+<p>Goal is selected.</p>
+<h3>Result</h3>
+<p>Greedy reaches the goal through:</p>
+<div class="ascii-box"><pre>Start → B → F → Goal</pre></div>
+<h3>What did Greedy do?</h3>
+<p>At each step it asked only:</p>
+<blockquote>
+<p><strong>Which candidate has the smallest heuristic?</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: Why Greedy can be fooled -->
+  <section id="s-13" data-search-section="Why Greedy can be fooled" class="content-section">
+    <div class="section-header">
+      <h2>13. Why Greedy can be fooled</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Now change the graph:</p>
+<div class="ascii-box"><pre>Start
+                /     \
+             Route A   Route B
+               |          |
+           looks close   looks farther
+               |          |
+              Goal       Goal</pre></div>
+<p>Imagine:</p>
+<div class="ascii-box"><pre>Route A:
+  h = 2 at the beginning
+  but the actual road contains a huge detour
+
+Route B:
+  h = 6 at the beginning
+  but the road is almost direct</pre></div>
+<p>Greedy prefers Route A because:</p>
+<div class="formula-math">\[
+2 \lt  6
+\]</div>
+<p>even though Route B may ultimately be much cheaper.</p>
+<h3>The core lesson</h3>
+<blockquote>
+<p><strong>A low heuristic value can make a node attractive without making the complete path optimal.</strong></p>
+</blockquote>
+<p>That is why Greedy Search is not generally optimal.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: A concrete trap: “closest-looking” is not “cheapest route” -->
+  <section id="s-14" data-search-section="A concrete trap: “closest-looking” is not “cheapest route”" class="content-section">
+    <div class="section-header">
+      <h2>14. A concrete trap: “closest-looking” is not “cheapest route”</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Think about driving.</p>
+<p>A road may physically point toward your destination but be:</p>
+<ul>
+<li>blocked later,</li>
+<li>full of detours,</li>
+<li>restricted,</li>
+<li>expensive,</li>
+<li>or connected to a dead end.</li>
+</ul>
+<p>A heuristic may see “close” while the full route sees “bad”.</p>
+<p>Greedy is deliberately willing to take this risk because it prioritizes the current heuristic estimate.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: Greedy Search algorithm -->
+  <section id="s-15" data-search-section="Greedy Search algorithm" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>15. Greedy Search algorithm</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Plain-English procedure</h2>
+<ol>
+<li>Put the initial node into the frontier.</li>
+<li>Look at the candidate nodes in the frontier.</li>
+<li>Compute/use <code>h(n)</code> for each.</li>
+<li>Select the node with the smallest heuristic value.</li>
+<li>If it is the goal, return the solution.</li>
+<li>Otherwise expand it.</li>
+<li>Add the resulting children to the frontier.</li>
+<li>Repeat.</li>
+</ol>
+<h3>Pseudocode</h3>
+<div class="ascii-box"><pre>GREEDY-BEST-FIRST-SEARCH(problem)
+
+    frontier ← priority queue ordered by h(n)
+    insert initial node into frontier
+
+    while frontier is not empty:
+        n ← remove node with smallest h(n)
+
+        if n is a goal:
+            return solution(n)
+
+        expand n
+        insert its successor nodes into frontier
+
+    return failure</pre></div>
+<p>The exact implementation details can vary between tree-search and graph-search versions. The supplied lecture frames Best-First Search in terms of a fringe ordered by desirability and describes Greedy as the <code>h(n)</code> special case. <span class="source-marker">Course source: slides 5–9.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: What does “priority queue” mean here? -->
+  <section id="s-16" data-search-section="What does “priority queue” mean here?" class="content-section">
+    <div class="section-header">
+      <h2>16. What does “priority queue” mean here?</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A normal queue says:</p>
+<blockquote>
+<p>“First come, first served.”</p>
+</blockquote>
+<p>A priority queue says:</p>
+<blockquote>
+<p>“The most important/lowest-priority-score item gets served first.”</p>
+</blockquote>
+<p>For Greedy:</p>
+<div class="ascii-box"><pre>Smaller h(n) → higher search priority</pre></div>
+<h3>Everyday analogy</h3>
+<p>Imagine a hospital triage queue.</p>
+<p>It isn't simply:</p>
+<blockquote>
+<p>“Who arrived first?”</p>
+</blockquote>
+<p>Instead, cases are ordered according to a priority score.</p>
+<p>Greedy similarly orders nodes according to the chosen search score.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: Tree Search vs Graph Search -->
+  <section id="s-17" data-search-section="Tree Search vs Graph Search" class="content-section">
+    <div class="section-header">
+      <h2>17. Tree Search vs Graph Search</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A subtle but important point:</p>
+<h3>Tree Search</h3>
+<p>The search can generate the same state multiple times through different paths.</p>
+<h3>Graph Search</h3>
+<p>The algorithm additionally tracks already explored states to avoid repeatedly exploring the same state.</p>
+<p>The supplied Basic Search lecture distinguishes a <strong>state</strong> from a <strong>node</strong> and explains that a search node contains information such as its parent, children, depth and path cost. <span class="source-marker">Course source: <code>lecture-basic-search.pdf</code>, slide 17.</span></p>
+<p>This matters for Greedy because the supplied lecture notes that it can get stuck in loops, while repeated-state checking changes that behavior.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: Completeness -->
+  <section id="s-18" data-search-section="Completeness" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>18. Completeness</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A search algorithm is <strong>complete</strong> if it is guaranteed to find a solution whenever a solution exists, subject to the assumptions of the search setting.</p>
+<p>The supplied Greedy Search lecture states:</p>
+<blockquote>
+<p>Greedy Search is <strong>not complete</strong> in general because it can get stuck in loops.</p>
+</blockquote>
+<p>The lecture gives the example:</p>
+<div class="ascii-box"><pre>Iasi → Neamt → Iasi → Neamt → ...</pre></div>
+<p>and notes that in a finite space with repeated-state checking, completeness can be recovered under those conditions. <span class="source-marker">Course source: <code>lecture-informed-search.pdf</code>, slide 15.</span></p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “Greedy ek hi attractive direction ke chakkar mein ghoomta reh sakta hai.”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: Optimality -->
+  <section id="s-19" data-search-section="Optimality" class="content-section">
+    <div class="section-header">
+      <h2>19. Optimality</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Greedy Best-First Search is <strong>not optimal</strong> according to the supplied course lecture.</p>
+<p>Optimal means:</p>
+<blockquote>
+<p>If solutions have different costs, the algorithm is guaranteed to return a least-cost solution.</p>
+</blockquote>
+<p>Greedy does not have that guarantee.</p>
+<p>It may find a goal quickly while another solution has lower total cost.</p>
+<h3>Memory anchor</h3>
+<blockquote>
+<p><strong>Greedy optimizes the appearance of the next step, not the guaranteed total path cost.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: Time complexity -->
+  <section id="s-20" data-search-section="Time complexity" class="content-section mode-gate">
+    <div class="section-header">
+      <h2>20. Time complexity</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For the supplied course framing, Greedy Search has worst-case time complexity:</p>
+<div class="formula-math">\[
+\boxed{O(b^m)}
+\]</div>
+<p>where:</p>
+<ul>
+<li><code>b</code> = maximum branching factor</li>
+<li><code>m</code> = maximum depth of the search space</li>
+</ul>
+<p>The lecture also emphasizes that a good heuristic can produce dramatic practical improvements. <span class="source-marker">Course source: <code>lecture-informed-search.pdf</code>, slide 15.</span></p>
+<h3>What does <code>b</code> mean?</h3>
+<p>If every node can have approximately 3 children, then:</p>
+<div class="formula-math">\[
+b=3
+\]</div>
+<h3>What does <code>m</code> mean?</h3>
+<p><code>m</code> is the maximum depth of the state space being considered.</p>
+<h3>Why can this become huge?</h3>
+<p>Because the number of possible nodes grows roughly like:</p>
+<div class="formula-math">\[
+1+b+b^2+b^3+\cdots+b^m
+\]</div>
+<p>which grows exponentially with depth.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: Space complexity -->
+  <section id="s-21" data-search-section="Space complexity" class="content-section">
+    <div class="section-header">
+      <h2>21. Space complexity</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied lecture gives:</p>
+<div class="formula-math">\[
+\boxed{O(b^m)}
+\]</div>
+<p>Greedy may need to keep many generated candidates in memory.</p>
+<p>The lecture describes the frontier/fringe as a queue and reports <code>O(bm)</code> space in its course notation, where the spacing in the slide is compact. Interpreted in the standard textbook notation, this is <code>O(b^m)</code>.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “Greedy sirf ek node yaad nahi rakhta; usko bahut saare candidate nodes memory mein rakhne pad sakte hain.”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: Why is Greedy sometimes very effective? -->
+  <section id="s-22" data-search-section="Why is Greedy sometimes very effective?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>22. Why is Greedy sometimes very effective?</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Because the heuristic can eliminate a huge amount of obviously unattractive exploration.</p>
+<p>Suppose the search space has millions of nodes.</p>
+<p>A blind strategy may explore a large portion of them.</p>
+<p>A useful heuristic can say:</p>
+<blockquote>
+<p>“These nodes are much less promising; concentrate over here first.”</p>
+</blockquote>
+<p>The supplied lecture explicitly notes that a good heuristic can dramatically improve the practical search effort. <span class="source-marker">Course source: <code>lecture-informed-search.pdf</code>, slide 15.</span></p>
+<p>This is one reason informed search is so important.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: Greedy vs BFS — same problem, different attitude -->
+  <section id="s-23" data-search-section="Greedy vs BFS — same problem, different attitude" class="content-section">
+    <div class="section-header">
+      <h2>23. Greedy vs BFS — same problem, different attitude</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the search tree is:</p>
+<div class="ascii-box"><pre>S
+              /     |     \
+             A      B      C
+            / \    / \    / \
+           ... ... ... ... ...</pre></div>
+<h3>BFS</h3>
+<p>BFS asks:</p>
+<blockquote>
+<p>“Which node is shallowest?”</p>
+</blockquote>
+<h3>Greedy</h3>
+<p>Greedy asks:</p>
+<blockquote>
+<p>“Which node appears closest to the goal?”</p>
+</blockquote>
+<p>Neither question is universally better. They are different search strategies designed for different assumptions.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: Greedy vs Uniform-Cost Search -->
+  <section id="s-24" data-search-section="Greedy vs Uniform-Cost Search" class="content-section">
+    <div class="section-header">
+      <h2>24. Greedy vs Uniform-Cost Search</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Uniform-Cost Search</h3>
+<p>Prioritizes:</p>
+<div class="formula-math">\[
+\boxed{g(n)}
+\]</div>
+<p>So it cares about cost <strong>already paid</strong>.</p>
+<h3>Greedy</h3>
+<p>Prioritizes:</p>
+<div class="formula-math">\[
+\boxed{h(n)}
+\]</div>
+<p>So it cares about cost <strong>estimated to remain</strong>.</p>
+<h3>Mental model</h3>
+<div class="ascii-box"><pre>UCS:
+“How expensive has my journey been so far?”
+          ↓
+        g(n)
+
+Greedy:
+“How close do I appear to the destination?”
+          ↓
+        h(n)</pre></div>
+<p>This sets up A*:</p>
+<div class="ascii-box"><pre>A*:
+“How much have I spent + how much seems left?”
+                    ↓
+               g(n) + h(n)</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: Greedy vs A* — the essential comparison -->
+  <section id="s-25" data-search-section="Greedy vs A* — the essential comparison" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>25. Greedy vs A* — the essential comparison</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Property</th>
+<th>Greedy Best-First</th>
+<th>A*</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Main score</td>
+<td><code>h(n)</code></td>
+<td><code>g(n)+h(n)</code></td>
+</tr>
+<tr>
+<td>Uses cost so far?</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Uses heuristic?</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>General optimality guarantee</td>
+<td>No</td>
+<td>Yes, with the required admissibility conditions in the course framing</td>
+</tr>
+<tr>
+<td>Main intuition</td>
+<td>“Looks closest”</td>
+<td>“Looks cheapest overall”</td>
+</tr>
+<tr>
+<td>Course chapter</td>
+<td>C06</td>
+<td>C07</td>
+</tr>
+</tbody>
+</table></div>
+<h3>The simplest memory sentence</h3>
+<blockquote>
+<p><strong>Greedy = future estimate only.</strong><br />
+<strong>A* = past cost + future estimate.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: Mathematical lens -->
+  <section id="s-26" data-search-section="Mathematical lens" class="content-section">
+    <div class="section-header">
+      <h2>26. Mathematical lens</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>There is not much difficult mathematics in Greedy itself.</p>
+<p>You mainly need to understand:</p>
+<h3>Function notation</h3>
+<div class="formula-math">\[
+h(n)
+\]</div>
+<p>means a function whose input is a node and whose output is a heuristic value.</p>
+<h3>Ordering</h3>
+<p>If:</p>
+<div class="formula-math">\[
+h(A)=4,
+\quad h(B)=9,
+\quad h(C)=6
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+A \prec C \prec B
+\]</div>
+<p>in the priority order when smaller heuristic values are preferred.</p>
+<h3>Prerequisite math</h3>
+<ul>
+<li>basic functions</li>
+<li>inequality comparison</li>
+<li>arithmetic</li>
+</ul>
+<p>No advanced calculus is required for this chapter.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: Formula Card -->
+  <section id="s-27" data-search-section="Formula Card" class="content-section">
+    <div class="section-header">
+      <h2>27. Formula Card</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <blockquote>
+<h2>Greedy Best-First Search</h2>
+<p><strong>Evaluation function:</strong></p>
+</blockquote>
+<div class="formula-math">\[
+\gt  \boxed{f(n)=h(n)}
+\gt  \]</div>
+<blockquote>
+<p><strong>Meaning:</strong></p>
+<p><code>h(n)</code> estimates the remaining cost to a goal.</p>
+<p><strong>Selection rule:</strong></p>
+<p>Choose the candidate with the <strong>smallest <code>h(n)</code></strong>.</p>
+<p><strong>Memory phrase:</strong></p>
+<blockquote>
+<p>“Pick the node that looks closest.”</p>
+</blockquote>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: Worked Numerical — selecting a node -->
+  <section id="s-28" data-search-section="Worked Numerical — selecting a node" class="content-section">
+    <div class="section-header">
+      <h2>28. Worked Numerical — selecting a node</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Frontier:</p>
+<div class="ascii-box"><pre>A: h(A)=14
+B: h(B)=6
+C: h(C)=11
+D: h(D)=9</pre></div>
+<h3>Step 1 — Compare</h3>
+<div class="formula-math">\[
+6 \lt  9 \lt  11 \lt  14
+\]</div>
+<h3>Step 2 — Select minimum</h3>
+<div class="formula-math">\[
+\boxed{B}
+\]</div>
+<h3>Answer</h3>
+<p>Greedy expands <strong>B</strong> next.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “B ka heuristic sabse chhota hai, toh B sabse promising dikh raha hai.”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 29: Worked Numerical — Greedy ignores path cost -->
+  <section id="s-29" data-search-section="Worked Numerical — Greedy ignores path cost" class="content-section">
+    <div class="section-header">
+      <h2>29. Worked Numerical — Greedy ignores path cost</h2>
+      <button class="bookmark-btn" data-id="s-29" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Node</th>
+<th style="text-align: right;"><code>g(n)</code></th>
+<th style="text-align: right;"><code>h(n)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr>
+<td>B</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr>
+<td>C</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">9</td>
+</tr>
+</tbody>
+</table></div>
+<p>Greedy compares:</p>
+<div class="formula-math">\[
+h(A)=12,\quad h(B)=5,\quad h(C)=9
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{B}
+\]</div>
+<p>Even though:</p>
+<div class="formula-math">\[
+g(B)=40
+\]</div>
+<p>is much larger than <code>g(A)</code>.</p>
+<h3>Why?</h3>
+<p>Because Greedy's evaluation is:</p>
+<div class="formula-math">\[
+f(n)=h(n)
+\]</div>
+<p>not:</p>
+<div class="formula-math">\[
+f(n)=g(n)+h(n)
+\]</div>
+<p>That second rule belongs to A*.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 30: Common misconceptions -->
+  <section id="s-30" data-search-section="Common misconceptions" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>30. Common misconceptions</h2>
+      <button class="bookmark-btn" data-id="s-30" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Misconception 1</h2>
+<blockquote>
+<p>“Greedy Search always finds the shortest path.”</p>
+</blockquote>
+<h3>Correct</h3>
+<p>No. The supplied lecture explicitly marks Greedy as <strong>not optimal</strong>.</p>
+<hr />
+<h2>Misconception 2</h2>
+<blockquote>
+<p>“The heuristic is the actual remaining cost.”</p>
+</blockquote>
+<h3>Correct</h3>
+<p>No. It is an estimate.</p>
+<hr />
+<h2>Misconception 3</h2>
+<blockquote>
+<p>“Greedy uses both <code>g(n)</code> and <code>h(n)</code>.”</p>
+</blockquote>
+<h3>Correct</h3>
+<p>Not in the Greedy evaluation rule used here.</p>
+<p>Greedy uses:</p>
+<div class="formula-math">\[
+\boxed{h(n)}
+\]</div>
+<p>A* uses:</p>
+<div class="formula-math">\[
+\boxed{g(n)+h(n)}
+\]</div>
+<hr />
+<h2>Misconception 4</h2>
+<blockquote>
+<p>“Smaller <code>h(n)</code> means the complete route is definitely shorter.”</p>
+</blockquote>
+<h3>Correct</h3>
+<p>It only means the node appears closer according to the heuristic.</p>
+<hr />
+<h2>Misconception 5</h2>
+<blockquote>
+<p>“Informed search means the algorithm knows the answer.”</p>
+</blockquote>
+<h3>Correct</h3>
+<p>No. It has <strong>additional problem-specific guidance</strong>; it still has to search.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 31: Failure Case — heuristic trap -->
+  <section id="s-31" data-search-section="Failure Case — heuristic trap" class="content-section">
+    <div class="section-header">
+      <h2>31. Failure Case — heuristic trap</h2>
+      <button class="bookmark-btn" data-id="s-31" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>Start
+                      /       \
+                     A         B
+                  h=1           h=8
+                   |              |
+                detour          direct
+                   |              |
+                  Goal          Goal</pre></div>
+<p>Greedy immediately prefers A because:</p>
+<div class="formula-math">\[
+1\lt 8
+\]</div>
+<p>But if the A branch costs 100 units while B costs 10 units, Greedy's choice is poor from a total-cost perspective.</p>
+<h3>Lesson</h3>
+<blockquote>
+<p><strong>A heuristic can guide search effectively while still being insufficient to guarantee an optimal route when used alone.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 32: Course-specific example — Greedy Search on Romania -->
+  <section id="s-32" data-search-section="Course-specific example — Greedy Search on Romania" class="content-section mode-gate">
+    <div class="section-header">
+      <h2>32. Course-specific example — Greedy Search on Romania</h2>
+      <button class="bookmark-btn" data-id="s-32" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied lecture uses straight-line distance to Bucharest:</p>
+<div class="formula-math">\[
+\boxed{h_{SLD}(n)=\text{straight-line distance from }n\text{ to Bucharest}}
+\]</div>
+<p>The course then presents a sequence of Greedy Search examples using the Romania map and step-cost map. <span class="source-marker">Course source: <code>lecture-informed-search.pdf</code>, slides 7–14.</span></p>
+<h3>How to study the course example</h3>
+<p>Do not just memorize the final city sequence.</p>
+<p>For every step, ask:</p>
+<ol>
+<li>What nodes are currently in the frontier?</li>
+<li>What is <code>h(n)</code> for each?</li>
+<li>Which has the lowest value?</li>
+<li>Which node is expanded?</li>
+<li>What new successors appear?</li>
+<li>Does the path cost matter to Greedy's current decision?</li>
+</ol>
+<p>That is the reasoning the Main Book wants you to learn.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 33: Course property table -->
+  <section id="s-33" data-search-section="Course property table" class="content-section">
+    <div class="section-header">
+      <h2>33. Course property table</h2>
+      <button class="bookmark-btn" data-id="s-33" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied lecture states the following properties for Greedy Search:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Criterion</th>
+<th>Greedy Search</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Complete?</td>
+<td>No in general; finite-space repeated-state checking can change this under the stated conditions</td>
+</tr>
+<tr>
+<td>Time</td>
+<td><code>O(b^m)</code> in the course framing</td>
+</tr>
+<tr>
+<td>Space</td>
+<td><code>O(b^m)</code> in standard notation</td>
+</tr>
+<tr>
+<td>Optimal?</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Main score</td>
+<td><code>h(n)</code></td>
+</tr>
+</tbody>
+</table></div>
+<p><span class="source-marker">Course source: <code>lecture-informed-search.pdf</code>, slide 15.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 34: Active Recall — close the book -->
+  <section id="s-34" data-search-section="Active Recall — close the book" class="content-section">
+    <div class="section-header">
+      <h2>34. Active Recall — close the book</h2>
+      <button class="bookmark-btn" data-id="s-34" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Try answering without looking back.</p>
+<ol>
+<li>Why was Greedy Best-First Search introduced?</li>
+<li>What is a heuristic?</li>
+<li>What does <code>h(n)</code> mean?</li>
+<li>What evaluation function does Greedy use?</li>
+<li>Which node does Greedy select?</li>
+<li>Does Greedy consider <code>g(n)</code> in its score?</li>
+<li>Why can Greedy choose a bad route?</li>
+<li>Is Greedy complete?</li>
+<li>Is Greedy optimal?</li>
+<li>What is its standard worst-case time complexity?</li>
+<li>What is its standard worst-case space complexity?</li>
+<li>What is the difference between Greedy and UCS?</li>
+<li>What is the difference between Greedy and A*?</li>
+<li>Give one real-world example of a heuristic.</li>
+<li>Why is “estimate” an important word?</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 35: Recall Answers -->
+  <section id="s-35" data-search-section="Recall Answers" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>35. Recall Answers</h2>
+      <button class="bookmark-btn" data-id="s-35" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <ol>
+<li>To use problem-specific heuristic information to guide the order of search.</li>
+<li>An estimate used to guide search, commonly representing estimated remaining cost to a goal.</li>
+<li>The estimated remaining cost from node <code>n</code> to a goal.</li>
+<li><code>f(n)=h(n)</code>.</li>
+<li>The candidate with the smallest heuristic value in the usual cost interpretation.</li>
+<li>No; its primary score is <code>h(n)</code>.</li>
+<li>Because the heuristic can make a locally attractive node look promising even when the complete route is expensive or leads to a poor choice.</li>
+<li>Not in general; the supplied course lecture gives loop-related counterexamples.</li>
+<li>No.</li>
+<li><code>O(b^m)</code>.</li>
+<li><code>O(b^m)</code> in standard notation.</li>
+<li>UCS uses <code>g(n)</code>; Greedy uses <code>h(n)</code>.</li>
+<li>Greedy uses <code>h(n)</code>; A* combines <code>g(n)+h(n)</code>.</li>
+<li>Straight-line distance to a destination.</li>
+<li>Because a heuristic is not necessarily the exact remaining cost.</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 36: Practice Set -->
+  <section id="s-36" data-search-section="Practice Set" class="content-section">
+    <div class="section-header">
+      <h2>36. Practice Set</h2>
+      <button class="bookmark-btn" data-id="s-36" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>A. Conceptual</h2>
+<h3>Q1</h3>
+<p>Explain Greedy Best-First Search in your own words.</p>
+<h3>Q2</h3>
+<p>Why is Greedy called “greedy”?</p>
+<h3>Q3</h3>
+<p>Why can a heuristic improve search without guaranteeing an optimal solution?</p>
+<h3>Q4</h3>
+<p>Why is Greedy not the same as Uniform-Cost Search?</p>
+<h3>Q5</h3>
+<p>What does the phrase “looks closest” mean algorithmically?</p>
+<hr />
+<h2>B. Numerical</h2>
+<h3>Q1 — Frontier selection</h3>
+<p>The frontier is:</p>
+<div class="ascii-box"><pre>A: 10
+B: 7
+C: 15
+D: 3</pre></div>
+<p>Which node does Greedy expand?</p>
+<h3>Q2 — Ignore <code>g(n)</code></h3>
+<div class="ascii-box"><pre>A: g=2,  h=20
+B: g=30, h=4
+C: g=7,  h=9</pre></div>
+<p>Which does Greedy choose?</p>
+<h3>Q3 — Construct a trap</h3>
+<p>Create a graph in which the node with the smallest heuristic leads to a more expensive final path than another available choice.</p>
+<hr />
+<h2>C. Diagram / Dry Run</h2>
+<p>Draw a search tree with at least six nodes. Label every node with <code>h(n)</code>. Then perform Greedy Search by writing the frontier after each expansion.</p>
+<p>Your final answer should show:</p>
+<div class="ascii-box"><pre>Node expanded at each step
+Frontier after each step
+Final path</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 37: Exam Lens -->
+  <section id="s-37" data-search-section="Exam Lens" class="content-section">
+    <div class="section-header">
+      <h2>37. Exam Lens</h2>
+      <button class="bookmark-btn" data-id="s-37" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>2-mark answer — Define Greedy Best-First Search</h2>
+<blockquote>
+<p>Greedy Best-First Search is an informed search strategy that expands the unexpanded node with the lowest heuristic value <code>h(n)</code>, where <code>h(n)</code> estimates the remaining cost to a goal.</p>
+</blockquote>
+<h2>5-mark answer — Explain Greedy Best-First Search</h2>
+<p>Include:</p>
+<ol>
+<li>Definition of informed search.</li>
+<li>Meaning of heuristic <code>h(n)</code>.</li>
+<li>Evaluation function <code>f(n)=h(n)</code>.</li>
+<li>Selection of the minimum-<code>h</code> node.</li>
+<li>One example.</li>
+<li>State whether it is complete/optimal.</li>
+</ol>
+<h2>10-mark answer</h2>
+<p>Use this order:</p>
+<div class="ascii-box"><pre>Definition
+   ↓
+Motivation for heuristic guidance
+   ↓
+Best-First Search idea
+   ↓
+h(n)
+   ↓
+Algorithm / pseudocode
+   ↓
+Worked graph example
+   ↓
+Time + space complexity
+   ↓
+Completeness
+   ↓
+Optimality
+   ↓
+Advantages + limitations
+   ↓
+Comparison with UCS / A*</pre></div>
+<h3>Diagram requirement</h3>
+<p>For a long-answer question, a clean search-tree trace with heuristic values is often more informative than a paragraph alone.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 38: Memory Anchor -->
+  <section id="s-38" data-search-section="Memory Anchor" class="content-section">
+    <div class="section-header">
+      <h2>38. Memory Anchor</h2>
+      <button class="bookmark-btn" data-id="s-38" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <blockquote>
+<h2>GREEDY = “WHAT LOOKS CLOSEST?”</h2>
+</blockquote>
+<div class="formula-math">\[
+\gt  \boxed{f(n)=h(n)}
+\gt  \]</div>
+<blockquote>
+<p><strong>Smallest <code>h</code> wins.</strong></p>
+<p>It can be fast and useful with a good heuristic, but it is <strong>not generally optimal</strong> and can get into loops without appropriate repeated-state handling.</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 39: Math Companion Connection -->
+  <section id="s-39" data-search-section="Math Companion Connection" class="content-section">
+    <div class="section-header">
+      <h2>39. Math Companion Connection</h2>
+      <button class="bookmark-btn" data-id="s-39" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This chapter depends mainly on:</p>
+<ul>
+<li><code>MATH-M01</code> — Mathematical notation</li>
+<li><code>MATH-M08</code> — Functions and inequalities</li>
+</ul>
+<p>Later:</p>
+<ul>
+<li><code>MATH-M10</code> — optimization/search objective notation</li>
+</ul>
+<p>The important mathematical habit here is simply:</p>
+<blockquote>
+<p><strong>Read the function, identify the quantity it measures, and compare its numerical values correctly.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 40: Exam Book Connection -->
+  <section id="s-40" data-search-section="Exam Book Connection" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>40. Exam Book Connection</h2>
+      <button class="bookmark-btn" data-id="s-40" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p><strong>Exam Book ID:</strong> <code>EXAM-AI-U1-C06-GREEDY</code></p>
+<p>The Exam Book should compress this chapter into:</p>
+<ul>
+<li>definition</li>
+<li><code>f(n)=h(n)</code></li>
+<li>algorithm</li>
+<li>one dry run</li>
+<li>properties</li>
+<li>complexity</li>
+<li>Greedy vs BFS/UCS/A*</li>
+<li>common traps</li>
+<li>numerical selection questions</li>
+</ul>
+<p>Do not try to memorize the whole Main Book chapter.</p>
+<p>Learn here; revise there.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 41: Resource Shelf -->
+  <section id="s-41" data-search-section="Resource Shelf" class="content-section">
+    <div class="section-header">
+      <h2>41. Resource Shelf</h2>
+      <button class="bookmark-btn" data-id="s-41" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Primary course source</h2>
+<p><strong><code>lecture-informed-search.pdf</code> — Philipp Koehn, Artificial Intelligence: Informed Search</strong></p>
+<p>Relevant slides:</p>
+<ul>
+<li>Slides 5–6 — Best-First Search framing</li>
+<li>Slide 9 — Greedy Search and <code>h(n)</code></li>
+<li>Slides 10–14 — Romania examples</li>
+<li>Slide 15 — properties of Greedy Search</li>
+</ul>
+<h2>Supporting course source</h2>
+<p><strong><code>lecture-basic-search.pdf</code></strong></p>
+<p>Use it for:</p>
+<ul>
+<li>state vs node</li>
+<li>tree search</li>
+<li>frontier</li>
+<li>expansion</li>
+<li>graph-search intuition</li>
+</ul>
+<h2>Structured source</h2>
+<p>NPTEL — <strong>Artificial Intelligence: Search Methods for Problem Solving</strong></p>
+<p>Use the informed-search lectures when you want a second explanation or additional worked examples.</p>
+<h2>Reference</h2>
+<p>Russell &amp; Norvig — <em>Artificial Intelligence: A Modern Approach</em>, informed-search sections.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 42: Chapter Exit Test -->
+  <section id="s-42" data-search-section="Chapter Exit Test" class="content-section">
+    <div class="section-header">
+      <h2>42. Chapter Exit Test</h2>
+      <button class="bookmark-btn" data-id="s-42" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You may move to C07 when you can do all of the following without looking at the chapter:</p>
+<ul>
+<li>[ ] Define Greedy Best-First Search.</li>
+<li>[ ] Explain heuristic <code>h(n)</code>.</li>
+<li>[ ] Explain <code>f(n)=h(n)</code>.</li>
+<li>[ ] Select the next node from a frontier using heuristic values.</li>
+<li>[ ] Perform a complete Greedy dry run.</li>
+<li>[ ] Explain why Greedy can fail.</li>
+<li>[ ] Explain why Greedy is not optimal.</li>
+<li>[ ] Explain the completeness issue.</li>
+<li>[ ] State the time/space complexity from the course framing.</li>
+<li>[ ] Distinguish Greedy from BFS/UCS.</li>
+<li>[ ] Explain why A* needs more information than Greedy.</li>
+</ul>
+<p>If any one of these is weak, redo the graph dry run before moving on.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 43: What comes next? -->
+  <section id="s-43" data-search-section="What comes next?" class="content-section">
+    <div class="section-header">
+      <h2>43. What comes next?</h2>
+      <button class="bookmark-btn" data-id="s-43" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Greedy answered:</p>
+<blockquote>
+<p><strong>“Which node looks closest to the goal?”</strong></p>
+</blockquote>
+<p>But we identified its weakness:</p>
+<blockquote>
+<p>It may ignore how much the route has already cost.</p>
+</blockquote>
+<p>The next question is therefore:</p>
+<blockquote>
+<p><strong>Can we combine the cost already spent with the estimated cost still remaining?</strong></p>
+</blockquote>
+<p>That is the idea behind <strong>A</strong>*.</p>
+<div class="formula-math">\[
+\boxed{f(n)=g(n)+h(n)}
+\]</div>
+<p>Go to:</p>
+<p><strong><code>MAIN-U1-C07 — A* Search</code></strong></p>
+<hr />
+<h1>Source Grounding Note</h1>
+<p>This chapter is primarily derived from your supplied <code>lecture-informed-search.pdf</code>, especially its Best-First Search framing, Greedy Search definition, Romania example, and Greedy properties. The chapter uses the supplied terminology such as <strong>heuristic, fringe/frontier, evaluation function, complete, optimal, branching factor and maximum depth</strong>. Pedagogical analogies, original examples, explanations, and recall exercises are intentionally marked as teaching expansions rather than course quotations.</p>
+<p>The course material places Greedy and A<em> as special cases of Best-First Search and introduces them in immediate succession; therefore this chapter deliberately ends by preparing the conceptual transition to A</em>. <span class="source-marker">Course source: <code>lecture-informed-search.pdf</code>, slides 5–17.</span></p>
+<hr />
+<h2>Chapter Metadata</h2>
+<ul>
+<li><strong>ID:</strong> <code>AI-U1-C06</code></li>
+<li><strong>Status:</strong> COMPLETE</li>
+<li><strong>Universal coverage:</strong> Core</li>
+<li><strong>University coverage:</strong> Core Unit I informed search</li>
+<li><strong>Math depth:</strong> Foundational</li>
+<li><strong>Visual depth:</strong> High</li>
+<li><strong>Exam depth:</strong> High</li>
+<li><strong>Coding depth:</strong> Algorithmic only; implementation intentionally excluded from the Main Book</li>
+<li><strong>Next:</strong> <code>MAIN-U1-C07</code></li>
+</ul>
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="ch05-heuristics.html" class="nav-btn">← Ch 5 — Heuristics</a>
+    <a href="ch07-a-star-search.html" class="nav-btn primary">Next: Ch 7 — A* Search →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch06-greedy-best-first-search.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 6</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

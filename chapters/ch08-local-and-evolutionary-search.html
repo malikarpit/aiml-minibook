@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 8: Local Search &amp; Evolutionary Algorithms — AI & Machine Learning MiniBook. Hill Climbing (Greedy Local Search), Local Maxima, Plateaus, Ridges, Simulated Annealing (Metropolis Acceptance), Beam Search, and Genetic Algorithms">
+<title>Ch 8 — Local Search &amp; Evolutionary Algorithms | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-iii">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 8 — Local Search &amp; Evolutionary Algorithms</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 8 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why do we need local search? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. One-minute intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. The key difference: path search vs state optimization <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. State-space landscape — the visual model <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. What is a neighbour? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Hill Climbing <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Hill-climbing procedure </a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Hill climbing — real-life analogy <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. The three classic problems of hill climbing </a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Random-restart hill climbing <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Local Beam Search </a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Simulated Annealing <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. The physical analogy — cooling metal </a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Simulated annealing — course formulation </a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Why allowing bad moves can be useful <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Genetic Algorithms </a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Genetic Algorithm vocabulary </a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Comparing the local/evolutionary methods <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Exact search vs approximate local search </a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. A deeper connection to Machine Learning <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Mathematical lens </a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Common misconceptions <span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Exam Lens </a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Active Recall — Close the Book </a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Practice Set <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Chapter Memory Card </a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Resource Shelf </a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Chapter Exit Test <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Connection to the Next Topic </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link active"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit I</span><span>›</span><span>Part III — Beyond Classical Search</span><span>›</span><span style="color:var(--em-text)">Chapter 8</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 8 · Unit I · Part III</div>
+    <div class="chapter-part-banner part-iii">
+      <span class="part-banner-badge">Unit I · Part III</span>
+      <span>Beyond Classical Search</span>
+    </div>
+    <h1 class="chapter-title">Local Search &amp; Evolutionary Algorithms</h1>
+    <div class="concept-id-tag">[CONCEPT-AI-008]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: Core / 5-mark Standard</span>
+      <span class="chapter-meta-item">📖 ~40 min read</span>
+      <span class="chapter-meta-item">🎯 29 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>Local & Evolutionary Search:</strong> Optimization in state landscapes, Hill Climbing variants (Steepest Ascent, Stochastic, First-choice, Random Restart), Simulated Annealing temperature schedules, Beam Search, and Genetic Algorithms (crossover, mutation, fitness proportion).</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why do we need local search?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">One-minute intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">The key difference: path search vs state optimization</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">State-space landscape — the visual model</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">What is a neighbour?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Hill Climbing</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Hill-climbing procedure</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Hill climbing — real-life analogy</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">The three classic problems of hill climbing</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Random-restart hill climbing</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Local Beam Search</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Simulated Annealing</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">The physical analogy — cooling metal</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Simulated annealing — course formulation</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Why allowing bad moves can be useful</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Genetic Algorithms</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Genetic Algorithm vocabulary</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Comparing the local/evolutionary methods</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Exact search vs approximate local search</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">A deeper connection to Machine Learning</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Mathematical lens</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Common misconceptions</span><span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Exam Lens</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Active Recall — Close the Book</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Practice Set</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Chapter Memory Card</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Resource Shelf</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Chapter Exit Test</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Connection to the Next Topic</span></a></li>
+    </ul>
+  </div>
+
+  <div class="chapter-preamble-card"><h1>MAIN-U1-C08 — Local &amp; Evolutionary Search</h1>
+<blockquote>
+<p><strong>Main Book:</strong> AI &amp; Machine Learning — Visual + Mathematical Self-Learning Textbook<br />
+<strong>Unit:</strong> I — Artificial Intelligence<br />
+<strong>Topic ID:</strong> <code>AI-U1-C08</code><br />
+<strong>Prerequisites:</strong> Problem Formulation, Search Tree/Node, Uninformed Search, Heuristics, Greedy Best-First Search, A<em> Search<br />
+</em><em>Course position:</em><em> Informed Search lecture continuation<br />
+</em><em>Syllabus status:</em><em> </em><em>Supplement / course-material enrichment.</em><em> Your official syllabus explicitly names Greedy, A</em>, and Heuristics under informed search; it does not separately name hill climbing, local beam search, simulated annealing, or genetic algorithms. Your supplied informed-search lecture does cover them, so they are retained here rather than silently discarded.<br />
+<strong>Primary course source:</strong> <code>lecture-informed-search.pdf</code> — Philipp Koehn, <em>Artificial Intelligence: Informed Search</em>, 12 February 2026<br />
+<strong>Next:</strong> <code>MAIN-U1-C09 — Constraint Satisfaction Problems</code></p>
+</blockquote>
+<hr /></div>
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 1: Why do we need local search? -->
+  <section id="s-01" data-search-section="Why do we need local search?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>1. Why do we need local search?</h2>
+      <button class="bookmark-btn" data-id="s-01" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine that you are solving a very large puzzle.</p>
+<p>A normal search method may try to remember many possibilities:</p>
+<div class="ascii-box"><pre>Problem
+                    │
+        ┌───────────┼───────────┐
+        ▼           ▼           ▼
+      State A     State B     State C
+      /   \       /   \       /   \
+     ...  ...    ...   ...    ...  ...</pre></div>
+<p>That becomes expensive when the space is huge.</p>
+<p>But imagine a different type of problem:</p>
+<blockquote>
+<p>You do not actually care about the <strong>route</strong> you took. You care only about reaching a very good final configuration.</p>
+</blockquote>
+<p>Examples:</p>
+<ul>
+<li>arrange a timetable with as few conflicts as possible;</li>
+<li>place queens so that none attack each other;</li>
+<li>find a short travelling-salesperson tour;</li>
+<li>tune a solution until its score improves.</li>
+</ul>
+<p>For these problems, keeping the complete search tree may be unnecessary.</p>
+<p>The supplied lecture describes this situation explicitly: when the path is irrelevant and the goal state itself is the solution, we can keep a <strong>single current state</strong> and repeatedly try to improve it. It notes that this uses constant space and can be suitable for online or offline search. <span class="source-marker">Course source: <code>lecture-informed-search.pdf</code>, slides 39–40.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 2: One-minute intuition -->
+  <section id="s-02" data-search-section="One-minute intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. One-minute intuition</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>English</h3>
+<p>Local search is a family of methods that says:</p>
+<blockquote>
+<p><strong>“I have one current solution. Instead of remembering the whole history, look at nearby alternatives and try to move toward a better one.”</strong></p>
+</blockquote>
+<p>The algorithm behaves more like someone <strong>improving a draft</strong> than someone mapping every road in a city.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> Socho tumhare paas already ek solution hai. Tum har possible solution ka tree banane ke bajaye bas current solution ko dekhte ho aur poochte ho: **“Iske aas-paas koi better solution mil sakta hai?”**
+
+Agar milta hai, move karo.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: The key difference: path search vs state optimization -->
+  <section id="s-03" data-search-section="The key difference: path search vs state optimization" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>3. The key difference: path search vs state optimization</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Classical path search</h2>
+<p>You usually care about:</p>
+<div class="ascii-box"><pre>Start
+  ↓
+State
+  ↓
+State
+  ↓
+State
+  ↓
+Goal</pre></div>
+<p>The path itself matters because the sequence of actions is the answer.</p>
+<h2>Local optimization</h2>
+<p>You often care about the final configuration:</p>
+<div class="ascii-box"><pre>Current configuration
+        ↓
+   improve it
+        ↓
+Better configuration
+        ↓
+   improve it
+        ↓
+Best configuration found</pre></div>
+<h3>Analogy</h3>
+<p>Think of editing a resume.</p>
+<p>You don't need to preserve every intermediate draft as a giant tree. You can keep the current draft, try a change, compare the result, and retain the better version.</p>
+<p>That is the mental model for local search.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: State-space landscape — the visual model -->
+  <section id="s-04" data-search-section="State-space landscape — the visual model" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>4. State-space landscape — the visual model</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A useful way to understand local search is to imagine every possible state placed on a landscape.</p>
+<div class="ascii-box"><pre>▲ quality / value
+                    │
+              /
+\        GLOBAL MAXIMUM
+            /    
+\        ★
+      _____/       
+\
+     /               
+\      local peak
+    /    ★             
+\    /\
+___/____________________\__/  \____
+
+        state space →</pre></div>
+<p>Depending on the problem, higher may mean:</p>
+<ul>
+<li>higher utility;</li>
+<li>fewer conflicts;</li>
+<li>lower cost if we reinterpret the landscape as an error/cost surface.</li>
+</ul>
+<h3>Important</h3>
+<p>The landscape picture is a <strong>mental model</strong>, not a literal requirement that every AI problem is physically continuous.</p>
+<p>A discrete problem such as n-queens still has a collection of neighbouring configurations; the landscape simply gives us a convenient way to visualize their quality.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: What is a neighbour? -->
+  <section id="s-05" data-search-section="What is a neighbour?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>5. What is a neighbour?</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A <strong>neighbour</strong> is a state reachable from the current state by a small permitted change.</p>
+<p>Examples:</p>
+<h3>n-Queens</h3>
+<p>Move one queen to another square.</p>
+<h3>TSP</h3>
+<p>Swap or exchange parts of the tour.</p>
+<h3>Timetable</h3>
+<p>Move one class to a different slot.</p>
+<p>So the definition is problem-dependent:</p>
+<blockquote>
+<p><strong>Neighbourhood = the set of candidate states reachable by one small local modification.</strong></p>
+</blockquote>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> Neighbour ka matlab “mathematically next” nahi hota. Bas current solution mein ek chhota legal change karke jo states ban sakti hain, woh neighbours hain.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: Hill Climbing -->
+  <section id="s-06" data-search-section="Hill Climbing" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>6. Hill Climbing</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied lecture presents hill climbing as the basic iterative-improvement method and uses the phrase:</p>
+<blockquote>
+<p>“Like climbing Everest in thick fog with amnesia.”</p>
+</blockquote>
+<p>That is a particularly useful intuition for the algorithm. <span class="source-marker">Course source: <code>lecture-informed-search.pdf</code>, slides 42–43.</span></p>
+<h2>Why the analogy works</h2>
+<ul>
+<li><strong>Everest</strong> → want a very high-quality solution.</li>
+<li><strong>Fog</strong> → cannot see the entire search space.</li>
+<li><strong>Amnesia</strong> → do not remember the whole path/tree.</li>
+<li><strong>Next move</strong> → choose a better neighbour.</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: Hill-climbing procedure -->
+  <section id="s-07" data-search-section="Hill-climbing procedure" class="content-section">
+    <div class="section-header">
+      <h2>7. Hill-climbing procedure</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied lecture gives this basic procedure:</p>
+<ol>
+<li>Start from a complete solution, possibly randomly generated.</li>
+<li>Consider neighbouring states.</li>
+<li>If there is no better neighbour, stop.</li>
+<li>Otherwise adopt the best neighbour.</li>
+<li>Repeat.</li>
+</ol>
+<p><span class="source-marker">Course source: <code>lecture-informed-search.pdf</code>, slide 43.</span></p>
+<h3>Visual</h3>
+<div class="ascii-box"><pre>START
+  │
+  ▼
+Current state
+  │
+  ▼
+Generate neighbours
+  │
+  ▼
+Is there a better one?
+  │
+ ┌┴─────────────┐
+Yes              No
+ │                │
+ ▼                ▼
+Move there      STOP
+ │
+ └──────► repeat</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: Hill climbing — real-life analogy -->
+  <section id="s-08" data-search-section="Hill climbing — real-life analogy" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>8. Hill climbing — real-life analogy</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine walking uphill in dense fog.</p>
+<p>You can only see the ground near your feet.</p>
+<p>You check the nearby directions and choose the one that goes upward most steeply.</p>
+<p>Then you repeat.</p>
+<p>Eventually you may reach a point where every immediately visible direction goes downhill.</p>
+<p>You stop.</p>
+<p>But there is a problem:</p>
+<blockquote>
+<p>You may be standing on a small hill while a much higher mountain exists somewhere else.</p>
+</blockquote>
+<p>That is the central weakness of hill climbing.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: The three classic problems of hill climbing -->
+  <section id="s-09" data-search-section="The three classic problems of hill climbing" class="content-section">
+    <div class="section-header">
+      <h2>9. The three classic problems of hill climbing</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>9.1 Local maximum</h2>
+<div class="ascii-box"><pre>GLOBAL MAX
+                  /\
+                 /  \
+        local   /    \
+        max     /      \
+        /\     /        \
+_______/  \___/__________
+      ↑
+ current search may stop here</pre></div>
+<p>The current state is better than all immediate neighbours, so the algorithm stops—even though a better state exists elsewhere.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> Tum ek chhoti hill ke top par pahunch gaye. Aas-paas koi higher point nahi dikh raha, isliye algorithm bolta hai “done”. Lekin door ek aur bahut badi hill ho sakti hai.
+
+</div>
+
+<hr />
+<h2>9.2 Plateau / flat region</h2>
+<div class="ascii-box"><pre>___________
+           \____</pre></div>
+<p>Many neighbouring states have the same value.</p>
+<p>The algorithm may have difficulty deciding where to move.</p>
+<hr />
+<h2>9.3 Ridge</h2>
+<p>A ridge is a narrow region where improving movement may require a combination of moves that is not obvious from the immediate neighbourhood.</p>
+<h3>Mental model</h3>
+<blockquote>
+<p>You are on a narrow mountain ridge. The best direction may not be represented by a single obvious sideways step.</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: Random-restart hill climbing -->
+  <section id="s-10" data-search-section="Random-restart hill climbing" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>10. Random-restart hill climbing</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A direct response to local maxima is:</p>
+<blockquote>
+<p><strong>Try again from another starting point.</strong></p>
+</blockquote>
+<p>The supplied lecture states that random-restart hill climbing can overcome local maxima and is trivially complete under its stated finite-space setup. <span class="source-marker">Course source: <code>lecture-informed-search.pdf</code>, slide 44.</span></p>
+<div class="ascii-box"><pre>Random start #1 → local maximum → restart
+Random start #2 → better region   → restart
+Random start #3 → global maximum → STOP</pre></div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> Ek hi starting point par depend mat karo. Multiple random starting points se hill climbing chalao. Kabhi kisi restart se better mountain mil jayegi.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: Local Beam Search -->
+  <section id="s-11" data-search-section="Local Beam Search" class="content-section">
+    <div class="section-header">
+      <h2>11. Local Beam Search</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Instead of keeping only <strong>one</strong> current state, keep <strong>k</strong> states.</p>
+<p>The supplied lecture defines the idea as:</p>
+<blockquote>
+<p>keep <code>k</code> states and choose the top <code>k</code> among all their successors.</p>
+</blockquote>
+<p><span class="source-marker">Course source: <code>lecture-informed-search.pdf</code>, slide 45.</span></p>
+<h3>Visual</h3>
+<div class="ascii-box"><pre>State A ──┬─ A1
+                    ├─ A2
+                    └─ A3
+
+          State B ──┬─ B1
+                    ├─ B2
+                    └─ B3
+
+          State C ──┬─ C1
+                    ├─ C2
+                    └─ C3
+
+                  ↓ rank all successors
+
+          Keep best k states</pre></div>
+<h3>Important distinction</h3>
+<p>Local beam search is <strong>not simply k independent hill-climbing runs</strong>.</p>
+<p>The states interact because their successors are pooled and the best <code>k</code> are selected together.</p>
+<h3>Problem</h3>
+<p>The lecture notes that all <code>k</code> states can end up on the same local hill.</p>
+<p>One proposed idea is to choose <code>k</code> successors randomly but bias that choice toward good ones. <span class="source-marker">Course source: slide 45.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: Simulated Annealing -->
+  <section id="s-12" data-search-section="Simulated Annealing" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>12. Simulated Annealing</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Hill climbing refuses to make a worse move.</p>
+<p>That is exactly why it can get stuck.</p>
+<p>Simulated annealing changes this rule:</p>
+<blockquote>
+<p><strong>Sometimes allow a worse move so that the search can escape a local maximum.</strong></p>
+</blockquote>
+<p>The key idea is to start more willing to explore and gradually become more conservative.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: The physical analogy — cooling metal -->
+  <section id="s-13" data-search-section="The physical analogy — cooling metal" class="content-section">
+    <div class="section-header">
+      <h2>13. The physical analogy — cooling metal</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>In metallurgy, annealing involves controlled heating and cooling.</p>
+<p>For our algorithmic mental model:</p>
+<div class="ascii-box"><pre>High temperature
+    ↓
+More exploration
+More willingness to accept bad moves
+
+    ↓ cooling
+
+Lower temperature
+    ↓
+Less exploration
+More selective
+
+    ↓
+
+Converge toward a good solution</pre></div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> Starting mein algorithm thoda “risk-taking” hota hai. Woh kabhi bad move bhi try kar sakta hai. Jaise-jaise temperature kam hota hai, algorithm disciplined ho jata hai.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: Simulated annealing — course formulation -->
+  <section id="s-14" data-search-section="Simulated annealing — course formulation" class="content-section">
+    <div class="section-header">
+      <h2>14. Simulated annealing — course formulation</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied lecture gives the following process:</p>
+<ol>
+<li>Reduce temperature <code>T</code> over time.</li>
+<li>Compute the best greedy move.</li>
+<li>Randomly draw another move.</li>
+<li>Compute:</li>
+</ol>
+<div class="formula-math">\[
+\Delta E = \text{value(random)}-\text{value(best)}
+\]</div>
+<ol>
+<li>Accept the random move with probability:</li>
+</ol>
+<div class="formula-math">\[
+\boxed{e^{\Delta E/T}}
+\]</div>
+<p>under the lecture's maximization-style formulation.</p>
+<ol>
+<li>Otherwise keep the best move.</li>
+</ol>
+<p><span class="source-marker">Course source: <code>lecture-informed-search.pdf</code>, slide 46.</span></p>
+<h3>Important intuition</h3>
+<p>When <code>T</code> is high, the algorithm is more exploratory.</p>
+<p>When <code>T</code> becomes low, accepting a worse move becomes less likely.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: Why allowing bad moves can be useful -->
+  <section id="s-15" data-search-section="Why allowing bad moves can be useful" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>15. Why allowing bad moves can be useful</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the landscape looks like:</p>
+<div class="ascii-box"><pre>local peak
+          /\
+         /  \
+________/    \______          global peak
+                       _________/\
+_____________________/           \__</pre></div>
+<p>A strict hill climber reaches the first peak and stops.</p>
+<p>Simulated annealing may temporarily move downhill:</p>
+<div class="ascii-box"><pre>local peak
+    ★
+   / \
+__/   \____
+          \   ← temporary bad move
+           \__________
+                      /\
+                     /  \
+                    ★ global</pre></div>
+<p>That temporary loss can provide access to a better region.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: Genetic Algorithms -->
+  <section id="s-16" data-search-section="Genetic Algorithms" class="content-section">
+    <div class="section-header">
+      <h2>16. Genetic Algorithms</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied lecture describes genetic algorithms as combining stochastic local beam search with generating successors from pairs of states. It also notes that genetic algorithms require states represented as strings and that crossover is useful when substrings represent meaningful components. <span class="source-marker">Course source: <code>lecture-informed-search.pdf</code>, slides 46–47.</span></p>
+<h2>Core analogy</h2>
+<p>Think about selective breeding:</p>
+<ul>
+<li>you have several candidate organisms;</li>
+<li>some perform better than others;</li>
+<li>good candidates are more likely to contribute to the next generation;</li>
+<li>parts of successful candidates can be recombined;</li>
+<li>random variation introduces diversity.</li>
+</ul>
+<p>The algorithmic version uses a <strong>population</strong> of candidate solutions.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: Genetic Algorithm vocabulary -->
+  <section id="s-17" data-search-section="Genetic Algorithm vocabulary" class="content-section">
+    <div class="section-header">
+      <h2>17. Genetic Algorithm vocabulary</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Population</td>
+<td>Set of candidate solutions</td>
+</tr>
+<tr>
+<td>Individual/chromosome</td>
+<td>One candidate solution</td>
+</tr>
+<tr>
+<td>Encoding</td>
+<td>Representation of a solution</td>
+</tr>
+<tr>
+<td>Gene</td>
+<td>A component of the encoding</td>
+</tr>
+<tr>
+<td>Fitness</td>
+<td>Measure of solution quality</td>
+</tr>
+<tr>
+<td>Selection</td>
+<td>Prefer better individuals as parents</td>
+</tr>
+<tr>
+<td>Crossover</td>
+<td>Combine parts of two parents</td>
+</tr>
+<tr>
+<td>Mutation</td>
+<td>Introduce a random small change</td>
+</tr>
+<tr>
+<td>Generation</td>
+<td>One iteration of the population process</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Visual</h3>
+<div class="ascii-box"><pre>Population
+│
+├── Candidate A  ── fitness
+├── Candidate B  ── fitness
+├── Candidate C  ── fitness
+└── Candidate D  ── fitness
+          │
+          ▼
+       Selection
+          │
+      Parent pair
+       /       \
+      ▼         ▼
+   Parent 1   Parent 2
+       \       /
+        \     /
+        Crossover
+            │
+         Mutation
+            │
+            ▼
+       New population</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: Comparing the local/evolutionary methods -->
+  <section id="s-18" data-search-section="Comparing the local/evolutionary methods" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>18. Comparing the local/evolutionary methods</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Method</th>
+<th>Main memory idea</th>
+<th>Core move</th>
+<th>Main strength</th>
+<th>Main weakness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hill climbing</td>
+<td>1 state</td>
+<td>Best neighbour</td>
+<td>Very simple, low memory</td>
+<td>Local maxima/plateaus/ridges</td>
+</tr>
+<tr>
+<td>Random-restart hill climbing</td>
+<td>1 state per run</td>
+<td>Best neighbour + restart</td>
+<td>Escapes bad starts</td>
+<td>Repeated restarts can cost time</td>
+</tr>
+<tr>
+<td>Local beam</td>
+<td><code>k</code> states</td>
+<td>Keep best <code>k</code> successors</td>
+<td>Multiple regions explored</td>
+<td>States may converge to same region</td>
+</tr>
+<tr>
+<td>Simulated annealing</td>
+<td>1 current state</td>
+<td>Sometimes accept worse move</td>
+<td>Can escape local maxima</td>
+<td>Requires temperature/schedule choices</td>
+</tr>
+<tr>
+<td>Genetic algorithm</td>
+<td>Population</td>
+<td>Selection + crossover + mutation</td>
+<td>Population-level exploration</td>
+<td>Representation/fitness design matters</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: Exact search vs approximate local search -->
+  <section id="s-19" data-search-section="Exact search vs approximate local search" class="content-section">
+    <div class="section-header">
+      <h2>19. Exact search vs approximate local search</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your supplied lecture summarizes the distinction as:</p>
+<div class="ascii-box"><pre>Exact search
+├── exhaustive exploration
+└── heuristic search such as A*
+
+Approximate search
+├── hill climbing
+├── simulated annealing
+└── genetic algorithms</pre></div>
+<p><span class="source-marker">Course source: <code>lecture-informed-search.pdf</code>, slide 48.</span></p>
+<h3>The mental distinction</h3>
+<p><strong>Exact-search mindset:</strong></p>
+<blockquote>
+<p>“Find a path / answer with a stated guarantee.”</p>
+</blockquote>
+<p><strong>Approximate/local-search mindset:</strong></p>
+<blockquote>
+<p>“Find a very good configuration efficiently, even when exhaustive exploration is impractical.”</p>
+</blockquote>
+<p>This distinction becomes useful when you later study optimization in Machine Learning.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: A deeper connection to Machine Learning -->
+  <section id="s-20" data-search-section="A deeper connection to Machine Learning" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>20. A deeper connection to Machine Learning</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This chapter is also a bridge toward your ML mathematics.</p>
+<p>Hill climbing resembles repeatedly looking for a better objective value.</p>
+<p>Gradient descent later does something related—but mathematically rather than by discrete neighbourhood comparison:</p>
+<div class="ascii-box"><pre>Local search
+    ↓
+Neighbour states
+    ↓
+Choose a better state
+
+Gradient-based optimization
+    ↓
+Gradient tells us a direction
+    ↓
+Update parameters</pre></div>
+<p>The resemblance is conceptual, not an identity.</p>
+<p>Do not conclude that hill climbing and gradient descent are the same algorithm.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: Mathematical lens -->
+  <section id="s-21" data-search-section="Mathematical lens" class="content-section">
+    <div class="section-header">
+      <h2>21. Mathematical lens</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This chapter needs only light mathematics.</p>
+<h3>Simulated annealing</h3>
+<div class="formula-math">\[
+\Delta E = E_{random}-E_{best}
+\]</div>
+<p>and the course's acceptance expression:</p>
+<div class="formula-math">\[
+P(accept)=e^{\Delta E/T}
+\]</div>
+<p>The important ideas are:</p>
+<ul>
+<li><code>T</code> = temperature;</li>
+<li><code>ΔE</code> = relative quality difference under the lecture's formulation;</li>
+<li>exponential term controls probability;</li>
+<li>cooling reduces the willingness to make worse moves.</li>
+</ul>
+<h3>Connection to optimization</h3>
+<p>Later, ML will introduce an objective function such as:</p>
+<div class="formula-math">\[
+J(\theta)
+\]</div>
+<p>and attempt to improve it.</p>
+<p>That will be much more mathematical than local search, so this chapter is only a conceptual bridge.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: Common misconceptions -->
+  <section id="s-22" data-search-section="Common misconceptions" class="content-section mode-gate">
+    <div class="section-header">
+      <h2>22. Common misconceptions</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Misconception 1</h2>
+<blockquote>
+<p>“Hill climbing always finds the globally best solution.”</p>
+</blockquote>
+<p><strong>No.</strong> Local maxima are a central failure mode.</p>
+<h2>Misconception 2</h2>
+<blockquote>
+<p>“Simulated annealing never makes a bad move.”</p>
+</blockquote>
+<p><strong>No.</strong> Its central idea is to sometimes permit worse moves.</p>
+<h2>Misconception 3</h2>
+<blockquote>
+<p>“Local beam search means k completely independent hill climbers.”</p>
+</blockquote>
+<p><strong>No.</strong> Their successor sets are pooled.</p>
+<h2>Misconception 4</h2>
+<blockquote>
+<p>“A genetic algorithm is just random guessing.”</p>
+</blockquote>
+<p><strong>No.</strong> It uses a population, fitness, selection, recombination and mutation.</p>
+<h2>Misconception 5</h2>
+<blockquote>
+<p>“Local search is always optimal.”</p>
+</blockquote>
+<p><strong>No.</strong> These methods are generally designed to obtain good solutions efficiently rather than to provide the same guarantees as exact search.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: Exam Lens -->
+  <section id="s-23" data-search-section="Exam Lens" class="content-section">
+    <div class="section-header">
+      <h2>23. Exam Lens</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Because these methods are present in your supplied informed-search lecture but are not separately named in the official informed-search syllabus wording, use this priority rule:</p>
+<blockquote>
+<p><strong>First master the explicit syllabus core: BFS/DFS → heuristics → Greedy → A*. Then learn this chapter as supporting/course-material depth.</strong></p>
+</blockquote>
+<h3>Possible 2-mark questions</h3>
+<ul>
+<li>What is local search?</li>
+<li>What is hill climbing?</li>
+<li>What is a local maximum?</li>
+<li>What is simulated annealing?</li>
+<li>What is a genetic algorithm?</li>
+</ul>
+<h3>Possible 5-mark questions</h3>
+<ul>
+<li>Explain hill climbing with its limitations.</li>
+<li>Explain simulated annealing.</li>
+<li>Explain local beam search.</li>
+<li>Explain the basic steps of a genetic algorithm.</li>
+</ul>
+<h3>Possible 10-mark question</h3>
+<blockquote>
+<p>Compare hill climbing, simulated annealing, local beam search and genetic algorithms.</p>
+</blockquote>
+<p>Suggested answer structure:</p>
+<ol>
+<li>Motivation for local search</li>
+<li>State-space landscape</li>
+<li>Hill climbing</li>
+<li>Failure modes</li>
+<li>Random restart</li>
+<li>Local beam</li>
+<li>Simulated annealing</li>
+<li>Genetic algorithms</li>
+<li>Comparison table</li>
+<li>Applications</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: Active Recall — Close the Book -->
+  <section id="s-24" data-search-section="Active Recall — Close the Book" class="content-section">
+    <div class="section-header">
+      <h2>24. Active Recall — Close the Book</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <ol>
+<li>Why does local search not need to store the whole search tree?</li>
+<li>What is a neighbour?</li>
+<li>What does hill climbing choose?</li>
+<li>What is a local maximum?</li>
+<li>What is a plateau?</li>
+<li>What is a ridge?</li>
+<li>How does random restart help?</li>
+<li>Why is local beam search different from k independent hill climbers?</li>
+<li>Why does simulated annealing sometimes accept a worse move?</li>
+<li>What happens as temperature falls?</li>
+<li>What is a population in a genetic algorithm?</li>
+<li>What is fitness?</li>
+<li>What is crossover?</li>
+<li>What is mutation?</li>
+<li>Which of these methods maintain multiple candidates at the population/beam level?</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: Practice Set -->
+  <section id="s-25" data-search-section="Practice Set" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>25. Practice Set</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>A. Conceptual</h2>
+<h3>Q1</h3>
+<p>A solution has no better immediate neighbour, but another region of the search space contains a much better solution. Which hill-climbing problem does this illustrate?</p>
+<h3>Q2</h3>
+<p>Why can restarting from a different random state help?</p>
+<h3>Q3</h3>
+<p>Why is “allowing a bad move” not automatically a bad design in simulated annealing?</p>
+<h3>Q4</h3>
+<p>What is the purpose of mutation in a genetic algorithm?</p>
+<h3>Q5</h3>
+<p>Why can local beam search lose diversity even though it keeps multiple states?</p>
+<h2>B. Numerical / reasoning</h2>
+<h3>Q6</h3>
+<p>Suppose two candidate moves have:</p>
+<div class="formula-math">\[
+E_{best}=100,\quad E_{random}=96,\quad T=10
+\]</div>
+<p>Using the lecture's formulation,</p>
+<div class="formula-math">\[
+\Delta E=96-100=-4
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+P(accept)=e^{-4/10}
+\]</div>
+<p>Calculate the numerical probability using a calculator.</p>
+<h3>Q7</h3>
+<p>Create a small landscape with at least two local maxima and one global maximum. Mark where hill climbing can terminate.</p>
+<h3>Q8</h3>
+<p>Design a toy genetic-algorithm population of four binary strings. Assign a fitness function and show one selection+crossover+mutation cycle.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: Chapter Memory Card -->
+  <section id="s-26" data-search-section="Chapter Memory Card" class="content-section">
+    <div class="section-header">
+      <h2>26. Chapter Memory Card</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <blockquote>
+<p><strong>LOCAL SEARCH = IMPROVE THE CURRENT SOLUTION</strong></p>
+<p>Hill climbing → always prefer a better neighbour.<br />
+Random restart → try another starting point.<br />
+Local beam → keep <code>k</code> states.<br />
+Simulated annealing → sometimes accept worse moves, then cool down.<br />
+Genetic algorithm → evolve a population using fitness, selection, crossover and mutation.</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: Resource Shelf -->
+  <section id="s-27" data-search-section="Resource Shelf" class="content-section">
+    <div class="section-header">
+      <h2>27. Resource Shelf</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Your course material — Primary</h2>
+<ul>
+<li><code>lecture-informed-search.pdf</code>, slides 39–48</li>
+<li><code>MAIN-U1-C05 — Heuristics.md</code> for the preceding concept</li>
+</ul>
+<h2>Structured course</h2>
+<p><a href="https://nptel.ac.in/courses/106106126">NPTEL — Artificial Intelligence: Search Methods for Problem Solving</a></p>
+<p>Use the informed-search / iterative-improvement portions after reading this chapter.</p>
+<h2>Reference</h2>
+<p><a href="https://aima.cs.berkeley.edu/">AIMA — Artificial Intelligence: A Modern Approach</a></p>
+<p>Use the search/local-search material for a second formal treatment.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: Chapter Exit Test -->
+  <section id="s-28" data-search-section="Chapter Exit Test" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>28. Chapter Exit Test</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You are ready to move on when you can:</p>
+<ul>
+<li>[ ] Explain why local search exists.</li>
+<li>[ ] Distinguish path search from state optimization.</li>
+<li>[ ] Define a neighbourhood.</li>
+<li>[ ] Run hill climbing on a small landscape.</li>
+<li>[ ] Identify local maxima, plateaus and ridges.</li>
+<li>[ ] Explain random-restart hill climbing.</li>
+<li>[ ] Explain local beam search.</li>
+<li>[ ] Explain why local beam is not simply k independent runs.</li>
+<li>[ ] Explain simulated annealing and temperature.</li>
+<li>[ ] Interpret <code>ΔE</code> and the acceptance expression used in the course lecture.</li>
+<li>[ ] Describe the genetic algorithm pipeline.</li>
+<li>[ ] Compare the methods.</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 29: Connection to the Next Topic -->
+  <section id="s-29" data-search-section="Connection to the Next Topic" class="content-section">
+    <div class="section-header">
+      <h2>29. Connection to the Next Topic</h2>
+      <button class="bookmark-btn" data-id="s-29" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>We have now covered several ways to search a state space.</p>
+<p>But some problems have a different structure:</p>
+<blockquote>
+<p><strong>Instead of asking “Which path should I search?”, can I describe the problem using variables, possible values, and rules that restrict which combinations are allowed?</strong></p>
+</blockquote>
+<p>That leads to <strong>Constraint Satisfaction Problems (CSPs)</strong>.</p>
+<h3>Next</h3>
+<p><code>MAIN-U1-C09 — Constraint Satisfaction Problems</code></p>
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="ch07-a-star-search.html" class="nav-btn">← Ch 7 — A* Search</a>
+    <a href="ch09-constraint-satisfaction-problems.html" class="nav-btn primary">Next: Ch 9 — CSPs →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch08-local-and-evolutionary-search.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 8</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

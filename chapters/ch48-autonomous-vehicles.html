@@ -1,0 +1,1689 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 48: Autonomous Vehicles — AI & Machine Learning MiniBook. Sensor Fusion (Cameras, LiDAR, Radar), 3D Perception, Localization &amp; SLAM, Path Planning (A*, RRT), and Control Systems">
+<title>Ch 48 — Autonomous Vehicles | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-xxi">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 48 — Autonomous Vehicles</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 48 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why This Chapter Exists <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. One-Minute Intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. The Core System Diagram <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. What Does “Autonomous” Actually Mean? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. AI/ML Tasks Inside the Vehicle <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Sensor Modalities <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Sensor Fusion <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Perception: From Pixels to Objects <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Confidence Is Not Certainty <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Localization <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Mapping <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Prediction <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Planning <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Reinforcement Learning Connection <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Control <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Why Safety Is Different From Ordinary ML Accuracy <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. False Positives vs False Negatives in Driving <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Dataset Shift </a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Edge Cases </a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Human Oversight and Fallbacks <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Worked Case Study — Pedestrian at a Crossing </a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. A Numerical Decision Example </a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. What AI/ML Is Doing — and What It Is Not Doing </a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Common Architecture Errors </a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Exam Connection <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Active Recall </a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Blank Recall Diagram </a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. One-Screen Summary </a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Math Checkpoint </a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Connection Map </a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Resource Shelf </a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Chapter Exit Test </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link active"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit IV</span><span>›</span><span>Part XXI — Applied AI & Autonomous Domain Systems</span><span>›</span><span style="color:var(--em-text)">Chapter 48</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 48 · Unit IV · Part XXI</div>
+    <div class="chapter-part-banner part-xxi">
+      <span class="part-banner-badge">Unit IV · Part XXI</span>
+      <span>Applied AI & Autonomous Domain Systems</span>
+    </div>
+    <h1 class="chapter-title">Autonomous Vehicles</h1>
+    <div class="concept-id-tag">[CONCEPT-APP-048]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: Core Applied Domain</span>
+      <span class="chapter-meta-item">📖 ~45 min read</span>
+      <span class="chapter-meta-item">🎯 32 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>AI in Autonomous Vehicles:</strong> Autonomous driving levels (SAE 0-5), Sensor modalities (Cameras, LiDAR, Radar, IMU), Sensor fusion via Extended Kalman Filter, 3D Object detection, Localization and SLAM on HD maps, Behavioral trajectory prediction, Motion planning (A*, RRT*), and Vehicle control (PID, MPC).</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why This Chapter Exists</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">One-Minute Intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">The Core System Diagram</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">What Does “Autonomous” Actually Mean?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">AI/ML Tasks Inside the Vehicle</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Sensor Modalities</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Sensor Fusion</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Perception: From Pixels to Objects</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Confidence Is Not Certainty</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Localization</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Mapping</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Prediction</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Planning</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Reinforcement Learning Connection</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Control</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Why Safety Is Different From Ordinary ML Accuracy</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">False Positives vs False Negatives in Driving</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Dataset Shift</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Edge Cases</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Human Oversight and Fallbacks</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Worked Case Study — Pedestrian at a Crossing</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">A Numerical Decision Example</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">What AI/ML Is Doing — and What It Is Not Doing</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Common Architecture Errors</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Exam Connection</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Active Recall</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Blank Recall Diagram</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">One-Screen Summary</span></a></li>
+      <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Math Checkpoint</span></a></li>
+      <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Connection Map</span></a></li>
+      <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Resource Shelf</span></a></li>
+      <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Chapter Exit Test</span></a></li>
+    </ul>
+  </div>
+
+  <div class="chapter-preamble-card"><h1>MAIN-U4-C48 — AI in Autonomous Vehicles</h1>
+<blockquote>
+<p><strong>Main Book:</strong> AI &amp; Machine Learning — Visual + Mathematical Self-Learning Textbook<br />
+<strong>Unit:</strong> IV — Advanced Topics and AI Applications<br />
+<strong>Topic ID:</strong> <code>ML-U4-C48</code><br />
+<strong>Coverage:</strong> CORE APPLICATION CASE STUDY + STANDARD EXPANSION<br />
+<strong>Syllabus position:</strong> AI applications — autonomous vehicles<br />
+<strong>Prerequisites:</strong> C14–C29 (ML), C30–C39 (deep learning), C40–C43 (RL/NLP foundations)</p>
+</blockquote>
+<hr /></div>
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 1: Why This Chapter Exists -->
+  <section id="s-01" data-search-section="Why This Chapter Exists" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>1. Why This Chapter Exists</h2>
+      <button class="bookmark-btn" data-id="s-01" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>An autonomous vehicle is not simply “a car with a neural network.”</p>
+<p>It is a <strong>complete AI-enabled decision system</strong> that has to:</p>
+<ul>
+<li>perceive what is around it;</li>
+<li>understand the situation;</li>
+<li>predict what other road users may do;</li>
+<li>decide what to do next;</li>
+<li>plan a safe path;</li>
+<li>control the vehicle;</li>
+<li>react to uncertainty and unexpected events.</li>
+</ul>
+<p>The useful mental model is therefore:</p>
+<div class="ascii-box"><pre>AUTONOMOUS VEHICLE
+                        │
+        ┌───────────────┼────────────────┐
+        │               │                │
+     PERCEPTION      PREDICTION        LOCALIZATION
+        │               │                │
+        └───────────────┼────────────────┘
+                        ↓
+                    PLANNING
+                        ↓
+                    CONTROL
+                        ↓
+                VEHICLE / ACTUATORS
+                        │
+                        └────── feedback ──────►</pre></div>
+<p>This chapter is an <strong>application synthesis</strong> of ideas you already learned elsewhere in the Main Book.</p>
+<p>The goal is not to memorize a list of sensors or companies. The goal is to understand how AI/ML components fit into an autonomous system.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 2: One-Minute Intuition -->
+  <section id="s-02" data-search-section="One-Minute Intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. One-Minute Intuition</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine a human driving through a crowded road.</p>
+<p>You continuously do something like this:</p>
+<div class="ascii-box"><pre>See road
+  ↓
+Recognize lane / vehicle / pedestrian
+  ↓
+Estimate where things are going
+  ↓
+Decide whether to slow, stop, turn or continue
+  ↓
+Choose a trajectory
+  ↓
+Steer + accelerate + brake
+  ↓
+Observe the changed road
+  ↓
+Repeat</pre></div>
+<p>An autonomous vehicle has to construct a machine version of this loop.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish teacher explanation</div>
+
+Socho tum traffic mein bike ya car chala rahe ho.
+
+Sirf saamne dekhna enough nahi hai.
+
+Tumhe ye samajhna padta hai:
+
+> “Ye object kya hai?”  
+> “Ye kidhar move kar raha hai?”  
+> “Meri lane safe hai?”  
+> “Mujhe brake karna hai ya turn?”  
+> “Turn karunga to vehicle exactly kaise move karegi?”
+
+Autonomous driving mein AI ka kaam ek single prediction dena nahi hai. **Perception → understanding → prediction → decision → action** ka full loop banana hai.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: The Core System Diagram -->
+  <section id="s-03" data-search-section="The Core System Diagram" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>3. The Core System Diagram</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="diagram-box"><pre class="mermaid">
+graph TD
+    subgraph SENSORS["Sensing Layer"]
+        CAM["Cameras (Vision, Signs, Lights)"]
+        LID["LiDAR (3D Point Cloud Distance)"]
+        RAD["Radar (Velocity in Rain/Fog)"]
+        IMU["IMU & GPS (Inertial Odometry)"]
+    end
+    subgraph PERCEPTION["Perception & Fusion"]
+        FUS["Kalman Filtering & Sensor Fusion"]
+        DET["3D Object Detection & Tracking"]
+    end
+    subgraph PLANNING["World Modeling & Planning"]
+        LOC["Localization & SLAM on HD Map"]
+        PRED["Behavioral Trajectory Prediction"]
+        PLAN["Motion Planning (A*, RRT*, Hybrid Path)"]
+    end
+    subgraph CONTROL["Actuation & Control Layer"]
+        CTRL["PID / Model Predictive Control (MPC)"]
+        VEH["Vehicle Actuators (Steering, Throttle, Brakes)"]
+    end
+    SENSORS --> PERCEPTION
+    PERCEPTION --> PLANNING
+    PLANNING --> CONTROL
+    CONTROL --> VEH
+</pre></div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher explanation — Hinglish</div>
+
+Ek Autonomous Vehicle (self-driving car) chaar main dimaagi paraton (layers) par chalti hai:
+1. **Sensing:** Cameras rang aur traffic light pehchante hain; LiDAR laser se 3D dori naapta hai; Radar barish aur dhundh mein speed naapta hai.
+2. **Perception:** Sensor fusion (Kalman filter) sab sensors ko milakar ek single 3D world banata hai ("samne 15m door ek pedestrian chal raha hai").
+3. **Planning:** Prediction aur search algorithms (A*, RRT) se faisla hota hai ki car ko 2 second baad kahan hona chahiye.
+4. **Control:** Control loop (PID / MPC) steering angle aur brake pressure ko millisecond accuracy ke sath ghumata hai.
+
+
+
+
+<div class="diagram-box"><pre class="mermaid">
+graph TD
+    subgraph SENSORS["Sensing Layer"]
+        CAM["Cameras (Vision, Signs, Lights)"]
+        LID["LiDAR (3D Point Cloud Distance)"]
+        RAD["Radar (Velocity in Rain/Fog)"]
+        IMU["IMU & GPS (Inertial Odometry)"]
+    end
+    subgraph PERCEPTION["Perception & Fusion"]
+        FUS["Kalman Filtering & Sensor Fusion"]
+        DET["3D Object Detection & Tracking"]
+    end
+    subgraph PLANNING["World Modeling & Planning"]
+        LOC["Localization & SLAM on HD Map"]
+        PRED["Behavioral Trajectory Prediction"]
+        PLAN["Motion Planning (A*, RRT*, Hybrid Path)"]
+    end
+    subgraph CONTROL["Actuation & Control Layer"]
+        CTRL["PID / Model Predictive Control (MPC)"]
+        VEH["Vehicle Actuators (Steering, Throttle, Brakes)"]
+    end
+    SENSORS --> PERCEPTION
+    PERCEPTION --> PLANNING
+    PLANNING --> CONTROL
+    CONTROL --> VEH
+</pre></div>
+
+
+
+</div>
+
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher explanation — Hinglish</div>
+
+Ek Autonomous Vehicle (self-driving car) chaar main dimaagi paraton (layers) par chalti hai:
+1. **Sensing:** Cameras rang aur traffic light pehchante hain; LiDAR laser se 3D dori naapta hai; Radar barish aur dhundh mein speed naapta hai.
+2. **Perception:** Sensor fusion (Kalman filter) sab sensors ko milakar ek single 3D world banata hai ("samne 15m door ek pedestrian chal raha hai").
+3. **Planning:** Prediction aur search algorithms (A*, RRT) se faisla hota hai ki car ko 2 second baad kahan hona chahiye.
+4. **Control:** Control loop (PID / MPC) steering angle aur brake pressure ko millisecond accuracy ke sath ghumata hai.
+
+
+
+
+<div class="ascii-box"><pre>SENSORS
+ cameras | lidar | radar | GNSS/IMU | ultrasonic
+                    │
+                    ▼
+          SENSOR PROCESSING
+                    │
+                    ▼
+             PERCEPTION
+  ┌───────────┬──────────┬────────────┐
+  │ objects   │ lanes    │ traffic    │
+  │           │          │ signals    │
+  └───────────┴──────────┴────────────┘
+                    │
+                    ▼
+             LOCALIZATION
+                    │
+                    ▼
+             PREDICTION
+       “What may others do next?”
+                    │
+                    ▼
+              PLANNING
+       “What should ego vehicle do?”
+                    │
+                    ▼
+               CONTROL
+        steering / throttle / brake
+                    │
+                    ▼
+              VEHICLE MOTION
+                    │
+                    └──────── feedback ────────►</pre></div>
+
+
+
+## How to read this visual
+
+Start at the top.
+
+1. **Sensors** observe the world.
+2. Processing converts raw measurements into usable representations.
+3. **Perception** extracts objects and scene information.
+4. **Localization** estimates where the vehicle is.
+5. **Prediction** estimates future behavior.
+6. **Planning** selects a desired route/trajectory.
+7. **Control** converts that plan into physical commands.
+8. The vehicle moves, changing the next observations.
+
+</div>
+
+<h3>Important distinction</h3>
+<p><strong>Perception is not planning.</strong></p>
+<p>Recognizing a pedestrian is perception.</p>
+<p>Deciding to stop for the pedestrian belongs to downstream decision/planning.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: What Does “Autonomous” Actually Mean? -->
+  <section id="s-04" data-search-section="What Does “Autonomous” Actually Mean?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>4. What Does “Autonomous” Actually Mean?</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A vehicle can automate only one part of driving without being a fully autonomous system.</p>
+<p>It helps to separate:</p>
+<ul>
+<li>assistance;</li>
+<li>perception automation;</li>
+<li>lane/path control;</li>
+<li>decision making;</li>
+<li>full driving-task automation.</li>
+</ul>
+<p>The technical idea is that increasing automation moves more of the driving loop from the human to the machine.</p>
+<h3>Do not use a vague definition</h3>
+<p>“Autonomous vehicle = car that drives itself” is intuitive but incomplete.</p>
+<p>A more useful definition is:</p>
+<blockquote>
+<p><strong>An autonomous vehicle is a cyber-physical system that uses sensing, estimation, machine learning/AI, planning and control to perform some or all driving tasks with reduced human intervention.</strong></p>
+</blockquote>
+<p>The precise operational meaning of “autonomous” depends on the system's claimed capability and operating conditions.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: AI/ML Tasks Inside the Vehicle -->
+  <section id="s-05" data-search-section="AI/ML Tasks Inside the Vehicle" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>5. AI/ML Tasks Inside the Vehicle</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The application can be decomposed into familiar ML problems.</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Vehicle task</th>
+<th>AI/ML framing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Detect cars/pedestrians</td>
+<td>classification + object detection</td>
+</tr>
+<tr>
+<td>Separate drivable road regions</td>
+<td>segmentation</td>
+</tr>
+<tr>
+<td>Identify lane markings</td>
+<td>vision / geometric estimation</td>
+</tr>
+<tr>
+<td>Read traffic signs</td>
+<td>classification/OCR</td>
+</tr>
+<tr>
+<td>Predict another vehicle's motion</td>
+<td>sequence prediction</td>
+</tr>
+<tr>
+<td>Decide among actions</td>
+<td>planning / decision making / RL concepts</td>
+</tr>
+<tr>
+<td>Estimate uncertainty</td>
+<td>probabilistic modelling / calibrated prediction</td>
+</tr>
+<tr>
+<td>Improve perception from data</td>
+<td>supervised/self-supervised learning</td>
+</tr>
+<tr>
+<td>Learn policies in simulated environments</td>
+<td>reinforcement learning</td>
+</tr>
+<tr>
+<td>Monitor system failures</td>
+<td>anomaly detection / safety monitoring</td>
+</tr>
+</tbody>
+</table></div>
+<p>The same ML concepts from Units II and III reappear here.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: Sensor Modalities -->
+  <section id="s-06" data-search-section="Sensor Modalities" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>6. Sensor Modalities</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A real autonomous system can use more than one sensing modality.</p>
+<h2>6.1 Camera</h2>
+<p>A camera provides rich visual information.</p>
+<p>It can support:</p>
+<ul>
+<li>object recognition;</li>
+<li>lane detection;</li>
+<li>traffic-light recognition;</li>
+<li>sign recognition;</li>
+<li>scene understanding.</li>
+</ul>
+<h3>AI connection</h3>
+<p>CNN-style visual models are natural candidates for many image-based perception tasks.</p>
+<h3>Limitation</h3>
+<p>A camera does not directly hand you a perfect 3D world model.</p>
+<p>Lighting, rain, glare, shadows and occlusion can affect perception.</p>
+<hr />
+<h2>6.2 LiDAR</h2>
+<p>LiDAR measures ranges using emitted light pulses.</p>
+<p>The result can be represented as a <strong>point cloud</strong>.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>physical world
+     ↓
+range measurements
+     ↓
+3D point cloud
+     ↓
+object / geometry understanding</pre></div>
+<p>LiDAR can provide useful geometric information, but sensors have cost, range, weather and integration considerations.</p>
+<hr />
+<h2>6.3 Radar</h2>
+<p>Radar measures properties related to radio-wave reflections and can be useful for:</p>
+<ul>
+<li>detecting objects;</li>
+<li>estimating relative motion;</li>
+<li>supporting operation in challenging visibility conditions.</li>
+</ul>
+<p>Radar and camera therefore provide different kinds of evidence.</p>
+<hr />
+<h2>6.4 GNSS + IMU</h2>
+<p>These support localization and motion estimation.</p>
+<ul>
+<li><strong>GNSS</strong>: positioning using satellite navigation signals.</li>
+<li><strong>IMU</strong>: inertial measurements such as acceleration and angular velocity.</li>
+</ul>
+<p>They are often combined with other information rather than treated as flawless absolute truth.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: Sensor Fusion -->
+  <section id="s-07" data-search-section="Sensor Fusion" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>7. Sensor Fusion</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<ul>
+<li>the camera says “there is an object”;</li>
+<li>LiDAR says “the object is approximately here in 3D”;</li>
+<li>radar says “the object is moving toward/away from me.”</li>
+</ul>
+<p>Using multiple measurements can produce a more informative system representation.</p>
+<div class="ascii-box"><pre>Camera ───┐
+LiDAR ────┼──► Fusion / shared representation ─► downstream AI
+Radar ────┘</pre></div>
+<h3>Analogy</h3>
+<p>Imagine three witnesses describing the same road incident.</p>
+<p>One sees color and shape.</p>
+<p>One estimates distance.</p>
+<p>One estimates relative motion.</p>
+<p>Combining their evidence can be more useful than forcing one witness to answer every question.</p>
+<h3>Boundary of the analogy</h3>
+<p>Three human witnesses are not statistically independent sensors, and real sensor fusion requires explicit models, calibration and uncertainty handling.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: Perception: From Pixels to Objects -->
+  <section id="s-08" data-search-section="Perception: From Pixels to Objects" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>8. Perception: From Pixels to Objects</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A perception system can perform tasks such as:</p>
+<h3>Classification</h3>
+<p>“What kind of object is this?”</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>crop → {car, bus, bicycle, pedestrian, ...}</pre></div>
+<h3>Object detection</h3>
+<p>“What objects are present, and where?”</p>
+<div class="ascii-box"><pre>image
+ ↓
+bounding boxes + class labels + confidence</pre></div>
+<h3>Semantic segmentation</h3>
+<p>“What class does each pixel belong to?”</p>
+<div class="ascii-box"><pre>road | sidewalk | vehicle | pedestrian | sky | ...</pre></div>
+<h3>Instance segmentation</h3>
+<p>“What pixels belong to each individual object instance?”</p>
+<p>These are different tasks.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: Confidence Is Not Certainty -->
+  <section id="s-09" data-search-section="Confidence Is Not Certainty" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>9. Confidence Is Not Certainty</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a detector returns:</p>
+<div class="ascii-box"><pre>pedestrian: 0.94</pre></div>
+<p>This does not mean:</p>
+<blockquote>
+<p>“There is a 94% guarantee that a pedestrian exists.”</p>
+</blockquote>
+<p>A model's output needs interpretation, calibration and context.</p>
+<p>This is especially important in safety-critical systems.</p>
+<p>The general principle connects directly to C24–C25:</p>
+<blockquote>
+<p><strong>Classification outputs should be evaluated, and uncertainty should not be confused with certainty.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: Localization -->
+  <section id="s-10" data-search-section="Localization" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>10. Localization</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Perception answers:</p>
+<blockquote>
+<p>“What is around me?”</p>
+</blockquote>
+<p>Localization answers:</p>
+<blockquote>
+<p>“Where am I?”</p>
+</blockquote>
+<p>A vehicle may combine:</p>
+<ul>
+<li>GNSS;</li>
+<li>IMU;</li>
+<li>map information;</li>
+<li>visual landmarks;</li>
+<li>LiDAR geometry;</li>
+<li>odometry.</li>
+</ul>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>sensor observations + prior estimate
+                ↓
+          state estimation
+                ↓
+         current vehicle pose</pre></div>
+<p>A <strong>pose</strong> typically includes position and orientation.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: Mapping -->
+  <section id="s-11" data-search-section="Mapping" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>11. Mapping</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A map gives prior structural information.</p>
+<p>Examples:</p>
+<ul>
+<li>lane topology;</li>
+<li>intersections;</li>
+<li>road geometry;</li>
+<li>speed restrictions;</li>
+<li>other static infrastructure.</li>
+</ul>
+<p>But a map cannot perfectly predict the current world.</p>
+<p>A parked truck may block a lane even though the map says nothing unusual exists there.</p>
+<p>Therefore:</p>
+<div class="ascii-box"><pre>MAP = prior structural knowledge
+
+SENSORS = current observations
+
+DECISION = combination of both</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: Prediction -->
+  <section id="s-12" data-search-section="Prediction" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>12. Prediction</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Prediction asks:</p>
+<blockquote>
+<p>“What might other agents do next?”</p>
+</blockquote>
+<p>Suppose a nearby pedestrian is walking toward a crossing.</p>
+<p>Possible future trajectories include:</p>
+<div class="ascii-box"><pre>┌── continue
+pedestrian┼── stop
+          └── cross</pre></div>
+<p>The system should often reason over <strong>multiple plausible futures</strong>, not only one guaranteed future.</p>
+<h3>Sequence-model connection</h3>
+<p>RNNs/LSTMs from Unit III provide a historical example of modelling temporal dependence.</p>
+<p>Modern systems may use other sequence architectures as well; that is beyond the minimum syllabus requirement here.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: Planning -->
+  <section id="s-13" data-search-section="Planning" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>13. Planning</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Planning converts the estimated situation into a desired action or trajectory.</p>
+<p>For example:</p>
+<div class="ascii-box"><pre>Current state
+    ↓
+possible trajectories
+ ┌─────┬─────┬─────┐
+ ↓     ↓     ↓
+left  straight  stop
+       │
+       ▼
+evaluate safety / legality / progress / comfort
+       │
+       ▼
+selected trajectory</pre></div>
+<p>Planning is not simply “choose the label with highest probability.”</p>
+<p>It is a constrained decision problem.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: Reinforcement Learning Connection -->
+  <section id="s-14" data-search-section="Reinforcement Learning Connection" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>14. Reinforcement Learning Connection</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The RL concepts from C40–C42 can be used to understand some decision-making formulations.</p>
+<p>A simplified MDP-style interpretation is:</p>
+<ul>
+<li><strong>state \(s\)</strong>: current driving situation;</li>
+<li><strong>action \(a\)</strong>: high-level driving choice;</li>
+<li><strong>transition \(P(s'|s,a)\)</strong>: what may happen after the choice;</li>
+<li><strong>reward \(R(s,a,s')\)</strong>: numerical preference for desirable outcomes;</li>
+<li><strong>policy \(\pi(a|s)\)</strong>: action-selection strategy.</li>
+</ul>
+<p>Example:</p>
+<div class="ascii-box"><pre>state:
+ego vehicle approaching intersection
+
+actions:
+{slow, stop, turn, continue}
+
+reward:
+safety + progress + legality + comfort</pre></div>
+<h3>Important caution</h3>
+<p>A real vehicle should not be reduced to a toy reward function.</p>
+<p>Safety constraints, verification, fallback behaviour, perception errors and system architecture matter enormously.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: Control -->
+  <section id="s-15" data-search-section="Control" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>15. Control</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Planning says:</p>
+<blockquote>
+<p>“Follow this trajectory.”</p>
+</blockquote>
+<p>Control says:</p>
+<blockquote>
+<p>“What steering, braking and acceleration commands make the vehicle follow it?”</p>
+</blockquote>
+<p>Thus:</p>
+<div class="ascii-box"><pre>planning ≠ control</pre></div>
+<p>A simplified loop is:</p>
+<div class="ascii-box"><pre>desired trajectory
+      ↓
+compare with current vehicle state
+      ↓
+calculate control action
+      ↓
+steering / throttle / brake
+      ↓
+new vehicle state
+      ↓
+repeat</pre></div>
+<p>This is an important example of AI interacting with a <strong>physical system</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: Why Safety Is Different From Ordinary ML Accuracy -->
+  <section id="s-16" data-search-section="Why Safety Is Different From Ordinary ML Accuracy" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>16. Why Safety Is Different From Ordinary ML Accuracy</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a classifier has:</p>
+<div class="ascii-box"><pre>99% accuracy</pre></div>
+<p>That single number is not enough to establish driving safety.</p>
+<p>Questions become:</p>
+<ul>
+<li>What kinds of errors remain?</li>
+<li>Under which weather conditions?</li>
+<li>Which objects are missed?</li>
+<li>How often are rare dangerous events misclassified?</li>
+<li>Does performance degrade in unfamiliar locations?</li>
+<li>What happens when a sensor fails?</li>
+<li>What happens when confidence is low?</li>
+</ul>
+<p>The cost of errors is <strong>asymmetric</strong>.</p>
+<p>Missing a pedestrian can be much more consequential than misclassifying a decorative roadside sign.</p>
+<p>This connects directly to the confusion-matrix ideas from Unit II.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: False Positives vs False Negatives in Driving -->
+  <section id="s-17" data-search-section="False Positives vs False Negatives in Driving" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>17. False Positives vs False Negatives in Driving</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the task is “is there a pedestrian in the vehicle's path?”</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Actual</th>
+<th>Prediction</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pedestrian</td>
+<td>Pedestrian</td>
+<td>TP</td>
+</tr>
+<tr>
+<td>No pedestrian</td>
+<td>Pedestrian</td>
+<td>FP</td>
+</tr>
+<tr>
+<td>Pedestrian</td>
+<td>No pedestrian</td>
+<td>FN</td>
+</tr>
+<tr>
+<td>No pedestrian</td>
+<td>No pedestrian</td>
+<td>TN</td>
+</tr>
+</tbody>
+</table></div>
+<p>A false negative can correspond to a dangerous missed hazard.</p>
+<p>A false positive can trigger unnecessary caution, braking or route changes.</p>
+<p>Therefore:</p>
+<blockquote>
+<p><strong>The correct operating threshold depends on the task, costs, operating environment and safety design—not merely overall accuracy.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: Dataset Shift -->
+  <section id="s-18" data-search-section="Dataset Shift" class="content-section">
+    <div class="section-header">
+      <h2>18. Dataset Shift</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Training data might contain:</p>
+<div class="ascii-box"><pre>clear weather
+daylight
+known road types
+common vehicle models</pre></div>
+<p>Deployment can contain:</p>
+<div class="ascii-box"><pre>night
+fog
+rain
+construction
+rare vehicles
+unusual road layouts</pre></div>
+<p>This difference is a form of <strong>distribution/data shift</strong>.</p>
+<p>The model may perform differently when deployment data differ from training data.</p>
+<h3>Memory anchor</h3>
+<blockquote>
+<p>Train-world ≠ always real-world.</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: Edge Cases -->
+  <section id="s-19" data-search-section="Edge Cases" class="content-section">
+    <div class="section-header">
+      <h2>19. Edge Cases</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>An autonomous vehicle must reason about events that may be rare in the training set.</p>
+<p>Examples:</p>
+<ul>
+<li>unusual roadworks;</li>
+<li>an object partly hidden behind another object;</li>
+<li>a pedestrian wearing unusual clothing;</li>
+<li>a vehicle stopped in an unexpected location;</li>
+<li>debris on the road;</li>
+<li>unusual lane markings.</li>
+</ul>
+<p>These cases are important precisely because they may be underrepresented.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: Human Oversight and Fallbacks -->
+  <section id="s-20" data-search-section="Human Oversight and Fallbacks" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>20. Human Oversight and Fallbacks</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A safety-oriented system should not assume:</p>
+<blockquote>
+<p>“The model will always be correct.”</p>
+</blockquote>
+<p>Instead, architecture can include:</p>
+<div class="ascii-box"><pre>normal model output
+      ↓
+confidence / consistency checks
+      ↓
+safe operating envelope?
+   ┌───────┴───────┐
+  yes             no
+   ↓               ↓
+continue       fallback / minimal-risk response</pre></div>
+<p>The exact mechanism depends on system design.</p>
+<p>The key principle is:</p>
+<blockquote>
+<p><strong>When confidence or system health is inadequate, the system needs a defined safe behaviour rather than silent failure.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: Worked Case Study — Pedestrian at a Crossing -->
+  <section id="s-21" data-search-section="Worked Case Study — Pedestrian at a Crossing" class="content-section">
+    <div class="section-header">
+      <h2>21. Worked Case Study — Pedestrian at a Crossing</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a vehicle approaches a crossing.</p>
+<h2>Step 1 — Sensing</h2>
+<p>Camera and other sensors observe the scene.</p>
+<h2>Step 2 — Perception</h2>
+<p>The system estimates:</p>
+<div class="ascii-box"><pre>pedestrian detected
+position ≈ crossing area
+confidence = high</pre></div>
+<h2>Step 3 — Localization</h2>
+<p>The vehicle estimates its own position relative to the road and crossing.</p>
+<h2>Step 4 — Prediction</h2>
+<p>The pedestrian's motion suggests a possible crossing trajectory.</p>
+<h2>Step 5 — Planning</h2>
+<p>The planner compares:</p>
+<ul>
+<li>continue;</li>
+<li>slow;</li>
+<li>stop.</li>
+</ul>
+<p>Given the estimated risk, it selects a conservative trajectory.</p>
+<h2>Step 6 — Control</h2>
+<p>The controller applies braking.</p>
+<h2>Step 7 — Feedback</h2>
+<p>New sensor data arrives.</p>
+<p>The system updates the state and repeats the loop.</p>
+<h3>What is the important lesson?</h3>
+<p>The result was not produced by “one AI algorithm.”</p>
+<p>It came from a <strong>pipeline of interacting estimation, prediction, decision and control components</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: A Numerical Decision Example -->
+  <section id="s-22" data-search-section="A Numerical Decision Example" class="content-section">
+    <div class="section-header">
+      <h2>22. A Numerical Decision Example</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a simplified planner evaluates three candidate actions using a toy score:</p>
+<div class="formula-math">\[
+S(a)=\alpha\,\text{progress}(a)-\beta\,\text{risk}(a)-\gamma\,\text{discomfort}(a)
+\]</div>
+<p>Take:</p>
+<div class="formula-math">\[
+\alpha=1,\qquad \beta=5,\qquad \gamma=1.
+\]</div>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Action</th>
+<th style="text-align: right;">Progress</th>
+<th style="text-align: right;">Risk</th>
+<th style="text-align: right;">Discomfort</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Continue</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.8</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr>
+<td>Slow</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr>
+<td>Stop</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0.05</td>
+<td style="text-align: right;">4</td>
+</tr>
+</tbody>
+</table></div>
+<p>Then:</p>
+<div class="formula-math">\[
+S(\text{continue})=10-5(0.8)-2=4
+\]</div>
+<div class="formula-math">\[
+S(\text{slow})=7-5(0.2)-3=3
+\]</div>
+<div class="formula-math">\[
+S(\text{stop})=3-5(0.05)-4=-1.25
+\]</div>
+<p>This toy calculation shows how a decision rule can combine multiple criteria.</p>
+<h3>Critical limitation</h3>
+<p>This is <strong>not</strong> a safe real-world driving objective.</p>
+<p>It is a teaching example for understanding multi-objective decision scoring.</p>
+<p>Safety-critical systems require far more structure than one hand-designed scalar score.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: What AI/ML Is Doing — and What It Is Not Doing -->
+  <section id="s-23" data-search-section="What AI/ML Is Doing — and What It Is Not Doing" class="content-section">
+    <div class="section-header">
+      <h2>23. What AI/ML Is Doing — and What It Is Not Doing</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>AI/ML is particularly useful for:</p>
+<ul>
+<li>recognising complex patterns from sensor data;</li>
+<li>predicting behaviour;</li>
+<li>learning representations;</li>
+<li>estimating probabilities;</li>
+<li>adapting to large data distributions.</li>
+</ul>
+<p>But not every component must be neural-network-based.</p>
+<p>A complete vehicle can contain:</p>
+<div class="ascii-box"><pre>ML models
++
+state estimation
++
+geometric algorithms
++
+search/planning
++
+optimization
++
+control systems
++
+safety rules
++
+monitoring</pre></div>
+<p>This is a crucial systems-engineering lesson.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: Common Architecture Errors -->
+  <section id="s-24" data-search-section="Common Architecture Errors" class="content-section">
+    <div class="section-header">
+      <h2>24. Common Architecture Errors</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Trap 1 — “CNN drives the car”</h2>
+<p><strong>Why it feels right:</strong> cameras are images and CNNs are image models.</p>
+<p><strong>Actually:</strong> a CNN can support perception, but perception is only one stage.</p>
+<hr />
+<h2>Trap 2 — “Prediction = planning”</h2>
+<p>Prediction estimates possible future behaviour.</p>
+<p>Planning chooses what the vehicle should do.</p>
+<hr />
+<h2>Trap 3 — “High accuracy means safe”</h2>
+<p>Accuracy is only one evaluation statistic.</p>
+<p>Rare, high-consequence failures can dominate safety.</p>
+<hr />
+<h2>Trap 4 — “Map = current truth”</h2>
+<p>Maps represent prior knowledge.</p>
+<p>Sensors observe current conditions.</p>
+<hr />
+<h2>Trap 5 — “RL automatically learns safe driving”</h2>
+<p>A learned policy depends on its state/action/reward design, training distribution, environment, constraints and deployment safeguards.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: Exam Connection -->
+  <section id="s-25" data-search-section="Exam Connection" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>25. Exam Connection</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="exam-ladder-card"><div class="ladder-mark-badge">📝 2-mark style</div>
+
+**Q:** Name major AI stages in an autonomous vehicle.
+
+**Expected points:**
+
+> Perception, localization/state estimation, prediction, planning and control.
+
+</div>
+
+<div class="exam-ladder-card"><div class="ladder-mark-badge">📝 5-mark style</div>
+
+**Q:** Explain the role of machine learning in autonomous vehicles.
+
+A strong answer can structure the response as:
+
+1. sensor data acquisition;
+2. perception;
+3. object/scene understanding;
+4. prediction;
+5. planning/decision making;
+6. control;
+7. feedback and monitoring;
+8. safety/failure considerations.
+
+</div>
+
+<h3>Application question</h3>
+<p><strong>Q:</strong> Why is a confusion matrix relevant to autonomous driving perception?</p>
+<p>Because different error types can have different consequences. In hazard detection, false negatives and false positives need to be interpreted separately rather than hidden inside a single accuracy value.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: Active Recall -->
+  <section id="s-26" data-search-section="Active Recall" class="content-section">
+    <div class="section-header">
+      <h2>26. Active Recall</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Close the chapter and answer:</p>
+<ol>
+<li>Draw the autonomous-driving pipeline.</li>
+<li>What is the difference between perception and planning?</li>
+<li>What is localization?</li>
+<li>Why combine multiple sensors?</li>
+<li>What does object detection produce?</li>
+<li>What is dataset shift?</li>
+<li>Why is accuracy insufficient for safety analysis?</li>
+<li>Explain false negative vs false positive for pedestrian detection.</li>
+<li>Where can RL concepts enter autonomous driving?</li>
+<li>What is the difference between planning and control?</li>
+<li>Why are fallback behaviours important?</li>
+<li>Give one example of AI/ML and one example of non-ML engineering in the same vehicle.</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: Blank Recall Diagram -->
+  <section id="s-27" data-search-section="Blank Recall Diagram" class="content-section">
+    <div class="section-header">
+      <h2>27. Blank Recall Diagram</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Fill this from memory:</p>
+<div class="ascii-box"><pre>___________
+(cameras / lidar / radar / ...)
+      │
+      ▼
+___________
+      │
+      ▼
+___________
+      │
+      ▼
+___________
+      │
+      ▼
+___________
+      │
+      ▼
+___________
+      │
+      ▼
+___________</pre></div>
+<p>Then label where:</p>
+<ul>
+<li>object detection;</li>
+<li>localization;</li>
+<li>prediction;</li>
+<li>planning;</li>
+<li>control</li>
+</ul>
+<p>belong.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: One-Screen Summary -->
+  <section id="s-28" data-search-section="One-Screen Summary" class="content-section">
+    <div class="section-header">
+      <h2>28. One-Screen Summary</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>AUTONOMOUS VEHICLE
+│
+├── SENSING
+│   ├── camera
+│   ├── lidar
+│   ├── radar
+│   └── GNSS / IMU
+│
+├── PERCEPTION
+│   ├── detection
+│   ├── classification
+│   └── segmentation
+│
+├── STATE ESTIMATION
+│   └── localization
+│
+├── PREDICTION
+│   └── future trajectories / behaviour
+│
+├── PLANNING
+│   └── desired action / trajectory
+│
+├── CONTROL
+│   └── steering / throttle / brake
+│
+└── SAFETY
+    ├── uncertainty
+    ├── monitoring
+    ├── fallback
+    └── human/system oversight</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 29: Math Checkpoint -->
+  <section id="s-29" data-search-section="Math Checkpoint" class="content-section">
+    <div class="section-header">
+      <h2>29. Math Checkpoint</h2>
+      <button class="bookmark-btn" data-id="s-29" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This chapter reuses:</p>
+<h3>Probability</h3>
+<div class="formula-math">\[
+P(\text{event})
+\]</div>
+<p>Useful for uncertainty and classification outputs.</p>
+<h3>Vectors/matrices</h3>
+<p>Sensor features and learned representations can be represented numerically.</p>
+<h3>Optimization</h3>
+<p>Planning and learned models may involve optimization objectives.</p>
+<h3>RL</h3>
+<div class="formula-math">\[
+Q(s,a)
+\]</div>
+<p>and</p>
+<div class="formula-math">\[
+\pi(a|s)
+\]</div>
+<p>provide useful conceptual language for sequential decision making.</p>
+<p>The details should be learned from C40–C42 rather than re-taught here.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 30: Connection Map -->
+  <section id="s-30" data-search-section="Connection Map" class="content-section">
+    <div class="section-header">
+      <h2>30. Connection Map</h2>
+      <button class="bookmark-btn" data-id="s-30" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>C24–C25
+classification metrics
+      │
+      ├────────► perception evaluation
+      │
+C30–C39
+neural networks / CNN / RNN / LSTM
+      │
+      ├────────► visual perception
+      └────────► temporal prediction
+      │
+C40–C42
+MDP / Q-learning / policy gradients
+      │
+      └────────► sequential decision concepts
+      │
+C48
+      │
+      └────────► complete AI safety-critical application</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 31: Resource Shelf -->
+  <section id="s-31" data-search-section="Resource Shelf" class="content-section">
+    <div class="section-header">
+      <h2>31. Resource Shelf</h2>
+      <button class="bookmark-btn" data-id="s-31" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <blockquote>
+<p><strong>READ FIRST</strong><br />
+Main Book chapters on CNN, RNN/LSTM, MDP and Q-learning.</p>
+<p><strong>WATCH</strong><br />
+Use focused neural-network/CNN/RL videos from the master resource guide for intuition and architecture refresh.</p>
+<p><strong>GO DEEPER</strong><br />
+Standard deep-learning and reinforcement-learning courses can provide more autonomous-systems context, but the syllabus does not require a full robotics specialization.</p>
+<p><strong>PRACTICE</strong><br />
+Practical work should focus on explaining the pipeline: input → representation → model → output → evaluation.</p>
+<p><strong>EXAM</strong><br />
+Unit IV AI applications / autonomous vehicles.</p>
+<p><strong>MATH</strong><br />
+C40–C42 for RL mathematics; C30–C39 for deep-learning mathematics.</p>
+</blockquote>
+<h3>Source boundary</h3>
+<p>The stored course/resource guide identifies <strong>autonomous vehicles as an official Unit IV application topic</strong>, while the supplied lecture-note inventory does not contain a dedicated autonomous-vehicle lecture. Therefore, this chapter is an integrated <strong>application-level gap-fill</strong>, not a reproduction of a course-specific lecture.</p>
+<p>Source anchors: <code>UNI-SYL-01</code>, <code>EXT-NPTEL-ML/DL</code>, <code>EXT-STAN-CS231N</code>, <code>EXT-NPTEL-RL</code>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 32: Chapter Exit Test -->
+  <section id="s-32" data-search-section="Chapter Exit Test" class="content-section">
+    <div class="section-header">
+      <h2>32. Chapter Exit Test</h2>
+      <button class="bookmark-btn" data-id="s-32" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Explain</h3>
+<p>In 3–5 sentences, explain the full autonomous-driving AI loop.</p>
+<h3>Draw</h3>
+<p>Draw the sensor → perception → prediction → planning → control pipeline.</p>
+<h3>Compare</h3>
+<p>Explain:</p>
+<div class="formula-math">\[
+\text{prediction} \neq \text{planning} \neq \text{control}
+\]</div>
+<h3>Apply</h3>
+<p>A pedestrian detector has 98% accuracy. Give two reasons why that number alone cannot establish safety.</p>
+<h3>Transfer</h3>
+<p>Explain how an MDP abstraction could represent a simplified driving decision.</p>
+<p>If you can explain, draw, compare and apply those ideas without notes, this case study is complete.</p>
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="ch47-ai-in-healthcare.html" class="nav-btn">← Ch 47 — AI in Healthcare</a>
+    <a href="ch49-ai-in-financial-systems.html" class="nav-btn primary">Next: Ch 49 — AI in Financial Systems →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch48-autonomous-vehicles.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 48</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

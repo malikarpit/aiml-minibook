@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Arpit">
+  <meta name="description" content="AI & Machine Learning MiniBook — A Visual, Mathematical, Bilingual Self-Teaching Textbook for University of Delhi B.Tech CSE">
+  <title>AI &amp; Machine Learning MiniBook 🤖 | Arpit | DU B.Tech CSE</title>
+
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#17365D">
+
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/animations.css">
+  <link rel="stylesheet" href="assets/css/timer.css">
+  <link rel="stylesheet" href="assets/css/chapters.css">
+
+  <style>
+    /* Home Portal Custom Layout */
+    .portal-hero {
+      text-align: center;
+      padding: var(--em-space-10) var(--em-space-4) var(--em-space-8);
+      background: var(--em-surface-1);
+      border: 1px solid var(--em-border);
+      border-radius: var(--em-radius-lg);
+      margin-bottom: var(--em-space-8);
+      box-shadow: var(--sh-md);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .portal-badge-strip {
+      display: flex;
+      justify-content: center;
+      gap: var(--em-space-2);
+      flex-wrap: wrap;
+      margin-bottom: var(--em-space-4);
+    }
+
+    .portal-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 700;
+      color: var(--em-text);
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+      margin-bottom: var(--em-space-3);
+    }
+
+    .portal-subtitle {
+      font-size: 1.15rem;
+      color: var(--em-text-secondary);
+      max-width: 68ch;
+      margin: 0 auto var(--em-space-6);
+      line-height: 1.6;
+    }
+
+    .portal-actions {
+      display: flex;
+      justify-content: center;
+      gap: var(--em-space-3);
+      flex-wrap: wrap;
+    }
+
+    .portal-btn {
+      padding: 10px 20px;
+      border-radius: var(--em-radius-sm);
+      font-weight: 600;
+      font-size: 0.90rem;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all var(--em-motion-fast) var(--em-ease);
+      border: 1px solid transparent;
+    }
+
+    .portal-btn-primary {
+      background: var(--em-accent);
+      color: #FFFFFF;
+    }
+    .portal-btn-primary:hover {
+      opacity: 0.92;
+      transform: translateY(-1px);
+    }
+
+    .portal-btn-secondary {
+      background: var(--em-surface-2);
+      color: var(--em-text);
+      border-color: var(--em-border);
+    }
+    .portal-btn-secondary:hover {
+      background: var(--em-surface-3);
+      border-color: var(--em-border-strong);
+    }
+
+    /* Curriculum Parts Grid */
+    .parts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: var(--em-space-5);
+      margin-bottom: var(--em-space-10);
+    }
+
+    .part-card {
+      background: var(--em-surface-1);
+      border: 1px solid var(--em-border);
+      border-radius: var(--em-radius-md);
+      padding: var(--em-space-5);
+      transition: transform var(--em-motion-fast) var(--em-ease),
+                  border-color var(--em-motion-fast) var(--em-ease),
+                  box-shadow var(--em-motion-fast) var(--em-ease);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .part-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--em-border-strong);
+      box-shadow: var(--sh-md);
+    }
+
+    .part-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: var(--em-space-3);
+    }
+
+    .part-card-title {
+      font-family: var(--font-sans);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--em-text);
+      margin-top: var(--em-space-2);
+    }
+
+    .part-card-desc {
+      font-size: 0.88rem;
+      line-height: 1.55;
+      color: var(--em-text-secondary);
+      margin-bottom: var(--em-space-4);
+    }
+
+    .part-chapter-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--em-space-2);
+      margin-top: auto;
+    }
+
+    .part-chapter-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px 10px;
+      background: var(--em-surface-2);
+      border-radius: var(--em-radius-sm);
+      text-decoration: none;
+      font-size: 0.84rem;
+      font-weight: 500;
+      color: var(--em-text);
+      border: 1px solid var(--em-border);
+      transition: all var(--em-motion-fast) var(--em-ease);
+    }
+
+    .part-chapter-link:hover {
+      border-color: var(--em-accent);
+      background: var(--em-surface-3);
+    }
+
+    .phase-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 8px;
+      border-radius: var(--em-radius-full);
+    }
+    .phase-midsem {
+      background: rgba(142, 90, 28, 0.15);
+      color: #DCA052;
+      border: 1px solid rgba(142, 90, 28, 0.35);
+    }
+    .phase-endsem {
+      background: rgba(91, 103, 117, 0.15);
+      color: var(--em-text-muted);
+      border: 1px solid var(--em-border);
+    }
+
+    /* System Features Grid */
+    .system-pillars {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: var(--em-space-4);
+      margin-bottom: var(--em-space-10);
+    }
+
+    .pillar-card {
+      background: var(--em-surface-1);
+      border: 1px solid var(--em-border);
+      border-radius: var(--em-radius-md);
+      padding: var(--em-space-4);
+    }
+
+    .pillar-icon {
+      font-size: 1.5rem;
+      margin-bottom: var(--em-space-2);
+    }
+
+    .pillar-title {
+      font-size: 0.94rem;
+      font-weight: 700;
+      color: var(--em-text);
+      margin-bottom: var(--em-space-1);
+    }
+
+    .pillar-desc {
+      font-size: 0.82rem;
+      color: var(--em-text-secondary);
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <div id="progress-bar"></div>
+
+  <!-- GLOBAL STICKY HEADER -->
+  <header id="main-header">
+    <div class="header-left">
+      <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle Navigation">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">🤖</div>
+        <div class="brand-text">
+          <span class="main">AI &amp; ML MiniBook</span>
+          <span class="sub">University of Delhi · B.Tech CSE</span>
+        </div>
+      </a>
+    </div>
+
+    <span class="header-chapter-title">Master Curriculum &amp; Portal</span>
+
+    <div class="header-right">
+      <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      </button>
+      <a href="progress.html" class="icon-btn" title="Study Analytics Dashboard" aria-label="Dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+      </a>
+      <button id="reading-mode-btn" class="icon-btn" title="Reading Focus Mode (F)" aria-label="Reading Mode">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      </button>
+      <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle Theme"></button>
+    </div>
+  </header>
+
+  <!-- NAVIGATION SIDEBAR DRAWER -->
+  <div id="sidebar-overlay"></div>
+  <aside id="sidebar">
+    <nav class="sidebar-nav">
+      <div class="sidebar-section">
+        <div class="sidebar-section-label">Navigation</div>
+        <a href="index.html" class="sidebar-link active"><span class="link-icon">🏠</span>Home Portal</a>
+        <a href="progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+        <a href="exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Mock Exam Simulator</a>
+        <a href="exams/unit-quiz.html" class="sidebar-link"><span class="link-icon">⚡</span>Custom Quiz Builder</a>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-label">Curriculum Directory</div>
+        <a href="#part-i" class="sidebar-link"><span class="link-icon">🤖</span>Part I — AI &amp; Agents</a>
+        <a href="#part-ii" class="sidebar-link"><span class="link-icon">🔍</span>Part II — Search &amp; Problems</a>
+        <a href="#part-iii" class="sidebar-link"><span class="link-icon">⭐</span>Part III — Beyond Classical Search</a>
+        <a href="#part-iv" class="sidebar-link"><span class="link-icon">♟️</span>Part IV — Games &amp; Unit I Synthesis</a>
+        <a href="#part-v" class="sidebar-link"><span class="link-icon">📊</span>Part V — ML Foundations</a>
+        <a href="#part-vi" class="sidebar-link"><span class="link-icon">🎯</span>Part VI — Hypothesis &amp; Bias</a>
+        <a href="#part-vii" class="sidebar-link"><span class="link-icon">📈</span>Part VII — Linear &amp; Logistic Models</a>
+        <a href="#part-viii" class="sidebar-link"><span class="link-icon">🌳</span>Part VIII — Decision Trees</a>
+        <a href="#part-ix" class="sidebar-link"><span class="link-icon">🎯</span>Part IX — Model Evaluation</a>
+        <a href="#part-x" class="sidebar-link"><span class="link-icon">🛡️</span>Part X — Regularization</a>
+        <a href="#part-xi" class="sidebar-link"><span class="link-icon">🧠</span>Part XI — Neural Network Foundations</a>
+        <a href="#part-xii" class="sidebar-link"><span class="link-icon">🧱</span>Part XII — MLPs &amp; Activations</a>
+        <a href="#part-xiii" class="sidebar-link"><span class="link-icon">📉</span>Part XIII — Optimization &amp; Backprop</a>
+        <a href="#part-xiv" class="sidebar-link"><span class="link-icon">👁️</span>Part XIV — Computer Vision &amp; CNNs</a>
+        <a href="#part-xv" class="sidebar-link"><span class="link-icon">🔁</span>Part XV — Sequence Models &amp; LSTMs</a>
+        <a href="#part-xvi" class="sidebar-link"><span class="link-icon">🏆</span>Part XVI — Unit III Consolidation</a>
+        <a href="#part-xvii" class="sidebar-link"><span class="link-icon">🎲</span>Part XVII — Reinforcement Learning</a>
+        <a href="#part-xviii" class="sidebar-link"><span class="link-icon">📝</span>Part XVIII — NLP &amp; Text</a>
+        <a href="#part-xix" class="sidebar-link"><span class="link-icon">🎨</span>Part XIX — Generative AI</a>
+        <a href="#part-xx" class="sidebar-link"><span class="link-icon">⚖️</span>Part XX — AI Ethics &amp; Bias</a>
+        <a href="#part-xxi" class="sidebar-link"><span class="link-icon">🚗</span>Part XXI — Applied Domain Systems</a>
+        <a href="#part-xxii" class="sidebar-link"><span class="link-icon">🏆</span>Part XXII — Unit IV Consolidation &amp; Capstone</a>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-label">Bookmarks</div>
+        <div id="bookmarks-list"></div>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-brand-mark">
+        <div class="mark">🤖</div>
+        <span>Arpit · AIML MiniBook 2026</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN READING CANVAS -->
+  <main id="main-content">
+    <div class="content-inner">
+
+      <!-- PORTAL HERO -->
+      <section class="portal-hero">
+        <div class="portal-badge-strip">
+          <span class="chapter-meta-item uni-badge">🎓 Delhi University Syllabus</span>
+          <span class="chapter-meta-item">📘 50 Complete Chapters</span>
+          <span class="chapter-meta-item">📐 2,125 Deep Sections</span>
+          <span class="chapter-meta-item">📝 Complete 4-Unit B.Tech Curriculum</span>
+        </div>
+
+        <h1 class="portal-title">AI &amp; Machine Learning</h1>
+        <p class="portal-subtitle">
+          A Visual, Mathematical, Bilingual Self-Teaching Textbook and Exam Preparation System. Engineered from zero to deep mastery, pairing precise academic rigor with high-intuition teacher models.
+        </p>
+
+        <div class="portal-actions">
+          <a href="chapters/ch01-what-is-ai.html" class="portal-btn portal-btn-primary">
+            <span>🚀 Start Chapter 1</span>
+          </a>
+          <a href="#curriculum-map" class="portal-btn portal-btn-secondary">
+            <span>🗺️ Explore Full Syllabus Map</span>
+          </a>
+          <a href="exams/mock-exam.html" class="portal-btn portal-btn-secondary">
+            <span>📝 Mock Exam</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- 4-LAYER PEDAGOGICAL ARCHITECTURE -->
+      <div class="system-pillars">
+        <div class="pillar-card">
+          <div class="pillar-icon">📘</div>
+          <div class="pillar-title">1. Main Conceptual Book</div>
+          <div class="pillar-desc">"Teach me AI/ML." Starts from zero, develops visual models, derives mathematics, and explains in bilingual Hinglish.</div>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-icon">📝</div>
+          <div class="pillar-title">2. Exam Companion</div>
+          <div class="pillar-desc">"Help me score on this syllabus." 2/5/10-mark standard answers, algorithm traces, and common traps.</div>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-icon">💻</div>
+          <div class="pillar-title">3. Coding Lab</div>
+          <div class="pillar-desc">"Help me build it." Implement algorithms from scratch in pure Python and NumPy before moving to scikit-learn.</div>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-icon">📐</div>
+          <div class="pillar-title">4. Math Companion</div>
+          <div class="pillar-desc">"Teach me the math behind it." Just-in-time vectors, matrix calculus, optimization, and probability.</div>
+        </div>
+      </div>
+
+      <!-- CURRICULUM DIRECTORY MAP -->
+      <div id="curriculum-map" class="section-heading">
+        <h2>Curriculum &amp; Knowledge Map</h2>
+        <span class="chapter-meta-item">17 Distinct Parts</span>
+      </div>
+
+      <div class="parts-grid">
+        <!-- PART 0 -->
+        <div class="part-card" data-part="0" style="border-left: 4px solid #5B6775;">
+          <div class="part-card-header">
+            <span class="part-banner part-0">Part 0 · Orientation</span>
+            <span class="phase-badge phase-midsem">Foundation</span>
+          </div>
+          <div class="part-card-title">How to Use This Book &amp; Notation</div>
+          <div class="part-card-desc">The visual map of AI vs ML vs DL, mathematical notation refresher, and prerequisite review.</div>
+          <ul class="part-chapter-list">
+            <li><a href="chapters/ch00-how-ai-fits.html" class="part-chapter-link"><span>Ch 0.1 · How AI/ML Fits Together</span><span>→</span></a></li>
+            <li><a href="chapters/ch00-math-notation.html" class="part-chapter-link"><span>Ch 0.2 · How to Read Math Notation</span><span>→</span></a></li>
+          </ul>
+        </div>
+
+        <!-- PART I -->
+        <div id="part-i" class="part-card" data-part="i" style="border-left: 4px solid #1D538A;">
+          <div class="part-card-header">
+            <span class="part-banner part-i">Part I · Unit I Core</span>
+            <span class="phase-badge phase-midsem">Mid-Sem Priority</span>
+          </div>
+          <div class="part-card-title">Artificial Intelligence &amp; Agents</div>
+          <div class="part-card-desc">Foundations of intelligence, rational agents, PEAS framework, environment types, and agent architectures.</div>
+          <ul class="part-chapter-list">
+            <li><a href="chapters/ch01-what-is-ai.html" class="part-chapter-link"><span>Ch 1 · What is Artificial Intelligence?</span><span>→</span></a></li>
+            <li><a href="chapters/ch02-intelligent-agents.html" class="part-chapter-link"><span>Ch 2 · Intelligent Agents &amp; PEAS</span><span>→</span></a></li>
+          </ul>
+        </div>
+
+        <!-- PART II -->
+        <div id="part-ii" class="part-card" data-part="ii" style="border-left: 4px solid #186D7A;">
+          <div class="part-card-header">
+            <span class="part-banner part-ii">Part II · Unit I Core</span>
+            <span class="phase-badge phase-midsem">Mid-Sem Priority</span>
+          </div>
+          <div class="part-card-title">Classical Search &amp; Problem Solving</div>
+          <div class="part-card-desc">State space problem formulation, search trees, frontier sets, BFS, DFS, UCS, DLS, and Iterative Deepening.</div>
+          <ul class="part-chapter-list">
+            <li><a href="chapters/ch03-problem-formulation.html" class="part-chapter-link"><span>Ch 3 · Problem Formulation &amp; States</span><span>→</span></a></li>
+            <li><a href="chapters/ch04-uninformed-search.html" class="part-chapter-link"><span>Ch 4 · Uninformed Search Strategies</span><span>→</span></a></li>
+            <li><a href="chapters/ch05-heuristics.html" class="part-chapter-link"><span>Ch 5 · Heuristics &amp; Admissibility</span><span>→</span></a></li>
+            <li><a href="chapters/ch06-greedy-best-first-search.html" class="part-chapter-link"><span>Ch 6 · Greedy Best-First Search</span><span>→</span></a></li>
+            <li><a href="chapters/ch07-a-star-search.html" class="part-chapter-link"><span>Ch 7 · A* Search Mathematics &amp; Traversal</span><span>→</span></a></li>
+          </ul>
+        </div>
+
+        <!-- PART III -->
+        <div id="part-iii" class="part-card" data-part="iii" style="border-left: 4px solid #1F7355;">
+          <div class="part-card-header">
+            <span class="part-banner part-iii">Part III · Unit I Core</span>
+            <span class="phase-badge phase-midsem">Mid-Sem Priority</span>
+          </div>
+          <div class="part-card-title">Beyond Classical Search</div>
+          <div class="part-card-desc">Local optimization, Hill Climbing, Simulated Annealing, Genetic Algorithms, and Constraint Satisfaction Problems.</div>
+          <ul class="part-chapter-list">
+            <li><a href="chapters/ch08-local-and-evolutionary-search.html" class="part-chapter-link"><span>Ch 8 · Local Search &amp; Genetic Algorithms</span><span>→</span></a></li>
+            <li><a href="chapters/ch09-constraint-satisfaction-problems.html" class="part-chapter-link"><span>Ch 9 · Constraint Satisfaction Problems</span><span>→</span></a></li>
+          </ul>
+        </div>
+
+        <!-- PART IV -->
+        <div id="part-iv" class="part-card" data-part="iv" style="border-left: 4px solid #6C4282;">
+          <div class="part-card-header">
+            <span class="part-banner part-iv">Part IV · Unit I Core</span>
+            <span class="phase-badge phase-midsem">Mid-Sem Priority</span>
+          </div>
+          <div class="part-card-title">Adversarial Search &amp; Unit I Mastery</div>
+          <div class="part-card-desc">Two-player zero-sum games, Minimax theorem, Alpha-Beta pruning proofs, Real-time evaluation, and Unit I Grand Synthesis.</div>
+          <ul class="part-chapter-list">
+            <li><a href="chapters/ch10-game-playing.html" class="part-chapter-link"><span>Ch 10 · Game Playing Foundations</span><span>→</span></a></li>
+            <li><a href="chapters/ch11-minimax-and-alpha-beta-pruning.html" class="part-chapter-link"><span>Ch 11 · Minimax &amp; Alpha-Beta Pruning</span><span>→</span></a></li>
+            <li><a href="chapters/ch12-resource-limited-game-search.html" class="part-chapter-link"><span>Ch 12 · Resource-Limited Game Search</span><span>→</span></a></li>
+            <li><a href="chapters/ch13-unit-1-consolidation.html" class="part-chapter-link"><span>Ch 13 · Unit I Search Mastery &amp; Synthesis</span><span>→</span></a></li>
+          </ul>
+        </div>
+
+        <!-- PART V -->
+        <div id="part-v" class="part-card" data-part="v" style="border-left: 4px solid #8AA3F0;">
+          <div class="part-card-header">
+            <span class="part-banner part-v">Part V · Unit II Core</span>
+            <span class="phase-badge phase-midsem">Mid-Sem Priority</span>
+          </div>
+          <div class="part-card-title">Machine Learning Foundations</div>
+          <div class="part-card-desc">Arthur Samuel &amp; Tom Mitchell formalizations, Task-Performance-Experience (T, P, E), Data representations, and Learning paradigms.</div>
+          <ul class="part-chapter-list">
+            <li><a href="chapters/ch14-what-is-ml.html" class="part-chapter-link"><span>Ch 14 · What is Machine Learning?</span><span>→</span></a></li>
+            <li><a href="chapters/ch15-ml-paradigms.html" class="part-chapter-link"><span>Ch 15 · Machine Learning Paradigms</span><span>→</span></a></li>
+          </ul>
+        </div>
+
+        <!-- PART VI -->
+        <div id="part-vi" class="part-card" data-part="vi" style="border-left: 4px solid #5DB8E6;">
+          <div class="part-card-header">
+            <span class="part-banner part-vi">Part VI · Unit II Core</span>
+            <span class="phase-badge phase-midsem">Mid-Sem Priority</span>
+          </div>
+          <div class="part-card-title">Hypothesis Classes &amp; Generalization</div>
+          <div class="part-card-desc">Hypothesis spaces, Inductive bias, No Free Lunch theorem, K-Nearest Neighbours (KNN), Bias-Variance Decomposition derivation, and Overfitting.</div>
+          <ul class="part-chapter-list">
+            <li><a href="chapters/ch16-hypothesis-classes-bias-knn.html" class="part-chapter-link"><span>Ch 16 · Hypothesis Classes &amp; KNN</span><span>→</span></a></li>
+            <li><a href="chapters/ch17-bias-variance-generalization.html" class="part-chapter-link"><span>Ch 17 · Bias-Variance &amp; Generalization</span><span>→</span></a></li>
+          </ul>
+        </div>
+
+        <!-- PART VII -->
+        <div id="part-vii" class="part-card" data-part="vii" style="border-left: 4px solid #DDA85E;">
+          <div class="part-card-header">
+            <span class="part-banner part-vii">Part VII · Unit II Core</span>
+            <span class="phase-badge phase-midsem">Mid-Sem Priority</span>
+          </div>
+          <div class="part-card-title">Linear &amp; Logistic Models</div>
+          <div class="part-card-desc">Ordinary Least Squares (OLS) normal equations, Gradient descent derivations, Sigmoid activation, Binary Cross-Entropy, and Maximum Likelihood.</div>
+          <ul class="part-chapter-list">
+            <li><a href="chapters/ch18-linear-regression.html" class="part-chapter-link"><span>Ch 18 · Linear Regression Foundations</span><span>→</span></a></li>
+            <li><a href="chapters/ch19-linear-regression-math.html" class="part-chapter-link"><span>Ch 19 · Linear Regression Math &amp; OLS</span><span>→</span></a></li>
+            <li><a href="chapters/ch20-logistic-regression.html" class="part-chapter-link"><span>Ch 20 · Logistic Regression Foundations</span><span>→</span></a></li>
+            <li><a href="chapters/ch21-logistic-regression-math.html" class="part-chapter-link"><span>Ch 21 · Logistic Regression Math &amp; MLE</span><span>→</span></a></li>
+          </ul>
+        </div>
+
+        <!-- PART VIII -->
+        <div id="part-viii" class="part-card" data-part="viii" style="border-left: 4px solid #8F3144;">
+          <div class="part-card-header">
+            <span class="part-banner part-viii">Part VIII · Unit II Core</span>
+            <span class="phase-badge phase-midsem">Mid-Sem Priority</span>
+          </div>
+          <div class="part-card-title">Decision Trees &amp; Tree Induction</div>
+          <div class="part-card-desc">Tree anatomy, recursive splitting, stopping rules, Shannon entropy, information gain, Gini impurity, and ID3 vs CART.</div>
+          <ul class="part-chapter-list">
+            <li><a href="chapters/ch22-decision-trees.html" class="part-chapter-link"><span>Ch 22 · Decision Trees Foundations</span><span>→</span></a></li>
+            <li><a href="chapters/ch23-decision-trees-math.html" class="part-chapter-link"><span>Ch 23 · Decision Trees Math &amp; Entropy</span><span>→</span></a></li>
+          </ul>
+        </div>
+
+        <!-- PART IX -->
+        <div id="part-ix" class="part-card" data-part="ix" style="border-left: 4px solid #5C6E24;">
+          <div class="part-card-header">
+            <span class="part-banner part-ix">Part IX · Unit II Core</span>
+            <span class="phase-badge phase-midsem">Mid-Sem Priority</span>
+          </div>
+          <div class="part-card-title">Model Evaluation &amp; Classification Metrics</div>
+          <div class="part-card-desc">Confusion Matrix, Accuracy paradox, Precision, Recall, F1 harmonic mean, ROC curves, AUC, and decision thresholds.</div>
+          <ul class="part-chapter-list">
+            <li><a href="chapters/ch24-confusion-matrix-evaluation.html" class="part-chapter-link"><span>Ch 24 · Confusion Matrix &amp; Evaluation</span><span>→</span></a></li>
+            <li><a href="chapters/ch25-precision-recall-roc-auc.html" class="part-chapter-link"><span>Ch 25 · Precision, Recall, F1, ROC &amp; AUC</span><span>→</span></a></li>
+          </ul>
+        </div>
+
+        <!-- PART X -->
+        <div id="part-x" class="part-card" data-part="x" style="border-left: 4px solid #5B3591;">
+          <div class="part-card-header">
+            <span class="part-banner part-x">Part X · Unit II Core</span>
+            <span class="phase-badge phase-midsem">Mid-Sem Priority</span>
+          </div>
+          <div class="part-card-title">Regularization &amp; Feature Selection</div>
+          <div class="part-card-desc">Overfitting control, Ridge regression (L2), Lasso regression (L1), diamond constraint geometry, and sparsity proofs.</div>
+          <ul class="part-chapter-list">
+            <li><a href="chapters/ch26-regularization-foundations.html" class="part-chapter-link"><span>Ch 26 · Regularization: Why It Exists</span><span>→</span></a></li>
+            <li><a href="chapters/ch27-ridge-regression.html" class="part-chapter-link"><span>Ch 27 · Ridge Regression &amp; L2 Shrinkage</span><span>→</span></a></li>
+            <li><a href="chapters/ch28-lasso-regression.html" class="part-chapter-link"><span>Ch 28 · Lasso Regression &amp; L1 Sparsity</span><span>→</span></a></li>
+            <li><a href="chapters/ch29-ridge-vs-lasso-comparison.html" class="part-chapter-link"><span>Ch 29 · Ridge vs Lasso Comparison</span><span>→</span></a></li>
+          </ul>
+        </div>
+
+        <!-- PART XI -->
+        <div id="part-xi" class="part-card" data-part="xi" style="border-left: 4px solid #E8906A;">
+          <div class="part-card-header">
+            <span class="part-banner part-xi">Part XI · Unit III Core</span>
+            <span class="phase-badge phase-endsem">End-Sem Priority</span>
+          </div>
+          <div class="part-card-title">Neural Network Foundations &amp; The Perceptron</div>
+          <div class="part-card-desc">Biological vs artificial neurons, linear combinations, activation thresholds, Rosenblatt's perceptron rule, margin theorem, and the XOR barrier.</div>
+          <ul class="part-chapter-list">
+            <li><a href="chapters/ch30-neural-network-foundations.html" class="part-chapter-link"><span>Ch 30 · Neural Network Foundations</span><span>→</span></a></li>
+            <li><a href="chapters/ch31-perceptron-learning-algorithm.html" class="part-chapter-link"><span>Ch 31 · The Perceptron &amp; Learning Rule</span><span>→</span></a></li>
+          </ul>
+        </div>
+
+        <!-- PART XII -->
+        <div id="part-xii" class="part-card" data-part="xii" style="border-left: 4px solid #72B8E6;">
+          <div class="part-card-header">
+            <span class="part-banner part-xii">Part XII · Unit III Core</span>
+            <span class="phase-badge phase-endsem">End-Sem Priority</span>
+          </div>
+          <div class="part-card-title">Multi-Layer Perceptrons &amp; Activations</div>
+          <div class="part-card-desc">Hidden layer representations, solving XOR, Universal Approximation theorem, Sigmoid, Tanh, ReLU, Leaky ReLU, Softmax, and Cross-Entropy loss.</div>
+          <ul class="part-chapter-list">
+            <li><a href="chapters/ch32-multi-layer-perceptron.html" class="part-chapter-link"><span>Ch 32 · Multi-Layer Perceptron (MLP)</span><span>→</span></a></li>
+            <li><a href="chapters/ch33-activations-and-loss-functions.html" class="part-chapter-link"><span>Ch 33 · Activation &amp; Loss Functions</span><span>→</span></a></li>
+          </ul>
+        </div>
+
+        <!-- PART XIII -->
+        <div id="part-xiii" class="part-card" data-part="xiii" style="border-left: 4px solid #5FC9B8;">
+          <div class="part-card-header">
+            <span class="part-banner part-xiii">Part XIII · Unit III Core</span>
+            <span class="phase-badge phase-endsem">Highest Yield</span>
+          </div>
+          <div class="part-card-title">Optimization &amp; Backpropagation</div>
+          <div class="part-card-desc">Non-convex loss landscapes, Mini-Batch SGD, Momentum, RMSprop, Adam optimizer, multivariate chain rule, error signals, and backprop derivation.</div>
+          <ul class="part-chapter-list">
+            <li><a href="chapters/ch34-gradient-descent-optimization.html" class="part-chapter-link"><span>Ch 34 · Gradient Descent &amp; Optimizers</span><span>→</span></a></li>
+            <li><a href="chapters/ch35-backpropagation.html" class="part-chapter-link"><span>Ch 35 · Backpropagation &amp; Chain Rule</span><span>→</span></a></li>
+          </ul>
+        </div>
+
+        <!-- PART XIV -->
+        <div id="part-xiv" class="part-card" data-part="xiv" style="border-left: 4px solid #EB78A4;">
+          <div class="part-card-header">
+            <span class="part-banner part-xiv">Part XIV · Unit III Core</span>
+            <span class="phase-badge phase-endsem">End-Sem Priority</span>
+          </div>
+          <div class="part-card-title">Computer Vision &amp; Convolutional Networks</div>
+          <div class="part-card-desc">Spatial locality, parameter sharing, 2D convolution, filters/kernels, stride, padding, feature maps, max pooling, and classification heads.</div>
+          <ul class="part-chapter-list">
+            <li><a href="chapters/ch36-convolutional-neural-networks.html" class="part-chapter-link"><span>Ch 36 · Convolutional Neural Networks</span><span>→</span></a></li>
+          </ul>
+        </div>
+
+        <!-- PART XV -->
+        <div id="part-xv" class="part-card" data-part="xv" style="border-left: 4px solid #D084C2;">
+          <div class="part-card-header">
+            <span class="part-banner part-xv">Part XV · Unit III Core</span>
+            <span class="phase-badge phase-endsem">Highest Yield</span>
+          </div>
+          <div class="part-card-title">Sequence Modeling, RNNs &amp; LSTMs</div>
+          <div class="part-card-desc">Temporal sequences, recurrent state updates, unrolling over time, BPTT, vanishing gradients, LSTM cell state highway, and gating mechanisms.</div>
+          <ul class="part-chapter-list">
+            <li><a href="chapters/ch37-recurrent-neural-networks.html" class="part-chapter-link"><span>Ch 37 · Recurrent Neural Networks</span><span>→</span></a></li>
+            <li><a href="chapters/ch38-long-short-term-memory-lstm.html" class="part-chapter-link"><span>Ch 38 · Long Short-Term Memory (LSTM)</span><span>→</span></a></li>
+          </ul>
+        </div>
+
+        <!-- PART XVI -->
+        <div id="part-xvi" class="part-card" data-part="xvi" style="border-left: 4px solid #8FA6EC;">
+          <div class="part-card-header">
+            <span class="part-banner part-xvi">Part XVI · Unit III Synthesis</span>
+            <span class="phase-badge phase-endsem">Master Review</span>
+          </div>
+          <div class="part-card-title">Unit III Consolidation &amp; Deep Learning Mastery</div>
+          <div class="part-card-desc">Complete end-to-end learning pipeline, architecture selection cheat sheet, hyperparameter playbook, University question bank, and 10-mark model answers.</div>
+          <ul class="part-chapter-list">
+            <li><a href="chapters/ch39-unit-3-consolidation.html" class="part-chapter-link"><span>Ch 39 · Unit III Consolidation &amp; Mastery</span><span>→</span></a></li>
+          </ul>
+        </div>
+
+        <!-- PART XVII -->
+        <div id="part-xvii" class="part-card" data-part="xvii" style="border-left: 4px solid #80C892;">
+          <div class="part-card-header">
+            <span class="part-banner part-xvii">Part XVII · Unit IV Core</span>
+            <span class="phase-badge phase-endsem">Highest Yield</span>
+          </div>
+          <div class="part-card-title">Reinforcement Learning &amp; Sequential Decisions</div>
+          <div class="part-card-desc">Markov Decision Processes, Bellman expectation and optimality equations, Value Iteration, Model-free Q-Learning, and Policy Gradients (REINFORCE).</div>
+          <ul class="part-chapter-list">
+            <li><a href="chapters/ch40-markov-decision-processes.html" class="part-chapter-link"><span>Ch 40 · Markov Decision Processes (MDPs)</span><span>→</span></a></li>
+            <li><a href="chapters/ch41-q-learning.html" class="part-chapter-link"><span>Ch 41 · Q-Learning &amp; Temporal Difference</span><span>→</span></a></li>
+            <li><a href="chapters/ch42-policy-gradient-methods.html" class="part-chapter-link"><span>Ch 42 · Policy Gradient Methods &amp; REINFORCE</span><span>→</span></a></li>
+          </ul>
+        </div>
+
+        <!-- PART XVIII -->
+        <div id="part-xviii" class="part-card" data-part="xviii" style="border-left: 4px solid #65B2E8;">
+          <div class="part-card-header">
+            <span class="part-banner part-xviii">Part XVIII · Unit IV Core</span>
+            <span class="phase-badge phase-endsem">End-Sem Priority</span>
+          </div>
+          <div class="part-card-title">Natural Language Processing &amp; Text Understanding</div>
+          <div class="part-card-desc">Text tokenization, Stemming vs Lemmatization, Stop-word filtering, Bag-of-Words count representation, N-grams, TF-IDF derivation, and Text Classifiers.</div>
+          <ul class="part-chapter-list">
+            <li><a href="chapters/ch43-nlp-preprocessing-text-classification.html" class="part-chapter-link"><span>Ch 43 · NLP Preprocessing &amp; Text Classification</span><span>→</span></a></li>
+          </ul>
+        </div>
+
+        <!-- PART XIX -->
+        <div id="part-xix" class="part-card" data-part="xix" style="border-left: 4px solid #E870B5;">
+          <div class="part-card-header">
+            <span class="part-banner part-xix">Part XIX · Unit IV Core</span>
+            <span class="phase-badge phase-endsem">Highest Yield</span>
+          </div>
+          <div class="part-card-title">Deep Generative Models &amp; Representations</div>
+          <div class="part-card-desc">Self-supervised representation learning, Autoencoder bottleneck reconstruction loss, Denoising autoencoders, and GANs Minimax adversarial game.</div>
+          <ul class="part-chapter-list">
+            <li><a href="chapters/ch44-autoencoders.html" class="part-chapter-link"><span>Ch 44 · Autoencoders &amp; Latent Bottlenecks</span><span>→</span></a></li>
+            <li><a href="chapters/ch45-generative-adversarial-networks.html" class="part-chapter-link"><span>Ch 45 · Generative Adversarial Networks (GANs)</span><span>→</span></a></li>
+          </ul>
+        </div>
+
+        <!-- PART XX -->
+        <div id="part-xx" class="part-card" data-part="xx" style="border-left: 4px solid #E8956A;">
+          <div class="part-card-header">
+            <span class="part-banner part-xx">Part XX · Unit IV Core</span>
+            <span class="phase-badge phase-endsem">End-Sem Priority</span>
+          </div>
+          <div class="part-card-title">AI Ethics, Fairness &amp; Governance</div>
+          <div class="part-card-desc">Sources of algorithmic bias, Demographic Parity, Equalized Odds, Disparate Impact Four-Fifths rule, Explainable AI (XAI), and Regulatory governance.</div>
+          <ul class="part-chapter-list">
+            <li><a href="chapters/ch46-ai-ethics-bias-fairness.html" class="part-chapter-link"><span>Ch 46 · AI Ethics, Bias, Fairness &amp; Accountability</span><span>→</span></a></li>
+          </ul>
+        </div>
+
+        <!-- PART XXI -->
+        <div id="part-xxi" class="part-card" data-part="xxi" style="border-left: 4px solid #9D96F0;">
+          <div class="part-card-header">
+            <span class="part-banner part-xxi">Part XXI · Unit IV Core</span>
+            <span class="phase-badge phase-endsem">Applied Domain</span>
+          </div>
+          <div class="part-card-title">Applied AI &amp; Autonomous Domain Systems</div>
+          <div class="part-card-desc">Real-world deployment case studies: Healthcare imaging diagnostics, Autonomous vehicle sensor fusion stacks, and Financial streaming fraud detection.</div>
+          <ul class="part-chapter-list">
+            <li><a href="chapters/ch47-ai-in-healthcare.html" class="part-chapter-link"><span>Ch 47 · AI in Healthcare: Decisions &amp; Risk</span><span>→</span></a></li>
+            <li><a href="chapters/ch48-autonomous-vehicles.html" class="part-chapter-link"><span>Ch 48 · AI in Autonomous Vehicles</span><span>→</span></a></li>
+            <li><a href="chapters/ch49-ai-in-financial-systems.html" class="part-chapter-link"><span>Ch 49 · AI in Financial Systems</span><span>→</span></a></li>
+          </ul>
+        </div>
+
+        <!-- PART XXII -->
+        <div id="part-xxii" class="part-card" data-part="xxii" style="border-left: 4px solid #F5C658;">
+          <div class="part-card-header">
+            <span class="part-banner part-xxii">Part XXII · Unit IV Capstone</span>
+            <span class="phase-badge phase-endsem">Grand Capstone</span>
+          </div>
+          <div class="part-card-title">Unit IV Consolidation &amp; Grand AI/ML Capstone</div>
+          <div class="part-card-desc">Synthesis of the full 50-chapter curriculum: Problem formulation to MDPs, Supervised learning to Policy Gradients, Neural architectures to GANs, and Model Answers.</div>
+          <ul class="part-chapter-list">
+            <li><a href="chapters/ch50-unit-4-consolidation.html" class="part-chapter-link"><span>Ch 50 · Grand AI/ML Capstone &amp; Mastery</span><span>→</span></a></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- SEARCH MODAL -->
+  <div id="search-modal">
+    <div class="search-box">
+      <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types…" autocomplete="off"></div>
+      <div id="search-results"></div>
+      <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script src="assets/js/state.js"></script>
+  <script src="assets/js/core.js"></script>
+  <script src="assets/js/modes.js"></script>
+</body>
+</html>

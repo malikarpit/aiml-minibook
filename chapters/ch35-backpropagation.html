@@ -1,0 +1,2511 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 35: Backpropagation &amp; Chain Rule — AI & Machine Learning MiniBook. Computational Graphs, Multivariate Chain Rule, Error Signals (Delta Rule), Weight Gradients, and Step-by-Step Numerical Derivation">
+<title>Ch 35 — Backpropagation &amp; Chain Rule | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-xiii">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 35 — Backpropagation &amp; Chain Rule</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 35 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why This Chapter Exists <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. The Most Important Distinction <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. One-Minute Intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. A Neural Network as a Composition of Functions <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Math You Need Now — Chain Rule <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Computational Graph View <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Worked Scalar Example — Backpropagation from End to Beginning <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Why Backpropagation Is Efficient <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Notation for a General L-Layer Network <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. The Four Core Backpropagation Equations <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Why Define \(\delta^{(l)}\)? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Deriving the Bias Gradient <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Deriving the Weight Gradient <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Hidden-Layer Backpropagation — Where the Transpose Comes From <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Output-Layer Error in Detail <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Important Special Case — Sigmoid + Binary Cross-Entropy <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Important Special Case — Softmax + Multi-Class Cross-Entropy <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. ReLU and Its Derivative <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. A Two-Layer Network — Full Backward Flow <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Dimensions — A Critical Exam Skill <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Mini-Batches and Backpropagation </a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Why Backpropagation Is a Dynamic Programming-Like Idea </a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Vanishing and Exploding Gradients — First Introduction </a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Why Sigmoid Can Contribute to Vanishing Gradients </a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Backpropagation as Error Attribution </a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Backpropagation Algorithm <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Backpropagation vs Numerical Differentiation </a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Common Misconceptions </a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Formula Card — Error Signal </a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Formula Card — Parameter Gradients </a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Exam-Friendly Derivation Skeleton </a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Worked Symbolic Derivation — Hidden Layer <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. The Full Learning Loop </a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Relation to the Learned-Representation View </a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Backpropagation and Overfitting </a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Active Recall — Close the Book </a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Practice Set </a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. University Exam Lens </a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. High-Value Comparison — Forward vs Backward </a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. High-Value Comparison — Backprop vs Gradient Descent <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Resource Shelf </a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Course Lens and Scope Boundary </a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Math Companion Links </a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Chapter Exit Test </a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. Connection to the Next Topic </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link active"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit III</span><span>›</span><span>Part XIII — Optimization & Backpropagation</span><span>›</span><span style="color:var(--em-text)">Chapter 35</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 35 · Unit III · Part XIII</div>
+    <div class="chapter-part-banner part-xiii">
+      <span class="part-banner-badge">Unit III · Part XIII</span>
+      <span>Optimization & Backpropagation</span>
+    </div>
+    <h1 class="chapter-title">Backpropagation &amp; Chain Rule</h1>
+    <div class="concept-id-tag">[CONCEPT-DL-035]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: Highest Yield Mathematical Derivations (10-mark guarantee)</span>
+      <span class="chapter-meta-item">📖 ~60 min read</span>
+      <span class="chapter-meta-item">🎯 45 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>Backpropagation:</strong> Forward pass vs Backward pass, Computational graphs, Multivariate chain rule, Output layer error \(\delta_k = \frac{\partial L}{\partial z_k}\), Hidden layer error backpropagation \(\delta_j = \sum w_{kj} \delta_k f'(z_j)\), Weight gradient computation, and Step-by-step numerical calculation.</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why This Chapter Exists</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">The Most Important Distinction</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">One-Minute Intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">A Neural Network as a Composition of Functions</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Math You Need Now — Chain Rule</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Computational Graph View</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Worked Scalar Example — Backpropagation from End to Beginning</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Why Backpropagation Is Efficient</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Notation for a General L-Layer Network</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">The Four Core Backpropagation Equations</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Why Define \(\delta^{(l)}\)?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Deriving the Bias Gradient</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Deriving the Weight Gradient</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Hidden-Layer Backpropagation — Where the Transpose Comes From</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Output-Layer Error in Detail</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Important Special Case — Sigmoid + Binary Cross-Entropy</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Important Special Case — Softmax + Multi-Class Cross-Entropy</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">ReLU and Its Derivative</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">A Two-Layer Network — Full Backward Flow</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Dimensions — A Critical Exam Skill</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Mini-Batches and Backpropagation</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Why Backpropagation Is a Dynamic Programming-Like Idea</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Vanishing and Exploding Gradients — First Introduction</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Why Sigmoid Can Contribute to Vanishing Gradients</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Backpropagation as Error Attribution</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Backpropagation Algorithm</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Backpropagation vs Numerical Differentiation</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Common Misconceptions</span></a></li>
+      <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Formula Card — Error Signal</span></a></li>
+      <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Formula Card — Parameter Gradients</span></a></li>
+      <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Exam-Friendly Derivation Skeleton</span></a></li>
+      <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Worked Symbolic Derivation — Hidden Layer</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">The Full Learning Loop</span></a></li>
+      <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Relation to the Learned-Representation View</span></a></li>
+      <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Backpropagation and Overfitting</span></a></li>
+      <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Active Recall — Close the Book</span></a></li>
+      <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Practice Set</span></a></li>
+      <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">University Exam Lens</span></a></li>
+      <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">High-Value Comparison — Forward vs Backward</span></a></li>
+      <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">High-Value Comparison — Backprop vs Gradient Descent</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Resource Shelf</span></a></li>
+      <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Course Lens and Scope Boundary</span></a></li>
+      <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Math Companion Links</span></a></li>
+      <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Chapter Exit Test</span></a></li>
+      <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">Connection to the Next Topic</span></a></li>
+    </ul>
+  </div>
+
+  
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 1: Why This Chapter Exists -->
+  <section id="s-01" data-search-section="Why This Chapter Exists" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>1. Why This Chapter Exists</h2>
+      <button class="bookmark-btn" data-id="s-01" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>C34 established the optimization rule:</p>
+<div class="formula-math">\[
+\theta\leftarrow\theta-\eta\nabla_\theta J.
+\]</div>
+<p>But for a deep network, the gradient contains derivatives with respect to many quantities:</p>
+<div class="formula-math">\[
+\frac{\partial J}{\partial W^{(1)}},
+\frac{\partial J}{\partial b^{(1)}},
+\frac{\partial J}{\partial W^{(2)}},
+\frac{\partial J}{\partial b^{(2)}},
+\ldots
+\]</div>
+<p>Computing all of those independently by repeatedly expanding the entire network would be inefficient and difficult to organize.</p>
+<p><strong>Backpropagation</strong> provides a systematic way to reuse intermediate derivative information while applying the chain rule from the output backward through the network.</p>
+<p>The central story is:</p>
+<div class="ascii-box"><pre>Forward computation
+      ↓
+Prediction
+      ↓
+Loss
+      ↓
+Backward derivative flow
+      ↓
+Gradients for each layer
+      ↓
+Optimizer update</pre></div>
+<p>The supplied resource guide identifies backpropagation as a Unit III core topic and notes that the provided practical materials contain only partial treatment, so a full mathematical treatment is needed as a gap-fill. The guide points to 3Blue1Brown and StatQuest as focused external reinforcement for the chain-rule and gradient intuition. This chapter therefore combines the supplied course vocabulary with standard neural-network mathematics.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 2: The Most Important Distinction -->
+  <section id="s-02" data-search-section="The Most Important Distinction" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. The Most Important Distinction</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>There are three related but different things:</p>
+<h3>Forward propagation</h3>
+<blockquote>
+<p>Compute the prediction.</p>
+</blockquote>
+<h3>Backpropagation</h3>
+<blockquote>
+<p>Compute derivatives of the loss with respect to intermediate quantities and parameters, efficiently using the chain rule.</p>
+</blockquote>
+<h3>Gradient descent / optimization</h3>
+<blockquote>
+<p>Use those gradients to update the parameters.</p>
+</blockquote>
+<p>So the complete training loop is:</p>
+<div class="ascii-box"><pre>FORWARD
+input → network → prediction
+                  ↓
+                 loss
+                  ↓
+BACKWARD
+loss → gradients → parameters
+                  ↓
+OPTIMIZE
+parameters ← parameters − step</pre></div>
+<h3>Memory anchor</h3>
+<blockquote>
+<p><strong>Forward computes. Backward differentiates. Optimization updates.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: One-Minute Intuition -->
+  <section id="s-03" data-search-section="One-Minute Intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>3. One-Minute Intuition</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine a company producing a product through several departments.</p>
+<div class="ascii-box"><pre>Raw material
+   ↓
+Department A
+   ↓
+Department B
+   ↓
+Department C
+   ↓
+Final product
+   ↓
+Customer rating</pre></div>
+<p>Suppose the customer says the final product is poor.</p>
+<p>Management wants to know:</p>
+<blockquote>
+<p>How much did each department contribute to the final loss?</p>
+</blockquote>
+<p>The answer cannot be found by looking only at the final department.</p>
+<p>You trace influence backward:</p>
+<div class="ascii-box"><pre>Customer loss
+    ↓
+Effect of final department
+    ↓
+Effect of previous department
+    ↓
+Effect of earlier department
+    ↓
+Effect of raw material transformations</pre></div>
+<p>Backpropagation performs this derivative-tracing process mathematically.</p>
+<h2>Hinglish</h2>
+<p>Socho ek factory mein product multiple stages se pass hota hai.</p>
+<p>End mein customer bolta hai product kharab hai.</p>
+<p>Ab management ko pata karna hai:</p>
+<blockquote>
+<p>“Galti ka kitna contribution har stage ka tha?”</p>
+</blockquote>
+<p>Backpropagation final loss se backward jata hai aur chain rule ke through calculate karta hai ki har parameter ne final loss ko kitna affect kiya.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: A Neural Network as a Composition of Functions -->
+  <section id="s-04" data-search-section="A Neural Network as a Composition of Functions" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>4. A Neural Network as a Composition of Functions</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A multilayer network is naturally written as a composition.</p>
+<p>For one hidden layer:</p>
+<div class="formula-math">\[
+z^{(1)}=W^{(1)}x+b^{(1)}
+\]</div>
+<div class="formula-math">\[
+a^{(1)}=\sigma(z^{(1)})
+\]</div>
+<div class="formula-math">\[
+z^{(2)}=W^{(2)}a^{(1)}+b^{(2)}
+\]</div>
+<div class="formula-math">\[
+a^{(2)}=\sigma(z^{(2)})
+\]</div>
+<p>and the loss is:</p>
+<div class="formula-math">\[
+J=\ell(a^{(2)},y).
+\]</div>
+<p>The key observation is that the variables depend on each other:</p>
+<div class="formula-math">\[
+W^{(1)},b^{(1)}
+\rightarrow z^{(1)}
+\rightarrow a^{(1)}
+\rightarrow z^{(2)}
+\rightarrow a^{(2)}
+\rightarrow J.
+\]</div>
+<p>Therefore the derivative with respect to an early parameter must account for the entire downstream path.</p>
+<p>That is exactly what the chain rule handles.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: Math You Need Now — Chain Rule -->
+  <section id="s-05" data-search-section="Math You Need Now — Chain Rule" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>5. Math You Need Now — Chain Rule</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For a composition:</p>
+<div class="formula-math">\[
+y=f(g(x)),
+\]</div>
+<p>we have:</p>
+<div class="formula-math">\[
+\boxed{
+\frac{dy}{dx}
+=
+\frac{dy}{dg}
+\frac{dg}{dx}
+}
+\]</div>
+<h3>Tiny example</h3>
+<p>Suppose:</p>
+<div class="formula-math">\[
+u=2x,
+\]</div>
+<p>and</p>
+<div class="formula-math">\[
+y=u^2.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\frac{dy}{du}=2u
+\]</div>
+<p>and</p>
+<div class="formula-math">\[
+\frac{du}{dx}=2.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\frac{dy}{dx}
+=
+\frac{dy}{du}\frac{du}{dx}
+=(2u)(2)=4u.
+\]</div>
+<p>Since \(u=2x\):</p>
+<div class="formula-math">\[
+\boxed{\frac{dy}{dx}=8x}.
+\]</div>
+<p>Backpropagation is essentially the chain rule organized for a computational graph with many variables and repeated shared structure.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: Computational Graph View -->
+  <section id="s-06" data-search-section="Computational Graph View" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>6. Computational Graph View</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="diagram-box"><pre class="mermaid">
+graph LR
+    subgraph ForwardPass["⏩ FORWARD PASS (Activations Flow Forward)"]
+        X["Input x"] -->|W¹| Z1["z¹ = W¹x + b¹"]
+        Z1 -->|σ| A1["a¹ = σ(z¹)"]
+        A1 -->|W²| Z2["z² = W²a¹ + b²"]
+        Z2 -->|σ| A2["a² = ŷ"]
+        A2 --> LOSS["Loss ℒ(ŷ, y)"]
+    end
+    subgraph BackwardPass["⏪ BACKWARD PASS (Gradients Flow Backward via Chain Rule)"]
+        D_LOSS["∂ℒ/∂ŷ"] --> D_Z2["δ² = ∂ℒ/∂z² = (ŷ - y)"]
+        D_Z2 --> D_W2["∂ℒ/∂W² = δ² · (a¹)ᵀ"]
+        D_Z2 --> D_A1["∂ℒ/∂a¹ = (W²)ᵀ · δ²"]
+        D_A1 --> D_Z1["δ¹ = ∂ℒ/∂z¹ = ((W²)ᵀ δ²) ⊙ σ'(z¹)"]
+        D_Z1 --> D_W1["∂ℒ/∂W¹ = δ¹ · xᵀ"]
+    end
+</pre></div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher explanation — Hinglish</div>
+
+Backpropagation ko simple words mein "Blame Allocation System" kehte hain. Jab network galat output deta hai, toh sabse pehle aakhri layer ka error $\delta^{[L]}$ nikaalte hain. Phir us error ko pichli layer par divide karte hain unke weights ke hisaab se. Jis connection ka weight zyada tha, usko zyada zimmedar maana jaata hai aur uska weight zyada adjust hota hai!
+
+
+Consider the scalar computation:
+
+
+
+<div class="formula-math">\[
+x
+\rightarrow z
+\rightarrow a
+\rightarrow J
+\]</div>
+
+
+
+where:
+
+
+
+<div class="formula-math">\[
+z=wx+b,
+\]</div>
+
+
+
+
+
+<div class="formula-math">\[
+a=\sigma(z),
+\]</div>
+
+
+
+
+
+<div class="formula-math">\[
+J=\ell(a,y).
+\]</div>
+
+
+
+The graph is:
+
+
+
+<div class="ascii-box"><pre>x ──→ z ──→ a ──→ J
+      ↑      ↑
+      │      │
+     w,b     y</pre></div>
+
+
+
+To obtain:
+
+
+
+<div class="formula-math">\[
+\frac{\partial J}{\partial w},
+\]</div>
+
+
+
+we chain the local derivatives:
+
+
+
+<div class="formula-math">\[
+\boxed{
+\frac{\partial J}{\partial w}
+=
+\frac{\partial J}{\partial a}
+\frac{\partial a}{\partial z}
+\frac{\partial z}{\partial w}
+}
+\]</div>
+
+
+
+This is the central backpropagation idea.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: Worked Scalar Example — Backpropagation from End to Beginning -->
+  <section id="s-07" data-search-section="Worked Scalar Example — Backpropagation from End to Beginning" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>7. Worked Scalar Example — Backpropagation from End to Beginning</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Consider one neuron:</p>
+<div class="formula-math">\[
+z=wx+b
+\]</div>
+<div class="formula-math">\[
+a=\sigma(z)
+\]</div>
+<p>and squared loss:</p>
+<div class="formula-math">\[
+J=\frac12(a-y)^2.
+\]</div>
+<p>Take:</p>
+<div class="formula-math">\[
+x=2,\quad y=1,
+\]</div>
+<div class="formula-math">\[
+w=0.5,\quad b=0.
+\]</div>
+<h3>Step 1 — Forward pass</h3>
+<div class="formula-math">\[
+z=(0.5)(2)+0=1.
+\]</div>
+<p>Sigmoid:</p>
+<div class="formula-math">\[
+a=\sigma(1)
+=\frac{1}{1+e^{-1}}
+\approx0.7311.
+\]</div>
+<p>Loss:</p>
+<div class="formula-math">\[
+J
+=\frac12(0.7311-1)^2
+\approx0.0362.
+\]</div>
+<hr />
+<h2>Step 2 — Start at the loss</h2>
+<div class="formula-math">\[
+J=\frac12(a-y)^2.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+\frac{\partial J}{\partial a}=a-y
+}
+\]</div>
+<p>Numerically:</p>
+<div class="formula-math">\[
+\frac{\partial J}{\partial a}
+\approx-0.2689.
+\]</div>
+<hr />
+<h2>Step 3 — Move through the activation</h2>
+<p>For sigmoid:</p>
+<div class="formula-math">\[
+\boxed{
+\sigma'(z)=\sigma(z)(1-\sigma(z))
+}
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\frac{\partial a}{\partial z}
+=a(1-a).
+\]</div>
+<p>Numerically:</p>
+<div class="formula-math">\[
+0.7311(1-0.7311)
+\approx0.1966.
+\]</div>
+<hr />
+<h2>Step 4 — Move through the weighted sum</h2>
+<p>Since:</p>
+<div class="formula-math">\[
+z=wx+b,
+\]</div>
+<p>we have:</p>
+<div class="formula-math">\[
+\frac{\partial z}{\partial w}=x=2
+\]</div>
+<p>and</p>
+<div class="formula-math">\[
+\frac{\partial z}{\partial b}=1.
+\]</div>
+<hr />
+<h2>Step 5 — Chain them</h2>
+<p>For \(w\):</p>
+<div class="formula-math">\[
+\frac{\partial J}{\partial w}
+=
+\frac{\partial J}{\partial a}
+\frac{\partial a}{\partial z}
+\frac{\partial z}{\partial w}.
+\]</div>
+<p>So:</p>
+<div class="formula-math">\[
+\frac{\partial J}{\partial w}
+\approx
+(-0.2689)(0.1966)(2)
+\approx-0.1057.
+\]</div>
+<p>For \(b\):</p>
+<div class="formula-math">\[
+\frac{\partial J}{\partial b}
+=
+\frac{\partial J}{\partial a}
+\frac{\partial a}{\partial z}
+\frac{\partial z}{\partial b}
+\]</div>
+<div class="formula-math">\[
+\approx(-0.2689)(0.1966)(1)
+\approx-0.0528.
+\]</div>
+<h3>Step 6 — Optimizer update</h3>
+<p>Now gradient descent takes over.</p>
+<p>With \(\eta=0.1\):</p>
+<div class="formula-math">\[
+w_{new}=0.5-0.1(-0.1057)
+\approx0.5106
+\]</div>
+<div class="formula-math">\[
+b_{new}=0-0.1(-0.0528)
+\approx0.00528.
+\]</div>
+<p>This example shows the complete sequence:</p>
+<div class="ascii-box"><pre>Forward
+→ z
+→ activation
+→ loss
+
+Backward
+→ dJ/da
+→ da/dz
+→ dz/dw, dz/db
+→ dJ/dw, dJ/db
+
+Update
+→ new w, b</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: Why Backpropagation Is Efficient -->
+  <section id="s-08" data-search-section="Why Backpropagation Is Efficient" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>8. Why Backpropagation Is Efficient</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine a network with many layers.</p>
+<p>A naive approach might try to derive every parameter's derivative independently by expanding the entire expression repeatedly.</p>
+<p>That would duplicate huge amounts of work.</p>
+<p>Backpropagation reuses intermediate derivative quantities.</p>
+<p>For a chain:</p>
+<div class="formula-math">\[
+J\rightarrow a^{(L)}\rightarrow z^{(L)}\rightarrow a^{(L-1)}\rightarrow\cdots
+\]</div>
+<p>the same local derivative information can contribute to multiple parameter gradients.</p>
+<h3>Core idea</h3>
+<blockquote>
+<p><strong>Compute each needed local derivative once, then reuse it while moving backward.</strong></p>
+</blockquote>
+<p>This is the reason backpropagation is practical for large layered networks.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: Notation for a General L-Layer Network -->
+  <section id="s-09" data-search-section="Notation for a General L-Layer Network" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>9. Notation for a General L-Layer Network</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Let:</p>
+<div class="formula-math">\[
+a^{(0)}=x.
+\]</div>
+<p>For layer \(l\):</p>
+<div class="formula-math">\[
+\boxed{
+z^{(l)}=W^{(l)}a^{(l-1)}+b^{(l)}
+}
+\]</div>
+<p>and</p>
+<div class="formula-math">\[
+\boxed{
+a^{(l)}=\sigma^{(l)}(z^{(l)})
+}
+\]</div>
+<p>for layers using an activation.</p>
+<p>At the output layer, the exact transformation depends on the task.</p>
+<p>The loss is:</p>
+<div class="formula-math">\[
+J=\ell(a^{(L)},y).
+\]</div>
+<p>Here:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>\(a^{(l)}\)</td>
+<td>Activation/output vector of layer \(l\)</td>
+</tr>
+<tr>
+<td>\(z^{(l)}\)</td>
+<td>Pre-activation vector</td>
+</tr>
+<tr>
+<td>\(W^{(l)}\)</td>
+<td>Weight matrix for layer \(l\)</td>
+</tr>
+<tr>
+<td>\(b^{(l)}\)</td>
+<td>Bias vector for layer \(l\)</td>
+</tr>
+<tr>
+<td>\(L\)</td>
+<td>Final layer index</td>
+</tr>
+<tr>
+<td>\(\sigma^{(l)}\)</td>
+<td>Activation function of layer \(l\)</td>
+</tr>
+<tr>
+<td>\(J\)</td>
+<td>Loss</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: The Four Core Backpropagation Equations -->
+  <section id="s-10" data-search-section="The Four Core Backpropagation Equations" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>10. The Four Core Backpropagation Equations</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>These equations are the heart of the chapter.</p>
+<p>Define the error signal:</p>
+<div class="formula-math">\[
+\boxed{
+\delta^{(l)}
+=
+\frac{\partial J}{\partial z^{(l)}}
+}
+\]</div>
+<p>Then the standard vectorized recursion is:</p>
+<h2>Output-layer error</h2>
+<div class="formula-math">\[
+\boxed{
+\delta^{(L)}
+=
+\frac{\partial J}{\partial a^{(L)}}
+\odot
+\sigma'^{(L)}(z^{(L)})
+}
+\]</div>
+<p>where \(\odot\) denotes elementwise multiplication.</p>
+<h2>Hidden-layer error</h2>
+<div class="formula-math">\[
+\boxed{
+\delta^{(l)}
+=
+\left(W^{(l+1)}\right)^T
+\delta^{(l+1)}
+\odot
+\sigma'^{(l)}(z^{(l)})
+}
+\]</div>
+<h2>Weight gradient</h2>
+<div class="formula-math">\[
+\boxed{
+\frac{\partial J}{\partial W^{(l)}}
+=
+\delta^{(l)}
+\left(a^{(l-1)}\right)^T
+}
+\]</div>
+<h2>Bias gradient</h2>
+<div class="formula-math">\[
+\boxed{
+\frac{\partial J}{\partial b^{(l)}}
+=
+\delta^{(l)}
+}
+\]</div>
+<p>These formulas are worth understanding rather than memorizing blindly.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: Why Define \(\delta^{(l)}\)? -->
+  <section id="s-11" data-search-section="Why Define \(\delta^{(l)}\)?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>11. Why Define \(\delta^{(l)}\)?</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Without shorthand, the same chain-rule expressions become extremely long.</p>
+<p>Defining:</p>
+<div class="formula-math">\[
+\delta^{(l)}=\frac{\partial J}{\partial z^{(l)}}
+\]</div>
+<p>lets us summarize the influence of a layer's pre-activation on the final loss.</p>
+<p>Think of \(\delta^{(l)}\) as:</p>
+<blockquote>
+<p><strong>How sensitive is the final loss to changing this layer's pre-activation values?</strong></p>
+</blockquote>
+<p>Then the parameter gradients become easy to express.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: Deriving the Bias Gradient -->
+  <section id="s-12" data-search-section="Deriving the Bias Gradient" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>12. Deriving the Bias Gradient</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For one layer:</p>
+<div class="formula-math">\[
+z^{(l)}=W^{(l)}a^{(l-1)}+b^{(l)}.
+\]</div>
+<p>Each bias component contributes directly to the corresponding pre-activation component.</p>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\frac{\partial z_i^{(l)}}{\partial b_i^{(l)}}=1.
+\]</div>
+<p>Using the error signal:</p>
+<div class="formula-math">\[
+\boxed{
+\frac{\partial J}{\partial b^{(l)}}=\delta^{(l)}
+}
+\]</div>
+<p>The bias is therefore one of the easiest gradients once \(\delta^{(l)}\) is known.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: Deriving the Weight Gradient -->
+  <section id="s-13" data-search-section="Deriving the Weight Gradient" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>13. Deriving the Weight Gradient</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For an individual weight:</p>
+<div class="formula-math">\[
+z_i^{(l)}=
+\sum_j W_{ij}^{(l)}a_j^{(l-1)}+b_i^{(l)}.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\frac{\partial z_i^{(l)}}{\partial W_{ij}^{(l)}}
+=a_j^{(l-1)}.
+\]</div>
+<p>Using the chain rule:</p>
+<div class="formula-math">\[
+\frac{\partial J}{\partial W_{ij}^{(l)}}
+=
+\frac{\partial J}{\partial z_i^{(l)}}
+\frac{\partial z_i^{(l)}}{\partial W_{ij}^{(l)}}.
+\]</div>
+<p>Thus:</p>
+<div class="formula-math">\[
+\boxed{
+\frac{\partial J}{\partial W_{ij}^{(l)}}
+=
+\delta_i^{(l)}a_j^{(l-1)}
+}
+\]</div>
+<p>and in matrix form:</p>
+<div class="formula-math">\[
+\boxed{
+\frac{\partial J}{\partial W^{(l)}}
+=
+\delta^{(l)}(a^{(l-1)})^T
+}
+\]</div>
+<h3>Intuition</h3>
+<p>A weight connects:</p>
+<div class="ascii-box"><pre>previous activation
+        ↓
+      weight
+        ↓
+   current neuron</pre></div>
+<p>Its gradient depends on both:</p>
+<ol>
+<li>how strongly the current neuron contributes to loss — \(\delta\);</li>
+<li>how much signal arrived through the connection — \(a^{(l-1)}\).</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: Hidden-Layer Backpropagation — Where the Transpose Comes From -->
+  <section id="s-14" data-search-section="Hidden-Layer Backpropagation — Where the Transpose Comes From" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>14. Hidden-Layer Backpropagation — Where the Transpose Comes From</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This is one of the most confusing equations for beginners:</p>
+<div class="formula-math">\[
+\delta^{(l)}
+=
+(W^{(l+1)})^T\delta^{(l+1)}
+\odot\sigma'(z^{(l)}).
+\]</div>
+<p>Do not memorize the transpose without understanding the flow.</p>
+<p>Suppose:</p>
+<div class="formula-math">\[
+z^{(l+1)}=W^{(l+1)}a^{(l)}+b^{(l+1)}.
+\]</div>
+<p>The layer-\(l\) activation contributes to the next layer through the matrix \(W^{(l+1)}\).</p>
+<p>To propagate sensitivity <strong>backward</strong>, we need the transpose mapping.</p>
+<p>This is analogous to how the gradient of a matrix-vector transformation uses the transpose of the forward matrix.</p>
+<p>So:</p>
+<div class="ascii-box"><pre>Forward:
+ a(l) ──W(l+1)──→ z(l+1)
+
+Backward:
+ gradient at z(l+1)
+        │
+        ↓ transpose
+ gradient at a(l)</pre></div>
+<p>Then we multiply elementwise by the local activation derivative:</p>
+<div class="formula-math">\[
+\sigma'(z^{(l)}).
+\]</div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: Output-Layer Error in Detail -->
+  <section id="s-15" data-search-section="Output-Layer Error in Detail" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>15. Output-Layer Error in Detail</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The final layer is special because there is no later hidden layer to pass through.</p>
+<p>We start directly from the loss.</p>
+<p>By the chain rule:</p>
+<div class="formula-math">\[
+\frac{\partial J}{\partial z^{(L)}}
+=
+\frac{\partial J}{\partial a^{(L)}}
+\odot
+\frac{\partial a^{(L)}}{\partial z^{(L)}}.
+\]</div>
+<p>Hence:</p>
+<div class="formula-math">\[
+\boxed{
+\delta^{(L)}
+=
+\nabla_{a^{(L)}}J
+\odot
+\sigma'^{(L)}(z^{(L)})
+}
+\]</div>
+<p>for a differentiable scalar activation applied elementwise.</p>
+<p>However, the output simplification depends on the loss/output pairing.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: Important Special Case — Sigmoid + Binary Cross-Entropy -->
+  <section id="s-16" data-search-section="Important Special Case — Sigmoid + Binary Cross-Entropy" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>16. Important Special Case — Sigmoid + Binary Cross-Entropy</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<div class="formula-math">\[
+\hat p=\sigma(z)
+\]</div>
+<p>and binary cross-entropy is:</p>
+<div class="formula-math">\[
+J=-\left[y\log \hat p+(1-y)\log(1-\hat p)\right].
+\]</div>
+<p>A useful result is:</p>
+<div class="formula-math">\[
+\boxed{
+\frac{\partial J}{\partial z}=\hat p-y
+}
+\]</div>
+<p>Notice how the sigmoid derivative and the cross-entropy derivative simplify together.</p>
+<p>This is why modern neural-network treatments frequently pair sigmoid outputs with binary cross-entropy.</p>
+<h3>Memory anchor</h3>
+<blockquote>
+<p><strong>For sigmoid + binary cross-entropy, output error = prediction − target.</strong></p>
+</blockquote>
+<p>This is mathematically powerful because it removes an extra sigmoid-derivative factor from the final expression.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: Important Special Case — Softmax + Multi-Class Cross-Entropy -->
+  <section id="s-17" data-search-section="Important Special Case — Softmax + Multi-Class Cross-Entropy" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>17. Important Special Case — Softmax + Multi-Class Cross-Entropy</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For multi-class classification:</p>
+<div class="formula-math">\[
+p_k
+=
+\frac{e^{z_k}}{\sum_j e^{z_j}}.
+\]</div>
+<p>Cross-entropy:</p>
+<div class="formula-math">\[
+J=-\sum_k y_k\log p_k.
+\]</div>
+<p>When the target \(y\) is represented as a one-hot vector, the combined derivative has the elegant form:</p>
+<div class="formula-math">\[
+\boxed{
+\frac{\partial J}{\partial z_k}=p_k-y_k
+}
+\]</div>
+<p>or vectorially:</p>
+<div class="formula-math">\[
+\boxed{
+\delta^{(L)}=p-y
+}
+\]</div>
+<p>The derivation is more involved than the sigmoid case because softmax couples its output components through the denominator, but the final combined gradient is compact.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: ReLU and Its Derivative -->
+  <section id="s-18" data-search-section="ReLU and Its Derivative" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>18. ReLU and Its Derivative</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Recall:</p>
+<div class="formula-math">\[
+ReLU(z)=\max(0,z).
+\]</div>
+<p>For ordinary points away from zero:</p>
+<div class="formula-math">\[
+\boxed{
+ReLU'(z)=
+\begin{cases}
+1,&z\gt 0\\
+0,&z\lt 0
+\end{cases}
+}
+\]</div>
+<p>At \(z=0\), the function is not classically differentiable; implementations choose a convention/subgradient behaviour.</p>
+<h3>Backpropagation consequence</h3>
+<p>If a hidden neuron's pre-activation is negative, the ReLU derivative is zero under the usual convention.</p>
+<p>Then the backpropagated gradient through that activation is zero for that step.</p>
+<p>This connects to the “dead ReLU” intuition from C33.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: A Two-Layer Network — Full Backward Flow -->
+  <section id="s-19" data-search-section="A Two-Layer Network — Full Backward Flow" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>19. A Two-Layer Network — Full Backward Flow</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Consider:</p>
+<div class="ascii-box"><pre>x
+ ↓
+Layer 1
+ ↓
+a(1)
+ ↓
+Layer 2
+ ↓
+a(2)
+ ↓
+Loss J</pre></div>
+<p>Forward:</p>
+<div class="formula-math">\[
+z^{(1)}=W^{(1)}x+b^{(1)}
+\]</div>
+<div class="formula-math">\[
+a^{(1)}=\sigma(z^{(1)})
+\]</div>
+<div class="formula-math">\[
+z^{(2)}=W^{(2)}a^{(1)}+b^{(2)}
+\]</div>
+<div class="formula-math">\[
+a^{(2)}=\sigma(z^{(2)}).
+\]</div>
+<p>Backward:</p>
+<h3>At output layer</h3>
+<div class="formula-math">\[
+\delta^{(2)}
+=
+\frac{\partial J}{\partial a^{(2)}}
+\odot
+\sigma'(z^{(2)}).
+\]</div>
+<h3>Output gradients</h3>
+<div class="formula-math">\[
+\frac{\partial J}{\partial W^{(2)}}
+=
+\delta^{(2)}(a^{(1)})^T
+\]</div>
+<div class="formula-math">\[
+\frac{\partial J}{\partial b^{(2)}}
+=\delta^{(2)}.
+\]</div>
+<h3>Move to hidden layer</h3>
+<div class="formula-math">\[
+\delta^{(1)}
+=
+(W^{(2)})^T\delta^{(2)}
+\odot
+\sigma'(z^{(1)}).
+\]</div>
+<h3>Hidden-layer gradients</h3>
+<div class="formula-math">\[
+\frac{\partial J}{\partial W^{(1)}}
+=
+\delta^{(1)}x^T
+\]</div>
+<div class="formula-math">\[
+\frac{\partial J}{\partial b^{(1)}}
+=\delta^{(1)}.
+\]</div>
+<p>Now every trainable parameter has a gradient.</p>
+<p>Only after this does the optimizer update the parameters.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: Dimensions — A Critical Exam Skill -->
+  <section id="s-20" data-search-section="Dimensions — A Critical Exam Skill" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>20. Dimensions — A Critical Exam Skill</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<div class="formula-math">\[
+x\in\mathbb R^{d_{in}}
+\]</div>
+<p>and a layer contains:</p>
+<div class="formula-math">\[
+d_{out}
+\]</div>
+<p>neurons.</p>
+<p>Then:</p>
+<div class="formula-math">\[
+W\in\mathbb R^{d_{out}\times d_{in}}
+\]</div>
+<div class="formula-math">\[
+b\in\mathbb R^{d_{out}}
+\]</div>
+<div class="formula-math">\[
+z\in\mathbb R^{d_{out}}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\frac{\partial J}{\partial W}
+\in
+\mathbb R^{d_{out}\times d_{in}}.
+\]</div>
+<p>The matrix formula:</p>
+<div class="formula-math">\[
+\delta(a_{prev})^T
+\]</div>
+<p>has exactly those dimensions:</p>
+<div class="formula-math">\[
+(d_{out}\times1)(1\times d_{in})
+=
+(d_{out}\times d_{in}).
+\]</div>
+<h3>Memory trick</h3>
+<blockquote>
+<p><strong>Weight gradient has the same shape as the weight matrix.</strong></p>
+</blockquote>
+<p>If your dimensions do not match, something is wrong.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: Mini-Batches and Backpropagation -->
+  <section id="s-21" data-search-section="Mini-Batches and Backpropagation" class="content-section">
+    <div class="section-header">
+      <h2>21. Mini-Batches and Backpropagation</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a mini-batch contains \(m\) examples.</p>
+<p>Backpropagation computes gradients for each example and the training procedure typically aggregates them according to the chosen loss convention.</p>
+<p>For average batch loss:</p>
+<div class="formula-math">\[
+J_B
+=
+\frac1m
+\sum_{i\in B}\ell_i.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\boxed{
+\nabla J_B
+=
+\frac1m
+\sum_{i\in B}\nabla\ell_i
+}
+\]</div>
+<p>The optimizer then uses this batch gradient.</p>
+<p>Thus:</p>
+<div class="ascii-box"><pre>One example
+→ backprop
+→ one gradient
+
+Mini-batch
+→ backprop across examples
+→ aggregate gradients
+→ one update</pre></div>
+<p>Vectorized implementations perform this efficiently with matrix operations rather than literally looping through every scalar parameter by hand.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: Why Backpropagation Is a Dynamic Programming-Like Idea -->
+  <section id="s-22" data-search-section="Why Backpropagation Is a Dynamic Programming-Like Idea" class="content-section">
+    <div class="section-header">
+      <h2>22. Why Backpropagation Is a Dynamic Programming-Like Idea</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A useful conceptual comparison is that backpropagation avoids recomputing the same intermediate derivative information again and again.</p>
+<p>When many paths depend on a common intermediate node:</p>
+<div class="ascii-box"><pre>→ path A
+intermediate
+             → path B
+             → path C</pre></div>
+<p>its derivative information can be reused.</p>
+<p>This is one reason the computational-graph view is so powerful.</p>
+<p>Backpropagation therefore feels like:</p>
+<blockquote>
+<p><strong>Local derivative computations + systematic reuse + reverse traversal.</strong></p>
+</blockquote>
+<p>This is a conceptual explanation, not a claim that backpropagation is identical to the standard dynamic-programming algorithms studied in Unit I.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: Vanishing and Exploding Gradients — First Introduction -->
+  <section id="s-23" data-search-section="Vanishing and Exploding Gradients — First Introduction" class="content-section">
+    <div class="section-header">
+      <h2>23. Vanishing and Exploding Gradients — First Introduction</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Backpropagation repeatedly multiplies derivatives across layers.</p>
+<p>If many factors are smaller than 1, the product can become extremely small.</p>
+<p>Conceptually:</p>
+<div class="formula-math">\[
+0.5\times0.5\times0.5\times0.5
+=0.0625.
+\]</div>
+<p>After many layers, the gradient can become tiny.</p>
+<p>That is the <strong>vanishing-gradient</strong> problem.</p>
+<p>Conversely, repeated factors greater than 1 can produce very large values, leading to <strong>exploding gradients</strong>.</p>
+<p>These effects became especially important in deep networks and sequence models.</p>
+<p>The later RNN/LSTM chapters will return to this problem.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: Why Sigmoid Can Contribute to Vanishing Gradients -->
+  <section id="s-24" data-search-section="Why Sigmoid Can Contribute to Vanishing Gradients" class="content-section">
+    <div class="section-header">
+      <h2>24. Why Sigmoid Can Contribute to Vanishing Gradients</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For sigmoid:</p>
+<div class="formula-math">\[
+\sigma'(z)=\sigma(z)(1-\sigma(z)).
+\]</div>
+<p>The derivative is largest around the middle of the sigmoid and becomes small in saturated regions.</p>
+<p>For example, when:</p>
+<div class="formula-math">\[
+\sigma(z)\approx0
+\]</div>
+<p>or</p>
+<div class="formula-math">\[
+\sigma(z)\approx1,
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+\sigma'(z)\approx0.
+\]</div>
+<p>During repeated backward multiplication, many small derivative factors can make gradients shrink substantially.</p>
+<p>This is one reason activation choice matters for optimization.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: Backpropagation as Error Attribution -->
+  <section id="s-25" data-search-section="Backpropagation as Error Attribution" class="content-section">
+    <div class="section-header">
+      <h2>25. Backpropagation as Error Attribution</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Another useful mental model is:</p>
+<blockquote>
+<p><strong>Backpropagation asks how much each internal quantity matters to the final loss.</strong></p>
+</blockquote>
+<p>Suppose:</p>
+<div class="ascii-box"><pre>Input
+ ↓
+Hidden neuron A ─┐
+                 ├→ Output
+Hidden neuron B ─┘</pre></div>
+<p>If the output loss changes strongly when A's activation changes, then the derivative reaching A is large in magnitude.</p>
+<p>If the output is insensitive to A, the derivative can be small.</p>
+<p>This gives a practical interpretation to gradients:</p>
+<ul>
+<li>large magnitude → local parameter change can strongly affect loss;</li>
+<li>small magnitude → local change has weaker first-order effect.</li>
+</ul>
+<p>It does <strong>not</strong> mean that the feature is globally “important” in every possible context.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: Backpropagation Algorithm -->
+  <section id="s-26" data-search-section="Backpropagation Algorithm" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>26. Backpropagation Algorithm</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+class TwoLayerNN:
+    &quot;&quot;&quot;Complete 2-layer Neural Network with Vectorized Backpropagation.&quot;&quot;&quot;
+    def __init__(self, n_x, n_h, n_y, lr=0.1):
+        np.random.seed(1)
+        self.lr = lr
+        self.W1 = np.random.randn(n_h, n_x) * 0.01
+        self.b1 = np.zeros((n_h, 1))
+        self.W2 = np.random.randn(n_y, n_h) * 0.01
+        self.b2 = np.zeros((n_y, 1))
+
+    def sigmoid(self, z):
+        return 1.0 / (1.0 + np.exp(-z))
+
+    def forward(self, X):
+        self.Z1 = np.dot(self.W1, X) + self.b1
+        self.A1 = self.sigmoid(self.Z1)
+        self.Z2 = np.dot(self.W2, self.A1) + self.b2
+        self.A2 = self.sigmoid(self.Z2)
+        return self.A2
+
+    def backward(self, X, Y):
+        m = X.shape[1]
+        dZ2 = self.A2 - Y
+        dW2 = (1.0 / m) * np.dot(dZ2, self.A1.T)
+        db2 = (1.0 / m) * np.sum(dZ2, axis=1, keepdims=True)
+
+        dA1 = np.dot(self.W2.T, dZ2)
+        dZ1 = dA1 * (self.A1 * (1.0 - self.A1))
+        dW1 = (1.0 / m) * np.dot(dZ1, X.T)
+        db1 = (1.0 / m) * np.sum(dZ1, axis=1, keepdims=True)
+
+        self.W1 -= self.lr * dW1
+        self.b1 -= self.lr * db1
+        self.W2 -= self.lr * dW2
+        self.b2 -= self.lr * db2
+
+# Train on XOR
+X = np.array([[0, 0, 1, 1], [0, 1, 0, 1]]) # (2, 4)
+Y = np.array([[0, 1, 1, 0]])               # (1, 4)
+nn = TwoLayerNN(n_x=2, n_h=4, n_y=1, lr=0.5)
+
+for i in range(5000):
+    preds = nn.forward(X)
+    nn.backward(X, Y)
+    if (i+1) % 1000 == 0:
+        loss = -np.mean(Y * np.log(preds + 1e-8) + (1-Y) * np.log(1-preds + 1e-8))
+        print(f&quot;Epoch {i+1}, Loss: {loss:.4f}&quot;)
+
+print(&quot;\nFinal XOR Predictions:&quot;)
+print(nn.forward(X).round(3))</code></pre></div>
+<h2>Inputs</h2>
+<ul>
+<li>training example or batch;</li>
+<li>current network parameters;</li>
+<li>differentiable model components;</li>
+<li>loss function.</li>
+</ul>
+<h2>Forward pass</h2>
+<p>For each layer:</p>
+<div class="formula-math">\[
+z^{(l)}=W^{(l)}a^{(l-1)}+b^{(l)}
+\]</div>
+<div class="formula-math">\[
+a^{(l)}=\sigma^{(l)}(z^{(l)}).
+\]</div>
+<p>Compute loss:</p>
+<div class="formula-math">\[
+J=\ell(a^{(L)},y).
+\]</div>
+<h2>Backward pass</h2>
+<ol>
+<li>Compute output error \(\delta^{(L)}\).</li>
+<li>Move backward through the layers.</li>
+<li>Compute each \(\delta^{(l)}\).</li>
+<li>Compute weight gradients.</li>
+<li>Compute bias gradients.</li>
+</ol>
+<h2>Optimizer step</h2>
+<p>For gradient descent:</p>
+<div class="formula-math">\[
+W^{(l)}
+\leftarrow
+W^{(l)}-[0m
+\eta\frac{\partial J}{\partial W^{(l)}}
+\]</div>
+<div class="formula-math">\[
+\boxed{
+ b^{(l)}
+\leftarrow
+ b^{(l)}-[0m
+\eta\frac{\partial J}{\partial b^{(l)}}
+}
+\]</div>
+<p>Repeat for future batches/epochs.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: Backpropagation vs Numerical Differentiation -->
+  <section id="s-27" data-search-section="Backpropagation vs Numerical Differentiation" class="content-section">
+    <div class="section-header">
+      <h2>27. Backpropagation vs Numerical Differentiation</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>One could approximate a derivative numerically with a small perturbation:</p>
+<div class="formula-math">\[
+\frac{\partial J}{\partial w}
+\approx
+\frac{J(w+\epsilon)-J(w)}{\epsilon}.
+\]</div>
+<p>But doing this separately for huge numbers of parameters is computationally expensive and can suffer from numerical issues.</p>
+<p>Backpropagation uses analytical chain-rule derivatives and shares intermediate computations.</p>
+<h3>Conceptual comparison</h3>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Method</th>
+<th>Main idea</th>
+<th>Large neural nets?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Numerical finite differences</td>
+<td>Perturb parameters and estimate change</td>
+<td>Poor scaling for training</td>
+</tr>
+<tr>
+<td>Backpropagation</td>
+<td>Apply chain rule efficiently through computation graph</td>
+<td>Designed for scalable gradient computation</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: Common Misconceptions -->
+  <section id="s-28" data-search-section="Common Misconceptions" class="content-section">
+    <div class="section-header">
+      <h2>28. Common Misconceptions</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Misconception 1 — “Backpropagation sends the error backward unchanged.”</h2>
+<p>No.</p>
+<p>It sends derivative information transformed by local derivatives and connections.</p>
+<hr />
+<h2>Misconception 2 — “Backpropagation updates the weights.”</h2>
+<p>Backpropagation computes gradients.</p>
+<p>An optimizer performs the update.</p>
+<hr />
+<h2>Misconception 3 — “The gradient of a layer is just the next layer's gradient.”</h2>
+<p>No.</p>
+<p>The backward signal is transformed through the transpose of the next layer's weight matrix and the local activation derivative.</p>
+<hr />
+<h2>Misconception 4 — “The transpose is arbitrary.”</h2>
+<p>It appears from the derivative of the forward matrix-vector multiplication when propagating gradient information backward.</p>
+<hr />
+<h2>Misconception 5 — “Every activation has the same derivative.”</h2>
+<p>No.</p>
+<p>Sigmoid, tanh, ReLU and softmax behave differently.</p>
+<hr />
+<h2>Misconception 6 — “A small gradient always means the parameter is useless.”</h2>
+<p>No.</p>
+<p>The gradient is local and depends on the current input, parameters and objective.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 29: Formula Card — Error Signal -->
+  <section id="s-29" data-search-section="Formula Card — Error Signal" class="content-section">
+    <div class="section-header">
+      <h2>29. Formula Card — Error Signal</h2>
+      <button class="bookmark-btn" data-id="s-29" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <blockquote>
+<h2>BACKPROPAGATION ERROR SIGNAL</h2>
+</blockquote>
+<div class="formula-math">\[
+\gt  \boxed{
+\gt  \delta^{(l)}
+\gt  =
+\gt  \frac{\partial J}{\partial z^{(l)}}
+\gt  }
+\gt  \]</div>
+<blockquote>
+<p>Output layer:</p>
+</blockquote>
+<div class="formula-math">\[
+\gt  \boxed{
+\gt  \delta^{(L)}
+\gt  =
+\gt  \frac{\partial J}{\partial a^{(L)}}
+\gt  \odot
+\gt  \sigma'^{(L)}(z^{(L)})
+\gt  }
+\gt  \]</div>
+<blockquote>
+<p>Hidden layer:</p>
+</blockquote>
+<div class="formula-math">\[
+\gt  \boxed{
+\gt  \delta^{(l)}
+\gt  =
+\gt  (W^{(l+1)})^T\delta^{(l+1)}
+\gt  \odot\sigma'^{(l)}(z^{(l)})
+\gt  }
+\gt  \]</div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 30: Formula Card — Parameter Gradients -->
+  <section id="s-30" data-search-section="Formula Card — Parameter Gradients" class="content-section">
+    <div class="section-header">
+      <h2>30. Formula Card — Parameter Gradients</h2>
+      <button class="bookmark-btn" data-id="s-30" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="formula-math">\[
+\boxed{
+\frac{\partial J}{\partial W^{(l)}}
+=
+\delta^{(l)}(a^{(l-1)})^T
+}
+\]</div>
+<div class="formula-math">\[
+\boxed{
+\frac{\partial J}{\partial b^{(l)}}
+=
+\delta^{(l)}
+}
+\]</div>
+<p>Interpretation:</p>
+<div class="ascii-box"><pre>weight gradient
+= downstream sensitivity × incoming activation
+
+bias gradient
+= downstream sensitivity</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 31: Exam-Friendly Derivation Skeleton -->
+  <section id="s-31" data-search-section="Exam-Friendly Derivation Skeleton" class="content-section">
+    <div class="section-header">
+      <h2>31. Exam-Friendly Derivation Skeleton</h2>
+      <button class="bookmark-btn" data-id="s-31" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>When asked:</p>
+<blockquote>
+<p>“Derive the backpropagation equations.”</p>
+</blockquote>
+<p>Use this order:</p>
+<ol>
+<li>Define the network forward equations.</li>
+<li>Define the loss \(J\).</li>
+<li>Define \(\delta^{(l)}=\partial J/\partial z^{(l)}\).</li>
+<li>Derive the output-layer error by the chain rule.</li>
+<li>Propagate error to a hidden layer.</li>
+<li>Derive \(\partial J/\partial W^{(l)}\).</li>
+<li>Derive \(\partial J/\partial b^{(l)}\).</li>
+<li>State the recursive equations.</li>
+<li>Explain that an optimizer uses these gradients for parameter updates.</li>
+</ol>
+<p>Do not start with a page of algebra without first defining the notation.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 32: Worked Symbolic Derivation — Hidden Layer -->
+  <section id="s-32" data-search-section="Worked Symbolic Derivation — Hidden Layer" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>32. Worked Symbolic Derivation — Hidden Layer</h2>
+      <button class="bookmark-btn" data-id="s-32" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Start with:</p>
+<div class="formula-math">\[
+z^{(l+1)}=W^{(l+1)}a^{(l)}+b^{(l+1)}.
+\]</div>
+<p>And:</p>
+<div class="formula-math">\[
+a^{(l)}=\sigma(z^{(l)}).
+\]</div>
+<p>We want:</p>
+<div class="formula-math">\[
+\frac{\partial J}{\partial z^{(l)}}.
+\]</div>
+<p>First pass through the activation:</p>
+<div class="formula-math">\[
+\frac{\partial J}{\partial z^{(l)}}
+=
+\frac{\partial J}{\partial a^{(l)}}
+\odot
+\sigma'(z^{(l)}).
+\]</div>
+<p>Now ask how \(J\) changes with \(a^{(l)}\).</p>
+<p>Because:</p>
+<div class="formula-math">\[
+z^{(l+1)}=W^{(l+1)}a^{(l)}+b^{(l+1)},
+\]</div>
+<p>we obtain:</p>
+<div class="formula-math">\[
+\frac{\partial J}{\partial a^{(l)}}
+=
+(W^{(l+1)})^T
+\frac{\partial J}{\partial z^{(l+1)}}.
+\]</div>
+<p>Since:</p>
+<div class="formula-math">\[
+\delta^{(l+1)}
+=
+\frac{\partial J}{\partial z^{(l+1)}},
+\]</div>
+<p>we get:</p>
+<div class="formula-math">\[
+\boxed{
+\delta^{(l)}
+=
+(W^{(l+1)})^T\delta^{(l+1)}
+\odot
+\sigma'(z^{(l)})
+}
+\]</div>
+<p>That is the hidden-layer recurrence.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 33: The Full Learning Loop -->
+  <section id="s-33" data-search-section="The Full Learning Loop" class="content-section">
+    <div class="section-header">
+      <h2>33. The Full Learning Loop</h2>
+      <button class="bookmark-btn" data-id="s-33" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>At this point, Unit III neural-network training can be seen as one integrated mechanism:</p>
+<div class="ascii-box"><pre>TRAINING LOOP
+
+Input x
+  ↓
+Forward propagation
+  ↓
+Layer computations
+  ↓
+Prediction
+  ↓
+Loss J
+  ↓
+Backpropagation
+  ↓
+Gradients dJ/dW, dJ/db
+  ↓
+Gradient descent / optimizer
+  ↓
+New W, b
+  ↓
+Next batch
+  ↓
+Repeat</pre></div>
+<h3>The four verbs</h3>
+<blockquote>
+<p><strong>Compute → Compare → Differentiate → Update</strong></p>
+</blockquote>
+<p>This is one of the most important mental models in the entire deep-learning section.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 34: Relation to the Learned-Representation View -->
+  <section id="s-34" data-search-section="Relation to the Learned-Representation View" class="content-section">
+    <div class="section-header">
+      <h2>34. Relation to the Learned-Representation View</h2>
+      <button class="bookmark-btn" data-id="s-34" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your supplied <code>Lecture10 copy.pdf</code> describes a neural network as learning a feature representation:</p>
+<div class="formula-math">\[
+\phi_\theta(x)
+\]</div>
+<p>followed by a prediction based on that learned representation.</p>
+<p>Backpropagation is the mechanism that provides the derivative information needed to change \(\theta\) so that the learned representation becomes more useful for the training objective.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>Initial representation
+        ↓
+Prediction quality
+        ↓
+Loss
+        ↓
+Gradient information
+        ↓
+Change θ
+        ↓
+New representation
+        ↓
+Repeat</pre></div>
+<p>This connects regularized least squares, representation learning and neural-network training into one continuous story.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 35: Backpropagation and Overfitting -->
+  <section id="s-35" data-search-section="Backpropagation and Overfitting" class="content-section">
+    <div class="section-header">
+      <h2>35. Backpropagation and Overfitting</h2>
+      <button class="bookmark-btn" data-id="s-35" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Backpropagation makes optimization possible, but optimization alone does not guarantee good generalization.</p>
+<p>A network can successfully reduce training loss and still overfit.</p>
+<p>Therefore the broader learning system includes:</p>
+<div class="ascii-box"><pre>Optimization
++ architecture choice
++ data
++ regularization
++ validation
++ training duration
+        ↓
+Generalization behaviour</pre></div>
+<p>Backpropagation is a training mechanism, not a guarantee against overfitting.</p>
+<p>This reconnects to C17, C26, C27 and C29.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 36: Active Recall — Close the Book -->
+  <section id="s-36" data-search-section="Active Recall — Close the Book" class="content-section">
+    <div class="section-header">
+      <h2>36. Active Recall — Close the Book</h2>
+      <button class="bookmark-btn" data-id="s-36" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <ol>
+<li>What problem does backpropagation solve?</li>
+<li>Distinguish forward propagation, backpropagation and optimization.</li>
+<li>State the chain rule.</li>
+<li>Why is the computational graph useful?</li>
+<li>Define \(\delta^{(l)}\).</li>
+<li>Write the output-layer error equation.</li>
+<li>Write the hidden-layer recurrence.</li>
+<li>Why does \((W^{(l+1)})^T\) appear?</li>
+<li>Derive the weight-gradient formula.</li>
+<li>Derive the bias-gradient formula.</li>
+<li>What does \(\odot\) mean?</li>
+<li>Why must the gradient matrix have the same shape as the weight matrix?</li>
+<li>State the sigmoid + BCE output-gradient simplification.</li>
+<li>State the softmax + cross-entropy output-gradient simplification.</li>
+<li>Why can repeated derivatives produce vanishing gradients?</li>
+<li>Why can gradients explode?</li>
+<li>Why is numerical differentiation impractical for large networks?</li>
+<li>How does backpropagation reuse intermediate calculations?</li>
+<li>Does backpropagation update parameters itself?</li>
+<li>How does backpropagation connect to learned representation?</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 37: Practice Set -->
+  <section id="s-37" data-search-section="Practice Set" class="content-section">
+    <div class="section-header">
+      <h2>37. Practice Set</h2>
+      <button class="bookmark-btn" data-id="s-37" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>A. Chain Rule</h2>
+<h3>Q1</h3>
+<p>Given:</p>
+<div class="formula-math">\[
+u=3x,
+\qquad
+J=u^2,
+\]</div>
+<p>derive \(dJ/dx\) using the chain rule.</p>
+<h3>Q2</h3>
+<p>Given:</p>
+<div class="formula-math">\[
+z=wx+b,
+\qquad
+\hat y=\sigma(z),
+\qquad
+J=\frac12(\hat y-y)^2,
+\]</div>
+<p>write the chain-rule expression for \(\partial J/\partial w\).</p>
+<hr />
+<h2>B. Backpropagation formulas</h2>
+<h3>Q3</h3>
+<p>Write:</p>
+<ol>
+<li>output-layer error;</li>
+<li>hidden-layer error;</li>
+<li>weight gradient;</li>
+<li>bias gradient.</li>
+</ol>
+<h3>Q4</h3>
+<p>For a layer where:</p>
+<div class="formula-math">\[
+\delta=(2,-1,3)^T,
+\qquad
+ a_{prev}=(4,5)^T,
+\]</div>
+<p>compute:</p>
+<div class="formula-math">\[
+\frac{\partial J}{\partial W}
+=
+\delta a_{prev}^T.
+\]</div>
+<hr />
+<h2>C. Dimension reasoning</h2>
+<h3>Q5</h3>
+<p>If:</p>
+<div class="formula-math">\[
+W\in\mathbb R^{4\times7},
+\]</div>
+<p>what are the dimensions of:</p>
+<ul>
+<li>input activation;</li>
+<li>output pre-activation;</li>
+<li>bias;</li>
+<li>weight gradient;</li>
+<li>bias gradient?</li>
+</ul>
+<hr />
+<h2>D. Conceptual</h2>
+<h3>Q6</h3>
+<p>Why does backpropagation move from the output toward the input?</p>
+<h3>Q7</h3>
+<p>Why is the transpose of the next-layer weight matrix used in the hidden-layer recurrence?</p>
+<h3>Q8</h3>
+<p>Explain vanishing gradients using repeated multiplication.</p>
+<hr />
+<h2>E. Exam-Style</h2>
+<h3>Q9</h3>
+<p>Explain backpropagation in a two-layer network with equations.</p>
+<h3>Q10</h3>
+<p>Differentiate between backpropagation and gradient descent with a clear diagram.</p>
+<h3>Q11</h3>
+<p>Explain how sigmoid + binary cross-entropy simplifies the output gradient.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 38: University Exam Lens -->
+  <section id="s-38" data-search-section="University Exam Lens" class="content-section">
+    <div class="section-header">
+      <h2>38. University Exam Lens</h2>
+      <button class="bookmark-btn" data-id="s-38" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>2-Mark Questions</h2>
+<ul>
+<li>Define backpropagation.</li>
+<li>State the chain rule.</li>
+<li>Define the error signal \(\delta\).</li>
+<li>What is the role of the transpose in backpropagation?</li>
+<li>What is vanishing gradient?</li>
+<li>Differentiate forward propagation and backpropagation.</li>
+</ul>
+<h2>5-Mark Question</h2>
+<blockquote>
+<p>Explain the backpropagation algorithm in a neural network.</p>
+</blockquote>
+<p>Suggested structure:</p>
+<ol>
+<li>Define backpropagation.</li>
+<li>State forward equations.</li>
+<li>Compute loss.</li>
+<li>Start from output layer.</li>
+<li>Apply chain rule backward.</li>
+<li>Compute weight/bias gradients.</li>
+<li>Mention optimizer update.</li>
+</ol>
+<h2>10-Mark Question</h2>
+<blockquote>
+<p>Derive the backpropagation equations for a multilayer perceptron.</p>
+</blockquote>
+<p>Recommended structure:</p>
+<ol>
+<li>Define notation.</li>
+<li>Write forward equations.</li>
+<li>Define the loss.</li>
+<li>Define \(\delta^{(L)}\).</li>
+<li>Derive hidden-layer recursion.</li>
+<li>Derive weight gradients.</li>
+<li>Derive bias gradients.</li>
+<li>Explain matrix dimensions.</li>
+<li>Explain gradient-descent update.</li>
+<li>Mention vanishing/exploding gradients and training implications.</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 39: High-Value Comparison — Forward vs Backward -->
+  <section id="s-39" data-search-section="High-Value Comparison — Forward vs Backward" class="content-section">
+    <div class="section-header">
+      <h2>39. High-Value Comparison — Forward vs Backward</h2>
+      <button class="bookmark-btn" data-id="s-39" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Feature</th>
+<th>Forward Pass</th>
+<th>Backward Pass</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Direction</td>
+<td>Input → output</td>
+<td>Output → input/lower layers</td>
+</tr>
+<tr>
+<td>Main purpose</td>
+<td>Compute activations and prediction</td>
+<td>Compute derivative information</td>
+</tr>
+<tr>
+<td>Uses</td>
+<td>Weights, biases, activations</td>
+<td>Loss derivatives and local derivatives</td>
+</tr>
+<tr>
+<td>Ends with</td>
+<td>Prediction + loss</td>
+<td>Gradients</td>
+</tr>
+<tr>
+<td>Enables</td>
+<td>Evaluation</td>
+<td>Optimization</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Memory line</h3>
+<blockquote>
+<p><strong>Forward tells us what the network predicts; backward tells us how the parameters affected the error.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 40: High-Value Comparison — Backprop vs Gradient Descent -->
+  <section id="s-40" data-search-section="High-Value Comparison — Backprop vs Gradient Descent" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>40. High-Value Comparison — Backprop vs Gradient Descent</h2>
+      <button class="bookmark-btn" data-id="s-40" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Feature</th>
+<th>Backpropagation</th>
+<th>Gradient Descent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Problem solved</td>
+<td>Efficient gradient computation</td>
+<td>Parameter optimization</td>
+</tr>
+<tr>
+<td>Mathematical core</td>
+<td>Chain rule</td>
+<td>Gradient-based update</td>
+</tr>
+<tr>
+<td>Typical output</td>
+<td>\(\nabla_WJ,\nabla_bJ\)</td>
+<td>New \(W,b\)</td>
+</tr>
+<tr>
+<td>Main direction</td>
+<td>Backward derivative flow</td>
+<td>Opposite gradient</td>
+</tr>
+<tr>
+<td>Uses loss?</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Is it an update rule?</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 41: Resource Shelf -->
+  <section id="s-41" data-search-section="Resource Shelf" class="content-section">
+    <div class="section-header">
+      <h2>41. Resource Shelf</h2>
+      <button class="bookmark-btn" data-id="s-41" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Core / supplied</h2>
+<h3><code>prac_7_neural_network.ipynb</code></h3>
+<p>Use as the practical companion for the neural-network training concepts identified in the resource guide.</p>
+<h3><code>CS6910 Lecture 2</code></h3>
+<p>Use for the Unit III foundations: artificial neurons, threshold logic, perceptron, MLP and representation power.</p>
+<h2>Gap-fill resources</h2>
+<p>The supplied resource guide explicitly marks full backpropagation as an important gap-fill topic and recommends focused visual explanations from:</p>
+<ul>
+<li><strong>3Blue1Brown — neural-network/backpropagation visual explanations</strong></li>
+<li><strong>3Blue1Brown — backpropagation calculus</strong></li>
+<li><strong>StatQuest — backpropagation main ideas</strong></li>
+<li><strong>NPTEL / structured ML and deep-learning resources</strong></li>
+</ul>
+<p>The best sequence is:</p>
+<div class="ascii-box"><pre>Read C35
+   ↓
+Draw a 2-layer network
+   ↓
+Write forward equations
+   ↓
+Write δ(L)
+   ↓
+Propagate one layer backward
+   ↓
+Compute dW and db
+   ↓
+Then watch a visual explanation</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 42: Course Lens and Scope Boundary -->
+  <section id="s-42" data-search-section="Course Lens and Scope Boundary" class="content-section">
+    <div class="section-header">
+      <h2>42. Course Lens and Scope Boundary</h2>
+      <button class="bookmark-btn" data-id="s-42" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied resource map identifies backpropagation as a <strong>core Unit III syllabus topic</strong>, but also notes that the user's supplied materials do not contain a complete mathematical backpropagation treatment.</p>
+<p>Therefore this chapter deliberately separates:</p>
+<h3>Course-grounded structure</h3>
+<ul>
+<li>neural-network foundations;</li>
+<li>MLPs;</li>
+<li>activations;</li>
+<li>losses;</li>
+<li>gradient descent;</li>
+<li>backpropagation as the next training mechanism.</li>
+</ul>
+<h3>Standard mathematical expansion</h3>
+<ul>
+<li>computational graphs;</li>
+<li>full chain-rule derivation;</li>
+<li>vectorized \(\delta\)-equations;</li>
+<li>sigmoid/BCE simplification;</li>
+<li>softmax/cross-entropy simplification;</li>
+<li>matrix dimensions;</li>
+<li>vanishing/exploding-gradient analysis.</li>
+</ul>
+<p>These expansions are included so the Main Book functions as a self-learning textbook rather than a transcript of a single supplied lecture.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 43: Math Companion Links -->
+  <section id="s-43" data-search-section="Math Companion Links" class="content-section">
+    <div class="section-header">
+      <h2>43. Math Companion Links</h2>
+      <button class="bookmark-btn" data-id="s-43" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <ul>
+<li><code>MATH-CALC-03</code> — Partial derivatives</li>
+<li><code>MATH-CALC-05</code> — Gradients</li>
+<li><code>MATH-CALC-07</code> — Chain rule</li>
+<li><code>MATH-LA-04</code> — Vectors</li>
+<li><code>MATH-LA-12</code> — Matrix multiplication</li>
+<li><code>MATH-OPT-03</code> — Gradient descent</li>
+<li><code>MATH-DL-01</code> — Computational graphs</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 44: Chapter Exit Test -->
+  <section id="s-44" data-search-section="Chapter Exit Test" class="content-section">
+    <div class="section-header">
+      <h2>44. Chapter Exit Test</h2>
+      <button class="bookmark-btn" data-id="s-44" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You are ready for the next chapter when you can:</p>
+<ul>
+<li>[ ] explain why backpropagation is needed;</li>
+<li>[ ] distinguish forward propagation, backpropagation and optimization;</li>
+<li>[ ] apply the chain rule to a neural neuron;</li>
+<li>[ ] define \(\delta^{(l)}\);</li>
+<li>[ ] state the four core backpropagation equations;</li>
+<li>[ ] explain why the transpose appears;</li>
+<li>[ ] derive a weight gradient;</li>
+<li>[ ] derive a bias gradient;</li>
+<li>[ ] check matrix dimensions;</li>
+<li>[ ] explain sigmoid + BCE output gradient;</li>
+<li>[ ] explain softmax + cross-entropy output gradient;</li>
+<li>[ ] describe vanishing and exploding gradients;</li>
+<li>[ ] explain why backpropagation is more efficient than naive finite differences;</li>
+<li>[ ] connect gradients to gradient descent updates.</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 45: Connection to the Next Topic -->
+  <section id="s-45" data-search-section="Connection to the Next Topic" class="content-section">
+    <div class="section-header">
+      <h2>45. Connection to the Next Topic</h2>
+      <button class="bookmark-btn" data-id="s-45" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>We now understand how a general multilayer network can be trained mathematically.</p>
+<p>The next question is architectural:</p>
+<blockquote>
+<p><strong>What changes when the input is an image, where nearby pixels have local structure and repeatedly applying the same detector can be useful?</strong></p>
+</blockquote>
+<p>That leads to:</p>
+<p><strong><code>MAIN-U3-C36 — Convolutional Neural Networks (CNNs)</code>.</strong></p>
+<hr />
+<h1>Status</h1>
+<p><strong><code>ML-U3-C35</code> — COMPLETE</strong></p>
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="ch34-gradient-descent-optimization.html" class="nav-btn">← Ch 34 — Gradient Descent & Optimization</a>
+    <a href="ch36-convolutional-neural-networks.html" class="nav-btn primary">Next: Ch 36 — Convolutional Neural Networks →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch35-backpropagation.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 35</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

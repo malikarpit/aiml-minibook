@@ -1,0 +1,2130 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 46: AI Ethics, Bias, Fairness &amp; Accountability — AI & Machine Learning MiniBook. Algorithmic Bias, Demographic Parity, Equalized Odds, Disparate Impact, Explainable AI (XAI), and Regulatory Governance">
+<title>Ch 46 — AI Ethics, Bias, Fairness &amp; Accountability | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-xx">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 46 — AI Ethics, Bias, Fairness &amp; Accountability</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 46 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why This Chapter Exists <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Scope and Source Boundary <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. One-Minute Intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Real-World Analogy — The Exam Invigilator <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. The Core Ethical Pipeline <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. What Is AI Ethics? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Core Ethical Dimensions <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Bias — What Does It Mean Here? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Where Can Bias Enter? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Fairness Is Not One Single Equation <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Confusion Matrix as an Ethics Tool <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Worked Example — Overall Accuracy Hides Group Differences <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Guided Example — Find the Missing Rate <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Fairness Does Not Mean “Treat Everyone Exactly the Same” <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Accountability — Who Owns the Decision? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Transparency vs Explainability <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Privacy <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Safety and Robustness <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Human-in-the-Loop Design </a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. A Technical Way to Think About Ethical Risk <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Dataset Documentation Mindset </a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Model Card Mindset </a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Bias Detection Workflow </a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Possible Mitigation Families </a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Why Fairness Can Create Technical Trade-offs <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Generation Models Add Another Risk Layer </a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Case Study Preview — High-Stakes Classification </a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Common Mistakes </a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Exam Lens </a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Active Recall <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Practice Set </a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. One-Screen Summary </a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Formula Sheet </a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Math You Need Now </a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Connection to Earlier Chapters </a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Chapter Exit Test </a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Resource Shelf </a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Source &amp; Boundary Note </a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Connection Forward </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link active"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit IV</span><span>›</span><span>Part XX — AI Ethics, Fairness & Governance</span><span>›</span><span style="color:var(--em-text)">Chapter 46</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 46 · Unit IV · Part XX</div>
+    <div class="chapter-part-banner part-xx">
+      <span class="part-banner-badge">Unit IV · Part XX</span>
+      <span>AI Ethics, Fairness & Governance</span>
+    </div>
+    <h1 class="chapter-title">AI Ethics, Bias, Fairness &amp; Accountability</h1>
+    <div class="concept-id-tag">[CONCEPT-ETH-046]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: High Yield (10-mark guarantee)</span>
+      <span class="chapter-meta-item">📖 ~50 min read</span>
+      <span class="chapter-meta-item">🎯 39 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>AI Ethics, Bias & Fairness:</strong> Sources of bias (historical, sampling, measurement), Demographic Parity \(P(\hat{Y}=1|A=0) = P(\hat{Y}=1|A=1)\), Equal Opportunity / Equalized Odds, Disparate Impact Four-Fifths rule, Accountability and transparency, Explainable AI (LIME, SHAP), and Regulatory compliance (EU AI Act risk tiers).</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why This Chapter Exists</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Scope and Source Boundary</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">One-Minute Intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Real-World Analogy — The Exam Invigilator</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">The Core Ethical Pipeline</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">What Is AI Ethics?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Core Ethical Dimensions</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Bias — What Does It Mean Here?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Where Can Bias Enter?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Fairness Is Not One Single Equation</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Confusion Matrix as an Ethics Tool</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Worked Example — Overall Accuracy Hides Group Differences</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Guided Example — Find the Missing Rate</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Fairness Does Not Mean “Treat Everyone Exactly the Same”</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Accountability — Who Owns the Decision?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Transparency vs Explainability</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Privacy</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Safety and Robustness</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Human-in-the-Loop Design</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">A Technical Way to Think About Ethical Risk</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Dataset Documentation Mindset</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Model Card Mindset</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Bias Detection Workflow</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Possible Mitigation Families</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Why Fairness Can Create Technical Trade-offs</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Generation Models Add Another Risk Layer</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Case Study Preview — High-Stakes Classification</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Common Mistakes</span></a></li>
+      <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Exam Lens</span></a></li>
+      <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Active Recall</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Practice Set</span></a></li>
+      <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">One-Screen Summary</span></a></li>
+      <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Formula Sheet</span></a></li>
+      <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Math You Need Now</span></a></li>
+      <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Connection to Earlier Chapters</span></a></li>
+      <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Chapter Exit Test</span></a></li>
+      <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Resource Shelf</span></a></li>
+      <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Source &amp; Boundary Note</span></a></li>
+      <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Connection Forward</span></a></li>
+    </ul>
+  </div>
+
+  
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 1: Why This Chapter Exists -->
+  <section id="s-01" data-search-section="Why This Chapter Exists" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>1. Why This Chapter Exists</h2>
+      <button class="bookmark-btn" data-id="s-01" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Earlier chapters taught us how to make a model produce an answer.</p>
+<p>That is only one part of building an AI system.</p>
+<p>A model can be mathematically correct according to its training objective and still create serious problems when it is used on real people.</p>
+<p>Examples:</p>
+<ul>
+<li>a classifier may make more false negatives for one population than another;</li>
+<li>a hiring model may learn patterns produced by historical human decisions rather than job ability;</li>
+<li>a medical model may work well in the hospital where it was trained but perform poorly in another hospital;</li>
+<li>a generative model may produce convincing but false information;</li>
+<li>an autonomous system may have to choose between imperfect alternatives under uncertainty;</li>
+<li>a system may produce a decision without making it clear how the decision was reached or who is responsible for it.</li>
+</ul>
+<p>So Unit IV adds another question:</p>
+<blockquote>
+<p><strong>Not only “Can the model do it?” but also “How should the system be designed, evaluated, deployed and governed?”</strong></p>
+</blockquote>
+<p>This chapter does not turn ethics into a vague list of slogans. It connects ethical concerns to the technical pipeline you already know.</p>
+<div class="ascii-box"><pre>DATA
+  ↓
+REPRESENTATION
+  ↓
+MODEL
+  ↓
+OBJECTIVE / LOSS
+  ↓
+EVALUATION
+  ↓
+DEPLOYMENT
+  ↓
+REAL-WORLD EFFECTS
+  ↓
+FEEDBACK INTO FUTURE DATA</pre></div>
+<p>The important insight is that ethical properties can be affected at <strong>every stage</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 2: Scope and Source Boundary -->
+  <section id="s-02" data-search-section="Scope and Source Boundary" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. Scope and Source Boundary</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>[COURSE SCOPE]</h3>
+<p>The supplied master resource guide identifies Unit IV as containing <strong>bias, fairness and accountability</strong> plus applications in healthcare, autonomous vehicles and financial systems. It also identifies the ethics section as a syllabus-backed topic. filecitefile_0000000086b882089e85dbe6281521e6</p>
+<h3>[GAP-FILL]</h3>
+<p>The provided lecture PDFs are strong for Units I–III foundations but do not contain a dedicated full ethics lecture. The master guide therefore marks most Unit IV material as material that needs external gap-filling. filecitefile_0000000086b882089e85dbe6281521e6</p>
+<h3>[UNIVERSAL EXPANSION]</h3>
+<p>The frameworks, examples, equations and case analyses in this chapter are a general AI/ML teaching synthesis designed to make the syllabus topic understandable. They are <strong>not presented as University of Delhi-specific definitions unless explicitly labelled as such</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: One-Minute Intuition -->
+  <section id="s-03" data-search-section="One-Minute Intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>3. One-Minute Intuition</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine you build a machine learning system that predicts whether a student is likely to struggle in a course.</p>
+<p>The model gets 90% accuracy.</p>
+<p>Should we immediately deploy it?</p>
+<p>No. We still need to ask:</p>
+<ul>
+<li>Who supplied the training data?</li>
+<li>Was the data representative?</li>
+<li>What does “struggle” actually mean?</li>
+<li>Is the label itself biased?</li>
+<li>Are some groups systematically receiving more false alarms?</li>
+<li>Can a student challenge the decision?</li>
+<li>Who is responsible if the model is wrong?</li>
+<li>What happens when the environment changes?</li>
+</ul>
+<p>So:</p>
+<div class="ascii-box"><pre>Good predictive performance
+        ≠
+Automatically good AI system</pre></div>
+<p>The model is a component.</p>
+<p>The <strong>socio-technical system</strong> is the thing that affects people.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: Real-World Analogy — The Exam Invigilator -->
+  <section id="s-04" data-search-section="Real-World Analogy — The Exam Invigilator" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>4. Real-World Analogy — The Exam Invigilator</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine an invigilator deciding who needs extra checking during an exam.</p>
+<p>The invigilator uses a rule based on observations.</p>
+<p>Suppose the rule accidentally checks students from one group much more often than others.</p>
+<p>Even if the invigilator catches some real problems, the system may still create an unfair burden if the rule is systematically different across groups.</p>
+<h3>Mapping</h3>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Exam analogy</th>
+<th>AI/ML system</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Students</td>
+<td>Individuals / data subjects</td>
+</tr>
+<tr>
+<td>Observed clues</td>
+<td>Features</td>
+</tr>
+<tr>
+<td>Invigilator rule</td>
+<td>Model</td>
+</tr>
+<tr>
+<td>“Suspicious” decision</td>
+<td>Prediction/classification</td>
+</tr>
+<tr>
+<td>Actual violation</td>
+<td>Ground truth</td>
+</tr>
+<tr>
+<td>Wrong accusation</td>
+<td>False positive</td>
+</tr>
+<tr>
+<td>Missed violation</td>
+<td>False negative</td>
+</tr>
+<tr>
+<td>Exam policy</td>
+<td>Decision policy</td>
+</tr>
+<tr>
+<td>Appeal process</td>
+<td>Human review / recourse</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Where the analogy breaks</h3>
+<p>An ML system can operate at enormous scale, can use thousands of features, can adapt over time, and can interact with other systems. Human decision-making and algorithmic decision-making are therefore not identical.</p>
+<p>Return to the technical idea:</p>
+<blockquote>
+<p><strong>Ethics concerns the consequences of the complete data-model-decision process, not merely the mathematical model.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: The Core Ethical Pipeline -->
+  <section id="s-05" data-search-section="The Core Ethical Pipeline" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>5. The Core Ethical Pipeline</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="diagram-box"><pre class="mermaid">
+graph TD
+    SOC["Historical & Societal Inequity"] --> DATA["Biased Training Dataset<br/>(Underrepresentation / Historical Prejudices)"]
+    DATA --> MODEL["Machine Learning Model<br/>(Optimizing Average Loss Function)"]
+    MODEL --> PRED["Disparate Algorithmic Decisions<br/>(Loan Approvals / Hiring / Sentencing)"]
+    PRED --> IMPACT["Disparate Societal Impact"]
+    IMPACT -.->|"Feedback Loop Amplification"| SOC
+</pre></div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher explanation — Hinglish</div>
+
+AI model koi devta nahi hai; woh wahi seekhta hai jo data usse sikhata hai.
+Agar training data mein purane zamane ka historical bias ya underrepresentation hai, toh model use ek "universal rule" maan leta hai.
+Jab yeh model real-world mein decisions leta hai (jaise loan reject karna ya job resume reject karna), toh yeh usi bhedbhav ko aur mazboot bana deta hai.
+Ethics aur Fairness ka lakshya ye sunishchit karna hai ki technology logon ke adhikaaron ko surakshit rakhe aur insaaf kare!
+
+
+
+
+<div class="diagram-box"><pre class="mermaid">
+graph TD
+    SOC["Historical & Societal Inequity"] --> DATA["Biased Training Dataset<br/>(Underrepresentation / Historical Prejudices)"]
+    DATA --> MODEL["Machine Learning Model<br/>(Optimizing Average Loss Function)"]
+    MODEL --> PRED["Disparate Algorithmic Decisions<br/>(Loan Approvals / Hiring / Sentencing)"]
+    PRED --> IMPACT["Disparate Societal Impact"]
+    IMPACT -.->|"Feedback Loop Amplification"| SOC
+</pre></div>
+
+
+
+</div>
+
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher explanation — Hinglish</div>
+
+AI model koi devta nahi hai; woh wahi seekhta hai jo data usse sikhata hai.
+Agar training data mein purane zamane ka historical bias ya underrepresentation hai, toh model use ek "universal rule" maan leta hai.
+Jab yeh model real-world mein decisions leta hai (jaise loan reject karna ya job resume reject karna), toh yeh usi bhedbhav ko aur mazboot bana deta hai.
+Ethics aur Fairness ka lakshya ye sunishchit karna hai ki technology logon ke adhikaaron ko surakshit rakhe aur insaaf kare!
+
+
+
+
+<div class="ascii-box"><pre>┌─────────────┐
+          │    DATA     │
+          └──────┬──────┘
+                 ↓
+       representation / labels
+                 ↓
+          ┌─────────────┐
+          │    MODEL    │
+          └──────┬──────┘
+                 ↓
+         objective + threshold
+                 ↓
+          ┌─────────────┐
+          │  DECISION   │
+          └──────┬──────┘
+                 ↓
+       human + organizational
+            consequences
+                 ↓
+         feedback / new data
+                 └──────────────► back to DATA</pre></div>
+
+
+
+## How to read it
+
+Start at **DATA**.
+
+Ask what was collected, from whom, when, under what conditions and with what labels.
+
+Move to **MODEL**.
+
+Ask what patterns it learns and what objective it optimizes.
+
+Move to **DECISION**.
+
+Ask how a probability or score becomes an action.
+
+Then move to **CONSEQUENCES**.
+
+Ask who benefits, who bears risk, who can challenge the outcome and what happens after deployment.
+
+The feedback arrow matters because deployed systems can change the future data distribution.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: What Is AI Ethics? -->
+  <section id="s-06" data-search-section="What Is AI Ethics?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>6. What Is AI Ethics?</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>[FORMAL DEFINITION — UNIVERSAL]</h3>
+<blockquote>
+<p><strong>AI ethics is the systematic consideration of values, risks, responsibilities and societal consequences in the design, development, deployment and use of AI systems.</strong></p>
+</blockquote>
+<p>The word <strong>systematic</strong> matters.</p>
+<p>Ethics is not simply:</p>
+<blockquote>
+<p>“Do not use AI for bad things.”</p>
+</blockquote>
+<p>A technical design question such as threshold choice can create ethical consequences.</p>
+<p>For example:</p>
+<div class="ascii-box"><pre>same classifier
+   ↓
+threshold = 0.30
+   vs
+threshold = 0.80</pre></div>
+<p>The underlying score model may be identical, while the real-world decisions differ considerably.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: Core Ethical Dimensions -->
+  <section id="s-07" data-search-section="Core Ethical Dimensions" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>7. Core Ethical Dimensions</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The syllabus asks you to know <strong>bias, fairness and accountability</strong>. For a complete understanding, we will connect them to related dimensions.</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Central question</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bias</td>
+<td>Could the system systematically produce distorted outcomes?</td>
+</tr>
+<tr>
+<td>Fairness</td>
+<td>Are relevant groups treated according to an explicitly chosen fairness criterion?</td>
+</tr>
+<tr>
+<td>Accountability</td>
+<td>Who is responsible for the system and its consequences?</td>
+</tr>
+<tr>
+<td>Transparency</td>
+<td>Can important parts of the system and decision process be explained or inspected?</td>
+</tr>
+<tr>
+<td>Privacy</td>
+<td>Is personal information collected, used and exposed appropriately?</td>
+</tr>
+<tr>
+<td>Safety</td>
+<td>Can the system cause unacceptable harm under expected or unexpected conditions?</td>
+</tr>
+<tr>
+<td>Robustness</td>
+<td>Does performance remain acceptable when inputs or environments change?</td>
+</tr>
+<tr>
+<td>Human oversight</td>
+<td>Where should people review, override or supervise automated decisions?</td>
+</tr>
+</tbody>
+</table></div>
+<p>These dimensions can interact.</p>
+<p>Improving one does not automatically solve all the others.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: Bias — What Does It Mean Here? -->
+  <section id="s-08" data-search-section="Bias — What Does It Mean Here?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>8. Bias — What Does It Mean Here?</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The word <strong>bias</strong> is dangerous because it is used in two different contexts.</p>
+<h3>Statistical/modeling bias</h3>
+<p>From Unit II:</p>
+<blockquote>
+<p>systematic error caused by a model class that is too restrictive relative to the target relationship.</p>
+</blockquote>
+<h3>Socio-technical bias</h3>
+<p>In an AI ethics context:</p>
+<blockquote>
+<p>a systematic pattern in data, modelling, evaluation or deployment that can contribute to unequal, distorted or inappropriate outcomes.</p>
+</blockquote>
+<p>These meanings are related only by the broad idea of systematic tendency.</p>
+<p>Do not automatically equate them.</p>
+<div class="ascii-box"><pre>STATISTICAL BIAS
+model approximation
+        ≠
+ETHICAL / SOCIO-TECHNICAL BIAS
+systematic disadvantage or distortion</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: Where Can Bias Enter? -->
+  <section id="s-09" data-search-section="Where Can Bias Enter?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>9. Where Can Bias Enter?</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>One of the most important mental models is to treat bias as a <strong>pipeline property</strong>.</p>
+<div class="ascii-box"><pre>DATA GENERATION
+              ↓
+        sampling bias
+              ↓
+        measurement bias
+              ↓
+        label bias
+              ↓
+      feature / representation
+              ↓
+        model / objective
+              ↓
+      threshold / policy
+              ↓
+       deployment context
+              ↓
+          outcomes</pre></div>
+<h2>9.1 Sampling / representation problems</h2>
+<p>Suppose a dataset contains many observations from one population and relatively few from another.</p>
+<p>A model can then learn excellent patterns for the large group and weak patterns for the smaller group.</p>
+<p>The issue may exist before any algorithm is trained.</p>
+<h2>9.2 Measurement problems</h2>
+<p>A feature may not measure what we think it measures.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>“past spending”
+      ↓
+may look like “financial reliability”
+      ↓
+but may partly reflect unequal access,
+wealth, opportunity or previous treatment</pre></div>
+<p>The mathematical value can be accurate while the interpretation is poor.</p>
+<h2>9.3 Label bias</h2>
+<p>Suppose historical human decisions are used as labels.</p>
+<p>Then:</p>
+<div class="ascii-box"><pre>historical decision
+       ↓
+training label
+       ↓
+learned pattern
+       ↓
+future decision</pre></div>
+<p>The model may reproduce properties of the historical decision process rather than an objective target.</p>
+<h2>9.4 Deployment bias</h2>
+<p>A system can be used differently from how it was evaluated.</p>
+<p>For example, a prediction intended as a support tool may gradually become treated as an automatic final decision.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: Fairness Is Not One Single Equation -->
+  <section id="s-10" data-search-section="Fairness Is Not One Single Equation" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>10. Fairness Is Not One Single Equation</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This is a crucial concept.</p>
+<p>The word <strong>fairness</strong> does not identify one universally agreed mathematical criterion.</p>
+<p>Different applications may choose different goals.</p>
+<p>For a binary classifier, suppose:</p>
+<ul>
+<li>\(A\) = group attribute;</li>
+<li>\(Y\) = actual outcome;</li>
+<li>\(\hat Y\) = predicted outcome.</li>
+</ul>
+<p>Potential fairness questions include:</p>
+<h3>Question A — Are positive prediction rates similar?</h3>
+<p>One family of criteria examines:</p>
+<div class="formula-math">\[
+P(\hat Y=1\mid A=a)
+\]</div>
+<p>across groups.</p>
+<p>This is related to <strong>demographic parity-type</strong> reasoning.</p>
+<h3>Question B — Are error rates similar?</h3>
+<p>For example, compare:</p>
+<div class="formula-math">\[
+P(\hat Y=1\mid Y=0,A=a)
+\]</div>
+<p>which is the false-positive rate conditional on the actual negative class.</p>
+<p>Similarly, compare the false-negative rate:</p>
+<div class="formula-math">\[
+P(\hat Y=0\mid Y=1,A=a).
+\]</div>
+<p>This motivates <strong>equalized-error-rate / equalized-odds-type</strong> reasoning.</p>
+<h3>Question C — Are predicted probabilities similarly calibrated?</h3>
+<p>A score can be examined for whether a prediction level corresponds to similar observed frequencies across groups.</p>
+<h3>Key lesson</h3>
+<p>Different fairness criteria can conflict.</p>
+<p>So an exam answer should never say:</p>
+<blockquote>
+<p>“Fairness means one exact formula.”</p>
+</blockquote>
+<p>Instead write:</p>
+<blockquote>
+<p><strong>Fairness is criterion-dependent; different mathematical definitions capture different notions of equal treatment or equal error behaviour.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: Confusion Matrix as an Ethics Tool -->
+  <section id="s-11" data-search-section="Confusion Matrix as an Ethics Tool" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>11. Confusion Matrix as an Ethics Tool</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+def compute_fairness_metrics(y_true, y_pred, sensitive_attr):
+    &quot;&quot;&quot;
+    Computes Demographic Parity and Equal Opportunity (TPR) across groups:
+    Demographic Parity: P(Y_hat=1 | A=0) == P(Y_hat=1 | A=1)
+    Equal Opportunity:  P(Y_hat=1 | Y=1, A=0) == P(Y_hat=1 | Y=1, A=1)
+    &quot;&quot;&quot;
+    g0 = (sensitive_attr == 0)
+    g1 = (sensitive_attr == 1)
+    
+    # Selection Rates (Demographic Parity)
+    sel_g0 = np.mean(y_pred[g0])
+    sel_g1 = np.mean(y_pred[g1])
+    dp_ratio = min(sel_g0, sel_g1) / max(sel_g0, sel_g1)
+    
+    # True Positive Rates (Equal Opportunity)
+    tpr_g0 = np.sum((y_pred[g0] == 1) &amp; (y_true[g0] == 1)) / max(np.sum(y_true[g0] == 1), 1)
+    tpr_g1 = np.sum((y_pred[g1] == 1) &amp; (y_true[g1] == 1)) / max(np.sum(y_true[g1] == 1), 1)
+    
+    return {
+        &quot;Demographic_Parity_Ratio&quot;: round(dp_ratio, 3),
+        &quot;TPR_Group_0&quot;: round(tpr_g0, 3),
+        &quot;TPR_Group_1&quot;: round(tpr_g1, 3),
+        &quot;Four_Fifths_Rule_Passed&quot;: dp_ratio &gt;= 0.80
+    }
+
+# Mock dataset: 100 individuals
+np.random.seed(42)
+y_true = np.random.randint(0, 2, 100)
+y_pred = np.random.randint(0, 2, 100)
+group  = np.array([0]*50 + [1]*50)
+
+metrics = compute_fairness_metrics(y_true, y_pred, group)
+for k, v in metrics.items():
+    print(f&quot;  {k}: {v}&quot;)</code></pre></div>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+def compute_fairness_metrics(y_true, y_pred, sensitive_attr):
+    &quot;&quot;&quot;
+    Computes Demographic Parity and Equal Opportunity (TPR) across groups:
+    Demographic Parity: P(Y_hat=1 | A=0) == P(Y_hat=1 | A=1)
+    Equal Opportunity:  P(Y_hat=1 | Y=1, A=0) == P(Y_hat=1 | Y=1, A=1)
+    &quot;&quot;&quot;
+    g0 = (sensitive_attr == 0)
+    g1 = (sensitive_attr == 1)
+    
+    # Selection Rates (Demographic Parity)
+    sel_g0 = np.mean(y_pred[g0])
+    sel_g1 = np.mean(y_pred[g1])
+    dp_ratio = min(sel_g0, sel_g1) / max(sel_g0, sel_g1)
+    
+    # True Positive Rates (Equal Opportunity)
+    tpr_g0 = np.sum((y_pred[g0] == 1) &amp; (y_true[g0] == 1)) / max(np.sum(y_true[g0] == 1), 1)
+    tpr_g1 = np.sum((y_pred[g1] == 1) &amp; (y_true[g1] == 1)) / max(np.sum(y_true[g1] == 1), 1)
+    
+    return {
+        &quot;Demographic_Parity_Ratio&quot;: round(dp_ratio, 3),
+        &quot;TPR_Group_0&quot;: round(tpr_g0, 3),
+        &quot;TPR_Group_1&quot;: round(tpr_g1, 3),
+        &quot;Four_Fifths_Rule_Passed&quot;: dp_ratio &gt;= 0.80
+    }
+
+# Mock dataset: 100 individuals
+np.random.seed(42)
+y_true = np.random.randint(0, 2, 100)
+y_pred = np.random.randint(0, 2, 100)
+group  = np.array([0]*50 + [1]*50)
+
+metrics = compute_fairness_metrics(y_true, y_pred, group)
+for k, v in metrics.items():
+    print(f&quot;  {k}: {v}&quot;)</code></pre></div>
+<p>You already learned the confusion matrix in Unit II.</p>
+<p>It becomes more powerful when evaluated separately across relevant groups.</p>
+<p>For each group:</p>
+<div class="ascii-box"><pre>ACTUAL
+              +---------+
+              | 1 | 0   |
+       +------+---------+
+ PRED 1| TP| FP          |
+       +------+---------+
+ PRED 0| FN| TN          |
+       +------+---------+</pre></div>
+<p>Then compute:</p>
+<div class="formula-math">\[
+\text{TPR} = \frac{TP}{TP+FN}
+\]</div>
+<div class="formula-math">\[
+\text{FPR} = \frac{FP}{FP+TN}
+\]</div>
+<div class="formula-math">\[
+\text{Precision}=\frac{TP}{TP+FP}
+\]</div>
+<div class="formula-math">\[
+\text{Recall}=\frac{TP}{TP+FN}
+\]</div>
+<h3>Why this matters</h3>
+<p>Suppose overall accuracy is high, but one group has a substantially larger false-negative rate.</p>
+<p>A single aggregate accuracy value can hide that difference.</p>
+<p>This is a direct bridge:</p>
+<div class="ascii-box"><pre>Unit II metrics
+      ↓
+measure model behaviour
+      ↓
+Unit IV group-wise analysis
+      ↓
+measure distribution of errors</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: Worked Example — Overall Accuracy Hides Group Differences -->
+  <section id="s-12" data-search-section="Worked Example — Overall Accuracy Hides Group Differences" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>12. Worked Example — Overall Accuracy Hides Group Differences</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose there are two groups, A and B.</p>
+<h3>Group A</h3>
+<ul>
+<li>TP = 90</li>
+<li>FN = 10</li>
+<li>TN = 80</li>
+<li>FP = 20</li>
+</ul>
+<p>Accuracy:</p>
+<div class="formula-math">\[
+\frac{90+80}{90+10+80+20}
+=\frac{170}{200}
+=0.85
+\]</div>
+<p>So:</p>
+<div class="formula-math">\[
+\boxed{\text{Accuracy}_A=85\%}
+\]</div>
+<p>Recall:</p>
+<div class="formula-math">\[
+\frac{90}{90+10}=0.90
+\]</div>
+<p>So:</p>
+<div class="formula-math">\[
+\boxed{\text{Recall}_A=90\%}
+\]</div>
+<h3>Group B</h3>
+<ul>
+<li>TP = 60</li>
+<li>FN = 40</li>
+<li>TN = 90</li>
+<li>FP = 10</li>
+</ul>
+<p>Accuracy:</p>
+<div class="formula-math">\[
+\frac{60+90}{60+40+90+10}
+=\frac{150}{200}
+=0.75
+\]</div>
+<p>So:</p>
+<div class="formula-math">\[
+\boxed{\text{Accuracy}_B=75\%}
+\]</div>
+<p>Recall:</p>
+<div class="formula-math">\[
+\frac{60}{60+40}=0.60
+\]</div>
+<p>So:</p>
+<div class="formula-math">\[
+\boxed{\text{Recall}_B=60\%}
+\]</div>
+<h3>Interpretation</h3>
+<p>The two groups do not experience the same recall in this constructed example.</p>
+<p>The important ethical lesson is not merely “85% is good” or “75% is bad.”</p>
+<p>The lesson is:</p>
+<blockquote>
+<p><strong>Aggregate performance can hide group-specific error patterns.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: Guided Example — Find the Missing Rate -->
+  <section id="s-13" data-search-section="Guided Example — Find the Missing Rate" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>13. Guided Example — Find the Missing Rate</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For one group:</p>
+<ul>
+<li>TP = 72</li>
+<li>FN = 8</li>
+<li>TN = 90</li>
+<li>FP = 30</li>
+</ul>
+<p>Find:</p>
+<ol>
+<li>recall;</li>
+<li>false-positive rate;</li>
+<li>precision.</li>
+</ol>
+<h3>Step 1 — Recall</h3>
+<div class="formula-math">\[
+Recall=\frac{TP}{TP+FN}
+=\frac{72}{72+8}
+=\boxed{0.90}
+\]</div>
+<h3>Step 2 — False-positive rate</h3>
+<div class="formula-math">\[
+FPR=\frac{FP}{FP+TN}
+=\frac{30}{30+90}
+=\boxed{0.25}
+\]</div>
+<h3>Step 3 — Precision</h3>
+<div class="formula-math">\[
+Precision=\frac{TP}{TP+FP}
+=\frac{72}{72+30}
+=\boxed{0.706\text{ approximately}}
+\]</div>
+<p>The ethical question comes <strong>after</strong> the arithmetic:</p>
+<blockquote>
+<p>Which errors matter more for this application, and are they distributed acceptably across relevant populations?</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: Fairness Does Not Mean “Treat Everyone Exactly the Same” -->
+  <section id="s-14" data-search-section="Fairness Does Not Mean “Treat Everyone Exactly the Same”" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>14. Fairness Does Not Mean “Treat Everyone Exactly the Same”</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This needs careful wording.</p>
+<p>Suppose two groups experience different measurement quality, different base rates, different access to services, or different error costs.</p>
+<p>Applying exactly the same decision rule may produce different outcome distributions.</p>
+<p>Therefore an analysis may need to distinguish:</p>
+<div class="ascii-box"><pre>same rule
+   vs
+same measured outcome
+   vs
+same error rates
+   vs
+same opportunity</pre></div>
+<p>These are different claims.</p>
+<p>A technically strong answer defines <strong>which fairness criterion</strong> is being used instead of using “fair” as a vague adjective.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: Accountability — Who Owns the Decision? -->
+  <section id="s-15" data-search-section="Accountability — Who Owns the Decision?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>15. Accountability — Who Owns the Decision?</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose an AI system produces a harmful decision.</p>
+<p>Saying:</p>
+<blockquote>
+<p>“The model did it.”</p>
+</blockquote>
+<p>does not answer the accountability question.</p>
+<p>A deployed AI system usually involves multiple roles:</p>
+<div class="ascii-box"><pre>Data collection
+      ↓
+Data engineering
+      ↓
+Model development
+      ↓
+Evaluation
+      ↓
+Deployment
+      ↓
+Human operator / organization
+      ↓
+Affected person</pre></div>
+<p>Accountability asks questions such as:</p>
+<ul>
+<li>Who approved deployment?</li>
+<li>Who selected the objective and threshold?</li>
+<li>Who monitored failures?</li>
+<li>Who can intervene?</li>
+<li>Who investigates incidents?</li>
+<li>Can an affected person challenge a result?</li>
+<li>What records are maintained?</li>
+</ul>
+<h3>Exam definition</h3>
+<blockquote>
+<p><strong>Accountability is the assignment and operationalization of responsibility for the design, deployment, monitoring and consequences of an AI system.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: Transparency vs Explainability -->
+  <section id="s-16" data-search-section="Transparency vs Explainability" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>16. Transparency vs Explainability</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>These terms are related but not identical.</p>
+<h3>Transparency</h3>
+<p>Concerns whether important information about the system can be inspected or understood.</p>
+<p>Examples:</p>
+<ul>
+<li>what data categories were used;</li>
+<li>how the system is intended to operate;</li>
+<li>which version was deployed;</li>
+<li>what limitations are known.</li>
+</ul>
+<h3>Explainability</h3>
+<p>Concerns whether we can provide useful explanations for particular model behaviour or predictions.</p>
+<p>A highly complex model can sometimes provide local explanations without becoming completely transparent.</p>
+<p>Conversely, having a transparent process does not guarantee that every prediction is intuitively explainable.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: Privacy -->
+  <section id="s-17" data-search-section="Privacy" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>17. Privacy</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>AI systems may use:</p>
+<ul>
+<li>names and identifiers;</li>
+<li>location;</li>
+<li>medical information;</li>
+<li>financial records;</li>
+<li>behavioural history;</li>
+<li>text or images;</li>
+<li>device and interaction data.</li>
+</ul>
+<p>Privacy questions include:</p>
+<div class="ascii-box"><pre>What is collected?
+       ↓
+Why is it collected?
+       ↓
+How long is it stored?
+       ↓
+Who can access it?
+       ↓
+What can be inferred?
+       ↓
+What happens after the original purpose ends?</pre></div>
+<p>Privacy is therefore not only a database-security question.</p>
+<p>A model can create privacy concerns even when raw data are protected, because learned models or outputs may reveal sensitive information under some conditions.</p>
+<p>For this syllabus chapter, the main learning target is to understand privacy as one part of responsible AI design rather than treating it as a synonym for cybersecurity.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: Safety and Robustness -->
+  <section id="s-18" data-search-section="Safety and Robustness" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>18. Safety and Robustness</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A model can have good test performance and still fail under conditions not represented in evaluation.</p>
+<p>For example:</p>
+<div class="ascii-box"><pre>training environment
+      ↓
+controlled test set
+      ↓
+real deployment
+      ↓
+new users / devices / hospitals / weather / behaviour
+      ↓
+distribution shift</pre></div>
+<p>This connects directly to earlier ML ideas:</p>
+<ul>
+<li>train/test distribution;</li>
+<li>generalization;</li>
+<li>overfitting;</li>
+<li>bias/variance;</li>
+<li>out-of-distribution behaviour.</li>
+</ul>
+<h3>Ethical connection</h3>
+<p>A low-probability failure may still matter greatly if the consequence is severe.</p>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{\text{risk} \neq \text{prediction error alone}}
+\]</div>
+<p>Risk depends on both uncertainty/error and consequences.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: Human-in-the-Loop Design -->
+  <section id="s-19" data-search-section="Human-in-the-Loop Design" class="content-section">
+    <div class="section-header">
+      <h2>19. Human-in-the-Loop Design</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>One common response to high-stakes uncertainty is to include a human decision point.</p>
+<div class="ascii-box"><pre>AI prediction
+      ↓
+confidence / risk check
+      ↓
+ ┌────┴─────┐
+ ↓          ↓
+low risk   uncertain/high risk
+ ↓          ↓
+automate    human review</pre></div>
+<p>But “human in the loop” is not automatically a complete solution.</p>
+<p>The human may:</p>
+<ul>
+<li>over-trust the model;</li>
+<li>misunderstand its uncertainty;</li>
+<li>have too little time to review;</li>
+<li>lack enough information;</li>
+<li>be unable to override the system in practice.</li>
+</ul>
+<p>Therefore the real question is:</p>
+<blockquote>
+<p><strong>Does the human role provide meaningful oversight?</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: A Technical Way to Think About Ethical Risk -->
+  <section id="s-20" data-search-section="A Technical Way to Think About Ethical Risk" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>20. A Technical Way to Think About Ethical Risk</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Consider a simplified decision system:</p>
+<div class="formula-math">\[
+score=f_\theta(x)
+\]</div>
+<p>and a decision rule:</p>
+<div class="formula-math">\[
+\hat y=
+\begin{cases}
+1,&f_\theta(x)\ge t\\
+0,&f_\theta(x)\lt t
+\end{cases}
+\]</div>
+<p>Ethical properties can therefore depend on:</p>
+<div class="formula-math">\[
+\boxed{\text{data} + \theta + t + context + consequences}
+\]</div>
+<p>The threshold \(t\) is easy to forget.</p>
+<p>Two organizations may use the same trained model but choose different thresholds because the cost of a false positive and false negative differs.</p>
+<p>This is why ethical evaluation cannot be reduced to comparing model architectures only.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: Dataset Documentation Mindset -->
+  <section id="s-21" data-search-section="Dataset Documentation Mindset" class="content-section">
+    <div class="section-header">
+      <h2>21. Dataset Documentation Mindset</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Before training, ask:</p>
+<h3>Representation</h3>
+<ul>
+<li>Who is represented?</li>
+<li>Who is missing?</li>
+<li>Which environments are included?</li>
+</ul>
+<h3>Measurement</h3>
+<ul>
+<li>How were variables recorded?</li>
+<li>Are proxies being used?</li>
+<li>Are important variables noisy?</li>
+</ul>
+<h3>Labels</h3>
+<ul>
+<li>Who created them?</li>
+<li>What exactly do they mean?</li>
+<li>Are they observations, judgments or outcomes?</li>
+</ul>
+<h3>Time</h3>
+<ul>
+<li>What time period does the data represent?</li>
+<li>Could behaviour change after deployment?</li>
+</ul>
+<h3>Use</h3>
+<ul>
+<li>What was the dataset originally collected for?</li>
+<li>Is the proposed use consistent with that context?</li>
+</ul>
+<p>This reasoning is often more useful than memorizing a list of ethical buzzwords.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: Model Card Mindset -->
+  <section id="s-22" data-search-section="Model Card Mindset" class="content-section">
+    <div class="section-header">
+      <h2>22. Model Card Mindset</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>After training, record:</p>
+<div class="ascii-box"><pre>INTENDED USE
+LIMITATIONS
+TRAINING DATA SUMMARY
+EVALUATION DATA
+PERFORMANCE METRICS
+GROUP-SPECIFIC RESULTS
+KNOWN FAILURE MODES
+UNCERTAINTY / CONFIDENCE CAVEATS
+HUMAN OVERSIGHT
+DEPLOYMENT RESTRICTIONS
+VERSION / CHANGE HISTORY</pre></div>
+<p>This connects accountability to ordinary engineering documentation.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: Bias Detection Workflow -->
+  <section id="s-23" data-search-section="Bias Detection Workflow" class="content-section">
+    <div class="section-header">
+      <h2>23. Bias Detection Workflow</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A practical technical workflow:</p>
+<div class="ascii-box"><pre>1. Define the decision
+        ↓
+2. Identify relevant populations
+        ↓
+3. Inspect data coverage
+        ↓
+4. Inspect labels / measurement
+        ↓
+5. Train baseline model
+        ↓
+6. Evaluate overall metrics
+        ↓
+7. Evaluate group-wise metrics
+        ↓
+8. Inspect threshold effects
+        ↓
+9. Investigate causes
+        ↓
+10. Mitigate + re-evaluate
+        ↓
+11. Monitor after deployment</pre></div>
+<p>The key is that <strong>detection is not the same as mitigation</strong>.</p>
+<p>First identify the pattern.</p>
+<p>Then investigate why it exists.</p>
+<p>Then test whether an intervention changes the relevant outcome without creating unacceptable new problems.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: Possible Mitigation Families -->
+  <section id="s-24" data-search-section="Possible Mitigation Families" class="content-section">
+    <div class="section-header">
+      <h2>24. Possible Mitigation Families</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This chapter introduces the categories, not a claim that any one method solves every case.</p>
+<h3>Pre-processing</h3>
+<p>Modify the data before model training.</p>
+<p>Examples:</p>
+<ul>
+<li>improve representation;</li>
+<li>correct measurement issues;</li>
+<li>revise labels where justified;</li>
+<li>reweight or resample training examples.</li>
+</ul>
+<h3>In-processing</h3>
+<p>Modify the training procedure.</p>
+<p>Examples:</p>
+<ul>
+<li>incorporate additional constraints into the objective;</li>
+<li>use group-aware training objectives;</li>
+<li>change the model-learning process.</li>
+</ul>
+<h3>Post-processing</h3>
+<p>Modify decisions after model scores are produced.</p>
+<p>Examples:</p>
+<ul>
+<li>threshold adjustment;</li>
+<li>calibrated decision policies;</li>
+<li>human-review routing.</li>
+</ul>
+<h3>Important warning</h3>
+<p>A mitigation must be evaluated against the actual application goal and fairness criterion.</p>
+<p>There is no universal “bias removal” switch.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: Why Fairness Can Create Technical Trade-offs -->
+  <section id="s-25" data-search-section="Why Fairness Can Create Technical Trade-offs" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>25. Why Fairness Can Create Technical Trade-offs</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a model produces a continuous score.</p>
+<p>You might want:</p>
+<ul>
+<li>high recall;</li>
+<li>low false-positive rate;</li>
+<li>well-calibrated probabilities;</li>
+<li>similar error behaviour across groups;</li>
+<li>low operational cost.</li>
+</ul>
+<p>These goals may conflict.</p>
+<p>So the engineering problem becomes:</p>
+<div class="ascii-box"><pre>choose objective
+      ↓
+measure constraints
+      ↓
+understand trade-offs
+      ↓
+choose policy
+      ↓
+validate consequences</pre></div>
+<p>This is one reason ethics is not a final “chapter after the technical work.”</p>
+<p>The desired objective and evaluation criteria influence technical design from the beginning.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: Generation Models Add Another Risk Layer -->
+  <section id="s-26" data-search-section="Generation Models Add Another Risk Layer" class="content-section">
+    <div class="section-header">
+      <h2>26. Generation Models Add Another Risk Layer</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You learned GANs in C45.</p>
+<p>Generative systems introduce risks such as:</p>
+<ul>
+<li>fabricated information;</li>
+<li>inappropriate generated content;</li>
+<li>misleading synthetic media;</li>
+<li>reproduction of training-set patterns;</li>
+<li>uncertainty being hidden behind fluent output.</li>
+</ul>
+<p>A generative model can be:</p>
+<div class="ascii-box"><pre>fluent
++
+confident
++
+wrong</pre></div>
+<p>That is particularly important for users who mistake fluency for factual reliability.</p>
+<p>The correct technical response is not simply:</p>
+<blockquote>
+<p>“The model is bad.”</p>
+</blockquote>
+<p>Instead ask how output is evaluated, what verification mechanism exists and what consequences follow from errors.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: Case Study Preview — High-Stakes Classification -->
+  <section id="s-27" data-search-section="Case Study Preview — High-Stakes Classification" class="content-section">
+    <div class="section-header">
+      <h2>27. Case Study Preview — High-Stakes Classification</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Consider a model that predicts whether a patient should receive additional clinical review.</p>
+<p>The system produces:</p>
+<div class="formula-math">\[
+p=P(Y=1\mid X)
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\hat Y=1 \text{ if } p\ge t.
+\]</div>
+<p>Suppose two thresholds are tested:</p>
+<div class="ascii-box"><pre>Threshold t = 0.30
+→ more patients flagged
+→ potentially higher sensitivity
+→ potentially more false positives
+
+Threshold t = 0.80
+→ fewer patients flagged
+→ potentially fewer false positives
+→ potentially more false negatives</pre></div>
+<p>Now the ethics question becomes technical:</p>
+<blockquote>
+<p>Which error is more harmful in this setting, and are error rates acceptably distributed across the populations being served?</p>
+</blockquote>
+<p>C47 will develop this healthcare case in detail.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: Common Mistakes -->
+  <section id="s-28" data-search-section="Common Mistakes" class="content-section">
+    <div class="section-header">
+      <h2>28. Common Mistakes</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Trap 1 — “High accuracy means the system is fair.”</h2>
+<h3>Why it feels right</h3>
+<p>Accuracy is a familiar headline metric.</p>
+<h3>Actual truth</h3>
+<p>Aggregate accuracy can hide group-specific error differences.</p>
+<h3>Repair prompt</h3>
+<blockquote>
+<p>“What happens when I split the evaluation by relevant populations?”</p>
+</blockquote>
+<hr />
+<h2>Trap 2 — “Bias always means a bad ML model.”</h2>
+<h3>Why it feels right</h3>
+<p>We already learned bias in Unit II.</p>
+<h3>Actual truth</h3>
+<p>Statistical model bias and socio-technical bias are different concepts.</p>
+<h3>Repair prompt</h3>
+<blockquote>
+<p>“Am I talking about approximation error or unequal/distorted outcomes?”</p>
+</blockquote>
+<hr />
+<h2>Trap 3 — “Fairness has one formula.”</h2>
+<p>Actual truth:</p>
+<blockquote>
+<p>Fairness is criterion-dependent.</p>
+</blockquote>
+<p>Different definitions target different notions of equality or error behaviour.</p>
+<hr />
+<h2>Trap 4 — “The human is automatically responsible because a human exists somewhere in the process.”</h2>
+<p>Actual truth</p>
+<p>Meaningful accountability requires identifiable responsibility, authority and ability to act.</p>
+<hr />
+<h2>Trap 5 — “Human-in-the-loop solves the problem.”</h2>
+<p>Actual truth</p>
+<p>A human who only rubber-stamps the model does not necessarily provide meaningful oversight.</p>
+<hr />
+<h2>Trap 6 — “If the training data are large, they are unbiased.”</h2>
+<p>Actual truth</p>
+<p>Large datasets can contain systematic measurement, sampling and label problems.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 29: Exam Lens -->
+  <section id="s-29" data-search-section="Exam Lens" class="content-section">
+    <div class="section-header">
+      <h2>29. Exam Lens</h2>
+      <button class="bookmark-btn" data-id="s-29" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Very short answer</h2>
+<p><strong>What is AI ethics?</strong></p>
+<blockquote>
+<p>The systematic consideration of values, risks, responsibilities and consequences in the design, deployment and use of AI systems.</p>
+</blockquote>
+<p><strong>What is bias in AI systems?</strong></p>
+<blockquote>
+<p>A systematic pattern in data, modelling, evaluation or deployment that can contribute to distorted or unequal outcomes.</p>
+</blockquote>
+<p><strong>What is fairness?</strong></p>
+<blockquote>
+<p>A criterion-based approach for evaluating whether relevant groups receive appropriately comparable treatment or error behaviour.</p>
+</blockquote>
+<p><strong>What is accountability?</strong></p>
+<blockquote>
+<p>Clear responsibility for the design, deployment, monitoring and consequences of an AI system.</p>
+</blockquote>
+<h2>5-mark answer structure — “Discuss bias and fairness in AI.”</h2>
+<ol>
+<li>define bias;</li>
+<li>identify sources: sampling, measurement, labels, model, threshold, deployment;</li>
+<li>explain why accuracy alone is insufficient;</li>
+<li>introduce group-wise metrics;</li>
+<li>state that fairness is criterion-dependent;</li>
+<li>mention monitoring and mitigation.</li>
+</ol>
+<h2>10-mark answer structure — “Explain ethical considerations in an ML system.”</h2>
+<div class="ascii-box"><pre>problem definition
+→ data
+→ labels
+→ model
+→ evaluation
+→ fairness
+→ privacy
+→ transparency
+→ accountability
+→ deployment monitoring
+→ human oversight</pre></div>
+<p>Then include one concrete worked example.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 30: Active Recall -->
+  <section id="s-30" data-search-section="Active Recall" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>30. Active Recall</h2>
+      <button class="bookmark-btn" data-id="s-30" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Close the book and answer.</p>
+<h3>Define</h3>
+<ol>
+<li>What is AI ethics?</li>
+<li>What is socio-technical bias?</li>
+<li>What is fairness?</li>
+<li>What is accountability?</li>
+<li>What is transparency?</li>
+<li>What is human oversight?</li>
+</ol>
+<h3>Explain</h3>
+<ol>
+<li>Why can high aggregate accuracy hide fairness issues?</li>
+<li>How can historical labels introduce bias?</li>
+<li>Why is threshold selection ethically relevant?</li>
+<li>Why is fairness criterion-dependent?</li>
+</ol>
+<h3>Draw</h3>
+<ol>
+<li>Draw the ethical AI pipeline from data to feedback.</li>
+<li>Draw a confusion matrix and label TP, TN, FP and FN.</li>
+</ol>
+<h3>Calculate</h3>
+<ol>
+<li>Compute recall from TP = 80, FN = 20.</li>
+<li>Compute FPR from FP = 15, TN = 85.</li>
+</ol>
+<h3>Diagnose</h3>
+<ol>
+<li>A model performs well in one hospital and poorly in another. What should you investigate?</li>
+<li>A human reviews every AI recommendation but almost never overrides it. What question should you ask about the human-in-the-loop design?</li>
+</ol>
+<h3>Compare</h3>
+<ol>
+<li>Statistical bias vs socio-technical bias.</li>
+<li>Transparency vs explainability.</li>
+<li>Overall accuracy vs group-wise evaluation.</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 31: Practice Set -->
+  <section id="s-31" data-search-section="Practice Set" class="content-section">
+    <div class="section-header">
+      <h2>31. Practice Set</h2>
+      <button class="bookmark-btn" data-id="s-31" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>P1 — MCQ [Easy]</h2>
+<p>Which statement is correct?</p>
+<p>A. High accuracy guarantees fairness.<br />
+B. Fairness has exactly one universal equation.<br />
+C. Ethical risk can depend on data, model, decision policy and consequences.<br />
+D. Human oversight automatically solves bias.</p>
+<p><strong>Answer:</strong> C</p>
+<hr />
+<h2>P2 — MCQ [Standard]</h2>
+<p>Which quantity directly measures the fraction of actual positives that are correctly identified?</p>
+<p>A. Precision<br />
+B. Recall / TPR<br />
+C. FPR<br />
+D. Accuracy</p>
+<p><strong>Answer:</strong> B</p>
+<hr />
+<h2>P3 — Numerical [Standard]</h2>
+<p>A group has TP = 45 and FN = 5.</p>
+<p>Find recall.</p>
+<p><strong>Answer:</strong></p>
+<div class="formula-math">\[
+\frac{45}{45+5}=0.90
+\]</div>
+<hr />
+<h2>P4 — Numerical [Standard]</h2>
+<p>A group has FP = 20 and TN = 80.</p>
+<p>Find FPR.</p>
+<p><strong>Answer:</strong></p>
+<div class="formula-math">\[
+\frac{20}{20+80}=0.20
+\]</div>
+<hr />
+<h2>P5 — Applied [Exam]</h2>
+<p>Two groups have identical overall accuracy but different false-negative rates.</p>
+<p>Explain why further evaluation may still be necessary.</p>
+<p><strong>Expected direction:</strong> A single aggregate metric can hide group-specific error behaviour; inspect the relevant confusion-matrix rates separately and choose an explicit fairness criterion.</p>
+<hr />
+<h2>P6 — Tricky [Exam]</h2>
+<p>A company says:</p>
+<blockquote>
+<p>“Our model is fair because both groups receive exactly the same threshold.”</p>
+</blockquote>
+<p>What is missing from this argument?</p>
+<p><strong>Answer direction:</strong> Same decision rule does not by itself establish equal outcomes, equal error rates, calibration or any other specific fairness criterion.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 32: One-Screen Summary -->
+  <section id="s-32" data-search-section="One-Screen Summary" class="content-section">
+    <div class="section-header">
+      <h2>32. One-Screen Summary</h2>
+      <button class="bookmark-btn" data-id="s-32" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>AI ETHICS
+│
+├── Bias
+│   ├── sampling
+│   ├── measurement
+│   ├── labels
+│   ├── model/objective
+│   ├── threshold
+│   └── deployment
+│
+├── Fairness
+│   ├── define the criterion
+│   ├── evaluate by relevant groups
+│   ├── compare error / prediction behaviour
+│   └── recognize trade-offs
+│
+├── Accountability
+│   ├── who builds?
+│   ├── who deploys?
+│   ├── who monitors?
+│   ├── who can intervene?
+│   └── who handles harm/appeals?
+│
+└── Related dimensions
+    ├── privacy
+    ├── transparency
+    ├── safety
+    ├── robustness
+    └── human oversight</pre></div>
+<h3>Memory anchor</h3>
+<blockquote>
+<p><strong>Data can be biased. Models can amplify patterns. Decisions can distribute errors. Deployment creates consequences. Accountability decides who responds.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 33: Formula Sheet -->
+  <section id="s-33" data-search-section="Formula Sheet" class="content-section">
+    <div class="section-header">
+      <h2>33. Formula Sheet</h2>
+      <button class="bookmark-btn" data-id="s-33" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Recall</h3>
+<div class="formula-math">\[
+Recall=\frac{TP}{TP+FN}
+\]</div>
+<h3>False-positive rate</h3>
+<div class="formula-math">\[
+FPR=\frac{FP}{FP+TN}
+\]</div>
+<h3>Precision</h3>
+<div class="formula-math">\[
+Precision=\frac{TP}{TP+FP}
+\]</div>
+<h3>Threshold rule</h3>
+<div class="formula-math">\[
+\hat Y=
+\begin{cases}
+1,&f_\theta(X)\ge t\\
+0,&f_\theta(X)\lt t
+\end{cases}
+\]</div>
+<h3>Ethical evaluation idea</h3>
+<div class="formula-math">\[
+\boxed{
+\text{system behaviour}
+=
+\text{model outputs}
++
+\text{decision policy}
++
+\text{context}
++
+\text{consequences}
+}
+\]</div>
+<p>This last expression is a conceptual synthesis, not a formal statistical identity.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 34: Math You Need Now -->
+  <section id="s-34" data-search-section="Math You Need Now" class="content-section">
+    <div class="section-header">
+      <h2>34. Math You Need Now</h2>
+      <button class="bookmark-btn" data-id="s-34" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This chapter deliberately reuses Unit II mathematics.</p>
+<p>You need:</p>
+<ul>
+<li>conditional probability intuition;</li>
+<li>confusion matrices;</li>
+<li>rates such as precision, recall and FPR;</li>
+<li>thresholds;</li>
+<li>group-wise comparison.</li>
+</ul>
+<p>The core mathematical idea is simple:</p>
+<blockquote>
+<p><strong>Ethical analysis often means conditioning a performance quantity on an additional group variable.</strong></p>
+</blockquote>
+<p>For example:</p>
+<div class="formula-math">\[
+P(\hat Y=1\mid A=a)
+\]</div>
+<p>adds the condition that the individual belongs to group \(a\).</p>
+<p>That is a direct link to your probability foundations.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 35: Connection to Earlier Chapters -->
+  <section id="s-35" data-search-section="Connection to Earlier Chapters" class="content-section">
+    <div class="section-header">
+      <h2>35. Connection to Earlier Chapters</h2>
+      <button class="bookmark-btn" data-id="s-35" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Earlier concept</th>
+<th>Ethics connection</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Confusion matrix</td>
+<td>Compare errors across groups</td>
+</tr>
+<tr>
+<td>Precision/recall</td>
+<td>Different error costs matter</td>
+</tr>
+<tr>
+<td>Bias/variance</td>
+<td>Distinguish model bias from socio-technical bias</td>
+</tr>
+<tr>
+<td>Overfitting</td>
+<td>Poor generalization can create deployment risk</td>
+</tr>
+<tr>
+<td>Logistic regression</td>
+<td>Threshold turns scores into decisions</td>
+</tr>
+<tr>
+<td>Neural networks</td>
+<td>Flexible models still need responsible evaluation</td>
+</tr>
+<tr>
+<td>GANs</td>
+<td>Generated outputs create additional reliability risks</td>
+</tr>
+<tr>
+<td>RL</td>
+<td>Rewards encode objectives and can shape behaviour</td>
+</tr>
+<tr>
+<td>NLP</td>
+<td>Language data may carry social and representational patterns</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 36: Chapter Exit Test -->
+  <section id="s-36" data-search-section="Chapter Exit Test" class="content-section">
+    <div class="section-header">
+      <h2>36. Chapter Exit Test</h2>
+      <button class="bookmark-btn" data-id="s-36" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You are ready to leave this chapter when you can do all of the following <strong>without reopening the chapter</strong>:</p>
+<ul>
+<li>define AI ethics, bias, fairness and accountability;</li>
+<li>explain at least four locations where bias can enter a pipeline;</li>
+<li>distinguish statistical bias from socio-technical bias;</li>
+<li>calculate recall and FPR from a confusion matrix;</li>
+<li>explain why aggregate accuracy can hide group differences;</li>
+<li>state that fairness is criterion-dependent;</li>
+<li>explain why threshold selection can affect outcomes;</li>
+<li>describe meaningful human oversight;</li>
+<li>connect ethics to model evaluation and deployment;</li>
+<li>analyze a simple healthcare classification case.</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 37: Resource Shelf -->
+  <section id="s-37" data-search-section="Resource Shelf" class="content-section">
+    <div class="section-header">
+      <h2>37. Resource Shelf</h2>
+      <button class="bookmark-btn" data-id="s-37" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>READ FIRST</h3>
+<ul>
+<li><strong>Course boundary:</strong> DSC-14 syllabus / Unit IV ethics, bias, fairness, accountability. <strong>Source ID:</strong> <code>UNI-SYL-01</code>  </li>
+<li><strong>Related course mathematics:</strong> <code>Lecture07.pdf</code> for evaluation metrics. <strong>Source ID:</strong> <code>UNI-NOTE-08</code></li>
+</ul>
+<h3>WATCH</h3>
+<p>The master resource guide does not specify a single dedicated ethics video. Therefore no specific video is presented here as a verified course-core resource. The guide instead recommends responsible-AI readings/materials after the technical core. filecitefile_0000000086b882089e85dbe6281521e6</p>
+<h3>GO DEEPER</h3>
+<ul>
+<li>Responsible/ethical AI material selected according to the current course offering.</li>
+<li>Standard ML/AI references for case-study reasoning.</li>
+</ul>
+<h3>PRACTICE</h3>
+<ul>
+<li>Recompute group-wise confusion-matrix metrics from custom examples.</li>
+<li>Reanalyze a classification threshold under different false-positive / false-negative costs.</li>
+</ul>
+<h3>EXAM</h3>
+<p>Planned Exam Book mapping: <code>EX-AI-ETHICS-*</code></p>
+<h3>MATH</h3>
+<ul>
+<li><code>MATH-M10</code> onward: conditional probability and statistics</li>
+<li>Unit II evaluation chapters: confusion matrix, precision, recall, F1, ROC/AUC</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 38: Source &amp; Boundary Note -->
+  <section id="s-38" data-search-section="Source &amp; Boundary Note" class="content-section">
+    <div class="section-header">
+      <h2>38. Source &amp; Boundary Note</h2>
+      <button class="bookmark-btn" data-id="s-38" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This chapter is intentionally divided into three layers:</p>
+<ul>
+<li><strong>Course scope:</strong> Unit IV explicitly includes bias, fairness and accountability. filecitefile_0000000086b882089e85dbe6281521e6</li>
+<li><strong>Course-supporting mathematics:</strong> the supplied <code>Lecture07.pdf</code> provides the confusion-matrix metrics reused here. filecitefile_0000000086b882089e85dbe6281521e6</li>
+<li><strong>Universal expansion:</strong> detailed fairness criteria, governance framing, mitigation categories and case-analysis patterns are included as standard conceptual expansion because the provided course notes do not contain a dedicated full ethics treatment.</li>
+</ul>
+<p>No University-specific ethical policy is implied unless separately sourced.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 39: Connection Forward -->
+  <section id="s-39" data-search-section="Connection Forward" class="content-section">
+    <div class="section-header">
+      <h2>39. Connection Forward</h2>
+      <button class="bookmark-btn" data-id="s-39" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The next chapter, <strong>C47 — AI in Healthcare</strong>, applies the same framework to a high-stakes domain.</p>
+<p>You will reuse:</p>
+<div class="ascii-box"><pre>classification
+→ confusion matrix
+→ thresholds
+→ bias/fairness
+→ human oversight
+→ accountability
+→ deployment risk</pre></div>
+<p>The following Unit IV chapters then apply the same reasoning to autonomous vehicles and financial systems.</p>
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="ch45-generative-adversarial-networks.html" class="nav-btn">← Ch 45 — GANs</a>
+    <a href="ch47-ai-in-healthcare.html" class="nav-btn primary">Next: Ch 47 — AI in Healthcare →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch46-ai-ethics-bias-fairness.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 46</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

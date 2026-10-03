@@ -1,0 +1,2138 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 3: Problem Formulation &amp; State Space Search — AI & Machine Learning MiniBook. State Space Models, 5-Tuple Formulation, State Abstraction, Transition Models, and Search Trees vs State Graphs">
+<title>Ch 3 — Problem Formulation &amp; State Space Search | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-ii">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 3 — Problem Formulation &amp; State Space Search</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 3 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why does problem formulation exist? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Real-world analogy — route planning <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. The problem-solving pipeline <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. What is a search problem? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. The four components <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. A visual way to understand the successor function <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Goal test <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Path cost <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Step cost vs path cost </a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. State space </a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Why don&#x27;t we represent the entire real world? </a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Abstraction <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Why abstraction is difficult <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Example — Romania route finding <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Example — Vacuum World </a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Example — 8-puzzle </a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. State vs node — a very important distinction </a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Path <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Solution </a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Optimal solution <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. A complete problem-formulation diagram </a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. What exactly is being searched? </a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. What makes a good problem formulation? </a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Common beginner confusion </a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Worked Example — formulate a route problem yourself <span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Worked Example — 8-puzzle formulation </a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Worked Example — robotic assembly </a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Problem formulation vs search strategy <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Why this chapter comes before BFS and DFS </a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Formula / notation cards <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. One-page memory map <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Active recall — close the book </a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Practice set </a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Exam connection </a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Math connection </a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Resource shelf </a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. What you should NOT memorize yet <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Chapter exit test </a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Final mental model </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link active"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit I</span><span>›</span><span>Part II — Classical Search & Problem Solving</span><span>›</span><span style="color:var(--em-text)">Chapter 3</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 3 · Unit I · Part II</div>
+    <div class="chapter-part-banner part-ii">
+      <span class="part-banner-badge">Unit I · Part II</span>
+      <span>Classical Search & Problem Solving</span>
+    </div>
+    <h1 class="chapter-title">Problem Formulation &amp; State Space Search</h1>
+    <div class="concept-id-tag">[CONCEPT-AI-003]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: Core Foundation</span>
+      <span class="chapter-meta-item">📖 ~45 min read</span>
+      <span class="chapter-meta-item">🎯 39 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>Problem Formulation & State Spaces:</strong> Initial state, Actions, Transition Model, Goal Test, Path Cost. State space graphs, search trees, repeated states, graph search vs tree search, vacuum world, 8-puzzle, and Romania pathfinding.</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why does problem formulation exist?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Real-world analogy — route planning</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">The problem-solving pipeline</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">What is a search problem?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">The four components</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">A visual way to understand the successor function</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Goal test</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Path cost</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Step cost vs path cost</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">State space</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Why don&#x27;t we represent the entire real world?</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Abstraction</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Why abstraction is difficult</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Example — Romania route finding</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Example — Vacuum World</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Example — 8-puzzle</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">State vs node — a very important distinction</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Path</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Solution</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Optimal solution</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">A complete problem-formulation diagram</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">What exactly is being searched?</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">What makes a good problem formulation?</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Common beginner confusion</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Worked Example — formulate a route problem yourself</span><span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Worked Example — 8-puzzle formulation</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Worked Example — robotic assembly</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Problem formulation vs search strategy</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Why this chapter comes before BFS and DFS</span></a></li>
+      <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Formula / notation cards</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">One-page memory map</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Active recall — close the book</span></a></li>
+      <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Practice set</span></a></li>
+      <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Exam connection</span></a></li>
+      <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Math connection</span></a></li>
+      <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Resource shelf</span></a></li>
+      <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">What you should NOT memorize yet</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Chapter exit test</span></a></li>
+      <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Final mental model</span></a></li>
+    </ul>
+  </div>
+
+  <div class="chapter-preamble-card"><h1>MAIN-U1-C03 — Problem Formulation</h1>
+<blockquote>
+<p><strong>Main Book · Unit I — Artificial Intelligence</strong><br />
+<strong>Concept ID:</strong> <code>AI-U1-C03</code><br />
+<strong>Status:</strong> Mid-sem core<br />
+<strong>Prerequisites:</strong> <code>AI-U1-C02</code> Intelligent Agents<br />
+<strong>Next:</strong> <code>AI-U1-C04</code> Uninformed Search<br />
+<strong>Source of course-specific framing:</strong> <code>lecture-basic-search.pdf</code></p>
+</blockquote>
+<hr />
+<h2>0. What this chapter will teach you</h2>
+<p>By the end of this chapter, you should be able to take an everyday task such as:</p>
+<blockquote>
+<p>“Go from one city to another.”</p>
+</blockquote>
+<p>and turn it into a form that an AI search algorithm can actually work with.</p>
+<p>You will learn to identify:</p>
+<ol>
+<li>the <strong>initial state</strong>,</li>
+<li>the <strong>possible actions / successor function</strong>,</li>
+<li>the <strong>goal test</strong>,</li>
+<li>the <strong>path cost</strong>,</li>
+<li>the <strong>state space</strong>,</li>
+<li>the difference between a <strong>state</strong> and a <strong>search node</strong>,</li>
+<li>a <strong>path</strong>, <strong>solution</strong>, and <strong>optimal solution</strong>, and</li>
+<li>why <strong>abstraction</strong> is necessary before search can become feasible.</li>
+</ol>
+<p>This chapter is the bridge between:</p>
+<div class="ascii-box"><pre>INTELLIGENT AGENT
+       ↓
+WHAT DO I WANT?
+       ↓
+HOW CAN I REPRESENT THE PROBLEM?
+       ↓
+SEARCH
+       ↓
+EXECUTE</pre></div>
+<p>The supplied Basic Search lecture presents problem solving as a restricted form of a general agent: formulate a goal, formulate the problem, search for a solution, and then execute the resulting sequence of actions. The lecture then formalizes the search problem using the initial state, successor function, goal test and path cost. [Course note: <code>lecture-basic-search.pdf</code>, early problem-solving and formulation slides.]</p>
+<hr /></div>
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 1: Why does problem formulation exist? -->
+  <section id="s-01" data-search-section="Why does problem formulation exist?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>1. Why does problem formulation exist?</h2>
+      <button class="bookmark-btn" data-id="s-01" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine telling a person:</p>
+<blockquote>
+<p>“Reach the airport tomorrow.”</p>
+</blockquote>
+<p>A human immediately asks or assumes many things:</p>
+<ul>
+<li>Which airport?</li>
+<li>Where are you starting?</li>
+<li>Can you walk, drive, or take a train?</li>
+<li>Does money matter?</li>
+<li>Does time matter?</li>
+<li>Are roads blocked?</li>
+<li>Is the shortest route the goal, or the fastest route?</li>
+</ul>
+<p>An AI system has the same fundamental problem, except it cannot simply rely on common sense to fill in everything.</p>
+<p>It needs a <strong>formal description of the problem</strong>.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher explanation — English</div>
+
+A search algorithm cannot operate directly on a vague sentence such as “find the best route.” It needs a structured representation of what the current situation is, what changes are possible, what counts as success, and how a solution is evaluated.
+
+</div>
+
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher explanation — Hinglish</div>
+
+AI ko bas itna bol dena ki **“Bucharest pahunch jao”** enough nahi hai. Usko exactly batana padega:
+
+> abhi kahan ho, kya actions le sakte ho, goal kya hai, aur route ki cost kaise calculate hogi.
+
+Yahi **problem formulation** hai.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 2: Real-world analogy — route planning -->
+  <section id="s-02" data-search-section="Real-world analogy — route planning" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. Real-world analogy — route planning</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose you are going from <strong>Arad → Bucharest</strong>.</p>
+<p>You have a map with multiple roads.</p>
+<div class="ascii-box"><pre>Oradea
+                           |
+                         71 km
+                           |
+                         Zerind
+                           |
+                         75 km
+                           |
+                         Arad  -------- 140 -------- Sibiu
+                           |                             |
+                         118                            99
+                           |                             |
+                      Timisoara                       Fagaras
+                                                         |
+                                                        211
+                                                         |
+                                                     Bucharest</pre></div>
+<p>The actual course lecture uses the Romania map as a canonical search example. It begins with the situation “currently in Arad” and a goal of being in Bucharest, then describes states as cities, actions as driving between cities, and a solution as a sequence of cities. [Course note: <code>lecture-basic-search.pdf</code>, Romania example slides.]</p>
+<h3>Analogy</h3>
+<p>Think of the map as a <strong>game board</strong>.</p>
+<ul>
+<li>A <strong>state</strong> = where your player currently is.</li>
+<li>An <strong>action</strong> = one legal move.</li>
+<li>The <strong>goal</strong> = the winning condition.</li>
+<li>The <strong>path cost</strong> = how expensive the sequence of moves is.</li>
+<li>A <strong>search algorithm</strong> = the strategy used to decide which possibilities to explore.</li>
+</ul>
+<p>The important point is that the map contains much more information than the search algorithm necessarily needs.</p>
+<p>You do not need to model:</p>
+<ul>
+<li>what music is playing in the car,</li>
+<li>what your passengers are wearing,</li>
+<li>the colour of nearby houses,</li>
+<li>your favourite food,</li>
+<li>or every detail of the weather,</li>
+</ul>
+<p>unless those details affect the problem you are trying to solve.</p>
+<p>That leads to <strong>abstraction</strong>, which is one of the deepest ideas in this chapter.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: The problem-solving pipeline -->
+  <section id="s-03" data-search-section="The problem-solving pipeline" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>3. The problem-solving pipeline</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A useful mental model is:</p>
+<div class="ascii-box"><pre>┌────────────────────────┐
+│ 1. FORMULATE THE GOAL  │
+│ What counts as success?│
+└────────────┬───────────┘
+             ↓
+┌────────────────────────┐
+│ 2. FORMULATE PROBLEM   │
+│ How do we represent it?│
+└────────────┬───────────┘
+             ↓
+┌────────────────────────┐
+│ 3. SEARCH              │
+│ Which action sequence? │
+└────────────┬───────────┘
+             ↓
+┌────────────────────────┐
+│ 4. EXECUTE             │
+│ Perform the actions    │
+└────────────────────────┘</pre></div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish mental model</div>
+
+> **Pehle decide karo “karna kya hai”, phir problem ko machine-friendly form mein describe karo, phir search se route/solution nikalo, phir usko execute karo.**
+
+Do not confuse **goal formulation** with **problem formulation**.
+
+- Goal formulation asks: **what do I want?**
+- Problem formulation asks: **what information and actions do I need to represent the task so I can search for that goal?**
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: What is a search problem? -->
+  <section id="s-04" data-search-section="What is a search problem?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>4. What is a search problem?</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A search problem is a formal description of a task in which we want to find a sequence of actions that takes us from a starting situation to a desired situation.</p>
+<p>For the standard <strong>single-state problem formulation</strong>, your supplied lecture defines the problem using four main items:</p>
+<ol>
+<li><strong>Initial state</strong></li>
+<li><strong>Successor function</strong></li>
+<li><strong>Goal test</strong></li>
+<li><strong>Path cost</strong></li>
+</ol>
+<p>A solution is a sequence of actions leading from the initial state to a goal state. [Course note: <code>lecture-basic-search.pdf</code>, “Single-State Problem Formulation”.]</p>
+<blockquote>
+<p><strong>Important wording:</strong> The successor function represents the available actions by returning action-state pairs. That is why some books present “actions” as a separate item while your lecture presents the <strong>successor function</strong> directly.</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: The four components -->
+  <section id="s-05" data-search-section="The four components" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>5. The four components</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>5.1 Initial state</h2>
+<h3>Formal meaning</h3>
+<p>The <strong>initial state</strong> is the state in which the problem starts.</p>
+<p>For the Romania route problem:</p>
+<div class="ascii-box"><pre>Initial state = In(Arad)</pre></div>
+<h3>Intuition</h3>
+<p>It is simply:</p>
+<blockquote>
+<p><strong>“Where am I right now?”</strong></p>
+</blockquote>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “Abhi starting point kya hai?”
+
+</div>
+
+<h3>Examples</h3>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Problem</th>
+<th>Initial state</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Route finding</td>
+<td>At Arad</td>
+</tr>
+<tr>
+<td>8-puzzle</td>
+<td>Given starting board configuration</td>
+</tr>
+<tr>
+<td>Vacuum world</td>
+<td>Given robot location + dirt configuration</td>
+</tr>
+<tr>
+<td>Robot assembly</td>
+<td>Initial joint/object configuration</td>
+</tr>
+<tr>
+<td>Game</td>
+<td>Initial board position</td>
+</tr>
+</tbody>
+</table></div>
+<p>The supplied lecture uses route finding, vacuum world, the 8-puzzle and robotic assembly as examples of how states/actions/goals/costs are specified. [Course note: <code>lecture-basic-search.pdf</code>, problem-formulation examples.]</p>
+<hr />
+<h2>5.2 Successor function</h2>
+<p>This is one of the most important terms in the chapter.</p>
+<h3>Definition</h3>
+<p>The <strong>successor function</strong> tells us what states can be reached from a given state and which action produces each transition.</p>
+<p>Conceptually:</p>
+<p>a current state</p>
+<div class="formula-math">\[
+S(x)
+\]</div>
+<p>maps to a set of <strong>action–state pairs</strong>.</p>
+<p>For example:</p>
+<div class="ascii-box"><pre>Current state: Arad
+
+S(Arad) = {
+    (Go-to-Zerind, Zerind),
+    (Go-to-Sibiu, Sibiu),
+    (Go-to-Timisoara, Timisoara)
+}</pre></div>
+<p>This is the course note's central idea: from one state, the successor function generates the legal next possibilities. [Course note: <code>lecture-basic-search.pdf</code>, “Single-State Problem Formulation”.]</p>
+<h3>Do not confuse these</h3>
+<p><strong>Action</strong> = what you do.</p>
+<p><strong>Successor state</strong> = where you end up.</p>
+<p><strong>Successor function</strong> = the rule that tells you which action-state transitions are available.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “Agar main abhi is state mein hoon, toh mere paas kaun-kaun se legal moves hain aur har move ke baad main kis state mein pahunchunga?”
+
+Yeh poora kaam **successor function** karta hai.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: A visual way to understand the successor function -->
+  <section id="s-06" data-search-section="A visual way to understand the successor function" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>6. A visual way to understand the successor function</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>CURRENT STATE
+                       Arad
+                    /   |   \
+                   /    |    \
+                 /      |      \
+                ↓       ↓       ↓
+             Zerind   Sibiu   Timisoara
+
+            ↑          ↑          ↑
+        action 1    action 2    action 3</pre></div>
+<p>The arrows are not merely lines.</p>
+<p>Each arrow represents an <strong>action</strong>.</p>
+<p>Each destination represents a <strong>successor state</strong>.</p>
+<h3>The important question</h3>
+<p>If I give you a state but don't tell you its successor function, can a search algorithm know which next states are legal?</p>
+<p><strong>No.</strong></p>
+<p>So the successor function is what turns a static description of a state into a space of possible actions.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: Goal test -->
+  <section id="s-07" data-search-section="Goal test" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>7. Goal test</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The AI needs a precise rule for deciding whether a state is a goal state.</p>
+<h3>Definition</h3>
+<p>A <strong>goal test</strong> checks whether the current state satisfies the desired goal.</p>
+<p>For Romania:</p>
+<div class="ascii-box"><pre>Goal = Be in Bucharest</pre></div>
+<p>The goal test can therefore be represented conceptually as:</p>
+<div class="ascii-box"><pre>Is current_state == Bucharest ?</pre></div>
+<h3>Explicit vs implicit goal tests</h3>
+<p>Your course material distinguishes two styles.</p>
+<h3>Explicit goal test</h3>
+<p>The goal state itself is explicitly described.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>x = “at Bucharest”</pre></div>
+<h3>Implicit goal test</h3>
+<p>The desired state is identified by a property rather than by one named state.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>NoDirt(x)</pre></div>
+<p>A vacuum-world state is a goal whenever there is no dirt, regardless of the robot's exact location. [Course note: <code>lecture-basic-search.pdf</code>, “Single-State Problem Formulation”.]</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> Explicit: “Bucharest pahunch gaye?”
+>
+> Implicit: “Har room clean hai?”
+
+The second one does not require one exact state label; it requires a **condition** to be true.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: Path cost -->
+  <section id="s-08" data-search-section="Path cost" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>8. Path cost</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Finding <strong>a</strong> solution and finding the <strong>best</strong> solution are not always the same thing.</p>
+<p>Suppose there are two routes:</p>
+<div class="ascii-box"><pre>Route A:  Arad → Sibiu → Fagaras → Bucharest
+Cost = 450 km
+
+Route B:  Arad → Sibiu → Pitesti → Bucharest
+Cost = 418 km</pre></div>
+<p>Both reach the goal.</p>
+<p>But if the problem says:</p>
+<blockquote>
+<p>Find the least-distance route,</p>
+</blockquote>
+<p>then the second route is preferred.</p>
+<h3>Definition</h3>
+<p><strong>Path cost</strong> is the total cost associated with a path.</p>
+<p>The lecture describes it as additive and uses a step-cost function such as:</p>
+<p>a 
+\rightarrow
+\text{transition from }x\text{ to }y</p>
+<p>a \text{ has cost } c(x,a,y)
+]</p>
+<p>and the path cost is the sum of the step costs along the path. The lecture assumes step costs are non-negative. [Course note: <code>lecture-basic-search.pdf</code>, “Single-State Problem Formulation”.]</p>
+<p>Conceptually:</p>
+<p>define
+\qquad</p>
+<p>g(n)=\sum_{i=1}^{k} c_i
+]</p>
+<p>where each \(c_i\) is a step cost on the path.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “Har move ki apni cost ho sakti hai. Puri journey ki cost = saari individual costs ka total.”
+
+</div>
+
+<h3>The cost can mean different things</h3>
+<p>Depending on the problem, cost might represent:</p>
+<ul>
+<li>distance,</li>
+<li>number of actions,</li>
+<li>time,</li>
+<li>money,</li>
+<li>energy,</li>
+<li>risk,</li>
+<li>or another defined quantity.</li>
+</ul>
+<p>The <strong>problem formulation decides what “good” means</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: Step cost vs path cost -->
+  <section id="s-09" data-search-section="Step cost vs path cost" class="content-section">
+    <div class="section-header">
+      <h2>9. Step cost vs path cost</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This distinction is very important.</p>
+<h3>Step cost</h3>
+<p>Cost of <strong>one transition</strong>.</p>
+<div class="ascii-box"><pre>Arad → Sibiu = 140 km</pre></div>
+<h3>Path cost</h3>
+<p>Cost of the <strong>whole sequence</strong>.</p>
+<div class="ascii-box"><pre>Arad → Sibiu → Fagaras → Bucharest
+
+= 140 + 99 + 211
+= 450 km</pre></div>
+<p>So:</p>
+<div class="ascii-box"><pre>STEP COST = one move
+PATH COST = sum of all move costs</pre></div>
+<h3>Memory anchor</h3>
+<blockquote>
+<p><strong>Step = one bill. Path = total shopping bill.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: State space -->
+  <section id="s-10" data-search-section="State space" class="content-section">
+    <div class="section-header">
+      <h2>10. State space</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Now we introduce a bigger concept.</p>
+<h3>Definition</h3>
+<p>The <strong>state space</strong> is the collection of states reachable through legal actions, together with the transitions between them.</p>
+<p>You can imagine it as a graph:</p>
+<div class="ascii-box"><pre>B
+        /   \
+       /     \
+      A       D
+       \     /
+        \   /
+          C</pre></div>
+<ul>
+<li>Nodes represent <strong>states</strong>.</li>
+<li>Edges represent <strong>actions/transitions</strong>.</li>
+</ul>
+<p>The initial state and the successor function together determine the reachable state space for the problem representation.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “State space matlab problem ki duniya ke saare relevant possible situations aur unke beech ke legal transitions.”
+
+This is not necessarily the same as the entire physical world.
+
+That distinction is crucial.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: Why don&#x27;t we represent the entire real world? -->
+  <section id="s-11" data-search-section="Why don&#x27;t we represent the entire real world?" class="content-section">
+    <div class="section-header">
+      <h2>11. Why don&#x27;t we represent the entire real world?</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose you're solving:</p>
+<blockquote>
+<p>“Drive from Arad to Bucharest.”</p>
+</blockquote>
+<p>The real world contains an enormous amount of detail:</p>
+<div class="ascii-box"><pre>weather
+traffic
+road surface
+music
+passengers
+car temperature
+nearby buildings
+fuel
+police
+road signs
+restaurants
+clouds
+pedestrians
+...</pre></div>
+<p>A search problem might represent the state simply as:</p>
+<div class="ascii-box"><pre>In(Arad)</pre></div>
+<p>That looks ridiculously simple compared with the real world.</p>
+<p>But that simplicity is intentional.</p>
+<p>The lecture explicitly emphasizes that problem formulation usually requires <strong>abstracting away real-world details</strong> to create a state space that can feasibly be explored. [Course note: <code>lecture-basic-search.pdf</code>, summary.] </p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: Abstraction -->
+  <section id="s-12" data-search-section="Abstraction" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>12. Abstraction</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>What is abstraction?</h2>
+<p><strong>Abstraction means removing details that are irrelevant to the current problem while retaining the information necessary to solve it.</strong></p>
+<h3>Everyday analogy</h3>
+<p>Imagine asking:</p>
+<blockquote>
+<p>“How do I get to Room 204?”</p>
+</blockquote>
+<p>You probably need:</p>
+<ul>
+<li>building layout,</li>
+<li>corridors,</li>
+<li>stairs/lifts,</li>
+<li>room numbers.</li>
+</ul>
+<p>You usually do <strong>not</strong> need:</p>
+<ul>
+<li>wall colour,</li>
+<li>what someone is wearing,</li>
+<li>exact temperature of every corridor,</li>
+<li>brand of every light bulb.</li>
+</ul>
+<p>Those details exist in reality but are irrelevant to the route-finding task.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “Real life mein bahut saari information hoti hai. AI problem banate waqt sirf wahi information rakho jo solution decide karne ke kaam aati hai.”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: Why abstraction is difficult -->
+  <section id="s-13" data-search-section="Why abstraction is difficult" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>13. Why abstraction is difficult</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Too little abstraction:</p>
+<div class="ascii-box"><pre>Real world
+████████████████████████████████████████
+
+Search problem becomes enormous.</pre></div>
+<p>Too much abstraction:</p>
+<div class="ascii-box"><pre>Real world
+        ↓
+Keep almost nothing
+        ↓
+Important information disappears.</pre></div>
+<p>The goal is:</p>
+<div class="ascii-box"><pre>REAL WORLD
+     ↓
+REMOVE IRRELEVANT DETAIL
+     ↓
+USEFUL ABSTRACT STATE
+     ↓
+FEASIBLE SEARCH</pre></div>
+<h3>The central trade-off</h3>
+<blockquote>
+<p><strong>Less detail → easier search, but greater risk of losing information.</strong></p>
+<p><strong>More detail → more faithful model, but potentially much harder search.</strong></p>
+</blockquote>
+<p>This is one reason problem formulation is itself an important AI skill.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: Example — Romania route finding -->
+  <section id="s-14" data-search-section="Example — Romania route finding" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>14. Example — Romania route finding</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The course lecture gives a standard formulation.</p>
+<h3>Informal problem</h3>
+<blockquote>
+<p>“I am on holiday in Romania, currently in Arad, and my flight leaves tomorrow from Bucharest.”</p>
+</blockquote>
+<h3>Goal formulation</h3>
+<div class="ascii-box"><pre>Be in Bucharest.</pre></div>
+<h3>Problem formulation</h3>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Component</th>
+<th>Formulation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>State</td>
+<td>Current city</td>
+</tr>
+<tr>
+<td>Initial state</td>
+<td>Arad</td>
+</tr>
+<tr>
+<td>Actions</td>
+<td>Drive to a connected city</td>
+</tr>
+<tr>
+<td>Successor function</td>
+<td>Legal city-to-city transitions</td>
+</tr>
+<tr>
+<td>Goal test</td>
+<td>Current city is Bucharest</td>
+</tr>
+<tr>
+<td>Path cost</td>
+<td>Sum of route distances</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Candidate solution</h3>
+<div class="ascii-box"><pre>Arad → Sibiu → Fagaras → Bucharest</pre></div>
+<p>or another legal sequence ending in Bucharest.</p>
+<p>The search algorithm has not yet been chosen here.</p>
+<p>That is important.</p>
+<p><strong>Problem formulation comes before search strategy.</strong></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: Example — Vacuum World -->
+  <section id="s-15" data-search-section="Example — Vacuum World" class="content-section">
+    <div class="section-header">
+      <h2>15. Example — Vacuum World</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied lecture also asks you to formulate the vacuum world.</p>
+<p>A simple representation uses:</p>
+<ul>
+<li>robot location,</li>
+<li>dirt configuration,</li>
+<li>legal actions.</li>
+</ul>
+<p>The Basic Search lecture gives these kinds of formulations and uses actions such as <strong>Left, Right, Suck, NoOp</strong>. [Course note: <code>lecture-basic-search.pdf</code>, vacuum-world formulation slides.]</p>
+<h3>One simplified formulation</h3>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Component</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>State</td>
+<td>Robot location + dirt configuration</td>
+</tr>
+<tr>
+<td>Initial state</td>
+<td>Given configuration</td>
+</tr>
+<tr>
+<td>Actions</td>
+<td>Left, Right, Suck, NoOp</td>
+</tr>
+<tr>
+<td>Goal test</td>
+<td>No dirt</td>
+</tr>
+<tr>
+<td>Path cost</td>
+<td>1 per action; NoOp may have cost 0 in the lecture formulation</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Visual</h3>
+<div class="ascii-box"><pre>ROOM A        ROOM B
+      ┌────────┬────────┐
+      │        │        │
+      │  🤖    │   •    │
+      │        │  dirt  │
+      └────────┴────────┘
+
+Possible actions:
+← Left     → Right     🧹 Suck     ○ NoOp</pre></div>
+<p>Notice how a huge physical environment becomes a compact symbolic problem.</p>
+<p>That is abstraction in action.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: Example — 8-puzzle -->
+  <section id="s-16" data-search-section="Example — 8-puzzle" class="content-section">
+    <div class="section-header">
+      <h2>16. Example — 8-puzzle</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied lecture formulates the 8-puzzle using the <strong>locations of the numbered tiles</strong>.</p>
+<p>Actions are moves of the blank tile:</p>
+<ul>
+<li>left,</li>
+<li>right,</li>
+<li>up,</li>
+<li>down.</li>
+</ul>
+<p>The goal test checks whether the current board matches the given goal configuration.</p>
+<p>The lecture assigns a cost of <strong>1 per move</strong> and notes that optimal solution of the general n-puzzle family is computationally difficult. [Course note: <code>lecture-basic-search.pdf</code>, 8-puzzle example.]</p>
+<h3>A state</h3>
+<div class="ascii-box"><pre>┌───┬───┬───┐
+│ 1 │ 2 │ 3 │
+├───┼───┼───┤
+│ 4 │   │ 6 │
+├───┼───┼───┤
+│ 7 │ 5 │ 8 │
+└───┴───┴───┘</pre></div>
+<p>The blank is part of the state because its location determines which moves are legal.</p>
+<h3>Legal transition idea</h3>
+<div class="ascii-box"><pre>move UP
+             ↑
+             │
+move LEFT ← [state] → move RIGHT
+             │
+             ↓
+         move DOWN</pre></div>
+<p>Not every action is legal from every state.</p>
+<p>That is why the successor function matters.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: State vs node — a very important distinction -->
+  <section id="s-17" data-search-section="State vs node — a very important distinction" class="content-section">
+    <div class="section-header">
+      <h2>17. State vs node — a very important distinction</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Students frequently mix these two words.</p>
+<p>They are <strong>not exactly the same thing</strong>.</p>
+<h3>State</h3>
+<p>A <strong>state</strong> is a representation of a physical configuration of the problem.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>At Sibiu</pre></div>
+<h3>Node</h3>
+<p>A <strong>node</strong> is a search data structure that stores a state <strong>plus search-related information</strong>.</p>
+<p>The supplied Basic Search lecture specifically notes that a node can contain:</p>
+<ul>
+<li>the state,</li>
+<li>parent,</li>
+<li>children,</li>
+<li>depth,</li>
+<li>path cost.</li>
+</ul>
+<p>It emphasizes that states do not inherently have parents, children, depth or path cost; nodes do. [Course note: <code>lecture-basic-search.pdf</code>, “Implementation: States vs. Nodes”.]</p>
+<h3>Visual</h3>
+<div class="ascii-box"><pre>STATE
+┌────────────────┐
+│   Sibiu        │
+└────────────────┘
+
+NODE
+┌─────────────────────────────┐
+│ State: Sibiu                │
+│ Parent: Arad                │
+│ Depth: 1                    │
+│ Path cost: 140              │
+│ Children: ...               │
+└─────────────────────────────┘</pre></div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> State matlab “main kahan/ kis configuration mein hoon”.
+>
+> Node matlab “search algorithm ke context mein ye state kis route se aayi, kitni depth par hai, kitna cost lag chuka hai, etc.”
+
+</div>
+
+<h3>Memory anchor</h3>
+<blockquote>
+<p><strong>State = situation. Node = situation + search history.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: Path -->
+  <section id="s-18" data-search-section="Path" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>18. Path</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A <strong>path</strong> is a sequence of states connected by actions.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>Arad
+  ↓ drive
+Sibiu
+  ↓ drive
+Fagaras
+  ↓ drive
+Bucharest</pre></div>
+<p>So the path is:</p>
+<div class="ascii-box"><pre>Arad → Sibiu → Fagaras → Bucharest</pre></div>
+<h3>Important</h3>
+<p>A path is <strong>not</strong> a single state.</p>
+<p>A path records a sequence of transitions through the state space.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: Solution -->
+  <section id="s-19" data-search-section="Solution" class="content-section">
+    <div class="section-header">
+      <h2>19. Solution</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A <strong>solution</strong> is a path / sequence of actions that reaches a goal state from the initial state.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>Initial
+Arad
+  ↓
+Sibiu
+  ↓
+Fagaras
+  ↓
+Bucharest
+Goal</pre></div>
+<p>This is a solution because it reaches the goal.</p>
+<p>There may be many solutions.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: Optimal solution -->
+  <section id="s-20" data-search-section="Optimal solution" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>20. Optimal solution</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>An <strong>optimal solution</strong> is the solution with the best value according to the defined path-cost criterion.</p>
+<p>For a shortest-route problem:</p>
+<blockquote>
+<p>optimal = minimum path cost.</p>
+</blockquote>
+<p>For another problem, the objective could be different.</p>
+<p>For example:</p>
+<ul>
+<li>shortest route → minimize distance,</li>
+<li>fastest route → minimize time,</li>
+<li>cheapest route → minimize money.</li>
+</ul>
+<h3>Important insight</h3>
+<p>“Optimal” does <strong>not</strong> mean “universally best.”</p>
+<p>It means:</p>
+<blockquote>
+<p><strong>best according to the problem's specified cost criterion.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: A complete problem-formulation diagram -->
+  <section id="s-21" data-search-section="A complete problem-formulation diagram" class="content-section">
+    <div class="section-header">
+      <h2>21. A complete problem-formulation diagram</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Use this as the chapter's main recall diagram.</p>
+<div class="diagram-box"><pre class="mermaid">
+flowchart LR
+    A[Real-world task] --> B[Goal formulation]
+    B --> C[Choose useful abstraction]
+    C --> D[Initial state]
+    C --> E[Successor function]
+    C --> F[Goal test]
+    C --> G[Path cost]
+    D --> H[State space]
+    E --> H
+    F --> H
+    G --> H
+    H --> I[Search strategy]
+    I --> J[Solution]
+    J --> K[Execute]
+</pre></div>
+<h3>How to read it</h3>
+<ol>
+<li>Start with a real-world task.</li>
+<li>Decide what success means.</li>
+<li>Remove irrelevant details and choose an appropriate representation.</li>
+<li>Define the four problem components.</li>
+<li>This creates a search space that algorithms can explore.</li>
+<li>A search strategy finds a solution.</li>
+<li>The agent executes the resulting action sequence.</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: What exactly is being searched? -->
+  <section id="s-22" data-search-section="What exactly is being searched?" class="content-section">
+    <div class="section-header">
+      <h2>22. What exactly is being searched?</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This is a subtle but important question.</p>
+<p>The algorithm is <strong>not searching through every possible detail of reality</strong>.</p>
+<p>It is searching through the <strong>abstract state space</strong> you defined.</p>
+<p>For route finding:</p>
+<div class="ascii-box"><pre>REAL WORLD
+roads + weather + traffic + people + buildings + etc.
+                         ↓
+                  ABSTRACT IT
+                         ↓
+STATE SPACE
+cities + road connections + costs</pre></div>
+<p>This means the quality of the final search result depends partly on the quality of the formulation.</p>
+<p>A perfect search algorithm cannot rescue a badly designed problem representation.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: What makes a good problem formulation? -->
+  <section id="s-23" data-search-section="What makes a good problem formulation?" class="content-section">
+    <div class="section-header">
+      <h2>23. What makes a good problem formulation?</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A useful formulation should be:</p>
+<h3>23.1 Correct enough</h3>
+<p>It must preserve the information needed to answer the actual problem.</p>
+<h3>23.2 Small enough to search</h3>
+<p>Keeping irrelevant details can make the state space unnecessarily huge.</p>
+<h3>23.3 Actionable</h3>
+<p>The successor function must describe which transitions are possible.</p>
+<h3>23.4 Goal-oriented</h3>
+<p>The goal test must correctly recognise success.</p>
+<h3>23.5 Cost-aware</h3>
+<p>If multiple solutions are possible, the cost function should reflect what “better” means.</p>
+<p>These are not separate algorithms. They are design decisions made <strong>before the search algorithm runs</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: Common beginner confusion -->
+  <section id="s-24" data-search-section="Common beginner confusion" class="content-section">
+    <div class="section-header">
+      <h2>24. Common beginner confusion</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Confusion 1 — “State = node.”</h2>
+<p>Not exactly.</p>
+<blockquote>
+<p><strong>State = configuration.</strong></p>
+<p><strong>Node = search record containing a state + search information.</strong></p>
+</blockquote>
+<hr />
+<h2>Confusion 2 — “Goal state = goal test.”</h2>
+<p>They are related but not identical.</p>
+<ul>
+<li>Goal state = a state that satisfies the objective.</li>
+<li>Goal test = the procedure used to check whether a state is a goal.</li>
+</ul>
+<hr />
+<h2>Confusion 3 — “Action = successor function.”</h2>
+<p>No.</p>
+<ul>
+<li>action = one possible operation,</li>
+<li>successor function = the mechanism that describes the legal action-state transitions from a state.</li>
+</ul>
+<hr />
+<h2>Confusion 4 — “Path cost = step cost.”</h2>
+<p>No.</p>
+<div class="ascii-box"><pre>step cost = one move
+path cost = total across the path</pre></div>
+<hr />
+<h2>Confusion 5 — “Search algorithm creates the problem.”</h2>
+<p>No.</p>
+<p>The problem formulation exists first.</p>
+<p>The search algorithm decides <strong>how to explore</strong> the formulated space.</p>
+<hr />
+<h2>Confusion 6 — “More detail always means a better model.”</h2>
+<p>Not necessarily.</p>
+<p>More detail can make the problem computationally infeasible without improving the answer.</p>
+<p>That is why abstraction is essential.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: Worked Example — formulate a route problem yourself -->
+  <section id="s-25" data-search-section="Worked Example — formulate a route problem yourself" class="content-section mode-gate">
+    <div class="section-header">
+      <h2>25. Worked Example — formulate a route problem yourself</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Problem</h3>
+<p>You are at <strong>Jind</strong> and want to reach <strong>Delhi</strong>. You may travel between connected cities. You want the minimum-distance route.</p>
+<p>Do not solve the route yet.</p>
+<p>We only formulate the problem.</p>
+<h3>Step 1 — Goal</h3>
+<div class="ascii-box"><pre>Reach Delhi.</pre></div>
+<h3>Step 2 — State</h3>
+<p>We only need the current city.</p>
+<div class="ascii-box"><pre>State = current city</pre></div>
+<h3>Step 3 — Initial state</h3>
+<div class="ascii-box"><pre>Jind</pre></div>
+<h3>Step 4 — Actions / successor function</h3>
+<p>From each city, move to a connected city.</p>
+<p>For a state such as Jind:</p>
+<div class="ascii-box"><pre>S(Jind) = legal connected cities</pre></div>
+<p>Each transition carries the action “travel to that city”.</p>
+<h3>Step 5 — Goal test</h3>
+<div class="ascii-box"><pre>Current city == Delhi</pre></div>
+<h3>Step 6 — Path cost</h3>
+<div class="ascii-box"><pre>sum of travel distances</pre></div>
+<h3>Final formulation</h3>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Item</th>
+<th>Answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Initial state</td>
+<td>Jind</td>
+</tr>
+<tr>
+<td>State</td>
+<td>Current city</td>
+</tr>
+<tr>
+<td>Actions</td>
+<td>Travel along a connecting road</td>
+</tr>
+<tr>
+<td>Successor function</td>
+<td>Generates connected cities + action transitions</td>
+</tr>
+<tr>
+<td>Goal test</td>
+<td>Current city is Delhi</td>
+</tr>
+<tr>
+<td>Path cost</td>
+<td>Total travel distance</td>
+</tr>
+</tbody>
+</table></div>
+<p>Only after this formulation is complete should we ask:</p>
+<blockquote>
+<p>Which search strategy should solve it?</p>
+</blockquote>
+<p>That question belongs to the next chapters.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: Worked Example — 8-puzzle formulation -->
+  <section id="s-26" data-search-section="Worked Example — 8-puzzle formulation" class="content-section">
+    <div class="section-header">
+      <h2>26. Worked Example — 8-puzzle formulation</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Given a starting board:</p>
+<div class="ascii-box"><pre>1 2 3
+4 _ 6
+7 5 8</pre></div>
+<p>and a target board:</p>
+<div class="ascii-box"><pre>1 2 3
+4 5 6
+7 8 _</pre></div>
+<h3>State</h3>
+<p>Arrangement of the tiles + blank location.</p>
+<h3>Initial state</h3>
+<p>The first board.</p>
+<h3>Actions</h3>
+<p>Move blank:</p>
+<ul>
+<li>left,</li>
+<li>right,</li>
+<li>up,</li>
+<li>down,</li>
+</ul>
+<p>when legal.</p>
+<h3>Successor function</h3>
+<p>Generate all boards reachable by one legal blank move.</p>
+<h3>Goal test</h3>
+<p>Check whether the board equals the specified target arrangement.</p>
+<h3>Path cost</h3>
+<p>1 for every move.</p>
+<h3>Solution</h3>
+<p>A sequence of legal blank moves that reaches the goal.</p>
+<h3>Optimal solution</h3>
+<p>The solution requiring the fewest moves under the given unit step cost.</p>
+<p>The formulation matches the structure used in the supplied Basic Search lecture. [Course note: <code>lecture-basic-search.pdf</code>, 8-puzzle example.]</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: Worked Example — robotic assembly -->
+  <section id="s-27" data-search-section="Worked Example — robotic assembly" class="content-section">
+    <div class="section-header">
+      <h2>27. Worked Example — robotic assembly</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The Basic Search lecture also gives robotic assembly as an example.</p>
+<p>A useful formulation is:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Component</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>State</td>
+<td>Real-valued joint coordinates + relevant assembly configuration</td>
+</tr>
+<tr>
+<td>Actions</td>
+<td>Continuous motions of robot joints</td>
+</tr>
+<tr>
+<td>Goal test</td>
+<td>Complete assembly</td>
+</tr>
+<tr>
+<td>Path cost</td>
+<td>Time to execute</td>
+</tr>
+</tbody>
+</table></div>
+<p>The exact representation depends on what details are necessary for the task. [Course note: <code>lecture-basic-search.pdf</code>, robotic-assembly example.]</p>
+<h3>Why this example matters</h3>
+<p>It demonstrates that states do not always look like city names or simple board positions.</p>
+<p>A state can contain <strong>continuous numerical variables</strong> and physical configuration information.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: Problem formulation vs search strategy -->
+  <section id="s-28" data-search-section="Problem formulation vs search strategy" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>28. Problem formulation vs search strategy</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>These are different levels.</p>
+<h3>Level 1 — Problem formulation</h3>
+<blockquote>
+<p>What is the problem?</p>
+</blockquote>
+<p>Defines:</p>
+<div class="ascii-box"><pre>states
+actions
+successors
+goal
+cost</pre></div>
+<h3>Level 2 — Search strategy</h3>
+<blockquote>
+<p>How do we explore possible solutions?</p>
+</blockquote>
+<p>Examples you'll learn next:</p>
+<ul>
+<li>BFS</li>
+<li>DFS</li>
+<li>Uniform-Cost Search</li>
+<li>Greedy Best-First</li>
+<li>A*</li>
+</ul>
+<h3>Mental model</h3>
+<div class="ascii-box"><pre>PROBLEM FORMULATION
+        ↓
+“Here is the map of the problem.”
+        ↓
+SEARCH STRATEGY
+        ↓
+“Here is how I will explore that map.”</pre></div>
+<p>The same problem can be solved by different search strategies.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 29: Why this chapter comes before BFS and DFS -->
+  <section id="s-29" data-search-section="Why this chapter comes before BFS and DFS" class="content-section">
+    <div class="section-header">
+      <h2>29. Why this chapter comes before BFS and DFS</h2>
+      <button class="bookmark-btn" data-id="s-29" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose I say:</p>
+<blockquote>
+<p>“Use BFS.”</p>
+</blockquote>
+<p>You still need to know:</p>
+<ul>
+<li>BFS on what?</li>
+<li>What is a state?</li>
+<li>What are the successors?</li>
+<li>What counts as the goal?</li>
+<li>What does a path mean?</li>
+</ul>
+<p>Without a formulation, BFS is just a generic mechanism with nothing concrete to operate on.</p>
+<p>So the correct learning order is:</p>
+<div class="ascii-box"><pre>PROBLEM
+ ↓
+FORMULATION
+ ↓
+STATE SPACE
+ ↓
+SEARCH STRATEGY</pre></div>
+<p>That is why this chapter is the foundation for the next chapter on uninformed search.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 30: Formula / notation cards -->
+  <section id="s-30" data-search-section="Formula / notation cards" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>30. Formula / notation cards</h2>
+      <button class="bookmark-btn" data-id="s-30" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Card AI-F-01 — Successor function</h2>
+<p>a conceptual form:</p>
+<div class="formula-math">\[
+S(x)=\{(a_1,x_1),(a_2,x_2),\dots\}
+\]</div>
+<h3>Meaning</h3>
+<p>From state \(x\), the function returns legal action-state transitions.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “Is state se kaunse moves possible hain aur har move ke baad kahan pahunchunga?”
+
+</div>
+
+<hr />
+<h2>Card AI-F-02 — Step cost</h2>
+<div class="formula-math">\[
+c(x,a,y)
+\]</div>
+<h3>Meaning</h3>
+<p>Cost of taking action \(a\) to move from \(x\) to \(y\).</p>
+<hr />
+<h2>Card AI-F-03 — Path cost</h2>
+<div class="formula-math">\[
+\text{Path Cost}=\sum \text{Step Costs}
+\]</div>
+<h3>Meaning</h3>
+<p>Total cost accumulated along the whole action sequence.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “Saare moves ka total bill.”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 31: One-page memory map -->
+  <section id="s-31" data-search-section="One-page memory map" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>31. One-page memory map</h2>
+      <button class="bookmark-btn" data-id="s-31" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>PROBLEM FORMULATION
+                         │
+        ┌────────────────┼────────────────┐
+        ↓                ↓                ↓
+     INITIAL          ACTIONS          GOAL
+      STATE        / SUCCESSORS          TEST
+        │                │                │
+        └────────────────┼────────────────┘
+                         ↓
+                    STATE SPACE
+                         │
+                         ↓
+                    PATH / NODES
+                         │
+                         ↓
+                    PATH COST
+                         │
+                         ↓
+                     SOLUTION
+                         │
+                         ↓
+                  OPTIMAL SOLUTION</pre></div>
+<h3>Super-short mnemonic</h3>
+<blockquote>
+<p><strong>Start → Move → Check → Cost</strong></p>
+</blockquote>
+<p>More precisely:</p>
+<blockquote>
+<p><strong>Initial State → Successor Function → Goal Test → Path Cost</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 32: Active recall — close the book -->
+  <section id="s-32" data-search-section="Active recall — close the book" class="content-section">
+    <div class="section-header">
+      <h2>32. Active recall — close the book</h2>
+      <button class="bookmark-btn" data-id="s-32" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Try answering without looking.</p>
+<ol>
+<li>Why can't an AI search algorithm work directly from the sentence “go to Delhi”?</li>
+<li>What is problem formulation?</li>
+<li>What are the four main components of a single-state search problem in your course notes?</li>
+<li>What is an initial state?</li>
+<li>What is a successor function?</li>
+<li>What is an action?</li>
+<li>What is a successor state?</li>
+<li>What is the difference between an explicit and implicit goal test?</li>
+<li>What is a step cost?</li>
+<li>What is path cost?</li>
+<li>What is a state space?</li>
+<li>What is the difference between a state and a node?</li>
+<li>What is a path?</li>
+<li>What is a solution?</li>
+<li>What is an optimal solution?</li>
+<li>Why is abstraction necessary?</li>
+<li>Why can too much abstraction be dangerous?</li>
+<li>Why must problem formulation happen before search?</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 33: Practice set -->
+  <section id="s-33" data-search-section="Practice set" class="content-section">
+    <div class="section-header">
+      <h2>33. Practice set</h2>
+      <button class="bookmark-btn" data-id="s-33" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>A. Multiple choice</h2>
+<h3>Q1</h3>
+<p>Which component specifies where the search starts?</p>
+<p>A. Goal test<br />
+B. Initial state<br />
+C. Path cost<br />
+D. Heuristic</p>
+<p><strong>Answer:</strong> B</p>
+<hr />
+<h3>Q2</h3>
+<p>Which of the following best describes a successor function?</p>
+<p>A. It evaluates whether a state is optimal.<br />
+B. It determines the total cost of the solution.<br />
+C. It describes legal action-state transitions from a state.<br />
+D. It stores the history of the entire search.</p>
+<p><strong>Answer:</strong> C</p>
+<hr />
+<h3>Q3</h3>
+<p>Which statement is correct?</p>
+<p>A. Path cost is always 1.<br />
+B. Step cost and path cost are identical.<br />
+C. Path cost is generally the sum of step costs along a path.<br />
+D. Goal test and path cost are the same.</p>
+<p><strong>Answer:</strong> C</p>
+<hr />
+<h2>B. Short answers</h2>
+<ol>
+<li>Define problem formulation.</li>
+<li>Explain the four components of a single-state problem formulation.</li>
+<li>Differentiate state and node.</li>
+<li>Explain abstraction with one AI example.</li>
+<li>Differentiate solution and optimal solution.</li>
+</ol>
+<hr />
+<h2>C. Formulation exercise</h2>
+<p>For each problem, specify:</p>
+<div class="ascii-box"><pre>State
+Initial state
+Actions
+Successor function
+Goal test
+Path cost</pre></div>
+<h3>Problem 1</h3>
+<p>Find the shortest route between two cities.</p>
+<h3>Problem 2</h3>
+<p>Solve an 8-puzzle.</p>
+<h3>Problem 3</h3>
+<p>Clean a two-room vacuum world.</p>
+<h3>Problem 4</h3>
+<p>Move a robot through a warehouse to pick up a package.</p>
+<h3>Problem 5</h3>
+<p>Plan the sequence of moves in a board game.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 34: Exam connection -->
+  <section id="s-34" data-search-section="Exam connection" class="content-section">
+    <div class="section-header">
+      <h2>34. Exam connection</h2>
+      <button class="bookmark-btn" data-id="s-34" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Likely exam tasks from this chapter</h2>
+<h3>Definition question</h3>
+<blockquote>
+<p>Define problem formulation in Artificial Intelligence.</p>
+</blockquote>
+<h3>List question</h3>
+<blockquote>
+<p>What are the components of a single-state problem formulation?</p>
+</blockquote>
+<h3>Explain question</h3>
+<blockquote>
+<p>Explain initial state, successor function, goal test and path cost with a suitable example.</p>
+</blockquote>
+<h3>Diagram question</h3>
+<blockquote>
+<p>Represent the state space of a simple problem.</p>
+</blockquote>
+<h3>Comparison question</h3>
+<blockquote>
+<p>Differentiate state and node.</p>
+</blockquote>
+<h3>Application question</h3>
+<blockquote>
+<p>Formulate the 8-puzzle / route-finding / vacuum-world problem.</p>
+</blockquote>
+<h3>Conceptual question</h3>
+<blockquote>
+<p>Why is abstraction necessary in AI problem formulation?</p>
+</blockquote>
+<h3>High-value long answer structure</h3>
+<p>For a longer answer, write in this order:</p>
+<ol>
+<li>definition,</li>
+<li>motivation,</li>
+<li>four components,</li>
+<li>state-space idea,</li>
+<li>one worked formulation example,</li>
+<li>state vs node,</li>
+<li>solution/optimal solution,</li>
+<li>abstraction,</li>
+<li>concluding statement.</li>
+</ol>
+<blockquote>
+<p><strong>Exam Book bridge:</strong> <code>EXAM-U1-FORM-01</code></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 35: Math connection -->
+  <section id="s-35" data-search-section="Math connection" class="content-section">
+    <div class="section-header">
+      <h2>35. Math connection</h2>
+      <button class="bookmark-btn" data-id="s-35" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This chapter is mostly conceptual, so advanced mathematics is not required.</p>
+<p>However, three mathematical ideas will appear later and should become familiar:</p>
+<h3>35.1 Functions</h3>
+<p>You will repeatedly see mappings such as:</p>
+<div class="formula-math">\[
+S(x)
+\]</div>
+<p>which means “apply a function to state \(x\).”</p>
+<h3>35.2 Summation</h3>
+<p>Path cost is naturally represented as a sum:</p>
+<div class="formula-math">\[
+\sum_i c_i
+\]</div>
+<h3>35.3 Graphs</h3>
+<p>Search spaces are naturally represented as graphs:</p>
+<div class="ascii-box"><pre>node/state ──edge/action──&gt; node/state</pre></div>
+<blockquote>
+<p><strong>Math Companion bridge:</strong> <code>MATH-M01-FUNCTIONS</code>, <code>MATH-M02-SUMMATION</code>, <code>MATH-M03-GRAPHS</code></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 36: Resource shelf -->
+  <section id="s-36" data-search-section="Resource shelf" class="content-section">
+    <div class="section-header">
+      <h2>36. Resource shelf</h2>
+      <button class="bookmark-btn" data-id="s-36" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Primary course source</h2>
+<p><strong>Your supplied:</strong> <code>lecture-basic-search.pdf</code></p>
+<p>Use it for the course-specific formulation, examples and terminology.</p>
+<p>Key objects from the lecture used in this chapter include:</p>
+<ul>
+<li>problem-solving agents,</li>
+<li>Romania route formulation,</li>
+<li>vacuum-world formulation,</li>
+<li>8-puzzle formulation,</li>
+<li>robotic assembly,</li>
+<li>state vs node,</li>
+<li>tree-search representation,</li>
+<li>abstraction.</li>
+</ul>
+<p>The lecture also notes that problem formulation generally requires abstracting away real-world details to make the state space feasible to explore. [Course note: <code>lecture-basic-search.pdf</code>, summary.] </p>
+<h2>Deeper universal reference</h2>
+<p><strong>Russell &amp; Norvig — Artificial Intelligence: A Modern Approach</strong></p>
+<p>Relevant area:</p>
+<blockquote>
+<p>Problem-Solving Agents / Problem Formulation / Search</p>
+</blockquote>
+<h2>External conceptual reference</h2>
+<p>A standard AIMA-style formulation also uses the initial state, successor function, goal test and path cost, with a solution defined as a sequence of actions leading to a goal state. citeturn217759search12turn217759search14</p>
+<p>Use external references to deepen understanding, but use the supplied course notes as the authority for your university-specific terminology.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 37: What you should NOT memorize yet -->
+  <section id="s-37" data-search-section="What you should NOT memorize yet" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>37. What you should NOT memorize yet</h2>
+      <button class="bookmark-btn" data-id="s-37" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Do not waste time memorizing isolated wording such as:</p>
+<blockquote>
+<p>“state is an abstract representation of a physical configuration”</p>
+</blockquote>
+<p>without understanding it.</p>
+<p>You need to understand the concept first.</p>
+<p>For the exam, you should eventually be able to write the formal definition, but the understanding should be:</p>
+<blockquote>
+<p><strong>“State = the relevant current configuration of the problem.”</strong></p>
+</blockquote>
+<p>Likewise:</p>
+<blockquote>
+<p><strong>Node = state + search bookkeeping.</strong></p>
+<p><strong>Path = sequence of transitions.</strong></p>
+<p><strong>Solution = path reaching a goal.</strong></p>
+<p><strong>Optimal solution = best solution under the defined cost criterion.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 38: Chapter exit test -->
+  <section id="s-38" data-search-section="Chapter exit test" class="content-section">
+    <div class="section-header">
+      <h2>38. Chapter exit test</h2>
+      <button class="bookmark-btn" data-id="s-38" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You have mastered this chapter when you can do all of these <strong>without looking at the notes</strong>:</p>
+<h3>Concept</h3>
+<ul>
+<li>Explain why problem formulation is necessary.</li>
+</ul>
+<h3>Representation</h3>
+<ul>
+<li>Define a state and state space.</li>
+</ul>
+<h3>Formulation</h3>
+<ul>
+<li>Correctly identify all four components.</li>
+</ul>
+<h3>Visualization</h3>
+<ul>
+<li>Draw a simple state-space graph.</li>
+</ul>
+<h3>Application</h3>
+<ul>
+<li>Formulate Romania route finding.</li>
+<li>Formulate a vacuum-world problem.</li>
+<li>Formulate an 8-puzzle.</li>
+</ul>
+<h3>Terminology</h3>
+<ul>
+<li>Distinguish state, node, path, solution and optimal solution.</li>
+</ul>
+<h3>Reasoning</h3>
+<ul>
+<li>Explain why abstraction is necessary.</li>
+</ul>
+<h3>Transition to next topic</h3>
+<ul>
+<li>Explain why a search strategy cannot be selected meaningfully until the problem has been formulated.</li>
+</ul>
+<p>If you can do all of that, you are ready for <strong>BFS and DFS</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 39: Final mental model -->
+  <section id="s-39" data-search-section="Final mental model" class="content-section">
+    <div class="section-header">
+      <h2>39. Final mental model</h2>
+      <button class="bookmark-btn" data-id="s-39" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine AI is solving a maze.</p>
+<p>Before choosing whether to walk:</p>
+<ul>
+<li>left-first,</li>
+<li>right-first,</li>
+<li>breadth-first,</li>
+<li>depth-first,</li>
+<li>or heuristic-first,</li>
+</ul>
+<p>the AI first needs to agree on what the maze problem actually means.</p>
+<div class="ascii-box"><pre>THE WORLD
+   ↓
+What do I want?
+   ↓
+What information matters?
+   ↓
+What is my current state?
+   ↓
+What moves are legal?
+   ↓
+What counts as success?
+   ↓
+What does a move cost?
+   ↓
+STATE SPACE
+   ↓
+NOW SEARCH</pre></div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish final anchor</div>
+
+> **“Pehle problem ko sahi tarah frame karo. Phir algorithm decide karo ki us problem ko kaise search karna hai.”**
+
+That is the core idea of **problem formulation**.
+
+</div>
+
+<hr />
+<h2>Source grounding note</h2>
+<p>This chapter is primarily derived from your supplied <code>lecture-basic-search.pdf</code>, especially its problem-solving-agent flow, Romania example, formal four-component problem formulation, vacuum-world/8-puzzle/robotic-assembly examples, state-vs-node distinction, and abstraction summary. The source describes problem-solving as formulating a goal, formulating a problem, searching for a solution, and executing the action sequence; it formalizes a problem using an initial state, successor function, goal test and path cost. <span class="source-marker">Course source: <code>lecture-basic-search.pdf</code></span></p>
+<p><strong>MAIN-U1-C03 COMPLETE</strong><br />
+<strong>Next:</strong> <code>MAIN-U1-C04 — Uninformed Search: BFS, DFS, Uniform-Cost Search and related properties</code></p>
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="ch02-intelligent-agents.html" class="nav-btn">← Ch 2 — Intelligent Agents</a>
+    <a href="ch04-uninformed-search.html" class="nav-btn primary">Next: Ch 4 — Uninformed Search →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch03-problem-formulation.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 3</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

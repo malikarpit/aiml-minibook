@@ -1,0 +1,2398 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 39: Unit III Consolidation &amp; Deep Learning Mastery — AI & Machine Learning MiniBook. End-to-End Neural Pipeline, Architecture Selection Decision Tree, Hyperparameter Tuning Playbook, University Exam Blueprints, and 10-Mark Model Answers">
+<title>Ch 39 — Unit III Consolidation &amp; Deep Learning Mastery | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-xvi">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 39 — Unit III Consolidation &amp; Deep Learning Mastery</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 39 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why This Chapter Exists <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. The One-Sentence Meaning of Every Topic <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. The Complete Neural-Network Learning Loop <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Three Different Questions That Students Commonly Mix Up <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Neuron → Perceptron → MLP <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Why Nonlinearity Matters <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Activation Functions — What Each One Is For <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Loss Functions — The Network Needs a Learning Signal <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Gradient Descent — The Parameter-Movement Rule <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Learning Rate — Why Step Size Matters <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Backpropagation — The Chain Rule in Action <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Parameter Gradient vs Parameter Update <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. CNN — Why Convolution Changes the Architecture <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. CNN Vocabulary You Must Not Mix Up <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. RNN — Why Recurrence Changes the Architecture <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. LSTM — Why the Gates Matter <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. CNN vs RNN vs LSTM vs MLP <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. The Architecture Selection Mental Model <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. A Single Worked Training Story <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. The Mathematical Dependency Map <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Unit III Formula Map <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Parameter Counting — A Core Exam Skill <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Shape Reasoning <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Unit III Common Confusions <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. The Unit III “Why” Chain <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Active Recall Master Test <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. University Exam Blueprint <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. High-Probability Numerical Patterns to Practice <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. High-Value Diagram Practice <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Unit III Comparison Matrix <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Failure Visuals You Should Understand <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Universal vs University Lens <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Mid-Sem vs End-Sem Use <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. One-Page Mental Map <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Final Unit III Oral-Test Questions <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. The “Explain It to a Friend” Test <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Unit III Mastery Rubric <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Unit III Final Checklist <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Exam-Day Formula Sheet <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Final Memory Anchors <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. What You Should Do After Reading This Chapter </a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Resource and Course Lens </a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Final Unit III Readiness Gate </a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. End of Unit III </a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. Next Unit </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link active"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit III</span><span>›</span><span>Part XVI — Unit III Consolidation & Deep Learning Mastery</span><span>›</span><span style="color:var(--em-text)">Chapter 39</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 39 · Unit III · Part XVI</div>
+    <div class="chapter-part-banner part-xvi">
+      <span class="part-banner-badge">Unit III · Part XVI</span>
+      <span>Unit III Consolidation & Deep Learning Mastery</span>
+    </div>
+    <h1 class="chapter-title">Unit III Consolidation &amp; Deep Learning Mastery</h1>
+    <div class="concept-id-tag">[CONCEPT-DL-039]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: Grand Master Consolidation (Must Read Before Exams)</span>
+      <span class="chapter-meta-item">📖 ~60 min read</span>
+      <span class="chapter-meta-item">🎯 45 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>Unit III Consolidation & Deep Learning Mastery:</strong> Comprehensive synthesis of Unit III: Biological vs Artificial neurons, Perceptron learning and XOR limitation, MLP Universal Approximation, Activations and vanishing gradients, Optimization algorithms (SGD, Momentum, Adam), Backpropagation chain rule derivations, CNN spatial hierarchy, RNN temporal unrolling, and LSTM gating mechanisms.</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why This Chapter Exists</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">The One-Sentence Meaning of Every Topic</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">The Complete Neural-Network Learning Loop</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Three Different Questions That Students Commonly Mix Up</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Neuron → Perceptron → MLP</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Why Nonlinearity Matters</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Activation Functions — What Each One Is For</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Loss Functions — The Network Needs a Learning Signal</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Gradient Descent — The Parameter-Movement Rule</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Learning Rate — Why Step Size Matters</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Backpropagation — The Chain Rule in Action</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Parameter Gradient vs Parameter Update</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">CNN — Why Convolution Changes the Architecture</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">CNN Vocabulary You Must Not Mix Up</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">RNN — Why Recurrence Changes the Architecture</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">LSTM — Why the Gates Matter</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">CNN vs RNN vs LSTM vs MLP</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">The Architecture Selection Mental Model</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">A Single Worked Training Story</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">The Mathematical Dependency Map</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Unit III Formula Map</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Parameter Counting — A Core Exam Skill</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Shape Reasoning</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Unit III Common Confusions</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">The Unit III “Why” Chain</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Active Recall Master Test</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">University Exam Blueprint</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">High-Probability Numerical Patterns to Practice</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">High-Value Diagram Practice</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Unit III Comparison Matrix</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Failure Visuals You Should Understand</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Universal vs University Lens</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Mid-Sem vs End-Sem Use</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">One-Page Mental Map</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Final Unit III Oral-Test Questions</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">The “Explain It to a Friend” Test</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Unit III Mastery Rubric</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Unit III Final Checklist</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Exam-Day Formula Sheet</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Final Memory Anchors</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">What You Should Do After Reading This Chapter</span></a></li>
+      <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Resource and Course Lens</span></a></li>
+      <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Final Unit III Readiness Gate</span></a></li>
+      <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">End of Unit III</span></a></li>
+      <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">Next Unit</span></a></li>
+    </ul>
+  </div>
+
+  
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 1: Why This Chapter Exists -->
+  <section id="s-01" data-search-section="Why This Chapter Exists" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>1. Why This Chapter Exists</h2>
+      <button class="bookmark-btn" data-id="s-01" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Unit III contains many terms that can initially feel unrelated:</p>
+<ul>
+<li>neuron;</li>
+<li>perceptron;</li>
+<li>MLP;</li>
+<li>activation function;</li>
+<li>loss function;</li>
+<li>gradient descent;</li>
+<li>backpropagation;</li>
+<li>CNN;</li>
+<li>RNN;</li>
+<li>LSTM.</li>
+</ul>
+<p>But these are not ten unrelated topics.</p>
+<p>They form a progression.</p>
+<div class="ascii-box"><pre>NEURAL NETWORKS
+                        │
+          ┌─────────────┴─────────────┐
+          │                           │
+     COMPUTATION                 LEARNING
+          │                           │
+       neuron                        loss
+          ↓                           ↓
+      perceptron              gradient descent
+          ↓                           ↓
+        MLP                    backpropagation
+          │
+    ┌─────┴─────┐
+    │           │
+   CNN         RNN
+                ↓
+               LSTM</pre></div>
+<p>The unit becomes much easier once you understand the <strong>role</strong> each topic plays.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 2: The One-Sentence Meaning of Every Topic -->
+  <section id="s-02" data-search-section="The One-Sentence Meaning of Every Topic" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. The One-Sentence Meaning of Every Topic</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Topic</th>
+<th>One-sentence meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Artificial neuron</td>
+<td>A weighted computation followed by a bias and activation.</td>
+</tr>
+<tr>
+<td>Perceptron</td>
+<td>A threshold-based linear decision unit and an early learnable neuron model.</td>
+</tr>
+<tr>
+<td>MLP</td>
+<td>A feedforward composition of multiple parameterized layers.</td>
+</tr>
+<tr>
+<td>Activation</td>
+<td>A function that transforms a neuron's pre-activation output.</td>
+</tr>
+<tr>
+<td>Loss</td>
+<td>A numerical measure of how wrong a prediction is.</td>
+</tr>
+<tr>
+<td>Gradient descent</td>
+<td>An optimization rule that changes parameters toward lower loss.</td>
+</tr>
+<tr>
+<td>Backpropagation</td>
+<td>Efficiently computes gradients of the loss through a layered computation graph.</td>
+</tr>
+<tr>
+<td>CNN</td>
+<td>A neural architecture that exploits local structure and shared filters, especially useful for grid-like data such as images.</td>
+</tr>
+<tr>
+<td>RNN</td>
+<td>A recurrent architecture that carries state across sequence positions.</td>
+</tr>
+<tr>
+<td>LSTM</td>
+<td>A gated recurrent architecture with explicit cell-state memory.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Memorize these meanings before memorizing detailed formulas.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: The Complete Neural-Network Learning Loop -->
+  <section id="s-03" data-search-section="The Complete Neural-Network Learning Loop" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>3. The Complete Neural-Network Learning Loop</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="diagram-box"><pre class="mermaid">
+graph TD
+    DATA["1. Training Batch (X, Y)"] --> FWD["2. Forward Propagation:<br/>z = Wx + b, a = σ(z)"]
+    FWD --> LOSS["3. Loss Computation:<br/>ℒ(ŷ, y) (MSE / Cross-Entropy)"]
+    LOSS --> BACK["4. Backward Propagation:<br/>Compute ∂ℒ/∂W via Chain Rule & δ"]
+    BACK --> OPT["5. Optimizer Update:<br/>W ← W - η · Adam/Momentum(∇W)"]
+    OPT --> CHECK{"Epoch Finished?"}
+    CHECK -- No --> DATA
+    CHECK -- Yes --> VAL["6. Validation Evaluation & Generalization Check"]
+</pre></div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher explanation — Hinglish</div>
+
+Unit III ka master formula hamesha yaad rakhna:
+"Har deep learning model 3 hisson ka bana hota hai:
+1. **Architecture** (Information aage kaise badhegi: Dense/MLP, Conv/CNN, ya Recurrent/LSTM),
+2. **Loss Function** (Galati kaise naapenge: MSE for numbers, Cross-Entropy for classes), aur
+3. **Optimizer** (Seekhenge kaise: SGD, Momentum, ya Adam)."
+Jab exam mein 10-mark question aaye, in teeno pillars ko alag-alag headings mein explain karo!
+
+
+This is the most important Unit III diagram.
+
+
+
+<div class="ascii-box"><pre>TRAINING DATA
+                         │
+                         ▼
+                     INPUT x
+                         │
+                         ▼
+                  ┌─────────────┐
+                  │ FORWARD     │
+                  │ COMPUTATION │
+                  └──────┬──────┘
+                         │
+                         ▼
+                     prediction ŷ
+                         │
+                         ▼
+                   LOSS L(y, ŷ)
+                         │
+                         ▼
+                 BACKPROPAGATION
+                         │
+                         ▼
+                 gradients ∂L/∂θ
+                         │
+                         ▼
+                 GRADIENT DESCENT
+                         │
+                         ▼
+                 updated parameters θ
+                         │
+                         └──────────────► repeat</pre></div>
+
+
+
+The architecture tells you **how information flows forward**.
+
+Backpropagation tells you **how derivative information flows backward**.
+
+Gradient descent tells you **how parameters are changed using that derivative information**.
+
+This distinction is crucial.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: Three Different Questions That Students Commonly Mix Up -->
+  <section id="s-04" data-search-section="Three Different Questions That Students Commonly Mix Up" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>4. Three Different Questions That Students Commonly Mix Up</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Question 1: What does the network compute?</h3>
+<p>Answer:</p>
+<blockquote>
+<p>The <strong>forward pass</strong>.</p>
+</blockquote>
+<h3>Question 2: How do we know which parameters should change?</h3>
+<p>Answer:</p>
+<blockquote>
+<p><strong>Backpropagation</strong> computes gradients.</p>
+</blockquote>
+<h3>Question 3: How are the parameters actually changed?</h3>
+<p>Answer:</p>
+<blockquote>
+<p>An <strong>optimizer</strong>, such as gradient descent or a variant, updates them.</p>
+</blockquote>
+<p>Therefore:</p>
+<div class="ascii-box"><pre>Forward pass
+   = compute prediction
+
+Backpropagation
+   = compute gradient information
+
+Gradient descent / optimizer
+   = update parameters</pre></div>
+<p>These are related but not identical.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: Neuron → Perceptron → MLP -->
+  <section id="s-05" data-search-section="Neuron → Perceptron → MLP" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>5. Neuron → Perceptron → MLP</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>5.1 Artificial neuron</h2>
+<p>The generic pre-activation is:</p>
+<div class="formula-math">\[
+z=w^Tx+b.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+a=\phi(z).
+\]</div>
+<p>A neuron therefore performs:</p>
+<div class="ascii-box"><pre>weighted combination
+        ↓
+      + bias
+        ↓
+      activation
+        ↓
+       output</pre></div>
+<hr />
+<h2>5.2 Perceptron</h2>
+<p>A perceptron uses a threshold-type decision.</p>
+<p>Conceptually:</p>
+<div class="formula-math">\[
+\hat y=
+\begin{cases}
+1,&w^Tx+b\ge 0\\
+0,&w^Tx+b\lt 0
+\end{cases}
+\]</div>
+<p>Its decision boundary satisfies:</p>
+<div class="formula-math">\[
+\boxed{w^Tx+b=0}
+\]</div>
+<p>This is a <strong>linear decision boundary</strong>.</p>
+<hr />
+<h2>5.3 MLP</h2>
+<p>An MLP stacks transformations:</p>
+<div class="formula-math">\[
+z^{(1)}=W^{(1)}x+b^{(1)}
+\]</div>
+<div class="formula-math">\[
+a^{(1)}=\phi^{(1)}(z^{(1)})
+\]</div>
+<div class="formula-math">\[
+z^{(2)}=W^{(2)}a^{(1)}+b^{(2)}
+\]</div>
+<div class="formula-math">\[
+a^{(2)}=\phi^{(2)}(z^{(2)})
+\]</div>
+<p>and so on.</p>
+<p>The power comes from <strong>composition</strong> and, crucially, <strong>nonlinearity</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: Why Nonlinearity Matters -->
+  <section id="s-06" data-search-section="Why Nonlinearity Matters" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>6. Why Nonlinearity Matters</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose you stack two purely linear transformations:</p>
+<div class="formula-math">\[
+z_1=W_1x
+\]</div>
+<div class="formula-math">\[
+z_2=W_2z_1
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+z_2=W_2W_1x.
+\]</div>
+<p>The composition is still linear in \(x\) (or affine if biases are included appropriately).</p>
+<p>So simply adding many linear layers does not automatically create the expressive power associated with deep neural networks.</p>
+<p>Activation functions introduce nonlinearity.</p>
+<div class="ascii-box"><pre>Linear → Linear → Linear
+          ↓
+ still collapsible conceptually
+
+Linear → Nonlinear → Linear
+          ↓
+ richer function class</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: Activation Functions — What Each One Is For -->
+  <section id="s-07" data-search-section="Activation Functions — What Each One Is For" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>7. Activation Functions — What Each One Is For</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Function</th>
+<th>Common role</th>
+<th>Range / property</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Step</td>
+<td>threshold decisions</td>
+<td>discrete output</td>
+</tr>
+<tr>
+<td>Sigmoid</td>
+<td>binary probability-style output; gates</td>
+<td>\((0,1)\)</td>
+</tr>
+<tr>
+<td>Tanh</td>
+<td>signed hidden representation</td>
+<td>\((-1,1)\)</td>
+</tr>
+<tr>
+<td>ReLU</td>
+<td>common hidden-layer nonlinearity</td>
+<td>\([0,\infty)\)</td>
+</tr>
+<tr>
+<td>Softmax</td>
+<td>multi-class probability distribution</td>
+<td>positive values summing to 1</td>
+</tr>
+</tbody>
+</table></div>
+<p>Remember:</p>
+<blockquote>
+<p><strong>The appropriate output transformation depends on the prediction task.</strong></p>
+</blockquote>
+<p>For example:</p>
+<div class="ascii-box"><pre>binary classification
+        ↓
+ sigmoid-style output
+
+multi-class classification
+        ↓
+ softmax-style output
+
+hidden layers
+        ↓
+ often ReLU-family activation</pre></div>
+<p>The exact architecture is task-dependent.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: Loss Functions — The Network Needs a Learning Signal -->
+  <section id="s-08" data-search-section="Loss Functions — The Network Needs a Learning Signal" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>8. Loss Functions — The Network Needs a Learning Signal</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A neural network needs to know how wrong it is.</p>
+<p>That is the role of the loss.</p>
+<h3>Mean Squared Error</h3>
+<div class="formula-math">\[
+\boxed{
+MSE=\frac1n\sum_{i=1}^{n}(y_i-\hat y_i)^2
+}
+\]</div>
+<p>Useful for many regression settings.</p>
+<h3>Mean Absolute Error</h3>
+<div class="formula-math">\[
+\boxed{
+MAE=\frac1n\sum_{i=1}^{n}|y_i-\hat y_i|
+}
+\]</div>
+<h3>Binary cross-entropy</h3>
+<div class="formula-math">\[
+\boxed{
+L=-\left[y\log(\hat p)+(1-y)\log(1-\hat p)\right]
+}
+\]</div>
+<p>for a single binary example.</p>
+<h3>Multi-class cross-entropy</h3>
+<div class="formula-math">\[
+\boxed{
+L=-\sum_{k=1}^{K}y_k\log(\hat p_k)
+}
+\]</div>
+<p>for one-hot target vector \(y\).</p>
+<p>The loss answers:</p>
+<blockquote>
+<p><strong>How undesirable is the current prediction?</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: Gradient Descent — The Parameter-Movement Rule -->
+  <section id="s-09" data-search-section="Gradient Descent — The Parameter-Movement Rule" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>9. Gradient Descent — The Parameter-Movement Rule</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the model parameters are collected in \(\theta\).</p>
+<p>The generic update is:</p>
+<div class="formula-math">\[
+\boxed{
+\theta\leftarrow\theta-\eta\nabla_\theta L(\theta)
+}
+\]</div>
+<p>where:</p>
+<ul>
+<li>\(\theta\) = trainable parameters;</li>
+<li>\(L\) = loss;</li>
+<li>\(\nabla_\theta L\) = gradient;</li>
+<li>\(\eta\) = learning rate.</li>
+</ul>
+<p>The minus sign matters.</p>
+<p>The gradient points toward local increase.</p>
+<p>We move in the opposite direction to reduce the objective.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: Learning Rate — Why Step Size Matters -->
+  <section id="s-10" data-search-section="Learning Rate — Why Step Size Matters" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>10. Learning Rate — Why Step Size Matters</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine walking downhill.</p>
+<h3>Very small learning rate</h3>
+<div class="ascii-box"><pre>small step
+small step
+small step
+small step
+...</pre></div>
+<p>Learning may be slow.</p>
+<h3>Very large learning rate</h3>
+<div class="ascii-box"><pre>overshoot
+←──────→
+overshoot
+←──────→</pre></div>
+<p>The optimization can become unstable or fail to settle near a useful minimum.</p>
+<p>So learning rate is a <strong>hyperparameter</strong>, not a learned weight.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: Backpropagation — The Chain Rule in Action -->
+  <section id="s-11" data-search-section="Backpropagation — The Chain Rule in Action" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>11. Backpropagation — The Chain Rule in Action</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Consider a simple composition:</p>
+<div class="formula-math">\[
+x\rightarrow a\rightarrow b\rightarrow L.
+\]</div>
+<p>The chain rule gives:</p>
+<div class="formula-math">\[
+\boxed{
+\frac{\partial L}{\partial a}
+=
+\frac{\partial L}{\partial b}
+\frac{\partial b}{\partial a}
+}
+\]</div>
+<p>and similarly through deeper layers.</p>
+<p>For a network:</p>
+<div class="ascii-box"><pre>input
+  ↓
+layer 1
+  ↓
+layer 2
+  ↓
+layer 3
+  ↓
+output
+  ↓
+loss</pre></div>
+<p>Backpropagation reuses intermediate derivative information so the gradients with respect to many parameters can be computed efficiently.</p>
+<p>A common mistake is to define backpropagation as “the opposite of forward propagation.”</p>
+<p>That is too vague.</p>
+<p>A better exam definition is:</p>
+<blockquote>
+<p><strong>Backpropagation is an efficient application of the chain rule that computes gradients of a network's loss with respect to its parameters by propagating derivative information backward through the computational graph.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: Parameter Gradient vs Parameter Update -->
+  <section id="s-12" data-search-section="Parameter Gradient vs Parameter Update" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>12. Parameter Gradient vs Parameter Update</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="diagram-box"><pre class="mermaid">
+graph TD
+    PROB{"What is your input data structure?"}
+    PROB -->|Tabular / Structured Features| MLP["Multi-Layer Perceptron (MLP)<br/>Fully connected layers, ReLU activations"]
+    PROB -->|Spatial Grids / 2D Images / Video| CNN["Convolutional Neural Network (CNN)<br/>Kernels, parameter sharing, MaxPool, translation invariance"]
+    PROB -->|Sequential / Time-Series / Text| SEQ{"Long-term dependency needed?"}
+    SEQ -->|Short Sequences (< 10 steps)| RNN["Vanilla RNN<br/>Simple recurrence, susceptible to vanishing gradients"]
+    SEQ -->|Long Sequences (> 10 steps)| LSTM["LSTM / GRU<br/>Gating mechanisms, additive cell state highway"]
+</pre></div>
+<p>Suppose:</p>
+<div class="formula-math">\[
+\frac{\partial L}{\partial w}=4
+\]</div>
+<p>and</p>
+<div class="formula-math">\[
+\eta=0.1.
+\]</div>
+<p>Then the update is:</p>
+<div class="formula-math">\[
+w_{new}=w-0.1(4)=w-0.4.
+\]</div>
+<p>Notice the two stages:</p>
+<div class="ascii-box"><pre>gradient
+  = 4
+
+update
+  = −0.4</pre></div>
+<p>Gradient and update are not the same thing.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: CNN — Why Convolution Changes the Architecture -->
+  <section id="s-13" data-search-section="CNN — Why Convolution Changes the Architecture" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>13. CNN — Why Convolution Changes the Architecture</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A standard dense layer connects many inputs to many neurons.</p>
+<p>For an image, this can ignore useful spatial structure.</p>
+<p>CNNs introduce operations based on <strong>local receptive fields</strong> and <strong>shared filters</strong>.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>image
+  ↓
+local filter / kernel
+  ↓
+feature map
+  ↓
+activation
+  ↓
+pooling / downsampling (when used)
+  ↓
+more feature extraction
+  ↓
+classification/regression head</pre></div>
+<p>The important conceptual idea is:</p>
+<blockquote>
+<p><strong>A CNN exploits spatial locality and parameter sharing to detect patterns across a grid-like input.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: CNN Vocabulary You Must Not Mix Up -->
+  <section id="s-14" data-search-section="CNN Vocabulary You Must Not Mix Up" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>14. CNN Vocabulary You Must Not Mix Up</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kernel / filter</td>
+<td>learned local weight pattern used in convolution</td>
+</tr>
+<tr>
+<td>Feature map</td>
+<td>result produced by applying a filter across the input</td>
+</tr>
+<tr>
+<td>Stride</td>
+<td>how far the filter moves between positions</td>
+</tr>
+<tr>
+<td>Padding</td>
+<td>additional border values used to control spatial behaviour</td>
+</tr>
+<tr>
+<td>Receptive field</td>
+<td>input region influencing a unit</td>
+</tr>
+<tr>
+<td>Pooling</td>
+<td>local aggregation/downsampling operation</td>
+</tr>
+<tr>
+<td>Channel</td>
+<td>one feature plane/depth slice of an input or feature map</td>
+</tr>
+</tbody>
+</table></div>
+<p>A common exam trap is to call the output of a convolution “the kernel.”</p>
+<p>The kernel is the learned operator; the output is the feature map.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: RNN — Why Recurrence Changes the Architecture -->
+  <section id="s-15" data-search-section="RNN — Why Recurrence Changes the Architecture" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>15. RNN — Why Recurrence Changes the Architecture</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A feedforward network treats examples as fixed inputs.</p>
+<p>A sequence has order.</p>
+<p>RNN introduces state:</p>
+<div class="formula-math">\[
+\boxed{h_t=f(x_t,h_{t-1})}
+\]</div>
+<p>Therefore:</p>
+<div class="ascii-box"><pre>current input
+    +
+previous state
+    ↓
+current state</pre></div>
+<p>That lets the model carry information through a sequence.</p>
+<p>Typical applications include:</p>
+<ul>
+<li>time-series modelling;</li>
+<li>sequential classification;</li>
+<li>sequence prediction;</li>
+<li>language-related sequence tasks.</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: LSTM — Why the Gates Matter -->
+  <section id="s-16" data-search-section="LSTM — Why the Gates Matter" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>16. LSTM — Why the Gates Matter</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Basic RNN:</p>
+<div class="ascii-box"><pre>xₜ + hₜ₋₁
+      ↓
+     hₜ</pre></div>
+<p>LSTM:</p>
+<div class="ascii-box"><pre>xₜ + hₜ₋₁
+      ↓
+ ┌─────────────────┐
+ │ forget gate     │
+ │ input gate      │
+ │ candidate       │
+ │ output gate     │
+ └────────┬────────┘
+          ↓
+       cell state cₜ
+          ↓
+       hidden hₜ</pre></div>
+<p>The key conceptual advance is <strong>controlled information flow</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: CNN vs RNN vs LSTM vs MLP -->
+  <section id="s-17" data-search-section="CNN vs RNN vs LSTM vs MLP" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>17. CNN vs RNN vs LSTM vs MLP</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Property</th>
+<th>MLP</th>
+<th>CNN</th>
+<th>RNN</th>
+<th>LSTM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Main structure</td>
+<td>feedforward dense layers</td>
+<td>local filters + shared weights</td>
+<td>recurrent state</td>
+<td>gated recurrent state</td>
+</tr>
+<tr>
+<td>Natural data geometry</td>
+<td>generic fixed vectors</td>
+<td>grids/images</td>
+<td>sequences</td>
+<td>sequences</td>
+</tr>
+<tr>
+<td>Explicit recurrent state</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Cell state</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Local spatial sharing</td>
+<td>No standard mechanism</td>
+<td>Yes</td>
+<td>Not the defining idea</td>
+<td>Not the defining idea</td>
+</tr>
+<tr>
+<td>Main strength</td>
+<td>general nonlinear mapping</td>
+<td>spatial pattern extraction</td>
+<td>sequential dependence</td>
+<td>controlled sequential memory</td>
+</tr>
+<tr>
+<td>Main cost</td>
+<td>dense connectivity can be large</td>
+<td>convolution computation</td>
+<td>recurrence</td>
+<td>more recurrent parameters than basic RNN</td>
+</tr>
+</tbody>
+</table></div>
+<p>The table is conceptual. Modern architectures can combine or replace these ideas.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: The Architecture Selection Mental Model -->
+  <section id="s-18" data-search-section="The Architecture Selection Mental Model" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>18. The Architecture Selection Mental Model</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Do not memorize architectures as random names.</p>
+<p>Ask:</p>
+<blockquote>
+<p><strong>What structure does the data have?</strong></p>
+</blockquote>
+<h3>Fixed feature vector</h3>
+<p>A dense MLP may be appropriate.</p>
+<h3>Spatial/grid structure</h3>
+<p>A CNN-style model may be useful.</p>
+<h3>Ordered sequence</h3>
+<p>An RNN/LSTM-style model is historically important and syllabus-relevant.</p>
+<h3>More complex modern systems</h3>
+<p>Other architectures may be used, but learning those is beyond the core route here.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: A Single Worked Training Story -->
+  <section id="s-19" data-search-section="A Single Worked Training Story" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>19. A Single Worked Training Story</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a model is classifying an image.</p>
+<h3>Step 1 — Input</h3>
+<div class="formula-math">\[
+x=\text{image pixels}
+\]</div>
+<h3>Step 2 — Forward computation</h3>
+<p>A CNN transforms the image into learned feature maps.</p>
+<h3>Step 3 — Prediction</h3>
+<p>The output head produces class probabilities.</p>
+<h3>Step 4 — Loss</h3>
+<p>Cross-entropy measures the mismatch between the true class and predicted distribution.</p>
+<h3>Step 5 — Backpropagation</h3>
+<p>The loss derivative is propagated backward through the output layer, convolutional layers and nonlinearities.</p>
+<h3>Step 6 — Gradient descent</h3>
+<p>Weights are updated.</p>
+<h3>Step 7 — Repeat</h3>
+<p>The network gradually changes its parameters based on training data.</p>
+<p>This gives the complete computational story:</p>
+<div class="ascii-box"><pre>image
+ ↓
+representation
+ ↓
+prediction
+ ↓
+loss
+ ↓
+backpropagation
+ ↓
+gradients
+ ↓
+optimizer
+ ↓
+updated model</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: The Mathematical Dependency Map -->
+  <section id="s-20" data-search-section="The Mathematical Dependency Map" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>20. The Mathematical Dependency Map</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Unit III uses three mathematical pillars.</p>
+<h2>Linear algebra</h2>
+<p>Needed for:</p>
+<ul>
+<li>vectors;</li>
+<li>matrices;</li>
+<li>matrix multiplication;</li>
+<li>affine transformations;</li>
+<li>convolutional representations;</li>
+<li>recurrent states.</li>
+</ul>
+<p>Core pattern:</p>
+<div class="formula-math">\[
+Wx+b.
+\]</div>
+<h2>Calculus</h2>
+<p>Needed for:</p>
+<ul>
+<li>derivatives;</li>
+<li>partial derivatives;</li>
+<li>chain rule;</li>
+<li>gradients;</li>
+<li>backpropagation.</li>
+</ul>
+<p>Core pattern:</p>
+<div class="formula-math">\[
+\frac{\partial L}{\partial w}.
+\]</div>
+<h2>Optimization</h2>
+<p>Needed for:</p>
+<ul>
+<li>objective functions;</li>
+<li>gradient descent;</li>
+<li>learning rate;</li>
+<li>iterative parameter updates.</li>
+</ul>
+<p>Core pattern:</p>
+<div class="formula-math">\[
+\theta\leftarrow\theta-\eta\nabla_\theta L.
+\]</div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: Unit III Formula Map -->
+  <section id="s-21" data-search-section="Unit III Formula Map" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>21. Unit III Formula Map</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Neuron</h2>
+<div class="formula-math">\[
+z=w^Tx+b
+\]</div>
+<div class="formula-math">\[
+a=\phi(z)
+\]</div>
+<h2>Perceptron boundary</h2>
+<div class="formula-math">\[
+w^Tx+b=0
+\]</div>
+<h2>Dense layer</h2>
+<div class="formula-math">\[
+z^{(l)}=W^{(l)}a^{(l-1)}+b^{(l)}
+\]</div>
+<h2>Sigmoid</h2>
+<div class="formula-math">\[
+\sigma(z)=\frac{1}{1+e^{-z}}
+\]</div>
+<h2>ReLU</h2>
+<div class="formula-math">\[
+\operatorname{ReLU}(z)=\max(0,z)
+\]</div>
+<h2>Tanh</h2>
+<div class="formula-math">\[
+\tanh(z)=\frac{e^z-e^{-z}}{e^z+e^{-z}}
+\]</div>
+<h2>MSE</h2>
+<div class="formula-math">\[
+MSE=\frac1n\sum_i(y_i-\hat y_i)^2
+\]</div>
+<h2>Gradient descent</h2>
+<div class="formula-math">\[
+\theta\leftarrow\theta-\eta\nabla_\theta L
+\]</div>
+<h2>Generic RNN</h2>
+<div class="formula-math">\[
+h_t=f(x_t,h_{t-1})
+\]</div>
+<h2>LSTM cell state</h2>
+<div class="formula-math">\[
+c_t=f_t\odot c_{t-1}+i_t\odot\tilde c_t
+\]</div>
+<h2>LSTM hidden state</h2>
+<div class="formula-math">\[
+h_t=o_t\odot\tanh(c_t)
+\]</div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: Parameter Counting — A Core Exam Skill -->
+  <section id="s-22" data-search-section="Parameter Counting — A Core Exam Skill" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>22. Parameter Counting — A Core Exam Skill</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For a fully connected layer mapping:</p>
+<div class="ascii-box"><pre>n_in inputs → n_out neurons</pre></div>
+<p>the number of weights is:</p>
+<div class="formula-math">\[
+n_{in}n_{out}
+\]</div>
+<p>and biases:</p>
+<div class="formula-math">\[
+n_{out}.
+\]</div>
+<p>Therefore total parameters:</p>
+<div class="formula-math">\[
+\boxed{
+n_{in}n_{out}+n_{out}
+}
+\]</div>
+<p>or:</p>
+<div class="formula-math">\[
+\boxed{n_{out}(n_{in}+1)}
+\]</div>
+<h3>Example</h3>
+<p>5 inputs → 4 neurons:</p>
+<p>Weights:</p>
+<div class="formula-math">\[
+5\times4=20
+\]</div>
+<p>Biases:</p>
+<div class="formula-math">\[
+4
+\]</div>
+<p>Total:</p>
+<div class="formula-math">\[
+\boxed{24}
+\]</div>
+<p>This is independent of the particular numeric values of the parameters.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: Shape Reasoning -->
+  <section id="s-23" data-search-section="Shape Reasoning" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>23. Shape Reasoning</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<div class="formula-math">\[
+x\in\mathbb R^d
+\]</div>
+<p>and a dense layer has \(m\) neurons.</p>
+<p>Then:</p>
+<div class="formula-math">\[
+W\in\mathbb R^{m\times d}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+b\in\mathbb R^m.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+Wx+b\in\mathbb R^m.
+\]</div>
+<p>Dimension reasoning prevents many matrix-multiplication mistakes.</p>
+<p>When confused, write the shapes.</p>
+<div class="ascii-box"><pre>(m × d)(d × 1) = (m × 1)</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: Unit III Common Confusions -->
+  <section id="s-24" data-search-section="Unit III Common Confusions" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>24. Unit III Common Confusions</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Perceptron vs neuron</h2>
+<p>A perceptron is a specific threshold-style model built around a weighted sum and decision rule.</p>
+<p>A generic artificial neuron may use a different activation.</p>
+<h2>MLP vs neural network</h2>
+<p>An MLP is a particular feedforward neural-network architecture.</p>
+<p>“Neural network” is broader.</p>
+<h2>Loss vs accuracy</h2>
+<p>Loss is typically the optimization objective signal.</p>
+<p>Accuracy is an evaluation metric for classification.</p>
+<p>They are not interchangeable.</p>
+<h2>Backpropagation vs gradient descent</h2>
+<p>Backpropagation computes gradients.</p>
+<p>Gradient descent uses gradients to update parameters.</p>
+<h2>CNN vs convolution</h2>
+<p>A CNN is an architecture.</p>
+<p>Convolution is an operation used within many CNNs.</p>
+<h2>RNN vs LSTM</h2>
+<p>LSTM is a gated recurrent architecture designed to provide more controlled information flow than a basic RNN.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: The Unit III “Why” Chain -->
+  <section id="s-25" data-search-section="The Unit III “Why” Chain" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>25. The Unit III “Why” Chain</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This is one of the best memory anchors for the entire unit.</p>
+<div class="ascii-box"><pre>Why a neuron?
+→ basic learnable computation
+
+Why a perceptron?
+→ learn a threshold decision boundary
+
+Why an MLP?
+→ represent richer nonlinear relationships
+
+Why activations?
+→ introduce nonlinearity / task-appropriate transformation
+
+Why a loss?
+→ quantify prediction error
+
+Why gradient descent?
+→ minimize the loss by changing parameters
+
+Why backpropagation?
+→ compute parameter gradients efficiently
+
+Why CNN?
+→ exploit local spatial structure + shared filters
+
+Why RNN?
+→ model ordered sequences with state
+
+Why LSTM?
+→ control recurrent information flow with gated memory</pre></div>
+<p>If you can recreate this chain, you understand the architecture of Unit III rather than merely recalling vocabulary.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: Active Recall Master Test -->
+  <section id="s-26" data-search-section="Active Recall Master Test" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>26. Active Recall Master Test</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Close the book and answer these in writing.</p>
+<h2>Level 1 — Recall</h2>
+<ol>
+<li>Define an artificial neuron.</li>
+<li>Write the weighted-sum equation.</li>
+<li>Define a perceptron.</li>
+<li>Define an MLP.</li>
+<li>Write sigmoid.</li>
+<li>Write ReLU.</li>
+<li>Define a loss function.</li>
+<li>Write the gradient-descent update.</li>
+<li>Define backpropagation.</li>
+<li>Expand CNN.</li>
+<li>Expand RNN.</li>
+<li>Expand LSTM.</li>
+</ol>
+<h2>Level 2 — Explain</h2>
+<ol>
+<li>Why does a single perceptron have limited representation power?</li>
+<li>Why do nonlinear activations matter?</li>
+<li>Why can a flexible neural network overfit?</li>
+<li>Why does a network need a loss?</li>
+<li>Why does gradient descent subtract the gradient?</li>
+<li>Why does backpropagation use the chain rule?</li>
+<li>Why are CNN filters shared?</li>
+<li>Why does an RNN carry hidden state?</li>
+<li>Why does LSTM introduce a cell state?</li>
+</ol>
+<h2>Level 3 — Apply</h2>
+<ol>
+<li>Count parameters in a dense layer.</li>
+<li>Compute a neuron output.</li>
+<li>Compute a simple MSE.</li>
+<li>Perform one gradient-descent update.</li>
+<li>Trace a two-layer forward pass.</li>
+<li>Identify the correct output activation for a binary problem.</li>
+<li>Distinguish CNN/RNN architecture from a standard MLP.</li>
+<li>Compute a simple LSTM cell-state update.</li>
+</ol>
+<h2>Level 4 — Connect</h2>
+<ol>
+<li>Explain how loss, backpropagation and gradient descent fit together.</li>
+<li>Explain how RNN and LSTM relate.</li>
+<li>Explain why CNNs and RNNs are specialized around different data structures.</li>
+<li>Explain how Unit III connects calculus and linear algebra.</li>
+<li>Explain the full training loop without using the words “it learns somehow.”</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: University Exam Blueprint -->
+  <section id="s-27" data-search-section="University Exam Blueprint" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>27. University Exam Blueprint</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>2-mark answers should contain</h2>
+<ul>
+<li>definition;</li>
+<li>one equation where appropriate;</li>
+<li>one key property.</li>
+</ul>
+<h2>5-mark answers should contain</h2>
+<div class="ascii-box"><pre>definition
+   ↓
+architecture / idea
+   ↓
+important equation(s)
+   ↓
+working
+   ↓
+one advantage or limitation</pre></div>
+<h2>10-mark answers should contain</h2>
+<div class="ascii-box"><pre>motivation
+   ↓
+formal definition
+   ↓
+diagram
+   ↓
+mathematical equations
+   ↓
+step-by-step working
+   ↓
+example
+   ↓
+advantages / limitations
+   ↓
+comparison / application</pre></div>
+<p>Do not dump formulas without explaining what each equation means.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: High-Probability Numerical Patterns to Practice -->
+  <section id="s-28" data-search-section="High-Probability Numerical Patterns to Practice" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>28. High-Probability Numerical Patterns to Practice</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>These are reusable patterns rather than predictions about a particular examination paper.</p>
+<h3>Pattern A — Neuron</h3>
+<p>Given \(x,w,b\), calculate:</p>
+<div class="formula-math">\[
+z=w^Tx+b
+\]</div>
+<p>and apply an activation.</p>
+<h3>Pattern B — Parameter counting</h3>
+<p>Given input and layer sizes, count weights and biases.</p>
+<h3>Pattern C — Activation</h3>
+<p>Calculate sigmoid, ReLU or tanh for a supplied value.</p>
+<h3>Pattern D — Loss</h3>
+<p>Calculate MSE, MAE or a simple cross-entropy expression.</p>
+<h3>Pattern E — Gradient descent</h3>
+<p>Given parameter, gradient and learning rate, compute the update.</p>
+<h3>Pattern F — Matrix dimensions</h3>
+<p>Check whether a forward-pass multiplication is valid and determine the result shape.</p>
+<h3>Pattern G — LSTM memory update</h3>
+<p>Given gate values and candidate/previous cell state, calculate:</p>
+<div class="formula-math">\[
+c_t=f_t\odot c_{t-1}+i_t\odot\tilde c_t.
+\]</div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 29: High-Value Diagram Practice -->
+  <section id="s-29" data-search-section="High-Value Diagram Practice" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>29. High-Value Diagram Practice</h2>
+      <button class="bookmark-btn" data-id="s-29" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You should be able to draw these without notes:</p>
+<h3>Diagram 1</h3>
+<p>Artificial neuron.</p>
+<h3>Diagram 2</h3>
+<p>Perceptron with decision boundary.</p>
+<h3>Diagram 3</h3>
+<p>One-hidden-layer MLP.</p>
+<h3>Diagram 4</h3>
+<p>Forward pass + loss + backward pass.</p>
+<h3>Diagram 5</h3>
+<p>CNN pipeline.</p>
+<h3>Diagram 6</h3>
+<p>RNN unrolled through time.</p>
+<h3>Diagram 7</h3>
+<p>LSTM cell with gates and states.</p>
+<p>A strong study technique is:</p>
+<div class="ascii-box"><pre>look at diagram for 30 seconds
+          ↓
+close book
+          ↓
+redraw from memory
+          ↓
+compare
+          ↓
+correct</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 30: Unit III Comparison Matrix -->
+  <section id="s-30" data-search-section="Unit III Comparison Matrix" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>30. Unit III Comparison Matrix</h2>
+      <button class="bookmark-btn" data-id="s-30" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Criterion</th>
+<th>Perceptron</th>
+<th>MLP</th>
+<th>CNN</th>
+<th>RNN</th>
+<th>LSTM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Feedforward</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes (typical CNN stack)</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Recurrence</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Memory state</td>
+<td>No</td>
+<td>No</td>
+<td>No explicit recurrent memory</td>
+<td>Hidden state</td>
+<td>Hidden + cell state</td>
+</tr>
+<tr>
+<td>Main structure</td>
+<td>threshold unit</td>
+<td>dense layers</td>
+<td>local shared filters</td>
+<td>recurrent state</td>
+<td>gated recurrent memory</td>
+</tr>
+<tr>
+<td>Typical data focus</td>
+<td>simple vectors</td>
+<td>fixed-size vectors</td>
+<td>images/grid-like data</td>
+<td>sequences</td>
+<td>sequences/longer dependencies</td>
+</tr>
+<tr>
+<td>Main teaching idea</td>
+<td>linear threshold learning</td>
+<td>layered nonlinear representation</td>
+<td>spatial locality</td>
+<td>temporal state</td>
+<td>controlled memory</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 31: Failure Visuals You Should Understand -->
+  <section id="s-31" data-search-section="Failure Visuals You Should Understand" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>31. Failure Visuals You Should Understand</h2>
+      <button class="bookmark-btn" data-id="s-31" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>A. Overfitting</h2>
+<div class="ascii-box"><pre>model too flexible
+      ↓
+fits training noise
+      ↓
+training error ↓
+      ↓
+new-data error may ↑</pre></div>
+<p>This reconnects Unit III to Unit II regularization and generalization.</p>
+<h2>B. Vanishing gradient intuition</h2>
+<div class="ascii-box"><pre>backward through many layers/time steps
+      ↓
+repeated derivative factors
+      ↓
+very small gradient
+      ↓
+early parameters receive weak updates</pre></div>
+<p>This motivates activation choices, initialization strategies and recurrent architectures such as LSTM, although the full mitigation landscape is broader than this syllabus block.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 32: Universal vs University Lens -->
+  <section id="s-32" data-search-section="Universal vs University Lens" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>32. Universal vs University Lens</h2>
+      <button class="bookmark-btn" data-id="s-32" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>University lens</h3>
+<p>The official Unit III scope is:</p>
+<div class="ascii-box"><pre>Neural networks
+Perceptron
+MLP
+Backpropagation
+Gradient descent
+CNN
+RNN
+LSTM</pre></div>
+<h3>Universal lens</h3>
+<p>The broader conceptual story is:</p>
+<div class="ascii-box"><pre>representation
+   ↓
+architecture
+   ↓
+objective
+   ↓
+optimization
+   ↓
+generalization
+   ↓
+specialized architectures for data structure</pre></div>
+<p>This is the deeper idea you should carry into future AI/ML study.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 33: Mid-Sem vs End-Sem Use -->
+  <section id="s-33" data-search-section="Mid-Sem vs End-Sem Use" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>33. Mid-Sem vs End-Sem Use</h2>
+      <button class="bookmark-btn" data-id="s-33" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your study system distinguishes <strong>what the full course contains</strong> from <strong>what the instructor has actually taught</strong>.</p>
+<p>The production plan explicitly keeps Unit III gated by the actual teaching cutoff for a mid-sem exam and then expands to the remaining Unit III topics later. [<code>DESIGN-04_AI_ML_MiniBook_Exam_Coding_Integration_System.pdf</code>]</p>
+<p>So use this chapter in two modes:</p>
+<h3>Mid-sem mode</h3>
+<p>Stop the examination revision at your instructor's actual Unit III cutoff.</p>
+<h3>End-sem mode</h3>
+<p>Use the full chain through CNN, RNN and LSTM.</p>
+<p>Do not sacrifice examinable taught material merely because later topics exist in the syllabus.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 34: One-Page Mental Map -->
+  <section id="s-34" data-search-section="One-Page Mental Map" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>34. One-Page Mental Map</h2>
+      <button class="bookmark-btn" data-id="s-34" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>UNIT III
+                            │
+        ┌───────────────────┼───────────────────┐
+        │                   │                   │
+   COMPUTATION           LEARNING          ARCHITECTURES
+        │                   │                   │
+      neuron              loss                MLP
+        ↓                   ↓                 /   \
+   perceptron         gradients             CNN   RNN
+        ↓                   ↓                       ↓
+       MLP            backpropagation             LSTM
+                            ↓
+                       optimization</pre></div>
+<p>Another form:</p>
+<div class="ascii-box"><pre>INPUT
+  ↓
+MODEL
+  ↓
+FORWARD PASS
+  ↓
+PREDICTION
+  ↓
+LOSS
+  ↓
+BACKPROPAGATION
+  ↓
+GRADIENTS
+  ↓
+OPTIMIZER
+  ↓
+UPDATED PARAMETERS
+  ↓
+REPEAT</pre></div>
+<p>This loop is the backbone.</p>
+<p>CNN, RNN and LSTM change <strong>how the model represents and transforms the input</strong>, but they still participate in the training loop.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 35: Final Unit III Oral-Test Questions -->
+  <section id="s-35" data-search-section="Final Unit III Oral-Test Questions" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>35. Final Unit III Oral-Test Questions</h2>
+      <button class="bookmark-btn" data-id="s-35" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine a professor asks you these verbally.</p>
+<h3>Q1</h3>
+<p>What is a neural network?</p>
+<h3>Q2</h3>
+<p>Why is a perceptron limited?</p>
+<h3>Q3</h3>
+<p>Why does an MLP need nonlinear activation?</p>
+<h3>Q4</h3>
+<p>What is the difference between a parameter and a hyperparameter?</p>
+<h3>Q5</h3>
+<p>What does the loss tell us?</p>
+<h3>Q6</h3>
+<p>What does the gradient tell us?</p>
+<h3>Q7</h3>
+<p>What does gradient descent do?</p>
+<h3>Q8</h3>
+<p>What does backpropagation do?</p>
+<h3>Q9</h3>
+<p>Why are CNNs useful for images?</p>
+<h3>Q10</h3>
+<p>Why does an RNN have a hidden state?</p>
+<h3>Q11</h3>
+<p>Why was LSTM introduced?</p>
+<h3>Q12</h3>
+<p>What is the difference between cell state and hidden state?</p>
+<h3>Q13</h3>
+<p>How are forward pass, loss, backpropagation and gradient descent related?</p>
+<h3>Q14</h3>
+<p>What mathematics is used in Unit III?</p>
+<h3>Q15</h3>
+<p>Explain Unit III as one continuous story.</p>
+<p>A learner who can answer Q15 clearly has moved beyond memorization.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 36: The “Explain It to a Friend” Test -->
+  <section id="s-36" data-search-section="The “Explain It to a Friend” Test" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>36. The “Explain It to a Friend” Test</h2>
+      <button class="bookmark-btn" data-id="s-36" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Without equations first, explain:</p>
+<blockquote>
+<p>“A neural network takes an input, transforms it through learned layers, produces a prediction, measures how wrong the prediction is, computes how each parameter contributed to that error, and updates parameters to reduce future error.”</p>
+</blockquote>
+<p>Then add the mathematics:</p>
+<div class="formula-math">\[
+z^{(l)}=W^{(l)}a^{(l-1)}+b^{(l)}
+\]</div>
+<div class="formula-math">\[
+a^{(l)}=\phi(z^{(l)})
+\]</div>
+<div class="formula-math">\[
+\theta\leftarrow\theta-\eta\nabla_\theta L
+\]</div>
+<p>This two-stage explanation is ideal for learning: intuition first, formalism second.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 37: Unit III Mastery Rubric -->
+  <section id="s-37" data-search-section="Unit III Mastery Rubric" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>37. Unit III Mastery Rubric</h2>
+      <button class="bookmark-btn" data-id="s-37" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Use this honestly.</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Dimension</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Concept</td>
+<td>unseen</td>
+<td>exposed</td>
+<td>understood</td>
+<td>can explain</td>
+<td>can teach</td>
+</tr>
+<tr>
+<td>Math</td>
+<td>none</td>
+<td>symbols recognized</td>
+<td>calculations</td>
+<td>derivation</td>
+<td>independent application</td>
+</tr>
+<tr>
+<td>Practice</td>
+<td>none</td>
+<td>guided</td>
+<td>standard</td>
+<td>exam</td>
+<td>transfer</td>
+</tr>
+<tr>
+<td>Diagram</td>
+<td>cannot draw</td>
+<td>recognizes</td>
+<td>copies</td>
+<td>draws</td>
+<td>reconstructs from memory</td>
+</tr>
+<tr>
+<td>Exam</td>
+<td>none</td>
+<td>recognizes question</td>
+<td>recalls answer</td>
+<td>writes answer</td>
+<td>timed + mixed</td>
+</tr>
+</tbody>
+</table></div>
+<p>You are not truly finished because you have read all nine topics.</p>
+<p>A stronger completion state is:</p>
+<div class="ascii-box"><pre>Concept ≥ 3
+Math ≥ 3
+Practice ≥ 3
+Diagram ≥ 3
+Exam ≥ 3</pre></div>
+<p>The broader study design defines “exam ready” around explanation, diagram reproduction, formulas/algorithms, standard and exam-level problems, and recognition of common traps. [<code>DESIGN-04_AI_ML_MiniBook_Exam_Coding_Integration_System.pdf</code>]</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 38: Unit III Final Checklist -->
+  <section id="s-38" data-search-section="Unit III Final Checklist" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>38. Unit III Final Checklist</h2>
+      <button class="bookmark-btn" data-id="s-38" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <ul>
+<li>[ ] artificial neuron</li>
+<li>[ ] weights and bias</li>
+<li>[ ] threshold / perceptron</li>
+<li>[ ] decision boundary</li>
+<li>[ ] perceptron learning intuition</li>
+<li>[ ] MLP architecture</li>
+<li>[ ] forward pass</li>
+<li>[ ] nonlinear activation</li>
+<li>[ ] sigmoid</li>
+<li>[ ] tanh</li>
+<li>[ ] ReLU</li>
+<li>[ ] softmax</li>
+<li>[ ] MSE / MAE</li>
+<li>[ ] cross-entropy</li>
+<li>[ ] logits vs probabilities</li>
+<li>[ ] gradient</li>
+<li>[ ] learning rate</li>
+<li>[ ] gradient descent</li>
+<li>[ ] backpropagation</li>
+<li>[ ] chain rule</li>
+<li>[ ] parameter counting</li>
+<li>[ ] matrix-shape reasoning</li>
+<li>[ ] CNN intuition</li>
+<li>[ ] kernel/filter</li>
+<li>[ ] feature map</li>
+<li>[ ] pooling</li>
+<li>[ ] RNN hidden state</li>
+<li>[ ] sequence modelling</li>
+<li>[ ] LSTM gates</li>
+<li>[ ] cell state</li>
+<li>[ ] hidden state</li>
+<li>[ ] RNN vs LSTM</li>
+<li>[ ] complete training loop</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 39: Exam-Day Formula Sheet -->
+  <section id="s-39" data-search-section="Exam-Day Formula Sheet" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>39. Exam-Day Formula Sheet</h2>
+      <button class="bookmark-btn" data-id="s-39" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Core neuron</h2>
+<div class="formula-math">\[
+\boxed{z=w^Tx+b}
+\]</div>
+<div class="formula-math">\[
+\boxed{a=\phi(z)}
+\]</div>
+<h2>Dense layer</h2>
+<div class="formula-math">\[
+\boxed{z^{(l)}=W^{(l)}a^{(l-1)}+b^{(l)}}
+\]</div>
+<h2>Sigmoid</h2>
+<div class="formula-math">\[
+\boxed{\sigma(z)=\frac1{1+e^{-z}}}
+\]</div>
+<h2>ReLU</h2>
+<div class="formula-math">\[
+\boxed{\max(0,z)}
+\]</div>
+<h2>MSE</h2>
+<div class="formula-math">\[
+\boxed{\frac1n\sum_i(y_i-\hat y_i)^2}
+\]</div>
+<h2>Gradient descent</h2>
+<div class="formula-math">\[
+\boxed{\theta\leftarrow\theta-\eta\nabla_\theta L}
+\]</div>
+<h2>LSTM</h2>
+<div class="formula-math">\[
+f_t=\sigma(W_fq_t+b_f)
+\]</div>
+<div class="formula-math">\[
+i_t=\sigma(W_iq_t+b_i)
+\]</div>
+<div class="formula-math">\[
+\tilde c_t=\tanh(W_cq_t+b_c)
+\]</div>
+<div class="formula-math">\[
+c_t=f_t\odot c_{t-1}+i_t\odot\tilde c_t
+\]</div>
+<div class="formula-math">\[
+o_t=\sigma(W_oq_t+b_o)
+\]</div>
+<div class="formula-math">\[
+h_t=o_t\odot\tanh(c_t)
+\]</div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 40: Final Memory Anchors -->
+  <section id="s-40" data-search-section="Final Memory Anchors" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>40. Final Memory Anchors</h2>
+      <button class="bookmark-btn" data-id="s-40" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Anchor 1 — The neuron</h3>
+<blockquote>
+<p><strong>Combine → bias → activate.</strong></p>
+</blockquote>
+<h3>Anchor 2 — The network</h3>
+<blockquote>
+<p><strong>Compose transformations.</strong></p>
+</blockquote>
+<h3>Anchor 3 — The loss</h3>
+<blockquote>
+<p><strong>Measure wrongness.</strong></p>
+</blockquote>
+<h3>Anchor 4 — Backpropagation</h3>
+<blockquote>
+<p><strong>Compute responsibility through the chain rule.</strong></p>
+</blockquote>
+<h3>Anchor 5 — Gradient descent</h3>
+<blockquote>
+<p><strong>Move parameters against the gradient.</strong></p>
+</blockquote>
+<h3>Anchor 6 — CNN</h3>
+<blockquote>
+<p><strong>Look locally and share filters.</strong></p>
+</blockquote>
+<h3>Anchor 7 — RNN</h3>
+<blockquote>
+<p><strong>Carry state through time.</strong></p>
+</blockquote>
+<h3>Anchor 8 — LSTM</h3>
+<blockquote>
+<p><strong>Control memory with gates.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 41: What You Should Do After Reading This Chapter -->
+  <section id="s-41" data-search-section="What You Should Do After Reading This Chapter" class="content-section">
+    <div class="section-header">
+      <h2>41. What You Should Do After Reading This Chapter</h2>
+      <button class="bookmark-btn" data-id="s-41" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Do not immediately reread it three times.</p>
+<p>Use this cycle:</p>
+<div class="ascii-box"><pre>1. Close the book.
+2. Recreate the Unit III map.
+3. Draw neuron, MLP, CNN, RNN and LSTM.
+4. Write the gradient-descent formula.
+5. Write the LSTM equations.
+6. Solve five short numericals.
+7. Explain backpropagation aloud.
+8. Attempt a 10-mark mixed question under time pressure.
+9. Mark every weak point.
+10. Return only to the weak chapters.</pre></div>
+<p>This converts passive familiarity into retrievable knowledge.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 42: Resource and Course Lens -->
+  <section id="s-42" data-search-section="Resource and Course Lens" class="content-section">
+    <div class="section-header">
+      <h2>42. Resource and Course Lens</h2>
+      <button class="bookmark-btn" data-id="s-42" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied course resource guide defines Unit III around:</p>
+<div class="ascii-box"><pre>Neuron
+Perceptron
+MLP
+Backpropagation
+Gradient descent
+CNN
+RNN
+LSTM</pre></div>
+<p>It maps <code>prac_7_neural_network.ipynb</code> to neurons, weights/bias, activations, losses and gradient-descent concepts, and identifies <code>CS6910 Lecture 2</code> as supplemental material for biological/artificial neurons, threshold logic, perceptron, learning algorithm, MLP and representation power. It also marks backpropagation, CNN and RNN/LSTM as areas requiring external gap-filling beyond the supplied notes. [<code>AI_ML_Master_Learning_Resource_Guide.pdf</code>]</p>
+<p>The architecture of this consolidation therefore follows the course's stated sequence while connecting the topics into one general deep-learning framework.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 43: Final Unit III Readiness Gate -->
+  <section id="s-43" data-search-section="Final Unit III Readiness Gate" class="content-section">
+    <div class="section-header">
+      <h2>43. Final Unit III Readiness Gate</h2>
+      <button class="bookmark-btn" data-id="s-43" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You are ready to move beyond Unit III theory when you can do all of the following without opening the book:</p>
+<h3>Explain</h3>
+<ul>
+<li>[ ] explain every core term in one or two sentences;</li>
+<li>[ ] explain why each topic exists;</li>
+<li>[ ] distinguish architecture, objective, gradient computation and optimizer.</li>
+</ul>
+<h3>Mathematics</h3>
+<ul>
+<li>[ ] manipulate vector/matrix shapes;</li>
+<li>[ ] calculate basic activations and losses;</li>
+<li>[ ] perform a simple gradient update;</li>
+<li>[ ] write the main LSTM equations;</li>
+<li>[ ] explain the chain rule connection to backpropagation.</li>
+</ul>
+<h3>Visuals</h3>
+<ul>
+<li>[ ] draw a neuron;</li>
+<li>[ ] draw an MLP;</li>
+<li>[ ] draw a CNN pipeline;</li>
+<li>[ ] draw an unrolled RNN;</li>
+<li>[ ] draw an LSTM cell.</li>
+</ul>
+<h3>Exam</h3>
+<ul>
+<li>[ ] answer 2-mark definitions;</li>
+<li>[ ] produce 5-mark explanations;</li>
+<li>[ ] structure 10-mark answers;</li>
+<li>[ ] solve standard numericals;</li>
+<li>[ ] identify common conceptual traps.</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 44: End of Unit III -->
+  <section id="s-44" data-search-section="End of Unit III" class="content-section">
+    <div class="section-header">
+      <h2>44. End of Unit III</h2>
+      <button class="bookmark-btn" data-id="s-44" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The complete conceptual route is now:</p>
+<div class="ascii-box"><pre>UNIT III
+                       │
+                 NEURAL COMPUTATION
+                       │
+        ┌──────────────┴──────────────┐
+        │                             │
+      MODEL                          TRAINING
+        │                             │
+   neuron → perceptron               loss
+        ↓                              ↓
+      MLP                         gradients
+        │                              ↓
+    ┌───┴───┐                    backprop
+    │       │                       ↓
+   CNN     RNN                  optimizer
+            ↓
+          LSTM</pre></div>
+<p>The unit is no longer a list of models.</p>
+<p>It is one system:</p>
+<blockquote>
+<p><strong>Represent → predict → measure error → compute gradients → update parameters, using an architecture suited to the structure of the data.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 45: Next Unit -->
+  <section id="s-45" data-search-section="Next Unit" class="content-section">
+    <div class="section-header">
+      <h2>45. Next Unit</h2>
+      <button class="bookmark-btn" data-id="s-45" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>With Unit III complete, the next stage is <strong>Unit IV — Advanced Topics and AI Applications</strong>:</p>
+<div class="ascii-box"><pre>MDP
+ ↓
+Q-Learning
+ ↓
+Policy Gradients
+ ↓
+NLP preprocessing
+ ↓
+Text classification
+ ↓
+Autoencoders
+ ↓
+GANs
+ ↓
+AI ethics
+ ↓
+Healthcare / Autonomous Vehicles / Finance</pre></div>
+<p>The next Main Book chapter is:</p>
+<p><strong><code>MAIN-U4-C40 — Markov Decision Processes (MDPs)</code>.</strong></p>
+<hr />
+<h1>Status</h1>
+<p><strong><code>ML-U3-C39</code> — COMPLETE</strong><br />
+<strong>UNIT III — MAIN BOOK THEORY COMPLETE</strong></p>
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="ch38-long-short-term-memory-lstm.html" class="nav-btn">← Ch 38 — Long Short-Term Memory</a>
+    <a href="ch40-markov-decision-processes.html" class="nav-btn primary">Next: Ch 40 — Markov Decision Processes →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch39-unit-3-consolidation.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 39</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

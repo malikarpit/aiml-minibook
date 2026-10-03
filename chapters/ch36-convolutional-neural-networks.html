@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 36: Convolutional Neural Networks (CNN) — AI & Machine Learning MiniBook. Spatial Locality, Parameter Sharing, Kernels/Filters, Stride, Padding, Feature Maps, Max Pooling, and Classic Architectures">
+<title>Ch 36 — Convolutional Neural Networks (CNN) | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-xiv">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 36 — Convolutional Neural Networks (CNN)</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 36 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why This Chapter Exists <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. One-Minute Intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. The Core Mental Model <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Image as a Tensor <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Why Not Just Use a Dense Network? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. The Convolution Filter <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. What Does a Filter Learn? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Convolution Operation <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Stride <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Padding <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Multiple Channels <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Number of Convolution Parameters <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Feature Maps <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. ReLU After Convolution <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Pooling <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Max Pooling Worked Example <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. A Typical CNN Pipeline <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Why Parameter Sharing Matters <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Translation Equivariance — Careful Understanding </a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Receptive Field <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. CNN vs Fully Connected Network </a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Worked End-to-End Shape Example <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. CNN Mathematics You Need Now </a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Common Mistakes </a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Exam Lens </a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Active Recall <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Chapter Exit Test </a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Resource Shelf </a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Source Boundary </a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Connection Forward </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link active"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit III</span><span>›</span><span>Part XIV — Computer Vision & Convolutional Networks</span><span>›</span><span style="color:var(--em-text)">Chapter 36</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 36 · Unit III · Part XIV</div>
+    <div class="chapter-part-banner part-xiv">
+      <span class="part-banner-badge">Unit III · Part XIV</span>
+      <span>Computer Vision & Convolutional Networks</span>
+    </div>
+    <h1 class="chapter-title">Convolutional Neural Networks (CNN)</h1>
+    <div class="concept-id-tag">[CONCEPT-DL-036]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: High Yield (10-mark guarantee)</span>
+      <span class="chapter-meta-item">📖 ~45 min read</span>
+      <span class="chapter-meta-item">🎯 30 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>Convolutional Neural Networks:</strong> Curse of dimensionality in fully connected networks on images, 2D convolution operation, Parameter sharing and translation equivariance, Padding (valid vs same), Stride, Output dimensions \(\lfloor\frac{W-F+2P}{S}\rfloor + 1\), Max pooling, and CNN architecture pipelines.</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why This Chapter Exists</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">One-Minute Intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">The Core Mental Model</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Image as a Tensor</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Why Not Just Use a Dense Network?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">The Convolution Filter</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">What Does a Filter Learn?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Convolution Operation</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Stride</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Padding</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Multiple Channels</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Number of Convolution Parameters</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Feature Maps</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">ReLU After Convolution</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Pooling</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Max Pooling Worked Example</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">A Typical CNN Pipeline</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Why Parameter Sharing Matters</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Translation Equivariance — Careful Understanding</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Receptive Field</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">CNN vs Fully Connected Network</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Worked End-to-End Shape Example</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">CNN Mathematics You Need Now</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Common Mistakes</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Exam Lens</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Active Recall</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Chapter Exit Test</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Resource Shelf</span></a></li>
+      <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Source Boundary</span></a></li>
+      <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Connection Forward</span></a></li>
+    </ul>
+  </div>
+
+  <div class="chapter-preamble-card"><h1>MAIN-U3-C36 — Convolutional Neural Networks (CNNs)</h1>
+<blockquote>
+<p><strong>Main Book:</strong> AI &amp; Machine Learning — Visual + Mathematical Self-Learning Textbook<br />
+<strong>Unit:</strong> III — Neural Networks and Deep Learning<br />
+<strong>Topic ID:</strong> <code>ML-U3-C36</code><br />
+<strong>Prerequisites:</strong> C30 Neural Network Foundations, C31 Perceptron, C32 MLP, C33 Activations/Losses, C34 Gradient Descent, C35 Backpropagation<br />
+<strong>Syllabus position:</strong> Unit III — CNN<br />
+<strong>Coverage status:</strong> CORE + STANDARD EXPANSION</p>
+</blockquote>
+<hr /></div>
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 1: Why This Chapter Exists -->
+  <section id="s-01" data-search-section="Why This Chapter Exists" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>1. Why This Chapter Exists</h2>
+      <button class="bookmark-btn" data-id="s-01" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A fully connected neural network can process image pixels, but it does not naturally encode the spatial structure of an image.</p>
+<p>If an image is represented as a large vector:</p>
+<div class="ascii-box"><pre>[pixel1, pixel2, pixel3, ...]</pre></div>
+<p>a dense layer treats the input through learned connections without explicitly preserving the idea that:</p>
+<ul>
+<li>nearby pixels are related;</li>
+<li>the same visual pattern may occur at different locations;</li>
+<li>a useful local pattern can be reused across the image.</li>
+</ul>
+<p>A <strong>Convolutional Neural Network (CNN)</strong> introduces architectural structure for these kinds of spatial patterns.</p>
+<p>The central idea is:</p>
+<blockquote>
+<p><strong>Instead of connecting every neuron to every input pixel in the same way, a CNN learns small filters that scan across an input and produce feature maps.</strong></p>
+</blockquote>
+<p>Typical conceptual progression:</p>
+<div class="ascii-box"><pre>Image
+  ↓
+Local receptive fields
+  ↓
+Convolution / learned filters
+  ↓
+Feature maps
+  ↓
+Nonlinearity
+  ↓
+Pooling / downsampling (when used)
+  ↓
+Deeper feature extraction
+  ↓
+Classifier / output</pre></div>
+<h3>Course grounding</h3>
+<p>The supplied University of Delhi DSC-14 resource guide places <strong>CNN</strong> explicitly in Unit III and identifies CNN as a topic that requires gap-filling beyond the supplied neural-network practical and lecture material.</p>
+<p>The resource guide also recommends Stanford CS231n and deep-learning resources for CNN study.</p>
+<p><strong>Important source boundary:</strong> the supplied course materials available for this book do not provide a complete CNN chapter or a full CNN derivation. Therefore this chapter is a <strong>syllabus-aligned standard ML/DL expansion</strong>, not a claim that every equation or example below appears in your supplied lecture notes.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 2: One-Minute Intuition -->
+  <section id="s-02" data-search-section="One-Minute Intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. One-Minute Intuition</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>English</h2>
+<p>Imagine looking at a photograph.</p>
+<p>You do not normally recognize the entire image by comparing every pixel independently.</p>
+<p>You can notice:</p>
+<ul>
+<li>an edge;</li>
+<li>a corner;</li>
+<li>a small curve;</li>
+<li>a texture;</li>
+<li>a shape;</li>
+<li>a combination of shapes.</li>
+</ul>
+<p>A CNN builds this kind of hierarchy computationally.</p>
+<div class="ascii-box"><pre>raw pixels
+   ↓
+simple local patterns
+   ↓
+more complex patterns
+   ↓
+parts
+   ↓
+object-level evidence</pre></div>
+<p>This is an intuition, not a guarantee that every hidden feature has a clean human interpretation.</p>
+<h2>Hinglish</h2>
+<p>Image ko ek huge puzzle samjho.</p>
+<p>Agar tum poori image ek saath samajhne ki koshish karo, problem difficult hai.</p>
+<p>CNN image ko chhote local regions mein dekhkar useful patterns seekhta hai.</p>
+<div class="ascii-box"><pre>small region
+    ↓
+edge?
+    ↓
+texture?
+    ↓
+shape?
+    ↓
+larger pattern?</pre></div>
+<p>Phir deeper layers pehle se nikle patterns ko combine karti hain.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: The Core Mental Model -->
+  <section id="s-03" data-search-section="The Core Mental Model" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>3. The Core Mental Model</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="diagram-box"><pre class="mermaid">
+graph LR
+    subgraph FeatureExtraction["Feature Extraction Stages"]
+        IMG["Input Image<br/>[H × W × C]"] --> CONV1["Conv2D + ReLU<br/>Local Edge Filters"]
+        CONV1 --> POOL1["Max Pooling 2×2<br/>Spatial Downsampling"]
+        POOL1 --> CONV2["Conv2D + ReLU<br/>Part / Texture Filters"]
+        CONV2 --> POOL2["Max Pooling 2×2<br/>Invariant Representations"]
+    end
+    subgraph Classification["Classification Head"]
+        POOL2 --> FLAT["Flatten Vector"]
+        FLAT --> FC1["Fully Connected Dense"]
+        FC1 --> SM["Softmax Class Probabilities"]
+    end
+</pre></div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher explanation — Hinglish</div>
+
+Standard MLP images par fail ho jaata hai kyunki agar $1000     imes 1000$ image ko flatten karoge toh 1 million inputs ban jaayenge, aur pehle layer ke hi trillions of weights ho jaayenge! CNN iska ilaaj do concepts se karta hai:
+1. **Local Receptive Fields:** Filter sirf $3   imes 3$ ya $5   imes 5$ ke chote patch ko dekhta hai.
+2. **Weight Sharing:** Wahi same filter poori image par slide karta hai. Agar ek filter se aankh ya kaan detect ho raha hai, toh image ke kisi bhi kone mein aankh ho, wo detect kar lega!
+
+
+A CNN is not simply:
+
+> "A neural network for images."
+
+A better mental model is:
+
+> **A neural network whose architecture uses local connectivity and shared parameters to learn spatial features efficiently.**
+
+Three ideas are especially important:
+
+| Idea | Meaning |
+|---|---|
+| Local connectivity | A unit looks at a local region rather than the entire image |
+| Parameter sharing | The same filter parameters are reused at different locations |
+| Hierarchical representation | Later layers can combine earlier features |
+
+These three ideas explain much of the usefulness of CNNs.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: Image as a Tensor -->
+  <section id="s-04" data-search-section="Image as a Tensor" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>4. Image as a Tensor</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A grayscale image can be represented as a matrix:</p>
+<div class="formula-math">\[
+X\in\mathbb{R}^{H\times W}
+\]</div>
+<p>where:</p>
+<ul>
+<li>\(H\) = height;</li>
+<li>\(W\) = width.</li>
+</ul>
+<p>A colour RGB image has three channels:</p>
+<div class="formula-math">\[
+X\in\mathbb{R}^{H\times W\times 3}.
+\]</div>
+<p>For example:</p>
+<div class="ascii-box"><pre>RGB image
+
+height
+  ↓
+┌───────────────────┐
+│ R channel         │
+│ G channel         │
+│ B channel         │
+└───────────────────┘
+          → width</pre></div>
+<p>In deep-learning notation, a batch may add another dimension:</p>
+<div class="formula-math">\[
+X\in\mathbb{R}^{B\times H\times W\times C}
+\]</div>
+<p>where \(B\) is batch size and \(C\) is the number of channels.</p>
+<p>Different software libraries may order these dimensions differently. The mathematical idea is unchanged.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: Why Not Just Use a Dense Network? -->
+  <section id="s-05" data-search-section="Why Not Just Use a Dense Network?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>5. Why Not Just Use a Dense Network?</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose an RGB image has:</p>
+<div class="formula-math">\[
+224\times224\times3
+\]</div>
+<p>input values.</p>
+<p>That is:</p>
+<div class="formula-math">\[
+224\cdot224\cdot3=150528
+\]</div>
+<p>input values.</p>
+<p>A dense layer with only 1000 neurons would require approximately:</p>
+<div class="formula-math">\[
+150528\times1000
+\]</div>
+<p>weights, before counting biases.</p>
+<p>That is about:</p>
+<div class="formula-math">\[
+150,528,000
+\]</div>
+<p>weights.</p>
+<p>A CNN can instead use small filters such as:</p>
+<div class="formula-math">\[
+3\times3
+\]</div>
+<p>and reuse them across spatial locations.</p>
+<p>This does <strong>not</strong> mean CNNs are always computationally cheap; modern CNNs can be very large. The key point is that convolution imposes a useful structural assumption and shares parameters.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: The Convolution Filter -->
+  <section id="s-06" data-search-section="The Convolution Filter" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>6. The Convolution Filter</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Consider a simple grayscale patch:</p>
+<div class="formula-math">\[
+X=
+\begin{bmatrix}
+1&2&0\\
+0&1&3\\
+2&1&1
+\end{bmatrix}
+\]</div>
+<p>and a filter:</p>
+<div class="formula-math">\[
+K=
+\begin{bmatrix}
+1&0\\
+0&-1
+\end{bmatrix}.
+\]</div>
+<p>A local operation multiplies corresponding values and sums them.</p>
+<p>For the top-left \(2\times2\) region:</p>
+<div class="formula-math">\[
+\begin{bmatrix}
+1&2\\
+0&1
+\end{bmatrix}
+\]</div>
+<p>the response is:</p>
+<div class="formula-math">\[
+1(1)+2(0)+0(0)+1(-1)=0.
+\]</div>
+<p>The filter is then moved to another location.</p>
+<div class="ascii-box"><pre>Input
+
+┌───┬───┬───┐
+│ 1 │ 2 │ 0 │
+├───┼───┼───┤
+│ 0 │ 1 │ 3 │
+├───┼───┼───┤
+│ 2 │ 1 │ 1 │
+└───┴───┴───┘
+  ↑
+  └── local window
+
+        ↓ filter moves
+
+┌───┬───┐
+│ ? │ ? │
+├───┼───┤
+│ ? │ ? │
+└───┴───┘
+
+feature map</pre></div>
+<p>The resulting matrix is called a <strong>feature map</strong> (or activation map).</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: What Does a Filter Learn? -->
+  <section id="s-07" data-search-section="What Does a Filter Learn?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>7. What Does a Filter Learn?</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A filter is not normally manually assigned in a trained CNN.</p>
+<p>Its parameters are learned from data.</p>
+<p>Early filters may learn patterns that resemble:</p>
+<ul>
+<li>edges;</li>
+<li>orientations;</li>
+<li>local contrasts;</li>
+<li>simple textures.</li>
+</ul>
+<p>Deeper layers can combine earlier feature responses.</p>
+<p>A useful conceptual picture is:</p>
+<div class="ascii-box"><pre>Layer 1
+edge-like / local patterns
+        ↓
+Layer 2
+textures / combinations
+        ↓
+Layer 3
+parts / larger structures
+        ↓
+Later layers
+task-relevant high-level evidence</pre></div>
+<p>Do not memorize this as a rigid rule. Learned features depend on the dataset, architecture and training objective.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: Convolution Operation -->
+  <section id="s-08" data-search-section="Convolution Operation" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>8. Convolution Operation</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For a 2D input \(X\) and kernel \(K\), a common deep-learning cross-correlation form is:</p>
+<div class="formula-math">\[
+S(i,j)
+=
+\sum_{m}\sum_{n}
+X(i+m,j+n)K(m,n).
+\]</div>
+<h3>Important terminology note</h3>
+<p>Many deep-learning libraries call this operation <strong>convolution</strong>, although mathematically it is often cross-correlation because the kernel is not explicitly flipped.</p>
+<p>For an introductory course, the important skill is understanding the sliding-window multiply-and-sum operation and knowing the terminology distinction.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: Stride -->
+  <section id="s-09" data-search-section="Stride" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>9. Stride</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p><strong>Stride</strong> tells us how far the filter moves between positions.</p>
+<h3>Stride 1</h3>
+<div class="ascii-box"><pre>→ one position at a time</pre></div>
+<h3>Stride 2</h3>
+<div class="ascii-box"><pre>→ skip every other starting position</pre></div>
+<p>Larger stride generally reduces spatial dimensions.</p>
+<p>For an input size \(N\), kernel size \(F\), padding \(P\), and stride \(S\):</p>
+<div class="formula-math">\[
+\text{Output size}
+=
+\left\lfloor
+\frac{N+2P-F}{S}
+\right\rfloor+1.
+\]</div>
+<p>For height and width, apply the formula separately.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: Padding -->
+  <section id="s-10" data-search-section="Padding" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>10. Padding</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Without padding, repeated convolution operations can shrink spatial dimensions.</p>
+<p>Padding adds values around the boundary, commonly zeros in basic examples.</p>
+<div class="ascii-box"><pre>Before padding
+
+████████
+████████
+████████
+
+After padding
+
+░░░░░░░░░░
+░████████░
+░████████░
+░████████░
+░░░░░░░░░░</pre></div>
+<p>Common terminology:</p>
+<h3>Valid</h3>
+<p>No padding.</p>
+<h3>Same</h3>
+<p>Padding is selected so that, under common stride-1 settings, output spatial dimensions match input dimensions.</p>
+<p>Do not assume "same" always means identical dimensions for arbitrary strides; the exact convention depends on the framework and stride.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: Multiple Channels -->
+  <section id="s-11" data-search-section="Multiple Channels" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>11. Multiple Channels</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A colour image has multiple channels.</p>
+<p>A filter therefore also has a depth/channel dimension.</p>
+<p>If the input is:</p>
+<div class="formula-math">\[
+H\times W\times C_{in}
+\]</div>
+<p>then one filter has dimensions approximately:</p>
+<div class="formula-math">\[
+F_h\times F_w\times C_{in}.
+\]</div>
+<p>For example, for RGB input:</p>
+<div class="formula-math">\[
+3\times3\times3.
+\]</div>
+<p>The filter produces <strong>one output feature map</strong>.</p>
+<p>If we learn \(C_{out}\) filters, we obtain:</p>
+<div class="formula-math">\[
+H_{out}\times W_{out}\times C_{out}.
+\]</div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: Number of Convolution Parameters -->
+  <section id="s-12" data-search-section="Number of Convolution Parameters" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>12. Number of Convolution Parameters</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For:</p>
+<ul>
+<li>kernel height \(F_h\);</li>
+<li>kernel width \(F_w\);</li>
+<li>input channels \(C_{in}\);</li>
+<li>output channels \(C_{out}\);</li>
+</ul>
+<p>the number of weights is:</p>
+<div class="formula-math">\[
+F_hF_wC_{in}C_{out}.
+\]</div>
+<p>If each output channel has one bias:</p>
+<div class="formula-math">\[
+\text{parameters}
+=
+F_hF_wC_{in}C_{out}+C_{out}.
+\]</div>
+<h3>Example</h3>
+<p>Input channels:</p>
+<div class="formula-math">\[
+C_{in}=3
+\]</div>
+<p>Kernel:</p>
+<div class="formula-math">\[
+3\times3
+\]</div>
+<p>Number of filters:</p>
+<div class="formula-math">\[
+32.
+\]</div>
+<p>Weights:</p>
+<div class="formula-math">\[
+3\cdot3\cdot3\cdot32=864.
+\]</div>
+<p>Biases:</p>
+<div class="formula-math">\[
+32.
+\]</div>
+<p>Total:</p>
+<div class="formula-math">\[
+896.
+\]</div>
+<p>Compare this with a dense layer connected to a large image: parameter sharing is the crucial structural difference.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: Feature Maps -->
+  <section id="s-13" data-search-section="Feature Maps" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>13. Feature Maps</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>If a layer contains several filters:</p>
+<div class="ascii-box"><pre>Input image
+     ↓
+ ┌───┼───┬───┐
+ ↓   ↓   ↓   ↓
+K1  K2  K3  K4
+ ↓   ↓   ↓   ↓
+M1  M2  M3  M4</pre></div>
+<p>each filter creates a different feature map.</p>
+<p>One filter may respond strongly to one learned local pattern, another to a different pattern.</p>
+<p>The collection of feature maps becomes the input to later processing.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: ReLU After Convolution -->
+  <section id="s-14" data-search-section="ReLU After Convolution" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>14. ReLU After Convolution</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A common block is:</p>
+<div class="ascii-box"><pre>Input
+  ↓
+Convolution
+  ↓
+ReLU
+  ↓
+Feature map</pre></div>
+<p>ReLU:</p>
+<div class="formula-math">\[
+\operatorname{ReLU}(z)=\max(0,z).
+\]</div>
+<p>Example:</p>
+<div class="formula-math">\[
+[-2,\ 1,\ 4,\ -3]
+\]</div>
+<p>becomes:</p>
+<div class="formula-math">\[
+[0,\ 1,\ 4,\ 0].
+\]</div>
+<p>The activation introduces nonlinearity, allowing stacked layers to represent more complex functions.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: Pooling -->
+  <section id="s-15" data-search-section="Pooling" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>15. Pooling</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="diagram-box"><pre class="mermaid">
+graph TD
+    subgraph MaxPooling["2×2 Max Pooling Operation with Stride 2"]
+        M1["┌───┬───┐<br/>│ 4 │ 1 │<br/>├───┼───┤<br/>│ 3 │ 8 │<br/>└───┴───┘"] -->|Select Max| OUT1["[ 8 ]"]
+        M2["┌───┬───┐<br/>│ 2 │ 6 │<br/>├───┼───┤<br/>│ 5 │ 3 │<br/>└───┴───┘"] -->|Select Max| OUT2["[ 6 ]"]
+    end
+</pre></div>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+def conv2d_single_channel(image, kernel, stride=1, padding=0):
+    if padding &gt; 0:
+        image = np.pad(image, ((padding, padding), (padding, padding)), mode=&#x27;constant&#x27;)
+    
+    H, W = image.shape
+    kH, kW = kernel.shape
+    out_H = (H - kH) // stride + 1
+    out_W = (W - kW) // stride + 1
+    output = np.zeros((out_H, out_W))
+
+    for i in range(out_H):
+        for j in range(out_W):
+            h_start = i * stride
+            w_start = j * stride
+            patch = image[h_start:h_start+kH, w_start:w_start+kW]
+            output[i, j] = np.sum(patch * kernel)
+    return output
+
+sobel_v = np.array([[-1, 0, 1],
+                    [-2, 0, 2],
+                    [-1, 0, 1]])
+
+img = np.array([
+    [10, 10, 10, 0, 0],
+    [10, 10, 10, 0, 0],
+    [10, 10, 10, 0, 0],
+    [10, 10, 10, 0, 0],
+    [10, 10, 10, 0, 0]
+], dtype=float)
+
+feat_map = conv2d_single_channel(img, sobel_v)
+print(&quot;Input Image Shape:&quot;, img.shape)
+print(&quot;Feature Map Shape:&quot;, feat_map.shape)
+print(&quot;Feature Map Output (Bright positive edge detected):\n&quot;, feat_map)</code></pre></div>
+<p>Pooling is a downsampling operation.</p>
+<p>The classic example is <strong>max pooling</strong>.</p>
+<p>For:</p>
+<div class="formula-math">\[
+\begin{bmatrix}
+1&5\\
+2&3
+\end{bmatrix}
+\]</div>
+<p>max pooling gives:</p>
+<div class="formula-math">\[
+5.
+\]</div>
+<p>A larger feature map becomes smaller.</p>
+<div class="ascii-box"><pre>4 × 4 feature map
+       ↓
+2 × 2 max pooling
+       ↓
+2 × 2 feature map</pre></div>
+<p>Pooling can:</p>
+<ul>
+<li>reduce spatial resolution;</li>
+<li>reduce computation in later layers;</li>
+<li>provide some tolerance to small spatial shifts.</li>
+</ul>
+<p>Pooling is common in classical CNN teaching, but modern architectures may use strided convolutions or other downsampling mechanisms instead.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: Max Pooling Worked Example -->
+  <section id="s-16" data-search-section="Max Pooling Worked Example" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>16. Max Pooling Worked Example</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Given:</p>
+<div class="formula-math">\[
+X=
+\begin{bmatrix}
+1&3&2&4\\
+5&6&1&2\\
+7&2&8&3\\
+1&4&5&9
+\end{bmatrix}
+\]</div>
+<p>Use \(2\times2\) max pooling with stride 2.</p>
+<p>Top-left:</p>
+<div class="formula-math">\[
+\max
+\begin{bmatrix}
+1&3\\
+5&6
+\end{bmatrix}
+=6.
+\]</div>
+<p>Top-right:</p>
+<div class="formula-math">\[
+\max
+\begin{bmatrix}
+2&4\\
+1&2
+\end{bmatrix}
+=4.
+\]</div>
+<p>Bottom-left:</p>
+<div class="formula-math">\[
+\max
+\begin{bmatrix}
+7&2\\
+1&4
+\end{bmatrix}
+=7.
+\]</div>
+<p>Bottom-right:</p>
+<div class="formula-math">\[
+\max
+\begin{bmatrix}
+8&3\\
+5&9
+\end{bmatrix}
+=9.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+\begin{bmatrix}
+6&4\\
+7&9
+\end{bmatrix}}
+\]</div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: A Typical CNN Pipeline -->
+  <section id="s-17" data-search-section="A Typical CNN Pipeline" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>17. A Typical CNN Pipeline</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A simplified architecture:</p>
+<div class="ascii-box"><pre>Image
+  ↓
+Convolution
+  ↓
+ReLU
+  ↓
+Pooling
+  ↓
+Convolution
+  ↓
+ReLU
+  ↓
+Pooling
+  ↓
+Flatten / global aggregation
+  ↓
+Dense layer
+  ↓
+Output</pre></div>
+<p>Modern architectures can differ substantially.</p>
+<p>Do not treat this diagram as the definition of every CNN.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: Why Parameter Sharing Matters -->
+  <section id="s-18" data-search-section="Why Parameter Sharing Matters" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>18. Why Parameter Sharing Matters</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a vertical edge appears:</p>
+<div class="ascii-box"><pre>██
+██
+██</pre></div>
+<p>If the same learned filter can detect a vertical edge at many positions, we do not need a completely different set of parameters for each location.</p>
+<p>The same kernel is reused:</p>
+<div class="ascii-box"><pre>position 1 → same filter
+position 2 → same filter
+position 3 → same filter
+...</pre></div>
+<p>This is called <strong>parameter sharing</strong>.</p>
+<p>It reduces parameter count and builds a useful inductive bias: the same local pattern may matter regardless of where it occurs.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: Translation Equivariance — Careful Understanding -->
+  <section id="s-19" data-search-section="Translation Equivariance — Careful Understanding" class="content-section">
+    <div class="section-header">
+      <h2>19. Translation Equivariance — Careful Understanding</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A convolutional feature map tends to move when the input pattern moves.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>pattern at left
+     ↓
+activation at left
+
+pattern moves right
+     ↓
+activation moves right</pre></div>
+<p>This is related to <strong>translation equivariance</strong>.</p>
+<p>Pooling/downsampling and later stages can introduce some degree of translation tolerance/invariance, but these concepts are not identical.</p>
+<h3>Do not say:</h3>
+<blockquote>
+<p>"CNNs are completely translation invariant."</p>
+</blockquote>
+<p>That is too strong.</p>
+<p>A safer statement is:</p>
+<blockquote>
+<p>Convolution naturally preserves spatial correspondence and provides translation-equivariant feature extraction, while architectural choices can provide some tolerance to small spatial shifts.</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: Receptive Field -->
+  <section id="s-20" data-search-section="Receptive Field" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>20. Receptive Field</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A neuron's <strong>receptive field</strong> is the region of the original input that can influence it.</p>
+<p>A shallow convolution may see a small region.</p>
+<p>After several layers, a unit can depend on a much larger region.</p>
+<div class="ascii-box"><pre>Layer 1
+small local view
+
+      ↓
+
+Layer 2
+larger effective view
+
+      ↓
+
+Layer 3
+still larger effective view</pre></div>
+<p>This helps explain how CNNs can move from local patterns toward larger structures.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: CNN vs Fully Connected Network -->
+  <section id="s-21" data-search-section="CNN vs Fully Connected Network" class="content-section">
+    <div class="section-header">
+      <h2>21. CNN vs Fully Connected Network</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Property</th>
+<th>Dense network</th>
+<th>CNN</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Local connectivity</td>
+<td>Not structurally enforced</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Parameter sharing</td>
+<td>Usually no spatial sharing</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Spatial structure</td>
+<td>Flattening can obscure it</td>
+<td>Preserved by architecture</td>
+</tr>
+<tr>
+<td>Typical use</td>
+<td>General tabular/vector data</td>
+<td>Images/spatial data</td>
+</tr>
+<tr>
+<td>Feature extraction</td>
+<td>Learned</td>
+<td>Learned</td>
+</tr>
+<tr>
+<td>Parameter efficiency for images</td>
+<td>Often poor</td>
+<td>Often better</td>
+</tr>
+</tbody>
+</table></div>
+<p>Neither architecture is universally superior. The appropriate inductive bias depends on the data and task.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: Worked End-to-End Shape Example -->
+  <section id="s-22" data-search-section="Worked End-to-End Shape Example" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>22. Worked End-to-End Shape Example</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<div class="ascii-box"><pre>Input: 32 × 32 × 3
+Kernel: 3 × 3
+Filters: 16
+Stride: 1
+Padding: 1</pre></div>
+<p>Output spatial size:</p>
+<div class="formula-math">\[
+\frac{32+2(1)-3}{1}+1
+=
+32.
+\]</div>
+<p>So:</p>
+<div class="formula-math">\[
+\boxed{32\times32\times16}
+\]</div>
+<h3>Parameter count</h3>
+<div class="formula-math">\[
+3\cdot3\cdot3\cdot16+16
+\]</div>
+<div class="formula-math">\[
+=432+16
+\]</div>
+<div class="formula-math">\[
+=\boxed{448}.
+\]</div>
+<p>This kind of shape and parameter calculation is highly useful for exams.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: CNN Mathematics You Need Now -->
+  <section id="s-23" data-search-section="CNN Mathematics You Need Now" class="content-section">
+    <div class="section-header">
+      <h2>23. CNN Mathematics You Need Now</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Output dimension</h2>
+<div class="formula-math">\[
+\boxed{
+N_{out}
+=
+\left\lfloor
+\frac{N+2P-F}{S}
+\right\rfloor+1
+}
+\]</div>
+<h2>Convolution/cross-correlation response</h2>
+<div class="formula-math">\[
+\boxed{
+S(i,j)
+=
+\sum_m\sum_n
+X(i+m,j+n)K(m,n)
+}
+\]</div>
+<h2>Convolution parameters</h2>
+<div class="formula-math">\[
+\boxed{
+F_hF_wC_{in}C_{out}+C_{out}
+}
+\]</div>
+<p>when biases are included.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: Common Mistakes -->
+  <section id="s-24" data-search-section="Common Mistakes" class="content-section">
+    <div class="section-header">
+      <h2>24. Common Mistakes</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Mistake 1</div>
+
+Thinking the filter is a fixed image-processing mask.
+
+**Correction:** in a trained CNN, filter values are learned parameters.
+
+</div>
+
+<div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Mistake 2</div>
+
+Thinking every filter produces one scalar for the whole image.
+
+**Correction:** a filter is scanned over spatial positions and produces a feature map.
+
+</div>
+
+<div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Mistake 3</div>
+
+Confusing kernel size with output size.
+
+**Correction:** use the output-size formula.
+
+</div>
+
+<div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Mistake 4</div>
+
+Forgetting input channels.
+
+A \(3\times3\) filter for RGB input is not merely \(3\times3\); its learned weights span the input channels.
+
+</div>
+
+<div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Mistake 5</div>
+
+Assuming pooling is mandatory.
+
+It is common but not a mathematical requirement for every CNN architecture.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: Exam Lens -->
+  <section id="s-25" data-search-section="Exam Lens" class="content-section">
+    <div class="section-header">
+      <h2>25. Exam Lens</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>2 marks</h2>
+<ul>
+<li>Define CNN.</li>
+<li>What is a kernel/filter?</li>
+<li>What is a feature map?</li>
+<li>Define stride.</li>
+<li>Define padding.</li>
+<li>What is pooling?</li>
+<li>What is parameter sharing?</li>
+</ul>
+<h2>5 marks</h2>
+<blockquote>
+<p>Explain the working of a CNN.</p>
+</blockquote>
+<p>Answer structure:</p>
+<ol>
+<li>Input image.</li>
+<li>Convolution filters.</li>
+<li>Feature maps.</li>
+<li>Activation.</li>
+<li>Pooling/downsampling.</li>
+<li>Repeated feature extraction.</li>
+<li>Final classifier.</li>
+</ol>
+<h2>10 marks</h2>
+<blockquote>
+<p>Explain CNN architecture with convolution, stride, padding, pooling and parameter sharing.</p>
+</blockquote>
+<p>Include:</p>
+<ul>
+<li>diagram;</li>
+<li>convolution equation;</li>
+<li>output-size equation;</li>
+<li>parameter-count formula;</li>
+<li>one numerical example;</li>
+<li>advantages and limitations.</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: Active Recall -->
+  <section id="s-26" data-search-section="Active Recall" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>26. Active Recall</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Close the book and answer:</p>
+<ol>
+<li>Why are CNNs useful for images?</li>
+<li>What does a filter learn?</li>
+<li>What is a feature map?</li>
+<li>What does stride control?</li>
+<li>Why use padding?</li>
+<li>How does channel depth affect a filter?</li>
+<li>Why does parameter sharing reduce parameters?</li>
+<li>What is pooling?</li>
+<li>What is receptive field?</li>
+<li>What is the difference between equivariance and invariance?</li>
+<li>Calculate output size for \(28\times28\), \(5\times5\), \(P=2\), \(S=1\).</li>
+<li>Calculate parameters for \(3\times3\), \(C_{in}=3\), \(C_{out}=64\).</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: Chapter Exit Test -->
+  <section id="s-27" data-search-section="Chapter Exit Test" class="content-section">
+    <div class="section-header">
+      <h2>27. Chapter Exit Test</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You are ready to move on when you can:</p>
+<ul>
+<li>[ ] Explain CNN intuition in English.</li>
+<li>[ ] Explain CNN intuition in Hinglish.</li>
+<li>[ ] Draw a convolution pipeline.</li>
+<li>[ ] Perform a small convolution calculation.</li>
+<li>[ ] Calculate output dimensions.</li>
+<li>[ ] Explain stride.</li>
+<li>[ ] Explain padding.</li>
+<li>[ ] Calculate convolution parameters.</li>
+<li>[ ] Explain feature maps.</li>
+<li>[ ] Explain parameter sharing.</li>
+<li>[ ] Explain pooling.</li>
+<li>[ ] Explain receptive field.</li>
+<li>[ ] Distinguish convolution from dense connectivity.</li>
+<li>[ ] Explain why CNNs preserve useful spatial structure.</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: Resource Shelf -->
+  <section id="s-28" data-search-section="Resource Shelf" class="content-section">
+    <div class="section-header">
+      <h2>28. Resource Shelf</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Supplied course source</h2>
+<p><code>AI_ML_Master_Learning_Resource_Guide.pdf</code></p>
+<p>The guide identifies CNN as an official Unit III topic and explicitly notes that the supplied notes do not fully cover CNN. It recommends gap-filling through structured deep-learning resources.</p>
+<h2>Recommended external reinforcement</h2>
+<ul>
+<li>Stanford CS231n — Deep Learning for Computer Vision</li>
+<li>NPTEL Deep Learning</li>
+<li>StatQuest neural-network/CNN videos</li>
+<li>DeepLearning.AI Deep Learning material</li>
+</ul>
+<h3>Learning order</h3>
+<div class="ascii-box"><pre>Read this chapter
+      ↓
+Watch one CNN intuition video
+      ↓
+Draw convolution by hand
+      ↓
+Solve output-size + parameter questions
+      ↓
+Study one CNN architecture diagram
+      ↓
+Move to RNN</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 29: Source Boundary -->
+  <section id="s-29" data-search-section="Source Boundary" class="content-section">
+    <div class="section-header">
+      <h2>29. Source Boundary</h2>
+      <button class="bookmark-btn" data-id="s-29" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This chapter is syllabus-aligned and uses the supplied resource guide for the course scope and identified resource gaps.</p>
+<p>The detailed convolution equations, shape formulas, pooling examples, receptive-field explanation and parameter calculations are standard deep-learning exposition added to make the chapter self-contained. They should not be interpreted as verbatim content from the supplied University lecture notes.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 30: Connection Forward -->
+  <section id="s-30" data-search-section="Connection Forward" class="content-section">
+    <div class="section-header">
+      <h2>30. Connection Forward</h2>
+      <button class="bookmark-btn" data-id="s-30" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>CNN answers:</p>
+<blockquote>
+<p><strong>How can a neural network exploit spatial structure?</strong></p>
+</blockquote>
+<p>The next major question is:</p>
+<blockquote>
+<p><strong>How can a neural network process information that arrives as a sequence, where earlier information can influence later predictions?</strong></p>
+</blockquote>
+<p>That leads to:</p>
+<p><strong><code>MAIN-U3-C37 — Recurrent Neural Networks (RNNs)</code>.</strong></p>
+<hr />
+<h1>Status</h1>
+<p><strong><code>ML-U3-C36</code> — COMPLETE</strong></p>
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="ch35-backpropagation.html" class="nav-btn">← Ch 35 — Backpropagation</a>
+    <a href="ch37-recurrent-neural-networks.html" class="nav-btn primary">Next: Ch 37 — Recurrent Neural Networks →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch36-convolutional-neural-networks.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 36</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

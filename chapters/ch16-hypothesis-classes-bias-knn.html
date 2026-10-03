@@ -1,0 +1,1717 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 16: Hypothesis Classes, Inductive Bias &amp; K-Nearest Neighbours — AI & Machine Learning MiniBook. Hypothesis Spaces, Restriction vs Preference Bias, No Free Lunch Theorem, Occam&#x27;s Razor, and the K-Nearest Neighbours (KNN) Algorithm">
+<title>Ch 16 — Hypothesis Classes, Inductive Bias &amp; K-Nearest Neighbours | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-vi">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 16 — Hypothesis Classes, Inductive Bias &amp; K-Nearest Neighbours</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 16 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why This Chapter Exists <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. One-Minute Intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. The Main Visual <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Why Zero Training Error Can Be a Bad Result <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. The Universal Vocabulary <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. What Does “Class” Mean Here? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Real-World Analogy — Hiring a Person </a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. What Is Inductive Bias? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Why Does Inductive Bias Help? </a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Two Important Types of Assumptions in Your Lecture <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. The Big Mental Model </a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Formal Learning Picture <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. What Happens If the Class Is Too Large? </a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. What Happens If the Class Is Too Small? </a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. K-Nearest Neighbours — Why It Appears Here <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. What Does “K” Mean? </a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. K-NN for Classification </a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. K-NN for Regression <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Distance — the Mathematical Heart of K-NN </a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Why Feature Scaling Matters for K-NN <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. The Effect of K </a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. K-NN as a Form of Local Learning </a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Hypothesis Class vs Model Parameters </a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Hypothesis Class Is a Design Decision </a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. A Powerful Everyday Analogy — Maps <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Connection to Training Error and Test Error </a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. A Small Mathematical Example </a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Common Misconceptions </a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Comparison — Hypothesis Class vs Inductive Bias </a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Active Recall — Close the Book <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Practice Set </a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. University Exam Lens <span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Math Lens </a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Course Lens — Lecture 8 </a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Resource Shelf <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Chapter Exit Test </a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Memory Card </a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. What Comes Next? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link active"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit II</span><span>›</span><span>Part VI — Hypothesis & Generalization</span><span>›</span><span style="color:var(--em-text)">Chapter 16</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 16 · Unit II · Part VI</div>
+    <div class="chapter-part-banner part-vi">
+      <span class="part-banner-badge">Unit II · Part VI</span>
+      <span>Hypothesis & Generalization</span>
+    </div>
+    <h1 class="chapter-title">Hypothesis Classes, Inductive Bias &amp; K-Nearest Neighbours</h1>
+    <div class="concept-id-tag">[CONCEPT-ML-016]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: Highest Yield (10-mark guarantee)</span>
+      <span class="chapter-meta-item">📖 ~50 min read</span>
+      <span class="chapter-meta-item">🎯 38 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>Hypothesis Classes & Inductive Bias:</strong> Hypothesis space H, Target concept c*, Generalization beyond training data, Inductive bias necessity, No Free Lunch theorem, K-Nearest Neighbours (KNN) algorithm, Distance metrics (Euclidean, Manhattan, Minkowski), Choice of K, Voronoi diagrams, and Curse of dimensionality.</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why This Chapter Exists</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">One-Minute Intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">The Main Visual</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Why Zero Training Error Can Be a Bad Result</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">The Universal Vocabulary</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">What Does “Class” Mean Here?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Real-World Analogy — Hiring a Person</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">What Is Inductive Bias?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Why Does Inductive Bias Help?</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Two Important Types of Assumptions in Your Lecture</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">The Big Mental Model</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Formal Learning Picture</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">What Happens If the Class Is Too Large?</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">What Happens If the Class Is Too Small?</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">K-Nearest Neighbours — Why It Appears Here</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">What Does “K” Mean?</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">K-NN for Classification</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">K-NN for Regression</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Distance — the Mathematical Heart of K-NN</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Why Feature Scaling Matters for K-NN</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">The Effect of K</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">K-NN as a Form of Local Learning</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Hypothesis Class vs Model Parameters</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Hypothesis Class Is a Design Decision</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">A Powerful Everyday Analogy — Maps</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Connection to Training Error and Test Error</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">A Small Mathematical Example</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Common Misconceptions</span></a></li>
+      <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Comparison — Hypothesis Class vs Inductive Bias</span></a></li>
+      <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Active Recall — Close the Book</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Practice Set</span></a></li>
+      <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">University Exam Lens</span><span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a></li>
+      <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Math Lens</span></a></li>
+      <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Course Lens — Lecture 8</span></a></li>
+      <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Resource Shelf</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Chapter Exit Test</span></a></li>
+      <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Memory Card</span></a></li>
+      <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">What Comes Next?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+    </ul>
+  </div>
+
+  <div class="chapter-preamble-card"><h1>MAIN-U2-C16 — Hypothesis Classes, Inductive Bias &amp; K-Nearest Neighbours</h1>
+<blockquote>
+<p><strong>Main Book:</strong> AI &amp; Machine Learning — Visual + Mathematical Self-Learning Textbook<br />
+<strong>Unit:</strong> II — Machine Learning Fundamentals<br />
+<strong>Topic ID:</strong> <code>ML-U2-C16</code><br />
+<strong>Prerequisites:</strong> <code>ML-U2-C14</code> What Is Machine Learning, <code>ML-U2-C15</code> Machine Learning Paradigms<br />
+<strong>Primary course source:</strong> <code>Lecture08.pdf</code> — <em>Supervised Learning: Hypothesis Class &amp; Bias-Variance Trade-off</em>, Prof. Subrahmanya Swamy Peruru, IIT Kanpur<br />
+<strong>Source status:</strong> Course-grounded; K-NN algorithm details below include a clearly marked universal expansion because the supplied lecture establishes the local-similarity assumption and identifies K-NN as the resulting method, but does not provide the complete algorithm.</p>
+</blockquote>
+<hr /></div>
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 1: Why This Chapter Exists -->
+  <section id="s-01" data-search-section="Why This Chapter Exists" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>1. Why This Chapter Exists</h2>
+      <button class="bookmark-btn" data-id="s-01" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You already know the basic supervised-learning story:</p>
+<div class="ascii-box"><pre>Training examples
+      ↓
+      ML model
+      ↓
+Prediction on new data</pre></div>
+<p>But there is a hidden question:</p>
+<blockquote>
+<p><strong>What is the model allowed to be?</strong></p>
+</blockquote>
+<p>Suppose you give a computer 100 examples of house size and house price. You tell it to find a function that predicts price.</p>
+<p>Could it choose <strong>any possible function in existence</strong>?</p>
+<p>If you allow that, something strange can happen.</p>
+<p>The system can simply memorize every training point:</p>
+<div class="ascii-box"><pre>Input                    Prediction
+────────────────────────────────────
+House A                  Exact price of A
+House B                  Exact price of B
+House C                  Exact price of C
+...
+
+Any unseen input         Whatever the arbitrary function says</pre></div>
+<p>Training error can become zero while the model may behave terribly on new houses.</p>
+<p>This is the central problem that this chapter solves conceptually:</p>
+<blockquote>
+<p><strong>Learning is not merely about fitting the training data. It is about learning a useful rule that generalizes to unseen data.</strong></p>
+</blockquote>
+<p>Your Lecture 8 starts from precisely this issue: without restrictions on the function structure, the learner can memorize the training data and obtain zero training error without learning a useful general rule. <span class="source-marker">Course source: <code>Lecture08.pdf</code>, slides 2–3.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 2: One-Minute Intuition -->
+  <section id="s-02" data-search-section="One-Minute Intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. One-Minute Intuition</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>English</h3>
+<p>A <strong>hypothesis</strong> is a candidate rule/model that could map an input to an output.</p>
+<p>A <strong>hypothesis class</strong> is the collection of candidate rules we are willing to consider.</p>
+<p><strong>Inductive bias</strong> is the set of assumptions that tells us which kinds of rules are reasonable.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+Socho teacher tumhe 20 questions dekar bolta hai:
+
+> “In examples se pattern find karke agla answer predict karo.”
+
+Agar tum har question ke liye bas alag-alag answer yaad kar lo, tum examples ko **memorize** kar rahe ho.
+
+Lekin agar tum samajh lo ki:
+
+> “Jin students ne zyada practice ki hai, unka performance usually better hota hai,”
+
+toh tum ek **general rule** bana rahe ho.
+
+ML mein humein isi tarah ka useful pattern chahiye.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: The Main Visual -->
+  <section id="s-03" data-search-section="The Main Visual" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>3. The Main Visual</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>SUPERVISED LEARNING
+                            │
+                            ▼
+                 Training examples (x, y)
+                            │
+                            ▼
+                ┌───────────────────────┐
+                │  What functions are   │
+                │  we willing to allow? │
+                └───────────┬───────────┘
+                            │
+                            ▼
+                     HYPOTHESIS CLASS H
+                            │
+               ┌────────────┼────────────┐
+               │            │            │
+               ▼            ▼            ▼
+           Linear        K-NN         Other models
+           functions     style         / rules
+               │            │
+               └────────────┼────────────┘
+                            ▼
+                    Choose best h ∈ H
+                            │
+                            ▼
+                    Generalize to new x</pre></div>
+<h3>How to read this</h3>
+<p>The important idea is that <strong>the learner does not search an unlimited universe of arbitrary functions</strong>.</p>
+<p>Instead:</p>
+<ol>
+<li>Decide what kinds of functions are allowed.</li>
+<li>Learn the best function within that family.</li>
+<li>Use that learned function on unseen inputs.</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: Why Zero Training Error Can Be a Bad Result -->
+  <section id="s-04" data-search-section="Why Zero Training Error Can Be a Bad Result" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>4. Why Zero Training Error Can Be a Bad Result</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose training data contains:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th style="text-align: right;">Input <code>x</code></th>
+<th style="text-align: right;">Target <code>y</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">30</td>
+</tr>
+</tbody>
+</table></div>
+<p>An unrestricted learner can create a weird function:</p>
+<div class="ascii-box"><pre>x = 1 → 10
+x = 2 → 20
+x = 3 → 30
+x ≠ 1,2,3 → arbitrary value</pre></div>
+<p>Its training error can be exactly zero.</p>
+<p>But suppose a new test input is:</p>
+<div class="formula-math">\[
+x=2.5
+\]</div>
+<p>What should it predict?</p>
+<p>The memorizing function may have no meaningful answer.</p>
+<p>This is why:</p>
+<blockquote>
+<p><strong>Low training error is not the same thing as good learning.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: The Universal Vocabulary -->
+  <section id="s-05" data-search-section="The Universal Vocabulary" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>5. The Universal Vocabulary</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>5.1 Hypothesis</h2>
+<p>A <strong>hypothesis</strong> is a candidate predictive function.</p>
+<p>We may write it as:</p>
+<div class="formula-math">\[
+h : \mathcal{X}\rightarrow\mathcal{Y}
+\]</div>
+<p>Meaning:</p>
+<blockquote>
+<p><code>h</code> takes an input from the input space <code>X</code> and returns a prediction in the output space <code>Y</code>.</p>
+</blockquote>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> Hypothesis ko simple language mein **possible prediction rule** samjho.
+
+</div>
+
+<hr />
+<h2>5.2 Hypothesis Class</h2>
+<p>A <strong>hypothesis class</strong> \(\mathcal H\) is the collection of functions that the learning algorithm is allowed to choose from.</p>
+<p>Instead of:</p>
+<blockquote>
+<p>“Choose any possible function.”</p>
+</blockquote>
+<p>we say:</p>
+<blockquote>
+<p>“Choose the best function from this family of functions.”</p>
+</blockquote>
+<p>The Lecture 8 formal objective is:</p>
+<div class="formula-math">\[
+\boxed{
+\hat f
+\in
+\arg\min_{f\in\mathcal H}
+\frac{1}{n}
+\sum_{i=1}^{n}
+\big(f(x_i)-y_i\big)^2
+}
+\]</div>
+<p>for the squared-error example used in the lecture. <span class="source-marker">Course source: <code>Lecture08.pdf</code>, slides 2–3.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: What Does “Class” Mean Here? -->
+  <section id="s-06" data-search-section="What Does “Class” Mean Here?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>6. What Does “Class” Mean Here?</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Do not interpret “class” as a Python class.</p>
+<p>It means:</p>
+<blockquote>
+<p><strong>A family or collection of possible functions/models.</strong></p>
+</blockquote>
+<p>Examples:</p>
+<div class="ascii-box"><pre>H₁ = all straight-line functions
+H₂ = all quadratic functions
+H₃ = all degree-15 polynomial functions</pre></div>
+<p>The class controls what the learner can represent.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: Real-World Analogy — Hiring a Person -->
+  <section id="s-07" data-search-section="Real-World Analogy — Hiring a Person" class="content-section">
+    <div class="section-header">
+      <h2>7. Real-World Analogy — Hiring a Person</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine you want to predict how well a candidate will perform in a job.</p>
+<p>You could create an absurd model that memorizes every candidate.</p>
+<p>Or you might decide beforehand:</p>
+<blockquote>
+<p>“I will consider only models that relate performance smoothly to experience, education and test score.”</p>
+</blockquote>
+<p>That restriction is a form of <strong>inductive bias</strong>.</p>
+<p>You are saying:</p>
+<blockquote>
+<p>“I believe these kinds of relationships are more plausible than arbitrary memorization.”</p>
+</blockquote>
+<p>The same idea appears in ML.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: What Is Inductive Bias? -->
+  <section id="s-08" data-search-section="What Is Inductive Bias?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>8. What Is Inductive Bias?</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your Lecture 8 defines inductive bias as assumptions about function structure that are introduced so that the learned model can generalize to unseen data. These assumptions may come from domain knowledge or mathematical principles such as smoothness. <span class="source-marker">Course source: <code>Lecture08.pdf</code>, slide 3.</span></p>
+<h3>Formal intuition</h3>
+<p>Inductive bias is the set of assumptions that restrict the learner toward certain kinds of solutions.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> Dataset humein limited examples deta hai. Unseen cases ke liye prediction karne ke liye humein kuch assumptions karni padti hain. **Ye assumptions inductive bias hain.**
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: Why Does Inductive Bias Help? -->
+  <section id="s-09" data-search-section="Why Does Inductive Bias Help?" class="content-section">
+    <div class="section-header">
+      <h2>9. Why Does Inductive Bias Help?</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Without bias:</p>
+<div class="ascii-box"><pre>Anything goes
+    ↓
+Memorization is possible
+    ↓
+Training error can be tiny
+    ↓
+Generalization can be poor</pre></div>
+<p>With useful bias:</p>
+<div class="ascii-box"><pre>Reasonable assumptions
+    ↓
+Smaller / structured hypothesis space
+    ↓
+Less freedom to memorize arbitrary noise
+    ↓
+Better chance of generalizing</pre></div>
+<p>This does <strong>not</strong> mean “more bias is always better.”</p>
+<p>An overly restrictive hypothesis class can also fail to represent the real relationship.</p>
+<p>That tension leads directly to <strong>bias and variance</strong>, which is the next chapter.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: Two Important Types of Assumptions in Your Lecture -->
+  <section id="s-10" data-search-section="Two Important Types of Assumptions in Your Lecture" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>10. Two Important Types of Assumptions in Your Lecture</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your lecture gives two particularly clear examples.</p>
+<h2>Example A — Local Similarity</h2>
+<p>Problem:</p>
+<blockquote>
+<p>Predict house price from location.</p>
+</blockquote>
+<p>Assumption:</p>
+<div class="formula-math">\[
+x\approx x_i
+\Rightarrow
+ y\text{ is likely close to }y_i
+\]</div>
+<p>In words:</p>
+<blockquote>
+<p>Nearby inputs tend to have similar outputs.</p>
+</blockquote>
+<p>Consequence:</p>
+<blockquote>
+<p>Predict using nearby examples → K-NN style methods.</p>
+</blockquote>
+<p><span class="source-marker">Course source: <code>Lecture08.pdf</code>, slide 4.</span></p>
+<hr />
+<h2>Example B — Global Linearity</h2>
+<p>Problem:</p>
+<blockquote>
+<p>Predict salary from experience.</p>
+</blockquote>
+<p>Assumption:</p>
+<blockquote>
+<p>The relationship is approximately linear across the input range.</p>
+</blockquote>
+<p>Model:</p>
+<div class="formula-math">\[
+f(x)=wx+b
+\]</div>
+<p><span class="source-marker">Course source: <code>Lecture08.pdf</code>, slide 5.</span></p>
+<p>So:</p>
+<div class="ascii-box"><pre>Assumption                     Model family
+──────────────────────────────────────────────
+Nearby things are similar  →   K-NN
+Relationship is linear     →   Linear model</pre></div>
+<p>This is one of the most important ideas in this entire section of the course.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: The Big Mental Model -->
+  <section id="s-11" data-search-section="The Big Mental Model" class="content-section">
+    <div class="section-header">
+      <h2>11. The Big Mental Model</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A supervised learner is solving two related questions:</p>
+<h3>Question 1</h3>
+<blockquote>
+<p><strong>What functions are allowed?</strong></p>
+</blockquote>
+<p>That is the role of the <strong>hypothesis class</strong>.</p>
+<h3>Question 2</h3>
+<blockquote>
+<p><strong>Which assumptions make those functions reasonable?</strong></p>
+</blockquote>
+<p>That is the role of <strong>inductive bias</strong>.</p>
+<h3>Then:</h3>
+<blockquote>
+<p>Choose the function that fits the training data best within that allowed family.</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: Formal Learning Picture -->
+  <section id="s-12" data-search-section="Formal Learning Picture" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>12. Formal Learning Picture</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the training dataset is:</p>
+<div class="formula-math">\[
+\mathcal{S}=
+\{(x_1,y_1),\ldots,(x_n,y_n)\}
+\]</div>
+<p>and the hypothesis class is:</p>
+<div class="formula-math">\[
+\mathcal H
+\]</div>
+<p>Then the learner may solve:</p>
+<div class="formula-math">\[
+\boxed{
+\hat f
+\in
+\arg\min_{f\in\mathcal H}
+\frac{1}{n}
+\sum_{i=1}^{n}
+\ell(f(x_i),y_i)
+}
+\]</div>
+<p>where:</p>
+<ul>
+<li>\(\mathcal S\) = training data</li>
+<li>\(\mathcal H\) = allowed hypothesis class</li>
+<li>\(\ell\) = loss function</li>
+<li>\(\hat f\) = learned function</li>
+</ul>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> Pehle rules/family decide karo → phir us family mein best function dhoondo.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: What Happens If the Class Is Too Large? -->
+  <section id="s-13" data-search-section="What Happens If the Class Is Too Large?" class="content-section">
+    <div class="section-header">
+      <h2>13. What Happens If the Class Is Too Large?</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>Very large H
+      ↓
+More expressive functions
+      ↓
+Can fit training data very closely
+      ↓
+Can memorize noise
+      ↓
+Possible overfitting</pre></div>
+<p>The model has lots of freedom.</p>
+<p>That freedom can be useful when the true relationship is complex—but dangerous when the model starts fitting noise instead of structure.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: What Happens If the Class Is Too Small? -->
+  <section id="s-14" data-search-section="What Happens If the Class Is Too Small?" class="content-section">
+    <div class="section-header">
+      <h2>14. What Happens If the Class Is Too Small?</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>Very small / restrictive H
+      ↓
+Not enough expressive power
+      ↓
+Cannot capture real relationship
+      ↓
+High systematic error
+      ↓
+Possible underfitting</pre></div>
+<p>This is why “use the simplest model possible” is not the whole story.</p>
+<p>The model must be <strong>simple enough to generalize and expressive enough to represent the real pattern</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: K-Nearest Neighbours — Why It Appears Here -->
+  <section id="s-15" data-search-section="K-Nearest Neighbours — Why It Appears Here" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>15. K-Nearest Neighbours — Why It Appears Here</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <blockquote>
+<p><strong>Source boundary:</strong> Your Lecture 8 establishes local similarity and says this assumption leads to nearest-neighbor methods. The complete algorithm below is a universal expansion so the concept is self-contained.</p>
+</blockquote>
+<p>Imagine predicting the price of a house in a neighborhood.</p>
+<p>You look at nearby houses:</p>
+<div class="ascii-box"><pre>₹90L
+                ●
+
+      ₹82L ●         ● ₹88L
+
+               ?
+            New house
+               ○
+
+      ₹79L ●         ● ₹84L</pre></div>
+<p>The basic assumption is:</p>
+<blockquote>
+<p><strong>Similar inputs tend to have similar outputs.</strong></p>
+</blockquote>
+<p>So instead of learning one global equation, we can search for the closest training examples.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: What Does “K” Mean? -->
+  <section id="s-16" data-search-section="What Does “K” Mean?" class="content-section">
+    <div class="section-header">
+      <h2>16. What Does “K” Mean?</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>In <strong>K-NN</strong>, <code>K</code> tells us how many neighbours we will use.</p>
+<p>Examples:</p>
+<ul>
+<li><code>K=1</code> → use the nearest example.</li>
+<li><code>K=3</code> → use the three nearest examples.</li>
+<li><code>K=5</code> → use the five nearest examples.</li>
+</ul>
+<p>The larger K becomes, the more surrounding data points influence the prediction.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: K-NN for Classification -->
+  <section id="s-17" data-search-section="K-NN for Classification" class="content-section">
+    <div class="section-header">
+      <h2>17. K-NN for Classification</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the task is:</p>
+<blockquote>
+<p>Is this email <strong>Spam</strong> or <strong>Not Spam</strong>?</p>
+</blockquote>
+<p>For <code>K=5</code>, suppose the five nearest examples are:</p>
+<div class="ascii-box"><pre>Spam       ✓
+Spam       ✓
+Not Spam   ✗
+Spam       ✓
+Not Spam   ✗</pre></div>
+<p>Votes:</p>
+<ul>
+<li>Spam = 3</li>
+<li>Not Spam = 2</li>
+</ul>
+<p>Prediction:</p>
+<div class="formula-math">\[
+\boxed{Spam}
+\]</div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “Mere nearest 5 neighbours mein majority kis class ki hai?”
+
+Jis class ke votes zyada, wahi prediction.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: K-NN for Regression -->
+  <section id="s-18" data-search-section="K-NN for Regression" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>18. K-NN for Regression</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the nearby houses have prices:</p>
+<div class="formula-math">\[
+80,\;82,\;86
+\]</div>
+<p>For a simple K-NN regression rule, use their average:</p>
+<div class="formula-math">\[
+\hat y
+=
+\frac{80+82+86}{3}
+=82.67
+\]</div>
+<p>So:</p>
+<div class="formula-math">\[
+\boxed{\hat y\approx82.67}
+\]</div>
+<p>The exact weighting scheme can vary; the simple average is the basic teaching version.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: Distance — the Mathematical Heart of K-NN -->
+  <section id="s-19" data-search-section="Distance — the Mathematical Heart of K-NN" class="content-section">
+    <div class="section-header">
+      <h2>19. Distance — the Mathematical Heart of K-NN</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>We need a way to decide what “near” means.</p>
+<p>For two points:</p>
+<div class="formula-math">\[
+x=(x_1,x_2),\qquad z=(z_1,z_2)
+\]</div>
+<p>one common choice is Euclidean distance:</p>
+<div class="formula-math">\[
+\boxed{
+ d(x,z)=
+\sqrt{(x_1-z_1)^2+(x_2-z_2)^2}
+}
+\]</div>
+<p>For <code>d</code> dimensions:</p>
+<div class="formula-math">\[
+\boxed{
+ d(x,z)=
+\sqrt{\sum_{j=1}^{d}(x_j-z_j)^2}
+}
+\]</div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> Har feature mein kitna difference hai → square karo → add karo → square root lo.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: Why Feature Scaling Matters for K-NN -->
+  <section id="s-20" data-search-section="Why Feature Scaling Matters for K-NN" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>20. Why Feature Scaling Matters for K-NN</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose one feature is:</p>
+<blockquote>
+<p>Age: 18–60</p>
+</blockquote>
+<p>and another is:</p>
+<blockquote>
+<p>Salary: 20,000–2,000,000</p>
+</blockquote>
+<p>Distance may become dominated by salary simply because the numeric scale is much larger.</p>
+<p>That can distort who counts as a “nearest” neighbour.</p>
+<p>This is why feature scaling can be important before distance-based methods.</p>
+<p>Your Lecture 9 later gives formal treatments of standardization and min-max scaling; this chapter only needs the intuition. [Course connection: <code>Lecture09.pdf</code>.]</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: The Effect of K -->
+  <section id="s-21" data-search-section="The Effect of K" class="content-section">
+    <div class="section-header">
+      <h2>21. The Effect of K</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Think of K as a <strong>neighbourhood size</strong>.</p>
+<h3>Small K</h3>
+<div class="ascii-box"><pre>K = 1
+
+Very local
+↓
+Highly sensitive to individual examples</pre></div>
+<h3>Larger K</h3>
+<div class="ascii-box"><pre>K = 25
+
+More neighbourhood information
+↓
+Prediction becomes smoother</pre></div>
+<p>But too small or too large can both be problematic depending on the data.</p>
+<p>The exact bias-variance consequences are developed fully in the next chapter.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: K-NN as a Form of Local Learning -->
+  <section id="s-22" data-search-section="K-NN as a Form of Local Learning" class="content-section">
+    <div class="section-header">
+      <h2>22. K-NN as a Form of Local Learning</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Compare two assumptions:</p>
+<h3>Linear model</h3>
+<blockquote>
+<p>One global relationship describes the whole dataset reasonably well.</p>
+</blockquote>
+<h3>K-NN</h3>
+<blockquote>
+<p>Local neighbourhoods contain useful information about local predictions.</p>
+</blockquote>
+<p>Visual idea:</p>
+<div class="ascii-box"><pre>GLOBAL VIEW
+────────────────────────
+One model for everything
+
+LOCAL VIEW
+────────────────────────
+Different neighbourhoods
+influence different predictions</pre></div>
+<p>This is why the Lecture 8 example calls the K-NN assumption <strong>local similarity</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: Hypothesis Class vs Model Parameters -->
+  <section id="s-23" data-search-section="Hypothesis Class vs Model Parameters" class="content-section">
+    <div class="section-header">
+      <h2>23. Hypothesis Class vs Model Parameters</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>These are easy to mix up.</p>
+<p>Suppose:</p>
+<div class="formula-math">\[
+f(x)=wx+b
+\]</div>
+<p>The <strong>hypothesis class</strong> might be:</p>
+<blockquote>
+<p>All linear functions of the form \(wx+b\).</p>
+</blockquote>
+<p>The parameters are:</p>
+<div class="formula-math">\[
+w,b
+\]</div>
+<p>So:</p>
+<div class="ascii-box"><pre>Hypothesis class
+= which forms of function are allowed?
+
+Parameters
+= which specific member of that family do we choose?</pre></div>
+<h3>Example</h3>
+<div class="ascii-box"><pre>H = all straight lines
+
+w = 2, b = 1
+        ↓
+One particular line</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: Hypothesis Class Is a Design Decision -->
+  <section id="s-24" data-search-section="Hypothesis Class Is a Design Decision" class="content-section">
+    <div class="section-header">
+      <h2>24. Hypothesis Class Is a Design Decision</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Choosing a hypothesis class is not just an implementation detail.</p>
+<p>It encodes what you believe about the problem.</p>
+<p>Examples:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Belief / assumption</th>
+<th>Possible model family</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Relationship is roughly linear</td>
+<td>Linear model</td>
+</tr>
+<tr>
+<td>Nearby points are similar</td>
+<td>K-NN</td>
+</tr>
+<tr>
+<td>Decision can be represented by nested rules</td>
+<td>Decision tree</td>
+</tr>
+<tr>
+<td>Complex nonlinear representations are useful</td>
+<td>Neural network</td>
+</tr>
+</tbody>
+</table></div>
+<p>Different model families correspond to different assumptions about what kinds of patterns are plausible.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: A Powerful Everyday Analogy — Maps -->
+  <section id="s-25" data-search-section="A Powerful Everyday Analogy — Maps" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>25. A Powerful Everyday Analogy — Maps</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine you are trying to draw the shape of a coastline.</p>
+<h3>Very coarse map</h3>
+<p>You use only a few straight segments.</p>
+<p>Easy to store.</p>
+<p>But it misses many details.</p>
+<h3>Extremely detailed map</h3>
+<p>You copy every tiny rock and irregularity.</p>
+<p>It matches your current measurement perfectly—but perhaps includes noise that is irrelevant to navigation.</p>
+<p>The useful map is somewhere between these extremes.</p>
+<p>This is the same intuition behind model flexibility and generalization.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: Connection to Training Error and Test Error -->
+  <section id="s-26" data-search-section="Connection to Training Error and Test Error" class="content-section">
+    <div class="section-header">
+      <h2>26. Connection to Training Error and Test Error</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Remember:</p>
+<h3>Training error</h3>
+<p>“How well did I fit the examples I saw?”</p>
+<h3>Test/generalization performance</h3>
+<p>“How well do I perform on examples I did not train on?”</p>
+<p>A hypothesis class influences both.</p>
+<div class="ascii-box"><pre>Change H
+   ↓
+Change model flexibility
+   ↓
+Change what can be fitted
+   ↓
+Change training + unseen-data behaviour</pre></div>
+<p>The supplied lecture explicitly says test data should approximate generalization performance and must not be used to fit the model or decide the hypothesis class. <span class="source-marker">Course source: <code>Lecture08.pdf</code>, slide 6.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: A Small Mathematical Example -->
+  <section id="s-27" data-search-section="A Small Mathematical Example" class="content-section">
+    <div class="section-header">
+      <h2>27. A Small Mathematical Example</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose we compare two classes.</p>
+<h3>Class A</h3>
+<div class="formula-math">\[
+\mathcal H_1=
+\{wx+b\}
+\]</div>
+<h3>Class B</h3>
+<div class="formula-math">\[
+\mathcal H_2=
+\{w_0+w_1x+w_2x^2+\cdots+w_{15}x^{15}\}
+\]</div>
+<p>Class B is much more expressive.</p>
+<p>It can represent far more shapes.</p>
+<p>That extra flexibility may:</p>
+<ul>
+<li>reduce training error;</li>
+<li>but also increase sensitivity to the particular training set.</li>
+</ul>
+<p>This leads directly into the next chapter's bias-variance framework.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: Common Misconceptions -->
+  <section id="s-28" data-search-section="Common Misconceptions" class="content-section">
+    <div class="section-header">
+      <h2>28. Common Misconceptions</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Misconception 1</h2>
+<blockquote>
+<p>“Hypothesis class means the labels/classes in classification.”</p>
+</blockquote>
+<p><strong>Wrong.</strong> Here it means a family of candidate functions/models.</p>
+<h2>Misconception 2</h2>
+<blockquote>
+<p>“Inductive bias is a mistake or unwanted bias.”</p>
+</blockquote>
+<p>Not in this context.</p>
+<p>Here it means assumptions that make generalization possible.</p>
+<h2>Misconception 3</h2>
+<blockquote>
+<p>“A more expressive hypothesis class is always better.”</p>
+</blockquote>
+<p>No. More flexibility can make fitting easier but can also increase overfitting.</p>
+<h2>Misconception 4</h2>
+<blockquote>
+<p>“K-NN has no assumptions.”</p>
+</blockquote>
+<p>It makes an important assumption: local similarity is useful.</p>
+<h2>Misconception 5</h2>
+<blockquote>
+<p>“K-NN means choose one nearest point for every problem.”</p>
+</blockquote>
+<p>Not necessarily. <code>K</code> can be greater than one, and the aggregation rule depends on regression vs classification and implementation.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 29: Comparison — Hypothesis Class vs Inductive Bias -->
+  <section id="s-29" data-search-section="Comparison — Hypothesis Class vs Inductive Bias" class="content-section">
+    <div class="section-header">
+      <h2>29. Comparison — Hypothesis Class vs Inductive Bias</h2>
+      <button class="bookmark-btn" data-id="s-29" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Concept</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hypothesis</td>
+<td>One candidate function</td>
+</tr>
+<tr>
+<td>Hypothesis class</td>
+<td>Collection of candidate functions</td>
+</tr>
+<tr>
+<td>Inductive bias</td>
+<td>Assumptions restricting which structures are considered reasonable</td>
+</tr>
+<tr>
+<td>Model flexibility</td>
+<td>How much variety the class can represent</td>
+</tr>
+<tr>
+<td>Generalization</td>
+<td>Performance on unseen data</td>
+</tr>
+</tbody>
+</table></div>
+<p>Memory anchor:</p>
+<blockquote>
+<p><strong>Hypothesis = one possibility.</strong><br />
+<strong>Hypothesis class = all allowed possibilities.</strong><br />
+<strong>Inductive bias = why we allow those possibilities.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 30: Active Recall — Close the Book -->
+  <section id="s-30" data-search-section="Active Recall — Close the Book" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>30. Active Recall — Close the Book</h2>
+      <button class="bookmark-btn" data-id="s-30" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <ol>
+<li>What is a hypothesis?</li>
+<li>What is a hypothesis class?</li>
+<li>Why can unrestricted functions memorize training data?</li>
+<li>Why is zero training error not enough?</li>
+<li>Define inductive bias.</li>
+<li>Where can inductive bias come from?</li>
+<li>What is the local-similarity assumption?</li>
+<li>What is the global-linearity assumption?</li>
+<li>Why does the local-similarity assumption lead naturally to K-NN?</li>
+<li>What does <code>K</code> mean?</li>
+<li>How does K-NN classify an example?</li>
+<li>How does simple K-NN regression work?</li>
+<li>What is Euclidean distance?</li>
+<li>Why can scaling affect K-NN?</li>
+<li>What happens qualitatively when K becomes very small?</li>
+<li>What happens qualitatively when K becomes very large?</li>
+<li>Distinguish hypothesis class from model parameters.</li>
+<li>Why is the hypothesis-class choice important for generalization?</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 31: Practice Set -->
+  <section id="s-31" data-search-section="Practice Set" class="content-section">
+    <div class="section-header">
+      <h2>31. Practice Set</h2>
+      <button class="bookmark-btn" data-id="s-31" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>A. Conceptual</h2>
+<h3>Q1</h3>
+<p>Explain why unrestricted supervised learning can produce a zero-training-error function that generalizes poorly.</p>
+<h3>Q2</h3>
+<p>Explain inductive bias with a house-price example.</p>
+<h3>Q3</h3>
+<p>Compare local similarity and global linearity.</p>
+<h3>Q4</h3>
+<p>Explain why K-NN is described as a local method.</p>
+<h3>Q5</h3>
+<p>Why is a larger hypothesis class not automatically better?</p>
+<hr />
+<h2>B. Distance Numericals</h2>
+<h3>Q6</h3>
+<p>Compute the Euclidean distance between:</p>
+<div class="formula-math">\[
+x=(2,3),\qquad z=(5,7)
+\]</div>
+<h3>Q7</h3>
+<p>For a new point, the three nearest regression targets are:</p>
+<div class="formula-math">\[
+20,\;24,\;28
+\]</div>
+<p>Using simple mean K-NN regression, calculate the prediction.</p>
+<hr />
+<h2>C. Classification</h2>
+<h3>Q8</h3>
+<p>For <code>K=5</code>, the neighbour labels are:</p>
+<div class="ascii-box"><pre>A A B A B</pre></div>
+<p>What is the majority-vote prediction?</p>
+<h3>Q9</h3>
+<p>Why might <code>K=1</code> be very sensitive to individual training examples?</p>
+<hr />
+<h2>D. Explain the Difference</h2>
+<h3>Q10</h3>
+<p>Complete this sentence:</p>
+<blockquote>
+<p>“Hypothesis class determines <strong><em>_</em></strong>_, while inductive bias explains <strong><em>_</em></strong>_.”</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 32: University Exam Lens -->
+  <section id="s-32" data-search-section="University Exam Lens" class="content-section mode-gate">
+    <div class="section-header">
+      <h2>32. University Exam Lens</h2>
+      <button class="bookmark-btn" data-id="s-32" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>2-mark answers</h2>
+<h3>Define hypothesis class.</h3>
+<blockquote>
+<p>A hypothesis class \(\mathcal H\) is a collection of candidate functions from which the learning algorithm selects a model.</p>
+</blockquote>
+<h3>Define inductive bias.</h3>
+<blockquote>
+<p>Inductive bias is the set of assumptions imposed on the structure of possible functions to enable useful generalization to unseen data.</p>
+</blockquote>
+<h3>What is K-NN?</h3>
+<blockquote>
+<p>K-Nearest Neighbours is a local method that predicts a new example using the outputs/classes of nearby training examples.</p>
+</blockquote>
+<hr />
+<h2>5-mark question</h2>
+<blockquote>
+<p>Explain hypothesis class and inductive bias.</p>
+</blockquote>
+<p>Recommended structure:</p>
+<ol>
+<li>Define supervised learning context.</li>
+<li>Explain unrestricted function space.</li>
+<li>Explain memorization.</li>
+<li>Define inductive bias.</li>
+<li>Define hypothesis class.</li>
+<li>Give local-similarity and global-linearity examples.</li>
+</ol>
+<hr />
+<h2>10-mark question</h2>
+<blockquote>
+<p>Explain hypothesis class, inductive bias and K-NN in supervised learning.</p>
+</blockquote>
+<p>Use:</p>
+<ol>
+<li>Problem of unrestricted functions.</li>
+<li>Memorization.</li>
+<li>Need for generalization.</li>
+<li>Inductive bias.</li>
+<li>Hypothesis class.</li>
+<li>Local similarity.</li>
+<li>K-NN intuition and algorithm.</li>
+<li>Distance function.</li>
+<li>Small K vs large K.</li>
+<li>Connection to generalization/bias-variance.</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 33: Math Lens -->
+  <section id="s-33" data-search-section="Math Lens" class="content-section">
+    <div class="section-header">
+      <h2>33. Math Lens</h2>
+      <button class="bookmark-btn" data-id="s-33" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You need only moderate mathematics here.</p>
+<h3>Core notation</h3>
+<div class="formula-math">\[
+h:\mathcal X\rightarrow\mathcal Y
+\]</div>
+<h3>Hypothesis-class optimization</h3>
+<div class="formula-math">\[
+\hat f\in\arg\min_{f\in\mathcal H}L(f)
+\]</div>
+<h3>Euclidean distance</h3>
+<div class="formula-math">\[
+ d(x,z)=
+ \sqrt{\sum_{j=1}^{d}(x_j-z_j)^2}
+\]</div>
+<h3>Math Companion links</h3>
+<ul>
+<li><code>MATH-M01</code> — Mathematical notation</li>
+<li><code>MATH-LA-04</code> — Vectors</li>
+<li><code>MATH-LA-06</code> — Norm and distance</li>
+<li><code>MATH-LA-07</code> — Inner products</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 34: Course Lens — Lecture 8 -->
+  <section id="s-34" data-search-section="Course Lens — Lecture 8" class="content-section">
+    <div class="section-header">
+      <h2>34. Course Lens — Lecture 8</h2>
+      <button class="bookmark-btn" data-id="s-34" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your <code>Lecture08.pdf</code> provides the central formal progression:</p>
+<ol>
+<li>Labelled training data.</li>
+<li>Unrestricted function space can memorize training data.</li>
+<li>Learning requires generalization.</li>
+<li>Introduce inductive bias.</li>
+<li>Encode assumptions through hypothesis class \(\mathcal H\).</li>
+<li>Local-similarity assumption → K-NN.</li>
+<li>Global-linearity assumption → linear model.</li>
+<li>Evaluate generalization with held-out test data.</li>
+</ol>
+<p>The lecture's exact examples are house-price prediction for local similarity and salary prediction for global linearity. <span class="source-marker">Course source: <code>Lecture08.pdf</code>, slides 2–6.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 35: Resource Shelf -->
+  <section id="s-35" data-search-section="Resource Shelf" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>35. Resource Shelf</h2>
+      <button class="bookmark-btn" data-id="s-35" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Primary</h2>
+<ul>
+<li><code>Lecture08.pdf</code></li>
+</ul>
+<h2>Next Main Book chapter</h2>
+<ul>
+<li><code>MAIN-U2-C17 — Generalization, Bias-Variance, Overfitting &amp; Underfitting</code></li>
+</ul>
+<h2>Structured course</h2>
+<p>NPTEL — Introduction to Machine Learning</p>
+<p>Use the supervised-learning/generalization lectures for further depth.</p>
+<h2>Video support</h2>
+<p>StatQuest — Bias and Variance / K-NN explanations.</p>
+<h2>Book</h2>
+<p>ISLP / <em>An Introduction to Statistical Learning</em> for practical statistical-learning intuition and model-comparison context.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 36: Chapter Exit Test -->
+  <section id="s-36" data-search-section="Chapter Exit Test" class="content-section">
+    <div class="section-header">
+      <h2>36. Chapter Exit Test</h2>
+      <button class="bookmark-btn" data-id="s-36" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You have mastered this chapter when you can:</p>
+<ul>
+<li>[ ] Explain why unrestricted functions can memorize training data.</li>
+<li>[ ] Define hypothesis.</li>
+<li>[ ] Define hypothesis class.</li>
+<li>[ ] Define inductive bias.</li>
+<li>[ ] Explain why assumptions are needed for generalization.</li>
+<li>[ ] Explain local similarity.</li>
+<li>[ ] Explain global linearity.</li>
+<li>[ ] Explain how local similarity leads to K-NN.</li>
+<li>[ ] Explain K-NN classification.</li>
+<li>[ ] Explain K-NN regression.</li>
+<li>[ ] Calculate Euclidean distance.</li>
+<li>[ ] Explain why feature scaling can matter.</li>
+<li>[ ] Explain the role of K.</li>
+<li>[ ] Distinguish hypothesis class from parameters.</li>
+<li>[ ] Connect hypothesis-class flexibility to the next chapter on bias/variance.</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 37: Memory Card -->
+  <section id="s-37" data-search-section="Memory Card" class="content-section">
+    <div class="section-header">
+      <h2>37. Memory Card</h2>
+      <button class="bookmark-btn" data-id="s-37" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <blockquote>
+<p><strong>Hypothesis = one candidate function.</strong></p>
+<p><strong>Hypothesis class = allowed family of functions.</strong></p>
+<p><strong>Inductive bias = assumptions that make generalization possible.</strong></p>
+<p><strong>Local similarity → K-NN.</strong></p>
+<p><strong>Global linearity → linear model.</strong></p>
+<p><strong>More flexibility can fit more—but can also overfit more.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 38: What Comes Next? -->
+  <section id="s-38" data-search-section="What Comes Next?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>38. What Comes Next?</h2>
+      <button class="bookmark-btn" data-id="s-38" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The next question is unavoidable:</p>
+<blockquote>
+<p><strong>How does changing model flexibility affect training error and unseen-data error?</strong></p>
+</blockquote>
+<p>That is the heart of:</p>
+<p><strong><code>MAIN-U2-C17 — Generalization, Bias-Variance, Overfitting &amp; Underfitting</code>.</strong></p>
+<hr />
+<h1>Source Grounding</h1>
+<p><strong>Primary source:</strong> <code>Lecture08.pdf</code>, <em>Introduction to Machine Learning — Lecture 8: Supervised Learning: Hypothesis Class &amp; Bias-Variance Trade-off</em>, Prof. Subrahmanya Swamy Peruru, IIT Kanpur.</p>
+<p><strong>Course-derived content in this chapter:</strong> unrestricted-function memorization, generalization motivation, inductive bias, hypothesis-class restriction, local similarity, global linearity, test-set role, and the squared-error formal objective.</p>
+<p><strong>Universal expansion:</strong> complete K-NN mechanics and Euclidean-distance treatment are included to make the chapter self-contained. They extend the lecture's local-similarity → K-NN connection rather than claiming that every algorithmic detail appears in the supplied lecture.</p>
+<p><strong>Cross-book links:</strong></p>
+<ul>
+<li>Exam Book: <code>EXAM-ML-U2-C16</code></li>
+<li>Math Companion: <code>MATH-LA-04</code>, <code>MATH-LA-06</code></li>
+<li>Practice Bank: <code>PRAC-ML-U2-C16</code></li>
+<li>Resource Shelf: <code>RES-ML-HYPOTHESIS-CLASS</code></li>
+</ul>
+<hr />
+<h1>Status</h1>
+<p><strong><code>ML-U2-C16</code> — COMPLETE</strong></p>
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="ch15-ml-paradigms.html" class="nav-btn">← Ch 15 — ML Paradigms</a>
+    <a href="ch17-bias-variance-generalization.html" class="nav-btn primary">Next: Ch 17 — Bias-Variance & Generalization →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch16-hypothesis-classes-bias-knn.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 16</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,3136 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 4: Uninformed Search Strategies — AI & Machine Learning MiniBook. Breadth-First Search (BFS), Depth-First Search (DFS), Uniform-Cost Search (UCS), Depth-Limited Search (DLS), and Iterative Deepening (IDDFS)">
+<title>Ch 4 — Uninformed Search Strategies | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-ii">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 4 — Uninformed Search Strategies</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 4 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. One-minute intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Hinglish teacher explanation <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. What exactly is being searched? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Search tree: the mental picture you must own <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. State vs Node — a common confusion <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Tree search vs graph search <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. The generic tree-search procedure <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. The frontier / fringe </a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. What makes one search strategy different from another? </a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. The three parameters you must know <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Why exponential growth is scary <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Uninformed Search — what does “uninformed” mean? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. BFS — Breadth-First Search </a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. BFS in everyday life <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. BFS data structure: FIFO queue <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. BFS — algorithmic idea <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. BFS worked example </a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. BFS traversal order — memory picture </a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Why BFS can find a shallowest solution </a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. BFS completeness <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. BFS time complexity </a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. BFS space complexity </a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. BFS property card </a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. DFS — Depth-First Search </a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. DFS visual intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Hinglish explanation of DFS </a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. DFS data structure: LIFO stack </a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. DFS — algorithmic idea </a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. DFS worked example </a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. DFS completeness <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Repeated states and DFS </a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. DFS time complexity </a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. DFS space complexity </a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. DFS optimality </a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. DFS property card <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. BFS vs DFS — the comparison you must know </a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. When would you conceptually prefer BFS? </a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. When would you conceptually prefer DFS? </a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Uniform-Cost Search (UCS) — lecture extension and bridge </a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Depth-Limited Search (DLS) <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. DLS properties </a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Iterative Deepening Search (IDS) </a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Why would we repeatedly search? </a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. IDS visual </a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. IDS properties <span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a>
+      <a href="#s-46" class="sidebar-link"><span class="link-icon">📌</span>46. Why repeated work is sometimes acceptable </a>
+      <a href="#s-47" class="sidebar-link"><span class="link-icon">📌</span>47. IDS vs BFS vs DFS </a>
+      <a href="#s-48" class="sidebar-link"><span class="link-icon">📌</span>48. The complete uninformed-search family </a>
+      <a href="#s-49" class="sidebar-link"><span class="link-icon">📌</span>49. Search strategy comparison — master table </a>
+      <a href="#s-50" class="sidebar-link"><span class="link-icon">📌</span>50. The single most important mental model <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-51" class="sidebar-link"><span class="link-icon">📌</span>51. Why BFS and DFS are in your university syllabus </a>
+      <a href="#s-52" class="sidebar-link"><span class="link-icon">📌</span>52. Common misconceptions </a>
+      <a href="#s-53" class="sidebar-link"><span class="link-icon">📌</span>53. Formula and property cards </a>
+      <a href="#s-54" class="sidebar-link"><span class="link-icon">📌</span>54. A small mathematical derivation: why the tree size grows exponentially </a>
+      <a href="#s-55" class="sidebar-link"><span class="link-icon">📌</span>55. Diagram you should be able to draw in an exam <span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a>
+      <a href="#s-56" class="sidebar-link"><span class="link-icon">📌</span>56. Worked comparison problem </a>
+      <a href="#s-57" class="sidebar-link"><span class="link-icon">📌</span>57. Exam-style numerical: complexity reasoning </a>
+      <a href="#s-58" class="sidebar-link"><span class="link-icon">📌</span>58. Exam-style conceptual question </a>
+      <a href="#s-59" class="sidebar-link"><span class="link-icon">📌</span>59. Why search strategy analysis matters </a>
+      <a href="#s-60" class="sidebar-link"><span class="link-icon">📌</span>60. Connection to the next chapter <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-61" class="sidebar-link"><span class="link-icon">📌</span>61. Active recall — close the book now </a>
+      <a href="#s-62" class="sidebar-link"><span class="link-icon">📌</span>62. Recall answers — short form </a>
+      <a href="#s-63" class="sidebar-link"><span class="link-icon">📌</span>63. Practice set </a>
+      <a href="#s-64" class="sidebar-link"><span class="link-icon">📌</span>64. Numerical / trace questions </a>
+      <a href="#s-65" class="sidebar-link"><span class="link-icon">📌</span>65. Applied thinking <span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a>
+      <a href="#s-66" class="sidebar-link"><span class="link-icon">📌</span>66. Exam bridge </a>
+      <a href="#s-67" class="sidebar-link"><span class="link-icon">📌</span>67. Answer-writing pattern for a 5-mark question </a>
+      <a href="#s-68" class="sidebar-link"><span class="link-icon">📌</span>68. Answer-writing pattern for a comparison question </a>
+      <a href="#s-69" class="sidebar-link"><span class="link-icon">📌</span>69. Math connection </a>
+      <a href="#s-70" class="sidebar-link"><span class="link-icon">📌</span>70. Resource shelf <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-71" class="sidebar-link"><span class="link-icon">📌</span>71. Visual inventory for this chapter </a>
+      <a href="#s-72" class="sidebar-link"><span class="link-icon">📌</span>72. Chapter mastery gate </a>
+      <a href="#s-73" class="sidebar-link"><span class="link-icon">📌</span>73. Final memory sheet </a>
+      <a href="#s-74" class="sidebar-link"><span class="link-icon">📌</span>74. Bridge to MAIN-U1-C05 </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link active"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit I</span><span>›</span><span>Part II — Classical Search & Problem Solving</span><span>›</span><span style="color:var(--em-text)">Chapter 4</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 4 · Unit I · Part II</div>
+    <div class="chapter-part-banner part-ii">
+      <span class="part-banner-badge">Unit I · Part II</span>
+      <span>Classical Search & Problem Solving</span>
+    </div>
+    <h1 class="chapter-title">Uninformed Search Strategies</h1>
+    <div class="concept-id-tag">[CONCEPT-AI-004]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: Highest Yield (10-mark guarantee)</span>
+      <span class="chapter-meta-item">📖 ~60 min read</span>
+      <span class="chapter-meta-item">🎯 74 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>Uninformed Search:</strong> BFS (FIFO queue, completeness, optimality, space/time complexity O(b^d)), DFS (LIFO stack, O(b*m) space, non-optimal), UCS (priority queue, Dijkstra equivalence), DLS, IDDFS (optimal uninformed search for large state spaces).</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">One-minute intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Hinglish teacher explanation</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">What exactly is being searched?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Search tree: the mental picture you must own</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">State vs Node — a common confusion</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Tree search vs graph search</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">The generic tree-search procedure</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">The frontier / fringe</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">What makes one search strategy different from another?</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">The three parameters you must know</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Why exponential growth is scary</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Uninformed Search — what does “uninformed” mean?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">BFS — Breadth-First Search</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">BFS in everyday life</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">BFS data structure: FIFO queue</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">BFS — algorithmic idea</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">BFS worked example</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">BFS traversal order — memory picture</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Why BFS can find a shallowest solution</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">BFS completeness</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">BFS time complexity</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">BFS space complexity</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">BFS property card</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">DFS — Depth-First Search</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">DFS visual intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Hinglish explanation of DFS</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">DFS data structure: LIFO stack</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">DFS — algorithmic idea</span></a></li>
+      <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">DFS worked example</span></a></li>
+      <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">DFS completeness</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Repeated states and DFS</span></a></li>
+      <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">DFS time complexity</span></a></li>
+      <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">DFS space complexity</span></a></li>
+      <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">DFS optimality</span></a></li>
+      <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">DFS property card</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">BFS vs DFS — the comparison you must know</span></a></li>
+      <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">When would you conceptually prefer BFS?</span></a></li>
+      <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">When would you conceptually prefer DFS?</span></a></li>
+      <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Uniform-Cost Search (UCS) — lecture extension and bridge</span></a></li>
+      <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Depth-Limited Search (DLS)</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">DLS properties</span></a></li>
+      <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Iterative Deepening Search (IDS)</span></a></li>
+      <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Why would we repeatedly search?</span></a></li>
+      <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">IDS visual</span></a></li>
+      <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">IDS properties</span><span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a></li>
+      <li class="toc-item"><a href="#s-46"><span class="toc-num">46</span><span class="toc-name">Why repeated work is sometimes acceptable</span></a></li>
+      <li class="toc-item"><a href="#s-47"><span class="toc-num">47</span><span class="toc-name">IDS vs BFS vs DFS</span></a></li>
+      <li class="toc-item"><a href="#s-48"><span class="toc-num">48</span><span class="toc-name">The complete uninformed-search family</span></a></li>
+      <li class="toc-item"><a href="#s-49"><span class="toc-num">49</span><span class="toc-name">Search strategy comparison — master table</span></a></li>
+      <li class="toc-item"><a href="#s-50"><span class="toc-num">50</span><span class="toc-name">The single most important mental model</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-51"><span class="toc-num">51</span><span class="toc-name">Why BFS and DFS are in your university syllabus</span></a></li>
+      <li class="toc-item"><a href="#s-52"><span class="toc-num">52</span><span class="toc-name">Common misconceptions</span></a></li>
+      <li class="toc-item"><a href="#s-53"><span class="toc-num">53</span><span class="toc-name">Formula and property cards</span></a></li>
+      <li class="toc-item"><a href="#s-54"><span class="toc-num">54</span><span class="toc-name">A small mathematical derivation: why the tree size grows exponentially</span></a></li>
+      <li class="toc-item"><a href="#s-55"><span class="toc-num">55</span><span class="toc-name">Diagram you should be able to draw in an exam</span><span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a></li>
+      <li class="toc-item"><a href="#s-56"><span class="toc-num">56</span><span class="toc-name">Worked comparison problem</span></a></li>
+      <li class="toc-item"><a href="#s-57"><span class="toc-num">57</span><span class="toc-name">Exam-style numerical: complexity reasoning</span></a></li>
+      <li class="toc-item"><a href="#s-58"><span class="toc-num">58</span><span class="toc-name">Exam-style conceptual question</span></a></li>
+      <li class="toc-item"><a href="#s-59"><span class="toc-num">59</span><span class="toc-name">Why search strategy analysis matters</span></a></li>
+      <li class="toc-item"><a href="#s-60"><span class="toc-num">60</span><span class="toc-name">Connection to the next chapter</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-61"><span class="toc-num">61</span><span class="toc-name">Active recall — close the book now</span></a></li>
+      <li class="toc-item"><a href="#s-62"><span class="toc-num">62</span><span class="toc-name">Recall answers — short form</span></a></li>
+      <li class="toc-item"><a href="#s-63"><span class="toc-num">63</span><span class="toc-name">Practice set</span></a></li>
+      <li class="toc-item"><a href="#s-64"><span class="toc-num">64</span><span class="toc-name">Numerical / trace questions</span></a></li>
+      <li class="toc-item"><a href="#s-65"><span class="toc-num">65</span><span class="toc-name">Applied thinking</span><span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a></li>
+      <li class="toc-item"><a href="#s-66"><span class="toc-num">66</span><span class="toc-name">Exam bridge</span></a></li>
+      <li class="toc-item"><a href="#s-67"><span class="toc-num">67</span><span class="toc-name">Answer-writing pattern for a 5-mark question</span></a></li>
+      <li class="toc-item"><a href="#s-68"><span class="toc-num">68</span><span class="toc-name">Answer-writing pattern for a comparison question</span></a></li>
+      <li class="toc-item"><a href="#s-69"><span class="toc-num">69</span><span class="toc-name">Math connection</span></a></li>
+      <li class="toc-item"><a href="#s-70"><span class="toc-num">70</span><span class="toc-name">Resource shelf</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-71"><span class="toc-num">71</span><span class="toc-name">Visual inventory for this chapter</span></a></li>
+      <li class="toc-item"><a href="#s-72"><span class="toc-num">72</span><span class="toc-name">Chapter mastery gate</span></a></li>
+      <li class="toc-item"><a href="#s-73"><span class="toc-num">73</span><span class="toc-name">Final memory sheet</span></a></li>
+      <li class="toc-item"><a href="#s-74"><span class="toc-num">74</span><span class="toc-name">Bridge to MAIN-U1-C05</span></a></li>
+    </ul>
+  </div>
+
+  <div class="chapter-preamble-card"><h1>MAIN-U1-C04 — Uninformed Search</h1>
+<p><strong>Main Book:</strong> AI &amp; Machine Learning — Complete Visual &amp; Mathematical Textbook<br />
+<strong>Unit:</strong> I — Artificial Intelligence<br />
+<strong>Chapter ID:</strong> AI-I-C04<br />
+<strong>Learning mode:</strong> Beginner → intuition → formalism → worked examples → exam → recall<br />
+<strong>Course lens:</strong> University of Delhi DSC-14 Artificial Intelligence and Machine Learning<br />
+<strong>Primary course source:</strong> <code>lecture-basic-search.pdf</code><br />
+<strong>Prerequisites:</strong> <code>MAIN-U1-C02 — Intelligent Agents</code>, <code>MAIN-U1-C03 — Problem Formulation</code></p>
+<hr />
+<h2>0. Why this chapter exists</h2>
+<p>You already know that an intelligent agent can have a goal and a set of actions. You have also learned how a real-world problem can be converted into an <strong>initial state, actions/successor function, goal test, and path cost</strong>.</p>
+<p>But there is a new problem:</p>
+<blockquote>
+<p><strong>Once we have a problem, how does the agent actually find a solution?</strong></p>
+</blockquote>
+<p>That is the job of <strong>search</strong>.</p>
+<p>Suppose you are in a huge building and need to find one particular room. You know where you started and what corridors you can take, but you do not have a map telling you the correct path. You must decide:</p>
+<blockquote>
+<p>Which corridor should I explore first?</p>
+</blockquote>
+<p>A search strategy is essentially a rule for answering exactly that question.</p>
+<p>The lecture describes a search strategy by the order in which it expands nodes and evaluates strategies using <strong>completeness, time complexity, space complexity, and optimality</strong>. It defines the important parameters <code>b</code>, <code>d</code>, and <code>m</code> for this analysis. [<code>lecture-basic-search.pdf</code>, slides 18–19]</p>
+<hr /></div>
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 1: One-minute intuition -->
+  <section id="s-01" data-search-section="One-minute intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>1. One-minute intuition</h2>
+      <button class="bookmark-btn" data-id="s-01" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine that every possible action creates more possibilities.</p>
+<div class="ascii-box"><pre>Start
+                             |
+                 ┌───────────┴───────────┐
+                 ▼                       ▼
+                Way A                   Way B
+                 |                       |
+           ┌─────┴─────┐           ┌────┴────┐
+           ▼           ▼           ▼         ▼
+         A1            A2          B1        B2
+         |                         |
+       ...                        ...</pre></div>
+<p>You cannot explore everything forever.</p>
+<p>So a <strong>search strategy</strong> tells the agent:</p>
+<blockquote>
+<p><strong>“Among all currently available possibilities, which one should I explore next?”</strong></p>
+</blockquote>
+<p>Different strategies answer differently:</p>
+<ul>
+<li><strong>BFS:</strong> “Explore the shallowest possibilities first.”</li>
+<li><strong>DFS:</strong> “Go as deep as possible along one path first.”</li>
+<li><strong>UCS:</strong> “Explore the path that has cost the least so far.”</li>
+<li><strong>DLS:</strong> “Go deep, but never beyond this depth limit.”</li>
+<li><strong>IDS:</strong> “Try depth 1, then depth 2, then depth 3, and so on.”</li>
+</ul>
+<p>The first two—<strong>BFS and DFS</strong>—are explicitly named in your university syllabus. UCS, DLS and IDS appear in your supplied lecture and are valuable both for understanding the full search family and for building the bridge to later search methods. [<code>lecture-basic-search.pdf</code>, slides 18–49]</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 2: Hinglish teacher explanation -->
+  <section id="s-02" data-search-section="Hinglish teacher explanation" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. Hinglish teacher explanation</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Search ko simple language mein socho.</p>
+<p>Tumhare paas ek <strong>starting point</strong> hai aur ek <strong>goal</strong> hai. Beech mein bahut saare possible raaste hain. Problem yeh hai ki tumhe pata nahi kaunsa raasta sahi hai.</p>
+<p>Ab tumhe ek rule chahiye:</p>
+<blockquote>
+<p><strong>“Next kaunsa option try karna hai?”</strong></p>
+</blockquote>
+<p>Yahi rule <strong>search strategy</strong> hai.</p>
+<p>Agar tum bolte ho:</p>
+<blockquote>
+<p>“Pehle nearest/upper level ke saare options check karunga, phir next level par jaunga.”</p>
+</blockquote>
+<p>toh tum BFS jaisa soch rahe ho.</p>
+<p>Agar tum bolte ho:</p>
+<blockquote>
+<p>“Ek raasta pakadta hoon aur usmein jitna deep ja sakta hoon jaunga. Agar dead end mila toh wapas aunga.”</p>
+</blockquote>
+<p>toh tum DFS jaisa soch rahe ho.</p>
+<p>Is chapter ka main idea bas itna hai:</p>
+<blockquote>
+<p><strong>Search = possibilities ko systematically explore karke goal tak pahunchna.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: What exactly is being searched? -->
+  <section id="s-03" data-search-section="What exactly is being searched?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>3. What exactly is being searched?</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>We do <strong>not</strong> directly search the messy real world.</p>
+<p>We first convert the problem into a <strong>state space</strong>.</p>
+<p>For example, in a route-finding problem:</p>
+<ul>
+<li>a <strong>state</strong> can be a city,</li>
+<li>an <strong>action</strong> can be driving from one city to another,</li>
+<li>a <strong>path</strong> is a sequence of cities,</li>
+<li>the <strong>goal</strong> is reaching the destination.</li>
+</ul>
+<p>Your Basic Search lecture emphasizes that problem formulation abstracts away irrelevant real-world details so that a state space that can actually be searched can be constructed.</p>
+<blockquote>
+<p><strong>Important mental distinction:</strong></p>
+<p>Real world → abstract problem → state space → search tree/graph → solution</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: Search tree: the mental picture you must own -->
+  <section id="s-04" data-search-section="Search tree: the mental picture you must own" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>4. Search tree: the mental picture you must own</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A search process is usually visualized as a tree.</p>
+<div class="diagram-box"><pre class="mermaid">
+flowchart TD
+    A[Initial State] --> B[State B]
+    A --> C[State C]
+    B --> D[State D]
+    B --> E[State E]
+    C --> F[State F]
+    C --> G[State G]
+</pre></div>
+<p>Each time the search <strong>expands</strong> a node, it generates its possible successors.</p>
+<p>The supplied lecture defines tree search as simulated exploration in which successors of already-explored states are generated; a node is selected for expansion according to the search strategy. [<code>lecture-basic-search.pdf</code>, slides 16–17]</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: State vs Node — a common confusion -->
+  <section id="s-05" data-search-section="State vs Node — a common confusion" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>5. State vs Node — a common confusion</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This distinction is easy to miss and extremely important.</p>
+<h2>5.1 State</h2>
+<p>A <strong>state</strong> is a representation of a physical configuration or situation.</p>
+<p>Example:</p>
+<blockquote>
+<p>“I am in Delhi.”</p>
+</blockquote>
+<p>or</p>
+<blockquote>
+<p>“The puzzle tiles are arranged like this.”</p>
+</blockquote>
+<h2>5.2 Node</h2>
+<p>A <strong>node</strong> is the search data structure that represents a state <strong>inside the search tree</strong>.</p>
+<p>A node can contain information such as:</p>
+<ul>
+<li>state</li>
+<li>parent</li>
+<li>children/successors</li>
+<li>depth</li>
+<li>path cost <code>g(n)</code></li>
+</ul>
+<p>The lecture explicitly notes that states do not inherently have parents, children, depth or path cost; nodes do. [<code>lecture-basic-search.pdf</code>, slide 17]</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish intuition</div>
+
+State = **actual situation**.
+
+Node = **that situation plus the search-system bookkeeping around it**.
+
+Think:
+
+> State = “Room 204”
+>
+> Node = “Room 204 reached from Room 101 after 3 steps with cost 7.”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: Tree search vs graph search -->
+  <section id="s-06" data-search-section="Tree search vs graph search" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>6. Tree search vs graph search</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The first major structural choice is whether we treat each generated occurrence independently or remember states that we have already seen.</p>
+<h2>Tree search</h2>
+<p>Tree search can generate the same state again through a different path.</p>
+<div class="ascii-box"><pre>A
+├── B
+│   └── D
+└── C
+    └── D    ← same state may appear again</pre></div>
+<h2>Graph search</h2>
+<p>Graph search maintains information about previously explored states so repeated-state situations can be avoided.</p>
+<p>This matters because failing to detect repeated states can make an otherwise manageable problem explode in size. The lecture explicitly notes this issue near the end of the search discussion.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+Tree search:
+
+> “Jo bhi route mila, naya branch bana do.”
+
+Graph search:
+
+> “Agar ye state pehle hi dekh chuka hoon, toh same cheez baar-baar kyun explore karun?”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: The generic tree-search procedure -->
+  <section id="s-07" data-search-section="The generic tree-search procedure" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>7. The generic tree-search procedure</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The lecture gives a general pattern:</p>
+<ol>
+<li>Start with the initial state.</li>
+<li>Keep candidate nodes in a frontier/fringe.</li>
+<li>Select a leaf/node according to the search strategy.</li>
+<li>If it is a goal, return the solution.</li>
+<li>Otherwise expand it and add its successors.</li>
+<li>Repeat until a solution is found or there are no candidates.</li>
+</ol>
+<p>A simplified version is:</p>
+<div class="ascii-box"><pre>TREE-SEARCH(problem, strategy)
+
+1. Put the initial state into the search tree.
+2. Repeat:
+   a. If there are no candidates, return failure.
+   b. Choose a leaf/node according to strategy.
+   c. If it is a goal, return the corresponding solution.
+   d. Otherwise expand it and add successors.</pre></div>
+<p>[<code>lecture-basic-search.pdf</code>, slide 16]</p>
+<p>The <strong>only major thing that changes from one search strategy to another is how the next node is chosen</strong>.</p>
+<p>That is the key that lets you understand the entire family rather than memorizing independent algorithms.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: The frontier / fringe -->
+  <section id="s-08" data-search-section="The frontier / fringe" class="content-section">
+    <div class="section-header">
+      <h2>8. The frontier / fringe</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The <strong>frontier</strong> (also called the <strong>fringe</strong>) contains generated but not yet fully processed search candidates.</p>
+<p>Imagine people waiting in line to be served.</p>
+<p>Different search algorithms use different rules for that waiting line.</p>
+<div class="diagram-box"><pre class="mermaid">
+flowchart LR
+    A[Generated nodes] --> B[FRONTIER / FRINGE]
+    B --> C[Search strategy chooses one]
+    C --> D[Expand node]
+    D --> A
+</pre></div>
+<h3>Analogy: hospital token system</h3>
+<p>Suppose 20 patients are waiting.</p>
+<ul>
+<li>FIFO queue → oldest patient first.</li>
+<li>LIFO stack → newest patient first.</li>
+<li>Priority queue → patient with highest priority first.</li>
+</ul>
+<p>The search algorithm is doing something very similar with nodes.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: What makes one search strategy different from another? -->
+  <section id="s-09" data-search-section="What makes one search strategy different from another?" class="content-section">
+    <div class="section-header">
+      <h2>9. What makes one search strategy different from another?</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your lecture evaluates search strategies using four major criteria. [<code>lecture-basic-search.pdf</code>, slide 18]</p>
+<h2>9.1 Completeness</h2>
+<blockquote>
+<p><strong>Will the algorithm always find a solution if one exists?</strong></p>
+</blockquote>
+<p>This is about <strong>finding something</strong>, not finding the best thing.</p>
+<h3>Example</h3>
+<p>If a route exists from A to B, a complete algorithm is guaranteed to eventually find one under the assumptions of the algorithm.</p>
+<hr />
+<h2>9.2 Time complexity</h2>
+<blockquote>
+<p>How much computation/search work do we perform?</p>
+</blockquote>
+<p>In search, this is usually described using the number of nodes generated or expanded.</p>
+<hr />
+<h2>9.3 Space complexity</h2>
+<blockquote>
+<p>How much memory must the algorithm keep at once?</p>
+</blockquote>
+<p>This becomes crucial for BFS because BFS can keep a very large frontier in memory.</p>
+<hr />
+<h2>9.4 Optimality</h2>
+<blockquote>
+<p>Does the algorithm always return the <strong>least-cost solution</strong>?</p>
+</blockquote>
+<p>Do not confuse:</p>
+<blockquote>
+<p><strong>Complete</strong> = finds a solution.</p>
+</blockquote>
+<p>with:</p>
+<blockquote>
+<p><strong>Optimal</strong> = finds the best/least-cost solution.</p>
+</blockquote>
+<p>An algorithm can be complete but not optimal.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: The three parameters you must know -->
+  <section id="s-10" data-search-section="The three parameters you must know" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>10. The three parameters you must know</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Search complexity is often described using three symbols. [<code>lecture-basic-search.pdf</code>, slide 18]</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>b</code></td>
+<td>Maximum branching factor of the search tree</td>
+</tr>
+<tr>
+<td><code>d</code></td>
+<td>Depth of the least-cost solution</td>
+</tr>
+<tr>
+<td><code>m</code></td>
+<td>Maximum depth of the state space; may be infinite</td>
+</tr>
+</tbody>
+</table></div>
+<h2>Branching factor <code>b</code></h2>
+<p>If each node can produce at most 3 children, then roughly:</p>
+<p>a\text{-like branching factor} \approx 3</p>
+<p>We call this <code>b = 3</code>.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+`b` = ek node se **maximum kitne naye raaste nikal sakte hain**.
+
+</div>
+
+<hr />
+<h2>Solution depth <code>d</code></h2>
+<p>If the shallowest/least-cost solution is 5 steps deep:</p>
+<div class="formula-math">\[
+d=5
+\]</div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+`d` = **solution tak pahunchne ke liye kitni depth chahiye**.
+
+</div>
+
+<hr />
+<h2>Maximum depth <code>m</code></h2>
+<p>This is how deep the state space can go.</p>
+<p>It may be:</p>
+<ul>
+<li>finite</li>
+<li>enormous</li>
+<li>effectively infinite</li>
+</ul>
+<p>DFS becomes dangerous when <code>m</code> is very large or infinite.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: Why exponential growth is scary -->
+  <section id="s-11" data-search-section="Why exponential growth is scary" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>11. Why exponential growth is scary</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<div class="formula-math">\[
+b=3
+\]</div>
+<p>Then the number of nodes by depth roughly grows like:</p>
+<div class="ascii-box"><pre>Depth 0 → 1
+Depth 1 → 3
+Depth 2 → 9
+Depth 3 → 27
+Depth 4 → 81
+Depth 5 → 243
+Depth 6 → 729</pre></div>
+<p>You can see why even a small branching factor becomes a serious problem as depth grows.</p>
+<h3>Real-life analogy</h3>
+<p>Imagine asking one person a question, and they give you 3 possible answers. Each answer leads you to 3 more people, and each of those 3 gives 3 more possibilities.</p>
+<p>You are not growing by +3.</p>
+<p>You are growing by <strong>multiplication</strong>.</p>
+<p>That is why search can become exponential.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: Uninformed Search — what does “uninformed” mean? -->
+  <section id="s-12" data-search-section="Uninformed Search — what does “uninformed” mean?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>12. Uninformed Search — what does “uninformed” mean?</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>An <strong>uninformed</strong> search algorithm does not have special knowledge telling it which direction is promising.</p>
+<p>It only uses information already supplied by the <strong>problem definition</strong>.</p>
+<p>The lecture lists these uninformed strategies:</p>
+<ul>
+<li>Breadth-first search</li>
+<li>Uniform-cost search</li>
+<li>Depth-first search</li>
+<li>Depth-limited search</li>
+<li>Iterative deepening search</li>
+</ul>
+<p>[<code>lecture-basic-search.pdf</code>, slide 19]</p>
+<h3>Important contrast</h3>
+<p>Later, when we study <strong>informed search</strong>, we will use an additional estimate called a <strong>heuristic</strong>.</p>
+<p>So:</p>
+<div class="ascii-box"><pre>UNINFORMED SEARCH
+Problem definition only
+        ↓
+BFS / UCS / DFS / DLS / IDS
+
+INFORMED SEARCH
+Problem definition + heuristic information
+        ↓
+Greedy / A*</pre></div>
+<p>This distinction is foundational.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: BFS — Breadth-First Search -->
+  <section id="s-13" data-search-section="BFS — Breadth-First Search" class="content-section">
+    <div class="section-header">
+      <h2>13. BFS — Breadth-First Search</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p><strong>Syllabus status:</strong> ★★★★★ Core<br />
+<strong>Chapter importance:</strong> Very high<br />
+<strong>Main idea:</strong> Expand the <strong>shallowest unexpanded node first</strong>.</p>
+<hr />
+<h2>13.1 Why “breadth”?</h2>
+<p>Think about the word <strong>breadth</strong>: wide.</p>
+<p>BFS spreads outward layer by layer.</p>
+<div class="ascii-box"><pre>A                depth 0
+           /     \
+          B       C             depth 1
+        / |       | \
+       D  E       F  G          depth 2
+      /                  \
+     H                    I      depth 3</pre></div>
+<p>BFS will not normally dive from A → B → D → H immediately.</p>
+<p>Instead, it processes:</p>
+<blockquote>
+<p>A → B → C → D → E → F → G → H → I</p>
+</blockquote>
+<p>subject to the exact goal-test convention and child ordering.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: BFS in everyday life -->
+  <section id="s-14" data-search-section="BFS in everyday life" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>14. BFS in everyday life</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Analogy: finding a friend through social connections</h3>
+<p>Suppose you want to find someone in a large college network.</p>
+<p>You know Arjun directly.</p>
+<p>First check:</p>
+<ul>
+<li>Arjun's friends.</li>
+</ul>
+<p>Then:</p>
+<ul>
+<li>friends of Arjun's friends.</li>
+</ul>
+<p>Then:</p>
+<ul>
+<li>friends of friends of friends.</li>
+</ul>
+<p>You are moving <strong>one relationship layer at a time</strong>.</p>
+<p>That is BFS thinking.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “Pehle saare 1-step wale options, phir saare 2-step wale, phir 3-step wale.”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: BFS data structure: FIFO queue -->
+  <section id="s-15" data-search-section="BFS data structure: FIFO queue" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>15. BFS data structure: FIFO queue</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The lecture describes BFS as expanding the shallowest node and implementing it with a <strong>FIFO queue</strong>. New successors go at the <strong>end</strong> of the queue. [<code>lecture-basic-search.pdf</code>, slides 21–24]</p>
+<p>FIFO = <strong>First In, First Out</strong>.</p>
+<h3>Real-world analogy</h3>
+<p>A normal queue at a ticket counter.</p>
+<div class="ascii-box"><pre>Front → [A] [B] [C] [D] ← Back
+         ↑
+      served first</pre></div>
+<p>If B is added after A:</p>
+<div class="ascii-box"><pre>[A, B, C]</pre></div>
+<p>A leaves before B.</p>
+<p>This is exactly the basic mechanism behind BFS.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: BFS — algorithmic idea -->
+  <section id="s-16" data-search-section="BFS — algorithmic idea" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>16. BFS — algorithmic idea</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>1. Put the initial node in the queue.
+2. Remove the front node.
+3. If it is the goal, stop.
+4. Otherwise expand it.
+5. Put its children at the back of the queue.
+6. Repeat.</pre></div>
+<h3>Pseudocode</h3>
+<div class="ascii-box"><pre>BFS(problem):
+    frontier ← FIFO queue containing initial node
+
+    while frontier is not empty:
+        node ← remove_front(frontier)
+
+        if node is goal:
+            return solution(node)
+
+        expand node
+        add successors to the back of frontier
+
+    return failure</pre></div>
+<p>This is the <strong>logic</strong>, not a programming implementation.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: BFS worked example -->
+  <section id="s-17" data-search-section="BFS worked example" class="content-section">
+    <div class="section-header">
+      <h2>17. BFS worked example</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Use this teaching graph:</p>
+<div class="diagram-box"><pre class="mermaid">
+flowchart TD
+    A((A)) --> B((B))
+    A --> C((C))
+    B --> D((D))
+    B --> E((E))
+    C --> F((F))
+    C --> G((G))
+    D --> H((H))
+    E --> I((I))
+</pre></div>
+<p>Let the goal be <strong>I</strong>.</p>
+<h2>Step 0</h2>
+<div class="ascii-box"><pre>Frontier = [A]</pre></div>
+<p>Expand A.</p>
+<p>Add B and C.</p>
+<div class="ascii-box"><pre>Frontier = [B, C]</pre></div>
+<h2>Step 1</h2>
+<p>Remove B.</p>
+<p>Add D and E.</p>
+<div class="ascii-box"><pre>Frontier = [C, D, E]</pre></div>
+<h2>Step 2</h2>
+<p>Remove C.</p>
+<p>Add F and G.</p>
+<div class="ascii-box"><pre>Frontier = [D, E, F, G]</pre></div>
+<h2>Step 3</h2>
+<p>Remove D.</p>
+<p>Add H.</p>
+<div class="ascii-box"><pre>Frontier = [E, F, G, H]</pre></div>
+<h2>Step 4</h2>
+<p>Remove E.</p>
+<p>Generate I.</p>
+<div class="ascii-box"><pre>Frontier = [F, G, H, I]</pre></div>
+<p>Eventually I becomes the selected goal node under the lecture's basic tree-search convention.</p>
+<h3>What did BFS do?</h3>
+<p>It did <strong>not</strong> care that H was directly below D.</p>
+<p>It cared about depth.</p>
+<p>It finished exploring the shallower layers before diving deeper.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: BFS traversal order — memory picture -->
+  <section id="s-18" data-search-section="BFS traversal order — memory picture" class="content-section">
+    <div class="section-header">
+      <h2>18. BFS traversal order — memory picture</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>Depth 0:        A
+
+Depth 1:       B  C
+
+Depth 2:      D E F G
+
+Depth 3:     H   I
+
+BFS idea:
+        left → right
+        layer → layer</pre></div>
+<h3>Memory anchor</h3>
+<blockquote>
+<p><strong>BFS = “level by level.”</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: Why BFS can find a shallowest solution -->
+  <section id="s-19" data-search-section="Why BFS can find a shallowest solution" class="content-section">
+    <div class="section-header">
+      <h2>19. Why BFS can find a shallowest solution</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose every action has the same cost—say, every move costs 1.</p>
+<p>Then a solution at depth 2 costs:</p>
+<div class="formula-math">\[
+2
+\]</div>
+<p>and a solution at depth 5 costs:</p>
+<div class="formula-math">\[
+5
+\]</div>
+<p>Since BFS explores depth 2 before depth 5, it encounters the shallowest solution first.</p>
+<p>Therefore, with equal step costs, BFS is optimal with respect to path cost.</p>
+<h3>Critical qualification</h3>
+<p>Do <strong>not</strong> memorize:</p>
+<blockquote>
+<p>“BFS is always optimal.”</p>
+</blockquote>
+<p>The supplied lecture states:</p>
+<blockquote>
+<p>BFS is optimal <strong>if cost = 1 per step</strong>; it is not optimal in general.</p>
+</blockquote>
+<p>[<code>lecture-basic-search.pdf</code>, slide 25]</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: BFS completeness -->
+  <section id="s-20" data-search-section="BFS completeness" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>20. BFS completeness</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The lecture states:</p>
+<blockquote>
+<p>Complete? <strong>Yes, if <code>b</code> is finite.</strong></p>
+</blockquote>
+<p>Why?</p>
+<p>If the solution is at a finite depth and every node has a finite number of children, BFS keeps systematically exhausting one finite layer before moving to the next.</p>
+<p>Eventually it reaches the solution depth.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “Agar har level manageable hai aur solution finite depth par hai, BFS levels ko skip nahi karega. Isliye eventually solution tak pahunch jayega.”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: BFS time complexity -->
+  <section id="s-21" data-search-section="BFS time complexity" class="content-section">
+    <div class="section-header">
+      <h2>21. BFS time complexity</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The lecture gives:</p>
+<div class="formula-math">\[
+O(b^{d+1})
+\]</div>
+<p>for time complexity in the standard exponential search-tree analysis. [<code>lecture-basic-search.pdf</code>, slide 25]</p>
+<p>Why?</p>
+<p>The number of nodes grows rapidly with depth.</p>
+<p>Approximate levels:</p>
+<div class="formula-math">\[
+1+b+b^2+\cdots+b^d
+\]</div>
+<p>and in the standard asymptotic treatment this becomes dominated by the largest term.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: BFS space complexity -->
+  <section id="s-22" data-search-section="BFS space complexity" class="content-section">
+    <div class="section-header">
+      <h2>22. BFS space complexity</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The lecture gives:</p>
+<div class="formula-math">\[
+O(b^{d+1})
+\]</div>
+<p>because BFS must keep a large frontier in memory. [<code>lecture-basic-search.pdf</code>, slide 25]</p>
+<h3>This is BFS's famous weakness</h3>
+<blockquote>
+<p><strong>BFS is memory hungry.</strong></p>
+</blockquote>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “BFS ko sabko yaad rakhna padta hai jo aage explore karna hai. Isliye RAM bahut jaldi bhar sakti hai.”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: BFS property card -->
+  <section id="s-23" data-search-section="BFS property card" class="content-section">
+    <div class="section-header">
+      <h2>23. BFS property card</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Property</th>
+<th>BFS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Selection rule</td>
+<td>Shallowest unexpanded node</td>
+</tr>
+<tr>
+<td>Data structure</td>
+<td>FIFO queue</td>
+</tr>
+<tr>
+<td>Complete?</td>
+<td>Yes, if <code>b</code> is finite</td>
+</tr>
+<tr>
+<td>Optimal?</td>
+<td>Yes, when every step has equal cost</td>
+</tr>
+<tr>
+<td>Time</td>
+<td><code>O(b^(d+1))</code></td>
+</tr>
+<tr>
+<td>Space</td>
+<td><code>O(b^(d+1))</code></td>
+</tr>
+<tr>
+<td>Main strength</td>
+<td>Finds shallow solutions systematically</td>
+</tr>
+<tr>
+<td>Main weakness</td>
+<td>High memory usage</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Exam memory line:</strong></p>
+<blockquote>
+<p><strong>BFS = FIFO + shallowest + complete + unit-cost optimal + exponential memory.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: DFS — Depth-First Search -->
+  <section id="s-24" data-search-section="DFS — Depth-First Search" class="content-section">
+    <div class="section-header">
+      <h2>24. DFS — Depth-First Search</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p><strong>Syllabus status:</strong> ★★★★★ Core<br />
+<strong>Main idea:</strong> Expand the <strong>deepest unexpanded node first</strong>.</p>
+<p>This is the opposite mental picture of BFS.</p>
+<p>BFS says:</p>
+<blockquote>
+<p>“Let me spread out.”</p>
+</blockquote>
+<p>DFS says:</p>
+<blockquote>
+<p>“Let me go down one path.”</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: DFS visual intuition -->
+  <section id="s-25" data-search-section="DFS visual intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>25. DFS visual intuition</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Using the same tree:</p>
+<div class="ascii-box"><pre>A
+           /     \
+          B       C
+        / |       | \
+       D  E       F  G
+      / \
+     H   ...</pre></div>
+<p>With left-to-right child ordering, DFS tends to behave like:</p>
+<div class="ascii-box"><pre>A → B → D → H</pre></div>
+<p>before backing up to try another branch.</p>
+<h3>Real-life analogy</h3>
+<p>Imagine exploring a building with many corridors.</p>
+<p>You choose one corridor and say:</p>
+<blockquote>
+<p>“I will keep following this corridor until I reach a dead end.”</p>
+</blockquote>
+<p>Only then do you return and try another branch.</p>
+<p>That is DFS.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: Hinglish explanation of DFS -->
+  <section id="s-26" data-search-section="Hinglish explanation of DFS" class="content-section">
+    <div class="section-header">
+      <h2>26. Hinglish explanation of DFS</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <blockquote>
+<p>“Ek raasta pakdo aur usmein jitna deep ja sakte ho jao. Dead end mila? Backtrack karo. Phir next branch try karo.”</p>
+</blockquote>
+<p>The word to remember is:</p>
+<blockquote>
+<p><strong>DEPTH</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: DFS data structure: LIFO stack -->
+  <section id="s-27" data-search-section="DFS data structure: LIFO stack" class="content-section">
+    <div class="section-header">
+      <h2>27. DFS data structure: LIFO stack</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The lecture describes DFS as using a <strong>LIFO queue</strong>, meaning successors are put at the front. [<code>lecture-basic-search.pdf</code>, slides 36–40]</p>
+<p>LIFO = <strong>Last In, First Out</strong>.</p>
+<h3>Everyday analogy</h3>
+<p>A stack of plates.</p>
+<div class="ascii-box"><pre>[D] ← placed last, removed first
+     [C]
+     [B]
+     [A]</pre></div>
+<p>This naturally creates depth-first behavior.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: DFS — algorithmic idea -->
+  <section id="s-28" data-search-section="DFS — algorithmic idea" class="content-section">
+    <div class="section-header">
+      <h2>28. DFS — algorithmic idea</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>1. Put the initial node on a stack.
+2. Remove the top node.
+3. If it is the goal, stop.
+4. Otherwise expand it.
+5. Put successors so that the desired next child is on top.
+6. Continue deeply.
+7. Backtrack when a branch is exhausted.</pre></div>
+<h3>Pseudocode</h3>
+<div class="ascii-box"><pre>DFS(problem):
+    frontier ← LIFO stack containing initial node
+
+    while frontier is not empty:
+        node ← remove_top(frontier)
+
+        if node is goal:
+            return solution(node)
+
+        expand node
+        add successors to the frontier
+
+    return failure</pre></div>
+<p>The exact order in which siblings are placed on the stack affects the traversal order.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 29: DFS worked example -->
+  <section id="s-29" data-search-section="DFS worked example" class="content-section">
+    <div class="section-header">
+      <h2>29. DFS worked example</h2>
+      <button class="bookmark-btn" data-id="s-29" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Using the same graph:</p>
+<div class="diagram-box"><pre class="mermaid">
+flowchart TD
+    A((A)) --> B((B))
+    A --> C((C))
+    B --> D((D))
+    B --> E((E))
+    C --> F((F))
+    C --> G((G))
+    D --> H((H))
+    E --> I((I))
+</pre></div>
+<p>Assume the search explores the left child before the right child.</p>
+<p>Possible progression:</p>
+<div class="ascii-box"><pre>A
+↓
+B
+↓
+D
+↓
+H
+↓
+(backtrack)
+↓
+E
+↓
+I</pre></div>
+<p>Notice something important:</p>
+<p>BFS reached E's region comparatively early because it moved across the level.</p>
+<p>DFS can spend a lot of time on a deep branch before returning.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 30: DFS completeness -->
+  <section id="s-30" data-search-section="DFS completeness" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>30. DFS completeness</h2>
+      <button class="bookmark-btn" data-id="s-30" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The lecture states DFS is <strong>not complete</strong> in general because it can fail in spaces with infinite depth or loops. [<code>lecture-basic-search.pdf</code>, slide 41]</p>
+<h3>Example: infinite branch</h3>
+<div class="ascii-box"><pre>A
+└── B
+    └── C
+        └── D
+            └── E
+                └── ...</pre></div>
+<p>Suppose the goal is somewhere in another branch:</p>
+<div class="ascii-box"><pre>A
+├── B → C → D → E → ...
+└── GOAL</pre></div>
+<p>A naive DFS can keep going forever down the left branch and never return to try the right branch.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “DFS agar galat deep path mein fas gaya, toh wahi jaata reh sakta hai.”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 31: Repeated states and DFS -->
+  <section id="s-31" data-search-section="Repeated states and DFS" class="content-section">
+    <div class="section-header">
+      <h2>31. Repeated states and DFS</h2>
+      <button class="bookmark-btn" data-id="s-31" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The lecture notes that DFS can be modified to avoid repeated states along the current path, making it complete in finite spaces under the relevant assumptions. [<code>lecture-basic-search.pdf</code>, slide 41]</p>
+<p>This is why blindly memorizing:</p>
+<blockquote>
+<p>“DFS is incomplete.”</p>
+</blockquote>
+<p>is not precise enough.</p>
+<p>A better exam statement is:</p>
+<blockquote>
+<p><strong>Standard DFS is not complete in infinite-depth spaces or spaces with loops; with repeated-state/path checking it is complete in finite spaces under the stated assumptions.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 32: DFS time complexity -->
+  <section id="s-32" data-search-section="DFS time complexity" class="content-section">
+    <div class="section-header">
+      <h2>32. DFS time complexity</h2>
+      <button class="bookmark-btn" data-id="s-32" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The lecture gives:</p>
+<div class="formula-math">\[
+O(b^m)
+\]</div>
+<p>where <code>m</code> is the maximum search depth. [<code>lecture-basic-search.pdf</code>, slide 41]</p>
+<p>The danger is obvious if:</p>
+<div class="formula-math">\[
+m \gg d
+\]</div>
+<p>That means the state space may have very deep branches even though a shallow solution exists.</p>
+<p>DFS might spend huge effort exploring the wrong depth.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 33: DFS space complexity -->
+  <section id="s-33" data-search-section="DFS space complexity" class="content-section">
+    <div class="section-header">
+      <h2>33. DFS space complexity</h2>
+      <button class="bookmark-btn" data-id="s-33" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The lecture gives:</p>
+<div class="formula-math">\[
+O(bm)
+\]</div>
+<p>which is <strong>linear in the depth</strong>, compared with BFS's exponentially growing memory requirement. [<code>lecture-basic-search.pdf</code>, slide 41]</p>
+<p>This is DFS's major attraction.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “DFS zyada cheezein memory mein ek saath nahi rakhta; woh mostly current deep path aur kuch pending branches sambhalta hai.”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 34: DFS optimality -->
+  <section id="s-34" data-search-section="DFS optimality" class="content-section">
+    <div class="section-header">
+      <h2>34. DFS optimality</h2>
+      <button class="bookmark-btn" data-id="s-34" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The lecture states:</p>
+<blockquote>
+<p><strong>DFS is not optimal.</strong></p>
+</blockquote>
+<p>Why?</p>
+<p>Because it may find a solution down a deep/expensive branch before a much shallower or cheaper solution elsewhere.</p>
+<h3>Example</h3>
+<div class="ascii-box"><pre>A
+        /   \
+       B     C
+       |     |
+       D     G ← shallow goal
+       |
+       E
+       |
+       G ← deep goal</pre></div>
+<p>If DFS explores the left branch first, it may reach the deeper goal before considering the shallow right branch.</p>
+<p>Therefore:</p>
+<blockquote>
+<p><strong>Finding a solution ≠ finding the best solution.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 35: DFS property card -->
+  <section id="s-35" data-search-section="DFS property card" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>35. DFS property card</h2>
+      <button class="bookmark-btn" data-id="s-35" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Property</th>
+<th>DFS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Selection rule</td>
+<td>Deepest unexpanded node</td>
+</tr>
+<tr>
+<td>Data structure</td>
+<td>LIFO stack</td>
+</tr>
+<tr>
+<td>Complete?</td>
+<td>No in infinite-depth/looping spaces; finite-space variants can be complete with appropriate repeated-state handling</td>
+</tr>
+<tr>
+<td>Optimal?</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Time</td>
+<td><code>O(b^m)</code></td>
+</tr>
+<tr>
+<td>Space</td>
+<td><code>O(bm)</code></td>
+</tr>
+<tr>
+<td>Main strength</td>
+<td>Very low memory compared with BFS</td>
+</tr>
+<tr>
+<td>Main weakness</td>
+<td>Can get trapped deep / return non-optimal solution</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Exam memory line:</strong></p>
+<blockquote>
+<p><strong>DFS = LIFO + deepest + low memory + not optimal + unsafe with infinite depth/loops.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 36: BFS vs DFS — the comparison you must know -->
+  <section id="s-36" data-search-section="BFS vs DFS — the comparison you must know" class="content-section">
+    <div class="section-header">
+      <h2>36. BFS vs DFS — the comparison you must know</h2>
+      <button class="bookmark-btn" data-id="s-36" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Question</th>
+<th>BFS</th>
+<th>DFS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>What does it prefer?</td>
+<td>Shallow nodes</td>
+<td>Deep nodes</td>
+</tr>
+<tr>
+<td>Main structure</td>
+<td>FIFO queue</td>
+<td>LIFO stack</td>
+</tr>
+<tr>
+<td>Search pattern</td>
+<td>Wide</td>
+<td>Deep</td>
+</tr>
+<tr>
+<td>Complete?</td>
+<td>Yes if <code>b</code> finite</td>
+<td>No in general infinite-depth/loop spaces</td>
+</tr>
+<tr>
+<td>Optimal?</td>
+<td>Yes if step costs are equal</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Time</td>
+<td><code>O(b^(d+1))</code></td>
+<td><code>O(b^m)</code></td>
+</tr>
+<tr>
+<td>Space</td>
+<td><code>O(b^(d+1))</code></td>
+<td><code>O(bm)</code></td>
+</tr>
+<tr>
+<td>Main problem</td>
+<td>Memory</td>
+<td>Can get lost deep</td>
+</tr>
+<tr>
+<td>Mental image</td>
+<td>Water spreading outward</td>
+<td>Exploring one tunnel</td>
+</tr>
+</tbody>
+</table></div>
+<h3>One-line Hinglish</h3>
+<blockquote>
+<p><strong>BFS breadth mein fail sakta hai; DFS depth mein phas sakta hai.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 37: When would you conceptually prefer BFS? -->
+  <section id="s-37" data-search-section="When would you conceptually prefer BFS?" class="content-section">
+    <div class="section-header">
+      <h2>37. When would you conceptually prefer BFS?</h2>
+      <button class="bookmark-btn" data-id="s-37" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>BFS is attractive when:</p>
+<ul>
+<li>the solution is expected to be shallow;</li>
+<li>step costs are equal and you want a shallowest/least-step solution;</li>
+<li>you can afford the memory needed for the frontier.</li>
+</ul>
+<h3>Example</h3>
+<p>Finding the minimum number of edges in an unweighted graph.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 38: When would you conceptually prefer DFS? -->
+  <section id="s-38" data-search-section="When would you conceptually prefer DFS?" class="content-section">
+    <div class="section-header">
+      <h2>38. When would you conceptually prefer DFS?</h2>
+      <button class="bookmark-btn" data-id="s-38" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>DFS is attractive when:</p>
+<ul>
+<li>memory is limited;</li>
+<li>the search space is very deep but solutions may be found deep down;</li>
+<li>you can tolerate the possibility of exploring a poor/deep branch first.</li>
+</ul>
+<h3>Important caveat</h3>
+<p>DFS's low memory usage does <strong>not</strong> mean it is always the better practical choice. The search space's structure matters.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 39: Uniform-Cost Search (UCS) — lecture extension and bridge -->
+  <section id="s-39" data-search-section="Uniform-Cost Search (UCS) — lecture extension and bridge" class="content-section">
+    <div class="section-header">
+      <h2>39. Uniform-Cost Search (UCS) — lecture extension and bridge</h2>
+      <button class="bookmark-btn" data-id="s-39" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p><strong>Syllabus status:</strong> Supporting / lecture material; not explicitly named in DSC-14 Unit I.<br />
+<strong>Why study it here?</strong> It makes the difference between <strong>depth</strong> and <strong>cost</strong> clear and provides a direct conceptual bridge to A*.</p>
+<p>The lecture defines UCS as:</p>
+<blockquote>
+<p>Expand the least-cost unexpanded node.</p>
+</blockquote>
+<p>Implementation:</p>
+<blockquote>
+<p>frontier is ordered by path cost, lowest first.</p>
+</blockquote>
+<p>[<code>lecture-basic-search.pdf</code>, slide 27]</p>
+<hr />
+<h2>39.1 Why BFS is not enough when costs differ</h2>
+<p>Consider:</p>
+<div class="ascii-box"><pre>A → B → G
+costs: 1 + 1 = 2
+
+A → C → D → G
+costs: 0.2 + 0.2 + 0.2 = 0.6</pre></div>
+<p>The second route has <strong>more steps</strong> but lower total cost.</p>
+<p>BFS focuses on depth.</p>
+<p>UCS focuses on <strong>path cost</strong>.</p>
+<p>That distinction is fundamental.</p>
+<hr />
+<h2>39.2 UCS mental model</h2>
+<div class="ascii-box"><pre>Frontier:
+
+Node      path cost
+-------------------
+A            0
+B            4
+C            2   ← choose C
+D            7</pre></div>
+<p>The smallest accumulated cost is selected.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “Kitne steps hue ye main issue nahi hai. Ab tak total kitna cost hua hai, woh dekho.”
+
+</div>
+
+<hr />
+<h2>39.3 UCS and BFS relationship</h2>
+<p>The lecture explicitly states:</p>
+<blockquote>
+<p><strong>UCS is equivalent to BFS when all step costs are equal.</strong></p>
+</blockquote>
+<p>[<code>lecture-basic-search.pdf</code>, slide 27]</p>
+<p>That is a beautiful connection:</p>
+<div class="ascii-box"><pre>Equal step cost
+      ↓
+least path cost ↔ shallowest depth
+      ↓
+UCS behaves like BFS</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 40: Depth-Limited Search (DLS) -->
+  <section id="s-40" data-search-section="Depth-Limited Search (DLS)" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>40. Depth-Limited Search (DLS)</h2>
+      <button class="bookmark-btn" data-id="s-40" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p><strong>Syllabus status:</strong> Supporting / lecture material.<br />
+<strong>Idea:</strong> DFS + a maximum allowed depth.</p>
+<p>The lecture defines DLS as depth-first search with a depth limit <code>l</code>; nodes at depth <code>l</code> are not expanded. [<code>lecture-basic-search.pdf</code>, slide 43]</p>
+<h3>Why?</h3>
+<p>DFS's big problem is getting lost forever in very deep spaces.</p>
+<p>DLS says:</p>
+<blockquote>
+<p>“You may go deep—but only up to here.”</p>
+</blockquote>
+<div class="ascii-box"><pre>A
+               /   \
+              B     C
+             / \
+            D   E
+           /
+          X
+
+limit l = 2
+
+A(depth0)
+B(depth1)
+D(depth2) ← stop expanding here</pre></div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “Depth ka speed limit laga do.”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 41: DLS properties -->
+  <section id="s-41" data-search-section="DLS properties" class="content-section">
+    <div class="section-header">
+      <h2>41. DLS properties</h2>
+      <button class="bookmark-btn" data-id="s-41" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Under the standard analysis from the lecture:</p>
+<ul>
+<li>Complete if the depth limit is at least the solution depth under the relevant assumptions.</li>
+<li>Time depends on the depth limit, commonly expressed as <code>O(b^l)</code>.</li>
+<li>Space is commonly <code>O(bl)</code>.</li>
+<li>It is not generally optimal.</li>
+</ul>
+<p>The depth limit <code>l</code> is the key new parameter.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 42: Iterative Deepening Search (IDS) -->
+  <section id="s-42" data-search-section="Iterative Deepening Search (IDS)" class="content-section">
+    <div class="section-header">
+      <h2>42. Iterative Deepening Search (IDS)</h2>
+      <button class="bookmark-btn" data-id="s-42" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p><strong>Syllabus status:</strong> Supporting / lecture material.<br />
+<strong>Main idea:</strong> Repeat depth-limited search with progressively larger limits.</p>
+<p>The lecture gives the process directly: [<code>lecture-basic-search.pdf</code>, slide 43]</p>
+<ol>
+<li>Start at depth 1.</li>
+<li>Perform depth-first search.</li>
+<li>If the solution is found, stop.</li>
+<li>Otherwise increase the limit.</li>
+<li>Repeat.</li>
+</ol>
+<p>A more conventional sequence may begin with depth 0; the conceptual idea is the same.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 43: Why would we repeatedly search? -->
+  <section id="s-43" data-search-section="Why would we repeatedly search?" class="content-section">
+    <div class="section-header">
+      <h2>43. Why would we repeatedly search?</h2>
+      <button class="bookmark-btn" data-id="s-43" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This initially sounds wasteful.</p>
+<p>Why search depth 1 and then throw it away?</p>
+<p>Why search depth 2 and then repeat?</p>
+<p>Because IDS combines two desirable properties:</p>
+<ul>
+<li>the <strong>low memory</strong> behavior of DFS;</li>
+<li>the <strong>shallow-solution guarantee</strong> of BFS under the same unit-cost assumptions.</li>
+</ul>
+<h3>Real-life analogy</h3>
+<p>Suppose you are searching for a person in a building but don't know which floor they are on.</p>
+<p>You could explore one corridor endlessly.</p>
+<p>Or you could say:</p>
+<blockquote>
+<p>“First I'll inspect up to floor 1.”</p>
+<p>“Not there? Now inspect up to floor 2.”</p>
+<p>“Not there? Now up to floor 3.”</p>
+</blockquote>
+<p>This is iterative deepening.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 44: IDS visual -->
+  <section id="s-44" data-search-section="IDS visual" class="content-section">
+    <div class="section-header">
+      <h2>44. IDS visual</h2>
+      <button class="bookmark-btn" data-id="s-44" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>Limit 0:  A
+
+Limit 1:  A
+          / \
+         B   C
+
+Limit 2:  A
+          / \
+         B   C
+        / |   | \
+       D  E   F G
+
+Limit 3: explore one level deeper</pre></div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “DFS karte raho, but har round mein allowed depth ko ek step badha do.”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 45: IDS properties -->
+  <section id="s-45" data-search-section="IDS properties" class="content-section mode-gate">
+    <div class="section-header">
+      <h2>45. IDS properties</h2>
+      <button class="bookmark-btn" data-id="s-45" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied lecture states: [<code>lecture-basic-search.pdf</code>, slide 48]</p>
+<ul>
+<li><strong>Complete:</strong> Yes.</li>
+<li><strong>Time:</strong> <code>O(b^d)</code> in the standard asymptotic treatment.</li>
+<li><strong>Space:</strong> <code>O(bd)</code>.</li>
+<li><strong>Optimal:</strong> Yes, if step cost = 1.</li>
+</ul>
+<p>The lecture also gives a numerical comparison showing how IDS can use much less node expansion than BFS in a particular example while retaining the low-space behavior. [<code>lecture-basic-search.pdf</code>, slide 48]</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 46: Why repeated work is sometimes acceptable -->
+  <section id="s-46" data-search-section="Why repeated work is sometimes acceptable" class="content-section">
+    <div class="section-header">
+      <h2>46. Why repeated work is sometimes acceptable</h2>
+      <button class="bookmark-btn" data-id="s-46" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>IDS repeats work near the top of the tree.</p>
+<p>For example, nodes close to the root may be expanded several times.</p>
+<p>But the number of nodes grows exponentially with depth, so the deepest level dominates the total work.</p>
+<p>Hence the repeated shallow work is often a reasonable trade-off for drastically lower memory usage.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 47: IDS vs BFS vs DFS -->
+  <section id="s-47" data-search-section="IDS vs BFS vs DFS" class="content-section">
+    <div class="section-header">
+      <h2>47. IDS vs BFS vs DFS</h2>
+      <button class="bookmark-btn" data-id="s-47" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Property</th>
+<th>BFS</th>
+<th>DFS</th>
+<th>IDS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pattern</td>
+<td>Breadth</td>
+<td>Depth</td>
+<td>Repeated depth-limited DFS</td>
+</tr>
+<tr>
+<td>Memory</td>
+<td>High</td>
+<td>Low</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>Complete?</td>
+<td>Yes if <code>b</code> finite</td>
+<td>No in general</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Optimal?</td>
+<td>Unit-cost only</td>
+<td>No</td>
+<td>Unit-cost only</td>
+</tr>
+<tr>
+<td>Time</td>
+<td><code>O(b^(d+1))</code></td>
+<td><code>O(b^m)</code></td>
+<td><code>O(b^d)</code></td>
+</tr>
+<tr>
+<td>Main idea</td>
+<td>Level by level</td>
+<td>Tunnel down</td>
+<td>Expand depth limit gradually</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 48: The complete uninformed-search family -->
+  <section id="s-48" data-search-section="The complete uninformed-search family" class="content-section">
+    <div class="section-header">
+      <h2>48. The complete uninformed-search family</h2>
+      <button class="bookmark-btn" data-id="s-48" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Now connect everything.</p>
+<div class="diagram-box"><pre class="mermaid">
+flowchart TD
+    U[Uninformed Search]
+    U --> B[BFS\nshallowest]
+    U --> U2[UCS\nleast path cost]
+    U --> D[DFS\ndeepest]
+    U --> DL[DLS\nDFS + depth limit]
+    U --> ID[IDS\nDLS repeatedly]
+</pre></div>
+<p>The selection rule is the real unifying idea:</p>
+<div class="ascii-box"><pre>BFS → choose by depth
+UCS → choose by cost
+DFS → choose deepest
+DLS → choose deepest, but stop at limit
+IDS → repeatedly increase the limit</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 49: Search strategy comparison — master table -->
+  <section id="s-49" data-search-section="Search strategy comparison — master table" class="content-section">
+    <div class="section-header">
+      <h2>49. Search strategy comparison — master table</h2>
+      <button class="bookmark-btn" data-id="s-49" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The lecture's end-of-section summary provides the standard comparison framework. [<code>lecture-basic-search.pdf</code>, slide 49]</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Strategy</th>
+<th>Selection rule</th>
+<th style="text-align: right;">Complete?</th>
+<th style="text-align: right;">Optimal?</th>
+<th>Time</th>
+<th>Space</th>
+<th>Key memory</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>BFS</strong></td>
+<td>Shallowest</td>
+<td style="text-align: right;">Yes*</td>
+<td style="text-align: right;">Yes*</td>
+<td><code>O(b^(d+1))</code></td>
+<td><code>O(b^(d+1))</code></td>
+<td>FIFO</td>
+</tr>
+<tr>
+<td><strong>UCS</strong></td>
+<td>Lowest path cost</td>
+<td style="text-align: right;">Yes*</td>
+<td style="text-align: right;">Yes</td>
+<td>Cost-threshold dependent</td>
+<td>Cost-threshold dependent</td>
+<td>Priority by <code>g(n)</code></td>
+</tr>
+<tr>
+<td><strong>DFS</strong></td>
+<td>Deepest</td>
+<td style="text-align: right;">No</td>
+<td style="text-align: right;">No</td>
+<td><code>O(b^m)</code></td>
+<td><code>O(bm)</code></td>
+<td>LIFO</td>
+</tr>
+<tr>
+<td><strong>DLS</strong></td>
+<td>Deepest up to limit <code>l</code></td>
+<td style="text-align: right;">Yes if <code>l ≥ d</code></td>
+<td style="text-align: right;">No</td>
+<td><code>O(b^l)</code></td>
+<td><code>O(bl)</code></td>
+<td>DFS + cutoff</td>
+</tr>
+<tr>
+<td><strong>IDS</strong></td>
+<td>Increasing depth limit</td>
+<td style="text-align: right;">Yes</td>
+<td style="text-align: right;">Yes*</td>
+<td><code>O(b^d)</code></td>
+<td><code>O(bd)</code></td>
+<td>DFS repeated</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>*</code> depends on assumptions such as finite branching and, for optimality, appropriate step-cost conditions.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 50: The single most important mental model -->
+  <section id="s-50" data-search-section="The single most important mental model" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>50. The single most important mental model</h2>
+      <button class="bookmark-btn" data-id="s-50" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Do not memorize five isolated algorithms.</p>
+<p>Memorize this:</p>
+<blockquote>
+<p><strong>All search algorithms are trying to answer the same question: “Which node should I explore next?”</strong></p>
+</blockquote>
+<p>Then remember the selector:</p>
+<div class="ascii-box"><pre>BFS  → SHALLOWEST
+UCS  → CHEAPEST
+DFS  → DEEPEST
+DLS  → DEEPEST + LIMIT
+IDS  → LIMIT = 0,1,2,3,...</pre></div>
+<p>This mental model will make later informed search much easier.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 51: Why BFS and DFS are in your university syllabus -->
+  <section id="s-51" data-search-section="Why BFS and DFS are in your university syllabus" class="content-section">
+    <div class="section-header">
+      <h2>51. Why BFS and DFS are in your university syllabus</h2>
+      <button class="bookmark-btn" data-id="s-51" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your DSC-14 syllabus explicitly names <strong>Uninformed Search (BFS, DFS)</strong> in Unit I.</p>
+<p>Therefore, for your university exam:</p>
+<h3>MUST MASTER</h3>
+<ul>
+<li>definition of uninformed search</li>
+<li>BFS intuition</li>
+<li>BFS queue/FIFO</li>
+<li>BFS algorithm/pseudocode</li>
+<li>BFS example and traversal</li>
+<li>BFS completeness</li>
+<li>BFS optimality condition</li>
+<li>BFS time/space</li>
+<li>DFS intuition</li>
+<li>DFS stack/LIFO</li>
+<li>DFS algorithm/pseudocode</li>
+<li>DFS example and traversal</li>
+<li>DFS completeness limitations</li>
+<li>DFS optimality</li>
+<li>DFS time/space</li>
+<li>BFS vs DFS</li>
+</ul>
+<h3>LECTURE EXTENSION / BRIDGE</h3>
+<ul>
+<li>UCS</li>
+<li>DLS</li>
+<li>IDS</li>
+<li>repeated-state handling</li>
+<li>deeper search-property comparisons</li>
+</ul>
+<p>These extensions should still be understood because your supplied lecture teaches them and they help you understand why different search strategies exist.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 52: Common misconceptions -->
+  <section id="s-52" data-search-section="Common misconceptions" class="content-section">
+    <div class="section-header">
+      <h2>52. Common misconceptions</h2>
+      <button class="bookmark-btn" data-id="s-52" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Misconception 1: “BFS is always optimal.”</h2>
+<p>Wrong.</p>
+<p>Correct:</p>
+<blockquote>
+<p>BFS is optimal when every action/step has equal cost under the standard assumptions.</p>
+</blockquote>
+<hr />
+<h2>Misconception 2: “DFS always uses constant memory.”</h2>
+<p>Wrong.</p>
+<p>The lecture gives:</p>
+<div class="formula-math">\[
+O(bm)
+\]</div>
+<p>That is low compared with BFS's exponential memory, but it is not literally <code>O(1)</code>.</p>
+<hr />
+<h2>Misconception 3: “Complete means optimal.”</h2>
+<p>Wrong.</p>
+<p>Complete = guaranteed to find a solution under assumptions.<br />
+Optimal = guaranteed to find the least-cost solution.</p>
+<hr />
+<h2>Misconception 4: “DFS always reaches the goal faster.”</h2>
+<p>Wrong.</p>
+<p>DFS can be fast when its first deep branch happens to contain a solution, but there is no guarantee.</p>
+<hr />
+<h2>Misconception 5: “Depth means cost.”</h2>
+<p>Wrong.</p>
+<p>Depth counts actions/levels.</p>
+<p>Path cost sums the costs of those actions.</p>
+<p>That distinction becomes crucial when you move from BFS to UCS and later A*.</p>
+<hr />
+<h2>Misconception 6: “A state and a node are the same thing.”</h2>
+<p>Not exactly.</p>
+<p>A state is the represented configuration; a node is the search structure carrying the state plus path/search information. [<code>lecture-basic-search.pdf</code>, slide 17]</p>
+<hr />
+<h2>Misconception 7: “Uninformed means random.”</h2>
+<p>No.</p>
+<p>Uninformed search is still systematic. It simply does not use a special heuristic estimate.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 53: Formula and property cards -->
+  <section id="s-53" data-search-section="Formula and property cards" class="content-section">
+    <div class="section-header">
+      <h2>53. Formula and property cards</h2>
+      <button class="bookmark-btn" data-id="s-53" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Formula Card — BFS</h2>
+<div class="formula-math">\[
+T = O(b^{d+1})
+\]</div>
+<h3>Meaning</h3>
+<p>Approximate exponential time in the depth of the shallowest solution.</p>
+<h3>Memory trigger</h3>
+<blockquote>
+<p><code>b^(d+1)</code> → expensive memory.</p>
+</blockquote>
+<hr />
+<h2>Formula Card — DFS</h2>
+<div class="formula-math">\[
+T = O(b^m)
+\]</div>
+<div class="formula-math">\[
+S = O(bm)
+\]</div>
+<h3>Meaning</h3>
+<p>Time depends on the maximum depth <code>m</code>; memory grows roughly linearly with depth under the standard analysis.</p>
+<hr />
+<h2>Formula Card — IDS</h2>
+<div class="formula-math">\[
+T = O(b^d)
+\]</div>
+<div class="formula-math">\[
+S = O(bd)
+\]</div>
+<h3>Condition for optimality</h3>
+<p>Equal/unit step costs in the standard formulation.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 54: A small mathematical derivation: why the tree size grows exponentially -->
+  <section id="s-54" data-search-section="A small mathematical derivation: why the tree size grows exponentially" class="content-section">
+    <div class="section-header">
+      <h2>54. A small mathematical derivation: why the tree size grows exponentially</h2>
+      <button class="bookmark-btn" data-id="s-54" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose each node has at most <code>b</code> children.</p>
+<p>Then:</p>
+<p>Depth 0:</p>
+<div class="formula-math">\[
+1=b^0
+\]</div>
+<p>Depth 1:</p>
+<div class="formula-math">\[
+b=b^1
+\]</div>
+<p>Depth 2:</p>
+<div class="formula-math">\[
+b^2
+\]</div>
+<p>Depth 3:</p>
+<div class="formula-math">\[
+b^3
+\]</div>
+<p>So the number of nodes through depth <code>d</code> is approximately:</p>
+<div class="formula-math">\[
+1+b+b^2+\cdots+b^d
+\]</div>
+<p>This is a geometric series.</p>
+<p>Its dominant term grows exponentially with <code>d</code>, which is why search can become computationally expensive very quickly.</p>
+<h3>Why this matters</h3>
+<p>It explains why:</p>
+<ul>
+<li>a small increase in depth can be expensive;</li>
+<li>heuristics later become valuable;</li>
+<li>memory can become a bigger problem than raw computation.</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 55: Diagram you should be able to draw in an exam -->
+  <section id="s-55" data-search-section="Diagram you should be able to draw in an exam" class="content-section mode-gate">
+    <div class="section-header">
+      <h2>55. Diagram you should be able to draw in an exam</h2>
+      <button class="bookmark-btn" data-id="s-55" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Draw a generic search tree:</p>
+<div class="ascii-box"><pre>START
+                      /     \
+                     A       B
+                   /   \      \
+                  C     D      E
+                 / \
+                F   G</pre></div>
+<p>Then annotate:</p>
+<p><strong>BFS:</strong> show level order.<br />
+<strong>DFS:</strong> show one deep branch.<br />
+<strong>UCS:</strong> write path costs.<br />
+<strong>DLS:</strong> draw a cutoff line.<br />
+<strong>IDS:</strong> draw repeated depth limits.</p>
+<p>The point is not artistic beauty.</p>
+<p>The point is to demonstrate that you understand the <strong>selection rule</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 56: Worked comparison problem -->
+  <section id="s-56" data-search-section="Worked comparison problem" class="content-section">
+    <div class="section-header">
+      <h2>56. Worked comparison problem</h2>
+      <button class="bookmark-btn" data-id="s-56" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Problem</h3>
+<p>Consider:</p>
+<div class="ascii-box"><pre>A
+           /   \
+          B     C
+        /  \     \
+       D    E     F
+      /          \
+     G            H</pre></div>
+<p>Assume left-to-right expansion.</p>
+<h3>Question 1</h3>
+<p>What is the BFS order?</p>
+<h3>Question 2</h3>
+<p>What is the DFS order until G is reached?</p>
+<h3>Question 3</h3>
+<p>Why might BFS use more memory?</p>
+<h3>Question 4</h3>
+<p>Why might DFS fail to find a shallow goal quickly?</p>
+<hr />
+<h2>Solution thinking</h2>
+<h3>Q1 — BFS</h3>
+<p>Think:</p>
+<blockquote>
+<p>shallowest first.</p>
+</blockquote>
+<p>So process layer 0, then layer 1, then layer 2, etc.</p>
+<h3>Q2 — DFS</h3>
+<p>Think:</p>
+<blockquote>
+<p>deepest first.</p>
+</blockquote>
+<p>Follow the left branch as far as possible before backtracking.</p>
+<h3>Q3</h3>
+<p>BFS keeps a broad frontier containing many nodes that have already been generated but still need to be processed.</p>
+<h3>Q4</h3>
+<p>DFS may spend a long time in a deep branch even when the solution is sitting near the root on another branch.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 57: Exam-style numerical: complexity reasoning -->
+  <section id="s-57" data-search-section="Exam-style numerical: complexity reasoning" class="content-section">
+    <div class="section-header">
+      <h2>57. Exam-style numerical: complexity reasoning</h2>
+      <button class="bookmark-btn" data-id="s-57" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<div class="formula-math">\[
+b=4,\quad d=3
+\]</div>
+<p>For BFS, the asymptotic form is:</p>
+<div class="formula-math">\[
+O(b^{d+1})
+\]</div>
+<p>Substitute:</p>
+<div class="formula-math">\[
+O(4^4)=O(256)
+\]</div>
+<p>This does <strong>not</strong> mean the algorithm literally expands exactly 256 nodes in every implementation. It demonstrates how the asymptotic expression grows with branching factor and solution depth.</p>
+<h3>Exam warning</h3>
+<p>Do not convert Big-O notation into an exact node count unless the question explicitly asks for an exact count and gives enough information to compute it.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 58: Exam-style conceptual question -->
+  <section id="s-58" data-search-section="Exam-style conceptual question" class="content-section">
+    <div class="section-header">
+      <h2>58. Exam-style conceptual question</h2>
+      <button class="bookmark-btn" data-id="s-58" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Question</h3>
+<blockquote>
+<p>Explain why IDS can combine the low space requirement of DFS with the shallow-solution behavior of BFS.</p>
+</blockquote>
+<h3>Model answer structure</h3>
+<ol>
+<li>IDS performs depth-limited DFS.</li>
+<li>It starts with a small depth limit.</li>
+<li>If the goal is not found, it increases the depth limit and repeats.</li>
+<li>Like DFS, each individual pass uses depth-bounded memory.</li>
+<li>Like BFS, it does not skip a shallower solution and systematically increases the explored depth.</li>
+<li>Under unit step costs, the lecture states IDS is complete and optimal.</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 59: Why search strategy analysis matters -->
+  <section id="s-59" data-search-section="Why search strategy analysis matters" class="content-section">
+    <div class="section-header">
+      <h2>59. Why search strategy analysis matters</h2>
+      <button class="bookmark-btn" data-id="s-59" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Search algorithms are not just different code implementations.</p>
+<p>They represent different assumptions and trade-offs.</p>
+<div class="ascii-box"><pre>SEARCH STRATEGY
+                          |
+          ┌───────────────┼───────────────┐
+          ▼               ▼               ▼
+      What first?      Memory?          Guarantee?
+          |               |               |
+      depth/cost       high/low      complete/optimal</pre></div>
+<p>A good AI engineer therefore does not ask:</p>
+<blockquote>
+<p>“Which algorithm do I remember?”</p>
+</blockquote>
+<p>They ask:</p>
+<blockquote>
+<p>“What does the problem structure allow me to exploit?”</p>
+</blockquote>
+<p>That is the beginning of intelligent problem solving.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 60: Connection to the next chapter -->
+  <section id="s-60" data-search-section="Connection to the next chapter" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>60. Connection to the next chapter</h2>
+      <button class="bookmark-btn" data-id="s-60" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You now have a family of algorithms that make decisions using only the information already contained in the problem formulation.</p>
+<p>But sometimes that is not enough.</p>
+<p>Suppose two frontier nodes are at the same depth.</p>
+<p>BFS cannot tell whether one of them appears much more promising than the other.</p>
+<p>What if we know something like:</p>
+<blockquote>
+<p>“This city seems to be closer to the destination.”</p>
+</blockquote>
+<p>Now we have <strong>extra directional knowledge</strong>.</p>
+<p>That brings us to:</p>
+<blockquote>
+<p><strong>HEURISTICS</strong></p>
+</blockquote>
+<p>and then:</p>
+<blockquote>
+<p><strong>GREEDY BEST-FIRST SEARCH</strong></p>
+</blockquote>
+<p>and finally:</p>
+<blockquote>
+<p><strong>A*</strong></p>
+</blockquote>
+<p>So the conceptual progression is:</p>
+<div class="ascii-box"><pre>Problem formulation
+        ↓
+Uninformed search
+        ↓
+“Search without extra guidance”
+        ↓
+Why might that be inefficient?
+        ↓
+Heuristics
+        ↓
+Informed search
+        ↓
+Greedy / A*</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 61: Active recall — close the book now -->
+  <section id="s-61" data-search-section="Active recall — close the book now" class="content-section">
+    <div class="section-header">
+      <h2>61. Active recall — close the book now</h2>
+      <button class="bookmark-btn" data-id="s-61" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Do not scroll upward.</p>
+<p>Try to answer from memory.</p>
+<h3>Foundations</h3>
+<ol>
+<li>What does a search strategy decide?</li>
+<li>What is the difference between a state and a node?</li>
+<li>What is the frontier?</li>
+<li>What is the difference between tree search and graph search?</li>
+<li>What are <code>b</code>, <code>d</code>, and <code>m</code>?</li>
+</ol>
+<h3>BFS</h3>
+<ol>
+<li>What does BFS expand first?</li>
+<li>Why does BFS use FIFO?</li>
+<li>Is BFS complete?</li>
+<li>When is BFS optimal?</li>
+<li>Why is BFS memory-intensive?</li>
+</ol>
+<h3>DFS</h3>
+<ol>
+<li>What does DFS expand first?</li>
+<li>Why does DFS use LIFO?</li>
+<li>Why can DFS fail to be complete?</li>
+<li>Why is DFS not optimal?</li>
+<li>What are its time and space complexities?</li>
+</ol>
+<h3>DLS / IDS / UCS</h3>
+<ol>
+<li>What problem does DLS try to control?</li>
+<li>What is the main idea behind IDS?</li>
+<li>Why can IDS use less memory than BFS?</li>
+<li>How does UCS differ from BFS?</li>
+<li>When does UCS behave like BFS?</li>
+</ol>
+<h3>Big picture</h3>
+<ol>
+<li>What single question unifies the whole chapter?</li>
+</ol>
+<blockquote>
+<p><strong>Which node should I explore next, and why?</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 62: Recall answers — short form -->
+  <section id="s-62" data-search-section="Recall answers — short form" class="content-section">
+    <div class="section-header">
+      <h2>62. Recall answers — short form</h2>
+      <button class="bookmark-btn" data-id="s-62" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <ol>
+<li>The order in which nodes are expanded.</li>
+<li>State = represented configuration; node = search-tree structure containing a state plus search metadata.</li>
+<li>Generated candidate nodes waiting for further processing.</li>
+<li>Tree search may revisit repeated states; graph search tracks visited information.</li>
+<li><code>b</code> = branching factor, <code>d</code> = depth of least-cost/shallowest solution, <code>m</code> = maximum depth.</li>
+<li>Shallowest unexpanded node.</li>
+<li>FIFO naturally preserves level-order exploration.</li>
+<li>Yes, if <code>b</code> is finite.</li>
+<li>When step costs are equal/unit under the standard assumptions.</li>
+<li>It keeps a large frontier.</li>
+<li>Deepest unexpanded node.</li>
+<li>LIFO encourages depth-first behavior.</li>
+<li>Infinite depth and loops can trap it.</li>
+<li>It can find a deeper/more expensive solution before a cheaper one.</li>
+<li><code>O(b^m)</code> time, <code>O(bm)</code> space.</li>
+<li>Unlimited depth / runaway DFS behavior.</li>
+<li>Repeat depth-limited search with increasing limits.</li>
+<li>Each pass is depth-bounded rather than storing an entire broad frontier.</li>
+<li>UCS chooses by accumulated path cost rather than depth.</li>
+<li>When all step costs are equal.</li>
+<li>Which node should be explored next?</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 63: Practice set -->
+  <section id="s-63" data-search-section="Practice set" class="content-section">
+    <div class="section-header">
+      <h2>63. Practice set</h2>
+      <button class="bookmark-btn" data-id="s-63" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>A. Multiple choice</h2>
+<h3>1. Which data structure is most naturally associated with BFS?</h3>
+<p>A. Stack<br />
+B. FIFO queue<br />
+C. Priority queue by heuristic<br />
+D. Set only</p>
+<h3>2. Which search is most directly associated with LIFO behavior?</h3>
+<p>A. BFS<br />
+B. UCS<br />
+C. DFS<br />
+D. IDS</p>
+<h3>3. Which property asks whether an algorithm is guaranteed to find a solution if one exists?</h3>
+<p>A. Optimality<br />
+B. Completeness<br />
+C. Efficiency<br />
+D. Admissibility</p>
+<h3>4. Which parameter represents the maximum depth of the state space?</h3>
+<p>A. <code>b</code><br />
+B. <code>d</code><br />
+C. <code>m</code><br />
+D. <code>g</code></p>
+<h3>5. BFS is optimal under the standard lecture assumption when:</h3>
+<p>A. heuristic is admissible<br />
+B. depth is infinite<br />
+C. all step costs are equal<br />
+D. branching factor is 1</p>
+<hr />
+<h2>B. Short-answer questions</h2>
+<ol>
+<li>Define uninformed search.</li>
+<li>Explain BFS in your own words.</li>
+<li>Explain DFS in your own words.</li>
+<li>Distinguish completeness from optimality.</li>
+<li>Explain why state and node are not identical.</li>
+<li>Why is DFS's space complexity lower than BFS's in the standard analysis?</li>
+<li>What is the role of a depth limit?</li>
+<li>Why does IDS repeat work?</li>
+<li>Explain the relationship between BFS and UCS when step costs are equal.</li>
+<li>What is the main reason for using a graph-search version instead of naive tree search?</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 64: Numerical / trace questions -->
+  <section id="s-64" data-search-section="Numerical / trace questions" class="content-section">
+    <div class="section-header">
+      <h2>64. Numerical / trace questions</h2>
+      <button class="bookmark-btn" data-id="s-64" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Problem 1 — BFS trace</h2>
+<p>Given:</p>
+<div class="ascii-box"><pre>A
+        /   \
+       B     C
+      / \   / \
+     D   E F   G</pre></div>
+<p>Find the BFS expansion order under left-to-right child generation.</p>
+<p>Then state the frontier after each expansion.</p>
+<hr />
+<h2>Problem 2 — DFS trace</h2>
+<p>Use the same tree.</p>
+<p>Find the DFS order under left-to-right child generation.</p>
+<p>Stop once G is selected as the goal.</p>
+<hr />
+<h2>Problem 3 — Complexity</h2>
+<p>If:</p>
+<div class="formula-math">\[
+b=3,\quad d=4,\quad m=8
+\]</div>
+<p>write the standard asymptotic time and space expressions for BFS and DFS.</p>
+<p>Do not calculate exact node counts.</p>
+<hr />
+<h2>Problem 4 — Strategy choice</h2>
+<p>You have a problem where:</p>
+<ul>
+<li>the solution is likely shallow;</li>
+<li>every action has equal cost;</li>
+<li>memory is abundant.</li>
+</ul>
+<p>Which uninformed strategy is naturally attractive, and why?</p>
+<hr />
+<h2>Problem 5 — Trick question</h2>
+<p>Suppose DFS finds a solution first.</p>
+<p>Can you conclude that it is the shortest solution?</p>
+<p>Explain.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 65: Applied thinking -->
+  <section id="s-65" data-search-section="Applied thinking" class="content-section mode-gate">
+    <div class="section-header">
+      <h2>65. Applied thinking</h2>
+      <button class="bookmark-btn" data-id="s-65" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Scenario A — Maze</h3>
+<p>You have a maze and want the path with the fewest moves.</p>
+<p>Questions:</p>
+<ul>
+<li>Would BFS be conceptually suitable?</li>
+<li>What assumption about step cost makes its optimality statement straightforward?</li>
+<li>Why might DFS still be dangerous?</li>
+</ul>
+<h3>Scenario B — Weighted road network</h3>
+<p>Roads have different tolls or travel costs.</p>
+<p>Questions:</p>
+<ul>
+<li>Why might BFS no longer be optimal?</li>
+<li>Which uninformed strategy in this chapter directly accounts for accumulated path cost?</li>
+</ul>
+<h3>Scenario C — Infinite search space</h3>
+<p>Imagine a state space with a branch that can continue forever.</p>
+<p>Questions:</p>
+<ul>
+<li>Why is naive DFS risky?</li>
+<li>How does DLS help?</li>
+<li>How does IDS build on the idea?</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 66: Exam bridge -->
+  <section id="s-66" data-search-section="Exam bridge" class="content-section">
+    <div class="section-header">
+      <h2>66. Exam bridge</h2>
+      <button class="bookmark-btn" data-id="s-66" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p><strong>Exam Book links to create later:</strong></p>
+<ul>
+<li><code>EXAM-AI-I-C04-01</code> — Uninformed Search definition</li>
+<li><code>EXAM-AI-I-C04-02</code> — BFS algorithm + pseudocode</li>
+<li><code>EXAM-AI-I-C04-03</code> — BFS numerical/trace questions</li>
+<li><code>EXAM-AI-I-C04-04</code> — DFS algorithm + pseudocode</li>
+<li><code>EXAM-AI-I-C04-05</code> — DFS numerical/trace questions</li>
+<li><code>EXAM-AI-I-C04-06</code> — BFS vs DFS comparison</li>
+<li><code>EXAM-AI-I-C04-07</code> — Search-property table</li>
+<li><code>EXAM-AI-I-C04-08</code> — UCS/DLS/IDS extension questions</li>
+</ul>
+<h3>Likely university-style question forms</h3>
+<blockquote>
+<p>Define uninformed search and explain BFS.</p>
+<p>Explain DFS with its advantages, disadvantages and complexity.</p>
+<p>Compare BFS and DFS.</p>
+<p>Given a search tree, show the order in which BFS/DFS expands nodes.</p>
+<p>State the completeness and optimality properties of BFS and DFS.</p>
+<p>Explain why BFS is optimal only under the equal-step-cost condition.</p>
+<p>Explain why DFS can fail in infinite-depth spaces.</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 67: Answer-writing pattern for a 5-mark question -->
+  <section id="s-67" data-search-section="Answer-writing pattern for a 5-mark question" class="content-section">
+    <div class="section-header">
+      <h2>67. Answer-writing pattern for a 5-mark question</h2>
+      <button class="bookmark-btn" data-id="s-67" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>If asked:</p>
+<blockquote>
+<p><strong>“Explain BFS.”</strong></p>
+</blockquote>
+<p>A strong answer should be organized as:</p>
+<ol>
+<li>Definition</li>
+<li>Basic idea</li>
+<li>FIFO queue</li>
+<li>Pseudocode / steps</li>
+<li>Small search-tree diagram</li>
+<li>Completeness</li>
+<li>Optimality condition</li>
+<li>Time/space complexity</li>
+<li>One strength + one limitation</li>
+</ol>
+<p>Do not write a giant paragraph.</p>
+<p>Use structure.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 68: Answer-writing pattern for a comparison question -->
+  <section id="s-68" data-search-section="Answer-writing pattern for a comparison question" class="content-section">
+    <div class="section-header">
+      <h2>68. Answer-writing pattern for a comparison question</h2>
+      <button class="bookmark-btn" data-id="s-68" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For:</p>
+<blockquote>
+<p><strong>BFS vs DFS</strong></p>
+</blockquote>
+<p>Use a table.</p>
+<p>Then add one sentence explaining the most important difference:</p>
+<blockquote>
+<p>BFS prioritizes shallow nodes using FIFO; DFS prioritizes deep nodes using LIFO.</p>
+</blockquote>
+<p>This gives the examiner the central distinction immediately.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 69: Math connection -->
+  <section id="s-69" data-search-section="Math connection" class="content-section">
+    <div class="section-header">
+      <h2>69. Math connection</h2>
+      <button class="bookmark-btn" data-id="s-69" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This chapter uses only light mathematics, but it introduces the mathematical language of algorithm analysis.</p>
+<p>You should be comfortable with:</p>
+<ul>
+<li>exponents</li>
+<li>asymptotic notation</li>
+<li>geometric growth</li>
+<li>powers such as <code>b^d</code></li>
+</ul>
+<h3>Math Companion links</h3>
+<ul>
+<li><code>MATH-M02-01</code> — Exponents and powers</li>
+<li><code>MATH-M02-02</code> — Geometric growth intuition</li>
+<li><code>MATH-M02-03</code> — Big-O notation</li>
+</ul>
+<p>The deeper linear algebra/probability track is <strong>not required</strong> to understand BFS/DFS.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 70: Resource shelf -->
+  <section id="s-70" data-search-section="Resource shelf" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>70. Resource shelf</h2>
+      <button class="bookmark-btn" data-id="s-70" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Your course material — primary</h2>
+<p><strong><code>lecture-basic-search.pdf</code></strong></p>
+<p>Important sections:</p>
+<ul>
+<li>Problem solving agents and problem formulation</li>
+<li>Tree search</li>
+<li>States vs nodes</li>
+<li>Search strategy evaluation</li>
+<li>BFS</li>
+<li>UCS</li>
+<li>DFS</li>
+<li>DLS</li>
+<li>IDS</li>
+<li>summary comparison</li>
+</ul>
+<p>The lecture explicitly presents the search strategy criteria and the full uninformed family, then gives BFS and DFS properties and step-by-step frontier examples. [<code>lecture-basic-search.pdf</code>, slides 18–25, 36–49]</p>
+<h2>Structured academic course</h2>
+<p><strong>NPTEL — Artificial Intelligence: Search Methods for Problem Solving (IIT Madras)</strong><br />
+https://nptel.ac.in/courses/106106226</p>
+<p>The current NPTEL course is structured around problem-solving search and includes dedicated coverage of uninformed search, informed search and adversarial/game-playing topics.</p>
+<h2>Deeper reading</h2>
+<p><strong>Russell &amp; Norvig — Artificial Intelligence: A Modern Approach</strong></p>
+<p>Use the problem-solving and search chapters when you need:</p>
+<ul>
+<li>a more formal explanation;</li>
+<li>additional examples;</li>
+<li>search terminology beyond the minimum course notes.</li>
+</ul>
+<h2>Learning video rule</h2>
+<p>For this chapter, do not watch an entire AI course before studying the chapter.</p>
+<p>Use a focused video only when the traversal/process is difficult to visualize.</p>
+<p>Suggested search terms:</p>
+<ul>
+<li><code>BFS DFS visualization</code></li>
+<li><code>BFS vs DFS search tree</code></li>
+<li><code>uniform cost search</code></li>
+<li><code>iterative deepening search</code></li>
+</ul>
+<p>The lecture notes remain the course-specific written authority.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 71: Visual inventory for this chapter -->
+  <section id="s-71" data-search-section="Visual inventory for this chapter" class="content-section">
+    <div class="section-header">
+      <h2>71. Visual inventory for this chapter</h2>
+      <button class="bookmark-btn" data-id="s-71" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>These are <strong>teaching visuals</strong>, not decoration.</p>
+<h3>Required visual set</h3>
+<ul>
+<li><code>V-AI-I-C04-01</code> — Generic state-space/search-tree model</li>
+<li><code>V-AI-I-C04-02</code> — Frontier lifecycle</li>
+<li><code>V-AI-I-C04-03</code> — BFS level-order traversal</li>
+<li><code>V-AI-I-C04-04</code> — BFS frontier snapshots</li>
+<li><code>V-AI-I-C04-05</code> — DFS deep-path traversal</li>
+<li><code>V-AI-I-C04-06</code> — DFS stack/LIFO behavior</li>
+<li><code>V-AI-I-C04-07</code> — Infinite-depth DFS failure case</li>
+<li><code>V-AI-I-C04-08</code> — DLS cutoff line</li>
+<li><code>V-AI-I-C04-09</code> — IDS increasing limits</li>
+<li><code>V-AI-I-C04-10</code> — BFS vs DFS side-by-side</li>
+<li><code>V-AI-I-C04-11</code> — Complete uninformed-search family map</li>
+</ul>
+<h3>Recall visuals</h3>
+<p>You should eventually be able to redraw from memory:</p>
+<div class="ascii-box"><pre>BFS → FIFO → shallowest
+
+DFS → LIFO → deepest
+
+UCS → lowest g(n)
+
+DLS → DFS + limit
+
+IDS → repeated DLS with increasing limit</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 72: Chapter mastery gate -->
+  <section id="s-72" data-search-section="Chapter mastery gate" class="content-section">
+    <div class="section-header">
+      <h2>72. Chapter mastery gate</h2>
+      <button class="bookmark-btn" data-id="s-72" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Before moving to informed search, you should be able to do all of the following <strong>without opening the chapter</strong>:</p>
+<h3>Concept</h3>
+<ul>
+<li>Explain what uninformed search means.</li>
+<li>Explain the role of a search strategy.</li>
+<li>Explain state vs node.</li>
+<li>Explain frontier.</li>
+<li>Explain tree search vs graph search.</li>
+</ul>
+<h3>BFS</h3>
+<ul>
+<li>Draw BFS traversal.</li>
+<li>Explain FIFO.</li>
+<li>Write pseudocode.</li>
+<li>Dry-run a graph.</li>
+<li>State completeness and optimality conditions.</li>
+<li>State time and space complexity.</li>
+</ul>
+<h3>DFS</h3>
+<ul>
+<li>Draw DFS traversal.</li>
+<li>Explain LIFO.</li>
+<li>Write pseudocode.</li>
+<li>Explain infinite-depth/loop problems.</li>
+<li>State time and space complexity.</li>
+<li>Explain why it is not optimal.</li>
+</ul>
+<h3>Supporting strategies</h3>
+<ul>
+<li>Explain UCS in one minute.</li>
+<li>Explain DLS in one minute.</li>
+<li>Explain IDS in one minute.</li>
+<li>Explain why IDS is useful.</li>
+</ul>
+<h3>Comparison</h3>
+<p>Given any search tree, you should be able to answer:</p>
+<blockquote>
+<p><strong>“What node will this algorithm explore next, and why?”</strong></p>
+</blockquote>
+<p>If you can do that, you understand the chapter rather than simply memorizing it.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 73: Final memory sheet -->
+  <section id="s-73" data-search-section="Final memory sheet" class="content-section">
+    <div class="section-header">
+      <h2>73. Final memory sheet</h2>
+      <button class="bookmark-btn" data-id="s-73" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>The five phrases</h2>
+<blockquote>
+<p><strong>BFS:</strong> shallowest first.</p>
+<p><strong>UCS:</strong> cheapest path first.</p>
+<p><strong>DFS:</strong> deepest first.</p>
+<p><strong>DLS:</strong> deepest first, but stop at a limit.</p>
+<p><strong>IDS:</strong> increase the depth limit gradually.</p>
+</blockquote>
+<h2>The four evaluation words</h2>
+<blockquote>
+<p><strong>Complete?</strong> Will I find a solution?</p>
+<p><strong>Optimal?</strong> Will I find the best one?</p>
+<p><strong>Time?</strong> How much computation?</p>
+<p><strong>Space?</strong> How much memory?</p>
+</blockquote>
+<h2>The three symbols</h2>
+<blockquote>
+<p><code>b</code> = branching factor<br />
+<code>d</code> = solution depth<br />
+<code>m</code> = maximum depth</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 74: Bridge to MAIN-U1-C05 -->
+  <section id="s-74" data-search-section="Bridge to MAIN-U1-C05" class="content-section">
+    <div class="section-header">
+      <h2>74. Bridge to MAIN-U1-C05</h2>
+      <button class="bookmark-btn" data-id="s-74" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You have now learned how to search <strong>without extra directional knowledge</strong>.</p>
+<p>The next question is:</p>
+<blockquote>
+<p>What if we can estimate which states look promising?</p>
+</blockquote>
+<p>That introduces the idea of a <strong>heuristic</strong>:</p>
+<div class="formula-math">\[
+h(n)
+\]</div>
+<p>and takes us from:</p>
+<div class="ascii-box"><pre>UNINFORMED SEARCH
+        ↓
+No heuristic
+        ↓
+BFS / DFS / UCS / DLS / IDS
+        ↓
+Need better guidance
+        ↓
+HEURISTICS
+        ↓
+INFORMED SEARCH</pre></div>
+<p><strong>Next chapter:</strong> <code>MAIN-U1-C05 — Heuristics</code></p>
+<hr />
+<h2>Source notes</h2>
+<p><strong>Primary source used:</strong> <code>lecture-basic-search.pdf</code> (Philipp Koehn, Artificial Intelligence: Basic Search).<br />
+The chapter preserves the lecture's terminology and properties for BFS, UCS, DFS, DLS and IDS, while adding beginner-facing analogies, explanations and worked teaching examples.  </p>
+<p><strong>Course scope reference:</strong> University of Delhi / Faculty of Technology DSC-14 Artificial Intelligence and Machine Learning syllabus: Unit I explicitly names BFS and DFS under uninformed search.  </p>
+<p><strong>External structured resource:</strong> NPTEL, <em>Artificial Intelligence: Search Methods for Problem Solving</em> (IIT Madras), current course page: https://nptel.ac.in/courses/106106226</p>
+<hr />
+<p><strong>CHAPTER STATUS:</strong> Drafted to Main Book teaching standard<br />
+<strong>Next:</strong> <code>MAIN-U1-C05 — Heuristics</code></p>
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="ch03-problem-formulation.html" class="nav-btn">← Ch 3 — Problem Formulation</a>
+    <a href="ch05-heuristics.html" class="nav-btn primary">Next: Ch 5 — Heuristics →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch04-uninformed-search.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 4</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,2484 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 43: NLP Preprocessing &amp; Text Classification — AI & Machine Learning MiniBook. Tokenization, Normalization, Stemming vs Lemmatization, Stop-Words, Bag-of-Words, TF-IDF Mathematics, and Text Classifiers">
+<title>Ch 43 — NLP Preprocessing &amp; Text Classification | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-xviii">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 43 — NLP Preprocessing &amp; Text Classification</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 43 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why This Chapter Exists <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Source Boundary — What the Course Guide Supports <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. What Is NLP? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. The One-Minute Intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Teacher Explanation — English </a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Teacher Explanation — Hinglish </a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. NLP Pipeline at a Glance <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Tokenization — The First Essential Step <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Why Tokenization Is Not Trivial <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Tokenization Analogy </a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Types of Tokenization <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Normalization — Making Representation Consistent <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Stemming <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Stemming Analogy </a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Lemmatization <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Stemming vs Lemmatization <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Worked Example — Stemming vs Lemmatization <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Stop Words — Useful Idea, Not a Universal Rule <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Punctuation, Numbers, URLs and Emojis </a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. From Tokens to Numbers <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Bag of Words <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Why “Bag”? </a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Binary Presence vs Count Representation </a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. N-Grams — Reintroducing Some Order <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. TF-IDF — Giving More Weight to Informative Words <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. TF-IDF Intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. TF-IDF Worked Example <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Vector Similarity — Cosine Similarity <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Text Classification <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Text Classification Pipeline <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. A Simple Spam-Classification Example <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Which Classifier Can Be Used? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Connection to Logistic Regression </a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Multi-Class Text Classification </a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Why Text Classification Is More Than Word Matching </a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Word Embeddings — Bridge to Neural NLP </a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. One-Hot vs TF-IDF vs Embedding </a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Preprocessing Choices Can Change the Model </a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Train-Test Leakage in NLP </a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Evaluation </a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Multilabel vs Multi-Class </a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Text Classification as a General ML Pipeline </a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Full Worked Example — Sentiment Classification </a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Common NLP Preprocessing Misconceptions </a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. Failure Cases and Trade-offs </a>
+      <a href="#s-46" class="sidebar-link"><span class="link-icon">📌</span>46. Formula Card — TF-IDF <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-47" class="sidebar-link"><span class="link-icon">📌</span>47. Formula Card — Cosine Similarity </a>
+      <a href="#s-48" class="sidebar-link"><span class="link-icon">📌</span>48. Formula Card — Binary Logistic Text Classifier </a>
+      <a href="#s-49" class="sidebar-link"><span class="link-icon">📌</span>49. Comparison: Classical NLP vs Sequence-Oriented Neural NLP </a>
+      <a href="#s-50" class="sidebar-link"><span class="link-icon">📌</span>50. Exam Lens <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-51" class="sidebar-link"><span class="link-icon">📌</span>51. Active Recall </a>
+      <a href="#s-52" class="sidebar-link"><span class="link-icon">📌</span>52. Chapter Exit Test </a>
+      <a href="#s-53" class="sidebar-link"><span class="link-icon">📌</span>53. Memory Anchors </a>
+      <a href="#s-54" class="sidebar-link"><span class="link-icon">📌</span>54. Cross-Unit Connections </a>
+      <a href="#s-55" class="sidebar-link"><span class="link-icon">📌</span>55. Resource Shelf </a>
+      <a href="#s-56" class="sidebar-link"><span class="link-icon">📌</span>56. Source Boundary and Confidence </a>
+      <a href="#s-57" class="sidebar-link"><span class="link-icon">📌</span>57. Final Five-Line Summary </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link active"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit IV</span><span>›</span><span>Part XVIII — Natural Language Processing & Text Understanding</span><span>›</span><span style="color:var(--em-text)">Chapter 43</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 43 · Unit IV · Part XVIII</div>
+    <div class="chapter-part-banner part-xviii">
+      <span class="part-banner-badge">Unit IV · Part XVIII</span>
+      <span>Natural Language Processing & Text Understanding</span>
+    </div>
+    <h1 class="chapter-title">NLP Preprocessing &amp; Text Classification</h1>
+    <div class="concept-id-tag">[CONCEPT-NLP-043]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: Highest Yield (10-mark guarantee)</span>
+      <span class="chapter-meta-item">📖 ~55 min read</span>
+      <span class="chapter-meta-item">🎯 57 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>NLP Preprocessing & Text Classification:</strong> Text cleaning, Tokenization mechanisms, Porter/Snowball Stemming vs WordNet Lemmatization, Stop-word filtering, Bag-of-Words (BoW) count representation, N-grams, TF-IDF mathematical derivation \(\text{TF}(t, d) \times \log(\frac{N}{\text{DF}(t)})\), Cosine similarity, and Naive Bayes text classification.</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why This Chapter Exists</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Source Boundary — What the Course Guide Supports</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">What Is NLP?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">The One-Minute Intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Teacher Explanation — English</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Teacher Explanation — Hinglish</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">NLP Pipeline at a Glance</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Tokenization — The First Essential Step</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Why Tokenization Is Not Trivial</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Tokenization Analogy</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Types of Tokenization</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Normalization — Making Representation Consistent</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Stemming</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Stemming Analogy</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Lemmatization</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Stemming vs Lemmatization</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Worked Example — Stemming vs Lemmatization</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Stop Words — Useful Idea, Not a Universal Rule</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Punctuation, Numbers, URLs and Emojis</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">From Tokens to Numbers</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Bag of Words</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Why “Bag”?</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Binary Presence vs Count Representation</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">N-Grams — Reintroducing Some Order</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">TF-IDF — Giving More Weight to Informative Words</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">TF-IDF Intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">TF-IDF Worked Example</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Vector Similarity — Cosine Similarity</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Text Classification</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Text Classification Pipeline</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">A Simple Spam-Classification Example</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Which Classifier Can Be Used?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Connection to Logistic Regression</span></a></li>
+      <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Multi-Class Text Classification</span></a></li>
+      <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Why Text Classification Is More Than Word Matching</span></a></li>
+      <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Word Embeddings — Bridge to Neural NLP</span></a></li>
+      <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">One-Hot vs TF-IDF vs Embedding</span></a></li>
+      <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Preprocessing Choices Can Change the Model</span></a></li>
+      <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Train-Test Leakage in NLP</span></a></li>
+      <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Evaluation</span></a></li>
+      <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Multilabel vs Multi-Class</span></a></li>
+      <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Text Classification as a General ML Pipeline</span></a></li>
+      <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Full Worked Example — Sentiment Classification</span></a></li>
+      <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Common NLP Preprocessing Misconceptions</span></a></li>
+      <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">Failure Cases and Trade-offs</span></a></li>
+      <li class="toc-item"><a href="#s-46"><span class="toc-num">46</span><span class="toc-name">Formula Card — TF-IDF</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-47"><span class="toc-num">47</span><span class="toc-name">Formula Card — Cosine Similarity</span></a></li>
+      <li class="toc-item"><a href="#s-48"><span class="toc-num">48</span><span class="toc-name">Formula Card — Binary Logistic Text Classifier</span></a></li>
+      <li class="toc-item"><a href="#s-49"><span class="toc-num">49</span><span class="toc-name">Comparison: Classical NLP vs Sequence-Oriented Neural NLP</span></a></li>
+      <li class="toc-item"><a href="#s-50"><span class="toc-num">50</span><span class="toc-name">Exam Lens</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-51"><span class="toc-num">51</span><span class="toc-name">Active Recall</span></a></li>
+      <li class="toc-item"><a href="#s-52"><span class="toc-num">52</span><span class="toc-name">Chapter Exit Test</span></a></li>
+      <li class="toc-item"><a href="#s-53"><span class="toc-num">53</span><span class="toc-name">Memory Anchors</span></a></li>
+      <li class="toc-item"><a href="#s-54"><span class="toc-num">54</span><span class="toc-name">Cross-Unit Connections</span></a></li>
+      <li class="toc-item"><a href="#s-55"><span class="toc-num">55</span><span class="toc-name">Resource Shelf</span></a></li>
+      <li class="toc-item"><a href="#s-56"><span class="toc-num">56</span><span class="toc-name">Source Boundary and Confidence</span></a></li>
+      <li class="toc-item"><a href="#s-57"><span class="toc-num">57</span><span class="toc-name">Final Five-Line Summary</span></a></li>
+    </ul>
+  </div>
+
+  
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 1: Why This Chapter Exists -->
+  <section id="s-01" data-search-section="Why This Chapter Exists" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>1. Why This Chapter Exists</h2>
+      <button class="bookmark-btn" data-id="s-01" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A computer does not naturally receive a sentence as “meaningful language.”</p>
+<p>A human sees:</p>
+<blockquote>
+<p>“The students are learning artificial intelligence.”</p>
+</blockquote>
+<p>A machine-learning system eventually needs a numerical representation it can process.</p>
+<p>NLP—<strong>Natural Language Processing</strong>—is the broad area concerned with computational processing of human language.</p>
+<p>For this chapter, the syllabus path is narrower:</p>
+<div class="ascii-box"><pre>raw text
+  ↓
+preprocessing
+  ↓
+tokens / normalized text
+  ↓
+numerical representation
+  ↓
+classifier
+  ↓
+predicted class
+  ↓
+evaluation</pre></div>
+<p>The chapter focuses on the preprocessing steps explicitly named in the course guide and then builds a complete text-classification pipeline.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 2: Source Boundary — What the Course Guide Supports -->
+  <section id="s-02" data-search-section="Source Boundary — What the Course Guide Supports" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. Source Boundary — What the Course Guide Supports</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your master resource guide places the following in Unit IV:</p>
+<ul>
+<li>tokenization;</li>
+<li>stemming;</li>
+<li>lemmatization;</li>
+<li>text classification.</li>
+</ul>
+<p>For these topics, the guide identifies <strong>Stanford CS224N — NLP with Deep Learning</strong> as the primary structured resource and also lists it as the source for sequence/NLP theory, word vectors and optimization foundations relevant to NLP.</p>
+<p>The supplied University of Delhi lecture-note set does <strong>not</strong> contain a complete dedicated NLP-preprocessing or text-classification lecture. Therefore the detailed preprocessing examples, bag-of-words, TF-IDF, cosine-similarity mathematics, and end-to-end classification workflow in this chapter are <strong>standard NLP/ML expansion aligned to the syllabus</strong>, not a transcription of a supplied lecture.</p>
+<p>Primary structured resource listed in the guide:<br />
+https://web.stanford.edu/class/cs224n/</p>
+<p>Supplemental NPTEL/deep-learning resources listed in the guide can be used after the core pipeline is understood.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: What Is NLP? -->
+  <section id="s-03" data-search-section="What Is NLP?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>3. What Is NLP?</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p><strong>Natural Language Processing</strong> is the field of AI and machine learning that deals with computational representation, analysis and generation of human language.</p>
+<p>Examples:</p>
+<ul>
+<li>spam detection;</li>
+<li>sentiment classification;</li>
+<li>topic classification;</li>
+<li>language modelling;</li>
+<li>information extraction;</li>
+<li>question answering;</li>
+<li>machine translation;</li>
+<li>speech/language applications.</li>
+</ul>
+<p>For this chapter, think of NLP as a transformation problem:</p>
+<div class="formula-math">\[
+\boxed{
+\text{text} \rightarrow \text{representation} \rightarrow \text{decision}
+}
+\]</div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: The One-Minute Intuition -->
+  <section id="s-04" data-search-section="The One-Minute Intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>4. The One-Minute Intuition</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine giving a teacher 10,000 handwritten answers and asking:</p>
+<blockquote>
+<p>“Which answers are positive, negative, neutral, or abusive?”</p>
+</blockquote>
+<p>The teacher can read words.</p>
+<p>A classical ML algorithm cannot directly manipulate a raw sentence as if it understood language.</p>
+<p>So we build a pipeline:</p>
+<div class="ascii-box"><pre>sentence
+   ↓
+split into useful pieces
+   ↓
+clean / normalize where appropriate
+   ↓
+represent pieces numerically
+   ↓
+learn patterns associated with labels
+   ↓
+predict label for new text</pre></div>
+<p>The biggest idea is:</p>
+<blockquote>
+<p><strong>Text classification is supervised learning on a numerical representation of language.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: Teacher Explanation — English -->
+  <section id="s-05" data-search-section="Teacher Explanation — English" class="content-section">
+    <div class="section-header">
+      <h2>5. Teacher Explanation — English</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Before a machine-learning model can classify text, we must decide what counts as the model's input.</p>
+<p>Words, subwords or characters may become tokens.</p>
+<p>Tokens may be normalized.</p>
+<p>The collection of documents can then be converted into numerical features such as word counts or TF-IDF values, or into learned representations such as embeddings.</p>
+<p>A classifier learns a mapping:</p>
+<div class="formula-math">\[
+\text{representation} \rightarrow \text{class label}.
+\]</div>
+<p>Good NLP therefore depends not only on the classifier but also on the representation and preprocessing decisions.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: Teacher Explanation — Hinglish -->
+  <section id="s-06" data-search-section="Teacher Explanation — Hinglish" class="content-section">
+    <div class="section-header">
+      <h2>6. Teacher Explanation — Hinglish</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Computer ke liye sentence directly waise useful nahi hota jaise human ke liye hota hai.</p>
+<p>Hume sentence ko <strong>pieces mein todna</strong>, zarurat ke hisaab se normalize karna, aur phir numbers mein represent karna padta hai.</p>
+<p>Phir model seekhta hai:</p>
+<div class="ascii-box"><pre>yeh numerical pattern
+        ↓
+spam</pre></div>
+<p>ya:</p>
+<div class="ascii-box"><pre>yeh pattern
+        ↓
+positive sentiment</pre></div>
+<p>Important point:</p>
+<blockquote>
+<p><strong>Preprocessing khud classification nahi hai.</strong></p>
+</blockquote>
+<p>Preprocessing input ko usable form deta hai; classifier prediction seekhta hai.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: NLP Pipeline at a Glance -->
+  <section id="s-07" data-search-section="NLP Pipeline at a Glance" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>7. NLP Pipeline at a Glance</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="diagram-box"><pre class="mermaid">
+graph LR
+    RAW["Raw Text Documents"] --> CLEAN["Text Cleaning & Normalization<br/>(Lowercase, Punctuation)"]
+    CLEAN --> TOK["Tokenization<br/>(Word / Subword / Byte-Pair)"]
+    TOK --> STOP["Stop-Word Removal<br/>('is', 'the', 'at')"]
+    STOP --> LEMMA["Lemmatization / Stemming<br/>('running' → 'run')"]
+    LEMMA --> VEC["Feature Extraction<br/>(TF-IDF / N-Grams)"]
+    VEC --> CLF["Classification Head<br/>(Naive Bayes / Logistic Regression)"]
+    CLF --> OUT["Predicted Class & Probabilities"]
+</pre></div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher explanation — Hinglish</div>
+
+NLP ka core challenge ye hai ki computers words ka matlab nahi samajhte; unhe sirf numbers aur matrices samajh aate hain.
+Is pipeline ka har step shuddhata ke liye hai:
+1. **Tokenization:** Text ko todkar chhote tukde (tokens) banata hai.
+2. **Stopwords Removal:** 'the', 'is', 'in' jaise aam shabd jo sentiment ya category mein koi information add nahi karte, unhe nikaal deta hai.
+3. **Lemmatization:** Vocabulary ko compress karta hai ('studies', 'studying', 'studied' sabka base word 'study' ban jata hai).
+4. **TF-IDF:** Har word ko ek statistical score deta hai: jo word is document mein bohot baar aaye (TF high) lekin baaki sabhi documents mein durlabh ho (IDF high), wohi us document ka আসল keyword hai!
+
+
+
+
+<div class="diagram-box"><pre class="mermaid">
+graph LR
+    RAW["Raw Text Documents"] --> CLEAN["Text Cleaning & Normalization<br/>(Lowercase, Punctuation)"]
+    CLEAN --> TOK["Tokenization<br/>(Word / Subword / Byte-Pair)"]
+    TOK --> STOP["Stop-Word Removal<br/>('is', 'the', 'at')"]
+    STOP --> LEMMA["Lemmatization / Stemming<br/>('running' → 'run')"]
+    LEMMA --> VEC["Feature Extraction<br/>(TF-IDF / N-Grams)"]
+    VEC --> CLF["Classification Head<br/>(Naive Bayes / Logistic Regression)"]
+    CLF --> OUT["Predicted Class & Probabilities"]
+</pre></div>
+
+
+
+</div>
+
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher explanation — Hinglish</div>
+
+NLP ka core challenge ye hai ki computers words ka matlab nahi samajhte; unhe sirf numbers aur matrices samajh aate hain.
+Is pipeline ka har step shuddhata ke liye hai:
+1. **Tokenization:** Text ko todkar chhote tukde (tokens) banata hai.
+2. **Stopwords Removal:** 'the', 'is', 'in' jaise aam shabd jo sentiment ya category mein koi information add nahi karte, unhe nikaal deta hai.
+3. **Lemmatization:** Vocabulary ko compress karta hai ('studies', 'studying', 'studied' sabka base word 'study' ban jata hai).
+4. **TF-IDF:** Har word ko ek statistical score deta hai: jo word is document mein bohot baar aaye (TF high) lekin baaki sabhi documents mein durlabh ho (IDF high), wohi us document ka আসল keyword hai!
+
+
+
+
+<div class="ascii-box"><pre>RAW DOCUMENT
+                      │
+                      ▼
+               text normalization
+                      │
+                      ▼
+                  TOKENIZATION
+                      │
+                      ▼
+          stemming / lemmatization
+                 (when useful)
+                      │
+                      ▼
+            NUMERICAL REPRESENTATION
+           ┌──────────┴───────────┐
+           │                      │
+       BoW / TF-IDF          embeddings
+           │                      │
+           └──────────┬───────────┘
+                      ▼
+                  CLASSIFIER
+                      ▼
+                  prediction
+                      ▼
+                  evaluation</pre></div>
+
+
+
+This is a conceptual pipeline, not a requirement that every project must apply every step.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: Tokenization — The First Essential Step -->
+  <section id="s-08" data-search-section="Tokenization — The First Essential Step" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>8. Tokenization — The First Essential Step</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>8.1 Definition</h2>
+<p><strong>Tokenization</strong> is the process of dividing text into units called <strong>tokens</strong>.</p>
+<p>A token might be:</p>
+<ul>
+<li>a word;</li>
+<li>a subword;</li>
+<li>a character;</li>
+<li>or another task-specific unit.</li>
+</ul>
+<p>For a simple word tokenizer:</p>
+<div class="ascii-box"><pre>&quot;Machine learning is useful&quot;</pre></div>
+<p>may become:</p>
+<div class="ascii-box"><pre>[&quot;Machine&quot;, &quot;learning&quot;, &quot;is&quot;, &quot;useful&quot;]</pre></div>
+<p>The tokenizer determines what the model can treat as a separate unit.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: Why Tokenization Is Not Trivial -->
+  <section id="s-09" data-search-section="Why Tokenization Is Not Trivial" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>9. Why Tokenization Is Not Trivial</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Consider:</p>
+<div class="ascii-box"><pre>&quot;I can&#x27;t attend.&quot;</pre></div>
+<p>Possible tokenization choices include:</p>
+<div class="ascii-box"><pre>[&quot;I&quot;, &quot;can&#x27;t&quot;, &quot;attend&quot;, &quot;.&quot;]</pre></div>
+<p>or a more decomposed representation:</p>
+<div class="ascii-box"><pre>[&quot;I&quot;, &quot;ca&quot;, &quot;n&#x27;t&quot;, &quot;attend&quot;, &quot;.&quot;]</pre></div>
+<p>A social-media sentence introduces more cases:</p>
+<div class="ascii-box"><pre>&quot;Great!!! 😭 #examday&quot;</pre></div>
+<p>Questions appear immediately:</p>
+<ul>
+<li>Should punctuation be separate?</li>
+<li>Should emojis be preserved?</li>
+<li>Should hashtags be split?</li>
+<li>Should URLs become special tokens?</li>
+<li>Should contractions remain whole?</li>
+</ul>
+<p>There is therefore no universal tokenization rule that is best for every task.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: Tokenization Analogy -->
+  <section id="s-10" data-search-section="Tokenization Analogy" class="content-section">
+    <div class="section-header">
+      <h2>10. Tokenization Analogy</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine a recipe written as one giant string:</p>
+<div class="ascii-box"><pre>2cupsflour1cuppani1spoonsalt...</pre></div>
+<p>A human cook would first separate useful units:</p>
+<div class="ascii-box"><pre>2 cups | flour | 1 cup | water | 1 spoon | salt</pre></div>
+<p>Tokenization does something analogous for language.</p>
+<p>The exact “cut points” matter because later stages operate on the resulting pieces.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: Types of Tokenization -->
+  <section id="s-11" data-search-section="Types of Tokenization" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>11. Types of Tokenization</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Word-level</h3>
+<div class="ascii-box"><pre>&quot;deep learning&quot;
+→ [deep, learning]</pre></div>
+<p>Easy to understand, but rare/unseen words can be a problem.</p>
+<h3>Character-level</h3>
+<div class="ascii-box"><pre>&quot;cat&quot;
+→ [c, a, t]</pre></div>
+<p>Vocabulary can be small, but sequences become much longer.</p>
+<h3>Subword-level</h3>
+<p>A word may be decomposed into smaller meaningful or frequent pieces.</p>
+<p>Subword approaches reduce the out-of-vocabulary problem while keeping sequences shorter than pure character-level representations in many settings.</p>
+<p>Modern NLP systems frequently use subword-style tokenization, but the syllabus focus here is the underlying preprocessing idea rather than one specific tokenizer implementation.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: Normalization — Making Representation Consistent -->
+  <section id="s-12" data-search-section="Normalization — Making Representation Consistent" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>12. Normalization — Making Representation Consistent</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Normalization means applying transformations that reduce unnecessary variation.</p>
+<p>Possible examples include:</p>
+<ul>
+<li>converting case;</li>
+<li>standardizing whitespace;</li>
+<li>normalizing certain punctuation;</li>
+<li>handling repeated symbols;</li>
+<li>mapping known variants to a common form.</li>
+</ul>
+<p>Example:</p>
+<div class="ascii-box"><pre>&quot;Machine Learning&quot;
+&quot;machine learning&quot;
+&quot;MACHINE LEARNING&quot;</pre></div>
+<p>A lowercasing step could map all three to:</p>
+<div class="ascii-box"><pre>&quot;machine learning&quot;</pre></div>
+<p>But normalization is <strong>task-dependent</strong>.</p>
+<p>Case can carry information.</p>
+<p>For example:</p>
+<div class="ascii-box"><pre>US
+us</pre></div>
+<p>can mean different things.</p>
+<p>Therefore:</p>
+<blockquote>
+<p><strong>Do not normalize information away merely because it looks inconvenient.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: Stemming -->
+  <section id="s-13" data-search-section="Stemming" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>13. Stemming</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Misconception — Common Exam Trap</div>
+
+**Mistake:** Stemming aur Lemmatization ek hi cheez hain.
+**Reality:** Dono mein zameen-aasmaan ka farak hai:
+- **Stemming (Rule-based chopping):** Porter/Snowball stemmer bas end ke letters kat deta hai bina dictionary check kiye. Example: `"better"` $\to$ `"better"`, `"universe"` $\to$ `"univers"`. Yeh grammatically galat words bana sakta hai.
+- **Lemmatization (Vocabulary & Morphological analysis):** WordNet dictionary aur Part-of-Speech (POS) tag use karta hai. Example: `"better"` $\to$ `"good"`, `"running"` (verb) $\to$ `"run"`. Yeh hamesha meaningful valid root word (lemma) deta hai.
+
+</div>
+
+<div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Misconception — Common Exam Trap</div>
+
+**Mistake:** Stemming aur Lemmatization ek hi cheez hain.
+**Reality:** Dono mein zameen-aasmaan ka farak hai:
+- **Stemming (Rule-based chopping):** Porter/Snowball stemmer bas end ke letters kat deta hai bina dictionary check kiye. Example: `"better"` $\to$ `"better"`, `"universe"` $\to$ `"univers"`. Yeh grammatically galat words bana sakta hai.
+- **Lemmatization (Vocabulary & Morphological analysis):** WordNet dictionary aur Part-of-Speech (POS) tag use karta hai. Example: `"better"` $\to$ `"good"`, `"running"` (verb) $\to$ `"run"`. Yeh hamesha meaningful valid root word (lemma) deta hai.
+
+
+## 13.1 Definition
+
+**Stemming** reduces words toward a common stem, often using rule-based suffix stripping.
+
+For example, an English stemmer might map related forms such as:
+
+
+
+<div class="ascii-box"><pre>connect
+connected
+connecting
+connection</pre></div>
+
+
+
+toward a common stem-like representation.
+
+The result does **not necessarily have to be a valid dictionary word**.
+
+That is the key distinction.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: Stemming Analogy -->
+  <section id="s-14" data-search-section="Stemming Analogy" class="content-section">
+    <div class="section-header">
+      <h2>14. Stemming Analogy</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Think of stemming as quickly chopping different forms toward a shared root-like piece.</p>
+<div class="ascii-box"><pre>walking
+walked
+walker
+walks
+  ↓
+common reduced form</pre></div>
+<p>The method is often:</p>
+<div class="ascii-box"><pre>fast
+mechanical
+rule-based</pre></div>
+<p>but can create forms that are linguistically awkward.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: Lemmatization -->
+  <section id="s-15" data-search-section="Lemmatization" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>15. Lemmatization</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>15.1 Definition</h2>
+<p><strong>Lemmatization</strong> maps a word to a linguistically meaningful base form called its <strong>lemma</strong>.</p>
+<p>For example, depending on the linguistic analysis:</p>
+<div class="ascii-box"><pre>am
+is
+are
+was
+were</pre></div>
+<p>may be mapped to:</p>
+<div class="ascii-box"><pre>be</pre></div>
+<p>Similarly:</p>
+<div class="ascii-box"><pre>better</pre></div>
+<p>may be mapped to a base form such as:</p>
+<div class="ascii-box"><pre>good</pre></div>
+<p>when the lemmatizer uses the appropriate linguistic information.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: Stemming vs Lemmatization -->
+  <section id="s-16" data-search-section="Stemming vs Lemmatization" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>16. Stemming vs Lemmatization</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This comparison is directly exam-relevant.</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Property</th>
+<th>Stemming</th>
+<th>Lemmatization</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Main idea</td>
+<td>reduce word mechanically</td>
+<td>map to linguistic base form</td>
+</tr>
+<tr>
+<td>Typical mechanism</td>
+<td>rules / suffix reduction</td>
+<td>morphology + linguistic information</td>
+</tr>
+<tr>
+<td>Output</td>
+<td>may not be a valid word</td>
+<td>intended to be a valid lemma</td>
+</tr>
+<tr>
+<td>Computational cost</td>
+<td>usually lower</td>
+<td>usually higher</td>
+</tr>
+<tr>
+<td>Language awareness</td>
+<td>relatively limited</td>
+<td>greater</td>
+</tr>
+<tr>
+<td>Best described as</td>
+<td>aggressive normalization</td>
+<td>linguistically informed normalization</td>
+</tr>
+</tbody>
+</table></div>
+<p>Memory anchor:</p>
+<blockquote>
+<p><strong>Stem = chopped-down form. Lemma = dictionary-style base form.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: Worked Example — Stemming vs Lemmatization -->
+  <section id="s-17" data-search-section="Worked Example — Stemming vs Lemmatization" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>17. Worked Example — Stemming vs Lemmatization</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the input is:</p>
+<div class="ascii-box"><pre>&quot;The children were running quickly.&quot;</pre></div>
+<p>Possible lemmatized representation might include:</p>
+<div class="ascii-box"><pre>child
+be
+run
+quickly</pre></div>
+<p>A stemmer may produce mechanically reduced forms that are less natural.</p>
+<p>The exact output depends on the algorithm and language.</p>
+<p>Therefore, in an exam, explain the <strong>principle</strong>, not a claimed universal stemmer output.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: Stop Words — Useful Idea, Not a Universal Rule -->
+  <section id="s-18" data-search-section="Stop Words — Useful Idea, Not a Universal Rule" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>18. Stop Words — Useful Idea, Not a Universal Rule</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Stop words are very frequent words that are sometimes removed from a bag-of-words style representation.</p>
+<p>Examples in English may include:</p>
+<div class="ascii-box"><pre>is
+am
+the
+of
+and</pre></div>
+<p>A classical pipeline may remove them to reduce vocabulary size.</p>
+<p>But automatic removal can destroy information.</p>
+<p>Consider:</p>
+<div class="ascii-box"><pre>&quot;not good&quot;</pre></div>
+<p>If “not” is removed, we might retain:</p>
+<div class="ascii-box"><pre>&quot;good&quot;</pre></div>
+<p>which changes the meaning.</p>
+<p>Therefore:</p>
+<blockquote>
+<p><strong>Stop-word removal is a preprocessing choice, not a law of NLP.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: Punctuation, Numbers, URLs and Emojis -->
+  <section id="s-19" data-search-section="Punctuation, Numbers, URLs and Emojis" class="content-section">
+    <div class="section-header">
+      <h2>19. Punctuation, Numbers, URLs and Emojis</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Preprocessing must consider the task.</p>
+<p>For sentiment analysis:</p>
+<div class="ascii-box"><pre>&quot;good!!!&quot;</pre></div>
+<p>may contain useful intensity information.</p>
+<p>For financial text:</p>
+<div class="ascii-box"><pre>₹10,000
++3.5%</pre></div>
+<p>numbers may be essential.</p>
+<p>For social-media classification:</p>
+<div class="ascii-box"><pre>😂
+🔥
+#winning</pre></div>
+<p>may carry strong signal.</p>
+<p>For spam detection:</p>
+<div class="ascii-box"><pre>http://...</pre></div>
+<p>may be informative.</p>
+<p>So:</p>
+<blockquote>
+<p><strong>Cleaning text means deciding which information is noise and which information is signal.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: From Tokens to Numbers -->
+  <section id="s-20" data-search-section="From Tokens to Numbers" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>20. From Tokens to Numbers</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A classifier expects numerical features.</p>
+<p>Suppose we have documents:</p>
+<div class="ascii-box"><pre>D1: &quot;machine learning is useful&quot;
+D2: &quot;deep learning is useful&quot;
+D3: &quot;machine vision is useful&quot;</pre></div>
+<p>A vocabulary might be:</p>
+<div class="ascii-box"><pre>[deep, is, learning, machine, useful, vision]</pre></div>
+<p>Now each document can be represented as a vector.</p>
+<p>For example:</p>
+<div class="ascii-box"><pre>D1 → [0,1,1,1,1,0]
+D2 → [1,1,1,0,1,0]
+D3 → [0,1,0,1,1,1]</pre></div>
+<p>This is the basic <strong>bag-of-words (BoW)</strong> idea.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: Bag of Words -->
+  <section id="s-21" data-search-section="Bag of Words" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>21. Bag of Words</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Definition</h2>
+<p>Bag of Words represents a document using counts or binary indicators of vocabulary items, while largely ignoring word order.</p>
+<p>For vocabulary:</p>
+<div class="ascii-box"><pre>[cat, dog, eats]</pre></div>
+<p>sentence:</p>
+<div class="ascii-box"><pre>&quot;dog eats dog&quot;</pre></div>
+<p>count vector:</p>
+<div class="ascii-box"><pre>[0, 2, 1]</pre></div>
+<p>The representation knows:</p>
+<ul>
+<li>dog appeared twice;</li>
+<li>eats appeared once.</li>
+</ul>
+<p>But it does not directly preserve the original sequence.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: Why “Bag”? -->
+  <section id="s-22" data-search-section="Why “Bag”?" class="content-section">
+    <div class="section-header">
+      <h2>22. Why “Bag”?</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine putting all words into a bag and forgetting the order in which they entered.</p>
+<div class="ascii-box"><pre>&quot;dog bites man&quot;</pre></div>
+<p>and</p>
+<div class="ascii-box"><pre>&quot;man bites dog&quot;</pre></div>
+<p>contain the same individual words.</p>
+<p>A pure unigram BoW representation can therefore be identical for the two sentences.</p>
+<p>This demonstrates a major limitation:</p>
+<blockquote>
+<p><strong>Bag-of-words captures occurrence information but loses much of the word-order structure.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: Binary Presence vs Count Representation -->
+  <section id="s-23" data-search-section="Binary Presence vs Count Representation" class="content-section">
+    <div class="section-header">
+      <h2>23. Binary Presence vs Count Representation</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For vocabulary:</p>
+<div class="ascii-box"><pre>[apple, banana, orange]</pre></div>
+<p>Document:</p>
+<div class="ascii-box"><pre>apple banana banana</pre></div>
+<h3>Binary representation</h3>
+<div class="ascii-box"><pre>[1,1,0]</pre></div>
+<h3>Count representation</h3>
+<div class="ascii-box"><pre>[1,2,0]</pre></div>
+<p>The correct representation depends on the model and task.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: N-Grams — Reintroducing Some Order -->
+  <section id="s-24" data-search-section="N-Grams — Reintroducing Some Order" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>24. N-Grams — Reintroducing Some Order</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>An <strong>n-gram</strong> is a contiguous sequence of \(n\) tokens.</p>
+<p>For:</p>
+<div class="ascii-box"><pre>&quot;machine learning is useful&quot;</pre></div>
+<h3>Unigrams</h3>
+<div class="ascii-box"><pre>machine
+learning
+is
+useful</pre></div>
+<h3>Bigrams</h3>
+<div class="ascii-box"><pre>machine learning
+learning is
+is useful</pre></div>
+<h3>Trigrams</h3>
+<div class="ascii-box"><pre>machine learning is
+learning is useful</pre></div>
+<p>N-grams preserve some local word-order information.</p>
+<p>But increasing \(n\) can dramatically increase the feature space.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: TF-IDF — Giving More Weight to Informative Words -->
+  <section id="s-25" data-search-section="TF-IDF — Giving More Weight to Informative Words" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>25. TF-IDF — Giving More Weight to Informative Words</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Simple frequency can overvalue words that occur in nearly every document.</p>
+<p>Suppose every document contains:</p>
+<div class="ascii-box"><pre>&quot;the&quot;</pre></div>
+<p>Then “the” does not distinguish documents well.</p>
+<p>TF-IDF addresses this by combining:</p>
+<ul>
+<li>term frequency (TF);</li>
+<li>inverse document frequency (IDF).</li>
+</ul>
+<p>A common IDF form is:</p>
+<div class="formula-math">\[
+\boxed{
+IDF(t)=\log\frac{N}{df(t)}
+}
+\]</div>
+<p>where:</p>
+<ul>
+<li>\(N\) = number of documents;</li>
+<li>\(df(t)\) = number of documents containing term \(t\).</li>
+</ul>
+<p>A common TF-IDF form is:</p>
+<div class="formula-math">\[
+\boxed{
+TFIDF(t,d)=TF(t,d)\times IDF(t)
+}
+\]</div>
+<p>Definitions vary slightly between implementations because of smoothing and TF normalization choices.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: TF-IDF Intuition -->
+  <section id="s-26" data-search-section="TF-IDF Intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>26. TF-IDF Intuition</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Think of a classroom vocabulary.</p>
+<p>If everyone uses the word:</p>
+<div class="ascii-box"><pre>&quot;student&quot;</pre></div>
+<p>it tells you little about which assignment a student is discussing.</p>
+<p>If only a few documents use:</p>
+<div class="ascii-box"><pre>&quot;backpropagation&quot;</pre></div>
+<p>that word may be much more informative for distinguishing technical documents.</p>
+<p>Hence:</p>
+<div class="ascii-box"><pre>frequent in one document
+        +
+rare across the document collection
+        ↓
+high discriminative value</pre></div>
+<p>This is the intuition behind TF-IDF.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: TF-IDF Worked Example -->
+  <section id="s-27" data-search-section="TF-IDF Worked Example" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>27. TF-IDF Worked Example</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+def compute_tf_idf(corpus):
+    &quot;&quot;&quot;Pure NumPy calculation of TF-IDF matrix for a collection of documents.&quot;&quot;&quot;
+    tokenized = [doc.lower().split() for doc in corpus]
+    vocab = sorted(list(set(word for doc in tokenized for word in doc)))
+    word_to_idx = {w: i for i, w in enumerate(vocab)}
+    N = len(corpus)
+    
+    tf = np.zeros((N, len(vocab)))
+    df = np.zeros(len(vocab))
+    
+    for i, doc in enumerate(tokenized):
+        for word in doc:
+            tf[i, word_to_idx[word]] += 1
+        tf[i] = tf[i] / len(doc)  # Normalized term frequency
+        for word in set(doc):
+            df[word_to_idx[word]] += 1
+            
+    # Smooth IDF formulation: log(N / (1 + df))
+    idf = np.log((N + 1) / (1 + df)) + 1.0
+    tfidf = tf * idf
+    
+    # L2 normalize rows
+    norms = np.linalg.norm(tfidf, axis=1, keepdims=True)
+    norms[norms == 0] = 1.0
+    return tfidf / norms, vocab
+
+docs = [&quot;machine learning is intelligent&quot;, &quot;deep learning is powerful learning&quot;]
+mat, vocab = compute_tf_idf(docs)
+print(&quot;Vocabulary:&quot;, vocab)
+print(&quot;TF-IDF Matrix Shape:&quot;, mat.shape)
+print(&quot;Doc 0 TF-IDF:
+&quot;, np.round(mat[0], 3))</code></pre></div>
+<p>Suppose there are:</p>
+<div class="formula-math">\[
+N=100
+\]</div>
+<p>documents.</p>
+<p>A term appears in:</p>
+<div class="formula-math">\[
+df(t)=10
+\]</div>
+<p>documents.</p>
+<p>Ignoring smoothing:</p>
+<div class="formula-math">\[
+IDF(t)=\log\frac{100}{10}=\log(10).
+\]</div>
+<p>If the term frequency in a particular document is:</p>
+<div class="formula-math">\[
+TF(t,d)=3,
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+TFIDF(t,d)=3\log(10).
+\]</div>
+<p>The exact numerical value depends on the logarithm base and TF convention; what matters conceptually is that the term gets a weight larger than a term occurring in almost every document.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: Vector Similarity — Cosine Similarity -->
+  <section id="s-28" data-search-section="Vector Similarity — Cosine Similarity" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>28. Vector Similarity — Cosine Similarity</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Once text is represented as vectors, we can measure similarity.</p>
+<p>The cosine similarity between vectors \(x\) and \(y\) is:</p>
+<div class="formula-math">\[
+\boxed{
+\cos\theta
+=
+\frac{x^Ty}{\|x\|_2\|y\|_2}
+}
+\]</div>
+<p>Interpretation:</p>
+<ul>
+<li>near 1 → similar direction;</li>
+<li>near 0 → little directional similarity;</li>
+<li>near -1 → opposite direction in settings where negative coordinates occur.</li>
+</ul>
+<p>For ordinary nonnegative bag-of-words/TF-IDF vectors, values are typically in \([0,1]\).</p>
+<p>Cosine similarity is especially useful because document length can differ while the directional pattern remains informative.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 29: Text Classification -->
+  <section id="s-29" data-search-section="Text Classification" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>29. Text Classification</h2>
+      <button class="bookmark-btn" data-id="s-29" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Definition</h2>
+<p><strong>Text classification</strong> is the supervised-learning task of assigning one or more labels to a text item.</p>
+<p>Examples:</p>
+<div class="ascii-box"><pre>email → spam / not spam
+review → positive / negative / neutral
+article → sports / politics / technology / ...
+message → safe / unsafe / ...</pre></div>
+<p>Let:</p>
+<div class="formula-math">\[
+D=\{(x_i,y_i)\}_{i=1}^{n}
+\]</div>
+<p>where:</p>
+<ul>
+<li>\(x_i\) = text representation;</li>
+<li>\(y_i\) = label.</li>
+</ul>
+<p>We learn a function:</p>
+<div class="formula-math">\[
+\hat f:x\rightarrow y.
+\]</div>
+<p>This connects directly to the supervised-learning framework from Unit II.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 30: Text Classification Pipeline -->
+  <section id="s-30" data-search-section="Text Classification Pipeline" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>30. Text Classification Pipeline</h2>
+      <button class="bookmark-btn" data-id="s-30" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>LABELED TEXT DATA
+                  │
+                  ▼
+           inspect the data
+                  │
+                  ▼
+            split train/test
+                  │
+                  ▼
+           preprocess text
+                  │
+                  ▼
+        tokenize / normalize
+                  │
+                  ▼
+       represent numerically
+         ┌────────┴────────┐
+         │                 │
+       BoW /           TF-IDF /
+      n-grams            embeddings
+         │                 │
+         └────────┬────────┘
+                  ▼
+             train model
+                  │
+                  ▼
+            predict classes
+                  │
+                  ▼
+        confusion matrix / F1</pre></div>
+<p>This is the full end-to-end story.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 31: A Simple Spam-Classification Example -->
+  <section id="s-31" data-search-section="A Simple Spam-Classification Example" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>31. A Simple Spam-Classification Example</h2>
+      <button class="bookmark-btn" data-id="s-31" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose training examples are:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Message</th>
+<th>Label</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>“Win a free phone now”</td>
+<td>Spam</td>
+</tr>
+<tr>
+<td>“Meeting at 4 PM”</td>
+<td>Not spam</td>
+</tr>
+<tr>
+<td>“Claim your free prize”</td>
+<td>Spam</td>
+</tr>
+<tr>
+<td>“Please send the report”</td>
+<td>Not spam</td>
+</tr>
+</tbody>
+</table></div>
+<p>After tokenization and vectorization, words such as:</p>
+<div class="ascii-box"><pre>free
+win
+prize
+claim</pre></div>
+<p>may become informative features.</p>
+<p>A classifier learns relationships between feature vectors and labels.</p>
+<p>For a new message:</p>
+<div class="ascii-box"><pre>&quot;Claim your free gift&quot;</pre></div>
+<p>the system computes its feature vector and predicts a class.</p>
+<p>The important pipeline is:</p>
+<div class="formula-math">\[
+\text{message}
+\rightarrow
+\text{features}
+\rightarrow
+\text{classifier}
+\rightarrow
+\text{class}
+\]</div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 32: Which Classifier Can Be Used? -->
+  <section id="s-32" data-search-section="Which Classifier Can Be Used?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>32. Which Classifier Can Be Used?</h2>
+      <button class="bookmark-btn" data-id="s-32" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Text classification does not require one universal classifier.</p>
+<p>Possible choices include:</p>
+<ul>
+<li>logistic regression;</li>
+<li>Naive Bayes;</li>
+<li>support vector machines;</li>
+<li>decision trees / ensembles;</li>
+<li>neural networks;</li>
+<li>sequence models;</li>
+<li>other learned architectures.</li>
+</ul>
+<p>For a first classical baseline, <strong>logistic regression with TF-IDF features</strong> is an especially useful conceptual example because it directly connects Unit IV NLP to the Unit II material on logistic regression.</p>
+<p>This does not mean logistic regression is the only suitable text classifier.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 33: Connection to Logistic Regression -->
+  <section id="s-33" data-search-section="Connection to Logistic Regression" class="content-section">
+    <div class="section-header">
+      <h2>33. Connection to Logistic Regression</h2>
+      <button class="bookmark-btn" data-id="s-33" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the text has been transformed into a vector:</p>
+<div class="formula-math">\[
+x\in\mathbb R^d.
+\]</div>
+<p>For binary classification, logistic regression computes:</p>
+<div class="formula-math">\[
+z=w^Tx+b
+\]</div>
+<p>followed by:</p>
+<div class="formula-math">\[
+\boxed{
+\hat p=\sigma(z)=\frac{1}{1+e^{-z}}
+}
+\]</div>
+<p>Then a threshold may be used to convert the probability into a class prediction.</p>
+<p>So the NLP pipeline becomes:</p>
+<div class="ascii-box"><pre>text
+ ↓
+TF-IDF vector x
+ ↓
+wᵀx + b
+ ↓
+sigmoid
+ ↓
+probability of class</pre></div>
+<p>This is a powerful cross-unit connection.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 34: Multi-Class Text Classification -->
+  <section id="s-34" data-search-section="Multi-Class Text Classification" class="content-section">
+    <div class="section-header">
+      <h2>34. Multi-Class Text Classification</h2>
+      <button class="bookmark-btn" data-id="s-34" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>If there are more than two classes, a common approach is to produce one score per class.</p>
+<p>For classes:</p>
+<div class="ascii-box"><pre>sports
+technology
+finance</pre></div>
+<p>we may use a score vector:</p>
+<div class="formula-math">\[
+z\in\mathbb R^K.
+\]</div>
+<p>Softmax converts scores into a probability distribution:</p>
+<div class="formula-math">\[
+\boxed{
+P(y=k\mid x)=
+\frac{e^{z_k}}
+{\sum_{j=1}^{K}e^{z_j}}
+}
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\sum_kP(y=k\mid x)=1.
+\]</div>
+<p>The class with the largest predicted probability can be selected as the predicted class in a standard multiclass setup.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 35: Why Text Classification Is More Than Word Matching -->
+  <section id="s-35" data-search-section="Why Text Classification Is More Than Word Matching" class="content-section">
+    <div class="section-header">
+      <h2>35. Why Text Classification Is More Than Word Matching</h2>
+      <button class="bookmark-btn" data-id="s-35" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a classifier sees:</p>
+<div class="ascii-box"><pre>&quot;not good&quot;</pre></div>
+<p>A naive unigram representation produces:</p>
+<div class="ascii-box"><pre>not
+
+ good</pre></div>
+<p>But the meaning comes from their relationship.</p>
+<p>Now compare:</p>
+<div class="ascii-box"><pre>&quot;good&quot;
+&quot;not good&quot;</pre></div>
+<p>A purely frequency-based system can struggle when the representation fails to capture composition or context.</p>
+<p>This motivates:</p>
+<ul>
+<li>n-grams;</li>
+<li>richer features;</li>
+<li>word embeddings;</li>
+<li>sequence models;</li>
+<li>modern contextual language models.</li>
+</ul>
+<p>The important progression is:</p>
+<div class="ascii-box"><pre>word counts
+  ↓
+local word combinations
+  ↓
+learned vector representations
+  ↓
+context-sensitive models</pre></div>
+<p>Only the earlier stages are required for the core preprocessing path here; later stages are included as conceptual bridges.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 36: Word Embeddings — Bridge to Neural NLP -->
+  <section id="s-36" data-search-section="Word Embeddings — Bridge to Neural NLP" class="content-section">
+    <div class="section-header">
+      <h2>36. Word Embeddings — Bridge to Neural NLP</h2>
+      <button class="bookmark-btn" data-id="s-36" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>An embedding maps a token to a dense vector.</p>
+<p>Conceptually:</p>
+<div class="formula-math">\[
+\text{word}
+\rightarrow
+\mathbb R^d
+\]</div>
+<p>For example:</p>
+<div class="ascii-box"><pre>king   → vector
+queen  → vector
+apple  → vector</pre></div>
+<p>The vectors are learned so that useful relationships in language can be represented geometrically.</p>
+<p>This is a major difference from one-hot representations.</p>
+<h3>One-hot</h3>
+<p>Vocabulary size = \(V\).</p>
+<p>A token is represented by a sparse vector of length \(V\).</p>
+<h3>Embedding</h3>
+<p>A token is represented by a learned dense vector of length \(d\), usually with:</p>
+<div class="formula-math">\[
+ d \ll V
+\]</div>
+<p>in the conceptual setup.</p>
+<p>Embeddings provide the bridge from classical text features to neural NLP.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 37: One-Hot vs TF-IDF vs Embedding -->
+  <section id="s-37" data-search-section="One-Hot vs TF-IDF vs Embedding" class="content-section">
+    <div class="section-header">
+      <h2>37. One-Hot vs TF-IDF vs Embedding</h2>
+      <button class="bookmark-btn" data-id="s-37" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Representation</th>
+<th>Main information</th>
+<th>Typical property</th>
+<th>Major limitation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>One-hot</td>
+<td>token identity</td>
+<td>sparse</td>
+<td>no semantic similarity by itself</td>
+</tr>
+<tr>
+<td>Bag of Words</td>
+<td>token counts/presence</td>
+<td>sparse</td>
+<td>little/no word order</td>
+</tr>
+<tr>
+<td>TF-IDF</td>
+<td>importance across corpus</td>
+<td>sparse weighted vector</td>
+<td>still weak contextual understanding</td>
+</tr>
+<tr>
+<td>Embedding</td>
+<td>learned distributed representation</td>
+<td>dense</td>
+<td>depends on training/data/model</td>
+</tr>
+</tbody>
+</table></div>
+<p>Memory anchor:</p>
+<blockquote>
+<p><strong>BoW counts; TF-IDF reweights; embeddings learn representations.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 38: Preprocessing Choices Can Change the Model -->
+  <section id="s-38" data-search-section="Preprocessing Choices Can Change the Model" class="content-section">
+    <div class="section-header">
+      <h2>38. Preprocessing Choices Can Change the Model</h2>
+      <button class="bookmark-btn" data-id="s-38" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the original sentence is:</p>
+<div class="ascii-box"><pre>&quot;NOT amazing!!!&quot;</pre></div>
+<p>A careless pipeline might:</p>
+<ol>
+<li>lowercase;</li>
+<li>remove punctuation;</li>
+<li>remove stop words;</li>
+<li>stem;</li>
+</ol>
+<p>and produce something that loses emphasis or negation.</p>
+<p>A task-aware pipeline might preserve:</p>
+<div class="ascii-box"><pre>not
+amazing
+!!!</pre></div>
+<p>or encode these signals through a richer representation.</p>
+<p>Therefore:</p>
+<blockquote>
+<p><strong>Preprocessing is part of model design.</strong></p>
+</blockquote>
+<p>It can alter the information available to the classifier.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 39: Train-Test Leakage in NLP -->
+  <section id="s-39" data-search-section="Train-Test Leakage in NLP" class="content-section">
+    <div class="section-header">
+      <h2>39. Train-Test Leakage in NLP</h2>
+      <button class="bookmark-btn" data-id="s-39" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A common mistake is to build vocabulary statistics using the entire dataset before the split.</p>
+<p>For example, with TF-IDF:</p>
+<div class="ascii-box"><pre>wrong:
+all documents
+   ↓
+fit vocabulary / IDF
+   ↓
+split into train and test</pre></div>
+<p>This can leak information from the test set into the representation process.</p>
+<p>A cleaner workflow is:</p>
+<div class="ascii-box"><pre>split data
+  ↓
+fit representation on training data
+  ↓
+transform training data
+  ↓
+transform validation/test using the fitted representation</pre></div>
+<p>The test set should remain unseen during model/representation selection.</p>
+<p>This connects directly to the generalization and validation ideas from Unit II.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 40: Evaluation -->
+  <section id="s-40" data-search-section="Evaluation" class="content-section">
+    <div class="section-header">
+      <h2>40. Evaluation</h2>
+      <button class="bookmark-btn" data-id="s-40" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>After classification, use appropriate evaluation metrics.</p>
+<p>For binary classification:</p>
+<ul>
+<li>confusion matrix;</li>
+<li>precision;</li>
+<li>recall;</li>
+<li>F1;</li>
+<li>ROC/AUC where appropriate.</li>
+</ul>
+<p>For example:</p>
+<div class="formula-math">\[
+Precision=\frac{TP}{TP+FP}
+\]</div>
+<div class="formula-math">\[
+Recall=\frac{TP}{TP+FN}
+\]</div>
+<div class="formula-math">\[
+F1=\frac{2PR}{P+R}
+\]</div>
+<p>The correct metric depends on the cost of errors.</p>
+<p>For spam detection, for example, false positives can matter because a legitimate message may be incorrectly blocked.</p>
+<p>This links Unit IV NLP directly back to Unit II evaluation.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 41: Multilabel vs Multi-Class -->
+  <section id="s-41" data-search-section="Multilabel vs Multi-Class" class="content-section">
+    <div class="section-header">
+      <h2>41. Multilabel vs Multi-Class</h2>
+      <button class="bookmark-btn" data-id="s-41" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>These terms are commonly confused.</p>
+<h3>Multi-class</h3>
+<p>Each document belongs to one of several classes.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>article → {sports, finance, technology}</pre></div>
+<p>One label is selected.</p>
+<h3>Multi-label</h3>
+<p>A document can receive several labels simultaneously.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>article → {technology, AI, healthcare}</pre></div>
+<p>Several labels can be true at once.</p>
+<p>The output design and evaluation can therefore differ.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 42: Text Classification as a General ML Pipeline -->
+  <section id="s-42" data-search-section="Text Classification as a General ML Pipeline" class="content-section">
+    <div class="section-header">
+      <h2>42. Text Classification as a General ML Pipeline</h2>
+      <button class="bookmark-btn" data-id="s-42" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Unit II gave the abstract supervised-learning story:</p>
+<div class="formula-math">\[
+D=\{(x_i,y_i)\}
+\rightarrow
+\text{model fitting}
+\rightarrow
+\text{prediction}
+\rightarrow
+\text{evaluation}.
+\]</div>
+<p>NLP adds a representation problem before the classifier:</p>
+<div class="formula-math">\[
+\boxed{
+\text{raw text}
+\rightarrow
+\text{text representation}
+\rightarrow
+\text{supervised learning}
+}
+\]</div>
+<p>This is one of the most important connections in Unit IV.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 43: Full Worked Example — Sentiment Classification -->
+  <section id="s-43" data-search-section="Full Worked Example — Sentiment Classification" class="content-section">
+    <div class="section-header">
+      <h2>43. Full Worked Example — Sentiment Classification</h2>
+      <button class="bookmark-btn" data-id="s-43" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the dataset contains:</p>
+<div class="ascii-box"><pre>&quot;This phone is excellent&quot;        → positive
+&quot;Battery life is terrible&quot;      → negative
+&quot;The screen is excellent&quot;       → positive
+&quot;Camera quality is terrible&quot;    → negative</pre></div>
+<h2>Step 1 — Tokenize</h2>
+<div class="ascii-box"><pre>This | phone | is | excellent</pre></div>
+<h2>Step 2 — Normalize</h2>
+<p>Possibly lowercase:</p>
+<div class="ascii-box"><pre>this | phone | is | excellent</pre></div>
+<h2>Step 3 — Decide whether stemming/lemmatization is useful</h2>
+<p>This depends on the task and feature representation.</p>
+<h2>Step 4 — Build features</h2>
+<p>Vocabulary might include:</p>
+<div class="ascii-box"><pre>battery
+camera
+excellent
+phone
+quality
+screen
+terrible</pre></div>
+<h2>Step 5 — Train classifier</h2>
+<p>For example, a classical logistic-regression classifier can learn positive association with:</p>
+<div class="ascii-box"><pre>excellent</pre></div>
+<p>and negative association with:</p>
+<div class="ascii-box"><pre>terrible</pre></div>
+<h2>Step 6 — Predict</h2>
+<p>New sentence:</p>
+<div class="ascii-box"><pre>&quot;The screen is excellent&quot;</pre></div>
+<p>The resulting feature vector is passed through the classifier.</p>
+<h2>Step 7 — Evaluate</h2>
+<p>Use held-out data and appropriate classification metrics.</p>
+<p>The complete pipeline is:</p>
+<div class="ascii-box"><pre>sentence
+ ↓
+tokenize
+ ↓
+normalize
+ ↓
+represent
+ ↓
+classify
+ ↓
+positive / negative</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 44: Common NLP Preprocessing Misconceptions -->
+  <section id="s-44" data-search-section="Common NLP Preprocessing Misconceptions" class="content-section">
+    <div class="section-header">
+      <h2>44. Common NLP Preprocessing Misconceptions</h2>
+      <button class="bookmark-btn" data-id="s-44" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>“More cleaning is always better.”</h3>
+<p>False.</p>
+<p>Cleaning can remove useful information.</p>
+<h3>“Stemming and lemmatization are the same.”</h3>
+<p>False.</p>
+<p>Stemming is generally more mechanical; lemmatization is linguistically informed.</p>
+<h3>“Every NLP system should remove stop words.”</h3>
+<p>False.</p>
+<p>It depends on the task and representation.</p>
+<h3>“BoW understands sentence meaning.”</h3>
+<p>Not in the full semantic/contextual sense.</p>
+<p>It mainly records features such as token occurrence/counts.</p>
+<h3>“Tokenization is classification.”</h3>
+<p>No.</p>
+<p>Tokenization is representation/preprocessing.</p>
+<h3>“TF-IDF knows grammar.”</h3>
+<p>Not by itself.</p>
+<p>TF-IDF reweights terms according to their document frequency patterns.</p>
+<h3>“Text must be converted to a vector before ML.”</h3>
+<p>For conventional numerical ML models, yes, some numerical representation is required. The specific representation may be sparse, dense, learned, or structured.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 45: Failure Cases and Trade-offs -->
+  <section id="s-45" data-search-section="Failure Cases and Trade-offs" class="content-section">
+    <div class="section-header">
+      <h2>45. Failure Cases and Trade-offs</h2>
+      <button class="bookmark-btn" data-id="s-45" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Choice</th>
+<th>Possible benefit</th>
+<th>Possible problem</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>lowercasing</td>
+<td>smaller vocabulary</td>
+<td>loses case information</td>
+</tr>
+<tr>
+<td>stemming</td>
+<td>fewer features</td>
+<td>unnatural stems / over-merging</td>
+</tr>
+<tr>
+<td>lemmatization</td>
+<td>more linguistic structure</td>
+<td>more processing / language dependence</td>
+</tr>
+<tr>
+<td>stop-word removal</td>
+<td>smaller feature space</td>
+<td>can remove meaning</td>
+</tr>
+<tr>
+<td>BoW</td>
+<td>simple and interpretable</td>
+<td>weak order/context</td>
+</tr>
+<tr>
+<td>n-grams</td>
+<td>captures local order</td>
+<td>feature-space growth</td>
+</tr>
+<tr>
+<td>TF-IDF</td>
+<td>emphasizes discriminative terms</td>
+<td>still sparse and largely lexical</td>
+</tr>
+<tr>
+<td>embeddings</td>
+<td>dense semantic-style representation</td>
+<td>can depend strongly on training data/context</td>
+</tr>
+</tbody>
+</table></div>
+<p>This is not a list of universally correct choices. It is a decision map.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 46: Formula Card — TF-IDF -->
+  <section id="s-46" data-search-section="Formula Card — TF-IDF" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>46. Formula Card — TF-IDF</h2>
+      <button class="bookmark-btn" data-id="s-46" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Core formula</h3>
+<div class="formula-math">\[
+\boxed{TFIDF(t,d)=TF(t,d)\times IDF(t)}
+\]</div>
+<p>with one common unsmoothed IDF definition:</p>
+<div class="formula-math">\[
+\boxed{IDF(t)=\log\frac{N}{df(t)}}
+\]</div>
+<h3>Meaning</h3>
+<p>A word gets higher weight when:</p>
+<ul>
+<li>it is important/frequent in the current document;</li>
+<li>but relatively uncommon across the entire collection.</li>
+</ul>
+<h3>Exam trigger</h3>
+<p>Question:</p>
+<blockquote>
+<p>“Why does TF-IDF downweight common words?”</p>
+</blockquote>
+<p>Answer:</p>
+<blockquote>
+<p>Because terms appearing in many documents have lower inverse document frequency and therefore contribute less discriminative weight.</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 47: Formula Card — Cosine Similarity -->
+  <section id="s-47" data-search-section="Formula Card — Cosine Similarity" class="content-section">
+    <div class="section-header">
+      <h2>47. Formula Card — Cosine Similarity</h2>
+      <button class="bookmark-btn" data-id="s-47" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="formula-math">\[
+\boxed{
+\cos\theta
+=
+\frac{x^Ty}{\|x\|_2\|y\|_2}
+}
+\]</div>
+<h3>Symbols</h3>
+<ul>
+<li>\(x,y\): document vectors;</li>
+<li>\(x^Ty\): dot product;</li>
+<li>\(\|x\|_2\): Euclidean norm;</li>
+<li>\(\theta\): angle between vectors.</li>
+</ul>
+<h3>Intuition</h3>
+<p>Compare the <strong>direction</strong> of document vectors rather than only their raw length.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 48: Formula Card — Binary Logistic Text Classifier -->
+  <section id="s-48" data-search-section="Formula Card — Binary Logistic Text Classifier" class="content-section">
+    <div class="section-header">
+      <h2>48. Formula Card — Binary Logistic Text Classifier</h2>
+      <button class="bookmark-btn" data-id="s-48" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>After converting text to vector \(x\):</p>
+<div class="formula-math">\[
+z=w^Tx+b
+\]</div>
+<div class="formula-math">\[
+\boxed{
+\hat p=\sigma(z)=\frac{1}{1+e^{-z}}
+}
+\]</div>
+<p>Interpretation:</p>
+<div class="formula-math">\[
+\hat p\approx P(y=1\mid x)
+\]</div>
+<p>under the chosen logistic-model interpretation.</p>
+<p>The key cross-unit message:</p>
+<blockquote>
+<p><strong>Once text becomes a feature vector, ordinary supervised ML methods from Unit II can operate on it.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 49: Comparison: Classical NLP vs Sequence-Oriented Neural NLP -->
+  <section id="s-49" data-search-section="Comparison: Classical NLP vs Sequence-Oriented Neural NLP" class="content-section">
+    <div class="section-header">
+      <h2>49. Comparison: Classical NLP vs Sequence-Oriented Neural NLP</h2>
+      <button class="bookmark-btn" data-id="s-49" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Classical text classification</th>
+<th>Sequence-oriented neural approach</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Representation</td>
+<td>BoW / TF-IDF / explicit features</td>
+<td>learned dense representations</td>
+</tr>
+<tr>
+<td>Word order</td>
+<td>limited unless n-grams/features used</td>
+<td>naturally modelled by sequence architecture</td>
+</tr>
+<tr>
+<td>Feature engineering</td>
+<td>often substantial</td>
+<td>more representation learned automatically</td>
+</tr>
+<tr>
+<td>Interpretability</td>
+<td>often easier at feature level</td>
+<td>often harder</td>
+</tr>
+<tr>
+<td>Computational requirements</td>
+<td>often lower</td>
+<td>can be substantially higher</td>
+</tr>
+<tr>
+<td>Unit-IV connection</td>
+<td>preprocessing + classification core</td>
+<td>bridge to RNN/LSTM and neural NLP</td>
+</tr>
+</tbody>
+</table></div>
+<p>The syllabus path is not asking you to master every modern NLP architecture here. The important progression is understanding how preprocessing and numerical representation connect text to ML.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 50: Exam Lens -->
+  <section id="s-50" data-search-section="Exam Lens" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>50. Exam Lens</h2>
+      <button class="bookmark-btn" data-id="s-50" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>2-mark questions</h2>
+<ul>
+<li>Define NLP.</li>
+<li>Define tokenization.</li>
+<li>What is stemming?</li>
+<li>What is lemmatization?</li>
+<li>What is TF-IDF?</li>
+<li>What is text classification?</li>
+<li>What is a bag-of-words representation?</li>
+</ul>
+<h2>5-mark questions</h2>
+<ul>
+<li>Explain tokenization, stemming and lemmatization with examples.</li>
+<li>Compare stemming and lemmatization.</li>
+<li>Explain the text-classification pipeline.</li>
+<li>Explain TF-IDF and its intuition.</li>
+<li>Explain why preprocessing is task-dependent.</li>
+<li>Explain how logistic regression can classify text after vectorization.</li>
+</ul>
+<h2>Numerical questions</h2>
+<p>Be ready to:</p>
+<ol>
+<li>construct a simple BoW vector;</li>
+<li>calculate a TF-IDF component;</li>
+<li>compute a cosine similarity;</li>
+<li>perform a logistic-regression probability calculation from a supplied feature vector;</li>
+<li>calculate precision/recall/F1 from a text-classification confusion matrix.</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 51: Active Recall -->
+  <section id="s-51" data-search-section="Active Recall" class="content-section">
+    <div class="section-header">
+      <h2>51. Active Recall</h2>
+      <button class="bookmark-btn" data-id="s-51" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Without looking back, answer:</p>
+<ol>
+<li>What is NLP?</li>
+<li>Why is tokenization necessary?</li>
+<li>What is the difference between a word token and a subword token?</li>
+<li>Why can lowercasing destroy information?</li>
+<li>What is stemming?</li>
+<li>What is lemmatization?</li>
+<li>Why is a stem not guaranteed to be a dictionary word?</li>
+<li>When can stop-word removal be harmful?</li>
+<li>What does bag-of-words preserve and what does it lose?</li>
+<li>What problem does TF-IDF address?</li>
+<li>Why do n-grams help?</li>
+<li>What is the difference between multi-class and multi-label classification?</li>
+<li>How does NLP connect to logistic regression from Unit II?</li>
+<li>Why should test-set information not be used when fitting TF-IDF statistics?</li>
+<li>How do embeddings differ conceptually from one-hot vectors?</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 52: Chapter Exit Test -->
+  <section id="s-52" data-search-section="Chapter Exit Test" class="content-section">
+    <div class="section-header">
+      <h2>52. Chapter Exit Test</h2>
+      <button class="bookmark-btn" data-id="s-52" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>A. MCQs</h2>
+<p><strong>1. Tokenization primarily converts:</strong></p>
+<p>A. labels into rewards<br />
+B. text into tokens<br />
+C. gradients into probabilities<br />
+D. images into pixels</p>
+<p><strong>Answer:</strong> B</p>
+<p><strong>2. Which statement is correct?</strong></p>
+<p>A. Stemming always produces dictionary words.<br />
+B. Lemmatization is purely random.<br />
+C. Stemming is generally more mechanical than lemmatization.<br />
+D. Tokenization and classification are identical.</p>
+<p><strong>Answer:</strong> C</p>
+<p><strong>3. A term appearing in almost every document generally receives:</strong></p>
+<p>A. a larger IDF<br />
+B. a smaller IDF<br />
+C. no TF value<br />
+D. a negative class label</p>
+<p><strong>Answer:</strong> B</p>
+<p><strong>4. Bag-of-words primarily loses:</strong></p>
+<p>A. word occurrence<br />
+B. document identity<br />
+C. much of the original word order<br />
+D. all numerical representation</p>
+<p><strong>Answer:</strong> C</p>
+<p><strong>5. After TF-IDF vectorization, a binary text classifier can use:</strong></p>
+<p>A. logistic regression<br />
+B. only an NLP-specific classifier<br />
+C. no classifier<br />
+D. only Q-learning</p>
+<p><strong>Answer:</strong> A</p>
+<h2>B. Numerical</h2>
+<p>Vocabulary:</p>
+<div class="ascii-box"><pre>[AI, learning, useful]</pre></div>
+<p>Document:</p>
+<div class="ascii-box"><pre>&quot;AI learning learning&quot;</pre></div>
+<p>Construct:</p>
+<ol>
+<li>binary BoW vector;</li>
+<li>count BoW vector.</li>
+</ol>
+<p>Expected:</p>
+<div class="ascii-box"><pre>binary → [1,1,0]
+count  → [1,2,0]</pre></div>
+<h2>C. Reasoning</h2>
+<p>Why might removing “not” be dangerous in sentiment classification?</p>
+<p>Expected idea: it can reverse or substantially alter the meaning of a phrase such as “not good.”</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 53: Memory Anchors -->
+  <section id="s-53" data-search-section="Memory Anchors" class="content-section">
+    <div class="section-header">
+      <h2>53. Memory Anchors</h2>
+      <button class="bookmark-btn" data-id="s-53" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Anchor 1</h3>
+<blockquote>
+<p><strong>Tokenize first; then represent; then classify.</strong></p>
+</blockquote>
+<h3>Anchor 2</h3>
+<blockquote>
+<p><strong>Stem = mechanical reduction. Lemma = linguistic base form.</strong></p>
+</blockquote>
+<h3>Anchor 3</h3>
+<blockquote>
+<p><strong>BoW counts. TF-IDF reweights. Embeddings learn dense representations.</strong></p>
+</blockquote>
+<h3>Anchor 4</h3>
+<div class="ascii-box"><pre>TEXT
+ ↓
+TOKENS
+ ↓
+FEATURES
+ ↓
+MODEL
+ ↓
+LABEL</pre></div>
+<h3>Anchor 5</h3>
+<blockquote>
+<p><strong>Preprocessing is part of the model pipeline, not a cosmetic cleaning step.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 54: Cross-Unit Connections -->
+  <section id="s-54" data-search-section="Cross-Unit Connections" class="content-section">
+    <div class="section-header">
+      <h2>54. Cross-Unit Connections</h2>
+      <button class="bookmark-btn" data-id="s-54" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Connection to Unit II</h2>
+<p>Text classification is still supervised learning:</p>
+<div class="formula-math">\[
+(x_i,y_i)
+ightarrow\text{fit}\rightarrow\hat y.
+\]</div>
+<p>The extra NLP problem is converting language into useful \(x_i\).</p>
+<h2>Connection to C37 RNNs</h2>
+<p>A sentence is an ordered sequence:</p>
+<div class="formula-math">\[
+x_1,x_2,\dots,x_T.
+\]</div>
+<p>RNNs were designed to carry information across such sequences.</p>
+<h2>Connection to C38 LSTM</h2>
+<p>LSTMs provide a recurrent memory mechanism for longer sequence dependencies.</p>
+<h2>Connection to C42 Policy Gradients</h2>
+<p>Both use probability distributions and gradient-based learning, but the objectives are different:</p>
+<div class="ascii-box"><pre>text classification
+→ supervised prediction objective
+
+policy gradients
+→ expected-return objective</pre></div>
+<p>Do not mix the two.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 55: Resource Shelf -->
+  <section id="s-55" data-search-section="Resource Shelf" class="content-section">
+    <div class="section-header">
+      <h2>55. Resource Shelf</h2>
+      <button class="bookmark-btn" data-id="s-55" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Primary structured course</h3>
+<p><strong>Stanford CS224N — NLP with Deep Learning</strong><br />
+https://web.stanford.edu/class/cs224n/</p>
+<p>Use for:</p>
+<ul>
+<li>NLP fundamentals;</li>
+<li>word representations;</li>
+<li>neural NLP;</li>
+<li>sequence modelling;</li>
+<li>language-specific modelling intuition.</li>
+</ul>
+<h3>Supplemental course</h3>
+<p><strong>NPTEL — Machine Learning and Deep Learning: Fundamentals and Applications</strong></p>
+<p>Use selectively for representation and neural-NLP connections.</p>
+<h3>Video supplement</h3>
+<p><strong>StatQuest video index</strong><br />
+https://statquest.org/video_index.html</p>
+<p>Search for:</p>
+<ul>
+<li>TF-IDF;</li>
+<li>text classification;</li>
+<li>embeddings;</li>
+<li>probability/classification foundations.</li>
+</ul>
+<h3>Main Book connections</h3>
+<ul>
+<li><code>ML-U2-C20</code> — Logistic Regression</li>
+<li><code>ML-U2-C21</code> — Logistic Regression Mathematics and Decision Boundaries</li>
+<li><code>ML-U2-C24</code> — Confusion Matrix</li>
+<li><code>ML-U2-C25</code> — Precision, Recall, F1, ROC and AUC</li>
+<li><code>ML-U3-C37</code> — RNNs</li>
+<li><code>ML-U3-C38</code> — LSTM</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 56: Source Boundary and Confidence -->
+  <section id="s-56" data-search-section="Source Boundary and Confidence" class="content-section">
+    <div class="section-header">
+      <h2>56. Source Boundary and Confidence</h2>
+      <button class="bookmark-btn" data-id="s-56" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p><strong>Course-supported:</strong></p>
+<ul>
+<li>NLP preprocessing is a Unit IV topic;</li>
+<li>tokenization, stemming and lemmatization are explicitly identified;</li>
+<li>text classification is explicitly identified;</li>
+<li>Stanford CS224N is the primary structured NLP resource in the master guide.</li>
+</ul>
+<p><strong>Standard expansion:</strong></p>
+<ul>
+<li>bag-of-words;</li>
+<li>n-grams;</li>
+<li>TF-IDF;</li>
+<li>cosine similarity;</li>
+<li>one-hot vs embedding comparison;</li>
+<li>logistic-regression text-classification example;</li>
+<li>leakage discussion;</li>
+<li>detailed preprocessing trade-offs.</li>
+</ul>
+<p>These additions are used to make the syllabus topic learnable from zero while keeping the core boundary visible.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 57: Final Five-Line Summary -->
+  <section id="s-57" data-search-section="Final Five-Line Summary" class="content-section">
+    <div class="section-header">
+      <h2>57. Final Five-Line Summary</h2>
+      <button class="bookmark-btn" data-id="s-57" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <ol>
+<li>NLP turns human language into forms that computational systems can represent and process.  </li>
+<li>Tokenization decides the basic units of text.  </li>
+<li>Stemming reduces forms mechanically; lemmatization aims for linguistically meaningful base forms.  </li>
+<li>Text must be converted into numerical features or learned representations before conventional ML can classify it.  </li>
+<li>Text classification then follows the same supervised-learning logic studied in Unit II, with preprocessing and representation supplying the input features.</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="ch42-policy-gradient-methods.html" class="nav-btn">← Ch 42 — Policy Gradient Methods</a>
+    <a href="ch44-autoencoders.html" class="nav-btn primary">Next: Ch 44 — Autoencoders →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch43-nlp-preprocessing-text-classification.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 43</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

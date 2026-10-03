@@ -1,0 +1,2004 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 32: Multi-Layer Perceptron (MLP) — AI & Machine Learning MiniBook. Hidden Layers, Overcoming the XOR Problem, Universal Approximation Theorem, Matrix Dimensions, and Vectorized Forward Propagation">
+<title>Ch 32 — Multi-Layer Perceptron (MLP) | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-xii">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 32 — Multi-Layer Perceptron (MLP)</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 32 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why This Chapter Exists <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. One-Minute Intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. The Core Architecture <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Vocabulary You Must Own <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Why Do We Need Hidden Layers? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. The Mathematical Skeleton of an MLP <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Matrix Shape Reading — A Survival Skill <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. One Neuron Inside an MLP <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Why Nonlinearity Is Essential <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Worked Example — One Hidden Layer <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. A More Informative Interpretation of Layers <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. MLP as Function Composition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. MLP for Different Tasks <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Hidden Layer Width vs Depth <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Parameter Counting <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Computational Graph View </a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. What Makes an MLP “Feedforward”? </a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. MLP and the Perceptron — Do Not Mix Them Up </a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Important Concept: What If We Remove the Nonlinearity? </a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Why Bias Exists in Every Dense Layer <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Failure Modes in Understanding MLPs </a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Real-Life Analogy — Recruitment Pipeline <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Connection to Lecture 10: Learned Feature Maps <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Worked Exam Example — Parameter Count </a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Worked Exam Example — Dimension Trace </a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. The MLP Forward Pass — Full Mental Trace </a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. MLP and Universal Approximation — Careful Interpretation </a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Architecture vs Training <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Active Recall — Close the Book </a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Practice Set </a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. University Exam Lens </a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Common Exam Traps </a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Math You Need Now <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Course Lens — Supplied Materials </a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Resource Shelf </a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Chapter Exit Test </a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Connection to the Next Topic </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link active"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit III</span><span>›</span><span>Part XII — Multi-Layer Perceptrons & Activations</span><span>›</span><span style="color:var(--em-text)">Chapter 32</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 32 · Unit III · Part XII</div>
+    <div class="chapter-part-banner part-xii">
+      <span class="part-banner-badge">Unit III · Part XII</span>
+      <span>Multi-Layer Perceptrons & Activations</span>
+    </div>
+    <h1 class="chapter-title">Multi-Layer Perceptron (MLP)</h1>
+    <div class="concept-id-tag">[CONCEPT-DL-032]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: High Yield (10-mark guarantee)</span>
+      <span class="chapter-meta-item">📖 ~50 min read</span>
+      <span class="chapter-meta-item">🎯 37 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>Multi-Layer Perceptron:</strong> Hidden layers, Solving non-linear XOR separation with a 2-layer network, Layer notations \(Z^{[l]} = W^{[l]} A^{[l-1]} + b^{[l]}\), Matrix shape conventions, Cybenko-Hornik Universal Approximation Theorem, and Vectorized forward propagation.</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why This Chapter Exists</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">One-Minute Intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">The Core Architecture</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Vocabulary You Must Own</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Why Do We Need Hidden Layers?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">The Mathematical Skeleton of an MLP</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Matrix Shape Reading — A Survival Skill</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">One Neuron Inside an MLP</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Why Nonlinearity Is Essential</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Worked Example — One Hidden Layer</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">A More Informative Interpretation of Layers</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">MLP as Function Composition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">MLP for Different Tasks</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Hidden Layer Width vs Depth</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Parameter Counting</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Computational Graph View</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">What Makes an MLP “Feedforward”?</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">MLP and the Perceptron — Do Not Mix Them Up</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Important Concept: What If We Remove the Nonlinearity?</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Why Bias Exists in Every Dense Layer</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Failure Modes in Understanding MLPs</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Real-Life Analogy — Recruitment Pipeline</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Connection to Lecture 10: Learned Feature Maps</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Worked Exam Example — Parameter Count</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Worked Exam Example — Dimension Trace</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">The MLP Forward Pass — Full Mental Trace</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">MLP and Universal Approximation — Careful Interpretation</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Architecture vs Training</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Active Recall — Close the Book</span></a></li>
+      <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Practice Set</span></a></li>
+      <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">University Exam Lens</span></a></li>
+      <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Common Exam Traps</span></a></li>
+      <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Math You Need Now</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Course Lens — Supplied Materials</span></a></li>
+      <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Resource Shelf</span></a></li>
+      <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Chapter Exit Test</span></a></li>
+      <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Connection to the Next Topic</span></a></li>
+    </ul>
+  </div>
+
+  
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 1: Why This Chapter Exists -->
+  <section id="s-01" data-search-section="Why This Chapter Exists" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>1. Why This Chapter Exists</h2>
+      <button class="bookmark-btn" data-id="s-01" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The single perceptron is an important idea, but it is also limited.</p>
+<p>A perceptron computes one weighted combination of inputs and then applies an activation rule. That makes it useful for simple decision boundaries, but a single layer cannot represent every relationship we may encounter.</p>
+<p>So the next question is:</p>
+<blockquote>
+<p><strong>What happens when we connect perceptrons into layers?</strong></p>
+</blockquote>
+<p>That construction gives us the <strong>Multi-Layer Perceptron (MLP)</strong>.</p>
+<p>The conceptual progression is:</p>
+<div class="ascii-box"><pre>Single perceptron
+      ↓
+One simple transformation
+      ↓
+Limited representation
+
+Multiple layers
+      ↓
+Intermediate representations
+      ↓
+Repeated transformations
+      ↓
+Richer functions
+      ↓
+MLP</pre></div>
+<p>Your supplied <code>CS6910 Lecture 2</code> is identified in the resource guide as covering biological/artificial neurons, threshold logic, perceptron, the learning algorithm, MLP and representation power. <code>prac_7_neural_network.ipynb</code> is identified as a practical companion for neurons, weights/bias, activations, losses and gradient-descent concepts. <code>Lecture10 copy.pdf</code> adds an important representation-learning viewpoint: a neural network can learn a feature map \(\phi_\theta(x)\), after which a final prediction can be approximately linear in that learned representation.</p>
+<p>The key lesson of this chapter is therefore not merely:</p>
+<blockquote>
+<p>“An MLP has more than one layer.”</p>
+</blockquote>
+<p>It is:</p>
+<blockquote>
+<p><strong>An MLP composes parameterized transformations so that later units can operate on representations produced by earlier units.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 2: One-Minute Intuition -->
+  <section id="s-02" data-search-section="One-Minute Intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. One-Minute Intuition</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>English</h2>
+<p>Imagine that a single employee can make one simple decision:</p>
+<blockquote>
+<p>“Does this application satisfy my rule?”</p>
+</blockquote>
+<p>Now imagine a team.</p>
+<p>The first group extracts simple pieces of evidence.</p>
+<p>The second group combines those pieces.</p>
+<p>A final unit makes the overall decision.</p>
+<p>That is the basic intuition of layered neural computation.</p>
+<div class="ascii-box"><pre>Raw information
+     ↓
+Simple detectors
+     ↓
+Combined patterns
+     ↓
+Higher-level representation
+     ↓
+Final output</pre></div>
+<h2>Hinglish</h2>
+<p>Ek perceptron ko ek worker samjho.</p>
+<p>Usko kuch inputs milte hain aur woh ek simple decision deta hai.</p>
+<p>Ab socho ek pura team structure hai:</p>
+<div class="ascii-box"><pre>Workers → clues collect karte hain
+Managers → clues combine karte hain
+Final decision maker → overall result deta hai</pre></div>
+<p>Neural network mein ye hierarchy layers ke through hoti hai.</p>
+<p>Pehli layer kuch patterns detect kar sakti hai. Agli layer un patterns ko combine karke aur useful representation bana sakti hai. Last layer output produce karti hai.</p>
+<p>Yaad rakho: analogy sirf intuition hai. Real neurons mein har hidden unit ka meaning hamesha human-interpretable nahi hota.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: The Core Architecture -->
+  <section id="s-03" data-search-section="The Core Architecture" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>3. The Core Architecture</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="diagram-box"><pre class="mermaid">
+graph LR
+    subgraph Input["Input Layer (x)"]
+        x1["x₁"]
+        x2["x₂"]
+    end
+    subgraph Hidden["Hidden Layer (h)"]
+        h1["h₁ = σ(z₁¹)"]
+        h2["h₂ = σ(z₂¹)"]
+        h3["h₃ = σ(z₃¹)"]
+    end
+    subgraph Output["Output Layer (ŷ)"]
+        y1["ŷ = σ(z²)"]
+    end
+    x1 -->|W¹| h1
+    x1 -->|W¹| h2
+    x1 -->|W¹| h3
+    x2 -->|W¹| h1
+    x2 -->|W¹| h2
+    x2 -->|W¹| h3
+    h1 -->|W²| y1
+    h2 -->|W²| y1
+    h3 -->|W²| y1
+</pre></div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher explanation — Hinglish</div>
+
+Multi-Layer Perceptron (MLP) ko tum "Feature Factory" samjho. Input layer seedha raw data deti hai (jaise pixel ya raw numbers). Hidden layer un raw numbers ko aapas mein jodkar naye, higher-level features banati hai. Output layer un bane-banaye features ko dekh kar final decision deti hai. Yahi wajah hai ki hidden layers add karne se non-linear boundary possible ho jaati hai!
+
+
+A basic feedforward MLP can be pictured as:
+
+
+
+<div class="ascii-box"><pre>Input Layer
+x₁  ───────┐
+x₂  ───────┼────→ Hidden Layer 1 ───→ Hidden Layer 2 ───→ Output Layer
+x₃  ───────┤          ○  ○  ○             ○  ○
+...        │         ╱│╲╱│╲               ╲│╱
+x_d ───────┘        weighted               weighted
+                   combinations            combinations</pre></div>
+
+
+
+A more explicit mathematical view is:
+
+
+
+<div class="formula-math">\[
+\mathbf{a}^{(0)}=\mathbf{x}
+\]</div>
+
+
+
+then for hidden layer \(1\):
+
+
+
+<div class="formula-math">\[
+\mathbf{z}^{(1)}=W^{(1)}\mathbf{a}^{(0)}+\mathbf{b}^{(1)}
+\]</div>
+
+
+
+
+
+<div class="formula-math">\[
+\mathbf{a}^{(1)}=\sigma^{(1)}(\mathbf{z}^{(1)})
+\]</div>
+
+
+
+and for the next layer:
+
+
+
+<div class="formula-math">\[
+\mathbf{z}^{(2)}=W^{(2)}\mathbf{a}^{(1)}+\mathbf{b}^{(2)}
+\]</div>
+
+
+
+
+
+<div class="formula-math">\[
+\mathbf{a}^{(2)}=\sigma^{(2)}(\mathbf{z}^{(2)})
+\]</div>
+
+
+
+until the output is produced.
+
+The exact output-layer transformation depends on the task.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: Vocabulary You Must Own -->
+  <section id="s-04" data-search-section="Vocabulary You Must Own" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>4. Vocabulary You Must Own</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Input layer</strong></td>
+<td>Receives the feature vector \(x\).</td>
+</tr>
+<tr>
+<td><strong>Hidden layer</strong></td>
+<td>Internal layer whose representation is not directly the target output.</td>
+</tr>
+<tr>
+<td><strong>Output layer</strong></td>
+<td>Produces the task-specific prediction.</td>
+</tr>
+<tr>
+<td><strong>Neuron / unit</strong></td>
+<td>A computational unit performing weighted combination + bias + activation.</td>
+</tr>
+<tr>
+<td><strong>Weight</strong></td>
+<td>Parameter controlling the influence of an incoming connection.</td>
+</tr>
+<tr>
+<td><strong>Bias</strong></td>
+<td>Learnable offset term.</td>
+</tr>
+<tr>
+<td><strong>Pre-activation</strong></td>
+<td>The value \(z=W a+b\) before the activation is applied.</td>
+</tr>
+<tr>
+<td><strong>Activation</strong></td>
+<td>Nonlinear or other transformation applied to \(z\).</td>
+</tr>
+<tr>
+<td><strong>Layer</strong></td>
+<td>A collection of units at a particular computational stage.</td>
+</tr>
+<tr>
+<td><strong>Hidden representation</strong></td>
+<td>Intermediate vector produced by a hidden layer.</td>
+</tr>
+<tr>
+<td><strong>Feedforward network</strong></td>
+<td>Information moves from input toward output without recurrent feedback connections.</td>
+</tr>
+<tr>
+<td><strong>Depth</strong></td>
+<td>Roughly the number of learned transformation layers; conventions vary on whether input is counted.</td>
+</tr>
+<tr>
+<td><strong>Width</strong></td>
+<td>Number of units in a layer.</td>
+</tr>
+<tr>
+<td><strong>Parameter</strong></td>
+<td>Learnable weight or bias.</td>
+</tr>
+<tr>
+<td><strong>Architecture</strong></td>
+<td>Structural design: number of layers, units, connectivity, activations, etc.</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: Why Do We Need Hidden Layers? -->
+  <section id="s-05" data-search-section="Why Do We Need Hidden Layers?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>5. Why Do We Need Hidden Layers?</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Consider a classification problem whose classes form an XOR-like pattern.</p>
+<div class="ascii-box"><pre>y=1        ○           ○       y=1
+
+y=0        ●           ●       y=0
+          x₁            x₂</pre></div>
+<p>The exact drawing can be arranged in many equivalent ways. The important fact is that a single straight decision boundary cannot separate the classes in the required XOR pattern.</p>
+<p>A single perceptron can represent a linear decision boundary:</p>
+<div class="formula-math">\[
+w^Tx+b=0.
+\]</div>
+<p>An MLP can first transform the representation and then apply further decision rules.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>Original space
+
+      ●      ○
+      ○      ●
+
+        ↓ hidden transformation
+
+New representation space
+
+   ●●● | ○○○
+       |
+   easier separation</pre></div>
+<p>This is one of the most important reasons hidden layers matter:</p>
+<blockquote>
+<p><strong>They allow the model to construct intermediate features before making the final decision.</strong></p>
+</blockquote>
+<p>That idea is directly related to the learned-feature-map perspective in <code>Lecture10 copy.pdf</code>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: The Mathematical Skeleton of an MLP -->
+  <section id="s-06" data-search-section="The Mathematical Skeleton of an MLP" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>6. The Mathematical Skeleton of an MLP</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the input contains \(d\) features:</p>
+<div class="formula-math">\[
+\mathbf{x}\in\mathbb{R}^{d}.
+\]</div>
+<p>Suppose the first hidden layer has \(h_1\) neurons.</p>
+<p>Then:</p>
+<div class="formula-math">\[
+W^{(1)}\in\mathbb{R}^{h_1\times d}
+\]</div>
+<p>and</p>
+<div class="formula-math">\[
+\mathbf{b}^{(1)}\in\mathbb{R}^{h_1}.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\mathbf{z}^{(1)}=W^{(1)}\mathbf{x}+\mathbf{b}^{(1)}
+\]</div>
+<p>has shape</p>
+<div class="formula-math">\[
+\mathbf{z}^{(1)}\in\mathbb{R}^{h_1}.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\mathbf{a}^{(1)}=\sigma(\mathbf{z}^{(1)}).
+\]</div>
+<p>If the second hidden layer has \(h_2\) units:</p>
+<div class="formula-math">\[
+W^{(2)}\in\mathbb{R}^{h_2\times h_1}
+\]</div>
+<p>and</p>
+<div class="formula-math">\[
+\mathbf{z}^{(2)}=W^{(2)}\mathbf{a}^{(1)}+\mathbf{b}^{(2)}.
+\]</div>
+<p>Finally, an output layer with \(k\) outputs uses:</p>
+<div class="formula-math">\[
+W^{(L)}\in\mathbb{R}^{k\times h_{L-1}}.
+\]</div>
+<p>This shape reasoning is extremely important for reading neural-network mathematics.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: Matrix Shape Reading — A Survival Skill -->
+  <section id="s-07" data-search-section="Matrix Shape Reading — A Survival Skill" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>7. Matrix Shape Reading — A Survival Skill</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="diagram-box"><pre class="mermaid">
+graph TD
+    subgraph VectorizedFlow["Matrix Dimensions in Forward Pass"]
+        D1["Input X: [BatchSize, n_in]"] --> D2["Hidden Z¹ = X · W¹ᵀ + b¹ : [BatchSize, n_hidden]"]
+        D2 --> D3["Hidden Activation A¹ = σ(Z¹) : [BatchSize, n_hidden]"]
+        D3 --> D4["Output Z² = A¹ · W²ᵀ + b² : [BatchSize, n_out]"]
+        D4 --> D5["Final Prediction Ŷ = σ(Z²) : [BatchSize, n_out]"]
+    end
+</pre></div>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+def sigmoid(z):
+    return 1.0 / (1.0 + np.exp(-z))
+
+class MLPForward:
+    def __init__(self, n_in, n_hidden, n_out):
+        # He/Xavier style random initialization
+        np.random.seed(42)
+        self.W1 = np.random.randn(n_hidden, n_in) * 0.1
+        self.b1 = np.zeros((n_hidden, 1))
+        self.W2 = np.random.randn(n_out, n_hidden) * 0.1
+        self.b2 = np.zeros((n_out, 1))
+
+    def forward(self, X):
+        # X shape: (n_in, batch_size)
+        Z1 = np.dot(self.W1, X) + self.b1
+        A1 = sigmoid(Z1)
+        Z2 = np.dot(self.W2, A1) + self.b2
+        A2 = sigmoid(Z2)
+        return A2, (Z1, A1, Z2, A2)
+
+# Verify with 4 samples of XOR
+X = np.array([[0, 0, 1, 1],
+              [0, 1, 0, 1]]) # Shape: (2, 4)
+mlp = MLPForward(n_in=2, n_hidden=4, n_out=1)
+preds, cache = mlp.forward(X)
+print(&quot;Forward Pass Successful!&quot;)
+print(&quot;Input shape:&quot;, X.shape)
+print(&quot;Hidden activation shape:&quot;, cache[1].shape)
+print(&quot;Output shape:&quot;, preds.shape)</code></pre></div>
+<p>Never multiply matrices by blindly matching symbols.</p>
+<p>Use dimensions.</p>
+<p>Suppose:</p>
+<div class="formula-math">\[
+\mathbf{x}\in\mathbb{R}^{4}
+\]</div>
+<p>and the hidden layer contains 3 units.</p>
+<p>Then:</p>
+<div class="formula-math">\[
+W\in\mathbb{R}^{3\times4}.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+W\mathbf{x}
+\]</div>
+<p>is valid because:</p>
+<div class="ascii-box"><pre>(3 × 4) · (4 × 1)
+          ↓
+        (3 × 1)</pre></div>
+<p>The output contains one value for each of the 3 hidden neurons.</p>
+<h3>Shape rule</h3>
+<p>For matrix multiplication:</p>
+<div class="formula-math">\[
+(m\times n)(n\times p)=(m\times p).
+\]</div>
+<p>The <strong>inner dimensions must match</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: One Neuron Inside an MLP -->
+  <section id="s-08" data-search-section="One Neuron Inside an MLP" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>8. One Neuron Inside an MLP</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Each unit is still doing the same kind of local computation learned in the perceptron chapter:</p>
+<div class="formula-math">\[
+z=\mathbf{w}^T\mathbf{a}+b
+\]</div>
+<p>followed by:</p>
+<div class="formula-math">\[
+a'=\sigma(z).
+\]</div>
+<p>The difference is that the neuron may receive inputs that are <strong>outputs of another layer</strong>, not raw features.</p>
+<p>That distinction is central.</p>
+<div class="ascii-box"><pre>Raw feature
+   ↓
+first-layer neuron
+   ↓
+learned intermediate feature
+   ↓
+second-layer neuron
+   ↓
+another learned feature
+   ↓
+output</pre></div>
+<p>So depth changes not only the quantity of neurons, but also <strong>what later neurons are allowed to compute from previous representations</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: Why Nonlinearity Is Essential -->
+  <section id="s-09" data-search-section="Why Nonlinearity Is Essential" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>9. Why Nonlinearity Is Essential</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This is one of the most important mathematical insights in neural networks.</p>
+<p>Suppose every layer were purely linear:</p>
+<div class="formula-math">\[
+\mathbf{a}^{(1)}=W^{(1)}\mathbf{x}
+\]</div>
+<p>and</p>
+<div class="formula-math">\[
+\mathbf{a}^{(2)}=W^{(2)}\mathbf{a}^{(1)}.
+\]</div>
+<p>Substitute:</p>
+<div class="formula-math">\[
+\mathbf{a}^{(2)}
+=
+W^{(2)}W^{(1)}\mathbf{x}.
+\]</div>
+<p>But the product</p>
+<div class="formula-math">\[
+W^{(2)}W^{(1)}
+\]</div>
+<p>is itself just another matrix.</p>
+<p>So multiple linear layers collapse into a single linear transformation.</p>
+<p>That means:</p>
+<div class="ascii-box"><pre>Linear layer
+   ↓
+Linear layer
+   ↓
+Linear layer
+
+≈ one linear transformation</pre></div>
+<p>Therefore, simply stacking linear transformations does not create the expressive power normally associated with deep neural networks.</p>
+<p>We need nonlinear activation functions between layers.</p>
+<p>Hence:</p>
+<div class="formula-math">\[
+\boxed{\text{Depth + nonlinearity} \rightarrow \text{rich representation power}}
+\]</div>
+<p>The activation-function chapter develops this idea in detail.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: Worked Example — One Hidden Layer -->
+  <section id="s-10" data-search-section="Worked Example — One Hidden Layer" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>10. Worked Example — One Hidden Layer</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Consider a network with:</p>
+<ul>
+<li>2 input features</li>
+<li>2 hidden neurons</li>
+<li>1 output neuron</li>
+</ul>
+<p>Let</p>
+<div class="formula-math">\[
+\mathbf{x}
+=
+\begin{bmatrix}
+2\\
+1
+\end{bmatrix}
+\]</div>
+<p>and hidden-layer weights:</p>
+<div class="formula-math">\[
+W^{(1)}
+=
+\begin{bmatrix}
+1 & 2\\
+-1 & 1
+\end{bmatrix}
+\]</div>
+<p>with bias:</p>
+<div class="formula-math">\[
+\mathbf{b}^{(1)}
+=
+\begin{bmatrix}
+1\\
+0
+\end{bmatrix}.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\mathbf{z}^{(1)}
+=
+W^{(1)}\mathbf{x}+\mathbf{b}^{(1)}.
+\]</div>
+<p>First compute:</p>
+<div class="formula-math">\[
+W^{(1)}\mathbf{x}
+=
+\begin{bmatrix}
+1&2\\
+-1&1
+\end{bmatrix}
+\begin{bmatrix}
+2\\
+1
+\end{bmatrix}
+=
+\begin{bmatrix}
+4\\
+-1
+\end{bmatrix}.
+\]</div>
+<p>Add bias:</p>
+<div class="formula-math">\[
+\mathbf{z}^{(1)}
+=
+\begin{bmatrix}
+5\\
+-1
+\end{bmatrix}.
+\]</div>
+<p>If the activation is ReLU:</p>
+<div class="formula-math">\[
+ReLU(z)=\max(0,z),
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+\mathbf{a}^{(1)}
+=
+\begin{bmatrix}
+5\\
+0
+\end{bmatrix}.
+\]</div>
+<p>The second layer will use this transformed vector, not the original \((2,1)\).</p>
+<h3>What should you notice?</h3>
+<p>The network has already created a representation different from the input.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: A More Informative Interpretation of Layers -->
+  <section id="s-11" data-search-section="A More Informative Interpretation of Layers" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>11. A More Informative Interpretation of Layers</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>It is tempting to say:</p>
+<blockquote>
+<p>“Layer 1 learns edges, layer 2 learns shapes, layer 3 learns objects.”</p>
+</blockquote>
+<p>That can be a useful intuition in some image models, but it should not be treated as a universal law.</p>
+<p>A safer interpretation is:</p>
+<blockquote>
+<p>Each layer computes a new representation that can make useful downstream computations easier.</p>
+</blockquote>
+<p>So think in terms of:</p>
+<div class="ascii-box"><pre>representation 0
+      ↓
+representation 1
+      ↓
+representation 2
+      ↓
+representation 3</pre></div>
+<p>rather than assuming every neuron corresponds to one human-readable concept.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: MLP as Function Composition -->
+  <section id="s-12" data-search-section="MLP as Function Composition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>12. MLP as Function Composition</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>An MLP can be viewed as repeated function composition.</p>
+<p>For example:</p>
+<div class="formula-math">\[
+h_1(x)=\sigma_1(W_1x+b_1)
+\]</div>
+<div class="formula-math">\[
+h_2(x)=\sigma_2(W_2h_1(x)+b_2)
+\]</div>
+<p>and final output:</p>
+<div class="formula-math">\[
+f(x)=g(W_3h_2(x)+b_3).
+\]</div>
+<p>Thus:</p>
+<div class="formula-math">\[
+\boxed{f = f_3\circ f_2\circ f_1}
+\]</div>
+<p>where each \(f_i\) is a parameterized transformation.</p>
+<p>This is a very powerful mental model because later, when we study backpropagation, the chain rule will follow exactly this compositional structure.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: MLP for Different Tasks -->
+  <section id="s-13" data-search-section="MLP for Different Tasks" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>13. MLP for Different Tasks</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The hidden architecture may be similar while the output formulation changes.</p>
+<h2>Regression</h2>
+<p>A typical output can be a real number:</p>
+<div class="formula-math">\[
+\hat y\in\mathbb{R}.
+\]</div>
+<p>The final layer may use a linear output.</p>
+<p>Example:</p>
+<blockquote>
+<p>predict house price.</p>
+</blockquote>
+<h2>Binary classification</h2>
+<p>The final output is often one probability-like value:</p>
+<div class="formula-math">\[
+\hat p\in[0,1]
+\]</div>
+<p>with a suitable output transformation such as sigmoid.</p>
+<p>Example:</p>
+<blockquote>
+<p>spam or not spam.</p>
+</blockquote>
+<h2>Multi-class classification</h2>
+<p>For \(K\) mutually exclusive classes, an output vector can represent class probabilities:</p>
+<div class="formula-math">\[
+\hat{\mathbf p}
+=
+(\hat p_1,\ldots,\hat p_K)
+\]</div>
+<p>with</p>
+<div class="formula-math">\[
+\sum_{k=1}^{K}\hat p_k=1.
+\]</div>
+<p>Softmax is commonly used for that role.</p>
+<p>The next chapter gives a systematic treatment of activations and losses.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: Hidden Layer Width vs Depth -->
+  <section id="s-14" data-search-section="Hidden Layer Width vs Depth" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>14. Hidden Layer Width vs Depth</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>These two ideas are often confused.</p>
+<h3>Wider network</h3>
+<p>More neurons in a layer.</p>
+<div class="ascii-box"><pre>○ ○ ○ ○ ○ ○ ○ ○</pre></div>
+<h3>Deeper network</h3>
+<p>More sequential layers.</p>
+<div class="ascii-box"><pre>○ ○
+ ↓
+○ ○ ○
+ ↓
+○ ○ ○ ○
+ ↓
+○</pre></div>
+<p>Width and depth can both affect representational capacity, but they are not interchangeable architectural concepts.</p>
+<p>For exam answers:</p>
+<blockquote>
+<p><strong>Width = units per layer. Depth = number of layers of computation.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: Parameter Counting -->
+  <section id="s-15" data-search-section="Parameter Counting" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>15. Parameter Counting</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Parameter counting is common in exams and useful for debugging architectures.</p>
+<p>Suppose a fully connected layer has:</p>
+<ul>
+<li>\(d\) inputs</li>
+<li>\(h\) neurons</li>
+</ul>
+<p>Every neuron receives \(d\) weights and one bias.</p>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{d h + h = h(d+1)}
+\]</div>
+<p>learnable parameters.</p>
+<h3>Example</h3>
+<p>Input dimension = 4, hidden neurons = 3.</p>
+<p>Weights:</p>
+<div class="formula-math">\[
+4\times3=12.
+\]</div>
+<p>Biases:</p>
+<div class="formula-math">\[
+3.
+\]</div>
+<p>Total:</p>
+<div class="formula-math">\[
+12+3=15.
+\]</div>
+<p>For another layer from 3 inputs to 2 neurons:</p>
+<div class="formula-math">\[
+3\times2+2=8.
+\]</div>
+<p>Total network parameters:</p>
+<div class="formula-math">\[
+15+8=23.
+\]</div>
+<p>This is a straightforward but high-value exam numerical.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: Computational Graph View -->
+  <section id="s-16" data-search-section="Computational Graph View" class="content-section">
+    <div class="section-header">
+      <h2>16. Computational Graph View</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>An MLP can also be drawn as a computational graph.</p>
+<div class="ascii-box"><pre>x
+│
+├──→ linear transform ─→ activation ─→
+│                                   │
+└───────────────────────────────────┘
+                                      ↓
+                              next layer
+                                      ↓
+                                   output</pre></div>
+<p>More formally:</p>
+<div class="ascii-box"><pre>x
+↓
+z¹ = W¹x + b¹
+↓
+a¹ = σ(z¹)
+↓
+z² = W²a¹ + b²
+↓
+a² = σ(z²)
+↓
+ŷ</pre></div>
+<p>This representation becomes essential for backpropagation because each operation contributes a local derivative.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: What Makes an MLP “Feedforward”? -->
+  <section id="s-17" data-search-section="What Makes an MLP “Feedforward”?" class="content-section">
+    <div class="section-header">
+      <h2>17. What Makes an MLP “Feedforward”?</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>In a standard feedforward MLP:</p>
+<blockquote>
+<p>Information flows from earlier layers to later layers.</p>
+</blockquote>
+<p>There is no recurrent state that feeds information from a later time step back into an earlier computation.</p>
+<p>Compare:</p>
+<h3>Feedforward</h3>
+<div class="ascii-box"><pre>input → hidden → hidden → output</pre></div>
+<h3>Recurrent</h3>
+<div class="ascii-box"><pre>inputₜ → hiddenₜ → outputₜ
+             ↑
+             │
+          hiddenₜ₋₁</pre></div>
+<p>The second structure leads toward RNNs, which appear later in Unit III.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: MLP and the Perceptron — Do Not Mix Them Up -->
+  <section id="s-18" data-search-section="MLP and the Perceptron — Do Not Mix Them Up" class="content-section">
+    <div class="section-header">
+      <h2>18. MLP and the Perceptron — Do Not Mix Them Up</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Feature</th>
+<th>Single Perceptron</th>
+<th>MLP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Layers of learned computation</td>
+<td>Typically one computational layer</td>
+<td>Multiple computational layers</td>
+</tr>
+<tr>
+<td>Intermediate representation</td>
+<td>Minimal</td>
+<td>Explicit hidden representations</td>
+</tr>
+<tr>
+<td>Nonlinear activation</td>
+<td>Can use threshold/nonlinear rule</td>
+<td>Hidden layers normally use nonlinear activations</td>
+</tr>
+<tr>
+<td>Representation power</td>
+<td>Limited</td>
+<td>Much richer</td>
+</tr>
+<tr>
+<td>Typical role</td>
+<td>Simple linear-style separation / foundational model</td>
+<td>General-purpose feedforward neural modelling</td>
+</tr>
+<tr>
+<td>Backpropagation setting</td>
+<td>Can be trained with simpler rules</td>
+<td>Commonly trained using backpropagation + gradient-based optimization</td>
+</tr>
+</tbody>
+</table></div>
+<p>The key is not “many neurons = MLP.”</p>
+<p>The key is <strong>layered composition with hidden representations</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: Important Concept: What If We Remove the Nonlinearity? -->
+  <section id="s-19" data-search-section="Important Concept: What If We Remove the Nonlinearity?" class="content-section">
+    <div class="section-header">
+      <h2>19. Important Concept: What If We Remove the Nonlinearity?</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This is a favourite conceptual question.</p>
+<p>Suppose:</p>
+<div class="formula-math">\[
+a^{(1)}=W_1x+b_1
+\]</div>
+<p>and</p>
+<div class="formula-math">\[
+a^{(2)}=W_2a^{(1)}+b_2.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+a^{(2)}
+=W_2(W_1x+b_1)+b_2
+\]</div>
+<div class="formula-math">\[
+=W_2W_1x+W_2b_1+b_2.
+\]</div>
+<p>Define:</p>
+<div class="formula-math">\[
+W'=W_2W_1
+\]</div>
+<p>and</p>
+<div class="formula-math">\[
+b'=W_2b_1+b_2.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\boxed{a^{(2)}=W'x+b'}.
+\]</div>
+<p>So a stack of linear layers is still linear-affine overall.</p>
+<h3>Memory anchor</h3>
+<blockquote>
+<p><strong>“Without nonlinearity, depth can collapse algebraically.”</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: Why Bias Exists in Every Dense Layer -->
+  <section id="s-20" data-search-section="Why Bias Exists in Every Dense Layer" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>20. Why Bias Exists in Every Dense Layer</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Consider:</p>
+<div class="formula-math">\[
+z=wx.
+\]</div>
+<p>If \(x=0\), then:</p>
+<div class="formula-math">\[
+z=0.
+\]</div>
+<p>A bias allows:</p>
+<div class="formula-math">\[
+z=wx+b,
+\]</div>
+<p>so the output can shift even when the input contribution is zero.</p>
+<p>Geometrically, bias allows a decision boundary or transformation to shift rather than being forced through a restricted origin-based position.</p>
+<p>In neural networks, biases therefore increase the flexibility of each learned affine transformation.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: Failure Modes in Understanding MLPs -->
+  <section id="s-21" data-search-section="Failure Modes in Understanding MLPs" class="content-section">
+    <div class="section-header">
+      <h2>21. Failure Modes in Understanding MLPs</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Failure 1 — “MLP is just a bigger perceptron.”</h3>
+<p>Incomplete.</p>
+<p>The important structural addition is hidden layers and representation composition.</p>
+<h3>Failure 2 — “More layers automatically means better.”</h3>
+<p>False.</p>
+<p>More capacity can increase optimization difficulty, computation, and overfitting risk without appropriate training and regularization.</p>
+<h3>Failure 3 — “Every hidden neuron detects a human concept.”</h3>
+<p>Not guaranteed.</p>
+<p>Hidden representations can be distributed and difficult to interpret directly.</p>
+<h3>Failure 4 — “Activation is optional.”</h3>
+<p>If every layer is linear, stacked layers reduce to one affine transformation.</p>
+<h3>Failure 5 — “Output layer is identical for every task.”</h3>
+<p>No.</p>
+<p>Output representation depends on whether the task is regression, binary classification, multi-class classification, etc.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: Real-Life Analogy — Recruitment Pipeline -->
+  <section id="s-22" data-search-section="Real-Life Analogy — Recruitment Pipeline" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>22. Real-Life Analogy — Recruitment Pipeline</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Consider selecting candidates for a job.</p>
+<h3>Input layer</h3>
+<p>Raw application features:</p>
+<ul>
+<li>exam score,</li>
+<li>projects,</li>
+<li>experience,</li>
+<li>interview score.</li>
+</ul>
+<h3>Hidden layer 1</h3>
+<p>Some units may learn combinations such as:</p>
+<blockquote>
+<p>technical strength pattern</p>
+<p>communication pattern</p>
+<p>consistency pattern</p>
+</blockquote>
+<h3>Hidden layer 2</h3>
+<p>Another layer combines these intermediate signals into broader representations.</p>
+<h3>Output layer</h3>
+<p>Final suitability score or class.</p>
+<p>The model does not receive an explicit rule saying:</p>
+<blockquote>
+<p>“First calculate technical strength, then communication.”</p>
+</blockquote>
+<p>Those intermediate representations can be <strong>learned from data</strong>.</p>
+<p>That is the major conceptual leap from hand-engineered rules toward representation learning.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: Connection to Lecture 10: Learned Feature Maps -->
+  <section id="s-23" data-search-section="Connection to Lecture 10: Learned Feature Maps" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>23. Connection to Lecture 10: Learned Feature Maps</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your <code>Lecture10 copy.pdf</code> presents a powerful viewpoint:</p>
+<div class="formula-math">\[
+\phi_\theta(x)
+\]</div>
+<p>acts as a learned feature representation.</p>
+<p>A final prediction can then be expressed conceptually as:</p>
+<div class="formula-math">\[
+f(x)=w^T\phi_\theta(x).
+\]</div>
+<p>For an MLP, the hidden layers are part of the mechanism that constructs \(\phi_\theta(x)\).</p>
+<p>Thus:</p>
+<div class="ascii-box"><pre>raw x
+ ↓
+learned transformations
+ ↓
+φθ(x)
+ ↓
+prediction</pre></div>
+<p>This connects MLPs directly to the earlier discussion of feature expansion and regularization.</p>
+<p>The important contrast is:</p>
+<h3>Hand-designed expansion</h3>
+<div class="ascii-box"><pre>x
+↓
+manually define x², x³, ...
+↓
+fit model</pre></div>
+<h3>Learned representation</h3>
+<div class="ascii-box"><pre>x
+↓
+learned neural transformations
+↓
+learned features
+↓
+prediction</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: Worked Exam Example — Parameter Count -->
+  <section id="s-24" data-search-section="Worked Exam Example — Parameter Count" class="content-section">
+    <div class="section-header">
+      <h2>24. Worked Exam Example — Parameter Count</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A neural network has:</p>
+<ul>
+<li>6 input features</li>
+<li>hidden layer 1: 4 neurons</li>
+<li>hidden layer 2: 3 neurons</li>
+<li>output layer: 2 neurons</li>
+</ul>
+<p>Find the total number of trainable weights and biases.</p>
+<h3>Layer 1</h3>
+<div class="formula-math">\[
+6\times4+4=28.
+\]</div>
+<h3>Layer 2</h3>
+<div class="formula-math">\[
+4\times3+3=15.
+\]</div>
+<h3>Output layer</h3>
+<div class="formula-math">\[
+3\times2+2=8.
+\]</div>
+<h3>Total</h3>
+<div class="formula-math">\[
+28+15+8=51.
+\]</div>
+<div class="formula-math">\[
+\boxed{51\text{ trainable parameters}}
+\]</div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: Worked Exam Example — Dimension Trace -->
+  <section id="s-25" data-search-section="Worked Exam Example — Dimension Trace" class="content-section">
+    <div class="section-header">
+      <h2>25. Worked Exam Example — Dimension Trace</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<div class="formula-math">\[
+x\in\mathbb{R}^{5}
+\]</div>
+<p>and the architecture is:</p>
+<div class="ascii-box"><pre>5 → 4 → 3 → 2</pre></div>
+<p>Then:</p>
+<div class="formula-math">\[
+W^{(1)}\in\mathbb{R}^{4\times5}
+\]</div>
+<div class="formula-math">\[
+W^{(2)}\in\mathbb{R}^{3\times4}
+\]</div>
+<div class="formula-math">\[
+W^{(3)}\in\mathbb{R}^{2\times3}.
+\]</div>
+<p>Bias shapes:</p>
+<div class="formula-math">\[
+\mathbf b^{(1)}\in\mathbb{R}^{4},
+\quad
+\mathbf b^{(2)}\in\mathbb{R}^{3},
+\quad
+\mathbf b^{(3)}\in\mathbb{R}^{2}.
+\]</div>
+<p>This kind of dimension bookkeeping is often more important than memorizing architecture diagrams.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: The MLP Forward Pass — Full Mental Trace -->
+  <section id="s-26" data-search-section="The MLP Forward Pass — Full Mental Trace" class="content-section">
+    <div class="section-header">
+      <h2>26. The MLP Forward Pass — Full Mental Trace</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For one input example:</p>
+<div class="ascii-box"><pre>INPUT
+  ↓
+x
+  ↓
+Weighted sum + bias
+  ↓
+z¹
+  ↓
+Activation
+  ↓
+a¹
+  ↓
+Weighted sum + bias
+  ↓
+z²
+  ↓
+Activation
+  ↓
+a²
+  ↓
+Output transformation
+  ↓
+ŷ</pre></div>
+<p>At each stage ask:</p>
+<ol>
+<li>What vector entered?</li>
+<li>What matrix multiplied it?</li>
+<li>What bias was added?</li>
+<li>What activation transformed it?</li>
+<li>What dimension came out?</li>
+<li>What role does this representation serve downstream?</li>
+</ol>
+<p>This exact habit will make backpropagation easier later.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: MLP and Universal Approximation — Careful Interpretation -->
+  <section id="s-27" data-search-section="MLP and Universal Approximation — Careful Interpretation" class="content-section">
+    <div class="section-header">
+      <h2>27. MLP and Universal Approximation — Careful Interpretation</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A common statement in neural-network theory is that sufficiently expressive feedforward networks with suitable nonlinear activations can approximate broad classes of functions under appropriate assumptions.</p>
+<p>Do <strong>not</strong> turn that into the incorrect statement:</p>
+<blockquote>
+<p>“Any neural network automatically learns any function perfectly.”</p>
+</blockquote>
+<p>The existence of an approximation result does not tell you:</p>
+<ul>
+<li>how many neurons are required,</li>
+<li>how to train the network efficiently,</li>
+<li>whether optimization will find useful parameters,</li>
+<li>whether the model generalizes,</li>
+<li>or whether the amount of data is sufficient.</li>
+</ul>
+<p>For your course, the most useful takeaway is:</p>
+<blockquote>
+<p><strong>Hidden layers plus nonlinear activations greatly expand the class of functions that a feedforward neural network can represent.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: Architecture vs Training -->
+  <section id="s-28" data-search-section="Architecture vs Training" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>28. Architecture vs Training</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>These are different questions.</p>
+<h3>Architecture</h3>
+<blockquote>
+<p>What computation are we allowing the network to perform?</p>
+</blockquote>
+<p>Examples:</p>
+<ul>
+<li>number of layers,</li>
+<li>units per layer,</li>
+<li>activation choices,</li>
+<li>connectivity.</li>
+</ul>
+<h3>Training</h3>
+<blockquote>
+<p>How are we selecting the parameters?</p>
+</blockquote>
+<p>Examples:</p>
+<ul>
+<li>loss function,</li>
+<li>gradient descent,</li>
+<li>backpropagation,</li>
+<li>learning rate,</li>
+<li>initialization.</li>
+</ul>
+<p>A network can have an excellent architecture but poorly trained parameters.</p>
+<p>Conversely, excellent optimization cannot magically turn a severely inadequate architecture into the right model for every task.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 29: Active Recall — Close the Book -->
+  <section id="s-29" data-search-section="Active Recall — Close the Book" class="content-section">
+    <div class="section-header">
+      <h2>29. Active Recall — Close the Book</h2>
+      <button class="bookmark-btn" data-id="s-29" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <ol>
+<li>What is an MLP?</li>
+<li>What is the role of a hidden layer?</li>
+<li>Why does an MLP use hidden representations?</li>
+<li>What is the difference between width and depth?</li>
+<li>What is a pre-activation \(z\)?</li>
+<li>Why is bias included?</li>
+<li>Why are nonlinear activations important?</li>
+<li>Show algebraically why stacked linear layers collapse into one linear transformation.</li>
+<li>What are the shapes of \(W\) and \(b\) for a dense layer with \(d\) inputs and \(h\) units?</li>
+<li>How many parameters does that layer contain?</li>
+<li>Distinguish architecture from training.</li>
+<li>How is MLP related to a learned feature map \(\phi_\theta(x)\)?</li>
+<li>Why is an MLP called feedforward?</li>
+<li>How does a binary-classification output differ conceptually from a regression output?</li>
+<li>Why is “more layers always means better” incorrect?</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 30: Practice Set -->
+  <section id="s-30" data-search-section="Practice Set" class="content-section">
+    <div class="section-header">
+      <h2>30. Practice Set</h2>
+      <button class="bookmark-btn" data-id="s-30" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>A. Conceptual</h2>
+<h3>Q1</h3>
+<p>Define Multi-Layer Perceptron.</p>
+<h3>Q2</h3>
+<p>Why are hidden layers useful?</p>
+<h3>Q3</h3>
+<p>Why does a network with only linear layers remain linear-affine overall?</p>
+<h3>Q4</h3>
+<p>Differentiate between width and depth.</p>
+<h3>Q5</h3>
+<p>Explain MLP as a composition of functions.</p>
+<h2>B. Numericals</h2>
+<h3>Q6</h3>
+<p>A dense layer receives 8 inputs and has 5 neurons. Find its parameter count.</p>
+<h3>Q7</h3>
+<p>For architecture <code>10 → 6 → 4 → 1</code>, find the number of parameters.</p>
+<h3>Q8</h3>
+<p>If \(W\in\mathbb R^{7\times4}\) and \(x\in\mathbb R^4\), what is the dimension of \(Wx\)?</p>
+<h2>C. Mathematical reasoning</h2>
+<h3>Q9</h3>
+<p>Show that two affine layers without nonlinear activation can be represented by a single affine transformation.</p>
+<h3>Q10</h3>
+<p>Explain why matrix dimensions matter when deriving a forward pass.</p>
+<h2>D. Diagram questions</h2>
+<h3>Q11</h3>
+<p>Draw a 3-input, 2-hidden-layer, 1-output MLP.</p>
+<h3>Q12</h3>
+<p>Annotate each matrix and bias with its correct dimensions.</p>
+<h2>E. Applied</h2>
+<h3>Q13</h3>
+<p>Describe how an MLP could be used for house-price regression.</p>
+<h3>Q14</h3>
+<p>Describe how an MLP could classify spam/non-spam messages.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 31: University Exam Lens -->
+  <section id="s-31" data-search-section="University Exam Lens" class="content-section">
+    <div class="section-header">
+      <h2>31. University Exam Lens</h2>
+      <button class="bookmark-btn" data-id="s-31" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>2 marks</h2>
+<ul>
+<li>Define MLP.</li>
+<li>What is a hidden layer?</li>
+<li>What is the role of an activation function?</li>
+<li>Define depth and width.</li>
+<li>State the parameter count of a dense layer.</li>
+</ul>
+<h2>5 marks</h2>
+<h3>Question</h3>
+<blockquote>
+<p>Explain the architecture and working of an MLP.</p>
+</blockquote>
+<h3>Answer structure</h3>
+<ol>
+<li>Define MLP.</li>
+<li>Draw input-hidden-output architecture.</li>
+<li>Explain weights and biases.</li>
+<li>Explain hidden representations.</li>
+<li>Explain nonlinear activation.</li>
+<li>Explain feedforward computation.</li>
+</ol>
+<h2>10 marks</h2>
+<h3>Question</h3>
+<blockquote>
+<p>Explain why multilayer neural networks are more expressive than a single perceptron.</p>
+</blockquote>
+<p>Recommended structure:</p>
+<ol>
+<li>Define perceptron.</li>
+<li>State limitation of a single layer.</li>
+<li>Introduce hidden layers.</li>
+<li>Give MLP architecture.</li>
+<li>Show matrix equations.</li>
+<li>Explain learned intermediate representations.</li>
+<li>Show why nonlinearity matters.</li>
+<li>Demonstrate collapse of stacked linear layers.</li>
+<li>Explain task-dependent output layer.</li>
+<li>Connect MLP to representation learning.</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 32: Common Exam Traps -->
+  <section id="s-32" data-search-section="Common Exam Traps" class="content-section">
+    <div class="section-header">
+      <h2>32. Common Exam Traps</h2>
+      <button class="bookmark-btn" data-id="s-32" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Trap 1</h3>
+<p>Writing that MLP means “many perceptrons” without mentioning layers.</p>
+<h3>Trap 2</h3>
+<p>Forgetting biases in parameter-count questions.</p>
+<h3>Trap 3</h3>
+<p>Writing incorrect matrix dimensions.</p>
+<h3>Trap 4</h3>
+<p>Saying activation functions are only for making values smaller.</p>
+<h3>Trap 5</h3>
+<p>Confusing the hidden activation output \(a\) with the pre-activation \(z\).</p>
+<h3>Trap 6</h3>
+<p>Assuming every output layer uses sigmoid.</p>
+<h3>Trap 7</h3>
+<p>Claiming that hidden neurons always correspond to human-readable features.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 33: Math You Need Now -->
+  <section id="s-33" data-search-section="Math You Need Now" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>33. Math You Need Now</h2>
+      <button class="bookmark-btn" data-id="s-33" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You need only a compact set of ideas before moving to activation/loss mathematics:</p>
+<h3>Vector</h3>
+<div class="formula-math">\[
+\mathbf{x}\in\mathbb R^d.
+\]</div>
+<h3>Matrix multiplication</h3>
+<div class="formula-math">\[
+(m\times n)(n\times p)=(m\times p).
+\]</div>
+<h3>Affine transformation</h3>
+<div class="formula-math">\[
+W\mathbf{x}+b.
+\]</div>
+<h3>Function composition</h3>
+<div class="formula-math">\[
+(f\circ g)(x)=f(g(x)).
+\]</div>
+<p>These are the mathematical building blocks of an MLP.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 34: Course Lens — Supplied Materials -->
+  <section id="s-34" data-search-section="Course Lens — Supplied Materials" class="content-section">
+    <div class="section-header">
+      <h2>34. Course Lens — Supplied Materials</h2>
+      <button class="bookmark-btn" data-id="s-34" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The resource guide maps:</p>
+<ul>
+<li><code>CS6910 Lecture 2</code> → biological/artificial neurons, threshold logic, perceptron, learning algorithm, MLP, representation power.</li>
+<li><code>prac_7_neural_network.ipynb</code> → neuron, weights/bias, activations, losses and gradient-descent concept.</li>
+<li><code>Lecture10 copy.pdf</code> → learned feature representation / neural network as a learned feature map.</li>
+</ul>
+<p>The supplied notes are not a complete formal textbook treatment of every MLP theorem or architecture variant. Therefore this chapter combines the course-specific framing with standard mathematical explanations needed to make the topic self-contained.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 35: Resource Shelf -->
+  <section id="s-35" data-search-section="Resource Shelf" class="content-section">
+    <div class="section-header">
+      <h2>35. Resource Shelf</h2>
+      <button class="bookmark-btn" data-id="s-35" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Core course resources</h2>
+<ul>
+<li><code>CS6910 Lecture 2</code></li>
+<li><code>prac_7_neural_network.ipynb</code></li>
+<li><code>Lecture10 copy.pdf</code></li>
+</ul>
+<h2>Video / visual intuition</h2>
+<ul>
+<li>StatQuest — <em>Neural Networks: The Essential Main Ideas</em></li>
+<li>3Blue1Brown — <em>But what is a Neural Network?</em></li>
+</ul>
+<h2>Structured learning</h2>
+<ul>
+<li>NPTEL — Introduction to Machine Learning</li>
+<li>NPTEL / Deep Learning material for feedforward neural networks</li>
+</ul>
+<h3>Use order</h3>
+<div class="ascii-box"><pre>Read this chapter
+      ↓
+Watch one visual neural-network explanation
+      ↓
+Trace the matrix equations by hand
+      ↓
+Do the parameter-count questions
+      ↓
+Move to activations + losses</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 36: Chapter Exit Test -->
+  <section id="s-36" data-search-section="Chapter Exit Test" class="content-section">
+    <div class="section-header">
+      <h2>36. Chapter Exit Test</h2>
+      <button class="bookmark-btn" data-id="s-36" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You are ready to move on when you can:</p>
+<ul>
+<li>[ ] Define an MLP.</li>
+<li>[ ] Draw a basic MLP architecture.</li>
+<li>[ ] Explain input, hidden and output layers.</li>
+<li>[ ] Explain weights and biases.</li>
+<li>[ ] Write \(z=W a+b\).</li>
+<li>[ ] Track matrix dimensions correctly.</li>
+<li>[ ] Calculate dense-layer parameter counts.</li>
+<li>[ ] Explain why hidden layers matter.</li>
+<li>[ ] Explain why nonlinear activations matter.</li>
+<li>[ ] Show why stacked linear layers collapse to one affine transformation.</li>
+<li>[ ] Explain MLP as function composition.</li>
+<li>[ ] Connect MLP to learned feature representations.</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 37: Connection to the Next Topic -->
+  <section id="s-37" data-search-section="Connection to the Next Topic" class="content-section">
+    <div class="section-header">
+      <h2>37. Connection to the Next Topic</h2>
+      <button class="bookmark-btn" data-id="s-37" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>We now know <strong>where</strong> the layers are.</p>
+<p>But a major question remains:</p>
+<blockquote>
+<p><strong>What exactly should each layer do to its pre-activation values, and how should the network measure whether its prediction is good or bad?</strong></p>
+</blockquote>
+<p>That leads to:</p>
+<p><strong><code>MAIN-U3-C33 — Activation Functions and Loss Functions</code>.</strong></p>
+<hr />
+<h1>Status</h1>
+<p><strong><code>ML-U3-C32</code> — COMPLETE</strong></p>
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="ch31-perceptron-learning-algorithm.html" class="nav-btn">← Ch 31 — The Perceptron</a>
+    <a href="ch33-activations-and-loss-functions.html" class="nav-btn primary">Next: Ch 33 — Activations & Loss Functions →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch32-multi-layer-perceptron.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 32</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

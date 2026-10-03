@@ -1,0 +1,1955 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 17: Generalization, Bias-Variance, Overfitting &amp; Underfitting — AI & Machine Learning MiniBook. Generalization Gap, Empirical vs True Risk, Underfitting vs Overfitting, Mathematical Derivation of Bias-Variance Decomposition, and Model Complexity">
+<title>Ch 17 — Generalization, Bias-Variance, Overfitting &amp; Underfitting | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-vi">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 17 — Generalization, Bias-Variance, Overfitting &amp; Underfitting</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 17 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why This Chapter Exists <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. One-Minute Intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Training Error vs Test Error <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. The Most Important Rule About the Test Set <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. The Classroom Analogy: Training vs Validation vs Test <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Why Do We Need a Validation Set? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Model Flexibility </a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. The Famous U-Shaped Test-Error Story <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Underfitting </a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Overfitting <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. A Visual Continuum </a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. What Is Bias? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. What Is Variance? </a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Bias vs Variance — Everyday Analogy </a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. The Third Term: Irreducible Error <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. The Mathematical View of Supervised Learning </a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Why Is the True Regression Function \(f^*(X)=E[Y|X]\)? </a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Bias-Variance Decomposition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Breaking the Formula Down </a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Hinglish Formula Explanation <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Why Bias Is Squared </a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. The Bias-Variance Trade-Off </a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Visualizing the Trade-Off </a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Polynomial Regression as a Mental Model </a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Why Test Error Can Fall Before It Rises <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Training Error vs Flexibility </a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Why Test Error Is More Important Than Training Error </a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Generalization </a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Cross-Validation — Course Connection </a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. A Critical Distinction: Bias in ML vs Bias in AI Ethics <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Common Misconceptions </a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Comparison Table </a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Step-by-Step Diagnostic Flow </a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Math Worked Example — Simple Bias Calculation </a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Math Worked Example — Variance <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. A Complete Mental Picture </a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Active Recall — Close the Book </a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Practice Set <span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. University Exam Lens </a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Math Lens <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Course Lens — Lecture 8 </a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Practical Lens </a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Resource Shelf </a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Common Exam Traps <span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. Chapter Exit Test <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-46" class="sidebar-link"><span class="link-icon">📌</span>46. Memory Card </a>
+      <a href="#s-47" class="sidebar-link"><span class="link-icon">📌</span>47. What Comes Next? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link active"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit II</span><span>›</span><span>Part VI — Hypothesis & Generalization</span><span>›</span><span style="color:var(--em-text)">Chapter 17</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 17 · Unit II · Part VI</div>
+    <div class="chapter-part-banner part-vi">
+      <span class="part-banner-badge">Unit II · Part VI</span>
+      <span>Hypothesis & Generalization</span>
+    </div>
+    <h1 class="chapter-title">Generalization, Bias-Variance, Overfitting &amp; Underfitting</h1>
+    <div class="concept-id-tag">[CONCEPT-ML-017]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: Highest Yield (10-mark guarantee)</span>
+      <span class="chapter-meta-item">📖 ~55 min read</span>
+      <span class="chapter-meta-item">🎯 47 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>Generalization & Bias-Variance:</strong> Training error vs Test error, Underfitting (high bias) vs Overfitting (high variance), Mathematical proof of Bias-Variance decomposition (E[(y-f_hat)^2] = Bias^2 + Variance + Noise), Learning curves, Validation sets, and K-Fold Cross-Validation.</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why This Chapter Exists</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">One-Minute Intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Training Error vs Test Error</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">The Most Important Rule About the Test Set</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">The Classroom Analogy: Training vs Validation vs Test</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Why Do We Need a Validation Set?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Model Flexibility</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">The Famous U-Shaped Test-Error Story</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Underfitting</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Overfitting</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">A Visual Continuum</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">What Is Bias?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">What Is Variance?</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Bias vs Variance — Everyday Analogy</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">The Third Term: Irreducible Error</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">The Mathematical View of Supervised Learning</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Why Is the True Regression Function \(f^*(X)=E[Y|X]\)?</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Bias-Variance Decomposition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Breaking the Formula Down</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Hinglish Formula Explanation</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Why Bias Is Squared</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">The Bias-Variance Trade-Off</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Visualizing the Trade-Off</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Polynomial Regression as a Mental Model</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Why Test Error Can Fall Before It Rises</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Training Error vs Flexibility</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Why Test Error Is More Important Than Training Error</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Generalization</span></a></li>
+      <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Cross-Validation — Course Connection</span></a></li>
+      <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">A Critical Distinction: Bias in ML vs Bias in AI Ethics</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Common Misconceptions</span></a></li>
+      <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Comparison Table</span></a></li>
+      <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Step-by-Step Diagnostic Flow</span></a></li>
+      <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Math Worked Example — Simple Bias Calculation</span></a></li>
+      <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Math Worked Example — Variance</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">A Complete Mental Picture</span></a></li>
+      <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Active Recall — Close the Book</span></a></li>
+      <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Practice Set</span><span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a></li>
+      <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">University Exam Lens</span></a></li>
+      <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Math Lens</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Course Lens — Lecture 8</span></a></li>
+      <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Practical Lens</span></a></li>
+      <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Resource Shelf</span></a></li>
+      <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Common Exam Traps</span><span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a></li>
+      <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">Chapter Exit Test</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-46"><span class="toc-num">46</span><span class="toc-name">Memory Card</span></a></li>
+      <li class="toc-item"><a href="#s-47"><span class="toc-num">47</span><span class="toc-name">What Comes Next?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+    </ul>
+  </div>
+
+  <div class="chapter-preamble-card"><h1>MAIN-U2-C17 — Generalization, Bias-Variance, Overfitting &amp; Underfitting</h1>
+<blockquote>
+<p><strong>Main Book:</strong> AI &amp; Machine Learning — Visual + Mathematical Self-Learning Textbook<br />
+<strong>Unit:</strong> II — Machine Learning Fundamentals<br />
+<strong>Topic ID:</strong> <code>ML-U2-C17</code><br />
+<strong>Prerequisites:</strong> <code>ML-U2-C14</code>, <code>ML-U2-C15</code>, <code>ML-U2-C16</code><br />
+<strong>Primary course source:</strong> <code>Lecture08.pdf</code> — <em>Supervised Learning: Hypothesis Class &amp; Bias-Variance Trade-off</em>, Prof. Subrahmanya Swamy Peruru, IIT Kanpur<br />
+<strong>Supporting course source:</strong> <code>Lecture09.pdf</code> for the later connection between model flexibility and polynomial fitting.<br />
+<strong>Practical connection:</strong> <code>pract_6_bias_and_hypothesis_class.ipynb</code>, as listed in your supplied resource set.</p>
+</blockquote>
+<hr /></div>
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 1: Why This Chapter Exists -->
+  <section id="s-01" data-search-section="Why This Chapter Exists" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>1. Why This Chapter Exists</h2>
+      <button class="bookmark-btn" data-id="s-01" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You now know that a hypothesis class controls what kinds of models the learner can choose.</p>
+<p>But that immediately creates a new question:</p>
+<blockquote>
+<p><strong>How flexible should the model be?</strong></p>
+</blockquote>
+<p>Imagine drawing a curve through measured data.</p>
+<p>One model gives a straight line.</p>
+<p>Another gives a gentle curve.</p>
+<p>Another gives a wild curve that passes through nearly every training point.</p>
+<p>Which one is actually learning the underlying relationship?</p>
+<p>This chapter gives the mathematical language to discuss that problem.</p>
+<p>The central story is:</p>
+<div class="ascii-box"><pre>Too simple
+   ↓
+Underfitting
+   ↓
+Too complex
+   ↓
+Overfitting
+
+Goal:
+Good generalization</pre></div>
+<p>Your Lecture 8 explicitly asks why test error first decreases and then increases as model flexibility changes, and then develops the bias-variance decomposition. <span class="source-marker">Course source: <code>Lecture08.pdf</code>, slides 18–23.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 2: One-Minute Intuition -->
+  <section id="s-02" data-search-section="One-Minute Intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. One-Minute Intuition</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>English</h3>
+<p>A model can fail in two broad ways:</p>
+<ul>
+<li><strong>Underfitting:</strong> it is too restrictive to capture the real relationship.</li>
+<li><strong>Overfitting:</strong> it is so flexible that it adapts too closely to the particular training data.</li>
+</ul>
+<p>The best model is not the one that fits the training data most aggressively.</p>
+<p>It is the one that performs well on data it did not see during training.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+Socho tum exam ke liye padh rahe ho.
+
+</div>
+
+<h3>Underfitting</h3>
+<p>Tumne bas 2–3 formulas yaad kiye aur concept nahi padha.</p>
+<p>Question thoda change hua → answer nahi aaya.</p>
+<h3>Overfitting</h3>
+<p>Tumne previous year's exact questions aur their answers rat liye.</p>
+<p>Same question aaya → perfect.</p>
+<p>Thoda wording change hua → problem.</p>
+<h3>Generalization</h3>
+<p>Tumne underlying concept samjha, isliye <strong>new question</strong> bhi solve kar pa rahe ho.</p>
+<p>ML mein bhi target new/unseen data par achha perform karna hai.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: Training Error vs Test Error -->
+  <section id="s-03" data-search-section="Training Error vs Test Error" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>3. Training Error vs Test Error</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose we train a model on:</p>
+<div class="formula-math">\[
+\mathcal S_{train}
+\]</div>
+<p>and keep separate data:</p>
+<div class="formula-math">\[
+\mathcal S_{test}
+\]</div>
+<h3>Training error</h3>
+<p>Measures how well the model fits the training data.</p>
+<h3>Test error</h3>
+<p>Measures performance on held-out data used as a proxy for unseen examples.</p>
+<p>The Lecture 8 definition is:</p>
+<div class="formula-math">\[
+\boxed{
+TestError
+=
+\frac1m\sum_{i=1}^{m}
+\ell(f(x_i),y_i)
+}
+\]</div>
+<p>for the test set. <span class="source-marker">Course source: <code>Lecture08.pdf</code>, slide 6.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: The Most Important Rule About the Test Set -->
+  <section id="s-04" data-search-section="The Most Important Rule About the Test Set" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>4. The Most Important Rule About the Test Set</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your test set should be treated like an <strong>exam paper you have not seen</strong>.</p>
+<p>It should not be used to:</p>
+<ul>
+<li>fit the model;</li>
+<li>choose the hypothesis class;</li>
+<li>repeatedly tune flexibility;</li>
+<li>decide hyperparameters.</li>
+</ul>
+<p>The supplied lecture explicitly warns that the test set is held out and should simply serve as a proxy for unseen data during evaluation. <span class="source-marker">Course source: <code>Lecture08.pdf</code>, slide 6.</span></p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> Test set ko practice notebook mat banao. Test set ko **final exam** ki tarah rakho.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: The Classroom Analogy: Training vs Validation vs Test -->
+  <section id="s-05" data-search-section="The Classroom Analogy: Training vs Validation vs Test" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>5. The Classroom Analogy: Training vs Validation vs Test</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your Lecture 8 gives an especially useful analogy:</p>
+<blockquote>
+<p>Using the test set to decide model complexity is like peeking at the exam paper to decide how much to study.</p>
+</blockquote>
+<p>Instead, use a <strong>mock exam</strong>.</p>
+<p>That maps to:</p>
+<div class="ascii-box"><pre>Available labelled data
+        │
+        ├── Training set
+        │       ↓
+        │   Fit model
+        │
+        └── Validation set
+                ↓
+       Choose model flexibility /
+       hyperparameters
+
+Final untouched test set
+        ↓
+   Final evaluation</pre></div>
+<p><span class="source-marker">Course source: <code>Lecture08.pdf</code>, slide 24.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: Why Do We Need a Validation Set? -->
+  <section id="s-06" data-search-section="Why Do We Need a Validation Set?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>6. Why Do We Need a Validation Set?</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose you are deciding between:</p>
+<ul>
+<li>a line,</li>
+<li>a degree-3 polynomial,</li>
+<li>a degree-10 polynomial.</li>
+</ul>
+<p>If you repeatedly use the test set to choose among them, the test set is no longer a clean measure of unseen performance.</p>
+<p>Instead:</p>
+<blockquote>
+<p><strong>Training chooses the parameters; validation helps choose the model configuration; test estimates final generalization.</strong></p>
+</blockquote>
+<p>This distinction becomes extremely important later for hyperparameters such as:</p>
+<ul>
+<li>polynomial degree,</li>
+<li>K in K-NN,</li>
+<li>regularization strength \(\lambda\),</li>
+<li>neural-network architecture.</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: Model Flexibility -->
+  <section id="s-07" data-search-section="Model Flexibility" class="content-section">
+    <div class="section-header">
+      <h2>7. Model Flexibility</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Think of flexibility as:</p>
+<blockquote>
+<p><strong>How many different patterns/shapes can the model represent?</strong></p>
+</blockquote>
+<p>A low-flexibility model may only represent smooth/simple patterns.</p>
+<p>A high-flexibility model can bend and adapt much more.</p>
+<div class="ascii-box"><pre>LOW FLEXIBILITY
+───────────────
+Few possible shapes
+
+MEDIUM FLEXIBILITY
+──────────────────
+More possible shapes
+
+HIGH FLEXIBILITY
+─────────────────
+Huge number of possible shapes</pre></div>
+<p>The hypothesis-class idea from C16 and flexibility are closely related.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: The Famous U-Shaped Test-Error Story -->
+  <section id="s-08" data-search-section="The Famous U-Shaped Test-Error Story" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>8. The Famous U-Shaped Test-Error Story</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>As flexibility increases, two things can happen:</p>
+<div class="ascii-box"><pre>Error
+ ↑
+ │        Test error
+ │       /\
+ │      /  \
+ │     /    \
+ │____/      \____
+ │
+ └────────────────────→ Model flexibility
+      low   good   high</pre></div>
+<p>Conceptually:</p>
+<ul>
+<li>At very low flexibility → model is too simple → high test error.</li>
+<li>At moderate flexibility → model captures useful structure → lower test error.</li>
+<li>At very high flexibility → model can fit idiosyncrasies/noise → test error rises again.</li>
+</ul>
+<p>Your Lecture 8 explicitly frames the question as:</p>
+<blockquote>
+<p><strong>Why does test error first decrease and then increase?</strong></p>
+</blockquote>
+<p>The answer is developed through the bias-variance trade-off. <span class="source-marker">Course source: <code>Lecture08.pdf</code>, slides 18–23.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: Underfitting -->
+  <section id="s-09" data-search-section="Underfitting" class="content-section">
+    <div class="section-header">
+      <h2>9. Underfitting</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Definition</h2>
+<p>Underfitting occurs when a model is too restrictive or inflexible to represent the important structure in the data.</p>
+<p>Typical symptom:</p>
+<div class="ascii-box"><pre>Training error → high
+Test error     → high</pre></div>
+<h3>Intuition</h3>
+<p>The model has not learned enough.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> Model bol raha hai: “Mujhe itna simple pattern hi aata hai, main actual data ka relation capture nahi kar pa raha.”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: Overfitting -->
+  <section id="s-10" data-search-section="Overfitting" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>10. Overfitting</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Definition</h2>
+<p>Overfitting occurs when a model adapts too closely to the training data and captures patterns that do not generalize well.</p>
+<p>Typical symptom:</p>
+<div class="ascii-box"><pre>Training error → very low
+Test error     → relatively high</pre></div>
+<h3>Intuition</h3>
+<p>The model has learned the training set extremely specifically rather than learning a robust general rule.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “Training examples ko itna closely yaad kar liya ki naye examples par general rule fail ho gaya.”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: A Visual Continuum -->
+  <section id="s-11" data-search-section="A Visual Continuum" class="content-section">
+    <div class="section-header">
+      <h2>11. A Visual Continuum</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>Model flexibility
+
+LOW ---------------------------------------------- HIGH
+
+Too simple             Useful range             Too complex
+    │                      │                        │
+    ▼                      ▼                        ▼
+Underfitting        Generalization            Overfitting
+    │                      │                        │
+High bias            Balanced behaviour       High variance</pre></div>
+<p>The supplied lecture explicitly associates less-flexible models with higher bias/lower variance and highly flexible models with lower bias/higher variance. <span class="source-marker">Course source: <code>Lecture08.pdf</code>, slide 23.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: What Is Bias? -->
+  <section id="s-12" data-search-section="What Is Bias?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>12. What Is Bias?</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Here “bias” does <strong>not</strong> mean unfairness between social groups.</p>
+<p>That is a different usage of the word.</p>
+<p>In this chapter:</p>
+<blockquote>
+<p><strong>Bias describes systematic error caused by restrictive modelling assumptions.</strong></p>
+</blockquote>
+<p>The lecture describes bias as the systematic mismatch between the expected learned model and the true regression function. <span class="source-marker">Course source: <code>Lecture08.pdf</code>, slides 20–21.</span></p>
+<h3>Intuition</h3>
+<p>Suppose the true relationship is curved but you force a straight line.</p>
+<p>The model's assumptions are systematically too restrictive.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> Model mein ek built-in simplification hai jo baar-baar same direction mein error create kar rahi hai.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: What Is Variance? -->
+  <section id="s-13" data-search-section="What Is Variance?" class="content-section">
+    <div class="section-header">
+      <h2>13. What Is Variance?</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Variance here means:</p>
+<blockquote>
+<p><strong>How sensitive the learned model is to the particular training set.</strong></p>
+</blockquote>
+<p>Imagine training the same algorithm on several different datasets sampled from the same underlying distribution.</p>
+<p>If the learned model changes dramatically each time, the model has high variance.</p>
+<h3>Visual</h3>
+<div class="ascii-box"><pre>Dataset 1 → Model A
+Dataset 2 → Model B
+Dataset 3 → Model C
+Dataset 4 → Model D
+
+If A, B, C, D are very different:
+→ high variance</pre></div>
+<p>The lecture defines variance as arising from sensitivity to the training data. <span class="source-marker">Course source: <code>Lecture08.pdf</code>, slides 20–21.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: Bias vs Variance — Everyday Analogy -->
+  <section id="s-14" data-search-section="Bias vs Variance — Everyday Analogy" class="content-section">
+    <div class="section-header">
+      <h2>14. Bias vs Variance — Everyday Analogy</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine four students trying to estimate the average difficulty of a semester.</p>
+<h3>High bias</h3>
+<p>One student always says:</p>
+<blockquote>
+<p>“Every subject is easy.”</p>
+</blockquote>
+<p>The assumption is too simplistic.</p>
+<h3>High variance</h3>
+<p>Another student changes their estimate wildly depending on which single class they attended that week.</p>
+<p>Their estimate is very sensitive to the particular sample of experience.</p>
+<h3>Better generalization</h3>
+<p>A better approach captures the underlying pattern without being rigid or wildly unstable.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: The Third Term: Irreducible Error -->
+  <section id="s-15" data-search-section="The Third Term: Irreducible Error" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>15. The Third Term: Irreducible Error</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The Lecture 8 decomposition contains three terms:</p>
+<div class="formula-math">\[
+\boxed{
+Expected\ Test\ Error
+=
+Bias^2+Variance+Irreducible\ Error
+}
+\]</div>
+<p>The third term matters because not everything in the target can be explained by the available features.</p>
+<p>The lecture describes irreducible error as error caused by factors that the features cannot explain and that cannot be removed by simply changing the model or adding more data. <span class="source-marker">Course source: <code>Lecture08.pdf</code>, slide 21.</span></p>
+<h3>Example</h3>
+<p>Suppose you predict a person's exact commute time using only:</p>
+<ul>
+<li>day of week</li>
+<li>distance</li>
+</ul>
+<p>But the true commute also depends on:</p>
+<ul>
+<li>an unexpected accident</li>
+<li>a temporary road closure</li>
+<li>a sudden weather event.</li>
+</ul>
+<p>Those unobserved influences can create unavoidable uncertainty.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: The Mathematical View of Supervised Learning -->
+  <section id="s-16" data-search-section="The Mathematical View of Supervised Learning" class="content-section">
+    <div class="section-header">
+      <h2>16. The Mathematical View of Supervised Learning</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The Lecture 8 introduces an underlying data distribution:</p>
+<div class="formula-math">\[
+(X,Y)\sim\mathcal D
+\]</div>
+<p>The true regression function is defined as:</p>
+<div class="formula-math">\[
+\boxed{
+ f^*
+=
+\arg\min_f
+\mathbb E_{(X,Y)\sim\mathcal D}
+[(Y-f(X))^2]
+}
+\]</div>
+<p>The lecture notes that we generally do not know the true distribution \(\mathcal D\), so we cannot directly compute the true optimal function.</p>
+<p>Instead, we sample training data and use a learning algorithm to obtain an approximate function \(\hat f_{\mathcal S}\). <span class="source-marker">Course source: <code>Lecture08.pdf</code>, slide 19.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: Why Is the True Regression Function \(f^*(X)=E[Y|X]\)? -->
+  <section id="s-17" data-search-section="Why Is the True Regression Function \(f^*(X)=E[Y|X]\)?" class="content-section">
+    <div class="section-header">
+      <h2>17. Why Is the True Regression Function \(f^*(X)=E[Y|X]\)?</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The lecture gives the exercise:</p>
+<blockquote>
+<p>Show that the true regression function is:</p>
+</blockquote>
+<div class="formula-math">\[
+\boxed{
+f^*(X)=\mathbb E[Y\mid X]
+}
+\]</div>
+<p>This is an important mathematical result.</p>
+<h3>Intuition first</h3>
+<p>Suppose the same input value \(X=x\) can correspond to several possible target values.</p>
+<p>Then the best single prediction under squared error is the <strong>conditional average</strong> of those outcomes.</p>
+<h3>Tiny example</h3>
+<p>For students with exactly 80% attendance, suppose observed exam scores are:</p>
+<div class="formula-math">\[
+70,\;75,\;80
+\]</div>
+<p>A simple squared-error-optimal prediction for that input condition is the average:</p>
+<div class="formula-math">\[
+\frac{70+75+80}{3}=75
+\]</div>
+<p>So the conditional mean naturally appears.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: Bias-Variance Decomposition -->
+  <section id="s-18" data-search-section="Bias-Variance Decomposition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>18. Bias-Variance Decomposition</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Fix a test input \(x\).</p>
+<p>The Lecture 8 decomposition is:</p>
+<div class="formula-math">\[
+\mathbb E_{\mathcal S,Y}
+\left[(Y-\hat f_{\mathcal S}(x))^2\mid X=x\right]
+\]</div>
+<p>which can be decomposed as:</p>
+<div class="formula-math">\[
+\boxed{
+\underbrace{
+\left(\mathbb E_{\mathcal S}[\hat f_{\mathcal S}(x)]-f^*(x)\right)^2
+}_{Bias^2}
++
+\underbrace{
+\mathbb E_{\mathcal S}
+\left[
+\hat f_{\mathcal S}(x)-
+\mathbb E_{\mathcal S}[\hat f_{\mathcal S}(x)]
+\right]^2
+}_{Variance}
++
+\underbrace{Var(Y\mid X=x)}_{Irreducible\ Error}
+}
+\]</div>
+<p><span class="source-marker">Course source: <code>Lecture08.pdf</code>, slide 20.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: Breaking the Formula Down -->
+  <section id="s-19" data-search-section="Breaking the Formula Down" class="content-section">
+    <div class="section-header">
+      <h2>19. Breaking the Formula Down</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Term 1 — Bias²</h2>
+<div class="formula-math">\[
+\left(E[\hat f(x)]-f^*(x)\right)^2
+\]</div>
+<p>Question:</p>
+<blockquote>
+<p>Across many training sets, is the average learned prediction systematically away from the true regression function?</p>
+</blockquote>
+<p>If yes → bias.</p>
+<hr />
+<h2>Term 2 — Variance</h2>
+<div class="formula-math">\[
+E\left[(\hat f(x)-E[\hat f(x)])^2\right]
+\]</div>
+<p>Question:</p>
+<blockquote>
+<p>How much does the learned prediction move around when the training set changes?</p>
+</blockquote>
+<p>Large movement → high variance.</p>
+<hr />
+<h2>Term 3 — Irreducible Error</h2>
+<div class="formula-math">\[
+Var(Y|X=x)
+\]</div>
+<p>Question:</p>
+<blockquote>
+<p>Even knowing <code>X</code>, how much unavoidable variation remains in <code>Y</code>?</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: Hinglish Formula Explanation -->
+  <section id="s-20" data-search-section="Hinglish Formula Explanation" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>20. Hinglish Formula Explanation</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Think of the total expected prediction error as three sources:</p>
+<blockquote>
+<p><strong>Model ki soch ki galti + dataset ke badalne se model ki instability + data mein unavoidable randomness.</strong></p>
+</blockquote>
+<p>So:</p>
+<div class="ascii-box"><pre>Total error
+   │
+   ├── Bias²
+   │     “Model ki assumption hi galat / too simple”
+   │
+   ├── Variance
+   │     “Dataset badla toh model bhi bahut badal gaya”
+   │
+   └── Irreducible error
+         “Input se sab kuch explain hi nahi hota”</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: Why Bias Is Squared -->
+  <section id="s-21" data-search-section="Why Bias Is Squared" class="content-section">
+    <div class="section-header">
+      <h2>21. Why Bias Is Squared</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The decomposition uses:</p>
+<div class="formula-math">\[
+Bias^2
+\]</div>
+<p>not just bias.</p>
+<p>Why?</p>
+<p>Because the underlying derivation is based on <strong>squared prediction error</strong>, and the squared difference between the average prediction and the target contributes to the total mean-squared error.</p>
+<p>For intuition:</p>
+<div class="ascii-box"><pre>bias = systematic offset
+bias² = contribution to squared error</pre></div>
+<p>You do not need to invent a new story here: the square comes from the MSE framework itself.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: The Bias-Variance Trade-Off -->
+  <section id="s-22" data-search-section="The Bias-Variance Trade-Off" class="content-section">
+    <div class="section-header">
+      <h2>22. The Bias-Variance Trade-Off</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This is called a <strong>trade-off</strong> because increasing model flexibility can move bias and variance in opposite directions.</p>
+<p>Typically:</p>
+<div class="ascii-box"><pre>Increase flexibility
+        ↓
+Bias tends to decrease
+Variance tends to increase</pre></div>
+<p>Conversely:</p>
+<div class="ascii-box"><pre>Decrease flexibility
+        ↓
+Bias tends to increase
+Variance tends to decrease</pre></div>
+<p>The Lecture 8 summary states:</p>
+<ul>
+<li>less-flexible models → higher bias, lower variance;</li>
+<li>highly flexible models → lower bias, higher variance. <span class="source-marker">Course source: <code>Lecture08.pdf</code>, slide 23.</span></li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: Visualizing the Trade-Off -->
+  <section id="s-23" data-search-section="Visualizing the Trade-Off" class="content-section">
+    <div class="section-header">
+      <h2>23. Visualizing the Trade-Off</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>ERROR
+                   ↑
+                   │            Test error
+                   │          /¯¯¯¯¯¯¯\
+                   │         /         \
+                   │        /           \
+                   │       /             \
+                   │      /               \
+                   └────────────────────────────→ FLEXIBILITY
+                         low     ideal      high
+
+             Bias²  →  generally decreases
+             Variance → generally increases</pre></div>
+<p>Do not memorize the exact shape as a universal physical law.</p>
+<p>The important course concept is the qualitative relationship:</p>
+<blockquote>
+<p><strong>More flexibility can reduce systematic bias but increase sensitivity to the training set.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: Polynomial Regression as a Mental Model -->
+  <section id="s-24" data-search-section="Polynomial Regression as a Mental Model" class="content-section">
+    <div class="section-header">
+      <h2>24. Polynomial Regression as a Mental Model</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a target really follows a curved relationship.</p>
+<h3>Degree 1</h3>
+<div class="formula-math">\[
+f(x)=w_0+w_1x
+\]</div>
+<p>Very limited flexibility.</p>
+<h3>Degree 3</h3>
+<div class="formula-math">\[
+f(x)=w_0+w_1x+w_2x^2+w_3x^3
+\]</div>
+<p>More flexible.</p>
+<h3>Degree 15</h3>
+<div class="formula-math">\[
+f(x)=
+\sum_{j=0}^{15}w_jx^j
+\]</div>
+<p>Much more flexible.</p>
+<p>This gives a convenient way to visualize the bias-variance trade-off.</p>
+<p>Your practical resource <code>pract_6_bias_and_hypothesis_class.ipynb</code> is intended to reinforce this idea experimentally.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: Why Test Error Can Fall Before It Rises -->
+  <section id="s-25" data-search-section="Why Test Error Can Fall Before It Rises" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>25. Why Test Error Can Fall Before It Rises</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>At very low flexibility:</p>
+<blockquote>
+<p>The model cannot represent enough of the real pattern.</p>
+</blockquote>
+<p>So bias dominates.</p>
+<p>As flexibility increases:</p>
+<blockquote>
+<p>The model becomes capable of representing important structure.</p>
+</blockquote>
+<p>Test error can fall.</p>
+<p>At very high flexibility:</p>
+<blockquote>
+<p>The model can fit training-specific quirks and become highly sensitive to the particular sample.</p>
+</blockquote>
+<p>Variance increases.</p>
+<p>Test error can rise.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: Training Error vs Flexibility -->
+  <section id="s-26" data-search-section="Training Error vs Flexibility" class="content-section">
+    <div class="section-header">
+      <h2>26. Training Error vs Flexibility</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Training error typically has a different trend.</p>
+<p>As the model becomes more flexible, it generally becomes easier to fit the training data.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>Training error
+ ↑
+ │\
+ │ \
+ │  \
+ │   \________
+ │
+ └────────────────────→ Flexibility</pre></div>
+<p>This creates an important contrast:</p>
+<div class="ascii-box"><pre>More flexibility
+   ↓
+Training error tends to decrease
+
+But
+
+More flexibility
+   ↓
+Test error may eventually increase</pre></div>
+<p>That divergence is one of the central signals of overfitting.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: Why Test Error Is More Important Than Training Error -->
+  <section id="s-27" data-search-section="Why Test Error Is More Important Than Training Error" class="content-section">
+    <div class="section-header">
+      <h2>27. Why Test Error Is More Important Than Training Error</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine two students.</p>
+<p>Student A can reproduce every practice question exactly.</p>
+<p>Student B understands the principle and solves unfamiliar questions.</p>
+<p>On the practice sheet:</p>
+<blockquote>
+<p>Student A may look better.</p>
+</blockquote>
+<p>On an unseen paper:</p>
+<blockquote>
+<p>Student B may generalize better.</p>
+</blockquote>
+<p>ML asks the same kind of question:</p>
+<blockquote>
+<p><strong>What happens on data the model has not seen?</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: Generalization -->
+  <section id="s-28" data-search-section="Generalization" class="content-section">
+    <div class="section-header">
+      <h2>28. Generalization</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Definition</h3>
+<p>Generalization is the ability of a learned model to perform well on unseen data drawn from the same task/distributional setting.</p>
+<h3>Formal intuition</h3>
+<p>Training performance:</p>
+<div class="formula-math">\[
+Error_{train}
+\]</div>
+<p>Generalization performance:</p>
+<div class="formula-math">\[
+Error_{unseen}
+\]</div>
+<p>Because unseen data is not available in advance, we estimate it using a held-out test set.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 29: Cross-Validation — Course Connection -->
+  <section id="s-29" data-search-section="Cross-Validation — Course Connection" class="content-section">
+    <div class="section-header">
+      <h2>29. Cross-Validation — Course Connection</h2>
+      <button class="bookmark-btn" data-id="s-29" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your Lecture 8 ends by introducing cross-validation after discussing the need for a validation set.</p>
+<p>At a high level, cross-validation repeatedly partitions the available data into training/validation portions so model selection can be evaluated more robustly.</p>
+<p>You do not need to treat cross-validation as identical to a final test set.</p>
+<p>Mental model:</p>
+<div class="ascii-box"><pre>Validation / cross-validation
+→ model selection
+
+Final test
+→ final evaluation</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 30: A Critical Distinction: Bias in ML vs Bias in AI Ethics -->
+  <section id="s-30" data-search-section="A Critical Distinction: Bias in ML vs Bias in AI Ethics" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>30. A Critical Distinction: Bias in ML vs Bias in AI Ethics</h2>
+      <button class="bookmark-btn" data-id="s-30" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You will encounter the word <strong>bias</strong> again in Unit IV.</p>
+<p>These are related only at a broad linguistic level.</p>
+<h3>This chapter</h3>
+<p><strong>Statistical/model bias</strong> = systematic modelling error.</p>
+<h3>Unit IV ethics</h3>
+<p><strong>Societal/algorithmic fairness bias</strong> = systematic disparities or unfairness concerns in data or system outcomes.</p>
+<p>Do not mix their definitions in an exam.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 31: Common Misconceptions -->
+  <section id="s-31" data-search-section="Common Misconceptions" class="content-section">
+    <div class="section-header">
+      <h2>31. Common Misconceptions</h2>
+      <button class="bookmark-btn" data-id="s-31" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Misconception 1</h2>
+<blockquote>
+<p>“Overfitting means the training error is high.”</p>
+</blockquote>
+<p>Usually the opposite: overfit models can have very low training error.</p>
+<h2>Misconception 2</h2>
+<blockquote>
+<p>“Underfitting means the test set is bad.”</p>
+</blockquote>
+<p>No. It usually means the model is too restrictive for the relationship it needs to represent.</p>
+<h2>Misconception 3</h2>
+<blockquote>
+<p>“Bias is always bad.”</p>
+</blockquote>
+<p>In statistical learning, some inductive bias is necessary to generalize from finite data.</p>
+<h2>Misconception 4</h2>
+<blockquote>
+<p>“Variance means variance of the labels.”</p>
+</blockquote>
+<p>Not here. In the bias-variance framework, it refers to variability of the learned model/predictions across training datasets.</p>
+<h2>Misconception 5</h2>
+<blockquote>
+<p>“The test set is for choosing hyperparameters.”</p>
+</blockquote>
+<p>No. Use training/validation procedures for that. Preserve the final test set for final evaluation.</p>
+<h2>Misconception 6</h2>
+<blockquote>
+<p>“Zero test error is required.”</p>
+</blockquote>
+<p>Not necessarily. Real data can contain irreducible uncertainty.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 32: Comparison Table -->
+  <section id="s-32" data-search-section="Comparison Table" class="content-section">
+    <div class="section-header">
+      <h2>32. Comparison Table</h2>
+      <button class="bookmark-btn" data-id="s-32" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Concept</th>
+<th>Main question</th>
+<th>Typical symptom</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Underfitting</td>
+<td>Is the model too simple?</td>
+<td>High train error + high test error</td>
+</tr>
+<tr>
+<td>Good generalization</td>
+<td>Does the model capture reusable structure?</td>
+<td>Low enough unseen-data error</td>
+</tr>
+<tr>
+<td>Overfitting</td>
+<td>Is the model too tailored to training data?</td>
+<td>Very low train error + higher unseen-data error</td>
+</tr>
+<tr>
+<td>Bias</td>
+<td>Are assumptions systematically too restrictive?</td>
+<td>Systematic mismatch</td>
+</tr>
+<tr>
+<td>Variance</td>
+<td>Does the model change strongly with the training sample?</td>
+<td>Instability across datasets</td>
+</tr>
+<tr>
+<td>Irreducible error</td>
+<td>What cannot be explained from available inputs?</td>
+<td>Unavoidable residual uncertainty</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 33: Step-by-Step Diagnostic Flow -->
+  <section id="s-33" data-search-section="Step-by-Step Diagnostic Flow" class="content-section">
+    <div class="section-header">
+      <h2>33. Step-by-Step Diagnostic Flow</h2>
+      <button class="bookmark-btn" data-id="s-33" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>When a model performs poorly, ask:</p>
+<div class="ascii-box"><pre>1. Is training error high?
+      │
+      ├── YES → possible underfitting / high bias
+      │
+      └── NO
+           │
+           ▼
+2. Is test error much worse than training error?
+      │
+      ├── YES → possible overfitting / high variance
+      │
+      └── NO → investigate data, noise, representation,
+                optimisation, distribution shift, etc.</pre></div>
+<p>This is a diagnostic mental model, not a substitute for actual model evaluation.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 34: Math Worked Example — Simple Bias Calculation -->
+  <section id="s-34" data-search-section="Math Worked Example — Simple Bias Calculation" class="content-section">
+    <div class="section-header">
+      <h2>34. Math Worked Example — Simple Bias Calculation</h2>
+      <button class="bookmark-btn" data-id="s-34" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the true regression value at a fixed input is:</p>
+<div class="formula-math">\[
+f^*(x)=10
+\]</div>
+<p>Across many training sets, the average prediction is:</p>
+<div class="formula-math">\[
+E[\hat f(x)]=8
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+Bias = 8-10=-2
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+Bias^2=(-2)^2=4
+\]</div>
+<p>So the squared-bias contribution is:</p>
+<div class="formula-math">\[
+\boxed{4}
+\]</div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> Average prediction actual value se 2 units neeche hai, isliye bias = -2. Bias squared = 4.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 35: Math Worked Example — Variance -->
+  <section id="s-35" data-search-section="Math Worked Example — Variance" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>35. Math Worked Example — Variance</h2>
+      <button class="bookmark-btn" data-id="s-35" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose predictions from five different training sets are:</p>
+<div class="formula-math">\[
+8,\;9,\;10,\;11,\;12
+\]</div>
+<p>Mean prediction:</p>
+<div class="formula-math">\[
+\bar f=10
+\]</div>
+<p>The predictions vary around 10.</p>
+<p>The variance measures the average squared deviation from 10.</p>
+<p>The point to understand is more important than memorizing this particular arithmetic:</p>
+<blockquote>
+<p><strong>Variance quantifies prediction instability caused by changes in the training sample.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 36: A Complete Mental Picture -->
+  <section id="s-36" data-search-section="A Complete Mental Picture" class="content-section">
+    <div class="section-header">
+      <h2>36. A Complete Mental Picture</h2>
+      <button class="bookmark-btn" data-id="s-36" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>MODEL FLEXIBILITY
+                                │
+             ┌──────────────────┼──────────────────┐
+             ▼                  ▼                  ▼
+          Too low             Useful             Too high
+             │                  │                  │
+             ▼                  ▼                  ▼
+       Underfitting        Good generalization   Overfitting
+             │                  │                  │
+             ▼                  ▼                  ▼
+        High bias           Balanced             High variance
+        low variance                              low bias</pre></div>
+<p>This is the central picture to remember.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 37: Active Recall — Close the Book -->
+  <section id="s-37" data-search-section="Active Recall — Close the Book" class="content-section">
+    <div class="section-header">
+      <h2>37. Active Recall — Close the Book</h2>
+      <button class="bookmark-btn" data-id="s-37" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <ol>
+<li>What is generalization?</li>
+<li>Why is training error insufficient?</li>
+<li>What is the role of a test set?</li>
+<li>Why should the test set remain untouched during model selection?</li>
+<li>Why is a validation set useful?</li>
+<li>Define underfitting.</li>
+<li>Define overfitting.</li>
+<li>Define bias in this statistical-learning context.</li>
+<li>Define variance in this context.</li>
+<li>What is irreducible error?</li>
+<li>State the bias-variance decomposition.</li>
+<li>Why does flexibility usually reduce bias?</li>
+<li>Why can flexibility increase variance?</li>
+<li>Why can test error first decrease and then increase?</li>
+<li>What is the true regression function under squared loss?</li>
+<li>Why does \(f^*(X)=E[Y|X]\) appear?</li>
+<li>Distinguish statistical bias from fairness-related bias.</li>
+<li>What role does cross-validation play?</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 38: Practice Set -->
+  <section id="s-38" data-search-section="Practice Set" class="content-section mode-gate">
+    <div class="section-header">
+      <h2>38. Practice Set</h2>
+      <button class="bookmark-btn" data-id="s-38" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>A. Conceptual</h2>
+<h3>Q1</h3>
+<p>A model has very high training error and high test error. Give the most likely interpretation and explain why.</p>
+<h3>Q2</h3>
+<p>A model has nearly zero training error but poor test performance. What problem is likely present?</p>
+<h3>Q3</h3>
+<p>Why can adding model flexibility lower training error while increasing test error?</p>
+<h3>Q4</h3>
+<p>Why does a final test set need to remain untouched during model selection?</p>
+<hr />
+<h2>B. Bias-Variance Numerical</h2>
+<h3>Q5</h3>
+<p>At a fixed input:</p>
+<div class="formula-math">\[
+f^*(x)=20,
+\qquad E[\hat f(x)]=17
+\]</div>
+<p>Find the bias and squared bias.</p>
+<h3>Q6</h3>
+<p>Suppose the expected test error decomposition gives:</p>
+<div class="formula-math">\[
+Bias^2=4,
+\quad Variance=9,
+\quad Irreducible=2
+\]</div>
+<p>Find the expected test error contribution at that point.</p>
+<h3>Q7</h3>
+<p>A model's training error falls from 20 to 4 as flexibility increases, while validation error falls from 18 to 10 and then rises to 25. Explain what this suggests about the effect of flexibility.</p>
+<hr />
+<h2>C. Diagram Recall</h2>
+<h3>Q8</h3>
+<p>Draw the qualitative curves for:</p>
+<ul>
+<li>training error vs flexibility;</li>
+<li>test error vs flexibility.</li>
+</ul>
+<p>Then label:</p>
+<ul>
+<li>underfitting region;</li>
+<li>useful range;</li>
+<li>overfitting region.</li>
+</ul>
+<hr />
+<h2>D. Explain in Hinglish</h2>
+<h3>Q9</h3>
+<p>Explain overfitting using the “previous-year exam questions” analogy.</p>
+<h3>Q10</h3>
+<p>Explain variance using the idea of training the same model on different samples.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 39: University Exam Lens -->
+  <section id="s-39" data-search-section="University Exam Lens" class="content-section">
+    <div class="section-header">
+      <h2>39. University Exam Lens</h2>
+      <button class="bookmark-btn" data-id="s-39" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>2-mark answers</h2>
+<h3>Define overfitting.</h3>
+<blockquote>
+<p>Overfitting occurs when a model fits the training data too closely and performs poorly on unseen data.</p>
+</blockquote>
+<h3>Define underfitting.</h3>
+<blockquote>
+<p>Underfitting occurs when a model is too restrictive to capture the important structure in the data, leading to poor training and unseen-data performance.</p>
+</blockquote>
+<h3>Define bias.</h3>
+<blockquote>
+<p>Bias is systematic error arising from restrictive modelling assumptions.</p>
+</blockquote>
+<h3>Define variance.</h3>
+<blockquote>
+<p>Variance is error due to the sensitivity of the learned model to the particular training dataset.</p>
+</blockquote>
+<hr />
+<h2>5-mark question</h2>
+<blockquote>
+<p>Explain the bias-variance trade-off.</p>
+</blockquote>
+<p>Recommended answer:</p>
+<ol>
+<li>Define model flexibility.</li>
+<li>Explain low-flexibility models.</li>
+<li>Explain high-flexibility models.</li>
+<li>State bias trend.</li>
+<li>State variance trend.</li>
+<li>Connect to underfitting/overfitting.</li>
+</ol>
+<hr />
+<h2>10-mark question</h2>
+<blockquote>
+<p>Derive/explain the bias-variance decomposition of expected test error.</p>
+</blockquote>
+<p>Recommended structure:</p>
+<ol>
+<li>Define underlying distribution.</li>
+<li>Define true regression function.</li>
+<li>Define learned function over a random training set.</li>
+<li>State expected squared test error.</li>
+<li>Add and subtract the mean prediction.</li>
+<li>Separate the error terms.</li>
+<li>Identify Bias².</li>
+<li>Identify Variance.</li>
+<li>Identify Irreducible Error.</li>
+<li>Interpret the result and connect it to model flexibility.</li>
+</ol>
+<p>Your exact derivation should follow the mathematical treatment taught in your course material.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 40: Math Lens -->
+  <section id="s-40" data-search-section="Math Lens" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>40. Math Lens</h2>
+      <button class="bookmark-btn" data-id="s-40" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This is one of the mathematically important chapters in Unit II.</p>
+<p>You need:</p>
+<h3>Expectation</h3>
+<div class="formula-math">\[
+E[Z]
+\]</div>
+<h3>Variance</h3>
+<div class="formula-math">\[
+Var(Z)=E[(Z-E[Z])^2]
+\]</div>
+<h3>Conditional expectation</h3>
+<div class="formula-math">\[
+E[Y\mid X=x]
+\]</div>
+<h3>Conditional variance</h3>
+<div class="formula-math">\[
+Var(Y\mid X=x)
+\]</div>
+<h3>Bias</h3>
+<div class="formula-math">\[
+Bias(x)=E_{\mathcal S}[\hat f_{\mathcal S}(x)]-f^*(x)
+\]</div>
+<h3>Bias²</h3>
+<div class="formula-math">\[
+Bias^2(x)=
+\left(E_{\mathcal S}[\hat f_{\mathcal S}(x)]-f^*(x)\right)^2
+\]</div>
+<h3>Total decomposition</h3>
+<div class="formula-math">\[
+\boxed{
+E[(Y-\hat f(X))^2]
+=
+Bias^2+Variance+Irreducible\ Error
+}
+\]</div>
+<h3>Math Companion links</h3>
+<ul>
+<li><code>MATH-PROB-09</code> — Expectation</li>
+<li><code>MATH-PROB-11</code> — Variance</li>
+<li><code>MATH-PROB-14</code> — Conditional expectation</li>
+<li><code>MATH-PROB-15</code> — Conditional variance</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 41: Course Lens — Lecture 8 -->
+  <section id="s-41" data-search-section="Course Lens — Lecture 8" class="content-section">
+    <div class="section-header">
+      <h2>41. Course Lens — Lecture 8</h2>
+      <button class="bookmark-btn" data-id="s-41" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your supplied <code>Lecture08.pdf</code> is the primary source for this chapter.</p>
+<p>Important lecture sequence:</p>
+<ul>
+<li>Slides 2–3 — unrestricted function space, memorization, inductive bias and hypothesis classes;</li>
+<li>slide 6 — test-set estimation of generalization;</li>
+<li>slide 18 — why test error changes with flexibility;</li>
+<li>slide 19 — probabilistic view and true regression function;</li>
+<li>slide 20 — bias-variance decomposition;</li>
+<li>slide 21 — interpretation of bias, variance and irreducible error;</li>
+<li>slide 23 — flexibility, bias and variance;</li>
+<li>slide 24 — validation set and cross-validation.</li>
+</ul>
+<p>The lecture's formal decomposition is the course anchor for the chapter.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 42: Practical Lens -->
+  <section id="s-42" data-search-section="Practical Lens" class="content-section">
+    <div class="section-header">
+      <h2>42. Practical Lens</h2>
+      <button class="bookmark-btn" data-id="s-42" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your resource set includes:</p>
+<p><strong><code>pract_6_bias_and_hypothesis_class.ipynb</code></strong></p>
+<p>Use the practical companion to make the theory visible:</p>
+<div class="ascii-box"><pre>Change model flexibility
+        ↓
+Fit different models
+        ↓
+Observe training error
+        ↓
+Observe held-out/validation behaviour
+        ↓
+See underfitting ↔ useful range ↔ overfitting</pre></div>
+<p>The notebook should be treated as an experiment companion, not as a replacement for the mathematical explanation in this chapter.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 43: Resource Shelf -->
+  <section id="s-43" data-search-section="Resource Shelf" class="content-section">
+    <div class="section-header">
+      <h2>43. Resource Shelf</h2>
+      <button class="bookmark-btn" data-id="s-43" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Primary</h2>
+<ul>
+<li><code>Lecture08.pdf</code></li>
+<li><code>pract_6_bias_and_hypothesis_class.ipynb</code></li>
+</ul>
+<h2>Supporting</h2>
+<ul>
+<li><code>Lecture09.pdf</code> — later model-flexibility / polynomial-regression connection</li>
+</ul>
+<h2>Structured course</h2>
+<p>NPTEL — Introduction to Machine Learning</p>
+<p>Use the supervised-learning/generalization portions for additional examples.</p>
+<h2>Video</h2>
+<p>StatQuest — Bias and Variance</p>
+<p>Use it when the visual trade-off is unclear.</p>
+<h2>Book</h2>
+<p><em>An Introduction to Statistical Learning</em> — model assessment / flexibility chapters for additional examples.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 44: Common Exam Traps -->
+  <section id="s-44" data-search-section="Common Exam Traps" class="content-section mode-gate">
+    <div class="section-header">
+      <h2>44. Common Exam Traps</h2>
+      <button class="bookmark-btn" data-id="s-44" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Trap 1</h3>
+<p>Writing:</p>
+<blockquote>
+<p>“Overfitting means high training error.”</p>
+</blockquote>
+<p>Wrong.</p>
+<h3>Trap 2</h3>
+<p>Writing:</p>
+<blockquote>
+<p>“Bias is always bad.”</p>
+</blockquote>
+<p>Too simplistic.</p>
+<h3>Trap 3</h3>
+<p>Using the test set to select model degree.</p>
+<p>Wrong methodology.</p>
+<h3>Trap 4</h3>
+<p>Confusing statistical bias with fairness bias.</p>
+<p>Wrong context.</p>
+<h3>Trap 5</h3>
+<p>Memorizing the decomposition but not knowing what each term means.</p>
+<p>The examiner can easily expose this with a numerical or conceptual question.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 45: Chapter Exit Test -->
+  <section id="s-45" data-search-section="Chapter Exit Test" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>45. Chapter Exit Test</h2>
+      <button class="bookmark-btn" data-id="s-45" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You are ready to proceed when you can:</p>
+<ul>
+<li>[ ] Explain generalization without using memorized wording.</li>
+<li>[ ] Distinguish training, validation and test data.</li>
+<li>[ ] Explain why the test set must be held out.</li>
+<li>[ ] Identify underfitting from a training/test pattern.</li>
+<li>[ ] Identify overfitting from a training/test pattern.</li>
+<li>[ ] Explain bias in the statistical-learning sense.</li>
+<li>[ ] Explain variance in the statistical-learning sense.</li>
+<li>[ ] Explain irreducible error.</li>
+<li>[ ] State the bias-variance decomposition.</li>
+<li>[ ] Calculate a simple bias² value.</li>
+<li>[ ] Calculate total error from the decomposition.</li>
+<li>[ ] Explain why flexibility can lower bias and raise variance.</li>
+<li>[ ] Explain the U-shaped test-error intuition.</li>
+<li>[ ] Explain why \(f^*(X)=E[Y|X]\) under squared loss.</li>
+<li>[ ] Explain validation vs final test.</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 46: Memory Card -->
+  <section id="s-46" data-search-section="Memory Card" class="content-section">
+    <div class="section-header">
+      <h2>46. Memory Card</h2>
+      <button class="bookmark-btn" data-id="s-46" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <blockquote>
+<h3>GENERALIZATION</h3>
+<p><strong>Train error asks:</strong> “Did I fit what I saw?”<br />
+<strong>Test/generalization asks:</strong> “Can I handle what I haven't seen?”</p>
+<h3>BIAS</h3>
+<p>Too restrictive → systematic mismatch.</p>
+<h3>VARIANCE</h3>
+<p>Too sensitive → changes with the training sample.</p>
+<h3>OVERFITTING</h3>
+<p>Very low training error + poor unseen-data performance.</p>
+<h3>UNDERFITTING</h3>
+<p>Model too restrictive → poor fit and poor generalization.</p>
+<h3>DECOMPOSITION</h3>
+</blockquote>
+<div class="formula-math">\[
+\gt  Test\ Error = Bias^2 + Variance + Irreducible\ Error
+\gt  \]</div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 47: What Comes Next? -->
+  <section id="s-47" data-search-section="What Comes Next?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>47. What Comes Next?</h2>
+      <button class="bookmark-btn" data-id="s-47" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Now we know:</p>
+<ul>
+<li>what supervised learning is;</li>
+<li>what a hypothesis class is;</li>
+<li>how model flexibility affects generalization.</li>
+</ul>
+<p>The next question is:</p>
+<blockquote>
+<p><strong>How do we actually fit one of the most important hypothesis classes—linear models—to data?</strong></p>
+</blockquote>
+<p>That leads to:</p>
+<p><strong><code>MAIN-U2-C18 — Linear Regression</code>.</strong></p>
+<hr />
+<h1>Source Grounding</h1>
+<p><strong>Primary source:</strong> <code>Lecture08.pdf</code>, <em>Introduction to Machine Learning — Lecture 8: Supervised Learning: Hypothesis Class &amp; Bias-Variance Trade-off</em>, Prof. Subrahmanya Swamy Peruru, IIT Kanpur.</p>
+<p><strong>Course-derived content:</strong> generalization, test-set role, validation-set logic, probabilistic view of supervised learning, true regression function, \(f^*(X)=E[Y|X]\), bias-variance decomposition, definitions of bias/variance/irreducible error, flexibility trend, underfitting/overfitting.</p>
+<p><strong>Supporting source:</strong> <code>Lecture09.pdf</code> for the continued model-flexibility/polynomial-regression connection.</p>
+<p><strong>Practical resource:</strong> <code>pract_6_bias_and_hypothesis_class.ipynb</code> is included as the experiment companion in the user's supplied AI/ML resource set.</p>
+<hr />
+<h1>Cross-Book Links</h1>
+<ul>
+<li>Exam Book: <code>EXAM-ML-U2-C17</code></li>
+<li>Math Companion: <code>MATH-PROB-09</code>, <code>MATH-PROB-11</code>, <code>MATH-PROB-14</code>, <code>MATH-PROB-15</code></li>
+<li>Practice Bank: <code>PRAC-ML-U2-C17</code></li>
+<li>Resource Shelf: <code>RES-ML-GENERALIZATION</code></li>
+</ul>
+<hr />
+<h1>Status</h1>
+<p><strong><code>ML-U2-C17</code> — COMPLETE</strong></p>
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="ch16-hypothesis-classes-bias-knn.html" class="nav-btn">← Ch 16 — Hypothesis Classes & KNN</a>
+    <a href="ch18-linear-regression.html" class="nav-btn primary">Next: Ch 18 — Linear Regression →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch17-bias-variance-generalization.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 17</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

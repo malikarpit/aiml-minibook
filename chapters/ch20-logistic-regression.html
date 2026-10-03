@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 20: Logistic Regression Foundations — AI & Machine Learning MiniBook. Classification vs Regression, Why Linear Regression Fails on Classification, The Sigmoid (Logistic) Function, Odds Ratio, Log-Odds (Logit), and Decision Boundaries">
+<title>Ch 20 — Logistic Regression Foundations | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-vii">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 20 — Logistic Regression Foundations</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 20 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why Does Logistic Regression Exist? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. One-Minute Intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Regression vs Classification <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. The Input to the Model <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Why Can&#x27;t We Just Use the Linear Score? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. The Sigmoid Function <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. What Does the Sigmoid Value Mean? </a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. The Decision Threshold <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Real-World Analogy — Exam Pass/Fail </a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Why Is the Decision Boundary Linear? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Where Does the Probability Formula Come From? </a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. What Is a Loss Function? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Why Does Cross-Entropy Make Sense? </a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Training Logistic Regression </a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. A Small Complete Numerical Example <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. What Happens When the Score Changes? </a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. What Do the Weights Mean? </a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Logistic Regression vs Linear Regression <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Logistic Regression Is a Linear Classifier </a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Multiclass Extension — Know the Idea <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Common Misconceptions </a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Active Recall — Close the Book </a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Practice Set </a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Exam Lens </a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Math Lens <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Course Lens </a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Resource Shelf </a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Chapter Exit Test <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link active"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit II</span><span>›</span><span>Part VII — Linear & Logistic Models</span><span>›</span><span style="color:var(--em-text)">Chapter 20</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 20 · Unit II · Part VII</div>
+    <div class="chapter-part-banner part-vii">
+      <span class="part-banner-badge">Unit II · Part VII</span>
+      <span>Linear & Logistic Models</span>
+    </div>
+    <h1 class="chapter-title">Logistic Regression Foundations</h1>
+    <div class="concept-id-tag">[CONCEPT-ML-020]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: Core Foundation</span>
+      <span class="chapter-meta-item">📖 ~45 min read</span>
+      <span class="chapter-meta-item">🎯 28 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>Logistic Regression:</strong> Binary classification, Probability calibration, Failure of linear regression for categorical targets, Sigmoid activation function sigma(z) = 1 / (1 + e^(-z)), Odds ratio, Log-odds / Logit transformation, Linear decision boundaries, and Thresholding.</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why Does Logistic Regression Exist?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">One-Minute Intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Regression vs Classification</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">The Input to the Model</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Why Can&#x27;t We Just Use the Linear Score?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">The Sigmoid Function</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">What Does the Sigmoid Value Mean?</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">The Decision Threshold</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Real-World Analogy — Exam Pass/Fail</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Why Is the Decision Boundary Linear?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Where Does the Probability Formula Come From?</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">What Is a Loss Function?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Why Does Cross-Entropy Make Sense?</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Training Logistic Regression</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">A Small Complete Numerical Example</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">What Happens When the Score Changes?</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">What Do the Weights Mean?</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Logistic Regression vs Linear Regression</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Logistic Regression Is a Linear Classifier</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Multiclass Extension — Know the Idea</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Common Misconceptions</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Active Recall — Close the Book</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Practice Set</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Exam Lens</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Math Lens</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Course Lens</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Resource Shelf</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Chapter Exit Test</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+    </ul>
+  </div>
+
+  <div class="chapter-preamble-card"><h1>MAIN-U2-C20 — Logistic Regression</h1>
+<blockquote>
+<p><strong>Main Book:</strong> AI &amp; Machine Learning — Visual + Mathematical Self-Learning Textbook<br />
+<strong>Unit:</strong> II — Machine Learning Fundamentals<br />
+<strong>Topic ID:</strong> <code>ML-U2-C20</code><br />
+<strong>Prerequisites:</strong> <code>ML-U2-C14</code>, <code>ML-U2-C15</code>, <code>ML-U2-C16</code>, <code>ML-U2-C18</code>, <code>ML-U2-C19</code><br />
+<strong>Official syllabus:</strong> Unit II — Logistic Regression<br />
+<strong>Course-note status:</strong> Your supplied Lecture07–Lecture10 set does not contain a complete dedicated logistic-regression lecture. This chapter therefore uses your syllabus as the requirement and adds a universal explanation from authoritative ML course material.<br />
+<strong>Primary external structured source:</strong> NPTEL Introduction to Machine Learning, which explicitly includes Linear Classification and Logistic Regression.<br />
+<strong>Video support:</strong> StatQuest logistic-regression explanation; NPTEL logistic-regression lectures.  </p>
+</blockquote>
+<hr /></div>
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 1: Why Does Logistic Regression Exist? -->
+  <section id="s-01" data-search-section="Why Does Logistic Regression Exist?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>1. Why Does Logistic Regression Exist?</h2>
+      <button class="bookmark-btn" data-id="s-01" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Before learning the equation, understand the problem.</p>
+<p>Suppose you build a system that must answer:</p>
+<blockquote>
+<p><strong>Is this email spam?</strong></p>
+</blockquote>
+<p>The answer is not a continuous quantity like ₹42,531 or 73.5 kg.</p>
+<p>It is a <strong>class</strong>:</p>
+<div class="ascii-box"><pre>spam
+not spam</pre></div>
+<p>Or:</p>
+<div class="ascii-box"><pre>cancer / not cancer
+fraud / legitimate
+pass / fail
+cat / dog</pre></div>
+<p>Linear regression is designed primarily for predicting a continuous numerical target. Logistic regression is designed for <strong>classification</strong>, especially binary classification.</p>
+<h3>Real-life analogy</h3>
+<p>Imagine a security guard deciding whether someone should enter a restricted area.</p>
+<p>The guard may internally become increasingly convinced:</p>
+<div class="ascii-box"><pre>very unlikely → unlikely → uncertain → likely → very likely</pre></div>
+<p>but the final decision may still be:</p>
+<div class="ascii-box"><pre>ALLOW / DENY</pre></div>
+<p>Logistic regression works similarly:</p>
+<blockquote>
+<p>First produce a quantity that can be interpreted as a probability between 0 and 1; then apply a decision rule to obtain a class.</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 2: One-Minute Intuition -->
+  <section id="s-02" data-search-section="One-Minute Intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. One-Minute Intuition</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>English</h3>
+<p>Logistic regression takes input features, computes a linear score, converts that score into a value between 0 and 1 using the <strong>sigmoid function</strong>, and interprets that value as a probability for a chosen class.</p>
+<p>The flow is:</p>
+<div class="ascii-box"><pre>Input features
+      ↓
+Linear score z = wᵀx + b
+      ↓
+Sigmoid σ(z)
+      ↓
+Probability
+      ↓
+Decision threshold
+      ↓
+Predicted class</pre></div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+Socho pehle model ek **score** banata hai:
+
+> "Mujhe lag raha hai ye spam hai — kitna strongly?"
+
+Lekin raw score kabhi `-20` ho sakta hai aur kabhi `+20`.
+
+Hume probability chahiye:
+
+> "Spam hone ka chance 0.92 hai."
+
+Sigmoid raw score ko probability-like range `[0,1]` mein convert karta hai.
+
+Then threshold lagao:
+
+> 0.92 → spam  
+> 0.21 → not spam
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: Regression vs Classification -->
+  <section id="s-03" data-search-section="Regression vs Classification" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>3. Regression vs Classification</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This distinction should be automatic.</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Problem</th>
+<th>Output</th>
+<th>Example</th>
+<th>Typical model family</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Regression</td>
+<td>Continuous number</td>
+<td>house price</td>
+<td>Linear regression</td>
+</tr>
+<tr>
+<td>Classification</td>
+<td>Class label / class probability</td>
+<td>spam or not spam</td>
+<td>Logistic regression</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Important nuance</h3>
+<p>Logistic regression <strong>does not directly learn the class label as a straight line</strong>.</p>
+<p>It models a probability derived from a linear score.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: The Input to the Model -->
+  <section id="s-04" data-search-section="The Input to the Model" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>4. The Input to the Model</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A data point can contain multiple features:</p>
+<div class="formula-math">\[
+x = [x_1,x_2,\ldots,x_d]^T
+\]</div>
+<p>The model has learned parameters:</p>
+<div class="formula-math">\[
+w=[w_1,w_2,\ldots,w_d]^T
+\]</div>
+<p>and an intercept/bias:</p>
+<div class="formula-math">\[
+b
+\]</div>
+<p>The first stage computes:</p>
+<div class="formula-math">\[
+\boxed{z = w^T x+b}
+\]</div>
+<p>or explicitly:</p>
+<div class="formula-math">\[
+z=w_1x_1+w_2x_2+\cdots+w_dx_d+b
+\]</div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+Har feature model ko thoda influence karta hai.
+
+`weight × feature` = us feature ka contribution.
+
+Sab contributions add karo + bias add karo → raw score `z`.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: Why Can&#x27;t We Just Use the Linear Score? -->
+  <section id="s-05" data-search-section="Why Can&#x27;t We Just Use the Linear Score?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>5. Why Can&#x27;t We Just Use the Linear Score?</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<div class="formula-math">\[
+z=w^Tx+b
+\]</div>
+<p>The score could be:</p>
+<div class="ascii-box"><pre>-12
+-3
+0
++2.7
++19</pre></div>
+<p>A probability should normally be represented between 0 and 1.</p>
+<p>So we need a squashing function.</p>
+<p>That function is the <strong>sigmoid</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: The Sigmoid Function -->
+  <section id="s-06" data-search-section="The Sigmoid Function" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>6. The Sigmoid Function</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="formula-math">\[
+\boxed{
+\sigma(z)=\frac{1}{1+e^{-z}}
+}
+\]</div>
+<p>Properties:</p>
+<div class="formula-math">\[
+0\lt \sigma(z)\lt 1
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\sigma(0)=0.5
+\]</div>
+<p>As <code>z</code> becomes very positive:</p>
+<div class="formula-math">\[
+\sigma(z)\rightarrow 1
+\]</div>
+<p>As <code>z</code> becomes very negative:</p>
+<div class="formula-math">\[
+\sigma(z)\rightarrow 0
+\]</div>
+<h3>Visual mental model</h3>
+<div class="ascii-box"><pre>Probability
+1.0 |                         ______
+    |                      __/
+    |                   __/
+0.5 |------------------*----------------
+    |               __/
+    |            __/
+0.0 |___________/
+    +------------------------------------→ z
+              0</pre></div>
+<p>The sigmoid turns the unbounded score into a bounded value.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: What Does the Sigmoid Value Mean? -->
+  <section id="s-07" data-search-section="What Does the Sigmoid Value Mean?" class="content-section">
+    <div class="section-header">
+      <h2>7. What Does the Sigmoid Value Mean?</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For binary classification, we commonly write:</p>
+<div class="formula-math">\[
+\boxed{
+P(Y=1\mid x)=\sigma(w^Tx+b)
+}
+\]</div>
+<p>That means:</p>
+<blockquote>
+<p>Given input <code>x</code>, the model's estimated probability of class <code>1</code> is the sigmoid of the linear score.</p>
+</blockquote>
+<h3>Example</h3>
+<p>Suppose:</p>
+<div class="formula-math">\[
+z=2
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\sigma(2)=\frac{1}{1+e^{-2}}
+\approx0.881
+\]</div>
+<p>So the model estimates roughly:</p>
+<div class="formula-math">\[
+P(Y=1\mid x)\approx0.881
+\]</div>
+<p>or about 88.1% under the model.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+`z = 2` ka matlab direct "2 probability" nahi hai.
+
+Sigmoid us score ko probability range mein map karta hai.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: The Decision Threshold -->
+  <section id="s-08" data-search-section="The Decision Threshold" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>8. The Decision Threshold</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A probability is not yet a final class label.</p>
+<p>A simple decision rule is:</p>
+<div class="formula-math">\[
+\hat y=
+\begin{cases}
+1,&P(Y=1\mid x)\ge 0.5\\
+0,&P(Y=1\mid x)\lt 0.5
+\end{cases}
+\]</div>
+<p>Because:</p>
+<div class="formula-math">\[
+\sigma(0)=0.5
+\]</div>
+<p>the threshold <code>0.5</code> corresponds to the linear score:</p>
+<div class="formula-math">\[
+z=0
+\]</div>
+<p>Therefore the decision boundary is:</p>
+<div class="formula-math">\[
+\boxed{w^Tx+b=0}
+\]</div>
+<p>This is an extremely important connection:</p>
+<blockquote>
+<p><strong>Logistic regression gives a nonlinear probability curve, but its binary decision boundary in feature space is linear.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: Real-World Analogy — Exam Pass/Fail -->
+  <section id="s-09" data-search-section="Real-World Analogy — Exam Pass/Fail" class="content-section">
+    <div class="section-header">
+      <h2>9. Real-World Analogy — Exam Pass/Fail</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine predicting whether a student will pass based on:</p>
+<ul>
+<li>attendance;</li>
+<li>internal marks;</li>
+<li>assignment completion.</li>
+</ul>
+<p>The model creates a score:</p>
+<div class="formula-math">\[
+z=w_1x_1+w_2x_2+w_3x_3+b
+\]</div>
+<p>Then sigmoid converts it:</p>
+<div class="ascii-box"><pre>raw score → probability of passing</pre></div>
+<p>Example:</p>
+<div class="ascii-box"><pre>z = -3  → probability ≈ 0.047
+z = 0   → probability = 0.500
+z = +3  → probability ≈ 0.953</pre></div>
+<p>So the model transitions smoothly from unlikely to likely.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: Why Is the Decision Boundary Linear? -->
+  <section id="s-10" data-search-section="Why Is the Decision Boundary Linear?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>10. Why Is the Decision Boundary Linear?</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Start from the standard threshold:</p>
+<div class="formula-math">\[
+P(Y=1\mid x)=0.5
+\]</div>
+<p>The sigmoid equals 0.5 exactly when:</p>
+<div class="formula-math">\[
+z=0
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+z=w^Tx+b
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+w^Tx+b=0
+\]</div>
+<p>For two features:</p>
+<div class="formula-math">\[
+w_1x_1+w_2x_2+b=0
+\]</div>
+<p>which describes a line in 2D.</p>
+<p>For three features it describes a plane.</p>
+<p>For higher dimensions it is a <strong>hyperplane</strong>.</p>
+<h3>Visual</h3>
+<div class="ascii-box"><pre>Class 0       |       Class 1
+○ ○ ○         |         ● ● ●
+○ ○           |       ● ● ●
+○             |     ● ●
+--------------|----------------
+       linear decision boundary</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: Where Does the Probability Formula Come From? -->
+  <section id="s-11" data-search-section="Where Does the Probability Formula Come From?" class="content-section">
+    <div class="section-header">
+      <h2>11. Where Does the Probability Formula Come From?</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A useful equivalent form is the <strong>log-odds / logit</strong> relation.</p>
+<p>Start with:</p>
+<div class="formula-math">\[
+p=\sigma(z)=\frac{1}{1+e^{-z}}
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\boxed{
+\log\left(\frac{p}{1-p}\right)=z
+}
+\]</div>
+<p>Since:</p>
+<div class="formula-math">\[
+z=w^Tx+b
+\]</div>
+<p>we get:</p>
+<div class="formula-math">\[
+\boxed{
+\log\left(\frac{p}{1-p}\right)=w^Tx+b
+}
+\]</div>
+<p>This says:</p>
+<blockquote>
+<p>The <strong>log-odds</strong> are modeled as a linear function of the input features.</p>
+</blockquote>
+<p>You do not need to force yourself to memorize this before understanding sigmoid and the decision boundary, but it is a major formal relationship.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: What Is a Loss Function? -->
+  <section id="s-12" data-search-section="What Is a Loss Function?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>12. What Is a Loss Function?</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>During training, the model needs a way to measure:</p>
+<blockquote>
+<p><strong>How wrong are my predicted probabilities?</strong></p>
+</blockquote>
+<p>A common loss for binary logistic regression is <strong>binary cross-entropy / log loss</strong>.</p>
+<p>For one example:</p>
+<div class="formula-math">\[
+\boxed{
+\ell(y,p)=-\left[y\log p+(1-y)\log(1-p)\right]
+}
+\]</div>
+<p>where:</p>
+<ul>
+<li><code>y</code> is the true label, usually 0 or 1;</li>
+<li><code>p</code> is the predicted probability of class 1.</li>
+</ul>
+<p>For <code>n</code> observations, the average loss is:</p>
+<div class="formula-math">\[
+\boxed{
+L(w,b)=
+-\frac1n\sum_{i=1}^{n}
+\left[y_i\log p_i+(1-y_i)\log(1-p_i)\right]
+}
+\]</div>
+<p>with:</p>
+<div class="formula-math">\[
+p_i=\sigma(w^Tx_i+b)
+\]</div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: Why Does Cross-Entropy Make Sense? -->
+  <section id="s-13" data-search-section="Why Does Cross-Entropy Make Sense?" class="content-section">
+    <div class="section-header">
+      <h2>13. Why Does Cross-Entropy Make Sense?</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Consider a true label:</p>
+<div class="formula-math">\[
+y=1
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\ell=-\log p
+\]</div>
+<p>If the model predicts:</p>
+<div class="ascii-box"><pre>p = 0.99 → very small loss
+p = 0.80 → moderate loss
+p = 0.10 → very large loss</pre></div>
+<p>This makes sense.</p>
+<p>If the event really happened, confidently assigning it a tiny probability should be heavily penalized.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+Agar actual answer `1` hai aur model bol raha hai:
+
+> "Probability 1 hone ki 0.99 hai"
+
+good.
+
+But if it says:
+
+> "Probability sirf 0.01 hai"
+
+then model **confidently wrong** hai, so loss bahut bada hona chahiye.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: Training Logistic Regression -->
+  <section id="s-14" data-search-section="Training Logistic Regression" class="content-section">
+    <div class="section-header">
+      <h2>14. Training Logistic Regression</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Conceptually:</p>
+<div class="ascii-box"><pre>Training data
+     ↓
+Choose initial w,b
+     ↓
+Compute z = wᵀx+b
+     ↓
+Compute p = σ(z)
+     ↓
+Compute loss
+     ↓
+Compute how parameters should change
+     ↓
+Update parameters
+     ↓
+Repeat</pre></div>
+<p>The optimization goal is:</p>
+<div class="formula-math">\[
+\boxed{
+\min_{w,b}L(w,b)
+}
+\]</div>
+<p>Gradient-based methods are commonly used to find parameters that reduce the loss.</p>
+<p>This is where your mathematics from Lecture 9 becomes directly relevant:</p>
+<ul>
+<li>vectors;</li>
+<li>inner products;</li>
+<li>derivatives;</li>
+<li>gradients;</li>
+<li>chain rule;</li>
+<li>optimization.</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: A Small Complete Numerical Example -->
+  <section id="s-15" data-search-section="A Small Complete Numerical Example" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>15. A Small Complete Numerical Example</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose we use one feature:</p>
+<blockquote>
+<p>hours studied → probability of passing</p>
+</blockquote>
+<p>Let:</p>
+<div class="formula-math">\[
+w=1,
+\qquad b=-2
+\]</div>
+<p>and a student studied:</p>
+<div class="formula-math">\[
+x=3
+\]</div>
+<h3>Step 1 — Linear score</h3>
+<div class="formula-math">\[
+z=wx+b
+\]</div>
+<div class="formula-math">\[
+z=(1)(3)-2=1
+\]</div>
+<h3>Step 2 — Sigmoid</h3>
+<div class="formula-math">\[
+p=\frac{1}{1+e^{-1}}
+\]</div>
+<div class="formula-math">\[
+p\approx0.731
+\]</div>
+<p>So:</p>
+<blockquote>
+<p>Estimated probability of passing ≈ 73.1%.</p>
+</blockquote>
+<h3>Step 3 — Classification</h3>
+<p>Using threshold 0.5:</p>
+<div class="formula-math">\[
+0.731\gt 0.5
+\]</div>
+<p>therefore:</p>
+<div class="formula-math">\[
+\hat y=1
+\]</div>
+<h3>Mental flow</h3>
+<div class="ascii-box"><pre>x = 3
+ ↓
+z = 1
+ ↓
+σ(1) ≈ 0.731
+ ↓
+73.1%
+ ↓
+Pass / class 1</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: What Happens When the Score Changes? -->
+  <section id="s-16" data-search-section="What Happens When the Score Changes?" class="content-section">
+    <div class="section-header">
+      <h2>16. What Happens When the Score Changes?</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>With the same model:</p>
+<div class="formula-math">\[
+z=x-2
+\]</div>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th style="text-align: right;">x</th>
+<th style="text-align: right;">z</th>
+<th style="text-align: right;">sigmoid(z) approx.</th>
+<th style="text-align: right;">class using 0.5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">-2</td>
+<td style="text-align: right;">0.119</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">0.269</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.500</td>
+<td style="text-align: right;">1*</td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.731</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.881</td>
+<td style="text-align: right;">1</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>*</code> Depending on the chosen tie convention at exactly 0.5; state the rule you are using.</p>
+<p>Notice the important shape:</p>
+<blockquote>
+<p>The probability changes <strong>smoothly</strong>, while the final class can change abruptly at the decision threshold.</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: What Do the Weights Mean? -->
+  <section id="s-17" data-search-section="What Do the Weights Mean?" class="content-section">
+    <div class="section-header">
+      <h2>17. What Do the Weights Mean?</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<div class="formula-math">\[
+P(Y=1\mid x)=\sigma(w_1x_1+w_2x_2+b)
+\]</div>
+<p>If <code>w1</code> is positive, increasing <code>x1</code> increases the linear score <code>z</code>, holding other inputs fixed.</p>
+<p>Since sigmoid is increasing, that tends to increase the predicted probability of class 1.</p>
+<p>If <code>w1</code> is negative, increasing <code>x1</code> tends to decrease that probability.</p>
+<h3>Important caution</h3>
+<p>Do not immediately interpret the magnitude of a weight as a simple real-world effect in the original units when features are differently scaled. Your Lecture 9 explicitly discusses feature scaling because feature magnitudes and units can matter for ML computations. <span class="source-marker">Course source: <code>Lecture09.pdf</code>, pp. 7–9.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: Logistic Regression vs Linear Regression -->
+  <section id="s-18" data-search-section="Logistic Regression vs Linear Regression" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>18. Logistic Regression vs Linear Regression</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Property</th>
+<th>Linear Regression</th>
+<th>Logistic Regression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Main task</td>
+<td>Regression</td>
+<td>Classification</td>
+</tr>
+<tr>
+<td>Basic model score</td>
+<td><code>wᵀx+b</code></td>
+<td><code>wᵀx+b</code></td>
+</tr>
+<tr>
+<td>Output mapping</td>
+<td>Identity</td>
+<td>Sigmoid for binary probability</td>
+</tr>
+<tr>
+<td>Typical target</td>
+<td>Continuous</td>
+<td>Binary class / probability</td>
+</tr>
+<tr>
+<td>Common loss</td>
+<td>Squared error</td>
+<td>Log loss / cross-entropy</td>
+</tr>
+<tr>
+<td>Decision boundary</td>
+<td>Not the main concept</td>
+<td><code>wᵀx+b=0</code> for 0.5 threshold</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Key insight</h3>
+<p>The <strong>linear score</strong> is shared.</p>
+<p>What changes is how the score is interpreted and trained for the target type.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: Logistic Regression Is a Linear Classifier -->
+  <section id="s-19" data-search-section="Logistic Regression Is a Linear Classifier" class="content-section">
+    <div class="section-header">
+      <h2>19. Logistic Regression Is a Linear Classifier</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This sounds contradictory at first.</p>
+<blockquote>
+<p>"But sigmoid is nonlinear!"</p>
+</blockquote>
+<p>Correct: sigmoid is nonlinear.</p>
+<p>However, the decision condition:</p>
+<div class="formula-math">\[
+\sigma(w^Tx+b)\ge0.5
+\]</div>
+<p>is equivalent to:</p>
+<div class="formula-math">\[
+w^Tx+b\ge0
+\]</div>
+<p>So the separating boundary is linear in the original feature space.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+Probability curve nonlinear hai, but boundary banane wala rule linear hai.
+
+Isi liye logistic regression ko **linear classification model** kaha jata hai.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: Multiclass Extension — Know the Idea -->
+  <section id="s-20" data-search-section="Multiclass Extension — Know the Idea" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>20. Multiclass Extension — Know the Idea</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your syllabus only says <strong>logistic regression</strong>, and a binary treatment is the basic starting point.</p>
+<p>For more than two classes, common extensions include:</p>
+<ul>
+<li>one-vs-rest strategies;</li>
+<li>multinomial/softmax logistic regression.</li>
+</ul>
+<p>For <code>K</code> classes, a softmax model can produce:</p>
+<div class="formula-math">\[
+P(Y=k\mid x)=
+\frac{e^{z_k}}{\sum_{j=1}^{K}e^{z_j}}
+\]</div>
+<p>The probabilities sum to 1.</p>
+<p>This is conceptually useful because you will meet <strong>softmax</strong> again in neural networks.</p>
+<p>Do not confuse the binary sigmoid case with the multiclass softmax case.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: Common Misconceptions -->
+  <section id="s-21" data-search-section="Common Misconceptions" class="content-section">
+    <div class="section-header">
+      <h2>21. Common Misconceptions</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Misconception 1</h2>
+<blockquote>
+<p>"Logistic regression predicts only 0 or 1."</p>
+</blockquote>
+<p>The model can produce a <strong>probability</strong>; a threshold converts the probability into a class label.</p>
+<h2>Misconception 2</h2>
+<blockquote>
+<p>"The sigmoid itself makes the decision boundary nonlinear."</p>
+</blockquote>
+<p>The sigmoid is nonlinear, but the standard binary decision boundary remains a hyperplane.</p>
+<h2>Misconception 3</h2>
+<blockquote>
+<p>"A predicted probability of 0.8 means the event definitely occurs 80% of the time in every situation."</p>
+</blockquote>
+<p>Interpret it as the model's estimated conditional probability under its assumptions/data/model quality; it is not a guarantee.</p>
+<h2>Misconception 4</h2>
+<blockquote>
+<p>"Logistic regression is just linear regression followed by rounding."</p>
+</blockquote>
+<p>No. It uses a different probabilistic formulation and a different training objective.</p>
+<h2>Misconception 5</h2>
+<blockquote>
+<p>"Probability must always be 0 or 1."</p>
+</blockquote>
+<p>No. Probability is naturally continuous between 0 and 1; the class decision can be discrete.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: Active Recall — Close the Book -->
+  <section id="s-22" data-search-section="Active Recall — Close the Book" class="content-section">
+    <div class="section-header">
+      <h2>22. Active Recall — Close the Book</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <ol>
+<li>Why do we need logistic regression?</li>
+<li>What is the difference between regression and classification?</li>
+<li>Write the linear score.</li>
+<li>Write the sigmoid equation.</li>
+<li>Why does sigmoid help?</li>
+<li>What does <code>σ(0)</code> equal?</li>
+<li>What happens to sigmoid as <code>z → +∞</code>?</li>
+<li>What happens as <code>z → -∞</code>?</li>
+<li>Write the binary probability equation.</li>
+<li>What is the usual 0.5 decision boundary?</li>
+<li>Why is the decision boundary linear?</li>
+<li>What is binary cross-entropy?</li>
+<li>What does a positive weight generally do, holding other features fixed?</li>
+<li>Why can scaling matter?</li>
+<li>Why is logistic regression called a linear classifier?</li>
+<li>What is the relationship between sigmoid and log-odds?</li>
+<li>How does binary logistic regression differ from softmax/multiclass classification?</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: Practice Set -->
+  <section id="s-23" data-search-section="Practice Set" class="content-section">
+    <div class="section-header">
+      <h2>23. Practice Set</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>A. Conceptual</h2>
+<h3>Q1</h3>
+<p>Explain logistic regression in one paragraph for a student who has never studied ML.</p>
+<h3>Q2</h3>
+<p>Why can't ordinary linear regression output be treated directly as a probability?</p>
+<h3>Q3</h3>
+<p>Why is a sigmoid useful for binary classification?</p>
+<h3>Q4</h3>
+<p>Explain the difference between probability and predicted class.</p>
+<h2>B. Numerical</h2>
+<h3>Q5</h3>
+<p>For:</p>
+<div class="formula-math">\[
+w=2,\;x=3,\;b=-4
+\]</div>
+<p>calculate <code>z</code> and <code>σ(z)</code>.</p>
+<h3>Q6</h3>
+<p>For:</p>
+<div class="formula-math">\[
+w_1=1,\;w_2=-2,\;x_1=4,\;x_2=1,\;b=-1
+\]</div>
+<p>calculate the linear score and predicted class using a 0.5 threshold.</p>
+<h3>Q7</h3>
+<p>A model gives <code>p=0.9</code> for a true label <code>1</code>. Compare its binary cross-entropy with a model giving <code>p=0.1</code> for the same true label. Explain which incurs the larger penalty and why.</p>
+<h2>C. Diagram recall</h2>
+<p>Draw:</p>
+<ol>
+<li>the sigmoid curve;</li>
+<li>the <code>z=0</code> point;</li>
+<li>the <code>p=0.5</code> point;</li>
+<li>probability labels near the ends;</li>
+<li>a 2D linear decision boundary.</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: Exam Lens -->
+  <section id="s-24" data-search-section="Exam Lens" class="content-section">
+    <div class="section-header">
+      <h2>24. Exam Lens</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>2-mark questions</h2>
+<ul>
+<li>Define logistic regression.</li>
+<li>Write the sigmoid function.</li>
+<li>What is the output of sigmoid?</li>
+<li>What is the decision boundary for binary logistic regression?</li>
+<li>Differentiate linear and logistic regression.</li>
+</ul>
+<h2>5-mark question</h2>
+<blockquote>
+<p><strong>Explain logistic regression with sigmoid function.</strong></p>
+</blockquote>
+<p>Recommended structure:</p>
+<ol>
+<li>Define binary classification.</li>
+<li>Give linear score <code>z=wᵀx+b</code>.</li>
+<li>Introduce sigmoid.</li>
+<li>Give probability interpretation.</li>
+<li>Give threshold/decision rule.</li>
+<li>Draw the sigmoid.</li>
+</ol>
+<h2>10-mark question</h2>
+<blockquote>
+<p><strong>Explain logistic regression mathematically and derive the decision boundary.</strong></p>
+</blockquote>
+<p>Recommended structure:</p>
+<ol>
+<li>Problem definition.</li>
+<li>Input vector and parameters.</li>
+<li>Linear score.</li>
+<li>Sigmoid equation.</li>
+<li>Probability interpretation.</li>
+<li>Loss function.</li>
+<li>Training objective.</li>
+<li>Threshold rule.</li>
+<li>Derive <code>wᵀx+b=0</code> for threshold 0.5.</li>
+<li>Advantages/limitations or comparison with linear regression.</li>
+</ol>
+<h3>Exam trap</h3>
+<p>Do not write:</p>
+<blockquote>
+<p>"The sigmoid is the decision boundary."</p>
+</blockquote>
+<p>Write:</p>
+<blockquote>
+<p>"The sigmoid maps the linear score to a probability; for the standard 0.5 threshold, the corresponding decision boundary is <code>wᵀx+b=0</code>."</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: Math Lens -->
+  <section id="s-25" data-search-section="Math Lens" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>25. Math Lens</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This chapter uses:</p>
+<ul>
+<li>vectors;</li>
+<li>dot products;</li>
+<li>exponentials;</li>
+<li>logarithms;</li>
+<li>derivatives;</li>
+<li>gradients;</li>
+<li>optimization.</li>
+</ul>
+<h3>Key equations</h3>
+<div class="formula-math">\[
+z=w^Tx+b
+\]</div>
+<div class="formula-math">\[
+\sigma(z)=\frac{1}{1+e^{-z}}
+\]</div>
+<div class="formula-math">\[
+P(Y=1\mid x)=\sigma(w^Tx+b)
+\]</div>
+<div class="formula-math">\[
+\log\frac{p}{1-p}=w^Tx+b
+\]</div>
+<div class="formula-math">\[
+\ell(y,p)=-[y\log p+(1-y)\log(1-p)]
+\]</div>
+<h3>Math Companion links</h3>
+<ul>
+<li><code>MATH-ALG-XX</code> — exponentials and logarithms</li>
+<li><code>MATH-LA</code> — vectors and inner product</li>
+<li><code>MATH-CALC</code> — derivatives</li>
+<li><code>MATH-OPT</code> — gradient-based minimization</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: Course Lens -->
+  <section id="s-26" data-search-section="Course Lens" class="content-section">
+    <div class="section-header">
+      <h2>26. Course Lens</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your supplied Lecture07 explicitly establishes the supervised-learning framework, regression/classification distinction, loss minimization and the importance of unseen-data performance. It defines classification targets as discrete classes. <span class="source-marker">Course source: <code>Lecture07.pdf</code>, slides 4–6.</span></p>
+<p>Your Lecture09 supplies the linear-model/vector/gradient foundation that this chapter uses. <span class="source-marker">Course source: <code>Lecture09.pdf</code>, slides 11–18.</span></p>
+<p>There is <strong>no complete dedicated logistic-regression derivation in the supplied Lecture07–Lecture10 set</strong>, so the sigmoid, log-odds and binary cross-entropy treatment in this chapter is explicitly an external/universal expansion.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: Resource Shelf -->
+  <section id="s-27" data-search-section="Resource Shelf" class="content-section">
+    <div class="section-header">
+      <h2>27. Resource Shelf</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Primary course material</h2>
+<ul>
+<li><code>Lecture07.pdf</code> — supervised learning and classification framing</li>
+<li><code>Lecture09.pdf</code> — linear model, vectors, gradients and optimization foundations</li>
+</ul>
+<h2>Structured course</h2>
+<p><a href="https://nptel.ac.in/courses/106106139">NPTEL — Introduction to Machine Learning</a></p>
+<p>The current course schedule explicitly includes Linear Classification and Logistic Regression. [External course source]</p>
+<h2>Additional NPTEL course</h2>
+<p><a href="https://onlinecourses.nptel.ac.in/noc17_cs26/preview">NPTEL — Introduction to Machine Learning, IIT Kharagpur</a></p>
+<p>Its course layout explicitly includes Logistic Regression in Week 5. [External course source]</p>
+<h2>Video</h2>
+<p><a href="https://www.youtube.com/watch?v=yIYKR4sgzI8">StatQuest — Logistic Regression</a></p>
+<p>Use this for intuition after reading sections 1–8, then return to the formal equations.</p>
+<h2>Book</h2>
+<ul>
+<li><em>An Introduction to Statistical Learning</em> — classification/logistic regression chapter</li>
+<li>Christopher Bishop, <em>Pattern Recognition and Machine Learning</em> — logistic/linear classification material</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: Chapter Exit Test -->
+  <section id="s-28" data-search-section="Chapter Exit Test" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>28. Chapter Exit Test</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You are ready for C21 when you can:</p>
+<ul>
+<li>[ ] Explain why logistic regression is needed.</li>
+<li>[ ] Explain binary classification.</li>
+<li>[ ] Compute <code>z=wᵀx+b</code>.</li>
+<li>[ ] Compute a sigmoid value.</li>
+<li>[ ] Interpret the output as a probability under the model.</li>
+<li>[ ] Convert probability to a class using a threshold.</li>
+<li>[ ] Derive the 0.5 decision boundary.</li>
+<li>[ ] Explain binary cross-entropy.</li>
+<li>[ ] Explain the log-odds form.</li>
+<li>[ ] Distinguish probability output from class output.</li>
+<li>[ ] Compare logistic regression with linear regression.</li>
+<li>[ ] Explain why feature scaling can matter.</li>
+</ul>
+<hr />
+<h1>Cross-Book Links</h1>
+<ul>
+<li><strong>Exam Book:</strong> <code>EXAM-ML-U2-C20</code></li>
+<li><strong>Math Companion:</strong> <code>MATH-LA</code>, <code>MATH-CALC</code>, <code>MATH-OPT</code></li>
+<li><strong>Practice Bank:</strong> <code>PRAC-ML-U2-C20</code></li>
+<li><strong>Resource Shelf:</strong> <code>RES-ML-LOGREG</code></li>
+<li><strong>Next:</strong> <code>MAIN-U2-C21 — Logistic Regression Mathematics &amp; Decision Boundaries</code></li>
+</ul>
+<hr />
+<h1>Status</h1>
+<p><strong><code>ML-U2-C20</code> — COMPLETE</strong></p>
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="ch19-linear-regression-math.html" class="nav-btn">← Ch 19 — Linear Regression Math</a>
+    <a href="ch21-logistic-regression-math.html" class="nav-btn primary">Next: Ch 21 — Logistic Regression Math →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch20-logistic-regression.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 20</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

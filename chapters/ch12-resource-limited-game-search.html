@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 12: Resource-Limited Game Search &amp; Evaluation — AI & Machine Learning MiniBook. Real-Time Game Search, Depth Cutoff CUTOFF-TEST(s,d), Heuristic Evaluation Functions EVAL(s), Weighted Linear Combinations, Quiescence Search, and Horizon Effect">
+<title>Ch 12 — Resource-Limited Game Search &amp; Evaluation | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-iv">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 12 — Resource-Limited Game Search &amp; Evaluation</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 12 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why do we need resource-limited game search? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. One-minute intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Exact search vs practical search <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. The cutoff test <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Evaluation functions <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Evaluation is not utility <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. A simple evaluation function </a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Why weights matter <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Hand-designed evaluation vs learned evaluation </a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. The horizon effect <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Quiescence </a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Forward pruning <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Beam-search connection </a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Lookup instead of search </a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Why exact numeric utility values can be less important <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Mathematical lens </a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Teacher summary </a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Common misconceptions <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Comparison — Exact Minimax vs Resource-Limited Minimax </a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Worked reasoning example <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Active Recall — Close the Book </a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Practice </a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Exam Lens </a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Course Lens <span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Resource Shelf <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Chapter Exit Test </a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Memory Card </a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Next Connection <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Cross-Book Links </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link active"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit I</span><span>›</span><span>Part IV — Adversarial Search & Game Playing</span><span>›</span><span style="color:var(--em-text)">Chapter 12</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 12 · Unit I · Part IV</div>
+    <div class="chapter-part-banner part-iv">
+      <span class="part-banner-badge">Unit I · Part IV</span>
+      <span>Adversarial Search & Game Playing</span>
+    </div>
+    <h1 class="chapter-title">Resource-Limited Game Search &amp; Evaluation</h1>
+    <div class="concept-id-tag">[CONCEPT-AI-012]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: Core Exam Topic</span>
+      <span class="chapter-meta-item">📖 ~40 min read</span>
+      <span class="chapter-meta-item">🎯 29 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>Evaluation & Resource Limits:</strong> Imperfect real-time decisions, Cutoff tests, Heuristic evaluation function design, Material & positional features, Quiescence search to avoid unstable states, Transposition tables, and Horizon effect.</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why do we need resource-limited game search?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">One-minute intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Exact search vs practical search</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">The cutoff test</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Evaluation functions</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Evaluation is not utility</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">A simple evaluation function</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Why weights matter</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Hand-designed evaluation vs learned evaluation</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">The horizon effect</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Quiescence</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Forward pruning</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Beam-search connection</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Lookup instead of search</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Why exact numeric utility values can be less important</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Mathematical lens</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Teacher summary</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Common misconceptions</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Comparison — Exact Minimax vs Resource-Limited Minimax</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Worked reasoning example</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Active Recall — Close the Book</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Practice</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Exam Lens</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Course Lens</span><span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Resource Shelf</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Chapter Exit Test</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Memory Card</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Next Connection</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Cross-Book Links</span></a></li>
+    </ul>
+  </div>
+
+  <div class="chapter-preamble-card"><h1>MAIN-U1-C12 — Resource-Limited Game Search &amp; Evaluation</h1>
+<blockquote>
+<p><strong>Main Book:</strong> AI &amp; Machine Learning — Visual + Mathematical Self-Learning Textbook<br />
+<strong>Unit:</strong> I — Artificial Intelligence<br />
+<strong>Topic ID:</strong> <code>AI-U1-C12</code><br />
+<strong>Prerequisites:</strong> Game Playing, Minimax, Alpha-Beta Pruning<br />
+<strong>Course position:</strong> Continuation of adversarial search after exact minimax/alpha-beta<br />
+<strong>Status:</strong> Course-material depth + Unit I consolidation support</p>
+</blockquote>
+<hr /></div>
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 1: Why do we need resource-limited game search? -->
+  <section id="s-01" data-search-section="Why do we need resource-limited game search?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>1. Why do we need resource-limited game search?</h2>
+      <button class="bookmark-btn" data-id="s-01" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>So far, we imagined that a game-playing AI could build the entire game tree until it reached actual terminal positions.</p>
+<p>For a tiny game, that is reasonable.</p>
+<p>For a real game such as chess, it quickly becomes impossible.</p>
+<p>Your supplied Game Playing lecture makes this problem explicit: minimax has time complexity <code>O(b^m)</code>, and with chess-like branching and depth, exhaustive search becomes infeasible. The lecture therefore introduces <strong>resource limits</strong>, approximate evaluation, and pruning as ways of making game search practical.</p>
+<h3>The real-world analogy</h3>
+<p>Imagine you have to make a decision in 10 seconds.</p>
+<p>You could imagine every possible future for the next 30 moves—but there simply is not enough time.</p>
+<p>So instead you say:</p>
+<blockquote>
+<p>“I will think ahead as far as I can, then estimate which current position is better.”</p>
+</blockquote>
+<p>That is exactly the idea behind resource-limited game search.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 2: One-minute intuition -->
+  <section id="s-02" data-search-section="One-minute intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. One-minute intuition</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>English</h3>
+<p>Exact minimax asks:</p>
+<blockquote>
+<p><strong>“What happens if we continue the game all the way to the end and both players play optimally?”</strong></p>
+</blockquote>
+<p>Resource-limited search asks:</p>
+<blockquote>
+<p><strong>“I cannot reach the end. What if I search to a practical cutoff and estimate the position there?”</strong></p>
+</blockquote>
+<p>This changes two components:</p>
+<div class="ascii-box"><pre>Exact game search
+        │
+        ├── TERMINAL-TEST
+        └── UTILITY
+
+Resource-limited search
+        │
+        ├── CUTOFF-TEST
+        └── EVAL</pre></div>
+<p>The supplied lecture states this replacement explicitly.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “Puri game tree ke end tak jaane ka time hi nahi hai. Toh jitna realistically dekh sakte ho utna dekho, aur us point par board kitna achha hai uska estimate laga do.”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: Exact search vs practical search -->
+  <section id="s-03" data-search-section="Exact search vs practical search" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>3. Exact search vs practical search</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Exact approach</th>
+<th>Resource-limited approach</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Search until terminal states</td>
+<td>Search until cutoff condition</td>
+</tr>
+<tr>
+<td>Use utility of final state</td>
+<td>Use evaluation function</td>
+</tr>
+<tr>
+<td>Can represent perfect play for finite trees</td>
+<td>Approximates deeper consequences</td>
+</tr>
+<tr>
+<td>Usually computationally expensive</td>
+<td>Computationally practical</td>
+</tr>
+</tbody>
+</table></div>
+<p>The central trade-off is:</p>
+<blockquote>
+<p><strong>More search depth gives more future information, but consumes more computation.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: The cutoff test -->
+  <section id="s-04" data-search-section="The cutoff test" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>4. The cutoff test</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A <strong>cutoff test</strong> decides when the search should stop before reaching a terminal game position.</p>
+<p>The most obvious cutoff is:</p>
+<blockquote>
+<p><strong>maximum search depth reached</strong></p>
+</blockquote>
+<p>For example:</p>
+<div class="ascii-box"><pre>Depth 0
+   ↓
+Depth 1
+   ↓
+Depth 2
+   ↓
+Depth 3
+   ↓
+DEPTH LIMIT → stop searching</pre></div>
+<p>But the cutoff can conceptually depend on other factors too, such as available time or computational budget.</p>
+<h3>Why a cutoff is necessary</h3>
+<p>Without one, the algorithm attempts to keep expanding the game tree until the game actually ends.</p>
+<p>With one, the algorithm can make a move within a fixed resource budget.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: Evaluation functions -->
+  <section id="s-05" data-search-section="Evaluation functions" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>5. Evaluation functions</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>When search stops at a non-terminal state, we still need to decide how desirable that position is.</p>
+<p>We therefore use an <strong>evaluation function</strong>.</p>
+<h3>Formal idea</h3>
+<p>An evaluation function maps a game state to a numerical value:</p>
+<div class="formula-math">\[
+\boxed{Eval(s)=\text{estimated desirability of state }s}
+\]</div>
+<p>The exact meaning of a higher value depends on the perspective used by the system.</p>
+<p>For a MAX player, a larger value can represent a more desirable position.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “Game abhi khatam nahi hui, lekin humein judge karna hai ki current position kis player ke favour mein lag rahi hai.”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: Evaluation is not utility -->
+  <section id="s-06" data-search-section="Evaluation is not utility" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>6. Evaluation is not utility</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This distinction matters.</p>
+<h2>Utility</h2>
+<p>The true value of a terminal game result.</p>
+<p>Examples:</p>
+<ul>
+<li>win = <code>+1</code></li>
+<li>draw = <code>0</code></li>
+<li>loss = <code>-1</code></li>
+</ul>
+<h2>Evaluation</h2>
+<p>An estimate for a state that may not be terminal.</p>
+<p>For example:</p>
+<blockquote>
+<p>“This chess position looks slightly better for White.”</p>
+</blockquote>
+<p>So:</p>
+<div class="ascii-box"><pre>TERMINAL STATE
+      ↓
+   UTILITY
+
+NON-TERMINAL CUTOFF STATE
+      ↓
+   EVALUATION</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: A simple evaluation function -->
+  <section id="s-07" data-search-section="A simple evaluation function" class="content-section">
+    <div class="section-header">
+      <h2>7. A simple evaluation function</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a game has three useful features:</p>
+<ul>
+<li>number of pieces controlled;</li>
+<li>material advantage;</li>
+<li>king safety.</li>
+</ul>
+<p>We can create a weighted score:</p>
+<div class="formula-math">\[
+Eval(s)=w_1f_1(s)+w_2f_2(s)+w_3f_3(s)
+\]</div>
+<p>The supplied Game Playing lecture gives this general linear weighted-sum form:</p>
+<div class="formula-math">\[
+Eval(s)=w_1f_1(s)+w_2f_2(s)+\cdots+w_nf_n(s)
+\]</div>
+<p>and gives the example of using the difference in queen counts as one feature.</p>
+<h3>Interpretation</h3>
+<ul>
+<li><code>f_i(s)</code> = a measurable feature of state <code>s</code></li>
+<li><code>w_i</code> = importance/weight assigned to that feature</li>
+<li><code>Eval(s)</code> = overall estimated position value</li>
+</ul>
+<p>This is an early and very useful bridge to machine learning.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: Why weights matter -->
+  <section id="s-08" data-search-section="Why weights matter" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>8. Why weights matter</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<div class="formula-math">\[
+Eval(s)=2f_1(s)+5f_2(s)
+\]</div>
+<p>Then feature 2 has a larger influence per unit change than feature 1.</p>
+<p>A chess-inspired analogy:</p>
+<blockquote>
+<p>If you value material more heavily than pawn structure, a material difference can dominate a small positional improvement.</p>
+</blockquote>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “Har feature equally important nahi hota. Weight decide karta hai ki model kis signal ko kitni importance de.”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: Hand-designed evaluation vs learned evaluation -->
+  <section id="s-09" data-search-section="Hand-designed evaluation vs learned evaluation" class="content-section">
+    <div class="section-header">
+      <h2>9. Hand-designed evaluation vs learned evaluation</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Historically, strong game systems often relied on carefully designed evaluation functions.</p>
+<p>That requires expertise.</p>
+<p>Your lecture then introduces a machine-learning approach:</p>
+<div class="ascii-box"><pre>Game database
+     ↓
+Past positions + outcomes
+     ↓
+Extract features
+     ↓
+Learn weights
+     ↓
+Evaluation function</pre></div>
+<p>The lecture also notes that evaluation can be learned through self-play.</p>
+<p>This is a beautiful AI → ML connection:</p>
+<blockquote>
+<p><strong>Search chooses where to look; learning can improve how positions are evaluated.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: The horizon effect -->
+  <section id="s-10" data-search-section="The horizon effect" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>10. The horizon effect</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A <strong>horizon effect</strong> occurs when the search cutoff makes the AI prefer to postpone a bad consequence instead of recognizing that the consequence is effectively unavoidable.</p>
+<h3>Example intuition</h3>
+<p>Suppose:</p>
+<div class="ascii-box"><pre>Move now → lose queen in 1 move
+
+Alternative → queen loss appears just beyond search depth</pre></div>
+<p>If the evaluator never reaches the damaging event on the second line, the system may incorrectly prefer it.</p>
+<p>The supplied lecture describes the horizon effect as an adverse move being delayed rather than avoided because of limited search depth.</p>
+<h3>Analogy</h3>
+<blockquote>
+<p>You know a bill must be paid, but your planning horizon ends before the due date. The problem has not disappeared; it has simply moved outside your visible window.</p>
+</blockquote>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “Danger khatam nahi hua. Bas search ki nazar se bahar chala gaya.”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: Quiescence -->
+  <section id="s-11" data-search-section="Quiescence" class="content-section">
+    <div class="section-header">
+      <h2>11. Quiescence</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Some positions are unstable.</p>
+<p>For example, in chess, a position may look acceptable immediately before a major capture sequence.</p>
+<p>If we stop exactly there and evaluate it, the evaluation may be misleading.</p>
+<p>The lecture calls this issue <strong>quiescence</strong>:</p>
+<blockquote>
+<p>evaluation can be unreliable when the position is not stable, so the search may need to continue through important game-changing moves.</p>
+</blockquote>
+<h3>Mental model</h3>
+<div class="ascii-box"><pre>Cutoff point
+     ↓
+Is the position calm/stable?
+     │
+  ┌──┴──┐
+  │     │
+ yes    no
+  │     │
+ eval   search further through critical moves</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: Forward pruning -->
+  <section id="s-12" data-search-section="Forward pruning" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>12. Forward pruning</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Forward pruning means deliberately avoiding some lines because they appear clearly unpromising.</p>
+<p>Your lecture gives the idea:</p>
+<blockquote>
+<p>cut off searches with bad positions before they reach the maximum depth.</p>
+</blockquote>
+<h3>Important warning</h3>
+<p>Forward pruning is risky.</p>
+<p>A position that initially looks bad may lead to a much better future position.</p>
+<p>So unlike alpha-beta pruning, which is designed to preserve the final minimax result under its assumptions, forward pruning is an approximation strategy.</p>
+<h3>This distinction must be remembered</h3>
+<div class="ascii-box"><pre>Alpha-beta
+→ skips branches proven irrelevant to the minimax result.
+
+Forward pruning
+→ skips branches judged unlikely to matter.</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: Beam-search connection -->
+  <section id="s-13" data-search-section="Beam-search connection" class="content-section">
+    <div class="section-header">
+      <h2>13. Beam-search connection</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The lecture describes beam search in this context as exploring a fixed number of promising moves more deeply.</p>
+<p>This connects naturally to the local-search family we studied earlier.</p>
+<h3>Shared idea</h3>
+<blockquote>
+<p><strong>Limit how many possibilities survive.</strong></p>
+</blockquote>
+<p>But the objects being managed differ:</p>
+<ul>
+<li>game search → promising moves/lines;</li>
+<li>local beam search → promising states.</li>
+</ul>
+<p>The shared design principle is computational control.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: Lookup instead of search -->
+  <section id="s-14" data-search-section="Lookup instead of search" class="content-section">
+    <div class="section-header">
+      <h2>14. Lookup instead of search</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Sometimes the best computational trick is not to search at all.</p>
+<p>The lecture gives examples such as:</p>
+<ul>
+<li>opening-move libraries;</li>
+<li>precomputed endgames.</li>
+</ul>
+<h3>Principle</h3>
+<div class="ascii-box"><pre>Would search be expensive?
+        ↓
+Is the answer reusable?
+        ↓
+Yes → store it once
+        ↓
+Retrieve it later</pre></div>
+<p>This is a broader computer-science idea:</p>
+<blockquote>
+<p><strong>Precomputation can trade storage for computation.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: Why exact numeric utility values can be less important -->
+  <section id="s-15" data-search-section="Why exact numeric utility values can be less important" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>15. Why exact numeric utility values can be less important</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The lecture notes that for deterministic games, behaviour can be preserved under a monotonic transformation of an evaluation function because the decision depends on ordering.</p>
+<h3>Example</h3>
+<p>Suppose three states have values:</p>
+<div class="formula-math">\[
+2, 5, 9
+\]</div>
+<p>If we apply:</p>
+<div class="formula-math">\[
+f(x)=10x+7
+\]</div>
+<p>we get:</p>
+<div class="formula-math">\[
+27, 57, 97
+\]</div>
+<p>The exact numbers changed.</p>
+<p>But the ordering remained:</p>
+<div class="formula-math">\[
+2\lt 5\lt 9
+\]</div>
+<p>and therefore:</p>
+<div class="formula-math">\[
+27\lt 57\lt 97
+\]</div>
+<h3>Main intuition</h3>
+<p>For ordinal decision-making, <strong>relative ordering</strong> can matter more than the absolute numerical scale.</p>
+<p>Do not overgeneralize this beyond the assumptions of the game/evaluation setting.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: Mathematical lens -->
+  <section id="s-16" data-search-section="Mathematical lens" class="content-section">
+    <div class="section-header">
+      <h2>16. Mathematical lens</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The core mathematical object is a weighted linear combination:</p>
+<div class="formula-math">\[
+\boxed{Eval(s)=\sum_{i=1}^{n} w_i f_i(s)}
+\]</div>
+<p>This notation will reappear in Machine Learning.</p>
+<p>You should understand:</p>
+<ul>
+<li>summation notation;</li>
+<li>multiplication of a feature by its weight;</li>
+<li>adding feature contributions.</li>
+</ul>
+<h3>Connection to ML</h3>
+<p>A linear model also computes a weighted combination of input features.</p>
+<p>So this chapter is an early bridge to:</p>
+<div class="formula-math">\[
+\text{Game evaluation}
+\longleftrightarrow
+\text{Linear models}
+\]</div>
+<p>The goal is not to say that these systems are identical. The goal is to notice the shared mathematical pattern.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: Teacher summary -->
+  <section id="s-17" data-search-section="Teacher summary" class="content-section">
+    <div class="section-header">
+      <h2>17. Teacher summary</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>English</h3>
+<p>Resource-limited game search accepts a practical truth:</p>
+<blockquote>
+<p><strong>There is not enough time to solve every future exactly.</strong></p>
+</blockquote>
+<p>So we:</p>
+<ol>
+<li>search to a cutoff;</li>
+<li>evaluate the resulting positions;</li>
+<li>use pruning and other computational shortcuts where appropriate;</li>
+<li>choose the move that looks best under the available information.</li>
+</ol>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “Perfect calculation har situation mein possible nahi hoti. Isliye AI limited time mein jitna intelligently dekh sakti hai utna dekhti hai, phir position ko score karke decision leti hai.”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: Common misconceptions -->
+  <section id="s-18" data-search-section="Common misconceptions" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>18. Common misconceptions</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Misconception 1</h2>
+<blockquote>
+<p>“Evaluation function gives the exact future outcome.”</p>
+</blockquote>
+<p>No. It is an <strong>estimate</strong> for a possibly non-terminal state.</p>
+<h2>Misconception 2</h2>
+<blockquote>
+<p>“Deeper search always solves the problem.”</p>
+</blockquote>
+<p>Deeper search improves information but may still be computationally limited and can still face horizon/evaluation issues.</p>
+<h2>Misconception 3</h2>
+<blockquote>
+<p>“Alpha-beta and forward pruning are the same.”</p>
+</blockquote>
+<p>No. Their guarantees and purposes differ.</p>
+<h2>Misconception 4</h2>
+<blockquote>
+<p>“If a feature has a high weight, it is always more important in every situation.”</p>
+</blockquote>
+<p>No. Weight is part of the evaluation model; its meaning depends on feature scale and the model design.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: Comparison — Exact Minimax vs Resource-Limited Minimax -->
+  <section id="s-19" data-search-section="Comparison — Exact Minimax vs Resource-Limited Minimax" class="content-section">
+    <div class="section-header">
+      <h2>19. Comparison — Exact Minimax vs Resource-Limited Minimax</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Exact minimax</th>
+<th>Resource-limited search</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Stopping condition</td>
+<td>Terminal test</td>
+<td>Cutoff test</td>
+</tr>
+<tr>
+<td>State valuation</td>
+<td>Utility</td>
+<td>Evaluation function</td>
+</tr>
+<tr>
+<td>Search horizon</td>
+<td>Until game end</td>
+<td>Practical depth/time/resource limit</td>
+</tr>
+<tr>
+<td>Result</td>
+<td>Exact under game assumptions</td>
+<td>Approximate</td>
+</tr>
+<tr>
+<td>Main difficulty</td>
+<td>Enormous tree</td>
+<td>Choosing a good cutoff/evaluation</td>
+</tr>
+<tr>
+<td>Typical tools</td>
+<td>Minimax</td>
+<td>Depth-limited minimax + alpha-beta + evaluation</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: Worked reasoning example -->
+  <section id="s-20" data-search-section="Worked reasoning example" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>20. Worked reasoning example</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a system can inspect 100,000 positions per second, but a full tree would require billions of positions.</p>
+<p>A practical design could be:</p>
+<div class="ascii-box"><pre>Set time budget
+      ↓
+Search to depth d
+      ↓
+Apply alpha-beta where possible
+      ↓
+At cutoff states:
+      ↓
+Compute Eval(s)
+      ↓
+Back up values
+      ↓
+Select move</pre></div>
+<p>The exact numbers are hardware- and game-dependent. The important principle is the architecture.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: Active Recall — Close the Book -->
+  <section id="s-21" data-search-section="Active Recall — Close the Book" class="content-section">
+    <div class="section-header">
+      <h2>21. Active Recall — Close the Book</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <ol>
+<li>Why is exact minimax impractical for large games?</li>
+<li>What replaces the terminal test in resource-limited search?</li>
+<li>What replaces utility at a cutoff state?</li>
+<li>What is an evaluation function?</li>
+<li>Why can evaluation functions be linear weighted sums?</li>
+<li>What does a weight represent?</li>
+<li>What is the horizon effect?</li>
+<li>What is quiescence?</li>
+<li>What is forward pruning?</li>
+<li>Why is forward pruning risky?</li>
+<li>What is precomputation/lookup doing instead of search?</li>
+<li>Why can monotonic transformations preserve ordering-based decisions?</li>
+<li>How can machine learning improve game evaluation?</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: Practice -->
+  <section id="s-22" data-search-section="Practice" class="content-section">
+    <div class="section-header">
+      <h2>22. Practice</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Conceptual</h2>
+<h3>Q1</h3>
+<p>Explain why cutoff-based search is necessary in real-time games.</p>
+<h3>Q2</h3>
+<p>Differentiate utility function and evaluation function.</p>
+<h3>Q3</h3>
+<p>Explain horizon effect with a non-chess real-world analogy.</p>
+<h3>Q4</h3>
+<p>Why can a stable-position assumption matter to game evaluation?</p>
+<h2>Numerical</h2>
+<h3>Q5</h3>
+<p>Given:</p>
+<div class="formula-math">\[
+Eval(s)=3f_1(s)-2f_2(s)+5f_3(s)
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+f_1=4,\quad f_2=3,\quad f_3=2
+\]</div>
+<p>calculate <code>Eval(s)</code>.</p>
+<h3>Q6</h3>
+<p>A search evaluates 10,000 positions per second and has a 2-second time budget. Approximately how many positions can be considered if all computation were devoted to evaluation/search?</p>
+<h2>Reasoning</h2>
+<h3>Q7</h3>
+<p>Construct a small game example where increasing the cutoff depth changes the preferred move.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: Exam Lens -->
+  <section id="s-23" data-search-section="Exam Lens" class="content-section">
+    <div class="section-header">
+      <h2>23. Exam Lens</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="exam-ladder-card"><div class="ladder-mark-badge">📝 2-mark</div>
+
+> Define an evaluation function.
+
+> What is a cutoff test?
+
+> What is horizon effect?
+
+</div>
+
+<div class="exam-ladder-card"><div class="ladder-mark-badge">📝 5-mark</div>
+
+> Explain resource-limited game search.
+
+Include:
+
+1. Why exact minimax is impractical.
+2. Cutoff test.
+3. Evaluation function.
+4. Depth-limited search.
+5. Alpha-beta as a computational improvement.
+
+</div>
+
+<div class="exam-ladder-card"><div class="ladder-mark-badge">📝 10-mark</div>
+
+> Explain practical game-playing systems under resource constraints.
+
+Suggested sequence:
+
+1. Minimax explosion
+2. Cutoff test
+3. Evaluation function
+4. Weighted features
+5. Alpha-beta
+6. Horizon effect
+7. Quiescence
+8. Forward pruning
+9. Lookup/precomputation
+10. Learned evaluation
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: Course Lens -->
+  <section id="s-24" data-search-section="Course Lens" class="content-section mode-gate">
+    <div class="section-header">
+      <h2>24. Course Lens</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p><strong>Primary source:</strong> <code>lecture-game-playing.pdf</code> — Philipp Koehn, <em>Artificial Intelligence: Game Playing</em>, 17 February 2026.</p>
+<p>Important source sections:</p>
+<ul>
+<li>Resource Limits — slide 21</li>
+<li>Evaluation Functions — slides 22–24</li>
+<li>Learning Evaluation Functions — slide 24</li>
+<li>Quiescence / Horizon Effect — slide 25</li>
+<li>Forward Pruning — slide 26</li>
+<li>Lookup instead of Search — slide 27</li>
+<li>Ordinal evaluation insight — slide 28</li>
+<li>Deterministic game practice — slide 29</li>
+<li>Chance/imperfect-information material follows later in the lecture</li>
+</ul>
+<p>Your supplied lecture explicitly frames resource-limited play as replacing terminal testing with cutoff testing and utility with an evaluation function, then discusses learned evaluation, horizon effects, quiescence, forward pruning and lookup strategies.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: Resource Shelf -->
+  <section id="s-25" data-search-section="Resource Shelf" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>25. Resource Shelf</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Your course material</h3>
+<ul>
+<li><code>lecture-game-playing.pdf</code></li>
+<li><code>MAIN-U1-C10 — Game Playing.md</code></li>
+<li><code>MAIN-U1-C11 — Minimax and Alpha-Beta Pruning.md</code></li>
+</ul>
+<h3>Reference</h3>
+<ul>
+<li>Russell &amp; Norvig — <em>Artificial Intelligence: A Modern Approach</em></li>
+<li>NPTEL Artificial Intelligence: Search Methods for Problem Solving</li>
+</ul>
+<h3>Deepening</h3>
+<p>Use an advanced game-search lecture only after you can perform a complete depth-limited minimax + alpha-beta example by hand.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: Chapter Exit Test -->
+  <section id="s-26" data-search-section="Chapter Exit Test" class="content-section">
+    <div class="section-header">
+      <h2>26. Chapter Exit Test</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You are ready to move to Unit I consolidation when you can:</p>
+<ul>
+<li>[ ] Explain why exact minimax is infeasible for large games.</li>
+<li>[ ] Distinguish terminal test and cutoff test.</li>
+<li>[ ] Distinguish utility and evaluation.</li>
+<li>[ ] Write and explain a weighted evaluation function.</li>
+<li>[ ] Explain learned evaluation.</li>
+<li>[ ] Explain the horizon effect.</li>
+<li>[ ] Explain quiescence.</li>
+<li>[ ] Explain forward pruning.</li>
+<li>[ ] Explain why lookup tables can replace repeated computation.</li>
+<li>[ ] Connect evaluation functions to later ML ideas.</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: Memory Card -->
+  <section id="s-27" data-search-section="Memory Card" class="content-section">
+    <div class="section-header">
+      <h2>27. Memory Card</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <blockquote>
+<p><strong>LIMITED GAME SEARCH</strong></p>
+<p>Search cannot continue forever.</p>
+<p><strong>Cutoff</strong> → stop.<br />
+<strong>Eval(s)</strong> → estimate.<br />
+<strong>Alpha-beta</strong> → avoid branches that cannot affect minimax.<br />
+<strong>Quiescence</strong> → don't evaluate unstable positions too early.<br />
+<strong>Horizon effect</strong> → danger can hide just beyond the cutoff.<br />
+<strong>Forward pruning</strong> → discard apparently poor lines, but with risk.<br />
+<strong>Lookup</strong> → precompute reusable answers.<br />
+<strong>Learning</strong> → improve evaluation from data/self-play.</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: Next Connection -->
+  <section id="s-28" data-search-section="Next Connection" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>28. Next Connection</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>We have now covered the main search families in Unit I:</p>
+<div class="ascii-box"><pre>Problem formulation
+        ↓
+Uninformed search
+        ↓
+Heuristics
+        ↓
+Greedy / A*
+        ↓
+Local search
+        ↓
+CSP
+        ↓
+Game search
+        ↓
+Minimax / Alpha-beta
+        ↓
+Resource-limited evaluation</pre></div>
+<p>The next chapter is not a new algorithm.</p>
+<p>It is a <strong>mastery chapter</strong> that forces all of these ideas to work together.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 29: Cross-Book Links -->
+  <section id="s-29" data-search-section="Cross-Book Links" class="content-section">
+    <div class="section-header">
+      <h2>29. Cross-Book Links</h2>
+      <button class="bookmark-btn" data-id="s-29" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <ul>
+<li><strong>Exam Book:</strong> <code>EXAM-AI-U1-C12-RESOURCE-LIMITED-GAME-SEARCH</code></li>
+<li><strong>Math Companion:</strong> <code>MATH-M01</code>, <code>MATH-M02</code>, <code>MATH-LA</code> for weighted sums</li>
+<li><strong>Main Book previous:</strong> <code>MAIN-U1-C11</code></li>
+<li><strong>Main Book consolidation:</strong> <code>MAIN-U1-C13</code></li>
+</ul>
+<hr />
+<h1>Status</h1>
+<p><strong><code>AI-U1-C12</code> — COMPLETE</strong></p>
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="ch11-minimax-and-alpha-beta-pruning.html" class="nav-btn">← Ch 11 — Minimax</a>
+    <a href="ch13-unit-1-consolidation.html" class="nav-btn primary">Next: Ch 13 — Unit I Consolidation →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch12-resource-limited-game-search.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 12</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

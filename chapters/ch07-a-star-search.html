@@ -1,0 +1,2868 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 7: A* Search Mathematics &amp; Graph Traversal — AI & Machine Learning MiniBook. Combining Past Cost g(n) with Future Estimate h(n): f(n) = g(n) + h(n), Proof of Optimality for Tree Search (Admissibility) and Graph Search (Consistency)">
+<title>Ch 7 — A* Search Mathematics &amp; Graph Traversal | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-ii">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 7 — A* Search Mathematics &amp; Graph Traversal</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 7 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why do we need A*? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. One-minute intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. The journey analogy <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Visual — the three quantities <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. The three symbols you must own <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. A* as a Best-First Search strategy <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Why `g(n)` and `h(n)` are complementary </a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. A* evaluation example <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. A* versus Greedy — the same frontier </a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Why does A* need a special heuristic property? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. What is `h*(n)`? </a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Admissible heuristic <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Why optimism is useful </a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Goal nodes </a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Straight-line distance to Bucharest <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Visual — straight line versus road path </a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. A* algorithm — plain-English version </a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Worked Example — A* from scratch <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Step 0 — Start at A </a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Step 1 — Generate B and C <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Step 2 — Expand B </a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Step 3 — Expand D </a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. What did the A* example teach us? </a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. The most important dry-run table </a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. The optimality idea <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Explain the optimality proof in plain English </a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. The `C*` view from the course lecture </a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Completeness of A* </a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Space usage </a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Time complexity intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. The spectrum from UCS to Greedy </a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Heuristic quality </a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. 8-Puzzle — two admissible heuristics from the course </a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Visual — misplaced tiles vs Manhattan distance </a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Dominance <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Course numerical comparison of heuristics </a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Combining admissible heuristics </a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Relaxed problems </a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. 8-Puzzle relaxed-problem intuition </a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Why does relaxation create a lower bound? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. TSP connection </a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. A* worked comparison with Greedy </a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. When A* returns a goal </a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Common A* misconceptions </a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. A* algorithm trace template <span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a>
+      <a href="#s-46" class="sidebar-link"><span class="link-icon">📌</span>46. Worked Numerical — compare three candidates </a>
+      <a href="#s-47" class="sidebar-link"><span class="link-icon">📌</span>47. Worked Numerical — identify the heuristic problem </a>
+      <a href="#s-48" class="sidebar-link"><span class="link-icon">📌</span>48. Worked Numerical — compare two admissible heuristics </a>
+      <a href="#s-49" class="sidebar-link"><span class="link-icon">📌</span>49. Visual summary — the whole informed-search family </a>
+      <a href="#s-50" class="sidebar-link"><span class="link-icon">📌</span>50. The most important conceptual chain <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-51" class="sidebar-link"><span class="link-icon">📌</span>51. Mathematical summary </a>
+      <a href="#s-52" class="sidebar-link"><span class="link-icon">📌</span>52. Exam Lens <span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a>
+      <a href="#s-53" class="sidebar-link"><span class="link-icon">📌</span>53. Common exam traps </a>
+      <a href="#s-54" class="sidebar-link"><span class="link-icon">📌</span>54. Active Recall — close the book </a>
+      <a href="#s-55" class="sidebar-link"><span class="link-icon">📌</span>55. Recall Answers <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-56" class="sidebar-link"><span class="link-icon">📌</span>56. Practice Set </a>
+      <a href="#s-57" class="sidebar-link"><span class="link-icon">📌</span>57. Memory Card </a>
+      <a href="#s-58" class="sidebar-link"><span class="link-icon">📌</span>58. Math Companion Connection </a>
+      <a href="#s-59" class="sidebar-link"><span class="link-icon">📌</span>59. Exam Book Connection </a>
+      <a href="#s-60" class="sidebar-link"><span class="link-icon">📌</span>60. Resource Shelf <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-61" class="sidebar-link"><span class="link-icon">📌</span>61. Chapter Exit Test </a>
+      <a href="#s-62" class="sidebar-link"><span class="link-icon">📌</span>62. Final mental model </a>
+      <a href="#s-63" class="sidebar-link"><span class="link-icon">📌</span>63. What comes next? </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link active"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit I</span><span>›</span><span>Part II — Classical Search & Problem Solving</span><span>›</span><span style="color:var(--em-text)">Chapter 7</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 7 · Unit I · Part II</div>
+    <div class="chapter-part-banner part-ii">
+      <span class="part-banner-badge">Unit I · Part II</span>
+      <span>Classical Search & Problem Solving</span>
+    </div>
+    <h1 class="chapter-title">A* Search Mathematics &amp; Graph Traversal</h1>
+    <div class="concept-id-tag">[CONCEPT-AI-007]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: Highest Yield (10-mark guarantee)</span>
+      <span class="chapter-meta-item">📖 ~60 min read</span>
+      <span class="chapter-meta-item">🎯 63 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>Informed Search (A* Search):</strong> Evaluation function f(n)=g(n)+h(n), step-by-step trace on 8-puzzle and pathfinding, mathematical proofs of optimality, f-contours, pruning efficiency, memory bottleneck, IDA*, and SMA*.</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why do we need A*?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">One-minute intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">The journey analogy</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Visual — the three quantities</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">The three symbols you must own</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">A* as a Best-First Search strategy</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Why `g(n)` and `h(n)` are complementary</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">A* evaluation example</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">A* versus Greedy — the same frontier</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Why does A* need a special heuristic property?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">What is `h*(n)`?</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Admissible heuristic</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Why optimism is useful</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Goal nodes</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Straight-line distance to Bucharest</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Visual — straight line versus road path</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">A* algorithm — plain-English version</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Worked Example — A* from scratch</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Step 0 — Start at A</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Step 1 — Generate B and C</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Step 2 — Expand B</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Step 3 — Expand D</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">What did the A* example teach us?</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">The most important dry-run table</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">The optimality idea</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Explain the optimality proof in plain English</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">The `C*` view from the course lecture</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Completeness of A*</span></a></li>
+      <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Space usage</span></a></li>
+      <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Time complexity intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">The spectrum from UCS to Greedy</span></a></li>
+      <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Heuristic quality</span></a></li>
+      <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">8-Puzzle — two admissible heuristics from the course</span></a></li>
+      <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Visual — misplaced tiles vs Manhattan distance</span></a></li>
+      <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Dominance</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Course numerical comparison of heuristics</span></a></li>
+      <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Combining admissible heuristics</span></a></li>
+      <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Relaxed problems</span></a></li>
+      <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">8-Puzzle relaxed-problem intuition</span></a></li>
+      <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Why does relaxation create a lower bound?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">TSP connection</span></a></li>
+      <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">A* worked comparison with Greedy</span></a></li>
+      <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">When A* returns a goal</span></a></li>
+      <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Common A* misconceptions</span></a></li>
+      <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">A* algorithm trace template</span><span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a></li>
+      <li class="toc-item"><a href="#s-46"><span class="toc-num">46</span><span class="toc-name">Worked Numerical — compare three candidates</span></a></li>
+      <li class="toc-item"><a href="#s-47"><span class="toc-num">47</span><span class="toc-name">Worked Numerical — identify the heuristic problem</span></a></li>
+      <li class="toc-item"><a href="#s-48"><span class="toc-num">48</span><span class="toc-name">Worked Numerical — compare two admissible heuristics</span></a></li>
+      <li class="toc-item"><a href="#s-49"><span class="toc-num">49</span><span class="toc-name">Visual summary — the whole informed-search family</span></a></li>
+      <li class="toc-item"><a href="#s-50"><span class="toc-num">50</span><span class="toc-name">The most important conceptual chain</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-51"><span class="toc-num">51</span><span class="toc-name">Mathematical summary</span></a></li>
+      <li class="toc-item"><a href="#s-52"><span class="toc-num">52</span><span class="toc-name">Exam Lens</span><span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a></li>
+      <li class="toc-item"><a href="#s-53"><span class="toc-num">53</span><span class="toc-name">Common exam traps</span></a></li>
+      <li class="toc-item"><a href="#s-54"><span class="toc-num">54</span><span class="toc-name">Active Recall — close the book</span></a></li>
+      <li class="toc-item"><a href="#s-55"><span class="toc-num">55</span><span class="toc-name">Recall Answers</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-56"><span class="toc-num">56</span><span class="toc-name">Practice Set</span></a></li>
+      <li class="toc-item"><a href="#s-57"><span class="toc-num">57</span><span class="toc-name">Memory Card</span></a></li>
+      <li class="toc-item"><a href="#s-58"><span class="toc-num">58</span><span class="toc-name">Math Companion Connection</span></a></li>
+      <li class="toc-item"><a href="#s-59"><span class="toc-num">59</span><span class="toc-name">Exam Book Connection</span></a></li>
+      <li class="toc-item"><a href="#s-60"><span class="toc-num">60</span><span class="toc-name">Resource Shelf</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-61"><span class="toc-num">61</span><span class="toc-name">Chapter Exit Test</span></a></li>
+      <li class="toc-item"><a href="#s-62"><span class="toc-num">62</span><span class="toc-name">Final mental model</span></a></li>
+      <li class="toc-item"><a href="#s-63"><span class="toc-num">63</span><span class="toc-name">What comes next?</span></a></li>
+    </ul>
+  </div>
+
+  <div class="chapter-preamble-card"><h1>MAIN-U1-C07 — A* Search</h1>
+<blockquote>
+<p><strong>Main Book:</strong> AI &amp; Machine Learning — Visual + Mathematical Self-Learning Textbook<br />
+<strong>Unit:</strong> I — Artificial Intelligence<br />
+<strong>Topic ID:</strong> <code>AI-U1-C07</code><br />
+<strong>Prerequisites:</strong> Problem Formulation, Search Trees/Nodes, Frontier, Uninformed Search, Heuristics, Greedy Best-First Search<br />
+<strong>Course status:</strong> Core Unit I topic<br />
+<strong>Primary course source:</strong> <code>lecture-informed-search.pdf</code> — Philipp Koehn, <em>Artificial Intelligence: Informed Search</em>, 12 February 2026<br />
+<strong>Previous:</strong> <code>MAIN-U1-C06 — Greedy Best-First Search</code><br />
+<strong>Next:</strong> <code>MAIN-U1-C08 — Local / Evolutionary Search</code></p>
+</blockquote>
+<hr /></div>
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 1: Why do we need A*? -->
+  <section id="s-01" data-search-section="Why do we need A*?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>1. Why do we need A*?</h2>
+      <button class="bookmark-btn" data-id="s-01" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Greedy Best-First Search taught us a powerful idea:</p>
+<blockquote>
+<p><strong>Use a heuristic to estimate how close a node is to the goal.</strong></p>
+</blockquote>
+<p>But we also found its weakness.</p>
+<p>Greedy mainly asks:</p>
+<blockquote>
+<p>“Which node looks closest?”</p>
+</blockquote>
+<p>Suppose one path already cost us 100 units, while another path cost only 5 units. If the expensive path has a slightly smaller heuristic, Greedy may still prefer it.</p>
+<p>So we want a search strategy that considers <strong>both</strong>:</p>
+<ol>
+<li>how much it has already cost to reach a node, and</li>
+<li>how much more it estimates will be needed.</li>
+</ol>
+<p>That gives us the core idea of A*.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 2: One-minute intuition -->
+  <section id="s-02" data-search-section="One-minute intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. One-minute intuition</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>English</h3>
+<p>A* says:</p>
+<blockquote>
+<p><strong>“Don't just ask which node looks close. Also ask how expensive it was to get there.”</strong></p>
+</blockquote>
+<p>It combines:</p>
+<div class="formula-math">\[
+\boxed{f(n)=g(n)+h(n)}
+\]</div>
+<p>where:</p>
+<ul>
+<li><code>g(n)</code> = actual cost already spent to reach <code>n</code></li>
+<li><code>h(n)</code> = estimated cost from <code>n</code> to a goal</li>
+<li><code>f(n)</code> = estimated total cost through <code>n</code></li>
+</ul>
+<p>The supplied lecture states exactly this formulation and introduces A* as a method intended to avoid expanding paths that are already expensive. <span class="source-marker">Course source: <code>lecture-informed-search.pdf</code>, slide 17.</span></p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> **A* bolta hai:** “Sirf destination kitni paas lag rahi hai woh mat dekho. Yahaan tak pahunchne mein kitna kharcha ho chuka hai, woh bhi dekho.”
+
+Socho:
+
+
+
+<div class="ascii-box"><pre>Ab tak ka kharcha + aage ka estimate
+          ↓
+         A*</pre></div>
+
+
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: The journey analogy -->
+  <section id="s-03" data-search-section="The journey analogy" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>3. The journey analogy</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine two people travelling to the same destination.</p>
+<h3>Person A</h3>
+<p>Has already spent ₹900 and is estimated to need ₹100 more.</p>
+<h3>Person B</h3>
+<p>Has already spent ₹300 and is estimated to need ₹400 more.</p>
+<p>Their estimated total costs are:</p>
+<div class="formula-math">\[
+A=900+100=1000
+\]</div>
+<div class="formula-math">\[
+B=300+400=700
+\]</div>
+<p>A* naturally prefers B under this evaluation.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “Aage ka distance hi nahi dekhna. Abhi tak kitna paisa/effort laga + aage kitna lagega, dono combine karo.”
+
+This is the heart of:
+
+
+
+<div class="formula-math">\[
+\boxed{f(n)=g(n)+h(n)}
+\]</div>
+
+
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: Visual — the three quantities -->
+  <section id="s-04" data-search-section="Visual — the three quantities" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>4. Visual — the three quantities</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>START -----------------------------&gt; GOAL
+        
+        [cost already spent]
+              g(n)
+                ↓
+START -------- n ------------------- GOAL
+                 \
+                  \
+                   estimated remaining cost
+                         h(n)
+
+Combined estimate:
+
+              g(n) + h(n)
+                    ↓
+                  f(n)</pre></div>
+<h3>How to read this visual</h3>
+<p>At node <code>n</code>, the path has already accumulated some real cost.</p>
+<p>That is <code>g(n)</code>.</p>
+<p>From <code>n</code> onward, we do not yet know the true cheapest remaining cost, so we use an estimate.</p>
+<p>That is <code>h(n)</code>.</p>
+<p>Adding the two gives an estimate of the cost of a complete route passing through <code>n</code>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: The three symbols you must own -->
+  <section id="s-05" data-search-section="The three symbols you must own" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>5. The three symbols you must own</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Meaning</th>
+<th>Question it answers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>g(n)</code></td>
+<td>Actual cost from start to <code>n</code></td>
+<td>“Mujhe yahaan tak pahunchne mein kitna laga?”</td>
+</tr>
+<tr>
+<td><code>h(n)</code></td>
+<td>Estimated cost from <code>n</code> to goal</td>
+<td>“Goal tak aur kitna lag sakta hai?”</td>
+</tr>
+<tr>
+<td><code>f(n)</code></td>
+<td><code>g(n)+h(n)</code></td>
+<td>“Is route ka estimated total kitna hai?”</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Memory sentence</h3>
+<blockquote>
+<p><strong>g = gone / already gone</strong><br />
+<strong>h = hopeful estimate ahead</strong><br />
+<strong>f = full estimated journey</strong></p>
+</blockquote>
+<p>The mnemonic is only a memory aid; use the actual mathematical definitions in formal answers.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: A* as a Best-First Search strategy -->
+  <section id="s-06" data-search-section="A* as a Best-First Search strategy" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>6. A* as a Best-First Search strategy</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied lecture first defines Best-First Search as a framework that orders the fringe according to an evaluation function. It then identifies A* as a special case.</p>
+<p>For A*:</p>
+<div class="formula-math">\[
+\boxed{f(n)=g(n)+h(n)}
+\]</div>
+<p>So the frontier is prioritized by the <strong>smallest <code>f(n)</code></strong>.</p>
+<div class="ascii-box"><pre>BEST-FIRST SEARCH
+                        │
+             choose evaluation function
+                        │
+              ┌─────────┴─────────┐
+              │                   │
+         GREEDY                  A*
+         f(n)=h(n)          f(n)=g(n)+h(n)
+              │                   │
+        future estimate     past + future estimate</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: Why `g(n)` and `h(n)` are complementary -->
+  <section id="s-07" data-search-section="Why `g(n)` and `h(n)` are complementary" class="content-section">
+    <div class="section-header">
+      <h2>7. Why `g(n)` and `h(n)` are complementary</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine a route to Delhi.</p>
+<h3><code>g(n)</code> alone</h3>
+<p>You might choose the route where you have already spent the least money.</p>
+<p>But you could be far away from the destination.</p>
+<h3><code>h(n)</code> alone</h3>
+<p>You might choose the place that looks closest to Delhi.</p>
+<p>But you might have taken an extremely expensive route to get there.</p>
+<h3><code>g(n)+h(n)</code></h3>
+<p>Now the decision includes both effects.</p>
+<p>That is the conceptual reason A* is more balanced than Greedy.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: A* evaluation example -->
+  <section id="s-08" data-search-section="A* evaluation example" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>8. A* evaluation example</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the frontier contains:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Node</th>
+<th style="text-align: right;"><code>g(n)</code></th>
+<th style="text-align: right;"><code>h(n)</code></th>
+<th style="text-align: right;"><code>f(n)=g+h</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr>
+<td>B</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr>
+<td>C</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr>
+<td>D</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">13</td>
+</tr>
+</tbody>
+</table></div>
+<p>A* compares:</p>
+<div class="formula-math">\[
+12,\quad9,\quad14,\quad13
+\]</div>
+<p>The smallest is:</p>
+<div class="formula-math">\[
+\boxed{9}
+\]</div>
+<p>so A* chooses:</p>
+<div class="formula-math">\[
+\boxed{B}
+\]</div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> B tak aane ka cost 5 tha, aur aage ka estimate 4. Total estimated 9. Sabse chhota hai, isliye B ko expand karenge.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: A* versus Greedy — the same frontier -->
+  <section id="s-09" data-search-section="A* versus Greedy — the same frontier" class="content-section">
+    <div class="section-header">
+      <h2>9. A* versus Greedy — the same frontier</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Use the same nodes:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Node</th>
+<th style="text-align: right;"><code>g</code></th>
+<th style="text-align: right;"><code>h</code></th>
+<th style="text-align: right;">Greedy uses <code>h</code></th>
+<th style="text-align: right;">A* uses <code>g+h</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr>
+<td>B</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">19</td>
+</tr>
+<tr>
+<td>C</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">12</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Greedy</h3>
+<p>Chooses B because:</p>
+<div class="formula-math">\[
+4\lt 7\lt 8
+\]</div>
+<h3>A*</h3>
+<p>Chooses A because:</p>
+<div class="formula-math">\[
+10\lt 12\lt 19
+\]</div>
+<p>This single table is one of the most important comparisons in Unit I.</p>
+<h3>Mental model</h3>
+<blockquote>
+<p><strong>Greedy:</strong> “B looks closer.”<br />
+<strong>A*:</strong> “B looks closer, but it was very expensive to reach.”</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: Why does A* need a special heuristic property? -->
+  <section id="s-10" data-search-section="Why does A* need a special heuristic property?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>10. Why does A* need a special heuristic property?</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>If A* is going to use:</p>
+<div class="formula-math">\[
+f(n)=g(n)+h(n)
+\]</div>
+<p>and we want strong guarantees about the solution it returns, the heuristic cannot be allowed to behave arbitrarily.</p>
+<p>The supplied lecture requires an <strong>admissible heuristic</strong>.</p>
+<p>It states:</p>
+<div class="formula-math">\[
+\boxed{h(n)\le h^*(n)}
+\]</div>
+<p>where:</p>
+<div class="formula-math">\[
+h^*(n)=\text{true cost of the cheapest remaining path from }n\text{ to a goal}
+\]</div>
+<p>and also requires:</p>
+<div class="formula-math">\[
+\boxed{h(n)\ge0}
+\]</div>
+<p><span class="source-marker">Course source: <code>lecture-informed-search.pdf</code>, slide 17.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: What is `h*(n)`? -->
+  <section id="s-11" data-search-section="What is `h*(n)`?" class="content-section">
+    <div class="section-header">
+      <h2>11. What is `h*(n)`?</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This notation looks scary initially, but it is simple.</p>
+<div class="formula-math">\[
+\boxed{h^*(n)}
+\]</div>
+<p>means the <strong>actual optimal remaining cost</strong> from node <code>n</code> to a goal.</p>
+<p>So:</p>
+<div class="ascii-box"><pre>h(n)  = our estimate
+h*(n) = actual cheapest remaining cost</pre></div>
+<h3>Example</h3>
+<p>Suppose the cheapest possible remaining route from <code>A</code> costs 20.</p>
+<p>Then:</p>
+<div class="formula-math">\[
+h^*(A)=20
+\]</div>
+<p>If our heuristic says:</p>
+<div class="formula-math">\[
+h(A)=15
+\]</div>
+<p>that is an underestimate.</p>
+<p>If it says:</p>
+<div class="formula-math">\[
+h(A)=20
+\]</div>
+<p>it is exact.</p>
+<p>If it says:</p>
+<div class="formula-math">\[
+h(A)=27
+\]</div>
+<p>it overestimates.</p>
+<p>That last case violates admissibility.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: Admissible heuristic -->
+  <section id="s-12" data-search-section="Admissible heuristic" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>12. Admissible heuristic</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The course condition is:</p>
+<div class="formula-math">\[
+\boxed{0\le h(n)\le h^*(n)}
+\]</div>
+<h3>English</h3>
+<p>A heuristic is <strong>admissible</strong> if it never overestimates the true cheapest remaining cost.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> **Admissible = optimistic estimate.**
+
+Agar actual remaining cost 20 hai:
+
+- `h=12` ✅
+- `h=18` ✅
+- `h=20` ✅
+- `h=21` ❌
+
+</div>
+
+<h3>Memory anchor</h3>
+<blockquote>
+<p><strong>Admissible heuristic kabhi reality se zyada cost nahi bolta.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: Why optimism is useful -->
+  <section id="s-13" data-search-section="Why optimism is useful" class="content-section">
+    <div class="section-header">
+      <h2>13. Why optimism is useful</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose there is an excellent route hiding somewhere in the search tree.</p>
+<p>If the heuristic were allowed to exaggerate its remaining cost wildly, A* could make that route appear more expensive than it really is.</p>
+<p>An admissible heuristic provides a lower-bound style estimate of remaining cost.</p>
+<p>So A* can reason:</p>
+<blockquote>
+<p>“Even if this estimate is optimistic, this node still cannot be dismissed as more expensive than reality merely because my heuristic exaggerated it.”</p>
+</blockquote>
+<p>The exact optimality reasoning is given later in this chapter.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: Goal nodes -->
+  <section id="s-14" data-search-section="Goal nodes" class="content-section">
+    <div class="section-header">
+      <h2>14. Goal nodes</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>If <code>G</code> is already a goal node, the true remaining cost is:</p>
+<div class="formula-math">\[
+h^*(G)=0
+\]</div>
+<p>For an admissible non-negative heuristic:</p>
+<div class="formula-math">\[
+0\le h(G)\le0
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{h(G)=0}
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+f(G)=g(G)+0=g(G)
+\]</div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> Goal par pahunch gaye. Aage aur kuch nahi hai. Remaining cost zero.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: Straight-line distance to Bucharest -->
+  <section id="s-15" data-search-section="Straight-line distance to Bucharest" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>15. Straight-line distance to Bucharest</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied course uses:</p>
+<div class="formula-math">\[
+\boxed{h_{SLD}(n)=\text{straight-line distance from }n\text{ to Bucharest}}
+\]</div>
+<p>This is a classic navigation heuristic.</p>
+<p>Why is it useful?</p>
+<p>Because straight-line distance is a direct geometric estimate of separation.</p>
+<p>The lecture explicitly uses it as an example that does not overestimate the corresponding actual road distance in the Romania problem. <span class="source-marker">Course source: <code>lecture-informed-search.pdf</code>, slide 17.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: Visual — straight line versus road path -->
+  <section id="s-16" data-search-section="Visual — straight line versus road path" class="content-section">
+    <div class="section-header">
+      <h2>16. Visual — straight line versus road path</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>actual road
+        A  ~~~~~~~~~~~~~~~~~~~~~  B
+         \                       /
+          \                     /
+           \                   /
+            \_________________/
+                  direct line
+
+             A ----------- B
+                 h(n)</pre></div>
+<h3>Interpretation</h3>
+<ul>
+<li>The <strong>road route</strong> may bend and contain extra distance.</li>
+<li>The <strong>straight-line distance</strong> ignores the bends.</li>
+<li>Therefore it can serve as a lower-bound-style estimate in this kind of map problem.</li>
+</ul>
+<h3>Important</h3>
+<p>The geometry itself is not the definition of a heuristic.</p>
+<p>The definition is:</p>
+<blockquote>
+<p><strong>A problem-specific estimate used to guide search.</strong></p>
+</blockquote>
+<p>Straight-line distance is one example.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: A* algorithm — plain-English version -->
+  <section id="s-17" data-search-section="A* algorithm — plain-English version" class="content-section">
+    <div class="section-header">
+      <h2>17. A* algorithm — plain-English version</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <ol>
+<li>Put the start node into the frontier.</li>
+<li>Give it an initial <code>g(n)</code> value.</li>
+<li>Compute its heuristic <code>h(n)</code>.</li>
+<li>Compute:</li>
+</ol>
+<div class="formula-math">\[
+   f(n)=g(n)+h(n)
+   \]</div>
+<ol>
+<li>Select the frontier node with the smallest <code>f(n)</code>.</li>
+<li>If it is a goal, return the solution under the course search assumptions.</li>
+<li>Otherwise expand it.</li>
+<li>For each successor, compute its path cost <code>g</code>, heuristic <code>h</code>, and combined value <code>f</code>.</li>
+<li>Put/update candidates in the frontier according to their <code>f</code> values.</li>
+<li>Repeat.</li>
+</ol>
+<h3>Pseudocode</h3>
+<div class="ascii-box"><pre>A*-SEARCH(problem)
+
+    frontier ← priority queue ordered by f(n)=g(n)+h(n)
+    insert start node
+
+    while frontier is not empty:
+        n ← remove node with smallest f(n)
+
+        if n is a goal:
+            return solution(n)
+
+        expand n
+
+        for each successor s of n:
+            compute g(s)
+            compute h(s)
+            compute f(s)=g(s)+h(s)
+            insert/update s in frontier
+
+    return failure</pre></div>
+<p>The exact details of duplicate-state handling and node replacement depend on the implementation variant. The core course idea is the <code>f=g+h</code> ordering and admissible heuristic requirement. <span class="source-marker">Course source: slide 17.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: Worked Example — A* from scratch -->
+  <section id="s-18" data-search-section="Worked Example — A* from scratch" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>18. Worked Example — A* from scratch</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>We will use a small original graph so that every calculation can be seen.</p>
+<div class="ascii-box"><pre>A
+                / \
+              2/   \5
+              /     \
+             B       C
+            / \     / \
+          2/   \6  1/   \3
+          /     \ /     \
+         D       E       F
+          \       |       |
+           \4     |2      |2
+            \     |       |
+             \    |       |
+              \   |       |
+                Goal</pre></div>
+<p>We choose heuristic values:</p>
+<div class="ascii-box"><pre>h(A)=6
+h(B)=5
+h(C)=4
+h(D)=4
+h(E)=2
+h(F)=2
+h(Goal)=0</pre></div>
+<p>These are teaching values for this original example. They are not values copied from the supplied lecture.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: Step 0 — Start at A -->
+  <section id="s-19" data-search-section="Step 0 — Start at A" class="content-section">
+    <div class="section-header">
+      <h2>19. Step 0 — Start at A</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>At the start:</p>
+<div class="formula-math">\[
+g(A)=0
+\]</div>
+<p>Given:</p>
+<div class="formula-math">\[
+h(A)=6
+\]</div>
+<p>So:</p>
+<div class="formula-math">\[
+f(A)=g(A)+h(A)=0+6=6
+\]</div>
+<p>Frontier:</p>
+<div class="ascii-box"><pre>A: g=0, h=6, f=6</pre></div>
+<p>Expand A.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: Step 1 — Generate B and C -->
+  <section id="s-20" data-search-section="Step 1 — Generate B and C" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>20. Step 1 — Generate B and C</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For B:</p>
+<div class="formula-math">\[
+g(B)=2
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+h(B)=5
+\]</div>
+<p>therefore:</p>
+<div class="formula-math">\[
+f(B)=2+5=7
+\]</div>
+<p>For C:</p>
+<div class="formula-math">\[
+g(C)=5
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+h(C)=4
+\]</div>
+<p>therefore:</p>
+<div class="formula-math">\[
+f(C)=5+4=9
+\]</div>
+<p>Frontier:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Node</th>
+<th style="text-align: right;"><code>g</code></th>
+<th style="text-align: right;"><code>h</code></th>
+<th style="text-align: right;"><code>f</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>B</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr>
+<td>C</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9</td>
+</tr>
+</tbody>
+</table></div>
+<p>A<em> selects </em><em>B</em>* because:</p>
+<div class="formula-math">\[
+7\lt 9
+\]</div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: Step 2 — Expand B -->
+  <section id="s-21" data-search-section="Step 2 — Expand B" class="content-section">
+    <div class="section-header">
+      <h2>21. Step 2 — Expand B</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>B produces D and E.</p>
+<p>For D:</p>
+<div class="formula-math">\[
+g(D)=g(B)+2=2+2=4
+\]</div>
+<p>Suppose:</p>
+<div class="formula-math">\[
+h(D)=4
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+f(D)=4+4=8
+\]</div>
+<p>For E through B:</p>
+<div class="formula-math">\[
+g(E)=g(B)+6=2+6=8
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+h(E)=2
+\]</div>
+<p>so:</p>
+<div class="formula-math">\[
+f(E)=8+2=10
+\]</div>
+<p>Current frontier becomes:</p>
+<div class="ascii-box"><pre>C: f=9
+D: f=8
+E: f=10</pre></div>
+<p>A<em> chooses </em><em>D</em>*.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: Step 3 — Expand D -->
+  <section id="s-22" data-search-section="Step 3 — Expand D" class="content-section">
+    <div class="section-header">
+      <h2>22. Step 3 — Expand D</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>D connects toward Goal with cost 4.</p>
+<p>If:</p>
+<div class="formula-math">\[
+g(D)=4
+\]</div>
+<p>then the candidate route through D gives:</p>
+<div class="formula-math">\[
+g(Goal)=4+4=8
+\]</div>
+<p>Since:</p>
+<div class="formula-math">\[
+h(Goal)=0
+\]</div>
+<p>we have:</p>
+<div class="formula-math">\[
+f(Goal)=8
+\]</div>
+<p>The frontier is now conceptually:</p>
+<div class="ascii-box"><pre>Goal: f=8
+C:    f=9
+E:    f=10</pre></div>
+<p>The smallest is Goal.</p>
+<p>Therefore A* returns the route:</p>
+<div class="ascii-box"><pre>A → B → D → Goal</pre></div>
+<p>with total cost:</p>
+<div class="formula-math">\[
+\boxed{8}
+\]</div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: What did the A* example teach us? -->
+  <section id="s-23" data-search-section="What did the A* example teach us?" class="content-section">
+    <div class="section-header">
+      <h2>23. What did the A* example teach us?</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>At every step, A* balanced two ideas.</p>
+<h3>Already spent</h3>
+<div class="formula-math">\[
+g(n)
+\]</div>
+<h3>Estimated remaining</h3>
+<div class="formula-math">\[
+h(n)
+\]</div>
+<h3>Combined</h3>
+<div class="formula-math">\[
+f(n)=g(n)+h(n)
+\]</div>
+<p>This is not merely a formula to memorize.</p>
+<p>It is a <strong>decision rule</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: The most important dry-run table -->
+  <section id="s-24" data-search-section="The most important dry-run table" class="content-section">
+    <div class="section-header">
+      <h2>24. The most important dry-run table</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Whenever you solve an A* numerical question, build this table:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Node</th>
+<th>Parent</th>
+<th style="text-align: right;">Step cost</th>
+<th style="text-align: right;"><code>g(n)</code></th>
+<th style="text-align: right;"><code>h(n)</code></th>
+<th style="text-align: right;"><code>f(n)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>...</td>
+<td>...</td>
+<td style="text-align: right;">...</td>
+<td style="text-align: right;">...</td>
+<td style="text-align: right;">...</td>
+<td style="text-align: right;">...</td>
+</tr>
+</tbody>
+</table></div>
+<p>Then repeat these steps:</p>
+<div class="ascii-box"><pre>1. Pick minimum f
+2. Expand it
+3. Compute successor g
+4. Read/compute h
+5. Add g+h
+6. Update frontier
+7. Repeat</pre></div>
+<h3>Exam habit</h3>
+<p><strong>Never try to do the complete A* calculation mentally.</strong></p>
+<p>Write the <code>g</code>, <code>h</code>, and <code>f</code> columns.</p>
+<p>It prevents a large fraction of arithmetic and selection mistakes.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: The optimality idea -->
+  <section id="s-25" data-search-section="The optimality idea" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>25. The optimality idea</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied course lecture states that A* is optimal when the admissibility condition is satisfied.</p>
+<p>The proof structure in the lecture is important.</p>
+<p>Suppose A* has generated a suboptimal goal <code>G2</code>.</p>
+<p>Let <code>G</code> be an optimal goal and let <code>n</code> be an unexpanded node on a shortest path to <code>G</code>.</p>
+<p>At a goal:</p>
+<div class="formula-math">\[
+h(G_2)=0
+\]</div>
+<p>so:</p>
+<div class="formula-math">\[
+f(G_2)=g(G_2)
+\]</div>
+<p>Since <code>G2</code> is suboptimal:</p>
+<div class="formula-math">\[
+g(G_2)\gt g(G)
+\]</div>
+<p>Because the heuristic is admissible:</p>
+<div class="formula-math">\[
+h(n)\le h^*(n)
+\]</div>
+<p>which gives:</p>
+<div class="formula-math">\[
+f(n)\le g(G)
+\]</div>
+<p>and therefore:</p>
+<div class="formula-math">\[
+f(G_2)\gt f(n)
+\]</div>
+<p>So A* will not choose the suboptimal goal <code>G2</code> before the more promising node on the optimal path.</p>
+<p>This is the core logic behind the course lecture's optimality argument. <span class="source-marker">Course source: <code>lecture-informed-search.pdf</code>, slide 29.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: Explain the optimality proof in plain English -->
+  <section id="s-26" data-search-section="Explain the optimality proof in plain English" class="content-section">
+    <div class="section-header">
+      <h2>26. Explain the optimality proof in plain English</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The proof can feel intimidating because of the notation.</p>
+<p>Here is the story version.</p>
+<p>Imagine:</p>
+<ul>
+<li>one candidate goal is expensive,</li>
+<li>another optimal route still has an unexplored node,</li>
+<li>and our heuristic is optimistic.</li>
+</ul>
+<p>The unexplored node on the optimal path cannot look more expensive than the true optimal route.</p>
+<p>The bad goal already has its full cost exposed.</p>
+<p>Therefore the bad goal gets a larger A* score than some node that still belongs to the good route.</p>
+<p>So A* expands the promising optimal-path node first instead of prematurely accepting the expensive goal.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “Agar heuristic overestimate nahi kar raha, toh optimal path ka koi useful node artificially bahut expensive nahi dikhega. Isliye A* ek suboptimal goal ko prematurely choose nahi karega.”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: The `C*` view from the course lecture -->
+  <section id="s-27" data-search-section="The `C*` view from the course lecture" class="content-section">
+    <div class="section-header">
+      <h2>27. The `C*` view from the course lecture</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied lecture uses <code>C*</code> for the optimal solution cost and states that A*:</p>
+<ul>
+<li>expands all nodes with</li>
+</ul>
+<div class="formula-math">\[
+  f(n)\lt C^*
+  \]</div>
+<ul>
+<li>may expand some nodes with</li>
+</ul>
+<div class="formula-math">\[
+  f(n)=C^*
+  \]</div>
+<ul>
+<li>does not expand nodes with</li>
+</ul>
+<div class="formula-math">\[
+  f(n)\gt C^*
+  \]</div>
+<p><span class="source-marker">Course source: <code>lecture-informed-search.pdf</code>, slide 30.</span></p>
+<h3>Intuition</h3>
+<p><code>C*</code> is the cost of the best solution.</p>
+<p>So A* concentrates its expansion around nodes whose estimated total cost is compatible with that optimal solution cost.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: Completeness of A* -->
+  <section id="s-28" data-search-section="Completeness of A*" class="content-section">
+    <div class="section-header">
+      <h2>28. Completeness of A*</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied lecture states A* is complete under its stated search assumptions, with the caveat that completeness can fail if there are infinitely many nodes with:</p>
+<div class="formula-math">\[
+f\le f(G)
+\]</div>
+<p>This is an important example of why algorithm properties should never be memorized as one-word slogans without their assumptions.</p>
+<h3>For your course-level memory</h3>
+<blockquote>
+<p><strong>A* is complete under the stated standard assumptions.</strong></p>
+</blockquote>
+<p><span class="source-marker">Course source: <code>lecture-informed-search.pdf</code>, slide 30.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 29: Space usage -->
+  <section id="s-29" data-search-section="Space usage" class="content-section">
+    <div class="section-header">
+      <h2>29. Space usage</h2>
+      <button class="bookmark-btn" data-id="s-29" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied lecture states that A* keeps all nodes in memory.</p>
+<p>So memory can become the major practical limitation.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “A* smart hai, lekin jo candidates consider kar raha hai unko memory mein sambhal ke rakhna padta hai. Huge search space mein memory bottleneck ban sakti hai.”
+
+This is one reason search strategy comparisons must include **space complexity**, not just whether the path is optimal.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 30: Time complexity intuition -->
+  <section id="s-30" data-search-section="Time complexity intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>30. Time complexity intuition</h2>
+      <button class="bookmark-btn" data-id="s-30" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied lecture describes the time behavior of A* in terms of heuristic error and solution length rather than a single simple polynomial bound.</p>
+<p>The key course message is:</p>
+<blockquote>
+<p>Better heuristic → potentially much less search.</p>
+</blockquote>
+<p>Poor heuristic → behavior can approach large exhaustive search behavior.</p>
+<h3>What this means</h3>
+<p>If:</p>
+<div class="formula-math">\[
+h(n)=0
+\]</div>
+<p>for every node, A* becomes equivalent to Uniform-Cost Search in the usual positive-cost setting because:</p>
+<div class="formula-math">\[
+f(n)=g(n)+0=g(n)
+\]</div>
+<p>So a completely uninformative heuristic provides no additional guidance.</p>
+<p>This follows directly from the <code>f=g+h</code> definition and is a useful conceptual connection to the preceding chapter.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 31: The spectrum from UCS to Greedy -->
+  <section id="s-31" data-search-section="The spectrum from UCS to Greedy" class="content-section">
+    <div class="section-header">
+      <h2>31. The spectrum from UCS to Greedy</h2>
+      <button class="bookmark-btn" data-id="s-31" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This is a powerful mental model:</p>
+<div class="ascii-box"><pre>UNIFORM-COST SEARCH
+
+f(n)=g(n)
+│
+│ gradually add heuristic information
+▼
+
+A*
+
+f(n)=g(n)+h(n)
+│
+│ remove the cost-so-far component
+▼
+
+GREEDY
+
+f(n)=h(n)</pre></div>
+<p>This is not saying the algorithms are literally produced by “turning a knob”; it is a conceptual way of seeing which information each strategy uses.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 32: Heuristic quality -->
+  <section id="s-32" data-search-section="Heuristic quality" class="content-section">
+    <div class="section-header">
+      <h2>32. Heuristic quality</h2>
+      <button class="bookmark-btn" data-id="s-32" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A heuristic can be:</p>
+<h3>Weak</h3>
+<p>It provides little information.</p>
+<h3>Stronger</h3>
+<p>It gives a more informative estimate while preserving the required property.</p>
+<h3>Exact</h3>
+<p>If:</p>
+<div class="formula-math">\[
+h(n)=h^*(n)
+\]</div>
+<p>then the estimate equals the true optimal remaining cost.</p>
+<p>This would provide extremely powerful guidance, although obtaining such a heuristic may itself be as hard as solving the original problem.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 33: 8-Puzzle — two admissible heuristics from the course -->
+  <section id="s-33" data-search-section="8-Puzzle — two admissible heuristics from the course" class="content-section">
+    <div class="section-header">
+      <h2>33. 8-Puzzle — two admissible heuristics from the course</h2>
+      <button class="bookmark-btn" data-id="s-33" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied lecture gives two heuristic examples for the 8-puzzle.</p>
+<h2>Heuristic 1 — Misplaced tiles</h2>
+<div class="formula-math">\[
+\boxed{h_1(n)=\text{number of misplaced tiles}}
+\]</div>
+<p>Count how many tiles are not in their target positions.</p>
+<h2>Heuristic 2 — Manhattan distance</h2>
+<div class="formula-math">\[
+\boxed{h_2(n)=\text{total Manhattan distance}}
+\]</div>
+<p>For each tile, count how many horizontal and vertical grid moves separate it from its target location, then add those values.</p>
+<p>The course lecture gives an example where:</p>
+<div class="formula-math">\[
+h_1(S)=6
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+h_2(S)=4+0+3+3+1+0+2+1=14
+\]</div>
+<p><span class="source-marker">Course source: <code>lecture-informed-search.pdf</code>, slides 31–32.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 34: Visual — misplaced tiles vs Manhattan distance -->
+  <section id="s-34" data-search-section="Visual — misplaced tiles vs Manhattan distance" class="content-section">
+    <div class="section-header">
+      <h2>34. Visual — misplaced tiles vs Manhattan distance</h2>
+      <button class="bookmark-btn" data-id="s-34" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine a tile is three squares away from its final location.</p>
+<h3>Misplaced-tile heuristic</h3>
+<p>It only asks:</p>
+<blockquote>
+<p>Is the tile in the correct position?</p>
+</blockquote>
+<p>If not:</p>
+<div class="formula-math">\[
++1
+\]</div>
+<h3>Manhattan distance</h3>
+<p>It asks:</p>
+<blockquote>
+<p>How many row/column moves away is the tile?</p>
+</blockquote>
+<p>So that same tile could contribute:</p>
+<div class="formula-math">\[
++3
+\]</div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> Misplaced tiles bas bolta hai **“galat jagah hai ya nahi?”**
+
+> Manhattan bolta hai **“kitne grid steps door hai?”**
+
+That is why Manhattan distance can provide a more informative estimate.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 35: Dominance -->
+  <section id="s-35" data-search-section="Dominance" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>35. Dominance</h2>
+      <button class="bookmark-btn" data-id="s-35" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied lecture introduces an important comparison.</p>
+<p>If two admissible heuristics satisfy:</p>
+<div class="formula-math">\[
+h_2(n)\ge h_1(n)
+\]</div>
+<p>for every node <code>n</code>, then <code>h2</code> <strong>dominates</strong> <code>h1</code>.</p>
+<p>The lecture states that the dominating heuristic is better for search in this sense because it can provide stronger guidance while retaining admissibility.</p>
+<p><span class="source-marker">Course source: <code>lecture-informed-search.pdf</code>, slide 34.</span></p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> Dono safe guesses hain, lekin `h2` har jagah kam-se-kam utna informative hai jitna `h1`. Toh A* ko zyada useful guidance mil sakti hai.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 36: Course numerical comparison of heuristics -->
+  <section id="s-36" data-search-section="Course numerical comparison of heuristics" class="content-section">
+    <div class="section-header">
+      <h2>36. Course numerical comparison of heuristics</h2>
+      <button class="bookmark-btn" data-id="s-36" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied lecture gives striking 8-puzzle search-cost comparisons:</p>
+<p>For a solution depth of 14:</p>
+<div class="formula-math">\[
+IDS=3,473,941
+\]</div>
+<p>nodes,</p>
+<p>while:</p>
+<div class="formula-math">\[
+A^*(h_1)=539
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+A^*(h_2)=113
+\]</div>
+<p>For a solution depth of 24, the lecture gives:</p>
+<div class="formula-math">\[
+IDS\approx54,000,000,000
+\]</div>
+<p>while:</p>
+<div class="formula-math">\[
+A^*(h_1)=39,135
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+A^*(h_2)=1,641
+\]</div>
+<p><span class="source-marker">Course source: <code>lecture-informed-search.pdf</code>, slide 34.</span></p>
+<h3>Why this matters</h3>
+<p>It demonstrates the practical value of a better heuristic.</p>
+<p>The heuristic is not merely a theoretical add-on.</p>
+<p><strong>Good guidance can change the number of states the algorithm needs to examine by orders of magnitude.</strong></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 37: Combining admissible heuristics -->
+  <section id="s-37" data-search-section="Combining admissible heuristics" class="content-section">
+    <div class="section-header">
+      <h2>37. Combining admissible heuristics</h2>
+      <button class="bookmark-btn" data-id="s-37" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied lecture also states:</p>
+<p>Given admissible heuristics <code>h_a</code> and <code>h_b</code>, define:</p>
+<div class="formula-math">\[
+\boxed{h(n)=\max(h_a(n),h_b(n))}
+\]</div>
+<p>Then this combined heuristic is also admissible and dominates both individual heuristics.</p>
+<h3>Intuition</h3>
+<p>Suppose:</p>
+<div class="formula-math">\[
+h_a(n)=5
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+h_b(n)=8
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+h(n)=\max(5,8)=8
+\]</div>
+<p>If both are valid lower bounds, taking the larger lower bound gives a tighter estimate without crossing the true cost.</p>
+<p><span class="source-marker">Course source: <code>lecture-informed-search.pdf</code>, slide 34.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 38: Relaxed problems -->
+  <section id="s-38" data-search-section="Relaxed problems" class="content-section">
+    <div class="section-header">
+      <h2>38. Relaxed problems</h2>
+      <button class="bookmark-btn" data-id="s-38" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>One of the most useful heuristic ideas in the supplied lecture is:</p>
+<blockquote>
+<p>Solve an easier version of the original problem and use that solution cost as a heuristic for the real problem.</p>
+</blockquote>
+<p>A <strong>relaxed problem</strong> removes or weakens some constraints from the original problem.</p>
+<p>Because the relaxed problem is easier, its optimal solution cost is no greater than the corresponding optimal cost of the real problem.</p>
+<p>Therefore it can provide a lower bound.</p>
+<p><span class="source-marker">Course source: <code>lecture-informed-search.pdf</code>, slides 34–36.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 39: 8-Puzzle relaxed-problem intuition -->
+  <section id="s-39" data-search-section="8-Puzzle relaxed-problem intuition" class="content-section">
+    <div class="section-header">
+      <h2>39. 8-Puzzle relaxed-problem intuition</h2>
+      <button class="bookmark-btn" data-id="s-39" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The lecture gives two examples.</p>
+<h3>Relaxation 1</h3>
+<p>Allow a tile to move anywhere.</p>
+<p>This gives the misplaced-tile style lower bound.</p>
+<h3>Relaxation 2</h3>
+<p>Allow a tile to move to any adjacent square without enforcing the full original movement interaction.</p>
+<p>This leads to the Manhattan-distance style lower bound.</p>
+<p>The essential idea is:</p>
+<div class="ascii-box"><pre>REAL PROBLEM
+    │
+    │ remove some restrictions
+    ▼
+RELAXED PROBLEM
+    │
+    │ solve easier problem
+    ▼
+LOWER-BOUND COST
+    │
+    ▼
+HEURISTIC</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 40: Why does relaxation create a lower bound? -->
+  <section id="s-40" data-search-section="Why does relaxation create a lower bound?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>40. Why does relaxation create a lower bound?</h2>
+      <button class="bookmark-btn" data-id="s-40" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the real problem has many rules.</p>
+<p>The relaxed problem removes some rules.</p>
+<p>That means the relaxed version has <strong>at least as much freedom</strong> as the real problem.</p>
+<p>So it cannot reasonably require <em>more</em> minimum effort than the original constrained problem.</p>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\text{optimal relaxed cost}
+\le
+\text{optimal real cost}
+\]</div>
+<p>This is exactly the lower-bound property that makes the relaxed solution useful as an admissible heuristic.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “Agar rules hata doge, problem easy ho jaayegi. Easy problem ka best possible cost original difficult problem ke best cost se zyada nahi ho sakta.”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 41: TSP connection -->
+  <section id="s-41" data-search-section="TSP connection" class="content-section">
+    <div class="section-header">
+      <h2>41. TSP connection</h2>
+      <button class="bookmark-btn" data-id="s-41" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied lecture then gives the Travelling Salesperson Problem as another example of relaxed-problem reasoning.</p>
+<p>The original problem asks for the shortest tour visiting all cities exactly once.</p>
+<p>A minimum spanning tree can be used as a lower-bound idea for a related relaxed structure.</p>
+<p>The lecture notes that a minimum spanning tree:</p>
+<ul>
+<li>connects all vertices without cycles,</li>
+<li>has minimum total edge weight,</li>
+<li>and gives a lower bound on the shortest open tour in the stated discussion.</li>
+</ul>
+<p><span class="source-marker">Course source: <code>lecture-informed-search.pdf</code>, slides 35–36.</span></p>
+<p>The Main Book will revisit this more deeply only if the surrounding TSP/optimization material becomes necessary for your course progression.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 42: A* worked comparison with Greedy -->
+  <section id="s-42" data-search-section="A* worked comparison with Greedy" class="content-section">
+    <div class="section-header">
+      <h2>42. A* worked comparison with Greedy</h2>
+      <button class="bookmark-btn" data-id="s-42" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Return to this frontier:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Node</th>
+<th style="text-align: right;"><code>g</code></th>
+<th style="text-align: right;"><code>h</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr>
+<td>B</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr>
+<td>C</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Greedy</h3>
+<div class="formula-math">\[
+A:8,\quad B:4,\quad C:7
+\]</div>
+<p>chooses:</p>
+<div class="formula-math">\[
+B
+\]</div>
+<h3>A*</h3>
+<div class="formula-math">\[
+A:2+8=10
+\]</div>
+<div class="formula-math">\[
+B:15+4=19
+\]</div>
+<div class="formula-math">\[
+C:5+7=12
+\]</div>
+<p>chooses:</p>
+<div class="formula-math">\[
+A
+\]</div>
+<h3>Lesson</h3>
+<p>Greedy and A* can literally choose different branches from the same frontier because they ask different questions.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 43: When A* returns a goal -->
+  <section id="s-43" data-search-section="When A* returns a goal" class="content-section">
+    <div class="section-header">
+      <h2>43. When A* returns a goal</h2>
+      <button class="bookmark-btn" data-id="s-43" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A subtle exam question is:</p>
+<blockquote>
+<p>“A goal has been generated. Can I immediately stop?”</p>
+</blockquote>
+<p>The safest course-level understanding is:</p>
+<blockquote>
+<p>A* returns a goal when the goal is selected/expanded according to its search procedure and the applicable assumptions, not merely because a goal node happens to appear somewhere in the frontier.</p>
+</blockquote>
+<p>Why?</p>
+<p>Because another frontier node might still have a lower <code>f</code> value and could lead to a cheaper complete solution.</p>
+<h3>Example</h3>
+<div class="ascii-box"><pre>Goal G1: f=20
+Node N:  f=12</pre></div>
+<p>Even though G1 is already a goal, A* should not treat it as the final answer simply because it has been generated if the search procedure still has a lower-cost candidate to examine.</p>
+<p>This distinction is essential when solving dry runs.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 44: Common A* misconceptions -->
+  <section id="s-44" data-search-section="Common A* misconceptions" class="content-section">
+    <div class="section-header">
+      <h2>44. Common A* misconceptions</h2>
+      <button class="bookmark-btn" data-id="s-44" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Misconception 1</h2>
+<blockquote>
+<p>“A* always uses only the heuristic.”</p>
+</blockquote>
+<p>No.</p>
+<div class="formula-math">\[
+\boxed{f(n)=g(n)+h(n)}
+\]</div>
+<hr />
+<h2>Misconception 2</h2>
+<blockquote>
+<p>“A* is just Greedy with a different name.”</p>
+</blockquote>
+<p>No.</p>
+<p>Greedy ignores <code>g(n)</code> in the evaluation rule used here.</p>
+<p>A* includes it.</p>
+<hr />
+<h2>Misconception 3</h2>
+<blockquote>
+<p>“Admissible means the heuristic is exact.”</p>
+</blockquote>
+<p>No.</p>
+<p>Admissible means:</p>
+<div class="formula-math">\[
+0\le h(n)\le h^*(n)
+\]</div>
+<p>It may be lower than the truth.</p>
+<hr />
+<h2>Misconception 4</h2>
+<blockquote>
+<p>“A larger heuristic is always better.”</p>
+</blockquote>
+<p>Not automatically.</p>
+<p>The key requirement is that it remain admissible in the relevant A* optimality setting.</p>
+<p>A larger <strong>admissible</strong> heuristic can be more informative.</p>
+<hr />
+<h2>Misconception 5</h2>
+<blockquote>
+<p>“A* chooses the node nearest to the goal.”</p>
+</blockquote>
+<p>Not exactly.</p>
+<p>It chooses according to:</p>
+<div class="formula-math">\[
+\boxed{g(n)+h(n)}
+\]</div>
+<hr />
+<h2>Misconception 6</h2>
+<blockquote>
+<p>“If <code>h(n)=0</code>, A* cannot work.”</p>
+</blockquote>
+<p>Wrong.</p>
+<p>It simply loses heuristic guidance and reduces to cost-based search behavior:</p>
+<div class="formula-math">\[
+f(n)=g(n)
+\]</div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 45: A* algorithm trace template -->
+  <section id="s-45" data-search-section="A* algorithm trace template" class="content-section mode-gate">
+    <div class="section-header">
+      <h2>45. A* algorithm trace template</h2>
+      <button class="bookmark-btn" data-id="s-45" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For every numerical question, draw this:</p>
+<div class="ascii-box"><pre>START
+  │
+  ▼
+Choose node with minimum f
+  │
+  ├── calculate g
+  ├── calculate h
+  └── calculate f=g+h
+  │
+  ▼
+Update frontier
+  │
+  ▼
+Repeat</pre></div>
+<p>And maintain:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Expansion step</th>
+<th>Node chosen</th>
+<th style="text-align: right;"><code>g</code></th>
+<th style="text-align: right;"><code>h</code></th>
+<th style="text-align: right;"><code>f</code></th>
+<th>Frontier after expansion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>...</td>
+<td style="text-align: right;">...</td>
+<td style="text-align: right;">...</td>
+<td style="text-align: right;">...</td>
+<td>...</td>
+</tr>
+<tr>
+<td>1</td>
+<td>...</td>
+<td style="text-align: right;">...</td>
+<td style="text-align: right;">...</td>
+<td style="text-align: right;">...</td>
+<td>...</td>
+</tr>
+<tr>
+<td>2</td>
+<td>...</td>
+<td style="text-align: right;">...</td>
+<td style="text-align: right;">...</td>
+<td style="text-align: right;">...</td>
+<td>...</td>
+</tr>
+</tbody>
+</table></div>
+<p>This will become your standard exam method.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 46: Worked Numerical — compare three candidates -->
+  <section id="s-46" data-search-section="Worked Numerical — compare three candidates" class="content-section">
+    <div class="section-header">
+      <h2>46. Worked Numerical — compare three candidates</h2>
+      <button class="bookmark-btn" data-id="s-46" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Frontier:</p>
+<div class="ascii-box"><pre>P: g=4,  h=10
+Q: g=7,  h=5
+R: g=2,  h=15</pre></div>
+<p>Compute:</p>
+<div class="formula-math">\[
+f(P)=4+10=14
+\]</div>
+<div class="formula-math">\[
+f(Q)=7+5=12
+\]</div>
+<div class="formula-math">\[
+f(R)=2+15=17
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{Q}
+\]</div>
+<p>is selected by A*.</p>
+<h3>Important</h3>
+<p>Do not choose R just because:</p>
+<div class="formula-math">\[
+g(R)=2
+\]</div>
+<p>and do not choose Q merely because:</p>
+<div class="formula-math">\[
+h(Q)=5
+\]</div>
+<p>You must combine them.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 47: Worked Numerical — identify the heuristic problem -->
+  <section id="s-47" data-search-section="Worked Numerical — identify the heuristic problem" class="content-section">
+    <div class="section-header">
+      <h2>47. Worked Numerical — identify the heuristic problem</h2>
+      <button class="bookmark-btn" data-id="s-47" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the true remaining costs are:</p>
+<div class="formula-math">\[
+h^*(A)=12,
+\quad h^*(B)=20,
+\quad h^*(C)=7
+\]</div>
+<p>and a proposed heuristic is:</p>
+<div class="formula-math">\[
+h(A)=10,
+\quad h(B)=18,
+\quad h(C)=9
+\]</div>
+<p>Check admissibility.</p>
+<h3>A</h3>
+<div class="formula-math">\[
+10\le12
+\]</div>
+<p>valid.</p>
+<h3>B</h3>
+<div class="formula-math">\[
+18\le20
+\]</div>
+<p>valid.</p>
+<h3>C</h3>
+<div class="formula-math">\[
+9\gt 7
+\]</div>
+<p>violates admissibility.</p>
+<p>Therefore the heuristic is <strong>not admissible</strong> over these nodes.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 48: Worked Numerical — compare two admissible heuristics -->
+  <section id="s-48" data-search-section="Worked Numerical — compare two admissible heuristics" class="content-section">
+    <div class="section-header">
+      <h2>48. Worked Numerical — compare two admissible heuristics</h2>
+      <button class="bookmark-btn" data-id="s-48" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<div class="formula-math">\[
+h_1(n)=6
+\]</div>
+<div class="formula-math">\[
+h_2(n)=10
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+h^*(n)=13
+\]</div>
+<p>Both are admissible.</p>
+<p>Because:</p>
+<div class="formula-math">\[
+10\ge6
+\]</div>
+<p><code>h2</code> is the tighter estimate at this node.</p>
+<p>If the relationship holds for <strong>all nodes</strong> and both remain admissible, then the course's dominance rule allows us to say <code>h2</code> dominates <code>h1</code>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 49: Visual summary — the whole informed-search family -->
+  <section id="s-49" data-search-section="Visual summary — the whole informed-search family" class="content-section">
+    <div class="section-header">
+      <h2>49. Visual summary — the whole informed-search family</h2>
+      <button class="bookmark-btn" data-id="s-49" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>SEARCH
+                      │
+          ┌───────────┴───────────┐
+          │                       │
+      UNINFORMED               INFORMED
+          │                       │
+   BFS / UCS / DFS        use heuristic h(n)
+                                  │
+                         ┌────────┴────────┐
+                         │                 │
+                      GREEDY              A*
+                       h(n)             g(n)+h(n)
+                         │                 │
+               “looks closest”     “estimated total”</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 50: The most important conceptual chain -->
+  <section id="s-50" data-search-section="The most important conceptual chain" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>50. The most important conceptual chain</h2>
+      <button class="bookmark-btn" data-id="s-50" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Memorize this <strong>after understanding it</strong>:</p>
+<div class="ascii-box"><pre>Problem
+  ↓
+State space
+  ↓
+Search tree / graph
+  ↓
+Frontier
+  ↓
+Heuristic
+  ↓
+Greedy
+  ↓
+Greedy notices only h(n)
+  ↓
+Problem: ignores route cost already spent
+  ↓
+A*
+  ↓
+f(n)=g(n)+h(n)
+  ↓
+Need an admissible heuristic for the course&#x27;s optimality theorem
+  ↓
+Better heuristics can reduce search dramatically</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 51: Mathematical summary -->
+  <section id="s-51" data-search-section="Mathematical summary" class="content-section">
+    <div class="section-header">
+      <h2>51. Mathematical summary</h2>
+      <button class="bookmark-btn" data-id="s-51" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Path cost so far</h3>
+<div class="formula-math">\[
+\boxed{g(n)}
+\]</div>
+<h3>Estimated remaining cost</h3>
+<div class="formula-math">\[
+\boxed{h(n)}
+\]</div>
+<h3>A* evaluation</h3>
+<div class="formula-math">\[
+\boxed{f(n)=g(n)+h(n)}
+\]</div>
+<h3>True optimal remaining cost</h3>
+<div class="formula-math">\[
+\boxed{h^*(n)}
+\]</div>
+<h3>Admissibility</h3>
+<div class="formula-math">\[
+\boxed{0\le h(n)\le h^*(n)}
+\]</div>
+<h3>Goal heuristic</h3>
+<div class="formula-math">\[
+\boxed{h(G)=0}
+\]</div>
+<h3>Optimal solution cost</h3>
+<div class="formula-math">\[
+\boxed{C^*}
+\]</div>
+<h3>A* course summary</h3>
+<ul>
+<li>expands lowest <code>f=g+h</code></li>
+<li>uses an admissible heuristic</li>
+<li>is optimal under the stated assumptions</li>
+<li>can be expensive in time/memory</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 52: Exam Lens -->
+  <section id="s-52" data-search-section="Exam Lens" class="content-section mode-gate">
+    <div class="section-header">
+      <h2>52. Exam Lens</h2>
+      <button class="bookmark-btn" data-id="s-52" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>2-mark — Define A*</h2>
+<blockquote>
+<p>A* is an informed best-first search strategy that expands the node with minimum <code>f(n)=g(n)+h(n)</code>, where <code>g(n)</code> is the cost so far and <code>h(n)</code> is an estimated remaining cost.</p>
+</blockquote>
+<h2>2-mark — Define admissible heuristic</h2>
+<blockquote>
+<p>A heuristic is admissible if it never overestimates the true optimal remaining cost, i.e. <code>0 ≤ h(n) ≤ h*(n)</code>.</p>
+</blockquote>
+<h2>5-mark — Explain A*</h2>
+<p>Include:</p>
+<ol>
+<li>Motivation.</li>
+<li>Definition.</li>
+<li><code>g(n)</code>.</li>
+<li><code>h(n)</code>.</li>
+<li><code>f(n)=g(n)+h(n)</code>.</li>
+<li>Node-selection rule.</li>
+<li>Admissibility.</li>
+<li>One small example.</li>
+</ol>
+<h2>10-mark — A* Search</h2>
+<p>Use this structure:</p>
+<div class="ascii-box"><pre>Introduction
+   ↓
+Best-First Search
+   ↓
+Motivation / weakness of Greedy
+   ↓
+g(n), h(n), f(n)
+   ↓
+Algorithm / pseudocode
+   ↓
+Worked graph example
+   ↓
+Admissibility
+   ↓
+Optimality idea/proof
+   ↓
+Completeness
+   ↓
+Complexity / memory
+   ↓
+8-puzzle heuristic example
+   ↓
+Advantages + limitations
+   ↓
+Greedy vs A*</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 53: Common exam traps -->
+  <section id="s-53" data-search-section="Common exam traps" class="content-section">
+    <div class="section-header">
+      <h2>53. Common exam traps</h2>
+      <button class="bookmark-btn" data-id="s-53" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Trap 1</h3>
+<p>Using:</p>
+<div class="formula-math">\[
+f=h
+\]</div>
+<p>for A*.</p>
+<p>That is Greedy.</p>
+<h3>Trap 2</h3>
+<p>Forgetting to add the path cost:</p>
+<div class="formula-math">\[
+f=g+h
+\]</div>
+<h3>Trap 3</h3>
+<p>Comparing <code>g</code> values when the question asks for A* selection.</p>
+<p>Compare <strong><code>f</code></strong>.</p>
+<h3>Trap 4</h3>
+<p>Calling an overestimating heuristic admissible.</p>
+<p>It is not.</p>
+<h3>Trap 5</h3>
+<p>Stopping merely because a goal has appeared in the frontier.</p>
+<p>Follow the search procedure and selection rule.</p>
+<h3>Trap 6</h3>
+<p>Saying “admissible means exact.”</p>
+<p>It means <strong>never overestimating</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 54: Active Recall — close the book -->
+  <section id="s-54" data-search-section="Active Recall — close the book" class="content-section">
+    <div class="section-header">
+      <h2>54. Active Recall — close the book</h2>
+      <button class="bookmark-btn" data-id="s-54" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <ol>
+<li>What problem does A* solve compared with Greedy?</li>
+<li>What is <code>g(n)</code>?</li>
+<li>What is <code>h(n)</code>?</li>
+<li>What is <code>h*(n)</code>?</li>
+<li>What is <code>f(n)</code>?</li>
+<li>Why are <code>g</code> and <code>h</code> added?</li>
+<li>What does admissible mean?</li>
+<li>Why must <code>h(G)=0</code>?</li>
+<li>What node does A* expand next?</li>
+<li>Why can Greedy and A* select different nodes from the same frontier?</li>
+<li>Explain A* optimality intuitively.</li>
+<li>What is <code>C*</code>?</li>
+<li>What does the course say about nodes with <code>f&lt;C*</code>, <code>f=C*</code>, and <code>f&gt;C*</code>?</li>
+<li>Give the two 8-puzzle heuristics from the lecture.</li>
+<li>What is dominance?</li>
+<li>Why do relaxed problems help create heuristics?</li>
+<li>What happens if <code>h(n)=0</code> everywhere?</li>
+<li>Why can A* become memory-heavy?</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 55: Recall Answers -->
+  <section id="s-55" data-search-section="Recall Answers" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>55. Recall Answers</h2>
+      <button class="bookmark-btn" data-id="s-55" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <ol>
+<li>It incorporates both the cost already spent and the estimated cost remaining, addressing a key weakness of Greedy.</li>
+<li>Actual cost from the start to node <code>n</code>.</li>
+<li>Estimated remaining cost from <code>n</code> to a goal.</li>
+<li>True cheapest remaining cost from <code>n</code> to a goal.</li>
+<li><code>f(n)=g(n)+h(n)</code>.</li>
+<li>To estimate the total cost of a solution path through <code>n</code>.</li>
+<li>The heuristic never overestimates the true optimal remaining cost.</li>
+<li>At a goal, no cost remains.</li>
+<li>The frontier node with the smallest <code>f(n)</code> under the search procedure.</li>
+<li>Because Greedy ranks by <code>h</code>, while A* ranks by <code>g+h</code>.</li>
+<li>With an admissible heuristic, a suboptimal goal cannot be selected before a sufficiently promising node on an optimal path under the course's theorem/assumptions.</li>
+<li>The cost of the optimal solution.</li>
+<li>A* expands all nodes with <code>f&lt;C*</code>, some with <code>f=C*</code>, and none with <code>f&gt;C*</code> under the course statement.</li>
+<li>Misplaced tiles and total Manhattan distance.</li>
+<li>If one admissible heuristic is everywhere at least as large as another, it dominates it and can offer stronger guidance.</li>
+<li>Relaxing constraints gives an easier problem whose optimal cost is a lower bound for the original problem.</li>
+<li>A* reduces to cost-based selection <code>f=g</code>.</li>
+<li>It keeps generated search nodes/candidates in memory.</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 56: Practice Set -->
+  <section id="s-56" data-search-section="Practice Set" class="content-section">
+    <div class="section-header">
+      <h2>56. Practice Set</h2>
+      <button class="bookmark-btn" data-id="s-56" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>A. Formula practice</h2>
+<h3>Q1</h3>
+<p>For:</p>
+<div class="formula-math">\[
+g(n)=7,
+\quad h(n)=5
+\]</div>
+<p>calculate <code>f(n)</code>.</p>
+<h3>Q2</h3>
+<p>For:</p>
+<div class="formula-math">\[
+g(n)=12,
+\quad h(n)=9
+\]</div>
+<p>calculate <code>f(n)</code>.</p>
+<h3>Q3</h3>
+<p>A node has:</p>
+<div class="formula-math">\[
+h^*(n)=18
+\]</div>
+<p>Which of these are admissible?</p>
+<ul>
+<li>12</li>
+<li>18</li>
+<li>20</li>
+<li>0</li>
+</ul>
+<p>Explain.</p>
+<hr />
+<h2>B. Frontier selection</h2>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Node</th>
+<th style="text-align: right;"><code>g</code></th>
+<th style="text-align: right;"><code>h</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr>
+<td>B</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr>
+<td>C</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr>
+<td>D</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">3</td>
+</tr>
+</tbody>
+</table></div>
+<ol>
+<li>Compute all <code>f</code> values.</li>
+<li>Which node does Greedy choose?</li>
+<li>Which node does A* choose?</li>
+<li>Why are the answers potentially different?</li>
+</ol>
+<hr />
+<h2>C. Dry run</h2>
+<p>Construct your own graph with:</p>
+<ul>
+<li>at least 7 nodes,</li>
+<li>at least 2 competing routes,</li>
+<li>non-uniform edge costs,</li>
+<li>heuristic values for each node.</li>
+</ul>
+<p>Run both:</p>
+<ol>
+<li>Greedy Best-First Search</li>
+<li>A*</li>
+</ol>
+<p>Then compare the node-expansion order.</p>
+<hr />
+<h2>D. Reasoning question</h2>
+<p>Why can a heuristic that is closer to the true remaining cost be useful to A* even when it is still not exact?</p>
+<hr />
+<h2>E. Higher-level question</h2>
+<p>Explain why solving a relaxed version of a problem can produce an admissible heuristic.</p>
+<p>Use the 8-puzzle as your example.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 57: Memory Card -->
+  <section id="s-57" data-search-section="Memory Card" class="content-section">
+    <div class="section-header">
+      <h2>57. Memory Card</h2>
+      <button class="bookmark-btn" data-id="s-57" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <blockquote>
+<h2>A* = PAST + FUTURE</h2>
+</blockquote>
+<div class="formula-math">\[
+\gt  \boxed{f(n)=g(n)+h(n)}
+\gt  \]</div>
+<blockquote>
+<p><code>g(n)</code> = actual cost so far<br />
+<code>h(n)</code> = estimated cost remaining<br />
+<code>f(n)</code> = estimated total</p>
+<p><strong>Admissible:</strong></p>
+</blockquote>
+<div class="formula-math">\[
+\gt  \boxed{0\le h(n)\le h^*(n)}
+\gt  \]</div>
+<blockquote>
+<p><strong>Goal:</strong></p>
+</blockquote>
+<div class="formula-math">\[
+\gt  \boxed{h(G)=0}
+\gt  \]</div>
+<blockquote>
+<p><strong>Greedy:</strong> <code>h(n)</code></p>
+<p><strong>A*:</strong> <code>g(n)+h(n)</code></p>
+<p><strong>Relaxed problem:</strong> easier version → lower-bound cost → heuristic.</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 58: Math Companion Connection -->
+  <section id="s-58" data-search-section="Math Companion Connection" class="content-section">
+    <div class="section-header">
+      <h2>58. Math Companion Connection</h2>
+      <button class="bookmark-btn" data-id="s-58" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This chapter should link to:</p>
+<ul>
+<li><code>MATH-M01</code> — notation</li>
+<li><code>MATH-M08</code> — functions and inequalities</li>
+<li><code>MATH-M10</code> — optimization/objective notation</li>
+<li>later mathematics on lower bounds and mathematical reasoning</li>
+</ul>
+<h3>What you need to be comfortable with</h3>
+<ul>
+<li>addition</li>
+<li>inequalities</li>
+<li>function notation</li>
+<li>comparing numerical values</li>
+<li>interpreting a lower bound</li>
+</ul>
+<p>No calculus is required for the basic A* dry runs.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 59: Exam Book Connection -->
+  <section id="s-59" data-search-section="Exam Book Connection" class="content-section">
+    <div class="section-header">
+      <h2>59. Exam Book Connection</h2>
+      <button class="bookmark-btn" data-id="s-59" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p><strong>Exam Book ID:</strong> <code>EXAM-AI-U1-C07-ASTAR</code></p>
+<p>The Exam Book should compress this chapter into:</p>
+<ul>
+<li>definition</li>
+<li><code>g/h/f</code></li>
+<li>pseudocode</li>
+<li>frontier table</li>
+<li>dry run</li>
+<li>admissibility</li>
+<li>optimality theorem idea</li>
+<li>completeness</li>
+<li>complexity</li>
+<li>8-puzzle heuristics</li>
+<li>dominance</li>
+<li>relaxed problems</li>
+<li>Greedy vs A*</li>
+<li>numerical problem patterns</li>
+<li>common traps</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 60: Resource Shelf -->
+  <section id="s-60" data-search-section="Resource Shelf" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>60. Resource Shelf</h2>
+      <button class="bookmark-btn" data-id="s-60" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Primary course source</h2>
+<p><strong><code>lecture-informed-search.pdf</code> — Philipp Koehn, Artificial Intelligence: Informed Search</strong></p>
+<p>Relevant course anchors:</p>
+<ul>
+<li>Slides 5–6 — Best-First framing</li>
+<li>Slide 17 — A* definition, <code>g+h</code>, admissibility</li>
+<li>Slides 18–28 — A* examples and trace sequence</li>
+<li>Slide 29 — optimality argument</li>
+<li>Slide 30 — properties and <code>C*</code></li>
+<li>Slides 31–32 — 8-puzzle heuristics</li>
+<li>Slide 34 — dominance</li>
+<li>Slides 34–36 — relaxed problems</li>
+<li>Slide 37 — A* summary</li>
+</ul>
+<h2>Supporting course source</h2>
+<p><strong><code>MAIN-U1-C05 — Heuristics</code></strong></p>
+<p>Use it for:</p>
+<ul>
+<li><code>h(n)</code> intuition</li>
+<li><code>h*(n)</code></li>
+<li>admissibility intuition</li>
+<li>8-puzzle heuristic foundations</li>
+<li>relaxed-problem idea</li>
+</ul>
+<h2>Previous Main Book chapter</h2>
+<p><strong><code>MAIN-U1-C06 — Greedy Best-First Search</code></strong></p>
+<p>Use it to understand why <code>g(n)</code> changes the decision.</p>
+<h2>Structured source</h2>
+<p>NPTEL — <strong>Artificial Intelligence: Search Methods for Problem Solving</strong></p>
+<p>Use the A* lectures for additional dry runs and formal reinforcement.</p>
+<h2>Reference</h2>
+<p>Russell &amp; Norvig — <em>Artificial Intelligence: A Modern Approach</em>, heuristic search / A* sections.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 61: Chapter Exit Test -->
+  <section id="s-61" data-search-section="Chapter Exit Test" class="content-section">
+    <div class="section-header">
+      <h2>61. Chapter Exit Test</h2>
+      <button class="bookmark-btn" data-id="s-61" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You may move on when you can do all of these <strong>without looking</strong>:</p>
+<ul>
+<li>[ ] Explain why A* is needed after Greedy.</li>
+<li>[ ] Define <code>g(n)</code>.</li>
+<li>[ ] Define <code>h(n)</code>.</li>
+<li>[ ] Define <code>f(n)</code>.</li>
+<li>[ ] Calculate <code>f(n)</code> quickly.</li>
+<li>[ ] Perform a multi-step A* dry run.</li>
+<li>[ ] Maintain a frontier table.</li>
+<li>[ ] Explain admissibility.</li>
+<li>[ ] Test a heuristic for admissibility.</li>
+<li>[ ] Explain why <code>h(G)=0</code>.</li>
+<li>[ ] Explain the course's optimality argument.</li>
+<li>[ ] State the course's completeness condition.</li>
+<li>[ ] Explain the role of <code>C*</code>.</li>
+<li>[ ] Compute misplaced-tile and Manhattan heuristics.</li>
+<li>[ ] Explain dominance.</li>
+<li>[ ] Explain relaxed problems.</li>
+<li>[ ] Distinguish Greedy, UCS and A*.</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 62: Final mental model -->
+  <section id="s-62" data-search-section="Final mental model" class="content-section">
+    <div class="section-header">
+      <h2>62. Final mental model</h2>
+      <button class="bookmark-btn" data-id="s-62" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>WHAT DO I KNOW?
+                        │
+           ┌────────────┴────────────┐
+           │                         │
+      COST SO FAR               COST AHEAD
+           │                         │
+          g(n)                     h(n)
+           │                         │
+           └───────────┬─────────────┘
+                       │
+                       ▼
+                 g(n) + h(n)
+                       │
+                       ▼
+                    f(n)
+                       │
+                       ▼
+              choose smallest f
+                       │
+                       ▼
+                  expand node
+                       │
+                       ▼
+                    repeat</pre></div>
+<h3>One sentence</h3>
+<blockquote>
+<p><strong>A* tries to find a cheap complete solution by combining what the journey has already cost with an optimistic estimate of what remains.</strong></p>
+</blockquote>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> **“Ab tak ka real cost + aage ka sensible estimate = A* ka decision.”**
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 63: What comes next? -->
+  <section id="s-63" data-search-section="What comes next?" class="content-section">
+    <div class="section-header">
+      <h2>63. What comes next?</h2>
+      <button class="bookmark-btn" data-id="s-63" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A<em> belongs to </em><em>exact / optimality-oriented heuristic search</em>* in the supplied course sequence.</p>
+<p>But some problems do not care about the exact path to the solution. They care about finding a good configuration efficiently.</p>
+<p>That leads to:</p>
+<h3><code>MAIN-U1-C08 — Local &amp; Evolutionary Search</code></h3>
+<p>where we will study:</p>
+<ul>
+<li>hill climbing</li>
+<li>local improvement</li>
+<li>simulated annealing</li>
+<li>genetic algorithms</li>
+</ul>
+<p>The supplied lecture introduces these immediately after its A* section. <span class="source-marker">Course source: <code>lecture-informed-search.pdf</code>, slides 38–47.</span></p>
+<hr />
+<h1>Source Grounding Note</h1>
+<p>This chapter is primarily grounded in your supplied <code>lecture-informed-search.pdf</code>. Course-specific claims about <code>f(n)=g(n)+h(n)</code>, admissibility, A* optimality, completeness, <code>C*</code>, the 8-puzzle heuristics, dominance, relaxed problems, and the numerical comparisons are derived from the indicated course slides. Pedagogical analogies, original worked examples, diagrams, recall questions, and teacher-style explanations are deliberately added as explanatory expansions; they are not presented as quotations from the course source.</p>
+<p>Where the supplied lecture does not provide a full implementation-level detail, the chapter intentionally keeps the Main Book at the algorithmic/conceptual level rather than inventing implementation-specific behavior.</p>
+<hr />
+<h2>Chapter Metadata</h2>
+<ul>
+<li><strong>ID:</strong> <code>AI-U1-C07</code></li>
+<li><strong>Status:</strong> COMPLETE</li>
+<li><strong>Universal coverage:</strong> Core</li>
+<li><strong>University coverage:</strong> Core Unit I informed search</li>
+<li><strong>Math depth:</strong> Moderate</li>
+<li><strong>Visual depth:</strong> Very high</li>
+<li><strong>Exam depth:</strong> Very high</li>
+<li><strong>Coding depth:</strong> Algorithmic only; implementation intentionally excluded from the Main Book</li>
+<li><strong>Previous:</strong> <code>MAIN-U1-C06</code></li>
+<li><strong>Next:</strong> <code>MAIN-U1-C08</code></li>
+</ul>
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="ch06-greedy-best-first-search.html" class="nav-btn">← Ch 6 — Greedy Search</a>
+    <a href="ch08-local-and-evolutionary-search.html" class="nav-btn primary">Next: Ch 8 — Local Search →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch07-a-star-search.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 7</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

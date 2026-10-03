@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Arpit">
+  <meta name="description" content="Custom Interactive Unit Quiz Builder — AI & Machine Learning MiniBook">
+  <title>Custom Quiz Builder | AIML MiniBook 🤖 Arpit</title>
+
+  <link rel="manifest" href="../manifest.json">
+  <meta name="theme-color" content="#17365D">
+
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/animations.css">
+  <link rel="stylesheet" href="../assets/css/timer.css">
+  <link rel="stylesheet" href="../assets/css/chapters.css">
+
+  <style>
+    .builder-card {
+      background: var(--em-surface-1);
+      border: 1px solid var(--em-border);
+      border-radius: var(--em-radius-lg);
+      padding: var(--em-space-6);
+      margin-bottom: var(--em-space-6);
+    }
+    .builder-controls {
+      display: flex;
+      gap: var(--em-space-4);
+      flex-wrap: wrap;
+      margin-top: var(--em-space-4);
+      align-items: center;
+    }
+    .select-input {
+      padding: 8px 12px;
+      border-radius: var(--em-radius-sm);
+      border: 1px solid var(--em-border);
+      background: var(--em-surface-2);
+      color: var(--em-text);
+      font-size: 0.90rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="progress-bar"></div>
+
+  <!-- HEADER -->
+  <header id="main-header">
+    <div class="header-left">
+      <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle Navigation">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <a href="../index.html" class="brand-logo">
+        <div class="brand-icon">🤖</div>
+        <div class="brand-text">
+          <span class="main">AIML MiniBook</span>
+          <span class="sub">Quiz Builder</span>
+        </div>
+      </a>
+    </div>
+
+    <span class="header-chapter-title">Custom Quiz Builder</span>
+
+    <div class="header-right">
+      <a href="../index.html" class="icon-btn" title="Home Portal">🏠</a>
+      <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)"></button>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <div id="sidebar-overlay"></div>
+  <aside id="sidebar">
+    <nav class="sidebar-nav">
+      <div class="sidebar-section">
+        <div class="sidebar-section-label">Navigation</div>
+        <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+        <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+        <a href="mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Mock Exam Simulator</a>
+        <a href="unit-quiz.html" class="sidebar-link active"><span class="link-icon">⚡</span>Custom Quiz Builder</a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- MAIN READING CANVAS -->
+  <main id="main-content">
+    <div class="content-inner">
+
+      <div class="builder-card">
+        <span class="part-banner part-ii">Interactive Self-Assessment</span>
+        <h1 style="font-family:var(--font-display); font-size:1.8rem; margin:10px 0 6px;">Custom Topic Quiz Builder</h1>
+        <p style="color:var(--em-text-secondary); font-size:0.92rem;">Filter questions by unit, topic, or difficulty to create a customized study drill.</p>
+
+        <div class="builder-controls">
+          <select id="unit-select" class="select-input" onchange="generateCustomQuiz()">
+            <option value="all">All Units</option>
+            <option value="Unit I">Unit I — Artificial Intelligence &amp; Search</option>
+            <option value="Unit II">Unit II — Machine Learning Foundations &amp; Models</option>
+            <option value="Unit III">Unit III — Deep Learning &amp; Neural Networks</option>
+          </select>
+          <select id="diff-select" class="select-input" onchange="generateCustomQuiz()">
+            <option value="all">All Difficulties</option>
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
+          </select>
+          <button class="portal-btn portal-btn-primary" onclick="generateCustomQuiz()">⚡ Generate Quiz</button>
+        </div>
+      </div>
+
+      <div id="custom-quiz-container"></div>
+
+    </div>
+  </main>
+
+  <script src="../assets/js/quiz-data.js"></script>
+  <script src="../assets/js/state.js"></script>
+  <script src="../assets/js/core.js"></script>
+  <script>
+    function generateCustomQuiz() {
+      const unit = document.getElementById('unit-select').value;
+      const diff = document.getElementById('diff-select').value;
+      const container = document.getElementById('custom-quiz-container');
+
+      const filtered = (typeof AIML_QUIZ_DATA !== 'undefined' ? AIML_QUIZ_DATA : []).filter(q => {
+        const matchUnit = unit === 'all' || q.unit === unit;
+        const matchDiff = diff === 'all' || q.diff === diff;
+        return matchUnit && matchDiff;
+      });
+
+      if (!filtered.length) {
+        container.innerHTML = '<p style="color:var(--em-text-muted); padding:20px 0;">No questions match your filter criteria.</p>';
+        return;
+      }
+
+      container.innerHTML = filtered.map((q, idx) => `
+        <div class="calc-box" style="margin-bottom:var(--em-space-5)">
+          <div class="calc-title">Question ${idx + 1} · ${q.unit} (${q.diff})</div>
+          <p style="font-size:1.02rem; font-weight:600; margin-bottom:12px;">${q.q}</p>
+          <details style="background:var(--em-surface-2); padding:10px 14px; border-radius:var(--em-radius-sm);">
+            <summary style="cursor:pointer; font-weight:600; color:var(--em-accent)">View Answer &amp; Detailed Explanation</summary>
+            <div style="margin-top:10px; font-size:0.90rem; line-height:1.55;">
+              <p><strong>Correct Answer:</strong> Option ${String.fromCharCode(65 + q.ans)}: <em>${q.options[q.ans]}</em></p>
+              <p style="margin-top:6px; color:var(--em-text-secondary);">${q.exp}</p>
+            </div>
+          </details>
+        </div>
+      `).join('');
+    }
+    document.addEventListener('DOMContentLoaded', generateCustomQuiz);
+  </script>
+</body>
+</html>

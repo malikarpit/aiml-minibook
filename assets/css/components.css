@@ -1,0 +1,1229 @@
+/*
+ * AI & MACHINE LEARNING MINIBOOK
+ * components.css — Complete C01–C22 Pedagogical Component Library
+ *
+ * Implements the DESIGN-01 specification:
+ *   - Concept Hook (C02)
+ *   - Teacher & Intuition Layer / Hinglish (C03)
+ *   - Life/World Analogy Card (C04)
+ *   - Formal Theory / Definition Box (C05)
+ *   - Diagram Walkthrough (C07)
+ *   - Formula Card (C08) & Derivation Ladder (C09)
+ *   - Worked Example / Calculation Steps (C10)
+ *   - Exam Trap & Common Mistake (C11)
+ *   - Comparison Matrix (C12) & Algorithm Trace (C13)
+ *   - Concept Check / Active Recall (C14)
+ *   - Practice Set with F/B/S/E/T Difficulty Tags (C15)
+ *   - Resource Panel & Cross-Link Bridges (C16, C18, C19, C20)
+ *   - Technical Code, CLI & Tables
+ */
+
+/* ─────────────────────────────────────────────────────────────────────
+   01 · C02: CONCEPT HOOK (WHY DOES THIS EXIST?)
+   ───────────────────────────────────────────────────────────────────── */
+.concept-hook {
+  background: var(--em-surface-1);
+  border-left: 4px solid var(--em-accent);
+  border-top: 1px solid var(--em-border);
+  border-right: 1px solid var(--em-border);
+  border-bottom: 1px solid var(--em-border);
+  border-radius: var(--em-radius-md);
+  padding: var(--em-space-4) var(--em-space-5);
+  margin-bottom: var(--em-space-6);
+}
+
+.concept-hook-label {
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--em-accent);
+  margin-bottom: var(--em-space-2);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.concept-hook-text {
+  font-size: 1.04rem;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--em-text);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   02 · C03: TEACHER & INTUITION LAYER (SKY TINT / HINGLISH)
+   ───────────────────────────────────────────────────────────────────── */
+.teacher-box, .c-intuition {
+  background: var(--tint-teacher-bg);
+  border: 1px solid var(--tint-teacher-border);
+  border-left: 4px solid var(--info);
+  border-radius: var(--em-radius-md);
+  padding: var(--em-space-4) var(--em-space-5);
+  margin: var(--em-space-5) 0;
+  position: relative;
+}
+
+.teacher-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--tint-teacher-text);
+  margin-bottom: var(--em-space-2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.teacher-body {
+  font-size: 0.96rem;
+  line-height: 1.65;
+  color: var(--em-text);
+}
+
+.teacher-body p {
+  margin-bottom: var(--em-space-2);
+}
+.teacher-body p:last-child {
+  margin-bottom: 0;
+}
+
+.hinglish-tag {
+  display: inline-block;
+  background: rgba(23, 84, 120, 0.15);
+  color: var(--tint-teacher-text);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: var(--em-radius-sm);
+  margin-left: 6px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   03 · C04: ANALOGY CARD (REAL-WORLD LIFE MAPPING)
+   ───────────────────────────────────────────────────────────────────── */
+.analogy-card {
+  background: var(--tint-analogy-bg);
+  border: 1px solid var(--tint-analogy-border);
+  border-radius: var(--em-radius-md);
+  padding: var(--em-space-4) var(--em-space-5);
+  margin: var(--em-space-5) 0;
+}
+
+.analogy-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--tint-analogy-text);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: var(--em-space-3);
+}
+
+.analogy-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--em-space-4);
+  background: var(--em-surface-1);
+  padding: var(--em-space-3) var(--em-space-4);
+  border-radius: var(--em-radius-sm);
+  border: 1px solid var(--em-border);
+  font-size: 0.88rem;
+  margin-top: var(--em-space-3);
+}
+
+.analogy-item-real strong { color: var(--em-text-muted); display: block; font-size: 0.76rem; text-transform: uppercase; }
+.analogy-item-ai strong { color: var(--em-accent); display: block; font-size: 0.76rem; text-transform: uppercase; }
+
+.analogy-boundary {
+  margin-top: var(--em-space-3);
+  font-size: 0.82rem;
+  color: var(--em-text-secondary);
+  font-style: italic;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   04 · C05: FORMAL THEORY & DEFINITION BOX
+   ───────────────────────────────────────────────────────────────────── */
+.def-box {
+  background: var(--em-surface-1);
+  border: 1px solid var(--em-border);
+  border-left: 4px solid var(--em-accent);
+  border-radius: var(--em-radius-md);
+  padding: var(--em-space-4) var(--em-space-5);
+  margin: var(--em-space-5) 0;
+  box-shadow: var(--sh-sm);
+}
+
+.def-term {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--em-accent);
+  margin-bottom: var(--em-space-2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.def-box.danger {
+  border-left-color: var(--danger);
+  background: var(--tint-caution-bg);
+  border-color: var(--tint-caution-border);
+}
+.def-box.danger .def-term {
+  color: var(--tint-caution-text);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   05 · C08: FORMULA CARD & C09: DERIVATION LADDER
+   ───────────────────────────────────────────────────────────────────── */
+.formula-box {
+  background: var(--tint-math-bg);
+  border: 1px solid var(--tint-math-border);
+  border-radius: var(--em-radius-md);
+  padding: var(--em-space-5);
+  margin: var(--em-space-6) 0;
+  box-shadow: var(--sh-sm);
+}
+
+.formula-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--em-space-3);
+  border-bottom: 1px solid var(--tint-math-border);
+  padding-bottom: var(--em-space-2);
+}
+
+.formula-label {
+  font-size: 0.80rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--tint-math-text);
+}
+
+.formula-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--em-radius-full);
+  background: var(--em-surface-1);
+  color: var(--tint-math-text);
+  border: 1px solid var(--tint-math-border);
+}
+
+.formula-math {
+  font-size: 1.35rem;
+  text-align: center;
+  padding: var(--em-space-4) 0;
+  color: var(--em-text);
+  overflow-x: auto;
+}
+
+.formula-words {
+  font-size: 0.94rem;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: var(--em-space-4);
+  color: var(--em-text-secondary);
+}
+
+.formula-vars {
+  background: var(--em-surface-1);
+  border-radius: var(--em-radius-sm);
+  border: 1px solid var(--tint-math-border);
+  padding: var(--em-space-3) var(--em-space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--em-space-2);
+  font-size: 0.86rem;
+}
+
+.var-row span {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--tint-math-text);
+}
+
+.formula-why, .formula-mistake {
+  margin-top: var(--em-space-3);
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--em-text-secondary);
+}
+
+/* Derivation Ladder (C09) */
+.derivation-ladder {
+  background: var(--em-surface-2);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-md);
+  padding: var(--em-space-4) var(--em-space-5);
+  margin: var(--em-space-4) 0;
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+}
+
+.derivation-step {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: var(--em-space-2) 0;
+  border-bottom: 1px dashed var(--em-border);
+}
+.derivation-step:last-child {
+  border-bottom: none;
+  font-weight: 700;
+  color: var(--em-accent);
+}
+
+.step-math { flex: 1; }
+.step-note {
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  color: var(--em-text-muted);
+  text-align: right;
+  margin-left: var(--em-space-3);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   06 · C10: WORKED EXAMPLE & CALCULATION FLOW
+   ───────────────────────────────────────────────────────────────────── */
+.calc-box, .worked-example {
+  background: var(--em-surface-1);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-md);
+  padding: var(--em-space-5);
+  margin: var(--em-space-6) 0;
+  box-shadow: var(--sh-sm);
+}
+
+.calc-title {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--em-text);
+  margin-bottom: var(--em-space-4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--em-border);
+  padding-bottom: var(--em-space-2);
+}
+
+.calc-step {
+  padding: var(--em-space-3) 0;
+  border-bottom: 1px solid var(--em-surface-2);
+  font-size: 0.90rem;
+  line-height: 1.6;
+}
+.calc-step:last-child {
+  border-bottom: none;
+}
+
+.calc-step strong {
+  color: var(--em-accent);
+  display: block;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   07 · C11: EXAM TRAP & COMMON MISTAKE (CAUTION TINT)
+   ───────────────────────────────────────────────────────────────────── */
+.confusion-box, .exam-trap {
+  background: var(--tint-caution-bg);
+  border: 1px solid var(--tint-caution-border);
+  border-left: 4px solid var(--danger);
+  border-radius: var(--em-radius-md);
+  padding: var(--em-space-4) var(--em-space-5);
+  margin: var(--em-space-5) 0;
+}
+
+.confusion-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--tint-caution-text);
+  margin-bottom: var(--em-space-2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.confusion-box p, .exam-trap p {
+  font-size: 0.90rem;
+  line-height: 1.6;
+  color: var(--em-text);
+  margin-bottom: var(--em-space-2);
+}
+.confusion-box p:last-child, .exam-trap p:last-child {
+  margin-bottom: 0;
+}
+
+.fallacy-label {
+  color: var(--danger);
+  font-weight: 700;
+}
+.reality-label {
+  color: var(--success);
+  font-weight: 700;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   08 · C12: COMPARISON MATRIX & C13: ALGORITHM TRACE
+   ───────────────────────────────────────────────────────────────────── */
+.comparison-matrix, .data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--em-space-4) 0;
+  font-size: 0.88rem;
+  border-radius: var(--em-radius-md);
+  overflow: hidden;
+  border: 1px solid var(--em-border);
+}
+
+.comparison-matrix th, .data-table th {
+  background: var(--em-surface-2);
+  color: var(--em-text);
+  font-weight: 700;
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 2px solid var(--em-border);
+}
+
+.comparison-matrix td, .data-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--em-border);
+  color: var(--em-text-secondary);
+}
+
+.comparison-matrix tr:last-child td, .data-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Algorithm Trace (C13) */
+.trace-table {
+  font-family: var(--font-mono);
+  font-size: 0.84rem;
+}
+.trace-step-num {
+  font-weight: 700;
+  color: var(--em-accent);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   09 · C14: CONCEPT CHECK / ACTIVE RECALL
+   ───────────────────────────────────────────────────────────────────── */
+.concept-check, .recall-panel {
+  background: var(--em-surface-1);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-md);
+  padding: var(--em-space-4) var(--em-space-5);
+  margin: var(--em-space-5) 0;
+}
+
+.ch-check-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--em-accent);
+  margin-bottom: var(--em-space-2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.concept-check p {
+  font-size: 0.94rem;
+  line-height: 1.6;
+  margin-bottom: var(--em-space-3);
+  color: var(--em-text);
+}
+
+.concept-check details {
+  background: var(--em-surface-2);
+  border-radius: var(--em-radius-sm);
+  border: 1px solid var(--em-border);
+  padding: 8px 12px;
+}
+
+.concept-check summary {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--em-text-secondary);
+  cursor: pointer;
+  outline: none;
+}
+
+.ch-check-answer {
+  margin-top: 8px;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--em-text);
+  border-top: 1px dashed var(--em-border);
+  padding-top: 8px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   10 · C15: PRACTICE SET (F / B / S / E / T TAGS)
+   ───────────────────────────────────────────────────────────────────── */
+.practice-item {
+  background: var(--em-surface-1);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-md);
+  padding: var(--em-space-4);
+  margin-bottom: var(--em-space-3);
+}
+
+.diff-tag {
+  display: inline-block;
+  font-size: 0.70rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--em-radius-full);
+  margin-right: 8px;
+  text-transform: uppercase;
+}
+
+.diff-f { background: rgba(91, 103, 117, 0.15); color: var(--em-text-secondary); }
+.diff-b { background: rgba(31, 115, 85, 0.15); color: #1F7355; }
+.diff-s { background: rgba(24, 109, 122, 0.15); color: #186D7A; }
+.diff-e { background: rgba(142, 90, 28, 0.15); color: #8E5A1C; }
+.diff-t { background: rgba(148, 37, 81, 0.15); color: #942551; }
+
+/* ─────────────────────────────────────────────────────────────────────
+   11 · C16: RESOURCE PANEL & C18–C20: BRIDGES
+   ───────────────────────────────────────────────────────────────────── */
+.resource-panel {
+  background: var(--em-surface-1);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-md);
+  padding: var(--em-space-5);
+  margin: var(--em-space-6) 0;
+}
+
+.resource-header {
+  font-size: 0.84rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--em-text);
+  margin-bottom: var(--em-space-4);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid var(--em-border);
+  padding-bottom: var(--em-space-2);
+}
+
+.resource-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--em-space-3);
+}
+
+.resource-item {
+  display: flex;
+  align-items: baseline;
+  gap: var(--em-space-3);
+  font-size: 0.88rem;
+}
+
+.res-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--em-radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+.res-course { background: #17365D; color: #FFFFFF; }
+.res-watch { background: #1F5A6F; color: #FFFFFF; }
+.res-deeper { background: #3350A3; color: #FFFFFF; }
+.res-read { background: #575247; color: #FFFFFF; }
+.res-practical { background: #1E5E3E; color: #FFFFFF; }
+
+/* Bridges */
+.bridge-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: var(--em-radius-sm);
+  font-size: 0.84rem;
+  font-weight: 600;
+  text-decoration: none;
+  margin: var(--em-space-2) 0;
+  border: 1px solid var(--em-border);
+}
+
+.bridge-exam { background: rgba(142, 90, 28, 0.10); color: #8E5A1C; border-color: rgba(142, 90, 28, 0.30); }
+.bridge-code { background: rgba(24, 109, 122, 0.10); color: #186D7A; border-color: rgba(24, 109, 122, 0.30); }
+.bridge-math { background: rgba(108, 66, 130, 0.10); color: #6C4282; border-color: rgba(108, 66, 130, 0.30); }
+
+/* ─────────────────────────────────────────────────────────────────────
+   12 · TECHNICAL SURFACES: CODE, CLI & DIAGRAMS
+   ───────────────────────────────────────────────────────────────────── */
+.code-block {
+  background: var(--em-surface-2);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-md);
+  margin: var(--em-space-4) 0;
+  overflow: hidden;
+}
+
+.code-header {
+  background: var(--em-surface-3);
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--em-border);
+  font-size: 0.78rem;
+  font-family: var(--font-mono);
+  color: var(--em-text-secondary);
+}
+
+.code-block pre {
+  padding: 14px;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--tx-code);
+}
+
+.copy-btn {
+  background: transparent;
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-sm);
+  color: var(--em-text-secondary);
+  font-size: 0.72rem;
+  padding: 2px 8px;
+  cursor: pointer;
+  transition: all var(--em-motion-fast) var(--em-ease);
+}
+.copy-btn:hover {
+  background: var(--em-surface-1);
+  color: var(--em-text);
+}
+
+/* Diagrams */
+.diagram-box {
+  background: var(--em-surface-1);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-md);
+  padding: var(--em-space-5);
+  margin: var(--em-space-6) 0;
+  text-align: center;
+}
+
+.diagram-title {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--em-text);
+  margin-bottom: var(--em-space-3);
+  text-align: left;
+}
+
+.ascii-box {
+  background: var(--em-surface-2);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-sm);
+  padding: var(--em-space-4);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.4;
+  overflow-x: auto;
+  text-align: left;
+  display: inline-block;
+  color: var(--em-text);
+  margin: var(--em-space-2) auto;
+}
+
+.diagram-caption {
+  font-size: 0.80rem;
+  color: var(--em-text-muted);
+  margin-top: var(--em-space-3);
+  font-style: italic;
+  text-align: left;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   13 · DESIGN-02 EXTENSIONS: STABLE IDS, GUIDED FADING & CHAPTER END
+   ───────────────────────────────────────────────────────────────────── */
+.concept-id-tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--em-radius-sm);
+  background: var(--em-surface-2);
+  color: var(--em-accent);
+  border: 1px solid var(--em-border);
+  letter-spacing: 0.04em;
+}
+
+/* Prerequisite Checkpoint (Stage 02: Activate) */
+.prereq-checkpoint {
+  background: var(--em-surface-2);
+  border-left: 3px solid var(--accent-teal);
+  border-radius: var(--em-radius-sm);
+  padding: 8px 12px;
+  font-size: 0.86rem;
+  display: flex;
+  align-items: center;
+  gap: var(--em-space-3);
+  margin: var(--em-space-3) 0 var(--em-space-4);
+  color: var(--em-text-secondary);
+}
+
+.prereq-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: var(--accent-teal-soft);
+  color: var(--accent-teal);
+  padding: 2px 6px;
+  border-radius: var(--em-radius-sm);
+  flex-shrink: 0;
+}
+
+/* Guided Example with Step Fading (Stage 09: Fade) */
+.guided-example {
+  background: var(--em-surface-1);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-md);
+  padding: var(--em-space-5);
+  margin: var(--em-space-5) 0;
+}
+
+.guided-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--em-text);
+  margin-bottom: var(--em-space-3);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.guided-step {
+  padding: var(--em-space-3);
+  background: var(--em-surface-2);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-sm);
+  margin-bottom: var(--em-space-2);
+  font-size: 0.88rem;
+}
+
+.guided-step.done {
+  border-left: 3px solid var(--success);
+  color: var(--em-text-secondary);
+}
+
+.guided-step.active {
+  border-left: 3px solid var(--em-accent);
+}
+
+.guided-step details summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--em-accent);
+  margin-top: 6px;
+  font-size: 0.84rem;
+}
+
+.guided-answer {
+  margin-top: 8px;
+  padding: 8px;
+  background: var(--em-surface-1);
+  border-radius: var(--em-radius-sm);
+  border: 1px dashed var(--em-border);
+  font-size: 0.86rem;
+  color: var(--em-text);
+}
+
+/* Algorithm Complexity Card (Section 12) */
+.algo-complexity-card {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--em-space-3);
+  background: var(--em-surface-1);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-md);
+  padding: var(--em-space-4);
+  margin: var(--em-space-4) 0;
+}
+
+.complexity-metric {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.84rem;
+}
+.complexity-metric span:first-child {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--em-text-muted);
+}
+.complexity-metric span:last-child {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--em-accent);
+}
+
+/* Chapter End Package (Section 14) */
+.chapter-end-package {
+  margin-top: var(--em-space-12);
+  padding-top: var(--em-space-8);
+  border-top: 2px solid var(--em-border);
+}
+
+.summary-strip {
+  background: var(--em-surface-1);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-md);
+  padding: var(--em-space-5);
+  margin-bottom: var(--em-space-6);
+}
+
+.exam-quicksheet {
+  background: var(--tint-caution-bg);
+  border: 1px solid var(--tint-caution-border);
+  border-radius: var(--em-radius-md);
+  padding: var(--em-space-5);
+  margin-bottom: var(--em-space-6);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   14 · DESIGN-03 EXTENSIONS: RESOURCE CITATION & RECONCILIATION
+   ───────────────────────────────────────────────────────────────────── */
+/* Inline Source Markers */
+.source-marker {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--em-text-muted);
+  background: var(--em-surface-2);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-sm);
+  padding: 1px 6px;
+  vertical-align: baseline;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+.source-marker:hover {
+  color: var(--em-accent);
+  border-color: var(--em-accent);
+}
+
+/* Course vs Universal Framing Reconciliation */
+.framing-compare {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--em-space-4);
+  background: var(--em-surface-1);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-md);
+  padding: var(--em-space-5);
+  margin: var(--em-space-5) 0;
+}
+
+.course-framing, .universal-framing {
+  display: flex;
+  flex-direction: column;
+  gap: var(--em-space-2);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.framing-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 8px;
+  border-radius: var(--em-radius-sm);
+  display: inline-block;
+  align-self: flex-start;
+}
+.framing-badge.course {
+  background: var(--em-accent-soft);
+  color: var(--em-accent-text);
+  border: 1px solid var(--em-accent-border);
+}
+.framing-badge.universal {
+  background: var(--accent-teal-soft);
+  color: var(--accent-teal);
+  border: 1px solid var(--accent-teal-border);
+}
+
+/* Standard Chapter End Resource Shelf (Section 16) */
+.resource-shelf {
+  background: var(--em-surface-1);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-md);
+  padding: var(--em-space-6);
+  margin: var(--em-space-8) 0;
+}
+
+.shelf-title {
+  font-size: 0.90rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--em-text);
+  margin-bottom: var(--em-space-4);
+  border-bottom: 1px solid var(--em-border);
+  padding-bottom: var(--em-space-2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.shelf-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--em-space-4);
+}
+
+.shelf-card {
+  background: var(--em-surface-2);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-sm);
+  padding: var(--em-space-4);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.shelf-card-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--em-accent);
+  margin-bottom: 4px;
+}
+
+.shelf-card-title {
+  font-size: 0.90rem;
+  font-weight: 600;
+  color: var(--em-text);
+  margin-bottom: 4px;
+}
+
+.shelf-card-meta {
+  font-size: 0.78rem;
+  color: var(--em-text-muted);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   15 · DESIGN-04 EXTENSIONS: MULTI-LENS, EXAM LADDER & MASTERY
+   ───────────────────────────────────────────────────────────────────── */
+/* Multi-Lens Perspective Callouts */
+.lens-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--em-space-3);
+  margin: var(--em-space-5) 0;
+}
+
+.lens-card {
+  background: var(--em-surface-1);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-md);
+  padding: var(--em-space-4);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.lens-header {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--em-space-2);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lens-course { border-left: 3px solid #1D538A; }
+.lens-course .lens-header { color: #1D538A; }
+
+.lens-exam { border-left: 3px solid #8E5A1C; }
+.lens-exam .lens-header { color: #8E5A1C; }
+
+.lens-build { border-left: 3px solid #186D7A; }
+.lens-build .lens-header { color: #186D7A; }
+
+.lens-math { border-left: 3px solid #6C4282; }
+.lens-math .lens-header { color: #6C4282; }
+
+/* Exam Answer Ladder (2M / 5M / 10M / Numerical) */
+.exam-ladder-card {
+  background: var(--em-surface-1);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-md);
+  padding: var(--em-space-5);
+  margin: var(--em-space-5) 0;
+}
+
+.ladder-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--em-space-3);
+  padding-bottom: var(--em-space-2);
+  border-bottom: 1px solid var(--em-border);
+}
+
+.ladder-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--em-radius-sm);
+  text-transform: uppercase;
+  background: rgba(142, 90, 28, 0.15);
+  color: #8E5A1C;
+  border: 1px solid rgba(142, 90, 28, 0.30);
+}
+
+.ladder-steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--em-space-2);
+  font-size: 0.88rem;
+}
+
+.ladder-step-row {
+  display: flex;
+  gap: var(--em-space-3);
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--em-surface-3);
+}
+.ladder-step-row:last-child { border-bottom: none; }
+
+.step-label {
+  font-weight: 700;
+  font-size: 0.76rem;
+  color: var(--em-accent);
+  min-width: 80px;
+  text-transform: uppercase;
+}
+
+/* Mastery Progress Badges */
+.mastery-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--em-radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.mastery-not-started { background: rgba(91, 103, 117, 0.15); color: var(--em-text-muted); }
+.mastery-foundation   { background: rgba(235, 184, 98, 0.15); color: #CFA66B; }
+.mastery-understood   { background: rgba(73, 179, 201, 0.15); color: #49B3C9; }
+.mastery-practiced    { background: rgba(106, 165, 224, 0.15); color: #6AA5E0; }
+.mastery-exam-ready   { background: rgba(117, 212, 158, 0.15); color: #75D49E; border: 1px solid rgba(117, 212, 158, 0.40); }
+.mastery-implemented  { background: rgba(156, 109, 224, 0.15); color: #9C6DE0; }
+
+
+
+
+/* ─────────────────────────────────────────────────────────────────────
+   23 · NOTES & GLOSSARY POPOVER ENGINE (DESIGN-01 & CN COMPATIBILITY)
+   ───────────────────────────────────────────────────────────────────── */
+.note-mark {
+  cursor: pointer;
+  border-bottom: 2px solid var(--note-color, #D97706);
+  background: color-mix(in srgb, var(--note-color, rgba(217, 119, 6, 0.15)) 25%, transparent);
+  border-radius: 2px;
+  transition: background var(--em-ease-quick);
+}
+.note-mark:hover,
+.note-mark:focus {
+  background: color-mix(in srgb, var(--note-color, #D97706) 40%, transparent);
+  outline: none;
+}
+
+#note-add-btn {
+  position: absolute;
+  z-index: 1000;
+  padding: 5px 14px;
+  border: 1px solid var(--em-accent);
+  border-radius: var(--em-radius-full);
+  background: var(--em-accent);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%);
+  transition: opacity 150ms ease, transform 150ms ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+#note-add-btn.visible { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(-4px); }
+
+#note-popover,
+#glossary-tooltip {
+  position: absolute;
+  z-index: 1020;
+  border: 1px solid var(--em-surface-3);
+  border-radius: var(--em-radius-md);
+  background: var(--em-surface-1);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+}
+
+#note-popover { width: min(320px, calc(100vw - 28px)); padding: 14px; }
+.note-pop-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 10px; color: var(--em-text); font-weight: 700; font-size: 0.88rem; }
+.note-pop-quote { margin-bottom: 10px; padding-left: 10px; border-left: 2px solid var(--em-accent); color: var(--em-text-muted); font-size: 0.75rem; font-style: italic; max-height: 60px; overflow-y: auto; }
+#note-pop-text { width: 100%; min-height: 90px; padding: 9px 10px; resize: vertical; border: 1px solid var(--em-surface-3); border-radius: var(--em-radius-sm); outline: none; color: var(--em-text); background: var(--em-surface-2); font-family: inherit; font-size: 0.85rem; }
+#note-pop-text:focus { border-color: var(--em-accent); box-shadow: 0 0 0 3px rgba(106, 165, 224, 0.2); }
+.note-pop-colors { display: flex; gap: 8px; margin: 10px 0; }
+.note-color-btn { width: 22px; height: 22px; border: 2px solid transparent; border-radius: 50%; cursor: pointer; transition: transform 150ms ease; }
+.note-color-btn:hover,
+.note-color-btn.active { transform: scale(1.15); border-color: var(--em-text); }
+.note-pop-actions { display: flex; gap: 8px; margin-top: 10px; }
+.note-btn-primary { flex: 1; padding: 8px 12px; border: none; border-radius: var(--em-radius-sm); background: var(--em-accent); color: #fff; font-size: 0.78rem; font-weight: 700; cursor: pointer; }
+.note-btn-danger { padding: 8px 12px; border: 1px solid rgba(239, 68, 68, 0.4); border-radius: var(--em-radius-sm); background: rgba(239, 68, 68, 0.15); color: #F87171; font-size: 0.78rem; font-weight: 700; cursor: pointer; }
+
+.note-sidebar-item { display: flex; gap: 10px; padding: 8px 10px; border-bottom: 1px solid var(--em-surface-3); cursor: pointer; border-radius: var(--em-radius-sm); transition: background 150ms ease; }
+.note-sidebar-item:hover { background: rgba(106, 165, 224, 0.08); }
+.note-sidebar-color { width: 4px; border-radius: 2px; background: #D97706; flex-shrink: 0; }
+.note-sidebar-body { min-width: 0; flex: 1; }
+.note-sidebar-quote,
+.note-sidebar-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.note-sidebar-quote { color: var(--em-text-muted); font-size: 0.70rem; font-style: italic; }
+.note-sidebar-text { color: var(--em-text-secondary); font-size: 0.80rem; margin-top: 2px; }
+
+.glossary-term { border-bottom: 1px dashed var(--em-accent); cursor: help; }
+.glossary-term:hover,
+.glossary-term:focus { background: rgba(106, 165, 224, 0.12); outline: none; border-radius: 2px; }
+
+#glossary-tooltip { width: min(300px, calc(100vw - 28px)); padding: 12px 14px; opacity: 0; pointer-events: none; transform: translateY(4px); transition: opacity 150ms ease, transform 150ms ease; }
+#glossary-tooltip.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+.glossary-tooltip-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+.gloss-term { color: var(--em-accent); font-size: 0.75rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.gloss-def { color: var(--em-text-secondary); font-size: 0.80rem; line-height: 1.6; }
+
+.glossary-tooltip-close,
+.note-pop-close {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  line-height: 1;
+  padding: 2px 6px;
+  border-radius: var(--em-radius-sm);
+  color: var(--em-text-muted);
+  cursor: pointer;
+}
+.glossary-tooltip-close:hover,
+.note-pop-close:hover {
+  color: var(--em-text);
+  background: var(--em-surface-2);
+}
+
+/* Timeline & Diagram Enhancements */
+.timeline-block {
+  position: relative;
+  border-left: 2px solid var(--em-accent-dim);
+  margin: var(--em-space-6) 0 var(--em-space-6) var(--em-space-4);
+  padding-left: var(--em-space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--em-space-6);
+}
+.timeline-item {
+  position: relative;
+}
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  left: calc(-1 * var(--em-space-5) - 6px);
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--em-accent);
+  box-shadow: 0 0 0 4px var(--em-surface-0);
+}
+.timeline-year {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--em-accent);
+  margin-bottom: 2px;
+}
+.timeline-desc {
+  font-size: 0.90rem;
+  color: var(--em-text-secondary);
+  line-height: 1.6;
+}
+
+/* Mermaid Box */
+.mermaid {
+  display: flex;
+  justify-content: center;
+  margin: var(--em-space-4) 0;
+  overflow-x: auto;
+  font-family: inherit;
+}
+
+/* Additional Semantic Helper Badges */
+.ladder-mark-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border-radius: var(--em-radius-sm);
+  background: rgba(106, 165, 224, 0.15);
+  color: var(--em-accent);
+  border: 1px solid var(--em-accent-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+
+.source-marker-ext {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  padding: 2px 7px;
+  background: var(--em-surface-2);
+  color: var(--em-accent);
+  border: 1px solid var(--em-surface-3);
+  border-radius: var(--em-radius-sm);
+  text-decoration: none;
+  margin-left: 4px;
+  transition: all 150ms ease;
+}
+.source-marker-ext:hover {
+  border-color: var(--em-accent);
+  background: var(--em-accent-soft);
+}

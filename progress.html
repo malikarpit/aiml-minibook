@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Arpit">
+  <meta name="description" content="Study Progress Dashboard & Analytics — AI & Machine Learning MiniBook">
+  <title>Study Dashboard | AIML MiniBook 🤖 Arpit</title>
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#17365D">
+
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/animations.css">
+  <link rel="stylesheet" href="assets/css/timer.css">
+
+  <style>
+    .dash-hero {
+      padding: var(--em-space-8) 0 var(--em-space-6);
+      border-bottom: 1px solid var(--em-border);
+      margin-bottom: var(--em-space-8);
+    }
+    .dash-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 700;
+      color: var(--em-text);
+      letter-spacing: -0.02em;
+    }
+    .dash-hero p {
+      color: var(--em-text-secondary);
+      margin-top: var(--em-space-2);
+      font-size: 0.95rem;
+    }
+
+    .dash-stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--em-space-4);
+      margin-bottom: var(--em-space-8);
+    }
+    .dash-stat {
+      background: var(--em-surface-1);
+      border: 1px solid var(--em-border);
+      border-radius: var(--em-radius-md);
+      padding: var(--em-space-5);
+      text-align: center;
+      box-shadow: var(--sh-sm);
+    }
+    .dash-stat-num {
+      font-family: var(--font-mono);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--em-accent);
+      margin-bottom: 4px;
+    }
+    .dash-stat-lbl {
+      font-size: 0.80rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--em-text-muted);
+      font-weight: 600;
+    }
+
+    .notes-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      margin-top: var(--em-space-4);
+      border: 1px solid var(--em-border);
+      border-radius: var(--em-radius-md);
+      overflow: hidden;
+    }
+    .notes-table th {
+      background: var(--em-surface-2);
+      color: var(--em-text);
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 700;
+      border-bottom: 2px solid var(--em-border);
+    }
+    .notes-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--em-border);
+      color: var(--em-text-secondary);
+    }
+
+    .actions-row {
+      display: flex;
+      gap: var(--em-space-3);
+      flex-wrap: wrap;
+      margin-top: var(--em-space-8);
+      padding-top: var(--em-space-6);
+      border-top: 1px solid var(--em-border);
+    }
+    .action-btn {
+      padding: 8px 16px;
+      border-radius: var(--em-radius-sm);
+      font-weight: 600;
+      font-size: 0.86rem;
+      cursor: pointer;
+      border: 1px solid var(--em-border);
+      background: var(--em-surface-1);
+      color: var(--em-text);
+      transition: all var(--em-motion-fast) var(--em-ease);
+    }
+    .action-btn:hover {
+      background: var(--em-surface-2);
+      border-color: var(--em-border-strong);
+    }
+    .action-btn.danger {
+      color: var(--danger);
+      border-color: var(--tint-caution-border);
+      background: var(--tint-caution-bg);
+    }
+  </style>
+</head>
+<body>
+  <div id="progress-bar"></div>
+
+  <!-- HEADER -->
+  <header id="main-header">
+    <div class="header-left">
+      <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle Navigation">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">🤖</div>
+        <div class="brand-text">
+          <span class="main">AIML MiniBook</span>
+          <span class="sub">Study Dashboard</span>
+        </div>
+      </a>
+    </div>
+
+    <span class="header-chapter-title">Progress &amp; Analytics</span>
+
+    <div class="header-right">
+      <a href="index.html" class="icon-btn" title="Home Portal">🏠</a>
+      <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)"></button>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <div id="sidebar-overlay"></div>
+  <aside id="sidebar">
+    <nav class="sidebar-nav">
+      <div class="sidebar-section">
+        <div class="sidebar-section-label">Navigation</div>
+        <a href="index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+        <a href="progress.html" class="sidebar-link active"><span class="link-icon">📊</span>Dashboard</a>
+        <a href="exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Mock Exam Simulator</a>
+        <a href="exams/unit-quiz.html" class="sidebar-link"><span class="link-icon">⚡</span>Custom Quiz Builder</a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- MAIN DASHBOARD -->
+  <main id="main-content">
+    <div class="content-inner">
+
+      <div class="dash-hero">
+        <h1>Study Progress &amp; Analytics</h1>
+        <p>Track your AI &amp; Machine Learning syllabus coverage, active recall notes, and Pomodoro focus intervals.</p>
+      </div>
+
+      <!-- METRICS ROW -->
+      <div class="dash-stats-row">
+        <div class="dash-stat">
+          <div class="dash-stat-num" id="stat-chapters">0 / 42</div>
+          <div class="dash-stat-lbl">Chapters Completed</div>
+        </div>
+        <div class="dash-stat">
+          <div class="dash-stat-num" id="stat-streak">0 🔥</div>
+          <div class="dash-stat-lbl">Study Day Streak</div>
+        </div>
+        <div class="dash-stat">
+          <div class="dash-stat-num" id="stat-pomodoros">0 ⏱️</div>
+          <div class="dash-stat-lbl">Focus Sessions</div>
+        </div>
+        <div class="dash-stat">
+          <div class="dash-stat-num" id="stat-notes">0 📝</div>
+          <div class="dash-stat-lbl">Active Annotations</div>
+        </div>
+      </div>
+
+      <!-- NOTES & BOOKMARKS SECTION -->
+      <div class="section-heading">
+        <h2>My Saved Annotations &amp; Bookmarks</h2>
+      </div>
+      <div id="notes-container">
+        <p style="color:var(--em-text-muted); font-size:0.90rem; padding: 20px 0;">No active notes saved yet. Select text inside any chapter to highlight and annotate.</p>
+      </div>
+
+      <!-- BACKUP / RESTORE ACTIONS -->
+      <div class="actions-row">
+        <button class="action-btn" onclick="exportData()">💾 Backup Progress (JSON)</button>
+        <button class="action-btn" onclick="document.getElementById('import-file').click()">📂 Restore Backup</button>
+        <input type="file" id="import-file" style="display:none" onchange="importData(event)">
+        <button class="action-btn danger" onclick="resetAllData()">⚠️ Reset All Progress</button>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="assets/js/state.js"></script>
+  <script src="assets/js/core.js"></script>
+  <script src="assets/js/notes.js"></script>
+  <script>
+    function updateDashboard() {
+      if (typeof StateManager !== 'undefined') {
+        const readMap = StateManager.getAllReadProgress() || {};
+        const completedCount = Object.values(readMap).filter(p => Number(p) >= 90).length;
+        document.getElementById('stat-chapters').textContent = completedCount + ' / 13';
+
+        const bookmarks = StateManager.get('bookmarks') || [];
+        let notesCount = 0;
+        let allNotes = [];
+        try {
+          if (typeof NotesManager !== 'undefined' && NotesManager.getAllNotes) {
+            allNotes = NotesManager.getAllNotes();
+            notesCount = allNotes.length;
+          }
+        } catch(e) {}
+        
+        document.getElementById('stat-notes').textContent = (notesCount + bookmarks.length) + ' 📝';
+
+        // Render notes and bookmarks list
+        const container = document.getElementById('notes-container');
+        if (container) {
+          if (allNotes.length === 0 && bookmarks.length === 0) {
+            container.innerHTML = '<p style="color:var(--em-text-muted); font-size:0.90rem; padding: 20px 0;">No active notes or bookmarks saved yet. Click the bookmark icon or select text inside any chapter to highlight and annotate.</p>';
+          } else {
+            let html = '<div class="notes-table-wrap"><table class="notes-table"><thead><tr><th>Type</th><th>Location</th><th>Content / Label</th></tr></thead><tbody>';
+            bookmarks.forEach(b => {
+              html += `<tr><td><span style="color:var(--em-accent);font-weight:700;">📌 Bookmark</span></td><td><a href="${b.href || '#'}" style="color:var(--em-accent);">${b.title || b.id || 'Section'}</a></td><td>Saved section</td></tr>`;
+            });
+            allNotes.forEach(n => {
+              html += `<tr><td><span style="color:#D97706;font-weight:700;">📝 Note</span></td><td>${n.page || 'Chapter'}</td><td><em>"${(n.quote || '').slice(0, 60)}..."</em> — ${(n.text || '').slice(0, 80)}</td></tr>`;
+            });
+            html += '</tbody></table></div>';
+            container.innerHTML = html;
+          }
+        }
+      }
+    }
+    document.addEventListener('DOMContentLoaded', updateDashboard);
+
+    function exportData() {
+      if (typeof StateManager !== 'undefined' && StateManager.exportData) {
+        StateManager.exportData();
+      }
+    }
+
+    function importData(e) {
+      if (typeof StateManager !== 'undefined' && StateManager.importData) {
+        StateManager.importData();
+      }
+    }
+
+    function resetAllData() {
+      if (confirm('Are you sure you want to reset all your study progress, notes, and bookmarks?')) {
+        localStorage.removeItem('aiml-minibook-state');
+        localStorage.removeItem('aiml-notes-v1');
+        location.reload();
+      }
+    }
+  </script>
+</body>
+</html>

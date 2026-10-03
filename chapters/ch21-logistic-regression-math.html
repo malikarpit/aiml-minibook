@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 21: Logistic Regression: Mathematics &amp; Decision Boundaries — AI & Machine Learning MiniBook. Maximum Likelihood Estimation (MLE), Binary Cross-Entropy Loss (Log Loss), Gradient Derivation, Non-Linear Decision Boundaries, and Multiclass Extensions">
+<title>Ch 21 — Logistic Regression: Mathematics &amp; Decision Boundaries | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-vii">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 21 — Logistic Regression: Mathematics &amp; Decision Boundaries</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 21 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why Have a Separate Mathematics Chapter? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Mathematical Prerequisites <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. The Sigmoid as a Mathematical Function <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Deriving the Sigmoid Derivative <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. From Probability to Odds <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. From Odds to Log-Odds <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Deriving the Sigmoid from the Log-Odds Model </a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. The Bernoulli Probability Model <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Likelihood </a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Why Do We Use the Log-Likelihood? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Why Cross-Entropy and Maximum Likelihood Are Connected </a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Deriving the Gradient — The Important Part <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Gradient with Respect to the Weights </a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. What Does `(p-y)x` Mean? </a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Gradient Descent Update <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. One-Step Numerical Gradient Example </a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Decision Boundary Derivation </a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Two-Dimensional Geometry <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. What Does the Bias Term Do Geometrically? </a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Changing the Classification Threshold <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Connection to Confusion-Matrix Metrics </a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Why Feature Scaling Can Matter </a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Convexity Connection </a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Logistic Regression Training — Full Mathematical Picture </a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. The Entire Algorithm in Human Language <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Full Numerical Exercise — Two Features </a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Numerical Skill Checklist </a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Common Mathematical Mistakes </a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Active Recall — Mathematics </a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Exam Lens <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Math Companion Links </a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Course Lens </a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Resource Shelf </a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Chapter Exit Test <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link active"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit II</span><span>›</span><span>Part VII — Linear & Logistic Models</span><span>›</span><span style="color:var(--em-text)">Chapter 21</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 21 · Unit II · Part VII</div>
+    <div class="chapter-part-banner part-vii">
+      <span class="part-banner-badge">Unit II · Part VII</span>
+      <span>Linear & Logistic Models</span>
+    </div>
+    <h1 class="chapter-title">Logistic Regression: Mathematics &amp; Decision Boundaries</h1>
+    <div class="concept-id-tag">[CONCEPT-ML-021]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: Highest Yield Mathematical Derivations</span>
+      <span class="chapter-meta-item">📖 ~55 min read</span>
+      <span class="chapter-meta-item">🎯 34 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>Logistic Regression Mathematics:</strong> Bernoulli likelihood formulation, Log-likelihood function, Derivation of Binary Cross-Entropy (Log Loss), Proof of convexity, Gradient vector derivation, Gradient Descent update rule, Non-linear boundaries via polynomial features, and Multiclass classification (One-vs-Rest, Softmax).</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why Have a Separate Mathematics Chapter?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Mathematical Prerequisites</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">The Sigmoid as a Mathematical Function</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Deriving the Sigmoid Derivative</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">From Probability to Odds</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">From Odds to Log-Odds</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Deriving the Sigmoid from the Log-Odds Model</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">The Bernoulli Probability Model</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Likelihood</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Why Do We Use the Log-Likelihood?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Why Cross-Entropy and Maximum Likelihood Are Connected</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Deriving the Gradient — The Important Part</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Gradient with Respect to the Weights</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">What Does `(p-y)x` Mean?</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Gradient Descent Update</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">One-Step Numerical Gradient Example</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Decision Boundary Derivation</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Two-Dimensional Geometry</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">What Does the Bias Term Do Geometrically?</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Changing the Classification Threshold</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Connection to Confusion-Matrix Metrics</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Why Feature Scaling Can Matter</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Convexity Connection</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Logistic Regression Training — Full Mathematical Picture</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">The Entire Algorithm in Human Language</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Full Numerical Exercise — Two Features</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Numerical Skill Checklist</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Common Mathematical Mistakes</span></a></li>
+      <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Active Recall — Mathematics</span></a></li>
+      <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Exam Lens</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Math Companion Links</span></a></li>
+      <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Course Lens</span></a></li>
+      <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Resource Shelf</span></a></li>
+      <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Chapter Exit Test</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+    </ul>
+  </div>
+
+  <div class="chapter-preamble-card"><h1>MAIN-U2-C21 — Logistic Regression: Mathematics &amp; Decision Boundaries</h1>
+<blockquote>
+<p><strong>Main Book:</strong> AI &amp; Machine Learning — Visual + Mathematical Self-Learning Textbook<br />
+<strong>Unit:</strong> II — Machine Learning Fundamentals<br />
+<strong>Topic ID:</strong> <code>ML-U2-C21</code><br />
+<strong>Prerequisites:</strong> <code>ML-U2-C19</code>, <code>ML-U2-C20</code><br />
+<strong>Purpose:</strong> Deep mathematical companion to logistic regression: sigmoid, log-odds, likelihood, cross-entropy, gradients, parameter updates, decision boundaries, threshold changes, geometry and numerical reasoning.<br />
+<strong>Course-note status:</strong> The supplied Lecture07–Lecture10 material establishes the supervised-learning/loss/linear-model/gradient foundations but does not provide a complete logistic-regression derivation. This chapter is therefore explicitly marked as a universal mathematical expansion.</p>
+</blockquote>
+<hr /></div>
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 1: Why Have a Separate Mathematics Chapter? -->
+  <section id="s-01" data-search-section="Why Have a Separate Mathematics Chapter?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>1. Why Have a Separate Mathematics Chapter?</h2>
+      <button class="bookmark-btn" data-id="s-01" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>In the previous chapter you learned <strong>what logistic regression does</strong>.</p>
+<p>Here we ask a deeper question:</p>
+<blockquote>
+<p><strong>Why do these equations fit together, and how does the model actually learn its parameters?</strong></p>
+</blockquote>
+<p>The complete conceptual chain is:</p>
+<div class="ascii-box"><pre>Features x
+   ↓
+Linear score z = wᵀx+b
+   ↓
+Probability p = σ(z)
+   ↓
+Compare p with true y
+   ↓
+Cross-entropy loss
+   ↓
+Gradient
+   ↓
+Update w,b
+   ↓
+Repeat</pre></div>
+<p>This is one of the first places where your earlier mathematics becomes a real ML training mechanism.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 2: Mathematical Prerequisites -->
+  <section id="s-02" data-search-section="Mathematical Prerequisites" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. Mathematical Prerequisites</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Before continuing, you should recognize:</p>
+<h3>Vector</h3>
+<div class="formula-math">\[
+x=[x_1,\ldots,x_d]^T
+\]</div>
+<h3>Inner product</h3>
+<div class="formula-math">\[
+w^Tx=\sum_{j=1}^{d}w_jx_j
+\]</div>
+<h3>Linear model</h3>
+<div class="formula-math">\[
+z=w^Tx+b
+\]</div>
+<h3>Derivative</h3>
+<p>A derivative tells us how a quantity changes when its input changes.</p>
+<h3>Gradient</h3>
+<p>For many parameters:</p>
+<div class="formula-math">\[
+\nabla_w L
+=
+\begin{bmatrix}
+\frac{\partial L}{\partial w_1}\\
+\vdots\\
+\frac{\partial L}{\partial w_d}
+\end{bmatrix}
+\]</div>
+<p>Your Lecture09 explicitly defines the gradient as stacked partial derivatives and demonstrates the gradient of an inner product. <span class="source-marker">Course source: <code>Lecture09.pdf</code>, slides 14–16.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: The Sigmoid as a Mathematical Function -->
+  <section id="s-03" data-search-section="The Sigmoid as a Mathematical Function" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>3. The Sigmoid as a Mathematical Function</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="formula-math">\[
+\sigma(z)=\frac{1}{1+e^{-z}}
+\]</div>
+<p>The sigmoid has several useful properties.</p>
+<h3>Range</h3>
+<div class="formula-math">\[
+0\lt \sigma(z)\lt 1
+\]</div>
+<h3>Center</h3>
+<div class="formula-math">\[
+\sigma(0)=\frac12
+\]</div>
+<h3>Monotonicity</h3>
+<p>If <code>z</code> increases, <code>σ(z)</code> increases.</p>
+<h3>Symmetry</h3>
+<div class="formula-math">\[
+\sigma(-z)=1-\sigma(z)
+\]</div>
+<p>This is useful when reasoning about positive vs negative evidence.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: Deriving the Sigmoid Derivative -->
+  <section id="s-04" data-search-section="Deriving the Sigmoid Derivative" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>4. Deriving the Sigmoid Derivative</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This derivative appears everywhere in neural networks and logistic regression.</p>
+<p>Start with:</p>
+<div class="formula-math">\[
+\sigma(z)=(1+e^{-z})^{-1}
+\]</div>
+<p>Differentiate:</p>
+<div class="formula-math">\[
+\frac{d\sigma}{dz}
+=
+-(1+e^{-z})^{-2}(-e^{-z})
+\]</div>
+<p>so:</p>
+<div class="formula-math">\[
+\frac{d\sigma}{dz}
+=
+\frac{e^{-z}}{(1+e^{-z})^2}
+\]</div>
+<p>This can be rearranged into the elegant form:</p>
+<div class="formula-math">\[
+\boxed{
+\sigma'(z)=\sigma(z)(1-\sigma(z))
+}
+\]</div>
+<h3>Why this form is useful</h3>
+<p>Instead of carrying exponentials everywhere, we can express the derivative directly using the output of the sigmoid.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+Sigmoid ka output `p` mil gaya toh derivative ko directly:
+
+
+
+<div class="formula-math">\[
+p(1-p)
+\]</div>
+
+
+
+likh sakte ho.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: From Probability to Odds -->
+  <section id="s-05" data-search-section="From Probability to Odds" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>5. From Probability to Odds</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Let:</p>
+<div class="formula-math">\[
+p=P(Y=1\mid x)
+\]</div>
+<p>The <strong>odds</strong> of class 1 are:</p>
+<div class="formula-math">\[
+\boxed{
+\frac{p}{1-p}
+}
+\]</div>
+<p>Interpretation:</p>
+<blockquote>
+<p>How much more likely is class 1 relative to class 0?</p>
+</blockquote>
+<p>For example, if:</p>
+<div class="formula-math">\[
+p=0.8
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+1-p=0.2
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\text{odds}=\frac{0.8}{0.2}=4
+\]</div>
+<p>So the odds are 4 to 1.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: From Odds to Log-Odds -->
+  <section id="s-06" data-search-section="From Odds to Log-Odds" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>6. From Odds to Log-Odds</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Take the logarithm:</p>
+<div class="formula-math">\[
+\log\left(\frac{p}{1-p}\right)
+\]</div>
+<p>Using the sigmoid relationship, we get:</p>
+<div class="formula-math">\[
+\boxed{
+\log\left(\frac{p}{1-p}\right)=z
+}
+\]</div>
+<p>and because:</p>
+<div class="formula-math">\[
+z=w^Tx+b
+\]</div>
+<p>we obtain:</p>
+<div class="formula-math">\[
+\boxed{
+\log\left(\frac{p}{1-p}\right)=w^Tx+b
+}
+\]</div>
+<p>This is the formal statistical statement behind the name <strong>logistic regression</strong>.</p>
+<p>The model is linear in <strong>log-odds</strong>, not directly in probability.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: Deriving the Sigmoid from the Log-Odds Model -->
+  <section id="s-07" data-search-section="Deriving the Sigmoid from the Log-Odds Model" class="content-section">
+    <div class="section-header">
+      <h2>7. Deriving the Sigmoid from the Log-Odds Model</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<div class="formula-math">\[
+\log\left(\frac{p}{1-p}\right)=z
+\]</div>
+<p>Exponentiate:</p>
+<div class="formula-math">\[
+\frac{p}{1-p}=e^z
+\]</div>
+<p>Multiply:</p>
+<div class="formula-math">\[
+p=e^z(1-p)
+\]</div>
+<p>Expand:</p>
+<div class="formula-math">\[
+p=e^z-e^zp
+\]</div>
+<p>Move terms:</p>
+<div class="formula-math">\[
+p+e^zp=e^z
+\]</div>
+<p>Factor:</p>
+<div class="formula-math">\[
+p(1+e^z)=e^z
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+p=\frac{e^z}{1+e^z}
+\]</div>
+<p>Divide numerator and denominator by <code>e^z</code>:</p>
+<div class="formula-math">\[
+\boxed{
+ p=\frac{1}{1+e^{-z}}
+}
+\]</div>
+<p>which is exactly the sigmoid.</p>
+<h3>Why this derivation matters</h3>
+<p>Now sigmoid is not just a memorized trick.</p>
+<p>You understand that it appears naturally when the <strong>log-odds are assumed to be linear</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: The Bernoulli Probability Model -->
+  <section id="s-08" data-search-section="The Bernoulli Probability Model" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>8. The Bernoulli Probability Model</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Binary classification uses a Bernoulli random variable.</p>
+<p>For one observation:</p>
+<div class="formula-math">\[
+y\in\{0,1\}
+\]</div>
+<p>and the model predicts:</p>
+<div class="formula-math">\[
+p=P(Y=1\mid x)
+\]</div>
+<p>The probability of observing <code>y</code> can be written compactly as:</p>
+<div class="formula-math">\[
+\boxed{
+P(Y=y\mid x)=p^y(1-p)^{1-y}
+}
+\]</div>
+<p>Check both cases.</p>
+<h3>If <code>y=1</code></h3>
+<div class="formula-math">\[
+p^1(1-p)^0=p
+\]</div>
+<h3>If <code>y=0</code></h3>
+<div class="formula-math">\[
+p^0(1-p)^1=1-p
+\]</div>
+<p>This compact expression is the foundation for the likelihood.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: Likelihood -->
+  <section id="s-09" data-search-section="Likelihood" class="content-section">
+    <div class="section-header">
+      <h2>9. Likelihood</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the observations are:</p>
+<div class="formula-math">\[
+(x_1,y_1),\ldots,(x_n,y_n)
+\]</div>
+<p>and assume the observations are conditionally independent given the model parameters.</p>
+<p>The likelihood is:</p>
+<div class="formula-math">\[
+L(w,b)
+=
+\prod_{i=1}^{n}
+ p_i^{y_i}(1-p_i)^{1-y_i}
+\]</div>
+<p>where:</p>
+<div class="formula-math">\[
+p_i=\sigma(w^Tx_i+b)
+\]</div>
+<p>The idea is:</p>
+<blockquote>
+<p>How compatible are the observed labels with the probabilities produced by the model?</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: Why Do We Use the Log-Likelihood? -->
+  <section id="s-10" data-search-section="Why Do We Use the Log-Likelihood?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>10. Why Do We Use the Log-Likelihood?</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Products are awkward to differentiate.</p>
+<p>Take logarithms:</p>
+<div class="formula-math">\[
+\log L(w,b)
+=
+\sum_{i=1}^{n}
+\left[
+ y_i\log p_i+(1-y_i)\log(1-p_i)
+\right]
+\]</div>
+<p>Maximizing likelihood is equivalent to maximizing log-likelihood because logarithm is monotonic.</p>
+<p>Instead, ML commonly minimizes the negative log-likelihood:</p>
+<div class="formula-math">\[
+\boxed{
+J(w,b)=
+-\sum_{i=1}^{n}
+\left[
+ y_i\log p_i+(1-y_i)\log(1-p_i)
+\right]
+}
+\]</div>
+<p>The average version divides by <code>n</code>.</p>
+<p>This is the <strong>binary cross-entropy / log-loss objective</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: Why Cross-Entropy and Maximum Likelihood Are Connected -->
+  <section id="s-11" data-search-section="Why Cross-Entropy and Maximum Likelihood Are Connected" class="content-section">
+    <div class="section-header">
+      <h2>11. Why Cross-Entropy and Maximum Likelihood Are Connected</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This is a high-value conceptual connection:</p>
+<div class="ascii-box"><pre>Bernoulli model
+      ↓
+Likelihood
+      ↓
+Log-likelihood
+      ↓
+Negative log-likelihood
+      ↓
+Binary cross-entropy</pre></div>
+<p>So the loss is not an arbitrary penalty invented solely for convenience.</p>
+<p>It arises naturally from the probabilistic model.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: Deriving the Gradient — The Important Part -->
+  <section id="s-12" data-search-section="Deriving the Gradient — The Important Part" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>12. Deriving the Gradient — The Important Part</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For one observation, define:</p>
+<div class="formula-math">\[
+z=w^Tx+b
+\]</div>
+<div class="formula-math">\[
+p=\sigma(z)
+\]</div>
+<p>and loss:</p>
+<div class="formula-math">\[
+\ell=-[y\log p+(1-y)\log(1-p)]
+\]</div>
+<p>We want:</p>
+<div class="formula-math">\[
+\frac{\partial \ell}{\partial z}
+\]</div>
+<p>Differentiate with respect to <code>p</code> first:</p>
+<div class="formula-math">\[
+\frac{\partial\ell}{\partial p}
+=
+-\left(\frac{y}{p}-\frac{1-y}{1-p}\right)
+\]</div>
+<p>Simplifying:</p>
+<div class="formula-math">\[
+\frac{\partial\ell}{\partial p}
+=
+\frac{p-y}{p(1-p)}
+\]</div>
+<p>From the sigmoid derivative:</p>
+<div class="formula-math">\[
+\frac{dp}{dz}=p(1-p)
+\]</div>
+<p>Apply the chain rule:</p>
+<div class="formula-math">\[
+\frac{d\ell}{dz}
+=
+\frac{\partial\ell}{\partial p}
+\frac{dp}{dz}
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+\frac{d\ell}{dz}=p-y
+}
+\]</div>
+<p>This is one of the most useful results in introductory ML.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: Gradient with Respect to the Weights -->
+  <section id="s-13" data-search-section="Gradient with Respect to the Weights" class="content-section">
+    <div class="section-header">
+      <h2>13. Gradient with Respect to the Weights</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Remember:</p>
+<div class="formula-math">\[
+z=w^Tx+b
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\frac{\partial z}{\partial w}=x
+\]</div>
+<p>Using chain rule:</p>
+<div class="formula-math">\[
+\nabla_w\ell
+=
+\frac{d\ell}{dz}
+\frac{\partial z}{\partial w}
+\]</div>
+<p>so:</p>
+<div class="formula-math">\[
+\boxed{
+\nabla_w\ell=(p-y)x
+}
+\]</div>
+<p>Similarly:</p>
+<div class="formula-math">\[
+\boxed{
+\frac{\partial\ell}{\partial b}=p-y
+}
+\]</div>
+<p>For <code>n</code> training examples, the gradient becomes the sum/average of the individual contributions.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: What Does `(p-y)x` Mean? -->
+  <section id="s-14" data-search-section="What Does `(p-y)x` Mean?" class="content-section">
+    <div class="section-header">
+      <h2>14. What Does `(p-y)x` Mean?</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This formula looks compact, but it has a simple interpretation.</p>
+<div class="formula-math">\[
+\nabla_w\ell=(p-y)x
+\]</div>
+<p>There are two important pieces.</p>
+<h3>Prediction error</h3>
+<div class="formula-math">\[
+p-y
+\]</div>
+<p>How far the predicted probability is from the true label.</p>
+<h3>Input vector</h3>
+<div class="formula-math">\[
+x
+\]</div>
+<p>Which features were present and by how much.</p>
+<p>Together they tell the optimizer:</p>
+<blockquote>
+<p><strong>How wrong was the prediction, and which parameter directions contributed to that error?</strong></p>
+</blockquote>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+`p-y` tells you **kitni galti hui**.
+
+`x` tells you **kaunse features us prediction mein involved the**.
+
+Their product gives the direction in which the weights should be corrected.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: Gradient Descent Update -->
+  <section id="s-15" data-search-section="Gradient Descent Update" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>15. Gradient Descent Update</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A standard gradient-descent update is:</p>
+<div class="formula-math">\[
+\boxed{
+w\leftarrow w-\eta\nabla_wJ
+}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\boxed{
+b\leftarrow b-\eta\frac{\partial J}{\partial b}
+}
+\]</div>
+<p>where:</p>
+<ul>
+<li><code>η</code> = learning rate;</li>
+<li><code>J</code> = objective/loss;</li>
+<li>gradient = direction of increasing loss.</li>
+</ul>
+<p>Subtracting the gradient moves toward lower loss.</p>
+<p>Your Lecture09 explicitly introduces gradients, chain rule and optimization in the context of least squares; the same mathematical machinery reappears here. <span class="source-marker">Course source: <code>Lecture09.pdf</code>, slides 14–18.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: One-Step Numerical Gradient Example -->
+  <section id="s-16" data-search-section="One-Step Numerical Gradient Example" class="content-section">
+    <div class="section-header">
+      <h2>16. One-Step Numerical Gradient Example</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Take one observation:</p>
+<div class="formula-math">\[
+x=2,
+\qquad y=1
+\]</div>
+<p>and parameters:</p>
+<div class="formula-math">\[
+w=0.5,
+\qquad b=-1
+\]</div>
+<h3>Step 1 — score</h3>
+<div class="formula-math">\[
+z=wx+b
+\]</div>
+<div class="formula-math">\[
+z=(0.5)(2)-1=0
+\]</div>
+<h3>Step 2 — probability</h3>
+<div class="formula-math">\[
+p=\sigma(0)=0.5
+\]</div>
+<h3>Step 3 — error signal</h3>
+<div class="formula-math">\[
+p-y=0.5-1=-0.5
+\]</div>
+<h3>Step 4 — weight gradient</h3>
+<div class="formula-math">\[
+\frac{\partial\ell}{\partial w}=(p-y)x
+\]</div>
+<div class="formula-math">\[
+=(-0.5)(2)=-1
+\]</div>
+<h3>Step 5 — bias gradient</h3>
+<div class="formula-math">\[
+\frac{\partial\ell}{\partial b}=-0.5
+\]</div>
+<h3>Step 6 — update</h3>
+<p>Suppose:</p>
+<div class="formula-math">\[
+\eta=0.1
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+w_{new}=0.5-0.1(-1)=0.6
+\]</div>
+<div class="formula-math">\[
+b_{new}=-1-0.1(-0.5)=-0.95
+\]</div>
+<p>The parameters move in a direction intended to increase the probability for the positive example.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: Decision Boundary Derivation -->
+  <section id="s-17" data-search-section="Decision Boundary Derivation" class="content-section">
+    <div class="section-header">
+      <h2>17. Decision Boundary Derivation</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>With threshold <code>0.5</code>:</p>
+<div class="formula-math">\[
+p\ge0.5
+\]</div>
+<p>Since sigmoid is monotonic and:</p>
+<div class="formula-math">\[
+\sigma(0)=0.5
+\]</div>
+<p>we have:</p>
+<div class="formula-math">\[
+w^Tx+b\ge0
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+w^Tx+b=0}
+\]</div>
+<p>is the boundary.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: Two-Dimensional Geometry -->
+  <section id="s-18" data-search-section="Two-Dimensional Geometry" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>18. Two-Dimensional Geometry</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<div class="formula-math">\[
+w_1x_1+w_2x_2+b=0
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\boxed{
+ x_2=-\frac{w_1}{w_2}x_1-\frac{b}{w_2}
+}
+\]</div>
+<p>This has the form:</p>
+<div class="formula-math">\[
+y=mx+c
+\]</div>
+<p>so the decision boundary is a straight line.</p>
+<h3>Geometric intuition</h3>
+<p>The weight vector:</p>
+<div class="formula-math">\[
+w
+\]</div>
+<p>is normal/perpendicular to the decision boundary.</p>
+<p>That means <code>w</code> points in the direction in which the linear score changes most directly.</p>
+<p>This is the same vector-geometry language you learned in Lecture04.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: What Does the Bias Term Do Geometrically? -->
+  <section id="s-19" data-search-section="What Does the Bias Term Do Geometrically?" class="content-section">
+    <div class="section-header">
+      <h2>19. What Does the Bias Term Do Geometrically?</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Without <code>b</code>:</p>
+<div class="formula-math">\[
+w^Tx=0
+\]</div>
+<p>The boundary must pass through the origin.</p>
+<p>With <code>b</code>:</p>
+<div class="formula-math">\[
+w^Tx+b=0
+\]</div>
+<p>we can shift the boundary.</p>
+<h3>Analogy</h3>
+<p>Think of <code>w</code> as deciding the <strong>orientation</strong> of a sheet and <code>b</code> as allowing the sheet to <strong>slide</strong> without changing its orientation.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+`w` boundary ko ghumata/orient karta hai.
+
+`b` usko idhar-udhar shift karta hai.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: Changing the Classification Threshold -->
+  <section id="s-20" data-search-section="Changing the Classification Threshold" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>20. Changing the Classification Threshold</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p><code>0.5</code> is common, but not mathematically sacred.</p>
+<p>Suppose threshold is:</p>
+<div class="formula-math">\[
+\tau
+\]</div>
+<p>Then predict class 1 if:</p>
+<div class="formula-math">\[
+p\ge \tau
+\]</div>
+<p>Since:</p>
+<div class="formula-math">\[
+p=\sigma(z)
+\]</div>
+<p>and sigmoid is invertible:</p>
+<div class="formula-math">\[
+z\ge\log\left(\frac{\tau}{1-\tau}\right)
+\]</div>
+<p>Therefore the threshold-dependent boundary is:</p>
+<div class="formula-math">\[
+\boxed{
+w^Tx+b=
+\log\left(\frac{\tau}{1-\tau}\right)
+}
+\]</div>
+<h3>Example</h3>
+<p>For:</p>
+<div class="formula-math">\[
+\tau=0.5
+\]</div>
+<p>we obtain:</p>
+<div class="formula-math">\[
+\log\frac{0.5}{0.5}=0
+\]</div>
+<p>so:</p>
+<div class="formula-math">\[
+w^Tx+b=0
+\]</div>
+<p>For a higher threshold, the classifier becomes more conservative about assigning class 1.</p>
+<p>This matters later when you study <strong>precision, recall and ROC curves</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: Connection to Confusion-Matrix Metrics -->
+  <section id="s-21" data-search-section="Connection to Confusion-Matrix Metrics" class="content-section">
+    <div class="section-header">
+      <h2>21. Connection to Confusion-Matrix Metrics</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Changing the threshold changes predictions.</p>
+<p>Therefore it can change:</p>
+<ul>
+<li>TP;</li>
+<li>FP;</li>
+<li>TN;</li>
+<li>FN;</li>
+<li>precision;</li>
+<li>recall;</li>
+<li>F1;</li>
+<li>ROC coordinates.</li>
+</ul>
+<p>So the topics are connected:</p>
+<div class="ascii-box"><pre>Logistic probability
+        ↓
+Choose threshold
+        ↓
+Predicted classes
+        ↓
+Confusion matrix
+        ↓
+Precision / Recall / F1 / ROC-AUC</pre></div>
+<p>This is an important bridge to the evaluation material in your Lecture07. <span class="source-marker">Course source: <code>Lecture07.pdf</code>, slides 20–23.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: Why Feature Scaling Can Matter -->
+  <section id="s-22" data-search-section="Why Feature Scaling Can Matter" class="content-section">
+    <div class="section-header">
+      <h2>22. Why Feature Scaling Can Matter</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your Lecture09 gives a concrete example where two features have very different units and shows that scaling changes the meaning of distances and can improve optimization. <span class="source-marker">Course source: <code>Lecture09.pdf</code>, slides 7–9.</span></p>
+<p>For logistic regression, scaling is also useful for optimization because parameter magnitudes and loss geometry can become poorly conditioned when feature scales differ greatly.</p>
+<h3>Example</h3>
+<p>Suppose one feature is:</p>
+<div class="ascii-box"><pre>Age: 18–80</pre></div>
+<p>and another is:</p>
+<div class="ascii-box"><pre>Income: 100,000–5,000,000</pre></div>
+<p>The model can still be expressed mathematically, but optimization can become less convenient than with sensibly scaled features.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: Convexity Connection -->
+  <section id="s-23" data-search-section="Convexity Connection" class="content-section">
+    <div class="section-header">
+      <h2>23. Convexity Connection</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For standard binary logistic regression with log loss, the optimization objective is convex in the linear parameters under the standard formulation.</p>
+<p>That has an important consequence:</p>
+<blockquote>
+<p>A local minimum is also a global minimum for a differentiable convex objective.</p>
+</blockquote>
+<p>Your Lecture09 explicitly introduces convexity and explains why <code>∇g(x*)=0</code> identifies a global minimum when the function is convex and differentiable. <span class="source-marker">Course source: <code>Lecture09.pdf</code>, slide 13.</span></p>
+<p>Do not confuse this with all neural-network objectives, which can be non-convex.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: Logistic Regression Training — Full Mathematical Picture -->
+  <section id="s-24" data-search-section="Logistic Regression Training — Full Mathematical Picture" class="content-section">
+    <div class="section-header">
+      <h2>24. Logistic Regression Training — Full Mathematical Picture</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Put everything together.</p>
+<div class="formula-math">\[
+\boxed{
+p_i=\sigma(w^Tx_i+b)}
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+\boxed{
+J(w,b)=
+-\frac1n\sum_{i=1}^{n}
+[y_i\log p_i+(1-y_i)\log(1-p_i)]
+}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\boxed{
+\nabla_wJ
+=
+\frac1n\sum_{i=1}^{n}(p_i-y_i)x_i
+}
+\]</div>
+<div class="formula-math">\[
+\boxed{
+\frac{\partial J}{\partial b}
+=
+\frac1n\sum_{i=1}^{n}(p_i-y_i)
+}
+\]</div>
+<p>Then update:</p>
+<div class="formula-math">\[
+w\leftarrow w-\eta\nabla_wJ
+\]</div>
+<div class="formula-math">\[
+b\leftarrow b-\eta\frac{\partial J}{\partial b}
+\]</div>
+<p>This is the mathematical learning loop.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: The Entire Algorithm in Human Language -->
+  <section id="s-25" data-search-section="The Entire Algorithm in Human Language" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>25. The Entire Algorithm in Human Language</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>English</h3>
+<ol>
+<li>Look at each training example.</li>
+<li>Compute the linear score.</li>
+<li>Convert the score into a probability.</li>
+<li>Compare that probability with the true label.</li>
+<li>Compute the loss.</li>
+<li>Determine how each parameter contributed to the loss.</li>
+<li>Move parameters in the direction that reduces the loss.</li>
+<li>Repeat over the data until the chosen stopping criterion is satisfied.</li>
+</ol>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+1. Features lo.
+2. Score nikalo.
+3. Score ko sigmoid se probability banao.
+4. Actual answer se compare karo.
+5. Loss nikalo.
+6. Gradient bataega parameters ko kis direction mein change karna hai.
+7. Chhota update karo.
+8. Repeat.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: Full Numerical Exercise — Two Features -->
+  <section id="s-26" data-search-section="Full Numerical Exercise — Two Features" class="content-section">
+    <div class="section-header">
+      <h2>26. Full Numerical Exercise — Two Features</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<div class="formula-math">\[
+x=[1,2]^T,
+\qquad y=1
+\]</div>
+<div class="formula-math">\[
+w=[0.2,-0.1]^T,
+\qquad b=0.3
+\]</div>
+<p>Calculate:</p>
+<h3>Step 1</h3>
+<div class="formula-math">\[
+z=w^Tx+b
+\]</div>
+<div class="formula-math">\[
+=(0.2)(1)+(-0.1)(2)+0.3
+\]</div>
+<div class="formula-math">\[
+=0.3
+\]</div>
+<h3>Step 2</h3>
+<div class="formula-math">\[
+p=\sigma(0.3)
+\]</div>
+<p>approximately:</p>
+<div class="formula-math">\[
+p\approx0.574
+\]</div>
+<h3>Step 3</h3>
+<div class="formula-math">\[
+p-y\approx-0.426
+\]</div>
+<h3>Step 4 — Weight gradient</h3>
+<div class="formula-math">\[
+\nabla_w\ell=(p-y)x
+\]</div>
+<div class="formula-math">\[
+\approx-0.426
+\begin{bmatrix}
+1\\2
+\end{bmatrix}
+=
+\begin{bmatrix}
+-0.426\\-0.852
+\end{bmatrix}
+\]</div>
+<h3>Step 5 — Bias gradient</h3>
+<div class="formula-math">\[
+\frac{\partial\ell}{\partial b}\approx-0.426
+\]</div>
+<p>Now the optimizer can update the parameters.</p>
+<p>The exact arithmetic is less important than being able to reconstruct the chain without memorization.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: Numerical Skill Checklist -->
+  <section id="s-27" data-search-section="Numerical Skill Checklist" class="content-section">
+    <div class="section-header">
+      <h2>27. Numerical Skill Checklist</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You should be able to compute without looking up the sequence:</p>
+<div class="ascii-box"><pre>x,w,b
+ ↓
+wᵀx+b
+ ↓
+z
+ ↓
+σ(z)
+ ↓
+p
+ ↓
+p-y
+ ↓
+(p-y)x
+ ↓
+parameter update</pre></div>
+<p>This is an excellent exam and viva skill.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: Common Mathematical Mistakes -->
+  <section id="s-28" data-search-section="Common Mathematical Mistakes" class="content-section">
+    <div class="section-header">
+      <h2>28. Common Mathematical Mistakes</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Mistake 1</h2>
+<p>Writing:</p>
+<div class="formula-math">\[
+P(Y=1\mid x)=w^Tx+b
+\]</div>
+<p>Wrong.</p>
+<p>Correct:</p>
+<div class="formula-math">\[
+P(Y=1\mid x)=\sigma(w^Tx+b)
+\]</div>
+<h2>Mistake 2</h2>
+<p>Forgetting the bias term.</p>
+<h2>Mistake 3</h2>
+<p>Confusing the probability <code>p</code> with the raw score <code>z</code>.</p>
+<h2>Mistake 4</h2>
+<p>Using squared error automatically without checking the logistic model formulation.</p>
+<h2>Mistake 5</h2>
+<p>Forgetting the chain rule in the gradient derivation.</p>
+<h2>Mistake 6</h2>
+<p>Treating a threshold such as 0.5 as part of the trained probability model rather than as a decision rule.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 29: Active Recall — Mathematics -->
+  <section id="s-29" data-search-section="Active Recall — Mathematics" class="content-section">
+    <div class="section-header">
+      <h2>29. Active Recall — Mathematics</h2>
+      <button class="bookmark-btn" data-id="s-29" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Without looking back, derive or explain:</p>
+<ol>
+<li><code>σ(z)</code>.</li>
+<li><code>σ'(z)</code>.</li>
+<li>odds <code>p/(1-p)</code>.</li>
+<li>log-odds.</li>
+<li>the sigmoid from the log-odds equation.</li>
+<li>the Bernoulli likelihood.</li>
+<li>the negative log-likelihood.</li>
+<li>why it becomes cross-entropy.</li>
+<li>why <code>dℓ/dz = p-y</code>.</li>
+<li>why <code>∇wℓ=(p-y)x</code>.</li>
+<li>why the 0.5 boundary is <code>wᵀx+b=0</code>.</li>
+<li>why changing the threshold moves the effective boundary.</li>
+<li>why the weight vector is normal to the decision boundary.</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 30: Exam Lens -->
+  <section id="s-30" data-search-section="Exam Lens" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>30. Exam Lens</h2>
+      <button class="bookmark-btn" data-id="s-30" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>2-mark</h2>
+<ul>
+<li>Define sigmoid.</li>
+<li>What is the logit/log-odds?</li>
+<li>Write binary cross-entropy.</li>
+<li>Define the decision boundary.</li>
+</ul>
+<h2>5-mark</h2>
+<blockquote>
+<p>Derive the sigmoid decision boundary for threshold 0.5.</p>
+</blockquote>
+<p>or:</p>
+<blockquote>
+<p>Explain the logistic-regression learning objective.</p>
+</blockquote>
+<h2>10-mark</h2>
+<blockquote>
+<p><strong>Derive the gradient of the binary cross-entropy loss with respect to logistic-regression parameters.</strong></p>
+</blockquote>
+<p>Recommended structure:</p>
+<ol>
+<li>Define <code>z</code>.</li>
+<li>Define sigmoid <code>p</code>.</li>
+<li>Define loss.</li>
+<li>Differentiate loss with respect to <code>p</code>.</li>
+<li>Differentiate <code>p</code> with respect to <code>z</code>.</li>
+<li>Apply chain rule.</li>
+<li>Show <code>dℓ/dz=p-y</code>.</li>
+<li>Use <code>z=wᵀx+b</code>.</li>
+<li>Derive weight/bias gradients.</li>
+<li>State gradient-descent update.</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 31: Math Companion Links -->
+  <section id="s-31" data-search-section="Math Companion Links" class="content-section">
+    <div class="section-header">
+      <h2>31. Math Companion Links</h2>
+      <button class="bookmark-btn" data-id="s-31" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <ul>
+<li><code>MATH-LA-VECTORS</code></li>
+<li><code>MATH-LA-INNER-PRODUCT</code></li>
+<li><code>MATH-CALC-DERIVATIVES</code></li>
+<li><code>MATH-CALC-PARTIALS</code></li>
+<li><code>MATH-CALC-CHAIN-RULE</code></li>
+<li><code>MATH-OPT-GRADIENT</code></li>
+<li><code>MATH-OPT-GRADIENT-DESCENT</code></li>
+<li><code>MATH-PROB-BERNOULLI</code></li>
+<li><code>MATH-PROB-LOGARITHMS</code></li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 32: Course Lens -->
+  <section id="s-32" data-search-section="Course Lens" class="content-section">
+    <div class="section-header">
+      <h2>32. Course Lens</h2>
+      <button class="bookmark-btn" data-id="s-32" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your Lecture09 is especially important here because it demonstrates the exact mathematical tools reused in logistic regression:</p>
+<ul>
+<li>vector notation;</li>
+<li>inner products;</li>
+<li>gradient as stacked partial derivatives;</li>
+<li>chain rule;</li>
+<li>objective minimization;</li>
+<li>convexity and global-minimum intuition. <span class="source-marker">Course source: <code>Lecture09.pdf</code>, slides 12–18.</span></li>
+</ul>
+<p>Your Lecture07 supplies the broader supervised-learning objective and classification/evaluation framing. <span class="source-marker">Course source: <code>Lecture07.pdf</code>, slides 4–6 and 20–23.</span></p>
+<p>Again, this chapter goes beyond those supplied notes for the logistic-specific likelihood and gradient derivation.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 33: Resource Shelf -->
+  <section id="s-33" data-search-section="Resource Shelf" class="content-section">
+    <div class="section-header">
+      <h2>33. Resource Shelf</h2>
+      <button class="bookmark-btn" data-id="s-33" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Structured academic source</h2>
+<p><a href="https://nptel.ac.in/courses/106106139">NPTEL — Introduction to Machine Learning</a></p>
+<p>The current syllabus includes Linear Classification, Logistic Regression and subsequent neural-network topics. [External course source]</p>
+<h2>Additional course</h2>
+<p><a href="https://onlinecourses.nptel.ac.in/noc17_cs26/preview">NPTEL — Introduction to Machine Learning, IIT Kharagpur</a></p>
+<p>The archived course explicitly places Logistic Regression in Week 5 and connects it with perceptrons and neural networks in the following week. [External course source]</p>
+<h2>Concept video</h2>
+<p><a href="https://www.youtube.com/watch?v=yIYKR4sgzI8">StatQuest — Logistic Regression</a></p>
+<p>Use for intuition; use this chapter for the mathematical reconstruction.</p>
+<h2>Reference</h2>
+<p><em>An Introduction to Statistical Learning</em> — logistic regression/classification section.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 34: Chapter Exit Test -->
+  <section id="s-34" data-search-section="Chapter Exit Test" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>34. Chapter Exit Test</h2>
+      <button class="bookmark-btn" data-id="s-34" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You are ready to proceed when you can:</p>
+<ul>
+<li>[ ] Derive the sigmoid from the log-odds equation.</li>
+<li>[ ] Explain why logistic regression uses a Bernoulli model.</li>
+<li>[ ] Write the likelihood.</li>
+<li>[ ] Convert likelihood to log-likelihood.</li>
+<li>[ ] Explain negative log-likelihood/cross-entropy.</li>
+<li>[ ] Derive <code>dℓ/dz=p-y</code>.</li>
+<li>[ ] Derive <code>∇wℓ=(p-y)x</code>.</li>
+<li>[ ] Perform one gradient update numerically.</li>
+<li>[ ] Derive the 0.5 decision boundary.</li>
+<li>[ ] Explain the geometric role of <code>w</code> and <code>b</code>.</li>
+<li>[ ] Explain threshold effects and their relationship to classification metrics.</li>
+</ul>
+<hr />
+<h1>Cross-Book Links</h1>
+<ul>
+<li><strong>Exam Book:</strong> <code>EXAM-ML-U2-C21</code></li>
+<li><strong>Math Companion:</strong> <code>MATH-LA</code>, <code>MATH-CALC</code>, <code>MATH-OPT</code>, <code>MATH-PROB</code></li>
+<li><strong>Practice Bank:</strong> <code>PRAC-ML-U2-C21</code></li>
+<li><strong>Resource Shelf:</strong> <code>RES-ML-LOGREG-MATH</code></li>
+<li><strong>Next:</strong> <code>MAIN-U2-C22 — Decision Trees</code></li>
+</ul>
+<hr />
+<h1>Status</h1>
+<p><strong><code>ML-U2-C21</code> — COMPLETE</strong></p>
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="ch20-logistic-regression.html" class="nav-btn">← Ch 20 — Logistic Regression</a>
+    <a href="ch22-decision-trees.html" class="nav-btn primary">Next: Ch 22 — Decision Trees →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch21-logistic-regression-math.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 21</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

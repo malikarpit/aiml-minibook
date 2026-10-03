@@ -1,0 +1,1959 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 28: Lasso Regression — AI & Machine Learning MiniBook. L1 Regularization, Diamond Constraint Geometry, Exact Zero Weights, Automated Feature Selection, Subgradients, and Coordinate Descent">
+<title>Ch 28 — Lasso Regression | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-x">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 28 — Lasso Regression</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 28 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why This Chapter Exists <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Course-Source Boundary — Read This Carefully <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. One-Minute Intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. The Model Before Regularization <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Lasso Objective <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. What Does the L1 Norm Actually Measure? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Formula Card — Lasso in One Box <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Why Absolute Value Changes the Mathematics <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Subgradient — The Minimum You Need to Know <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Geometry — The Most Visual Explanation <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Constraint View of Lasso <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. A Real-Life Analogy — Packing a Backpack </a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. What “Feature Selection” Means Here <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Ridge vs Lasso at the Coefficient Level <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. A Simple 1D Mathematical Example </a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Worked Numerical Example — Computing the Objective <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Worked Numerical Example — Compare Two Candidate Coefficient Vectors <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Why Scaling Matters for Lasso <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. What Does \(\lambda\) Do? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Why Lasso Is Connected to Overfitting </a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Bias-Variance Connection <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Lasso Is Not the Same as “Delete the Weakest Features” </a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Correlated Features — A Subtle Case </a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Intercept Treatment </a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Optimization — Why Ordinary Closed-Form OLS Reasoning Does Not Transfer Directly <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Coordinate Descent — Intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Algorithm Template — Lasso Regression </a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. L1 vs L2 — Mathematical Table <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Lasso vs OLS <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Worked Conceptual Example — 8 Features </a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. What Happens as \(\lambda\) Changes? </a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Common Misconceptions </a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Memory Palace </a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Active Recall — Close the Book </a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Practice Set </a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. University Exam Lens <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Diagram You Should Be Able to Draw From Memory </a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Math Companion Links </a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Resource Shelf </a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Chapter Exit Test <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Connection to the Next Chapter </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link active"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit II</span><span>›</span><span>Part X — Regularization & Feature Selection</span><span>›</span><span style="color:var(--em-text)">Chapter 28</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 28 · Unit II · Part X</div>
+    <div class="chapter-part-banner part-x">
+      <span class="part-banner-badge">Unit II · Part X</span>
+      <span>Regularization & Feature Selection</span>
+    </div>
+    <h1 class="chapter-title">Lasso Regression</h1>
+    <div class="concept-id-tag">[CONCEPT-ML-028]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: Highest Yield (10-mark guarantee)</span>
+      <span class="chapter-meta-item">📖 ~55 min read</span>
+      <span class="chapter-meta-item">🎯 41 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>Lasso Regression (L1 Regularization):</strong> L1 norm penalty \(\lambda \|w\|_1\), Non-differentiability at zero, Subgradient calculus, Sparsity and automatic feature selection, Diamond constraint boundary geometry, Coordinate Descent optimization, and Contrast with OLS and Ridge.</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why This Chapter Exists</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Course-Source Boundary — Read This Carefully</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">One-Minute Intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">The Model Before Regularization</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Lasso Objective</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">What Does the L1 Norm Actually Measure?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Formula Card — Lasso in One Box</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Why Absolute Value Changes the Mathematics</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Subgradient — The Minimum You Need to Know</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Geometry — The Most Visual Explanation</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Constraint View of Lasso</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">A Real-Life Analogy — Packing a Backpack</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">What “Feature Selection” Means Here</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Ridge vs Lasso at the Coefficient Level</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">A Simple 1D Mathematical Example</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Worked Numerical Example — Computing the Objective</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Worked Numerical Example — Compare Two Candidate Coefficient Vectors</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Why Scaling Matters for Lasso</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">What Does \(\lambda\) Do?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Why Lasso Is Connected to Overfitting</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Bias-Variance Connection</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Lasso Is Not the Same as “Delete the Weakest Features”</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Correlated Features — A Subtle Case</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Intercept Treatment</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Optimization — Why Ordinary Closed-Form OLS Reasoning Does Not Transfer Directly</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Coordinate Descent — Intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Algorithm Template — Lasso Regression</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">L1 vs L2 — Mathematical Table</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Lasso vs OLS</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Worked Conceptual Example — 8 Features</span></a></li>
+      <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">What Happens as \(\lambda\) Changes?</span></a></li>
+      <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Common Misconceptions</span></a></li>
+      <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Memory Palace</span></a></li>
+      <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Active Recall — Close the Book</span></a></li>
+      <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Practice Set</span></a></li>
+      <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">University Exam Lens</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Diagram You Should Be Able to Draw From Memory</span></a></li>
+      <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Math Companion Links</span></a></li>
+      <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Resource Shelf</span></a></li>
+      <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Chapter Exit Test</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Connection to the Next Chapter</span></a></li>
+    </ul>
+  </div>
+
+  <div class="chapter-preamble-card"><h1>MAIN-U2-C28 — Lasso Regression</h1>
+<blockquote>
+<p><strong>Core question:</strong> What changes when the regularization penalty is based on the <strong>absolute values</strong> of the model coefficients rather than their squares?</p>
+</blockquote>
+<p>Lasso Regression answers this question with the <strong>L1 penalty</strong>. Its distinctive mathematical behaviour is that it can drive some coefficients <strong>exactly to zero</strong>, which makes it useful for sparse models and feature selection.</p>
+<hr /></div>
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 1: Why This Chapter Exists -->
+  <section id="s-01" data-search-section="Why This Chapter Exists" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>1. Why This Chapter Exists</h2>
+      <button class="bookmark-btn" data-id="s-01" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>In the previous chapter, Ridge Regression introduced the idea:</p>
+<div class="formula-math">\[
+\text{fit the data} + \text{penalize large coefficients}
+\]</div>
+<p>Ridge uses a squared penalty:</p>
+<div class="formula-math">\[
+\lambda\sum_j w_j^2.
+\]</div>
+<p>That produces smooth coefficient shrinkage, but normally does not make coefficients exactly zero.</p>
+<p>Now ask:</p>
+<blockquote>
+<p><strong>Can we control complexity while also encouraging a model to use fewer features?</strong></p>
+</blockquote>
+<p>Lasso changes the penalty to:</p>
+<div class="formula-math">\[
+\lambda\sum_j |w_j|.
+\]</div>
+<p>This is the <strong>L1 penalty</strong>.</p>
+<p>The central story is:</p>
+<div class="ascii-box"><pre>Flexible model
+      ↓
+Possible overfitting
+      ↓
+Regularization
+      ↓
+Penalize coefficient magnitude
+      ↓
+L1 penalty
+      ↓
+Some coefficients can become exactly 0
+      ↓
+Sparse model / feature selection</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 2: Course-Source Boundary — Read This Carefully -->
+  <section id="s-02" data-search-section="Course-Source Boundary — Read This Carefully" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. Course-Source Boundary — Read This Carefully</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your supplied course-resource guide identifies <code>Lecture10 copy.pdf</code> as a source for:</p>
+<ul>
+<li>feature expansion,</li>
+<li>learned feature representations,</li>
+<li>overfitting motivation,</li>
+<li>and regularization motivation.</li>
+</ul>
+<p>It also explicitly notes that Lecture 10 <strong>does not fully cover Ridge/Lasso treatment</strong>. The university syllabus nevertheless contains Ridge/Lasso, so the complete Lasso formulation, derivation ideas, geometry and numerical treatment in this chapter are an explicit <strong>syllabus-aligned standard machine-learning expansion</strong>.</p>
+<p>Supporting course foundations come from:</p>
+<ul>
+<li><code>Lecture08.pdf</code> — generalization, bias/variance, overfitting/underfitting.</li>
+<li><code>Lecture09.pdf</code> — scaling, vectors, gradients, linear regression and least-squares mathematics.</li>
+<li><code>Lecture10 copy.pdf</code> — feature expansion → flexibility → overfitting → regularization motivation.</li>
+</ul>
+<p>This distinction matters: do not memorize this chapter as though every displayed Lasso derivation appeared verbatim in Lecture 10.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: One-Minute Intuition -->
+  <section id="s-03" data-search-section="One-Minute Intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>3. One-Minute Intuition</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>English</h2>
+<p>Imagine a linear regression model using many features:</p>
+<div class="formula-math">\[
+\hat y=w_1x_1+w_2x_2+\cdots+w_dx_d+b.
+\]</div>
+<p>A highly flexible model can give large, complicated coefficient patterns.</p>
+<p>Lasso says:</p>
+<blockquote>
+<p>“Fit the observations, but pay a cost for every unit of absolute coefficient magnitude.”</p>
+</blockquote>
+<p>Because the absolute-value penalty has a sharp corner at zero, optimization can prefer <strong>landing exactly at zero</strong> for some coefficients.</p>
+<p>So Lasso can produce a model such as:</p>
+<div class="formula-math">\[
+\hat y=3.1x_1+0x_2-0.8x_3+0x_4+1.4x_5.
+\]</div>
+<p>The zero coefficients effectively remove those features from the fitted prediction.</p>
+<h2>Hinglish Teacher Explanation</h2>
+<p>Socho tumhare paas 20 features hain, lekin actual prediction mein shayad sirf 5 useful hain.</p>
+<p>Lasso model ko bolta hai:</p>
+<blockquote>
+<p>“Data ko fit karo, lekin unnecessary coefficients ko zero tak push karne ki permission do.”</p>
+</blockquote>
+<p>Isliye Ridge aur Lasso ka basic difference yaad rakho:</p>
+<div class="ascii-box"><pre>Ridge → weights ko chhota karta hai
+Lasso → weights ko chhota kar sakta hai aur kuch ko 0 bana sakta hai</pre></div>
+<p><strong>Important:</strong> “Lasso always removes many features” galat statement hai. Whether coefficients become zero depends on the data, scaling, the value of \(\lambda\), and the optimization setup.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: The Model Before Regularization -->
+  <section id="s-04" data-search-section="The Model Before Regularization" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>4. The Model Before Regularization</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Start with ordinary linear regression:</p>
+<div class="formula-math">\[
+\hat y_i=w^Tx_i+b.
+\]</div>
+<p>In matrix-style notation, after representing the intercept separately or augmenting the feature vector:</p>
+<div class="formula-math">\[
+\hat y=Xw.
+\]</div>
+<p>Ordinary least squares can be written as:</p>
+<div class="formula-math">\[
+J_{OLS}(w)=\|Xw-y\|_2^2.
+\]</div>
+<p>It only asks:</p>
+<blockquote>
+<p>How well do the predictions fit the observed targets?</p>
+</blockquote>
+<p>Regularization adds another concern:</p>
+<blockquote>
+<p>Can we discourage unnecessary model complexity?</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: Lasso Objective -->
+  <section id="s-05" data-search-section="Lasso Objective" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>5. Lasso Objective</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The standard Lasso objective is:</p>
+<div class="formula-math">\[
+\boxed{
+J_{Lasso}(w)=\|Xw-y\|_2^2+\lambda\|w\|_1
+}
+\]</div>
+<p>where</p>
+<div class="formula-math">\[
+\boxed{
+\|w\|_1=\sum_{j=1}^{d}|w_j|
+}
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+J_{Lasso}(w)
+=
+\|Xw-y\|_2^2
++
+\lambda\sum_{j=1}^{d}|w_j|.
+\]</div>
+<h3>Convention note</h3>
+<p>Different textbooks scale the data-loss term by constants such as \(1/2\) or \(1/n\), and may correspondingly rescale the meaning of \(\lambda\). The conceptual structure remains:</p>
+<div class="formula-math">\[
+\boxed{\text{data-fit term}+\lambda\times\text{L1 complexity penalty}}
+\]</div>
+<p>For numerical questions, always use the exact objective convention stated in the question.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: What Does the L1 Norm Actually Measure? -->
+  <section id="s-06" data-search-section="What Does the L1 Norm Actually Measure?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>6. What Does the L1 Norm Actually Measure?</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For</p>
+<div class="formula-math">\[
+w=(w_1,w_2,w_3),
+\]</div>
+<p>we have</p>
+<div class="formula-math">\[
+\|w\|_1=|w_1|+|w_2|+|w_3|.
+\]</div>
+<p>Example:</p>
+<div class="formula-math">\[
+w=(2,-3,4)
+\]</div>
+<p>then</p>
+<div class="formula-math">\[
+\|w\|_1=|2|+|-3|+|4|=2+3+4=9.
+\]</div>
+<p>If</p>
+<div class="formula-math">\[
+\lambda=0.5,
+\]</div>
+<p>then the penalty contribution is</p>
+<div class="formula-math">\[
+0.5(9)=4.5.
+\]</div>
+<h3>Memory anchor</h3>
+<blockquote>
+<p><strong>L1 = add absolute values.</strong></p>
+</blockquote>
+<p>Do not square them.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: Formula Card — Lasso in One Box -->
+  <section id="s-07" data-search-section="Formula Card — Lasso in One Box" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>7. Formula Card — Lasso in One Box</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <blockquote>
+<h2>LASSO FORMULA CARD</h2>
+<p><strong>Objective</strong></p>
+</blockquote>
+<div class="formula-math">\[
+\gt  J(w)=\|Xw-y\|_2^2+\lambda\|w\|_1
+\gt  \]</div>
+<blockquote>
+<p><strong>Penalty</strong></p>
+</blockquote>
+<div class="formula-math">\[
+\gt  \|w\|_1=\sum_j|w_j|
+\gt  \]</div>
+<blockquote>
+<p><strong>\(\lambda\)</strong></p>
+<p>Controls the strength of regularization.</p>
+<p><strong>Large \(\lambda\)</strong></p>
+<p>Stronger pressure toward small/sparse coefficients.</p>
+<p><strong>Small \(\lambda\)</strong></p>
+<p>Closer to ordinary least squares.</p>
+<p><strong>Characteristic behaviour</strong></p>
+<p>Some coefficients can become exactly zero.</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: Why Absolute Value Changes the Mathematics -->
+  <section id="s-08" data-search-section="Why Absolute Value Changes the Mathematics" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>8. Why Absolute Value Changes the Mathematics</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For one coefficient \(w\):</p>
+<div class="formula-math">\[
+f(w)=|w|.
+\]</div>
+<p>This behaves differently from</p>
+<div class="formula-math">\[
+f(w)=w^2.
+\]</div>
+<h2>Squared penalty</h2>
+<div class="formula-math">\[
+\frac{d}{dw}w^2=2w.
+\]</div>
+<p>The function is smooth at zero.</p>
+<h2>Absolute-value penalty</h2>
+<p>For \(w\gt 0\):</p>
+<div class="formula-math">\[
+\frac{d}{dw}|w|=1.
+\]</div>
+<p>For \(w\lt 0\):</p>
+<div class="formula-math">\[
+\frac{d}{dw}|w|=-1.
+\]</div>
+<p>At</p>
+<div class="formula-math">\[
+w=0,
+\]</div>
+<p>ordinary differentiation is not defined.</p>
+<p>This is called a <strong>non-differentiable point</strong> or <strong>kink</strong>.</p>
+<p>That small-looking mathematical detail is one of the reasons Lasso behaves differently from Ridge.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: Subgradient — The Minimum You Need to Know -->
+  <section id="s-09" data-search-section="Subgradient — The Minimum You Need to Know" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>9. Subgradient — The Minimum You Need to Know</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You do not need to fear the word <em>subgradient</em>.</p>
+<p>For the absolute value,</p>
+<div class="formula-math">\[
+\partial |w|
+=
+\begin{cases}
+\{1\}, & w\gt 0\\[4pt]
+[-1,1], & w=0\\[4pt]
+\{-1\}, & w\lt 0.
+\end{cases}
+\]</div>
+<p>The key idea is:</p>
+<blockquote>
+<p>At zero, there is a whole interval of allowable slope values rather than one ordinary derivative.</p>
+</blockquote>
+<p>This allows the optimization conditions to be satisfied at exactly</p>
+<div class="formula-math">\[
+w=0.
+\]</div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+Ridge ka penalty smooth hai.
+
+Lasso ke zero par ek sharp corner hai.
+
+Isi corner ki wajah se optimum zero par “sit” kar sakta hai.
+
+Exam mein full convex-analysis proof usually required nahi hota unless specifically taught, but the **non-differentiability at zero** is an important mathematical explanation for sparsity.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: Geometry — The Most Visual Explanation -->
+  <section id="s-10" data-search-section="Geometry — The Most Visual Explanation" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>10. Geometry — The Most Visual Explanation</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Consider two coefficients \(w_1,w_2\).</p>
+<h3>L2 constraint</h3>
+<p>Ridge corresponds to a circular constraint:</p>
+<div class="formula-math">\[
+ w_1^2+w_2^2\le t.
+\]</div>
+<h3>L1 constraint</h3>
+<p>Lasso corresponds to a diamond-shaped constraint:</p>
+<div class="formula-math">\[
+ |w_1|+|w_2|\le t.
+\]</div>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>Ridge / L2                  Lasso / L1
+
+        _____                  /\
+     .-&#x27;     &#x27;-.              /  \
+   .&#x27;           &#x27;.            /    \
+  /       •      \           /  •   \
+  \               /           \      /
+   &#x27;.           .&#x27;             \    /
+     &#x27;-._____.-&#x27;                \/
+
+smooth boundary             sharp corners</pre></div>
+<p>The corners of the L1 region lie on coordinate axes.</p>
+<p>That means an optimum can occur where:</p>
+<div class="formula-math">\[
+w_1=0
+\quad\text{or}\quad
+w_2=0.
+\]</div>
+<p>This geometric argument gives intuition for why Lasso can create exact zeros.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: Constraint View of Lasso -->
+  <section id="s-11" data-search-section="Constraint View of Lasso" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>11. Constraint View of Lasso</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A regularized problem can often be viewed in an equivalent constrained form.</p>
+<p>Instead of:</p>
+<div class="formula-math">\[
+\min_w\;\|Xw-y\|_2^2+\lambda\|w\|_1,
+\]</div>
+<p>think conceptually of:</p>
+<div class="formula-math">\[
+\boxed{
+\min_w\;\|Xw-y\|_2^2
+\quad\text{subject to}\quad
+\|w\|_1\le t
+}
+\]</div>
+<p>for a suitable relationship between \(t\) and \(\lambda\).</p>
+<p>Interpretation:</p>
+<div class="ascii-box"><pre>Penalized view
+→ “Every unit of L1 size costs something.”
+
+Constrained view
+→ “The total L1 size cannot exceed a budget.”</pre></div>
+<p>You do not need to prove the exact mapping between \(t\) and \(\lambda\) to understand the regularization idea.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: A Real-Life Analogy — Packing a Backpack -->
+  <section id="s-12" data-search-section="A Real-Life Analogy — Packing a Backpack" class="content-section">
+    <div class="section-header">
+      <h2>12. A Real-Life Analogy — Packing a Backpack</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose you need to travel with many items.</p>
+<p>You want everything useful, but the backpack has a limited complexity/burden budget.</p>
+<h3>Ridge-like thinking</h3>
+<p>Almost every useful item can stay, but you reduce how heavily you rely on each item.</p>
+<h3>Lasso-like thinking</h3>
+<p>You also allow some items to be removed entirely.</p>
+<p>In ML terms:</p>
+<div class="ascii-box"><pre>Feature → item
+Coefficient magnitude → dependence on that item
+L1 budget → total absolute dependence allowed
+Zero coefficient → feature effectively unused</pre></div>
+<p>The analogy is only intuition; Lasso does not literally delete columns from the dataset during the optimization process. It produces fitted coefficients whose exact zeros make those features inactive in the prediction rule.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: What “Feature Selection” Means Here -->
+  <section id="s-13" data-search-section="What “Feature Selection” Means Here" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>13. What “Feature Selection” Means Here</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the fitted model is:</p>
+<div class="formula-math">\[
+\hat y=2.8x_1+0x_2-1.1x_3+0x_4+0.7x_5.
+\]</div>
+<p>The model depends on:</p>
+<div class="formula-math">\[
+x_1,x_3,x_5.
+\]</div>
+<p>Features \(x_2\) and \(x_4\) have zero fitted coefficients.</p>
+<p>Thus Lasso has performed <strong>embedded feature selection</strong> as part of model fitting.</p>
+<h3>Important distinction</h3>
+<p>Feature selection means selecting which variables the fitted model uses.</p>
+<p>It does <strong>not</strong> necessarily mean:</p>
+<ul>
+<li>the features are globally useless,</li>
+<li>the selected set is unique,</li>
+<li>or the model has discovered causal variables.</li>
+</ul>
+<p>It only means the fitted optimization result assigned zero coefficient to those features under the chosen setup.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: Ridge vs Lasso at the Coefficient Level -->
+  <section id="s-14" data-search-section="Ridge vs Lasso at the Coefficient Level" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>14. Ridge vs Lasso at the Coefficient Level</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a model has coefficients:</p>
+<div class="formula-math">\[
+(4,-2,0.7,-0.1).
+\]</div>
+<h3>Ridge</h3>
+<p>The squared penalty strongly discourages large values and tends to continuously shrink coefficients toward zero.</p>
+<p>A typical result might conceptually look like:</p>
+<div class="formula-math">\[
+(2.9,-1.5,0.5,-0.07).
+\]</div>
+<h3>Lasso</h3>
+<p>The absolute-value penalty can produce exact zeros.</p>
+<p>A conceptual result might look like:</p>
+<div class="formula-math">\[
+(2.6,-1.2,0.3,0).
+\]</div>
+<p>These numbers are illustrative, not universal predictions.</p>
+<p>The important structural difference is:</p>
+<div class="ascii-box"><pre>Ridge → shrinkage
+Lasso → shrinkage + possible exact zeros</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: A Simple 1D Mathematical Example -->
+  <section id="s-15" data-search-section="A Simple 1D Mathematical Example" class="content-section">
+    <div class="section-header">
+      <h2>15. A Simple 1D Mathematical Example</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>To see sparsity without a full matrix derivation, consider the normalized one-variable objective:</p>
+<div class="formula-math">\[
+J(w)=\frac12(z-w)^2+\lambda|w|.
+\]</div>
+<p>This is a standard soft-thresholding form.</p>
+<p>For \(z\gt 0\), the solution is:</p>
+<div class="formula-math">\[
+\hat w=
+\begin{cases}
+z-\lambda,& z\gt \lambda\\
+0,& 0\le z\le \lambda.
+\end{cases}
+\]</div>
+<p>Symmetrically, for negative \(z\):</p>
+<div class="formula-math">\[
+\boxed{
+\hat w=\operatorname{sign}(z)\max(|z|-\lambda,0)
+}
+\]</div>
+<h3>Example</h3>
+<p>Let</p>
+<div class="formula-math">\[
+z=3,
+\qquad
+\lambda=1.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\hat w=(+1)(3-1)=2.
+\]</div>
+<p>Now let</p>
+<div class="formula-math">\[
+z=0.6,
+\qquad
+\lambda=1.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+|z|-\lambda=0.6-1=-0.4.
+\]</div>
+<p>The maximum with zero is zero:</p>
+<div class="formula-math">\[
+\boxed{\hat w=0}.
+\]</div>
+<h3>What did we learn?</h3>
+<p>Small signals can be pushed all the way to zero when the regularization pressure is strong enough.</p>
+<h3>Convention warning</h3>
+<p>This exact soft-threshold formula belongs to the displayed normalized objective \(\frac12(z-w)^2+\lambda|w|\). Do <strong>not</strong> copy the same threshold into a differently scaled Lasso objective without adjusting the constants.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: Worked Numerical Example — Computing the Objective -->
+  <section id="s-16" data-search-section="Worked Numerical Example — Computing the Objective" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>16. Worked Numerical Example — Computing the Objective</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<div class="formula-math">\[
+\|Xw-y\|_2^2=12
+\]</div>
+<p>and</p>
+<div class="formula-math">\[
+w=(2,-1,3).
+\]</div>
+<p>Let:</p>
+<div class="formula-math">\[
+\lambda=0.4.
+\]</div>
+<p>First calculate the L1 norm:</p>
+<div class="formula-math">\[
+\|w\|_1=|2|+|-1|+|3|=6.
+\]</div>
+<p>Penalty:</p>
+<div class="formula-math">\[
+\lambda\|w\|_1=0.4(6)=2.4.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+J(w)=12+2.4=14.4.
+\]</div>
+<div class="formula-math">\[
+\boxed{J(w)=14.4}
+\]</div>
+<h3>Exam habit</h3>
+<p>Always separate:</p>
+<ol>
+<li>data-fit term,</li>
+<li>norm calculation,</li>
+<li>regularization term,</li>
+<li>total objective.</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: Worked Numerical Example — Compare Two Candidate Coefficient Vectors -->
+  <section id="s-17" data-search-section="Worked Numerical Example — Compare Two Candidate Coefficient Vectors" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>17. Worked Numerical Example — Compare Two Candidate Coefficient Vectors</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose two models have the same data loss:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Model</th>
+<th style="text-align: right;">Data loss</th>
+<th>Coefficients</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td style="text-align: right;">5</td>
+<td>\((3,-2,0,1)\)</td>
+</tr>
+<tr>
+<td>B</td>
+<td style="text-align: right;">5.5</td>
+<td>\((2, -1.5, 0, 0.2)\)</td>
+</tr>
+</tbody>
+</table></div>
+<p>Let:</p>
+<div class="formula-math">\[
+\lambda=0.5.
+\]</div>
+<h3>Model A</h3>
+<div class="formula-math">\[
+\|w_A\|_1=3+2+0+1=6
+\]</div>
+<p>so</p>
+<div class="formula-math">\[
+J_A=5+0.5(6)=8.
+\]</div>
+<h3>Model B</h3>
+<div class="formula-math">\[
+\|w_B\|_1=2+1.5+0+0.2=3.7
+\]</div>
+<p>so</p>
+<div class="formula-math">\[
+J_B=5.5+0.5(3.7)
+=5.5+1.85
+=7.35.
+\]</div>
+<p>Therefore, under this regularized objective:</p>
+<div class="formula-math">\[
+\boxed{J_B\lt J_A}.
+\]</div>
+<p>Notice something important:</p>
+<blockquote>
+<p>Model B has <strong>higher data loss</strong> but <strong>lower regularized objective</strong>.</p>
+</blockquote>
+<p>Regularized learning does not simply choose the smallest training error.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: Why Scaling Matters for Lasso -->
+  <section id="s-18" data-search-section="Why Scaling Matters for Lasso" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>18. Why Scaling Matters for Lasso</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<ul>
+<li>feature \(x_1\) is measured in kilograms,</li>
+<li>feature \(x_2\) is measured in grams.</li>
+</ul>
+<p>Their numeric scales differ greatly.</p>
+<p>Regularization penalizes coefficient magnitudes:</p>
+<div class="formula-math">\[
+\sum_j|w_j|.
+\]</div>
+<p>But coefficient magnitude depends on the unit of the corresponding feature.</p>
+<p>A feature rescaled by 100 can often use a coefficient around 1/100 of the previous magnitude while producing the same prediction.</p>
+<p>Therefore the penalty would treat the two parameterizations differently even though the underlying information is unchanged.</p>
+<p>This is why feature scaling is important before regularized regression.</p>
+<p>Your <code>Lecture09.pdf</code> explicitly discusses standardization and min-max scaling and explains that scaling matters for models and optimization.</p>
+<h3>Common preprocessing choice</h3>
+<p>Standardization:</p>
+<div class="formula-math">\[
+\boxed{
+ x_j\leftarrow\frac{x_j-\mu_j}{\sigma_j}
+}
+\]</div>
+<p>Then fit the regularized model.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: What Does \(\lambda\) Do? -->
+  <section id="s-19" data-search-section="What Does \(\lambda\) Do?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>19. What Does \(\lambda\) Do?</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The regularization parameter controls the trade-off between fit and simplicity.</p>
+<div class="formula-math">\[
+J(w)=\text{data loss}+\lambda\times\text{L1 penalty}.
+\]</div>
+<h2>\(\lambda=0\)</h2>
+<p>Then:</p>
+<div class="formula-math">\[
+J(w)=\text{data loss}.
+\]</div>
+<p>The Lasso penalty disappears, giving the corresponding ordinary least-squares objective.</p>
+<h2>Small positive \(\lambda\)</h2>
+<p>The model is encouraged to keep coefficients modest, but data fit still dominates relatively strongly.</p>
+<h2>Larger \(\lambda\)</h2>
+<p>The penalty matters more.</p>
+<p>More coefficients may shrink strongly, and some may become exactly zero.</p>
+<h2>Extremely large \(\lambda\)</h2>
+<p>The model is pushed toward very small coefficients and can lose useful signal, producing underfitting.</p>
+<h3>Memory anchor</h3>
+<div class="ascii-box"><pre>λ ↑
+→ penalty matters more
+→ stronger shrinkage pressure
+→ potentially more zeros
+→ too much can underfit</pre></div>
+<p>Do not memorize “larger \(\lambda\) always means better sparsity” as an evaluative claim. Larger \(\lambda\) means <strong>stronger regularization</strong>; whether the resulting model is useful depends on the data and validation procedure.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: Why Lasso Is Connected to Overfitting -->
+  <section id="s-20" data-search-section="Why Lasso Is Connected to Overfitting" class="content-section">
+    <div class="section-header">
+      <h2>20. Why Lasso Is Connected to Overfitting</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>From the earlier generalization chapters:</p>
+<div class="ascii-box"><pre>Model too flexible
+      ↓
+Can fit peculiarities of training data
+      ↓
+Higher overfitting risk</pre></div>
+<p>Regularization introduces a preference for simpler coefficient configurations.</p>
+<p>Lasso specifically uses:</p>
+<div class="formula-math">\[
+\lambda\sum_j|w_j|.
+\]</div>
+<p>So the learner balances:</p>
+<div class="ascii-box"><pre>Explain the observations
+          +
+Keep total coefficient magnitude controlled</pre></div>
+<p>This is the same overall regularization philosophy introduced in C26, but with an L1 penalty.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: Bias-Variance Connection -->
+  <section id="s-21" data-search-section="Bias-Variance Connection" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>21. Bias-Variance Connection</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Regularization usually makes a model less free to fit the training sample.</p>
+<p>That can increase bias while reducing variance.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>No / weak regularization
+→ more freedom
+→ lower restriction
+→ potentially higher variance
+
+Stronger regularization
+→ more restriction
+→ potentially lower variance
+→ potentially higher bias</pre></div>
+<p>Lasso does not magically eliminate the bias-variance trade-off.</p>
+<p>It changes the hypothesis-selection process by adding a complexity penalty.</p>
+<p>The supplied <code>Lecture08.pdf</code> provides the broader bias-variance framework.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: Lasso Is Not the Same as “Delete the Weakest Features” -->
+  <section id="s-22" data-search-section="Lasso Is Not the Same as “Delete the Weakest Features”" class="content-section">
+    <div class="section-header">
+      <h2>22. Lasso Is Not the Same as “Delete the Weakest Features”</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A common oversimplification is:</p>
+<blockquote>
+<p>“Lasso calculates feature importance and deletes the least important features.”</p>
+</blockquote>
+<p>That is not the mathematical definition.</p>
+<p>Lasso solves a joint optimization problem:</p>
+<div class="formula-math">\[
+\min_w
+\left[
+\text{loss}(w)+\lambda\sum_j|w_j|
+\right].
+\]</div>
+<p>The coefficients interact through the prediction loss.</p>
+<p>As a result, the selected/non-selected status emerges from the optimization rather than from a separate ranking-and-deletion step.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: Correlated Features — A Subtle Case -->
+  <section id="s-23" data-search-section="Correlated Features — A Subtle Case" class="content-section">
+    <div class="section-header">
+      <h2>23. Correlated Features — A Subtle Case</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose two features carry very similar information:</p>
+<div class="formula-math">\[
+x_1\approx x_2.
+\]</div>
+<p>Lasso may assign weight to one feature and a much smaller or zero weight to the other.</p>
+<p>But <strong>which feature gets selected is not guaranteed to be uniquely determined</strong> by the underlying concept alone.</p>
+<p>With strongly correlated predictors, small changes in:</p>
+<ul>
+<li>the data,</li>
+<li>preprocessing,</li>
+<li>\(\lambda\),</li>
+<li>or optimization details</li>
+</ul>
+<p>can influence the selected subset.</p>
+<p>Therefore:</p>
+<blockquote>
+<p>A zero Lasso coefficient should not automatically be interpreted as proof that the corresponding real-world variable is irrelevant.</p>
+</blockquote>
+<p>This is an important statistical interpretation safeguard.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: Intercept Treatment -->
+  <section id="s-24" data-search-section="Intercept Treatment" class="content-section">
+    <div class="section-header">
+      <h2>24. Intercept Treatment</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Many standard implementations do not penalize the intercept.</p>
+<p>Suppose:</p>
+<div class="formula-math">\[
+\hat y=Xw+b.
+\]</div>
+<p>A typical objective is:</p>
+<div class="formula-math">\[
+J(w,b)=\|Xw+b\mathbf1-y\|_2^2+\lambda\|w\|_1.
+\]</div>
+<p>Notice that the penalty is on \(w\), not \(b\).</p>
+<p>Why?</p>
+<p>The intercept represents a baseline offset rather than a feature contribution. Penalizing it can distort the baseline unnecessarily.</p>
+<p>For an exam, follow the exact convention in the question.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: Optimization — Why Ordinary Closed-Form OLS Reasoning Does Not Transfer Directly -->
+  <section id="s-25" data-search-section="Optimization — Why Ordinary Closed-Form OLS Reasoning Does Not Transfer Directly" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>25. Optimization — Why Ordinary Closed-Form OLS Reasoning Does Not Transfer Directly</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For OLS, the objective is smooth and differentiable, so we can write:</p>
+<div class="formula-math">\[
+\nabla J(w)=0
+\]</div>
+<p>and obtain a closed-form stationary-point equation.</p>
+<p>For Lasso, the absolute-value term is non-differentiable at zero:</p>
+<div class="formula-math">\[
+|w_j|.
+\]</div>
+<p>Therefore the optimization requires methods designed to handle the L1 structure, such as <strong>coordinate descent</strong> and other convex optimization techniques.</p>
+<p>The key learning point for this course is not to invent an OLS-style inverse formula such as:</p>
+<div class="formula-math">\[
+(X^TX+\lambda I)^{-1}X^Ty
+\]</div>
+<p>for Lasso.</p>
+<p>That formula is the Ridge closed-form solution, not the Lasso solution.</p>
+<h3>Memory trap</h3>
+<div class="ascii-box"><pre>Ridge → differentiable L2 penalty → closed-form solution available
+Lasso → kinked L1 penalty → no analogous simple closed-form vector formula</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: Coordinate Descent — Intuition -->
+  <section id="s-26" data-search-section="Coordinate Descent — Intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>26. Coordinate Descent — Intuition</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A useful way to understand Lasso optimization is <strong>coordinate descent</strong>.</p>
+<p>Instead of changing every coefficient simultaneously:</p>
+<ol>
+<li>hold all coefficients except one fixed,</li>
+<li>optimize the chosen coefficient,</li>
+<li>move to the next coefficient,</li>
+<li>repeat until the objective stabilizes.</li>
+</ol>
+<p>The one-dimensional L1 update has the soft-thresholding form introduced earlier.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>Start with coefficients
+        ↓
+Optimize w₁ while others fixed
+        ↓
+Optimize w₂
+        ↓
+Optimize w₃
+        ↓
+...
+        ↓
+Repeat
+        ↓
+Converge to a Lasso solution</pre></div>
+<p>This explains why the one-variable soft-thresholding example is more than a trick: it captures an important building block of Lasso optimization.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: Algorithm Template — Lasso Regression -->
+  <section id="s-27" data-search-section="Algorithm Template — Lasso Regression" class="content-section">
+    <div class="section-header">
+      <h2>27. Algorithm Template — Lasso Regression</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Problem</h2>
+<p>Fit a linear regression model while controlling coefficient magnitude using an L1 penalty.</p>
+<h2>Inputs</h2>
+<ul>
+<li>training feature matrix \(X\),</li>
+<li>target vector \(y\),</li>
+<li>regularization strength \(\lambda\).</li>
+</ul>
+<h2>Objective</h2>
+<div class="formula-math">\[
+\min_w
+\|Xw-y\|_2^2+\lambda\|w\|_1.
+\]</div>
+<h2>High-level procedure</h2>
+<div class="ascii-box"><pre>1. Prepare the data.
+2. Scale features when appropriate.
+3. Choose candidate λ values.
+4. Fit the Lasso objective for each candidate.
+5. Evaluate using validation / cross-validation.
+6. Select λ using the validation procedure.
+7. Refit on the permitted training data if required.
+8. Evaluate once on the held-out test set.</pre></div>
+<h2>Critical evaluation rule</h2>
+<p>Do not repeatedly choose \(\lambda\) using the final test set. The role of validation data/cross-validation belongs to the generalization framework from <code>Lecture08.pdf</code>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: L1 vs L2 — Mathematical Table -->
+  <section id="s-28" data-search-section="L1 vs L2 — Mathematical Table" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>28. L1 vs L2 — Mathematical Table</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Property</th>
+<th>L1 / Lasso</th>
+<th>L2 / Ridge</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Penalty</td>
+<td>\(\sum |w_j|\)</td>
+<td>\(\sum w_j^2\)</td>
+</tr>
+<tr>
+<td>Norm</td>
+<td>\(\|w\|_1\)</td>
+<td>\(\|w\|_2^2\) in the common objective</td>
+</tr>
+<tr>
+<td>Boundary geometry</td>
+<td>Diamond-like</td>
+<td>Circular/spherical</td>
+</tr>
+<tr>
+<td>Smooth at zero?</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Exact zeros</td>
+<td>Can occur</td>
+<td>Usually not the defining behaviour</td>
+</tr>
+<tr>
+<td>Feature selection</td>
+<td>Can occur naturally</td>
+<td>Not usually exact selection</td>
+</tr>
+<tr>
+<td>Main intuition</td>
+<td>Shrink + sparsify</td>
+<td>Smooth shrinkage</td>
+</tr>
+<tr>
+<td>Simple closed form like Ridge?</td>
+<td>No</td>
+<td>Yes, for standard least-squares Ridge formulation</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 29: Lasso vs OLS -->
+  <section id="s-29" data-search-section="Lasso vs OLS" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>29. Lasso vs OLS</h2>
+      <button class="bookmark-btn" data-id="s-29" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Property</th>
+<th>OLS</th>
+<th>Lasso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Data-fit objective</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Complexity penalty</td>
+<td>No</td>
+<td>Yes, L1</td>
+</tr>
+<tr>
+<td>Coefficients shrink because of penalty</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Exact zeros encouraged</td>
+<td>No</td>
+<td>Yes, possible</td>
+</tr>
+<tr>
+<td>Regularization parameter</td>
+<td>No</td>
+<td>\(\lambda\)</td>
+</tr>
+<tr>
+<td>Typical purpose</td>
+<td>Fit least-squares relationship</td>
+<td>Fit + control complexity + possible sparsity</td>
+</tr>
+</tbody>
+</table></div>
+<p>The central conceptual transition is:</p>
+<div class="formula-math">\[
+\boxed{OLS\rightarrow Lasso=OLS\;fit\;+\;L1\;regularization}
+\]</div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 30: Worked Conceptual Example — 8 Features -->
+  <section id="s-30" data-search-section="Worked Conceptual Example — 8 Features" class="content-section">
+    <div class="section-header">
+      <h2>30. Worked Conceptual Example — 8 Features</h2>
+      <button class="bookmark-btn" data-id="s-30" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine a prediction problem with:</p>
+<div class="formula-math">\[
+x_1,x_2,\ldots,x_8.
+\]</div>
+<p>Suppose a Lasso fit produces:</p>
+<div class="formula-math">\[
+\hat w=(1.9,0,-0.7,0,0.3,0,0.04,-1.2).
+\]</div>
+<p>How should you read this?</p>
+<h3>Active coefficients</h3>
+<div class="formula-math">\[
+1.9,-0.7,0.3,0.04,-1.2
+\]</div>
+<h3>Zero coefficients</h3>
+<div class="formula-math">\[
+w_2=w_4=w_6=0.
+\]</div>
+<p>Therefore the corresponding features are inactive in this fitted linear prediction function.</p>
+<p>But note that \(0.04\) is <strong>not</strong> zero. Lasso may shrink it strongly without eliminating it.</p>
+<h3>Important distinction</h3>
+<div class="ascii-box"><pre>small coefficient ≠ zero coefficient</pre></div>
+<p>Do not casually round a small number to zero unless the question explicitly tells you to do so.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 31: What Happens as \(\lambda\) Changes? -->
+  <section id="s-31" data-search-section="What Happens as \(\lambda\) Changes?" class="content-section">
+    <div class="section-header">
+      <h2>31. What Happens as \(\lambda\) Changes?</h2>
+      <button class="bookmark-btn" data-id="s-31" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Think of a regularization path conceptually.</p>
+<div class="ascii-box"><pre>λ very small
+
+w = [large, moderate, small, small, moderate]
+
+        ↓ increase λ
+
+w = [smaller, smaller, 0, 0, moderate]
+
+        ↓ increase λ further
+
+w = [small, 0, 0, 0, very small]</pre></div>
+<p>This is an intuition, not a guarantee of the exact number or order of zeros for arbitrary data.</p>
+<p>The general trend is stronger penalty pressure as \(\lambda\) increases.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 32: Common Misconceptions -->
+  <section id="s-32" data-search-section="Common Misconceptions" class="content-section">
+    <div class="section-header">
+      <h2>32. Common Misconceptions</h2>
+      <button class="bookmark-btn" data-id="s-32" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Misconception 1</h2>
+<blockquote>
+<p>“Lasso is just Ridge with absolute values substituted mechanically.”</p>
+</blockquote>
+<p>The objectives differ in a mathematically important way because L1 is non-differentiable at zero.</p>
+<h2>Misconception 2</h2>
+<blockquote>
+<p>“Lasso always makes most coefficients zero.”</p>
+</blockquote>
+<p>No. Sparsity depends on the data, \(\lambda\), scaling, and model setup.</p>
+<h2>Misconception 3</h2>
+<blockquote>
+<p>“A zero Lasso coefficient proves the feature has no real-world meaning.”</p>
+</blockquote>
+<p>No. It means the fitted model under the chosen objective assigned zero weight to that feature.</p>
+<h2>Misconception 4</h2>
+<blockquote>
+<p>“Larger \(\lambda\) means better model.”</p>
+</blockquote>
+<p>No. Larger \(\lambda\) means stronger regularization and can eventually cause underfitting.</p>
+<h2>Misconception 5</h2>
+<blockquote>
+<p>“The Ridge formula can be reused for Lasso.”</p>
+</blockquote>
+<p>No. The standard Ridge closed-form formula does not become a Lasso formula by changing the exponent.</p>
+<h2>Misconception 6</h2>
+<blockquote>
+<p>“Scaling is optional.”</p>
+</blockquote>
+<p>Scaling can materially affect the regularization because the penalty acts on coefficient magnitudes.</p>
+<h2>Misconception 7</h2>
+<blockquote>
+<p>“Lasso deletes columns before learning.”</p>
+</blockquote>
+<p>Not in the standard formulation. The optimization produces coefficients, some of which may be exactly zero.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 33: Memory Palace -->
+  <section id="s-33" data-search-section="Memory Palace" class="content-section">
+    <div class="section-header">
+      <h2>33. Memory Palace</h2>
+      <button class="bookmark-btn" data-id="s-33" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>LASSO</h3>
+<p><strong>L → L1</strong></p>
+<p><strong>A → Absolute values</strong></p>
+<p><strong>S → Sparse possibility</strong></p>
+<p><strong>S → Some coefficients become zero</strong></p>
+<p><strong>O → Objective = loss + penalty</strong></p>
+<div class="ascii-box"><pre>Lasso
+ ↓
+L1
+ ↓
+|w|
+ ↓
+sharp corners
+ ↓
+exact zeros can occur</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 34: Active Recall — Close the Book -->
+  <section id="s-34" data-search-section="Active Recall — Close the Book" class="content-section">
+    <div class="section-header">
+      <h2>34. Active Recall — Close the Book</h2>
+      <button class="bookmark-btn" data-id="s-34" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Answer without looking.</p>
+<ol>
+<li>What problem does regularization address?</li>
+<li>Write the Lasso objective.</li>
+<li>Define the L1 norm.</li>
+<li>What does \(\lambda\) control?</li>
+<li>What happens when \(\lambda=0\)?</li>
+<li>Why can Lasso produce exact zeros?</li>
+<li>What happens to \(|w|\) at \(w=0\)?</li>
+<li>What is a subgradient?</li>
+<li>Why does L1 geometry have corners?</li>
+<li>What is feature selection in the Lasso context?</li>
+<li>Why is scaling important?</li>
+<li>Why is the intercept commonly not penalized?</li>
+<li>Why does the Ridge closed-form formula not apply to Lasso?</li>
+<li>What is soft thresholding?</li>
+<li>What is the relationship between regularization and bias-variance?</li>
+<li>How can correlated features complicate interpretation?</li>
+<li>Distinguish a small coefficient from an exact zero.</li>
+<li>State one difference between Lasso and Ridge.</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 35: Practice Set -->
+  <section id="s-35" data-search-section="Practice Set" class="content-section">
+    <div class="section-header">
+      <h2>35. Practice Set</h2>
+      <button class="bookmark-btn" data-id="s-35" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>A. Direct Formula</h2>
+<h3>Q1</h3>
+<p>Write the Lasso objective for a linear regression model.</p>
+<h3>Q2</h3>
+<p>For</p>
+<div class="formula-math">\[
+w=(2,-3,4,-1),
+\]</div>
+<p>calculate \(\|w\|_1\).</p>
+<h3>Q3</h3>
+<p>For</p>
+<div class="formula-math">\[
+\|Xw-y\|_2^2=8,
+\quad
+\|w\|_1=10,
+\quad
+\lambda=0.3,
+\]</div>
+<p>calculate the regularized objective.</p>
+<hr />
+<h2>B. Reasoning</h2>
+<h3>Q4</h3>
+<p>Why can Lasso set some coefficients exactly to zero while Ridge generally shrinks them without exact selection?</p>
+<h3>Q5</h3>
+<p>Why is feature scaling important before regularized regression?</p>
+<h3>Q6</h3>
+<p>Explain why a larger \(\lambda\) can eventually produce underfitting.</p>
+<hr />
+<h2>C. Geometry</h2>
+<h3>Q7</h3>
+<p>Sketch the conceptual L1 constraint region in two dimensions.</p>
+<h3>Q8</h3>
+<p>Explain why corners lying on coordinate axes matter.</p>
+<hr />
+<h2>D. Soft Thresholding</h2>
+<p>For</p>
+<div class="formula-math">\[
+J(w)=\frac12(z-w)^2+\lambda|w|,
+\]</div>
+<p>compute \(\hat w\) for:</p>
+<h3>Q9</h3>
+<div class="formula-math">\[
+z=5,\quad \lambda=2.
+\]</div>
+<h3>Q10</h3>
+<div class="formula-math">\[
+z=1,\quad \lambda=2.
+\]</div>
+<hr />
+<h2>E. Exam-Style Trap</h2>
+<h3>Q11</h3>
+<p>A student writes:</p>
+<div class="formula-math">\[
+\hat w=(X^TX+\lambda I)^{-1}X^Ty
+\]</div>
+<p>for Lasso. Identify the error.</p>
+<h3>Q12</h3>
+<p>A feature has fitted coefficient \(0.001\). Is it correct to say Lasso selected it out?</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 36: University Exam Lens -->
+  <section id="s-36" data-search-section="University Exam Lens" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>36. University Exam Lens</h2>
+      <button class="bookmark-btn" data-id="s-36" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>2-Mark Questions</h2>
+<h3>Define Lasso Regression.</h3>
+<blockquote>
+<p>Lasso Regression is a regularized linear regression method that adds an L1 penalty, \(\lambda\sum_j|w_j|\), to the data-fitting objective.</p>
+</blockquote>
+<h3>What penalty does Lasso use?</h3>
+<div class="formula-math">\[
+\boxed{\lambda\|w\|_1}
+\]</div>
+<h3>State one important property of Lasso.</h3>
+<p>It can produce exact zero coefficients, enabling sparse fitted models and embedded feature selection.</p>
+<h3>What is the role of \(\lambda\)?</h3>
+<p>It controls the strength of the L1 regularization penalty.</p>
+<hr />
+<h2>5-Mark Question</h2>
+<blockquote>
+<p>Explain Lasso Regression and its significance.</p>
+</blockquote>
+<p>Suggested structure:</p>
+<ol>
+<li>Define ordinary least-squares regression.</li>
+<li>Introduce the regularization objective.</li>
+<li>State Lasso's L1 penalty.</li>
+<li>Explain \(\lambda\).</li>
+<li>Explain exact-zero coefficients and feature selection.</li>
+<li>Mention scaling and overfitting connection.</li>
+</ol>
+<hr />
+<h2>10-Mark Question</h2>
+<blockquote>
+<p>Explain Lasso Regression mathematically and compare its behaviour with Ridge Regression.</p>
+</blockquote>
+<p>Recommended structure:</p>
+<ol>
+<li>Motivation: overfitting and complexity.</li>
+<li>Linear regression objective.</li>
+<li>Lasso objective.</li>
+<li>L1 norm definition.</li>
+<li>Role of \(\lambda\).</li>
+<li>Non-differentiability at zero.</li>
+<li>Geometric interpretation.</li>
+<li>Exact zeros / sparsity.</li>
+<li>Scaling.</li>
+<li>Contrast with Ridge.</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 37: Diagram You Should Be Able to Draw From Memory -->
+  <section id="s-37" data-search-section="Diagram You Should Be Able to Draw From Memory" class="content-section">
+    <div class="section-header">
+      <h2>37. Diagram You Should Be Able to Draw From Memory</h2>
+      <button class="bookmark-btn" data-id="s-37" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Draw this without notes:</p>
+<div class="ascii-box"><pre>w₂
+                  ↑
+              /\  |  /\
+             /  \ | /  \
+            /    \|/    \
+-----------&lt;------0------&gt;----------→ w₁
+            \    /|\    /
+             \  / | \  /
+              \/  |  \/
+
+        L1 constraint: diamond
+        Sharp corners → possible zero coefficients</pre></div>
+<p>Then draw a circle around the origin and label it:</p>
+<blockquote>
+<p>L2 / Ridge constraint</p>
+</blockquote>
+<p>Be able to explain why the geometry differs.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 38: Math Companion Links -->
+  <section id="s-38" data-search-section="Math Companion Links" class="content-section">
+    <div class="section-header">
+      <h2>38. Math Companion Links</h2>
+      <button class="bookmark-btn" data-id="s-38" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Recommended companion topics:</p>
+<ul>
+<li><code>MATH-LA-04</code> — vectors and inner products</li>
+<li><code>MATH-LA-08</code> — norms</li>
+<li><code>MATH-CALC-05</code> — gradients</li>
+<li><code>MATH-CALC-07</code> — piecewise functions</li>
+<li><code>MATH-OPT-02</code> — objective functions</li>
+<li><code>MATH-OPT-04</code> — convex optimization</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 39: Resource Shelf -->
+  <section id="s-39" data-search-section="Resource Shelf" class="content-section">
+    <div class="section-header">
+      <h2>39. Resource Shelf</h2>
+      <button class="bookmark-btn" data-id="s-39" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Primary course resources</h2>
+<ul>
+<li><code>Lecture08.pdf</code></li>
+<li><code>Lecture09.pdf</code></li>
+<li><code>Lecture10 copy.pdf</code></li>
+</ul>
+<h2>Video</h2>
+<ul>
+<li>StatQuest — Lasso Regression: https://www.youtube.com/watch?v=NGf0voTMlcs</li>
+<li>StatQuest — Ridge Regression: https://www.youtube.com/watch?v=Q81RR3yKn30</li>
+</ul>
+<h2>Structured course</h2>
+<ul>
+<li>NPTEL Introduction to Machine Learning: https://nptel.ac.in/courses/106105152</li>
+</ul>
+<h2>Reference</h2>
+<ul>
+<li><em>An Introduction to Statistical Learning</em> — linear-model regularization material</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 40: Chapter Exit Test -->
+  <section id="s-40" data-search-section="Chapter Exit Test" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>40. Chapter Exit Test</h2>
+      <button class="bookmark-btn" data-id="s-40" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You are ready to move to the comparison chapter when you can:</p>
+<ul>
+<li>[ ] Write the Lasso objective from memory.</li>
+<li>[ ] Define the L1 norm.</li>
+<li>[ ] Explain the role of \(\lambda\).</li>
+<li>[ ] Explain why the absolute value is non-differentiable at zero.</li>
+<li>[ ] Explain L1 geometry.</li>
+<li>[ ] Explain why exact zero coefficients can occur.</li>
+<li>[ ] Distinguish feature selection from proving real-world irrelevance.</li>
+<li>[ ] Explain why scaling matters.</li>
+<li>[ ] Explain the soft-thresholding idea in a one-variable example.</li>
+<li>[ ] Explain why Ridge's closed-form formula does not apply to Lasso.</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 41: Connection to the Next Chapter -->
+  <section id="s-41" data-search-section="Connection to the Next Chapter" class="content-section">
+    <div class="section-header">
+      <h2>41. Connection to the Next Chapter</h2>
+      <button class="bookmark-btn" data-id="s-41" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Now that Lasso is understood independently, the natural question is:</p>
+<blockquote>
+<p><strong>When should I think in terms of L1 versus L2 regularization, and what exactly changes mathematically?</strong></p>
+</blockquote>
+<p>That is the purpose of:</p>
+<p><strong><code>MAIN-U2-C29 — Ridge vs Lasso Regularization: Comparison, Geometry &amp; Model Behaviour</code>.</strong></p>
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="ch27-ridge-regression.html" class="nav-btn">← Ch 27 — Ridge Regression</a>
+    <a href="ch29-ridge-vs-lasso-comparison.html" class="nav-btn primary">Next: Ch 29 — Ridge vs Lasso Comparison →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch28-lasso-regression.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 28</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

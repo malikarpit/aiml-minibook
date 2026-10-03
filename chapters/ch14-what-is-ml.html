@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 14: What Is Machine Learning? — AI & Machine Learning MiniBook. Arthur Samuel &amp; Tom Mitchell Definitions, Paradigm Shift, Task-Performance-Experience (T, P, E), Data Representations, and Generalization">
+<title>Ch 14 — What Is Machine Learning? | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-v">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 14 — What Is Machine Learning?</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 14 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why are we learning this first? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. One-minute intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. The important distinction: programming rules vs learning from data <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. When should we use Machine Learning? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. The ML problem in symbols <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. What is a feature? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. What is a label / target? </a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. What is a model? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Training and inference </a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. The central objective: generalization <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Why do we need a loss function? </a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. The supervised-learning objective <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. What does \(\arg\min\) mean? </a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. A complete beginner example </a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Training error vs test/generalization performance <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. The ML pipeline you must remember </a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Parameters vs hyperparameters </a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. A crucial question: what does “learning” really mean? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Why one model is not automatically the “best” model </a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Mathematical lens <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Hinglish recap </a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Common misconceptions </a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Active recall — close the book </a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Worked thinking exercise </a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. University Exam Lens <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Course Lens — Lecture 7 </a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Resource shelf </a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Math Companion links <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Connection map </a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Chapter exit test <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link active"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit II</span><span>›</span><span>Part V — Machine Learning Foundations</span><span>›</span><span style="color:var(--em-text)">Chapter 14</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 14 · Unit II · Part V</div>
+    <div class="chapter-part-banner part-v">
+      <span class="part-banner-badge">Unit II · Part V</span>
+      <span>Machine Learning Foundations</span>
+    </div>
+    <h1 class="chapter-title">What Is Machine Learning?</h1>
+    <div class="concept-id-tag">[CONCEPT-ML-014]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: Core Foundation</span>
+      <span class="chapter-meta-item">📖 ~40 min read</span>
+      <span class="chapter-meta-item">🎯 30 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>Machine Learning Foundations:</strong> Definitions of learning, Arthur Samuel (1959), Tom Mitchell (1997) formalization (T, P, E), Traditional programming vs Machine learning, Feature vectors, Target variables, Training and inference phases, and Overfitting intuition.</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why are we learning this first?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">One-minute intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">The important distinction: programming rules vs learning from data</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">When should we use Machine Learning?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">The ML problem in symbols</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">What is a feature?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">What is a label / target?</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">What is a model?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Training and inference</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">The central objective: generalization</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Why do we need a loss function?</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">The supervised-learning objective</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">What does \(\arg\min\) mean?</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">A complete beginner example</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Training error vs test/generalization performance</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">The ML pipeline you must remember</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Parameters vs hyperparameters</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">A crucial question: what does “learning” really mean?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Why one model is not automatically the “best” model</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Mathematical lens</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Hinglish recap</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Common misconceptions</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Active recall — close the book</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Worked thinking exercise</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">University Exam Lens</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Course Lens — Lecture 7</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Resource shelf</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Math Companion links</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Connection map</span></a></li>
+      <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Chapter exit test</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+    </ul>
+  </div>
+
+  <div class="chapter-preamble-card"><h1>MAIN-U2-C14 — What Is Machine Learning?</h1>
+<blockquote>
+<p><strong>Main Book:</strong> AI &amp; Machine Learning — Visual + Mathematical Self-Learning Textbook<br />
+<strong>Unit:</strong> II — Machine Learning Fundamentals<br />
+<strong>Topic ID:</strong> <code>ML-U2-C14</code><br />
+<strong>Prerequisites:</strong> MAIN-U1-C01 to MAIN-U1-C13 at a conceptual level; basic algebra and the idea of data<br />
+<strong>Primary course source:</strong> <code>Lecture07.pdf</code> — <em>Introduction to Machine Learning, Lecture 7: Machine Learning Paradigms and Performance Metrics</em>, Prof. Subrahmanya Swamy Peruru, IIT Kanpur<br />
+<strong>Next:</strong> <code>MAIN-U2-C15 — Machine Learning Paradigms</code></p>
+</blockquote>
+<hr /></div>
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 1: Why are we learning this first? -->
+  <section id="s-01" data-search-section="Why are we learning this first?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>1. Why are we learning this first?</h2>
+      <button class="bookmark-btn" data-id="s-01" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Before learning linear regression, logistic regression, decision trees, or neural networks, you need to answer a much more basic question:</p>
+<blockquote>
+<p><strong>What exactly is a machine learning system doing?</strong></p>
+</blockquote>
+<p>A beginner often hears:</p>
+<blockquote>
+<p>“Machine learning means the computer learns from data.”</p>
+</blockquote>
+<p>That is directionally correct, but too vague to help you reason about an actual model.</p>
+<p>In this book, we will gradually turn that sentence into a complete mental model:</p>
+<div class="ascii-box"><pre>Real-world problem
+       ↓
+       Data
+       ↓
+Features / inputs
+       ↓
+Learning procedure
+       ↓
+Model
+       ↓
+Prediction
+       ↓
+Loss / error
+       ↓
+Improve the model
+       ↓
+Generalize to unseen data</pre></div>
+<p>Your Lecture 7 begins with a practical motivation: ML is especially useful when explicit rules or formulas are hard to write and when data exists but the input-output relationship is complex. <span class="source-marker">Course source: <code>Lecture07.pdf</code>, slide 3.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 2: One-minute intuition -->
+  <section id="s-02" data-search-section="One-minute intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. One-minute intuition</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>English</h3>
+<p>Machine learning is a way of building a predictive or decision-making system by using data to learn a useful relationship instead of manually writing every rule.</p>
+<p>Imagine you want a computer to recognize handwritten digits.</p>
+<p>You could try to manually write rules such as:</p>
+<blockquote>
+<p>“If the top line curves this way and the lower loop has this shape, call it a 5.”</p>
+</blockquote>
+<p>That becomes extremely difficult because handwriting varies.</p>
+<p>Instead, you can provide many examples:</p>
+<div class="ascii-box"><pre>Image of 5 → label 5
+Image of 5 → label 5
+Image of 3 → label 3
+Image of 8 → label 8
+...</pre></div>
+<p>A learning algorithm uses these examples to construct a model that can make predictions on new images.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> Computer ko har rule manually batane ke bajaye hum usse bahut saare examples dete hain. Computer un examples mein patterns dhoondhkar ek **model** banata hai. Phir wahi model naye example par prediction karta hai.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: The important distinction: programming rules vs learning from data -->
+  <section id="s-03" data-search-section="The important distinction: programming rules vs learning from data" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>3. The important distinction: programming rules vs learning from data</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Traditional programming</h2>
+<p>A simplified picture is:</p>
+<div class="ascii-box"><pre>Rules + Data
+     ↓
+  Program
+     ↓
+ Output</pre></div>
+<p>The programmer specifies the logic.</p>
+<p>For example:</p>
+<div class="ascii-box"><pre>IF temperature &lt; 20°C
+THEN turn heater ON</pre></div>
+<h2>Machine learning</h2>
+<p>A simplified picture is:</p>
+<div class="ascii-box"><pre>Examples / Data + Learning procedure
+                  ↓
+                Model
+                  ↓
+          Predictions on new data</pre></div>
+<p>The model's parameters are learned from examples.</p>
+<h3>Analogy — teaching a child</h3>
+<p>Suppose you want to teach a child what a mango is.</p>
+<p>You could try to provide a perfectly complete rulebook:</p>
+<blockquote>
+<p>“A mango must have exactly this shape, this colour, this texture...”</p>
+</blockquote>
+<p>Or you could show many examples:</p>
+<blockquote>
+<p>“This is a mango.”
+“This is also a mango.”
+“This one is a mango.”</p>
+</blockquote>
+<p>The child gradually learns a useful concept from examples.</p>
+<p>That analogy is useful, but it is not a formal definition of ML. A machine-learning algorithm does not literally think like a child.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: When should we use Machine Learning? -->
+  <section id="s-04" data-search-section="When should we use Machine Learning?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>4. When should we use Machine Learning?</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your Lecture 7 gives two especially useful situations:</p>
+<h3>Situation 1 — Explicit rules are hard to write</h3>
+<p>Examples:</p>
+<ul>
+<li>handwritten digit recognition;</li>
+<li>image classification;</li>
+<li>speech recognition;</li>
+<li>complicated pattern recognition.</li>
+</ul>
+<p>The problem is not necessarily that rules do not exist. The problem is that writing all the useful rules explicitly may be difficult or impractical.</p>
+<h3>Situation 2 — The input-output relationship is complex</h3>
+<p>Imagine:</p>
+<div class="ascii-box"><pre>house information ─────────→ price</pre></div>
+<p>There may be many interacting factors:</p>
+<ul>
+<li>area;</li>
+<li>location;</li>
+<li>number of rooms;</li>
+<li>age;</li>
+<li>other features.</li>
+</ul>
+<p>Rather than manually writing every combination, we can use data to learn a function that maps input features toward the desired output.</p>
+<p><span class="source-marker">Course source: <code>Lecture07.pdf</code>, slide 3.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: The ML problem in symbols -->
+  <section id="s-05" data-search-section="The ML problem in symbols" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>5. The ML problem in symbols</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Now we introduce a little mathematics.</p>
+<p>Suppose one example is represented by:</p>
+<div class="formula-math">\[
+(\mathbf{x}_i,y_i)
+\]</div>
+<p>where:</p>
+<ul>
+<li>\(\mathbf{x}_i\) = input/features for example \(i\);</li>
+<li>\(y_i\) = target/output for example \(i\).</li>
+</ul>
+<p>If there are \(n\) training examples, the dataset can be written as:</p>
+<div class="formula-math">\[
+\mathcal{D}=\{(\mathbf{x}_i,y_i)\}_{i=1}^{n}
+\]</div>
+<p>Your Lecture 7 uses exactly this notation for supervised learning. <span class="source-marker">Course source: <code>Lecture07.pdf</code>, slide 5.</span></p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> \(\mathbf{x}\) ko tum “input ki information” samjho aur \(y\) ko “jo answer chahiye” samjho.
+
+For house-price prediction:
+
+
+
+<div class="formula-math">\[
+\mathbf{x}=\text{house features}
+\]</div>
+
+
+
+and:
+
+
+
+<div class="formula-math">\[
+y=\text{house price}
+\]</div>
+
+
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: What is a feature? -->
+  <section id="s-06" data-search-section="What is a feature?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>6. What is a feature?</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A <strong>feature</strong> is an input variable or measurable property used by the model.</p>
+<p>For a house-price example:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Feature</th>
+<th style="text-align: right;">Possible value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Area</td>
+<td style="text-align: right;">1400 sqft</td>
+</tr>
+<tr>
+<td>Bedrooms</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr>
+<td>Bathrooms</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr>
+<td>Age</td>
+<td style="text-align: right;">8 years</td>
+</tr>
+</tbody>
+</table></div>
+<p>These together form an input vector:</p>
+<div class="formula-math">\[
+\mathbf{x}=
+\begin{bmatrix}
+1400\\
+3\\
+2\\
+8
+\end{bmatrix}
+\]</div>
+<h3>Real-world analogy</h3>
+<p>Think of selecting a student for a sports team.</p>
+<p>You might consider:</p>
+<ul>
+<li>height;</li>
+<li>speed;</li>
+<li>endurance;</li>
+<li>previous performance.</li>
+</ul>
+<p>These are features.</p>
+<p>The model uses the features as evidence for a prediction or decision.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: What is a label / target? -->
+  <section id="s-07" data-search-section="What is a label / target?" class="content-section">
+    <div class="section-header">
+      <h2>7. What is a label / target?</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A <strong>label</strong>, <strong>target</strong>, or <strong>response</strong> is the output we want to predict in supervised learning.</p>
+<p>Examples:</p>
+<div class="ascii-box"><pre>Email features → spam / not spam
+House features → price
+Image → cat / dog
+Student information → exam score</pre></div>
+<p>Notice that the output can be different kinds of things.</p>
+<p>That leads to two common supervised-learning settings, which your Lecture 7 explicitly names:</p>
+<h3>Regression</h3>
+<p>The target is continuous, such as:</p>
+<div class="formula-math">\[
+y\in\mathbb{R}
+\]</div>
+<p>Example:</p>
+<blockquote>
+<p>house size → price</p>
+</blockquote>
+<h3>Classification</h3>
+<p>The target is a discrete class:</p>
+<div class="formula-math">\[
+y\in\{1,2,\ldots,K\}
+\]</div>
+<p>Example:</p>
+<blockquote>
+<p>email → spam / not spam</p>
+</blockquote>
+<p><span class="source-marker">Course source: <code>Lecture07.pdf</code>, slide 6.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: What is a model? -->
+  <section id="s-08" data-search-section="What is a model?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>8. What is a model?</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A <strong>model</strong> is the learned function or structure that transforms inputs into predictions.</p>
+<p>A simple abstraction is:</p>
+<div class="formula-math">\[
+\hat{y}=\hat{f}(\mathbf{x})
+\]</div>
+<p>Here:</p>
+<ul>
+<li>\(\mathbf{x}\) = input;</li>
+<li>\(\hat{f}\) = learned model/function;</li>
+<li>\(\hat{y}\) = predicted output.</li>
+</ul>
+<p>The hat symbol is useful:</p>
+<div class="formula-math">\[
+\hat{f}
+\]</div>
+<p>means this is the <strong>learned estimate of the underlying relationship</strong>, rather than a claim that we know the perfect true function.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> Model basically woh “seekha hua mechanism” hai jo input dekhkar answer predict karta hai.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: Training and inference -->
+  <section id="s-09" data-search-section="Training and inference" class="content-section">
+    <div class="section-header">
+      <h2>9. Training and inference</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>These two words will appear everywhere.</p>
+<h2>Training</h2>
+<p>The model uses available data to learn its parameters.</p>
+<div class="ascii-box"><pre>Training data
+     ↓
+ Learning algorithm
+     ↓
+ Learned parameters/model</pre></div>
+<h2>Inference / prediction</h2>
+<p>After training, the model receives a new input and produces an output.</p>
+<div class="ascii-box"><pre>New unseen input
+      ↓
+    Model
+      ↓
+ Prediction</pre></div>
+<h3>Analogy — exam preparation</h3>
+<p>Training is like practicing with many questions before an exam.</p>
+<p>Inference is like receiving a new question during the exam.</p>
+<p>The whole point of practice is not merely to memorize the old questions; it is to perform on <strong>new questions</strong>.</p>
+<p>That is exactly why unseen data matters so much.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: The central objective: generalization -->
+  <section id="s-10" data-search-section="The central objective: generalization" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>10. The central objective: generalization</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A model can perform extremely well on the training examples and still be poor on new data.</p>
+<p>So the real objective is not:</p>
+<blockquote>
+<p>“Memorize the training dataset.”</p>
+</blockquote>
+<p>The objective is:</p>
+<blockquote>
+<p><strong>Learn a relationship that works well on unseen examples from the relevant data-generating process.</strong></p>
+</blockquote>
+<p>Your Lecture 7 explicitly warns that performance depends on how well the learned function predicts on unseen data. <span class="source-marker">Course source: <code>Lecture07.pdf</code>, slide 5.</span></p>
+<p>This idea will become much more important in the next chapters on hypothesis classes, bias-variance and overfitting.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: Why do we need a loss function? -->
+  <section id="s-11" data-search-section="Why do we need a loss function?" class="content-section">
+    <div class="section-header">
+      <h2>11. Why do we need a loss function?</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the real answer is:</p>
+<div class="formula-math">\[
+y=100
+\]</div>
+<p>and your model predicts:</p>
+<div class="formula-math">\[
+\hat y=92
+\]</div>
+<p>How do we tell the learning algorithm that this prediction is imperfect?</p>
+<p>We need a numerical way to measure error.</p>
+<p>That is the purpose of a <strong>loss function</strong>.</p>
+<p>A general loss can be written as:</p>
+<div class="formula-math">\[
+\ell(\hat y,y)
+\]</div>
+<p>It takes the prediction and the true answer and returns a measure of how bad that prediction is.</p>
+<h3>Intuition</h3>
+<div class="ascii-box"><pre>Prediction + Truth
+       ↓
+     Loss
+       ↓
+“How wrong were we?”</pre></div>
+<p>The learning process can then try to find a model that produces a small loss on the training data.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: The supervised-learning objective -->
+  <section id="s-12" data-search-section="The supervised-learning objective" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>12. The supervised-learning objective</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your Lecture 7 expresses supervised learning as:</p>
+<div class="formula-math">\[
+\hat f\in
+\arg\min_{f\in\mathcal H}
+\frac{1}{n}
+\sum_{i=1}^{n}
+\ell(f(\mathbf{x}_i),y_i)
+\]</div>
+<p>Do not panic.</p>
+<p>We will unpack it piece by piece.</p>
+<h2>Step 1 — \(f(\mathbf{x}_i)\)</h2>
+<p>The model receives example \(\mathbf{x}_i\) and predicts an output.</p>
+<h2>Step 2 — Compare prediction with \(y_i\)</h2>
+<p>The true answer is known for supervised training.</p>
+<h2>Step 3 — Calculate loss</h2>
+<div class="formula-math">\[
+\ell(f(\mathbf{x}_i),y_i)
+\]</div>
+<p>This tells us how wrong the prediction was.</p>
+<h2>Step 4 — Add errors across examples</h2>
+<div class="formula-math">\[
+\sum_{i=1}^{n}
+\ell(f(\mathbf{x}_i),y_i)
+\]</div>
+<h2>Step 5 — Average them</h2>
+<div class="formula-math">\[
+\frac{1}{n}
+\sum_{i=1}^{n}
+\ell(f(\mathbf{x}_i),y_i)
+\]</div>
+<h2>Step 6 — Find the best candidate in \(\mathcal H\)</h2>
+<div class="formula-math">\[
+\arg\min_{f\in\mathcal H}
+\dots
+\]</div>
+<p>We are asking:</p>
+<blockquote>
+<p><strong>Which allowed model gives the smallest average training loss?</strong></p>
+</blockquote>
+<p>The set \(\mathcal H\) is the <strong>hypothesis class</strong>. We will study it carefully later.</p>
+<p><span class="source-marker">Course source: <code>Lecture07.pdf</code>, slide 5.</span></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: What does \(\arg\min\) mean? -->
+  <section id="s-13" data-search-section="What does \(\arg\min\) mean?" class="content-section">
+    <div class="section-header">
+      <h2>13. What does \(\arg\min\) mean?</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This notation looks intimidating at first.</p>
+<p>Suppose:</p>
+<div class="formula-math">\[
+f_1\rightarrow 8
+\]</div>
+<div class="formula-math">\[
+f_2\rightarrow 3
+\]</div>
+<div class="formula-math">\[
+f_3\rightarrow 5
+\]</div>
+<p>where the numbers are training losses.</p>
+<p>Then:</p>
+<div class="formula-math">\[
+\arg\min_f L(f)=f_2
+\]</div>
+<p>because \(f_2\) produces the smallest loss.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> **min** = smallest value.  
+> **arg min** = “kaunsa option smallest value de raha hai?”
+
+So:
+
+
+
+<div class="formula-math">\[
+\arg\min
+\]</div>
+
+
+
+does not return the minimum number itself; it identifies the **argument/input/model that achieves it**.
+
+This notation will appear repeatedly in ML.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: A complete beginner example -->
+  <section id="s-14" data-search-section="A complete beginner example" class="content-section">
+    <div class="section-header">
+      <h2>14. A complete beginner example</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose you have three models for predicting house price:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Model</th>
+<th style="text-align: right;">Average training loss</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model A</td>
+<td style="text-align: right;">120</td>
+</tr>
+<tr>
+<td>Model B</td>
+<td style="text-align: right;">80</td>
+</tr>
+<tr>
+<td>Model C</td>
+<td style="text-align: right;">95</td>
+</tr>
+</tbody>
+</table></div>
+<p>The learning objective chooses Model B because it has the smallest training loss.</p>
+<p>But there is a warning:</p>
+<blockquote>
+<p><strong>Lowest training loss does not automatically mean best model on unseen data.</strong></p>
+</blockquote>
+<p>A sufficiently flexible model can memorize training examples.</p>
+<p>That is why the later concepts of generalization and overfitting are essential.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: Training error vs test/generalization performance -->
+  <section id="s-15" data-search-section="Training error vs test/generalization performance" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>15. Training error vs test/generalization performance</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>We need two different ideas.</p>
+<h3>Training error</h3>
+<p>How well does the model fit data it was trained on?</p>
+<h3>Test / unseen-data performance</h3>
+<p>How well does the model perform on examples it did not use to fit its parameters?</p>
+<p>The conceptual goal is:</p>
+<div class="ascii-box"><pre>Good training performance
+          +
+Good unseen-data performance
+          ↓
+      Generalization</pre></div>
+<h3>Why this matters</h3>
+<p>Imagine a student memorizes the exact answers to 100 practice questions.</p>
+<p>Training performance may look excellent.</p>
+<p>Then the teacher asks a new question using the same underlying idea.</p>
+<p>If the student cannot solve it, memorization did not become understanding.</p>
+<p>ML has an analogous problem.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: The ML pipeline you must remember -->
+  <section id="s-16" data-search-section="The ML pipeline you must remember" class="content-section">
+    <div class="section-header">
+      <h2>16. The ML pipeline you must remember</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>PROBLEM
+                    ↓
+                 DATA
+                    ↓
+          REPRESENT INPUTS
+                    ↓
+           CHOOSE MODEL CLASS
+                    ↓
+                TRAIN
+                    ↓
+             CALCULATE LOSS
+                    ↓
+        OPTIMIZE / FIT PARAMETERS
+                    ↓
+            EVALUATE UNSEEN DATA
+                    ↓
+               GENERALIZE</pre></div>
+<p>Different ML algorithms mainly change the <strong>model class</strong>, <strong>loss/objective</strong>, and <strong>learning procedure</strong>.</p>
+<p>That is why learning the common ML skeleton is more useful than memorizing isolated algorithms.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: Parameters vs hyperparameters -->
+  <section id="s-17" data-search-section="Parameters vs hyperparameters" class="content-section">
+    <div class="section-header">
+      <h2>17. Parameters vs hyperparameters</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>These two words are often confused.</p>
+<h2>Parameters</h2>
+<p>Values learned from training data.</p>
+<p>Examples:</p>
+<ul>
+<li>weights in linear regression;</li>
+<li>coefficients in a model;</li>
+<li>neural-network weights.</li>
+</ul>
+<h2>Hyperparameters</h2>
+<p>Settings selected before or around training rather than learned in the same parameter-fitting step.</p>
+<p>Examples may include:</p>
+<ul>
+<li>learning rate;</li>
+<li>tree depth;</li>
+<li>number of neighbours in K-NN;</li>
+<li>regularization strength.</li>
+</ul>
+<h3>Analogy</h3>
+<p>Think of cooking.</p>
+<p>The final taste depends on the ingredients actually used in the dish.</p>
+<p>Parameters are somewhat analogous to the quantities adjusted as part of the learned recipe.</p>
+<p>Hyperparameters are more like choices you make about the recipe or cooking process before/around the cooking procedure.</p>
+<p>The analogy is only for intuition; exact ML training protocols vary.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: A crucial question: what does “learning” really mean? -->
+  <section id="s-18" data-search-section="A crucial question: what does “learning” really mean?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>18. A crucial question: what does “learning” really mean?</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A model is said to learn when its parameters are adjusted using data so that its behavior improves according to a defined objective.</p>
+<p>That means:</p>
+<div class="ascii-box"><pre>Before learning
+     ↓
+Parameters produce weaker predictions
+     ↓
+Data + learning algorithm
+     ↓
+Parameters change
+     ↓
+Predictions improve according to objective</pre></div>
+<p>The system does <strong>not</strong> necessarily discover truth in a philosophical sense.</p>
+<p>It learns a parameterized representation or mapping that performs according to the chosen objective and data.</p>
+<p>This distinction becomes important when we later discuss:</p>
+<ul>
+<li>overfitting;</li>
+<li>biased datasets;</li>
+<li>distribution shift;</li>
+<li>fairness;</li>
+<li>limitations of evaluation metrics.</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: Why one model is not automatically the “best” model -->
+  <section id="s-19" data-search-section="Why one model is not automatically the “best” model" class="content-section">
+    <div class="section-header">
+      <h2>19. Why one model is not automatically the “best” model</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A model can be good or bad relative to a task, dataset and evaluation criterion.</p>
+<p>For example:</p>
+<ul>
+<li>a simple model may generalize better on one dataset;</li>
+<li>a complex model may capture more structure on another;</li>
+<li>a model may have excellent accuracy but poor recall for a safety-critical task;</li>
+<li>a model with low training loss may overfit.</li>
+</ul>
+<p>Therefore always ask:</p>
+<blockquote>
+<p><strong>Best according to which objective, which data, and which evaluation metric?</strong></p>
+</blockquote>
+<p>This mindset will prevent many later mistakes.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: Mathematical lens -->
+  <section id="s-20" data-search-section="Mathematical lens" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>20. Mathematical lens</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For this chapter, the mathematics you actually need is modest.</p>
+<h3>Dataset</h3>
+<div class="formula-math">\[
+\mathcal D=\{(\mathbf x_i,y_i)\}_{i=1}^{n}
+\]</div>
+<h3>Model prediction</h3>
+<div class="formula-math">\[
+\hat y=\hat f(\mathbf x)
+\]</div>
+<h3>Loss</h3>
+<div class="formula-math">\[
+\ell(\hat y,y)
+\]</div>
+<h3>Average training loss</h3>
+<div class="formula-math">\[
+\frac{1}{n}\sum_{i=1}^{n}
+\ell(f(\mathbf x_i),y_i)
+\]</div>
+<h3>Learning objective</h3>
+<div class="formula-math">\[
+\hat f\in\arg\min_{f\in\mathcal H}
+\frac{1}{n}\sum_{i=1}^{n}
+\ell(f(\mathbf x_i),y_i)
+\]</div>
+<p>The most important thing is not memorizing every symbol immediately.</p>
+<p>You should be able to narrate the formula in words:</p>
+<blockquote>
+<p><strong>Choose an allowed model that minimizes the average loss on the training examples.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: Hinglish recap -->
+  <section id="s-21" data-search-section="Hinglish recap" class="content-section">
+    <div class="section-header">
+      <h2>21. Hinglish recap</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <blockquote>
+<p>Machine learning mein hum problem ko data ke through solve karne ki koshish karte hain.</p>
+<p>Input ko generally \(\mathbf{x}\) se represent karte hain aur target ko \(y\) se.</p>
+<p>Model \(\hat f\) input lekar prediction \(\hat y\) deta hai.</p>
+<p>Training mein hum dekhte hain ki prediction kitni galat hai — isko loss ke through measure karte hain.</p>
+<p>Phir learning algorithm model ke parameters ko aise adjust karta hai ki objective improve ho.</p>
+<p>Lekin sirf training data par achha perform karna enough nahi hai. Humein <strong>unseen data par bhi achha perform karna hai</strong>. Isi ko generalization samajhne ki direction mein pehla step samjho.</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: Common misconceptions -->
+  <section id="s-22" data-search-section="Common misconceptions" class="content-section">
+    <div class="section-header">
+      <h2>22. Common misconceptions</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Misconception 1</h2>
+<blockquote>
+<p>“Machine learning means the computer can learn anything.”</p>
+</blockquote>
+<h3>Correct</h3>
+<p>No. Learning depends on:</p>
+<ul>
+<li>data;</li>
+<li>model class;</li>
+<li>objective/loss;</li>
+<li>learning procedure;</li>
+<li>assumptions;</li>
+<li>evaluation setting.</li>
+</ul>
+<hr />
+<h2>Misconception 2</h2>
+<blockquote>
+<p>“Low training error means the model is good.”</p>
+</blockquote>
+<h3>Correct</h3>
+<p>Not necessarily. Unseen-data performance matters.</p>
+<hr />
+<h2>Misconception 3</h2>
+<blockquote>
+<p>“A model is the same as its training data.”</p>
+</blockquote>
+<h3>Correct</h3>
+<p>The model is the learned function/structure used to make predictions; the training data is what the learning procedure uses to fit it.</p>
+<hr />
+<h2>Misconception 4</h2>
+<blockquote>
+<p>“Learning means memorizing examples.”</p>
+</blockquote>
+<h3>Correct</h3>
+<p>Memorization can happen, but useful learning aims for generalization to unseen examples.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: Active recall — close the book -->
+  <section id="s-23" data-search-section="Active recall — close the book" class="content-section">
+    <div class="section-header">
+      <h2>23. Active recall — close the book</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <ol>
+<li>Why is ML useful when explicit rules are difficult to write?</li>
+<li>What is the difference between a feature and a label?</li>
+<li>What does \(\mathbf x\) represent?</li>
+<li>What does \(y\) represent?</li>
+<li>What is \(\hat y\)?</li>
+<li>What is a model?</li>
+<li>What is training?</li>
+<li>What is inference?</li>
+<li>Why do we need a loss function?</li>
+<li>What does \(\arg\min\) mean?</li>
+<li>What is a hypothesis class?</li>
+<li>Why is unseen-data performance important?</li>
+<li>What is the difference between a parameter and a hyperparameter?</li>
+<li>Why can lower training loss fail to imply better generalization?</li>
+<li>Explain the supervised-learning objective in ordinary English.</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: Worked thinking exercise -->
+  <section id="s-24" data-search-section="Worked thinking exercise" class="content-section">
+    <div class="section-header">
+      <h2>24. Worked thinking exercise</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a model predicts the following for three houses:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>House</th>
+<th style="text-align: right;">True price</th>
+<th style="text-align: right;">Predicted price</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td style="text-align: right;">100</td>
+<td style="text-align: right;">98</td>
+</tr>
+<tr>
+<td>B</td>
+<td style="text-align: right;">200</td>
+<td style="text-align: right;">210</td>
+</tr>
+<tr>
+<td>C</td>
+<td style="text-align: right;">150</td>
+<td style="text-align: right;">140</td>
+</tr>
+</tbody>
+</table></div>
+<p>Do <strong>not</strong> calculate a specific metric yet.</p>
+<p>Instead answer:</p>
+<h3>Step 1</h3>
+<p>What is the role of the feature vector \(\mathbf x\)?</p>
+<h3>Step 2</h3>
+<p>What is \(y\)?</p>
+<h3>Step 3</h3>
+<p>What is \(\hat y\)?</p>
+<h3>Step 4</h3>
+<p>Why would a loss function be useful?</p>
+<h3>Step 5</h3>
+<p>Would perfect performance on these three training examples prove that the model generalizes well?</p>
+<p>No. We would need appropriate evaluation on unseen data.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: University Exam Lens -->
+  <section id="s-25" data-search-section="University Exam Lens" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>25. University Exam Lens</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="exam-ladder-card"><div class="ladder-mark-badge">📝 2-mark questions</div>
+
+- Define machine learning.
+- Why is ML used when explicit rules are difficult to write?
+- Define feature.
+- Define target/label.
+- Define loss function.
+- What is generalization?
+
+</div>
+
+<div class="exam-ladder-card"><div class="ladder-mark-badge">📝 5-mark question — Explain the basic ML learning process</div>
+
+Recommended structure:
+
+1. Define ML in the context of learning from data.
+2. Explain input/features and target.
+3. Explain training and model fitting.
+4. Explain loss.
+5. Explain prediction on unseen data.
+6. Mention generalization.
+
+</div>
+
+<div class="exam-ladder-card"><div class="ladder-mark-badge">📝 10-mark question — Explain supervised learning mathematically</div>
+
+Suggested structure:
+
+1. Introduce labelled dataset.
+2. Define \(\mathbf{x}\) and \(y\).
+3. Write:
+
+
+<div class="formula-math">\[
+   \mathcal D=\{(\mathbf x_i,y_i)\}_{i=1}^n
+   \]</div>
+
+
+4. Introduce \(\hat f\).
+5. Define loss.
+6. Write the average-loss objective.
+7. Explain \(\mathcal H\).
+8. Explain why unseen-data performance matters.
+
+</div>
+
+<h3>Exam trap</h3>
+<p>Do not say:</p>
+<blockquote>
+<p>“Machine learning finds the perfect function.”</p>
+</blockquote>
+<p>A safer statement is:</p>
+<blockquote>
+<p>“The learning procedure selects/fits a model according to an objective using available data.”</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: Course Lens — Lecture 7 -->
+  <section id="s-26" data-search-section="Course Lens — Lecture 7" class="content-section">
+    <div class="section-header">
+      <h2>26. Course Lens — Lecture 7</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Primary source: <strong><code>Lecture07.pdf</code></strong>.</p>
+<p>Relevant course slides:</p>
+<ul>
+<li><strong>Slide 3:</strong> when ML is useful — explicit rules are hard to write / complex input-output relationship.</li>
+<li><strong>Slide 4:</strong> supervised-learning visual with labelled training data and a trained model.</li>
+<li><strong>Slide 5:</strong> dataset notation, target function, hypothesis class, loss and unseen-data performance.</li>
+<li><strong>Slide 6:</strong> regression vs classification.</li>
+</ul>
+<p>This chapter expands those ideas into a beginner-first teaching sequence while preserving the course notation.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: Resource shelf -->
+  <section id="s-27" data-search-section="Resource shelf" class="content-section">
+    <div class="section-header">
+      <h2>27. Resource shelf</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Primary — Your course material</h2>
+<ul>
+<li><code>Lecture07.pdf</code></li>
+<li><code>Lecture08.pdf</code> for the next generalization/hypothesis-class layer</li>
+</ul>
+<h2>Video support</h2>
+<p>Use your approved AI/ML resource guide and watch a beginner introduction to supervised learning before moving on if the notation feels abstract.</p>
+<h2>NPTEL</h2>
+<p>Use a structured <strong>Introduction to Machine Learning</strong> course after this chapter for a second complete presentation of the ML pipeline.</p>
+<h2>Reference book</h2>
+<p>Use a beginner-friendly ML text for additional examples, but do not replace the notation in this chapter with a different notation unless you understand both.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: Math Companion links -->
+  <section id="s-28" data-search-section="Math Companion links" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>28. Math Companion links</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <ul>
+<li><code>MATH-M01</code> — notation</li>
+<li><code>MATH-M03</code> — vectors</li>
+<li><code>MATH-M04</code> — matrices</li>
+<li><code>MATH-M07</code> — statistics</li>
+<li><code>MATH-M10</code> — optimization</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 29: Connection map -->
+  <section id="s-29" data-search-section="Connection map" class="content-section">
+    <div class="section-header">
+      <h2>29. Connection map</h2>
+      <button class="bookmark-btn" data-id="s-29" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>What is ML?
+    ↓
+Learning paradigms
+    ↓
+Hypothesis classes
+    ↓
+Generalization
+    ↓
+Bias / Variance
+    ↓
+Linear Regression / Classification
+    ↓
+Model Evaluation
+    ↓
+Regularization
+    ↓
+Neural Networks</pre></div>
+<p>The next chapter answers:</p>
+<blockquote>
+<p><strong>What are the different ways a machine can learn from data?</strong></p>
+</blockquote>
+<p>That is the difference between supervised, unsupervised and reinforcement learning.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 30: Chapter exit test -->
+  <section id="s-30" data-search-section="Chapter exit test" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>30. Chapter exit test</h2>
+      <button class="bookmark-btn" data-id="s-30" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You are ready for C15 when you can, without looking:</p>
+<ul>
+<li>[ ] Explain why ML is useful.</li>
+<li>[ ] Define feature, label, model, training and inference.</li>
+<li>[ ] Explain \(\mathbf x\), \(y\), \(\hat y\).</li>
+<li>[ ] Explain loss in plain language.</li>
+<li>[ ] Read the supervised-learning objective.</li>
+<li>[ ] Explain \(\arg\min\).</li>
+<li>[ ] Explain why generalization matters.</li>
+<li>[ ] Explain parameter vs hyperparameter at a basic level.</li>
+<li>[ ] Describe the complete ML pipeline.</li>
+</ul>
+<blockquote>
+<p><strong>Mastery standard:</strong> You should be able to explain the ML pipeline to another beginner without using unexplained jargon.</p>
+</blockquote>
+<hr />
+<h1>Cross-Book Links</h1>
+<ul>
+<li><strong>Exam Book:</strong> <code>EXAM-ML-U2-C14</code></li>
+<li><strong>Math Companion:</strong> <code>MATH-M01</code>, <code>MATH-M03</code>, <code>MATH-M10</code></li>
+<li><strong>Practice Bank:</strong> <code>PRAC-ML-U2-C14</code></li>
+<li><strong>Next:</strong> <code>MAIN-U2-C15</code></li>
+</ul>
+<hr />
+<h1>Status</h1>
+<p><strong><code>ML-U2-C14</code> — COMPLETE</strong></p>
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="ch13-unit-1-consolidation.html" class="nav-btn">← Ch 13 — Unit I Consolidation</a>
+    <a href="ch15-ml-paradigms.html" class="nav-btn primary">Next: Ch 15 — ML Paradigms →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch14-what-is-ml.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 14</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

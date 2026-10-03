@@ -1,0 +1,2155 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 47: AI in Healthcare — AI & Machine Learning MiniBook. Medical Imaging CNNs, Electronic Health Records, Asymmetric Error Costs, Sensitivity-First Triage, and Physician-in-the-Loop">
+<title>Ch 47 — AI in Healthcare | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-xxi">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 47 — AI in Healthcare</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 47 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why This Chapter Exists <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Source Boundary <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. One-Minute Intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Healthcare AI Is Not One Problem <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Real-World Analogy — Hospital Triage Queue <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. The Healthcare AI Stack <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Healthcare Data Types <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. The First Question: What Is the Target? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Classification Formulation <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Why Probability and Decision Are Different <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Worked Example — Threshold Change <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. False Positives and False Negatives in Healthcare <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Error Cost Must Be Defined in Context <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Guided Example — Why Accuracy Alone Can Mislead <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Evaluation Should Be Multi-Dimensional <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. ROC Curve Connection <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Calibration — A Different Question from Classification Accuracy <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Imaging Systems — CNN Connection <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Clinical Text — NLP Connection </a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Sequential Data — RNN/LSTM Connection <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Missing Data </a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Data Leakage — A Major Healthcare Trap </a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Dataset Shift Between Hospitals </a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Worked Case — A Risk-Scoring Tool </a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Fairness in Healthcare <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Explainability in Clinical Settings </a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Human Oversight Design </a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Why “AI = Doctor Replacement” Is the Wrong Mental Model for This Chapter </a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Monitoring After Deployment </a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Incident Response <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. End-to-End Worked Example </a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Common Mistakes </a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Exam Lens </a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Active Recall </a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Practice Set </a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. One-Screen Summary </a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Formula Sheet </a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Math You Need Now </a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Connection to Earlier Chapters </a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Chapter Exit Test </a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Resource Shelf </a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Source &amp; Boundary Note </a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Connection Forward </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link active"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit IV</span><span>›</span><span>Part XXI — Applied AI & Autonomous Domain Systems</span><span>›</span><span style="color:var(--em-text)">Chapter 47</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 47 · Unit IV · Part XXI</div>
+    <div class="chapter-part-banner part-xxi">
+      <span class="part-banner-badge">Unit IV · Part XXI</span>
+      <span>Applied AI & Autonomous Domain Systems</span>
+    </div>
+    <h1 class="chapter-title">AI in Healthcare</h1>
+    <div class="concept-id-tag">[CONCEPT-APP-047]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: Core Applied Domain</span>
+      <span class="chapter-meta-item">📖 ~50 min read</span>
+      <span class="chapter-meta-item">🎯 43 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>AI in Healthcare:</strong> Medical computer vision (X-ray, CT, MRI segmentation), Electronic Health Record (EHR) predictive analytics, Asymmetric cost of False Negatives vs False Positives, Sensitivity/Recall prioritization, Clinical decision support systems, Model calibration, and Patient privacy regulations (HIPAA/GDPR).</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why This Chapter Exists</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Source Boundary</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">One-Minute Intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Healthcare AI Is Not One Problem</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Real-World Analogy — Hospital Triage Queue</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">The Healthcare AI Stack</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Healthcare Data Types</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">The First Question: What Is the Target?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Classification Formulation</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Why Probability and Decision Are Different</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Worked Example — Threshold Change</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">False Positives and False Negatives in Healthcare</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Error Cost Must Be Defined in Context</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Guided Example — Why Accuracy Alone Can Mislead</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Evaluation Should Be Multi-Dimensional</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">ROC Curve Connection</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Calibration — A Different Question from Classification Accuracy</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Imaging Systems — CNN Connection</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Clinical Text — NLP Connection</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Sequential Data — RNN/LSTM Connection</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Missing Data</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Data Leakage — A Major Healthcare Trap</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Dataset Shift Between Hospitals</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Worked Case — A Risk-Scoring Tool</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Fairness in Healthcare</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Explainability in Clinical Settings</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Human Oversight Design</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Why “AI = Doctor Replacement” Is the Wrong Mental Model for This Chapter</span></a></li>
+      <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Monitoring After Deployment</span></a></li>
+      <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Incident Response</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">End-to-End Worked Example</span></a></li>
+      <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Common Mistakes</span></a></li>
+      <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Exam Lens</span></a></li>
+      <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Active Recall</span></a></li>
+      <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Practice Set</span></a></li>
+      <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">One-Screen Summary</span></a></li>
+      <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Formula Sheet</span></a></li>
+      <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Math You Need Now</span></a></li>
+      <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Connection to Earlier Chapters</span></a></li>
+      <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Chapter Exit Test</span></a></li>
+      <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Resource Shelf</span></a></li>
+      <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Source &amp; Boundary Note</span></a></li>
+      <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Connection Forward</span></a></li>
+    </ul>
+  </div>
+
+  
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 1: Why This Chapter Exists -->
+  <section id="s-01" data-search-section="Why This Chapter Exists" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>1. Why This Chapter Exists</h2>
+      <button class="bookmark-btn" data-id="s-01" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Healthcare is one of the clearest examples of the difference between:</p>
+<blockquote>
+<p><strong>building a predictive model</strong></p>
+</blockquote>
+<p>and</p>
+<blockquote>
+<p><strong>building a safe AI-enabled decision system</strong>.</p>
+</blockquote>
+<p>Consider a model that predicts whether a patient may require additional clinical attention.</p>
+<p>Mathematically, the task can look familiar:</p>
+<div class="formula-math">\[
+X\rightarrow f_\theta(X)\rightarrow \hat p\rightarrow \hat Y.
+\]</div>
+<p>But the consequences are different from a low-stakes prediction such as recommending a movie.</p>
+<p>A false negative may mean a genuinely important case is not escalated.</p>
+<p>A false positive may create unnecessary tests, workload, anxiety or resource use.</p>
+<p>Therefore healthcare gives us a concrete environment in which to combine nearly everything learned so far:</p>
+<div class="ascii-box"><pre>DATA
+ ↓
+PREPROCESSING
+ ↓
+MODEL
+ ↓
+PROBABILITY / SCORE
+ ↓
+THRESHOLD OR DECISION POLICY
+ ↓
+CLINICAL WORKFLOW
+ ↓
+HUMAN REVIEW
+ ↓
+PATIENT OUTCOME
+ ↓
+MONITORING</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 2: Source Boundary -->
+  <section id="s-02" data-search-section="Source Boundary" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. Source Boundary</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>[COURSE SCOPE]</h3>
+<p>The master resource guide identifies <strong>healthcare, autonomous vehicles and financial systems</strong> as Unit IV application case studies. filecitefile_0000000086b882089e85dbe6281521e6</p>
+<h3>[GAP-FILL]</h3>
+<p>The provided lecture-note set does not contain a dedicated healthcare-AI lecture. The healthcare material below is therefore a <strong>standard application expansion</strong> built on the technical syllabus topics already covered in the Main Book.</p>
+<h3>[COURSE-CONNECTED]</h3>
+<p>The mathematics and model concepts reused in this chapter are grounded in the supplied Unit II and Unit III materials, especially classification/evaluation and neural-network foundations. filecitefile_0000000086b882089e85dbe6281521e6</p>
+<p>This chapter does <strong>not</strong> present a clinical guideline or medical advice.</p>
+<p>It is an AI/ML systems chapter using healthcare as the application domain.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: One-Minute Intuition -->
+  <section id="s-03" data-search-section="One-Minute Intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>3. One-Minute Intuition</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose an AI system assigns a risk score:</p>
+<div class="formula-math">\[
+p=0.82.
+\]</div>
+<p>What does that number mean?</p>
+<p>It does <strong>not</strong> automatically mean:</p>
+<blockquote>
+<p>“The patient definitely has the disease.”</p>
+</blockquote>
+<p>A model output may instead represent a probability-like estimate under a particular model, training distribution and prediction task.</p>
+<p>Then someone must decide:</p>
+<div class="ascii-box"><pre>p = 0.82
+   ↓
+What threshold?
+   ↓
+What action?
+   ↓
+Who reviews it?
+   ↓
+What happens if wrong?</pre></div>
+<p>That chain is the heart of healthcare AI.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: Healthcare AI Is Not One Problem -->
+  <section id="s-04" data-search-section="Healthcare AI Is Not One Problem" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>4. Healthcare AI Is Not One Problem</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>“AI in healthcare” is not a single algorithm.</p>
+<p>Common task families include:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Task family</th>
+<th>Example AI question</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Classification</td>
+<td>Is this case likely to belong to class 1 or class 0?</td>
+</tr>
+<tr>
+<td>Risk prediction</td>
+<td>What is the estimated probability of a future event?</td>
+</tr>
+<tr>
+<td>Medical imaging</td>
+<td>What patterns appear in an image?</td>
+</tr>
+<tr>
+<td>Segmentation</td>
+<td>Which pixels/regions correspond to a structure of interest?</td>
+</tr>
+<tr>
+<td>NLP</td>
+<td>What information can be extracted from clinical text?</td>
+</tr>
+<tr>
+<td>Forecasting</td>
+<td>What may happen later in a time series?</td>
+</tr>
+<tr>
+<td>Retrieval / summarization</td>
+<td>Which information from a large record is relevant?</td>
+</tr>
+<tr>
+<td>Decision support</td>
+<td>Which cases should receive additional attention?</td>
+</tr>
+</tbody>
+</table></div>
+<p>The underlying ML family can therefore differ.</p>
+<div class="ascii-box"><pre>image      → CNN / deep vision
+text       → NLP models
+sequences  → RNN/LSTM or other sequence models
+structured → regression / trees / neural nets</pre></div>
+<p>The <strong>application context</strong> stays healthcare even when the model family changes.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: Real-World Analogy — Hospital Triage Queue -->
+  <section id="s-05" data-search-section="Real-World Analogy — Hospital Triage Queue" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>5. Real-World Analogy — Hospital Triage Queue</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine a hospital emergency department.</p>
+<p>There are many patients but limited attention and resources at a particular moment.</p>
+<p>A triage process attempts to identify which cases need faster attention.</p>
+<p>Now replace one part of the process with an ML model.</p>
+<h3>Mapping</h3>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Triage process</th>
+<th>ML system</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Patient information</td>
+<td>Feature vector \(x\)</td>
+</tr>
+<tr>
+<td>Triage assessment</td>
+<td>Model score</td>
+</tr>
+<tr>
+<td>Priority category</td>
+<td>Predicted class</td>
+</tr>
+<tr>
+<td>Escalation rule</td>
+<td>Decision threshold / policy</td>
+</tr>
+<tr>
+<td>Clinician</td>
+<td>Human reviewer</td>
+</tr>
+<tr>
+<td>Actual condition</td>
+<td>Ground truth / later outcome</td>
+</tr>
+<tr>
+<td>Missed urgent case</td>
+<td>False negative</td>
+</tr>
+<tr>
+<td>Unnecessary escalation</td>
+<td>False positive</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Where the analogy breaks</h3>
+<p>Real clinical processes are complex, involve multiple data sources and may include information unavailable to the model.</p>
+<p>The analogy is useful only for understanding <strong>resource allocation under uncertainty</strong>.</p>
+<p>Return to the technical model:</p>
+<blockquote>
+<p><strong>Healthcare AI often combines prediction with a downstream decision policy.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: The Healthcare AI Stack -->
+  <section id="s-06" data-search-section="The Healthcare AI Stack" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>6. The Healthcare AI Stack</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="diagram-box"><pre class="mermaid">
+graph TD
+    PAT["Multimodal Patient Inputs<br/>(CT/MRI Scans, EHR Vitals, Pathology)"] --> PRE["Data Harmonization & De-Identification<br/>(HIPAA/GDPR Compliance)"]
+    PRE --> MODEL["Specialized AI Clinical Models<br/>(CNN Segmentation, RNN Time-Series)"]
+    MODEL --> PROB["Calibrated Risk Probabilities<br/>P(Disease | Biomarkers)"]
+    PROB --> TRIAGE["Sensitivity-First Decision Threshold<br/>(Prioritize High Recall to Prevent Missed Diagnoses)"]
+    TRIAGE --> HUMAN["Physician-in-the-Loop Review<br/>(Clinician verifies AI explanation & signs off)"]
+    HUMAN --> CLINIC["Actionable Patient Treatment"]
+</pre></div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher explanation — Hinglish</div>
+
+Healthcare AI general machine learning se alag hai kyunki yahan galti ki keemat insaani jaan hai!
+- **Asymmetric Cost of Errors:** Agar model kisi healthy insaan ko "Bimaar" keh de (**False Positive**), toh bas ek extra test karana padega. Lekin agar kisi bimaar cancer patient ko "Healthy" bolkar ghar bhej de (**False Negative**), toh uski jaan chali jayegi!
+Isliye healthcare models hamesha **High Sensitivity (Recall)** par tune kiye jaate hain, aur AI hamesha ek **Assistant** ki tarah kaam karta hai jisme aakhiri faisla doctor ka hota hai.
+
+
+
+
+<div class="diagram-box"><pre class="mermaid">
+graph TD
+    PAT["Multimodal Patient Inputs<br/>(CT/MRI Scans, EHR Vitals, Pathology)"] --> PRE["Data Harmonization & De-Identification<br/>(HIPAA/GDPR Compliance)"]
+    PRE --> MODEL["Specialized AI Clinical Models<br/>(CNN Segmentation, RNN Time-Series)"]
+    MODEL --> PROB["Calibrated Risk Probabilities<br/>P(Disease | Biomarkers)"]
+    PROB --> TRIAGE["Sensitivity-First Decision Threshold<br/>(Prioritize High Recall to Prevent Missed Diagnoses)"]
+    TRIAGE --> HUMAN["Physician-in-the-Loop Review<br/>(Clinician verifies AI explanation & signs off)"]
+    HUMAN --> CLINIC["Actionable Patient Treatment"]
+</pre></div>
+
+
+
+</div>
+
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher explanation — Hinglish</div>
+
+Healthcare AI general machine learning se alag hai kyunki yahan galti ki keemat insaani jaan hai!
+- **Asymmetric Cost of Errors:** Agar model kisi healthy insaan ko "Bimaar" keh de (**False Positive**), toh bas ek extra test karana padega. Lekin agar kisi bimaar cancer patient ko "Healthy" bolkar ghar bhej de (**False Negative**), toh uski jaan chali jayegi!
+Isliye healthcare models hamesha **High Sensitivity (Recall)** par tune kiye jaate hain, aur AI hamesha ek **Assistant** ki tarah kaam karta hai jisme aakhiri faisla doctor ka hota hai.
+
+
+
+
+<div class="ascii-box"><pre>┌─────────────────────────────┐
+│ Patient / clinical context  │
+└──────────────┬──────────────┘
+               ↓
+┌─────────────────────────────┐
+│ Data acquisition            │
+│ records / images / signals  │
+└──────────────┬──────────────┘
+               ↓
+┌─────────────────────────────┐
+│ Preprocessing               │
+│ cleaning / normalization    │
+└──────────────┬──────────────┘
+               ↓
+┌─────────────────────────────┐
+│ Representation              │
+│ features / embeddings       │
+└──────────────┬──────────────┘
+               ↓
+┌─────────────────────────────┐
+│ ML / DL model               │
+└──────────────┬──────────────┘
+               ↓
+┌─────────────────────────────┐
+│ prediction / score          │
+└──────────────┬──────────────┘
+               ↓
+┌─────────────────────────────┐
+│ decision policy             │
+│ threshold / routing         │
+└──────────────┬──────────────┘
+               ↓
+┌─────────────────────────────┐
+│ clinician / workflow        │
+└──────────────┬──────────────┘
+               ↓
+┌─────────────────────────────┐
+│ patient outcome + monitoring│
+└─────────────────────────────┘</pre></div>
+
+
+
+The most important visual insight:
+
+> **The model is inside the healthcare workflow, not the entire workflow.**
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: Healthcare Data Types -->
+  <section id="s-07" data-search-section="Healthcare Data Types" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>7. Healthcare Data Types</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A healthcare system may involve several data structures.</p>
+<h2>7.1 Tabular data</h2>
+<p>Examples:</p>
+<ul>
+<li>age;</li>
+<li>laboratory measurements;</li>
+<li>vital signs;</li>
+<li>coded diagnoses;</li>
+<li>medication-related variables.</li>
+</ul>
+<p>Representation:</p>
+<div class="formula-math">\[
+X\in\mathbb R^{n\times d}
+\]</div>
+<p>where each row represents an example and each column a feature.</p>
+<h2>7.2 Images</h2>
+<p>Medical images can be represented as grids/tensors.</p>
+<p>Conceptually:</p>
+<div class="formula-math">\[
+X\in\mathbb R^{H\times W\times C}
+\]</div>
+<p>or with a batch dimension as well.</p>
+<p>This is where CNN concepts from C36 become relevant.</p>
+<h2>7.3 Text</h2>
+<p>Clinical notes may contain:</p>
+<div class="ascii-box"><pre>symptoms
+history
+observations
+plans
+results</pre></div>
+<p>This connects to C43 NLP preprocessing and text classification.</p>
+<h2>7.4 Time series</h2>
+<p>Repeated measurements may form:</p>
+<div class="formula-math">\[
+x_1,x_2,\ldots,x_T.
+\]</div>
+<p>This connects to sequence modelling from C37–C38.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: The First Question: What Is the Target? -->
+  <section id="s-08" data-search-section="The First Question: What Is the Target?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>8. The First Question: What Is the Target?</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A common beginner mistake is to start with:</p>
+<blockquote>
+<p>“Which AI model should we use?”</p>
+</blockquote>
+<p>Start earlier.</p>
+<p>Ask:</p>
+<blockquote>
+<p><strong>What exactly are we trying to predict or decide?</strong></p>
+</blockquote>
+<p>For example:</p>
+<div class="ascii-box"><pre>Patient data
+   ↓
+What target?
+   ├── current condition?
+   ├── future event?
+   ├── image finding?
+   ├── treatment response?
+   └── workflow priority?</pre></div>
+<p>These are different learning tasks.</p>
+<p>The target also determines how the model should be evaluated.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: Classification Formulation -->
+  <section id="s-09" data-search-section="Classification Formulation" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>9. Classification Formulation</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a healthcare task is binary classification.</p>
+<p>Training data:</p>
+<div class="formula-math">\[
+D=\{(x_i,y_i)\}_{i=1}^{n}
+\]</div>
+<p>with:</p>
+<div class="formula-math">\[
+y_i\in\{0,1\}.
+\]</div>
+<p>A model estimates:</p>
+<div class="formula-math">\[
+\hat p_i=P(Y=1\mid X=x_i)
+\]</div>
+<p>or a score interpreted through the model's output semantics.</p>
+<p>Then a decision rule may be:</p>
+<div class="formula-math">\[
+\hat y_i=
+\begin{cases}
+1,&\hat p_i\ge t\\
+0,&\hat p_i\lt t
+\end{cases}
+\]</div>
+<p>The three quantities must be kept separate:</p>
+<div class="ascii-box"><pre>MODEL
+  ↓
+score / probability-like output
+  ↓
+THRESHOLD
+  ↓
+CLASSIFICATION DECISION</pre></div>
+<p>This distinction is critical in healthcare.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: Why Probability and Decision Are Different -->
+  <section id="s-10" data-search-section="Why Probability and Decision Are Different" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>10. Why Probability and Decision Are Different</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<div class="formula-math">\[
+\hat p=0.64.
+\]</div>
+<p>With threshold \(0.50\):</p>
+<div class="formula-math">\[
+\hat y=1.
+\]</div>
+<p>With threshold \(0.70\):</p>
+<div class="formula-math">\[
+\hat y=0.
+\]</div>
+<p>Same model.</p>
+<p>Same patient input.</p>
+<p>Different decision rule.</p>
+<p>Therefore:</p>
+<blockquote>
+<p><strong>A model output does not determine the final action unless a decision policy is specified.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: Worked Example — Threshold Change -->
+  <section id="s-11" data-search-section="Worked Example — Threshold Change" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>11. Worked Example — Threshold Change</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose five patients receive predicted scores:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Patient</th>
+<th style="text-align: right;">Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P1</td>
+<td style="text-align: right;">0.91</td>
+</tr>
+<tr>
+<td>P2</td>
+<td style="text-align: right;">0.73</td>
+</tr>
+<tr>
+<td>P3</td>
+<td style="text-align: right;">0.64</td>
+</tr>
+<tr>
+<td>P4</td>
+<td style="text-align: right;">0.42</td>
+</tr>
+<tr>
+<td>P5</td>
+<td style="text-align: right;">0.18</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Threshold = 0.50</h3>
+<p>Positive predictions:</p>
+<div class="ascii-box"><pre>P1, P2, P3</pre></div>
+<h3>Threshold = 0.80</h3>
+<p>Positive prediction:</p>
+<div class="ascii-box"><pre>P1</pre></div>
+<h3>What changed?</h3>
+<p>Not the learned parameters.</p>
+<p>The <strong>decision policy</strong> changed.</p>
+<p>This is why healthcare AI must be evaluated at the level of the operational decision, not just the model score.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: False Positives and False Negatives in Healthcare -->
+  <section id="s-12" data-search-section="False Positives and False Negatives in Healthcare" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>12. False Positives and False Negatives in Healthcare</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The confusion matrix now becomes domain-specific.</p>
+<p>Suppose positive means:</p>
+<blockquote>
+<p>“Send this case for additional review.”</p>
+</blockquote>
+<p>Then:</p>
+<h3>True positive</h3>
+<p>The system escalates a case that genuinely needs additional review.</p>
+<h3>False positive</h3>
+<p>The system escalates a case that does not require the additional review.</p>
+<h3>True negative</h3>
+<p>The system does not escalate a case that does not require escalation.</p>
+<h3>False negative</h3>
+<p>The system fails to escalate a case that does require additional review.</p>
+<p>Notice that the practical meaning depends on the <strong>definition of the positive class</strong>.</p>
+<p>Never discuss “false positive” without first stating what positive means.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: Error Cost Must Be Defined in Context -->
+  <section id="s-13" data-search-section="Error Cost Must Be Defined in Context" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>13. Error Cost Must Be Defined in Context</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the costs are represented abstractly as:</p>
+<div class="formula-math">\[
+C_{FP},\qquad C_{FN}.
+\]</div>
+<p>The cost of the decision system depends on:</p>
+<ul>
+<li>how frequent each event is;</li>
+<li>the relative cost of false positives and false negatives;</li>
+<li>downstream actions;</li>
+<li>available human review;</li>
+<li>resource constraints.</li>
+</ul>
+<p>A simple expected-cost view is:</p>
+<div class="formula-math">\[
+E[C]
+\approx
+C_{FP}P(FP)+C_{FN}P(FN)
+\]</div>
+<p>for a simplified binary setting.</p>
+<p>This is a conceptual teaching equation, not a complete clinical utility model.</p>
+<p>The key idea is:</p>
+<blockquote>
+<p><strong>The “best” threshold depends on the consequences of errors, not only on a generic accuracy score.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: Guided Example — Why Accuracy Alone Can Mislead -->
+  <section id="s-14" data-search-section="Guided Example — Why Accuracy Alone Can Mislead" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>14. Guided Example — Why Accuracy Alone Can Mislead</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a screening dataset has 1,000 cases.</p>
+<p>Only 20 are truly positive.</p>
+<p>A naive model predicts everyone as negative.</p>
+<p>Then:</p>
+<ul>
+<li>TP = 0</li>
+<li>FN = 20</li>
+<li>TN = 980</li>
+<li>FP = 0</li>
+</ul>
+<p>Accuracy:</p>
+<div class="formula-math">\[
+\frac{0+980}{1000}=98\%.
+\]</div>
+<p>That looks impressive.</p>
+<p>But recall is:</p>
+<div class="formula-math">\[
+\frac{0}{0+20}=0.
+\]</div>
+<p>So the model finds none of the positive cases.</p>
+<h3>Lesson</h3>
+<blockquote>
+<p><strong>In imbalanced healthcare classification, accuracy can look high even when the model completely fails at the clinically relevant positive class.</strong></p>
+</blockquote>
+<p>The specific practical importance depends on the task definition, but the mathematical lesson is general.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: Evaluation Should Be Multi-Dimensional -->
+  <section id="s-15" data-search-section="Evaluation Should Be Multi-Dimensional" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>15. Evaluation Should Be Multi-Dimensional</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A healthcare AI evaluation may include:</p>
+<div class="ascii-box"><pre>discrimination
+   ↓
+calibration
+   ↓
+group-wise performance
+   ↓
+robustness / distribution shift
+   ↓
+human workflow interaction
+   ↓
+operational consequences</pre></div>
+<p>Relevant quantities may include:</p>
+<ul>
+<li>sensitivity / recall;</li>
+<li>specificity;</li>
+<li>precision;</li>
+<li>F1;</li>
+<li>ROC-AUC;</li>
+<li>calibration-related measures;</li>
+<li>subgroup error rates;</li>
+<li>latency and resource use.</li>
+</ul>
+<p>No single metric describes every important property.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: ROC Curve Connection -->
+  <section id="s-16" data-search-section="ROC Curve Connection" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>16. ROC Curve Connection</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For a binary classifier, changing the threshold changes:</p>
+<ul>
+<li>true-positive rate;</li>
+<li>false-positive rate.</li>
+</ul>
+<p>That produces an ROC curve.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>threshold high
+   ↓
+fewer positive predictions
+   ↓
+usually lower TPR and lower FPR
+
+threshold lower
+   ↓
+more positive predictions
+   ↓
+usually higher TPR and higher FPR</pre></div>
+<p>The ROC curve therefore visualizes a family of operating points.</p>
+<p>A healthcare team still needs to choose an operating point based on the task and costs.</p>
+<p>AUC summarizes ranking ability across thresholds, but it does not by itself choose the clinical decision threshold.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: Calibration — A Different Question from Classification Accuracy -->
+  <section id="s-17" data-search-section="Calibration — A Different Question from Classification Accuracy" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>17. Calibration — A Different Question from Classification Accuracy</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a model outputs:</p>
+<div class="formula-math">\[
+0.8.
+\]</div>
+<p>Calibration asks a probability-oriented question:</p>
+<blockquote>
+<p>Among cases receiving predictions around 0.8, does the observed frequency of the target event correspond appropriately to that level?</p>
+</blockquote>
+<p>This is different from asking only whether the class label is correct.</p>
+<p>So:</p>
+<div class="ascii-box"><pre>Discrimination
+→ can the model rank cases?
+
+Classification threshold
+→ what action do we take?
+
+Calibration
+→ do probability-like outputs correspond to observed frequencies?</pre></div>
+<p>Do not interchange these concepts.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: Imaging Systems — CNN Connection -->
+  <section id="s-18" data-search-section="Imaging Systems — CNN Connection" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>18. Imaging Systems — CNN Connection</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the input is a medical image.</p>
+<p>A CNN may process it as:</p>
+<div class="ascii-box"><pre>image
+ ↓
+convolution
+ ↓
+feature maps
+ ↓
+activation
+ ↓
+downsampling / further convolution
+ ↓
+representation
+ ↓
+prediction head</pre></div>
+<p>From C36, remember:</p>
+<ul>
+<li>kernels are learned local operators;</li>
+<li>filters are shared across spatial locations;</li>
+<li>feature maps describe responses to learned patterns.</li>
+</ul>
+<p>In healthcare, the model may be trained to identify image patterns associated with a target label.</p>
+<p>But the ethical and clinical questions remain:</p>
+<ul>
+<li>What data were used?</li>
+<li>What population was represented?</li>
+<li>What imaging devices were included?</li>
+<li>What happens when the acquisition protocol changes?</li>
+<li>Which errors matter?</li>
+<li>Who reviews the output?</li>
+</ul>
+<p>The CNN does not remove those questions.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: Clinical Text — NLP Connection -->
+  <section id="s-19" data-search-section="Clinical Text — NLP Connection" class="content-section">
+    <div class="section-header">
+      <h2>19. Clinical Text — NLP Connection</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>From C43:</p>
+<div class="ascii-box"><pre>raw note
+ ↓
+tokenization / normalization
+ ↓
+representation
+ ↓
+classifier / sequence model
+ ↓
+prediction</pre></div>
+<p>Possible task types include:</p>
+<ul>
+<li>document classification;</li>
+<li>information extraction;</li>
+<li>routing;</li>
+<li>summarization support;</li>
+<li>retrieval.</li>
+</ul>
+<p>The same caution applies:</p>
+<blockquote>
+<p>Language models can process text without necessarily understanding it in the same way a clinician does.</p>
+</blockquote>
+<p>For the textbook, the important technical idea is that NLP systems inherit the properties of their training data and representation.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: Sequential Data — RNN/LSTM Connection -->
+  <section id="s-20" data-search-section="Sequential Data — RNN/LSTM Connection" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>20. Sequential Data — RNN/LSTM Connection</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Healthcare data can be longitudinal.</p>
+<p>A patient may have observations over time:</p>
+<div class="formula-math">\[
+x_1,x_2,\ldots,x_T.
+\]</div>
+<p>RNNs represent this using a hidden state:</p>
+<div class="formula-math">\[
+h_t=f(x_t,h_{t-1}).
+\]</div>
+<p>An LSTM adds gated memory mechanisms.</p>
+<p>The application mapping is:</p>
+<div class="ascii-box"><pre>patient history
+      ↓
+sequence model
+      ↓
+representation of temporal pattern
+      ↓
+risk / classification output</pre></div>
+<p>Again, good sequence modelling does not automatically imply safe deployment.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: Missing Data -->
+  <section id="s-21" data-search-section="Missing Data" class="content-section">
+    <div class="section-header">
+      <h2>21. Missing Data</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Healthcare data often contain missing values.</p>
+<p>A critical question is:</p>
+<blockquote>
+<p><strong>Why is the value missing?</strong></p>
+</blockquote>
+<p>Missingness can arise because:</p>
+<ul>
+<li>a test was not ordered;</li>
+<li>a measurement was unavailable;</li>
+<li>a patient did not attend;</li>
+<li>a device failed;</li>
+<li>a clinician chose a different pathway.</li>
+</ul>
+<p>Therefore:</p>
+<div class="ascii-box"><pre>missing value
+   ≠
+random empty cell</pre></div>
+<p>The missingness mechanism may itself carry information.</p>
+<p>But using it carelessly can also create leakage or spurious correlations.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: Data Leakage — A Major Healthcare Trap -->
+  <section id="s-22" data-search-section="Data Leakage — A Major Healthcare Trap" class="content-section">
+    <div class="section-header">
+      <h2>22. Data Leakage — A Major Healthcare Trap</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a model is intended to predict whether a patient will require an intervention <strong>before</strong> that intervention occurs.</p>
+<p>Now imagine one input feature is generated only after the intervention has begun.</p>
+<p>The model can appear extremely accurate because it has access to future information.</p>
+<div class="ascii-box"><pre>prediction time ───────────────►
+       |             |
+       |             └── future event
+       |
+       └── allowed information</pre></div>
+<p>Using information from after the prediction point creates <strong>temporal leakage</strong>.</p>
+<p>The fix is to define the prediction timestamp explicitly and ensure training features respect it.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: Dataset Shift Between Hospitals -->
+  <section id="s-23" data-search-section="Dataset Shift Between Hospitals" class="content-section">
+    <div class="section-header">
+      <h2>23. Dataset Shift Between Hospitals</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the model is trained in Hospital A.</p>
+<div class="ascii-box"><pre>Hospital A
+patients + devices + protocols
+          ↓
+       training</pre></div>
+<p>Deployment occurs in Hospital B.</p>
+<div class="ascii-box"><pre>Hospital B
+patients + devices + protocols
+          ↓
+       deployment</pre></div>
+<p>Differences may arise in:</p>
+<ul>
+<li>patient population;</li>
+<li>measurement devices;</li>
+<li>coding practices;</li>
+<li>clinical workflows;</li>
+<li>image acquisition;</li>
+<li>missingness patterns.</li>
+</ul>
+<p>Therefore:</p>
+<div class="formula-math">\[
+P_{train}(X,Y)\neq P_{deploy}(X,Y)
+\]</div>
+<p>is a useful conceptual warning.</p>
+<p>A model should be evaluated for the environment in which it will actually be used.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: Worked Case — A Risk-Scoring Tool -->
+  <section id="s-24" data-search-section="Worked Case — A Risk-Scoring Tool" class="content-section">
+    <div class="section-header">
+      <h2>24. Worked Case — A Risk-Scoring Tool</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a hospital uses an ML model to route patients into three workflow categories:</p>
+<div class="ascii-box"><pre>LOW
+MEDIUM
+HIGH</pre></div>
+<p>The model receives:</p>
+<div class="formula-math">\[
+x=(x_1,x_2,\ldots,x_d).
+\]</div>
+<p>It computes a score:</p>
+<div class="formula-math">\[
+s=f_\theta(x).
+\]</div>
+<p>Then the policy is:</p>
+<div class="formula-math">\[
+\text{LOW if }s\lt t_1
+\]</div>
+<div class="formula-math">\[
+\text{MEDIUM if }t_1\le s\lt t_2
+\]</div>
+<div class="formula-math">\[
+\text{HIGH if }s\ge t_2.
+\]</div>
+<p>Now evaluate the entire system.</p>
+<h3>Question 1 — Model</h3>
+<p>Does the score discriminate between relevant cases?</p>
+<h3>Question 2 — Calibration</h3>
+<p>Do similar scores correspond to similar observed risk?</p>
+<h3>Question 3 — Thresholds</h3>
+<p>What happens around \(t_1\) and \(t_2\)?</p>
+<h3>Question 4 — Groups</h3>
+<p>Do error rates differ by relevant population?</p>
+<h3>Question 5 — Workflow</h3>
+<p>Can clinicians challenge the routing decision?</p>
+<h3>Question 6 — Monitoring</h3>
+<p>What happens when patient mix or data collection changes?</p>
+<p>This is the difference between <strong>model evaluation</strong> and <strong>system evaluation</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: Fairness in Healthcare -->
+  <section id="s-25" data-search-section="Fairness in Healthcare" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>25. Fairness in Healthcare</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>From C46, fairness requires an explicit criterion.</p>
+<p>In healthcare, group-wise evaluation may examine:</p>
+<div class="formula-math">\[
+TPR_A,
+TPR_B
+\]</div>
+<p>or:</p>
+<div class="formula-math">\[
+FPR_A,
+FPR_B.
+\]</div>
+<p>But comparing these quantities requires context.</p>
+<p>A difference might come from:</p>
+<ul>
+<li>data representation;</li>
+<li>measurement differences;</li>
+<li>label quality;</li>
+<li>model behaviour;</li>
+<li>different base rates;</li>
+<li>different workflows;</li>
+<li>different thresholds.</li>
+</ul>
+<p>Therefore:</p>
+<blockquote>
+<p><strong>A fairness metric identifies a pattern; it does not automatically identify its cause.</strong></p>
+</blockquote>
+<p>This distinction is extremely important in technical analysis.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: Explainability in Clinical Settings -->
+  <section id="s-26" data-search-section="Explainability in Clinical Settings" class="content-section">
+    <div class="section-header">
+      <h2>26. Explainability in Clinical Settings</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a model says:</p>
+<blockquote>
+<p>“High risk.”</p>
+</blockquote>
+<p>A clinician may reasonably want to know:</p>
+<ul>
+<li>which inputs contributed to the prediction;</li>
+<li>whether the case resembles training data;</li>
+<li>how uncertain the prediction is;</li>
+<li>whether important measurements were missing;</li>
+<li>whether the model has known failure modes.</li>
+</ul>
+<p>There are different forms of explanation.</p>
+<h3>Global explanation</h3>
+<p>How does the model generally behave?</p>
+<h3>Local explanation</h3>
+<p>Why did this particular input receive this output?</p>
+<h3>Example-based explanation</h3>
+<p>Which similar cases or patterns influenced the model?</p>
+<p>For high-stakes systems, the useful question is not simply:</p>
+<blockquote>
+<p>“Can we explain it?”</p>
+</blockquote>
+<p>but:</p>
+<blockquote>
+<p><strong>“Is the explanation reliable, appropriate for the user, and useful for the decision?”</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: Human Oversight Design -->
+  <section id="s-27" data-search-section="Human Oversight Design" class="content-section">
+    <div class="section-header">
+      <h2>27. Human Oversight Design</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A human-review system can be structured in several ways.</p>
+<h3>Pattern A — AI recommends, clinician decides</h3>
+<div class="ascii-box"><pre>AI
+ ↓
+recommendation
+ ↓
+clinician
+ ↓
+final decision</pre></div>
+<h3>Pattern B — AI routes uncertain cases</h3>
+<div class="ascii-box"><pre>AI
+ ↓
+confidence / uncertainty
+ ├── confident → automated route
+ └── uncertain → human review</pre></div>
+<h3>Pattern C — AI is advisory only</h3>
+<div class="ascii-box"><pre>AI
+ ↓
+additional information
+ ↓
+clinician integrates it with other evidence</pre></div>
+<p>The correct design depends on the task, consequences and operational setting.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: Why “AI = Doctor Replacement” Is the Wrong Mental Model for This Chapter -->
+  <section id="s-28" data-search-section="Why “AI = Doctor Replacement” Is the Wrong Mental Model for This Chapter" class="content-section">
+    <div class="section-header">
+      <h2>28. Why “AI = Doctor Replacement” Is the Wrong Mental Model for This Chapter</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The relevant technical framing is not a binary choice between:</p>
+<div class="ascii-box"><pre>human OR AI</pre></div>
+<p>Instead consider:</p>
+<div class="ascii-box"><pre>human + data + model + workflow + oversight</pre></div>
+<p>A healthcare AI system may provide:</p>
+<ul>
+<li>prioritization;</li>
+<li>decision support;</li>
+<li>image assistance;</li>
+<li>information retrieval;</li>
+<li>pattern detection;</li>
+<li>forecasting.</li>
+</ul>
+<p>The chapter is about how AI fits into that system responsibly, not about making a blanket claim about replacing medical professionals.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 29: Monitoring After Deployment -->
+  <section id="s-29" data-search-section="Monitoring After Deployment" class="content-section">
+    <div class="section-header">
+      <h2>29. Monitoring After Deployment</h2>
+      <button class="bookmark-btn" data-id="s-29" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Training is not the end.</p>
+<p>Use a loop:</p>
+<div class="ascii-box"><pre>DEPLOY
+  ↓
+MONITOR INPUTS
+  ↓
+MONITOR OUTPUTS
+  ↓
+MONITOR ERRORS
+  ↓
+MONITOR GROUP-WISE PERFORMANCE
+  ↓
+MONITOR WORKFLOW EFFECTS
+  ↓
+INVESTIGATE DRIFT
+  ↓
+RETRAIN / RECALIBRATE / RESTRICT
+  ↓
+REVALIDATE</pre></div>
+<p>This connects directly to Unit II generalization.</p>
+<p>Deployment changes the environment in which the model operates.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 30: Incident Response -->
+  <section id="s-30" data-search-section="Incident Response" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>30. Incident Response</h2>
+      <button class="bookmark-btn" data-id="s-30" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A responsible system should define what happens when a model fails.</p>
+<p>Possible steps:</p>
+<ol>
+<li>detect the incident;</li>
+<li>preserve relevant records;</li>
+<li>assess the impact;</li>
+<li>determine whether the model or workflow contributed;</li>
+<li>restrict or suspend use when appropriate;</li>
+<li>communicate to responsible stakeholders;</li>
+<li>correct and revalidate;</li>
+<li>record the change.</li>
+</ol>
+<p>The exact operational process is organization-specific.</p>
+<p>The AI/ML lesson is:</p>
+<blockquote>
+<p><strong>Accountability requires a process for responding to failure, not merely a statement that errors are possible.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 31: End-to-End Worked Example -->
+  <section id="s-31" data-search-section="End-to-End Worked Example" class="content-section">
+    <div class="section-header">
+      <h2>31. End-to-End Worked Example</h2>
+      <button class="bookmark-btn" data-id="s-31" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Consider an image classification system used to prioritize cases for specialist review.</p>
+<h2>Step 1 — Problem</h2>
+<p>Input:</p>
+<div class="formula-math">\[
+x=\text{medical image}
+\]</div>
+<p>Target:</p>
+<div class="formula-math">\[
+y\in\{0,1\}
+\]</div>
+<h2>Step 2 — Model</h2>
+<p>Use a CNN:</p>
+<div class="formula-math">\[
+x\rightarrow\phi_\theta(x)\rightarrow \hat p.
+\]</div>
+<h2>Step 3 — Decision</h2>
+<div class="formula-math">\[
+\hat y=1 \quad \text{if }\hat p\ge t.
+\]</div>
+<h2>Step 4 — Evaluation</h2>
+<p>Compute:</p>
+<ul>
+<li>recall;</li>
+<li>specificity;</li>
+<li>precision;</li>
+<li>ROC-AUC;</li>
+<li>calibration-oriented checks.</li>
+</ul>
+<h2>Step 5 — Group analysis</h2>
+<p>Compute relevant rates separately for populations represented in evaluation.</p>
+<h2>Step 6 — External validation</h2>
+<p>Test on a separate deployment-like environment.</p>
+<h2>Step 7 — Workflow analysis</h2>
+<p>Ask:</p>
+<ul>
+<li>Does a clinician review flagged cases?</li>
+<li>What happens to unflagged cases?</li>
+<li>How quickly can a result be challenged?</li>
+</ul>
+<h2>Step 8 — Monitoring</h2>
+<p>After deployment, track performance and distribution changes.</p>
+<h3>Complete mental model</h3>
+<div class="ascii-box"><pre>IMAGE
+ ↓
+CNN
+ ↓
+SCORE
+ ↓
+THRESHOLD
+ ↓
+ROUTING DECISION
+ ↓
+HUMAN REVIEW
+ ↓
+CLINICAL WORKFLOW
+ ↓
+OUTCOME
+ ↓
+MONITOR + REVALIDATE</pre></div>
+<p>This is a healthcare AI system.</p>
+<p>The CNN is only one part.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 32: Common Mistakes -->
+  <section id="s-32" data-search-section="Common Mistakes" class="content-section">
+    <div class="section-header">
+      <h2>32. Common Mistakes</h2>
+      <button class="bookmark-btn" data-id="s-32" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Trap 1 — “The model predicts disease, therefore it diagnoses disease.”</h2>
+<p>Correction:</p>
+<p>A prediction task must be defined precisely, and the downstream clinical meaning depends on how the system is designed and used.</p>
+<hr />
+<h2>Trap 2 — “Sensitivity is always the most important metric.”</h2>
+<p>Correction:</p>
+<p>Metric importance is task-dependent. False positives, false negatives, resource constraints and workflow consequences all matter.</p>
+<hr />
+<h2>Trap 3 — “AUC tells us which threshold to use.”</h2>
+<p>Correction:</p>
+<p>AUC summarizes ranking behaviour across thresholds; selecting an operating threshold is a separate decision problem.</p>
+<hr />
+<h2>Trap 4 — “A hospital dataset is automatically representative.”</h2>
+<p>Correction:</p>
+<p>Representation depends on who, where, when and how the data were generated.</p>
+<hr />
+<h2>Trap 5 — “No missing values means the dataset is high quality.”</h2>
+<p>Correction:</p>
+<p>Missingness may have been transformed, imputed or encoded. Data quality is broader than the presence of empty cells.</p>
+<hr />
+<h2>Trap 6 — “A more complex neural network automatically solves clinical risk.”</h2>
+<p>Correction:</p>
+<p>Architecture affects predictive modelling, but it does not solve target definition, dataset shift, threshold policy, fairness, governance or accountability.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 33: Exam Lens -->
+  <section id="s-33" data-search-section="Exam Lens" class="content-section">
+    <div class="section-header">
+      <h2>33. Exam Lens</h2>
+      <button class="bookmark-btn" data-id="s-33" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>2-mark question</h2>
+<p><strong>Give two applications of AI in healthcare.</strong></p>
+<p>Examples:</p>
+<ul>
+<li>medical image analysis;</li>
+<li>clinical risk prediction;</li>
+<li>NLP over clinical text;</li>
+<li>workflow prioritization.</li>
+</ul>
+<h2>5-mark question</h2>
+<p><strong>Explain the role of AI in healthcare.</strong></p>
+<p>Use:</p>
+<div class="ascii-box"><pre>problem
+→ data
+→ model
+→ prediction
+→ decision support
+→ evaluation
+→ human oversight
+→ monitoring</pre></div>
+<p>Then give one concrete task.</p>
+<h2>10-mark question</h2>
+<p><strong>Discuss challenges of deploying AI in healthcare.</strong></p>
+<p>A strong structure is:</p>
+<ol>
+<li>data quality and representation;</li>
+<li>target/label definition;</li>
+<li>leakage;</li>
+<li>performance metrics;</li>
+<li>threshold and error costs;</li>
+<li>fairness and subgroup performance;</li>
+<li>interpretability / transparency;</li>
+<li>distribution shift;</li>
+<li>human oversight;</li>
+<li>accountability and post-deployment monitoring.</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 34: Active Recall -->
+  <section id="s-34" data-search-section="Active Recall" class="content-section">
+    <div class="section-header">
+      <h2>34. Active Recall</h2>
+      <button class="bookmark-btn" data-id="s-34" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Define</h3>
+<ol>
+<li>What is healthcare AI as an application domain?</li>
+<li>What is the difference between a model score and a decision?</li>
+<li>What is a false negative in a healthcare-routing example?</li>
+<li>What is data leakage?</li>
+<li>What is dataset shift?</li>
+<li>What is calibration?</li>
+</ol>
+<h3>Explain</h3>
+<ol>
+<li>Why does threshold choice matter?</li>
+<li>Why can accuracy be misleading with class imbalance?</li>
+<li>Why is the model only one component of the healthcare system?</li>
+<li>Why should deployment monitoring continue after training?</li>
+</ol>
+<h3>Draw</h3>
+<ol>
+<li>Draw the healthcare AI stack.</li>
+<li>Draw the train → deployment distribution-shift problem.</li>
+<li>Draw a human-in-the-loop routing design.</li>
+</ol>
+<h3>Calculate</h3>
+<ol>
+<li>A model has TP = 80 and FN = 20. Calculate recall.</li>
+<li>A model has FP = 15 and TN = 85. Calculate FPR.</li>
+</ol>
+<h3>Diagnose</h3>
+<ol>
+<li>A model performs well at Hospital A but poorly at Hospital B. List at least three possible causes.</li>
+<li>A model uses a feature recorded after the prediction time. What is the likely problem?</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 35: Practice Set -->
+  <section id="s-35" data-search-section="Practice Set" class="content-section">
+    <div class="section-header">
+      <h2>35. Practice Set</h2>
+      <button class="bookmark-btn" data-id="s-35" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>P1 — MCQ [Easy]</h2>
+<p>Which component converts a probability-like model output into a binary action in a simple threshold classifier?</p>
+<p>A. tokenizer<br />
+B. threshold / decision rule<br />
+C. optimizer<br />
+D. convolution kernel</p>
+<p><strong>Answer:</strong> B</p>
+<hr />
+<h2>P2 — MCQ [Standard]</h2>
+<p>Why can accuracy be misleading in a heavily imbalanced classification problem?</p>
+<p>A. Accuracy cannot be computed.<br />
+B. A classifier can achieve high accuracy while missing most positive cases.<br />
+C. Accuracy always equals recall.<br />
+D. AUC becomes undefined.</p>
+<p><strong>Answer:</strong> B</p>
+<hr />
+<h2>P3 — Numerical [Standard]</h2>
+<p>TP = 90, FN = 10.</p>
+<p>Find sensitivity/recall.</p>
+<p><strong>Answer:</strong></p>
+<div class="formula-math">\[
+\frac{90}{90+10}=0.90
+\]</div>
+<hr />
+<h2>P4 — Numerical [Exam]</h2>
+<p>TP = 45, FP = 15.</p>
+<p>Find precision.</p>
+<p><strong>Answer:</strong></p>
+<div class="formula-math">\[
+\frac{45}{45+15}=0.75
+\]</div>
+<hr />
+<h2>P5 — Applied [Tricky]</h2>
+<p>A model's AUC increases, but the chosen operating threshold produces too many false positives for the available clinical workflow.</p>
+<p>What does this teach?</p>
+<p><strong>Answer direction:</strong> Overall ranking quality and operational threshold selection are different questions.</p>
+<hr />
+<h2>P6 — Integration [Tricky]</h2>
+<p>A CNN achieves excellent internal test accuracy but poor performance at a second hospital.</p>
+<p>Give four possible investigation areas.</p>
+<p><strong>Expected direction:</strong> distribution shift, acquisition differences, population differences, label/measurement differences, preprocessing changes, workflow changes.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 36: One-Screen Summary -->
+  <section id="s-36" data-search-section="One-Screen Summary" class="content-section">
+    <div class="section-header">
+      <h2>36. One-Screen Summary</h2>
+      <button class="bookmark-btn" data-id="s-36" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>HEALTHCARE AI
+│
+├── Data
+│   ├── tabular
+│   ├── image
+│   ├── text
+│   └── sequence
+│
+├── Model
+│   ├── regression/classification
+│   ├── CNN
+│   ├── NLP models
+│   └── sequence models
+│
+├── Decision
+│   ├── score
+│   ├── threshold
+│   └── workflow
+│
+├── Evaluation
+│   ├── sensitivity/recall
+│   ├── specificity
+│   ├── precision/F1
+│   ├── ROC-AUC
+│   ├── calibration
+│   └── group-wise analysis
+│
+└── Deployment
+    ├── fairness
+    ├── privacy
+    ├── robustness
+    ├── human oversight
+    ├── accountability
+    └── monitoring</pre></div>
+<h3>Memory anchor</h3>
+<blockquote>
+<p><strong>Healthcare AI is not “input → model → answer.” It is “data → model → score → decision → workflow → human oversight → outcome → monitoring.”</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 37: Formula Sheet -->
+  <section id="s-37" data-search-section="Formula Sheet" class="content-section">
+    <div class="section-header">
+      <h2>37. Formula Sheet</h2>
+      <button class="bookmark-btn" data-id="s-37" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Binary decision threshold</h3>
+<div class="formula-math">\[
+\hat y=
+\begin{cases}
+1,&\hat p\ge t\\
+0,&\hat p\lt t
+\end{cases}
+\]</div>
+<h3>Recall / sensitivity</h3>
+<div class="formula-math">\[
+Recall=\frac{TP}{TP+FN}
+\]</div>
+<h3>Specificity</h3>
+<div class="formula-math">\[
+Specificity=\frac{TN}{TN+FP}
+\]</div>
+<h3>Precision</h3>
+<div class="formula-math">\[
+Precision=\frac{TP}{TP+FP}
+\]</div>
+<h3>False-positive rate</h3>
+<div class="formula-math">\[
+FPR=\frac{FP}{FP+TN}=1-Specificity
+\]</div>
+<h3>Simplified expected-cost idea</h3>
+<div class="formula-math">\[
+E[C]\approx C_{FP}P(FP)+C_{FN}P(FN)
+\]</div>
+<p>Use this as an intuition-building approximation, not as a complete clinical utility model.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 38: Math You Need Now -->
+  <section id="s-38" data-search-section="Math You Need Now" class="content-section">
+    <div class="section-header">
+      <h2>38. Math You Need Now</h2>
+      <button class="bookmark-btn" data-id="s-38" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This chapter reuses several earlier mathematical ideas.</p>
+<h3>Probability</h3>
+<div class="formula-math">\[
+P(Y=1\mid X=x)
+\]</div>
+<p>from classification and conditional probability.</p>
+<h3>Confusion-matrix rates</h3>
+<p>Ratios of counts form sensitivity, specificity, precision and FPR.</p>
+<h3>Thresholds</h3>
+<p>A threshold maps a continuous score into a discrete action.</p>
+<h3>Expected cost</h3>
+<p>A decision can be viewed as minimizing an expected consequence under uncertainty.</p>
+<p>This is the bridge toward the decision-theoretic thinking that will also appear in other Unit IV applications.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 39: Connection to Earlier Chapters -->
+  <section id="s-39" data-search-section="Connection to Earlier Chapters" class="content-section">
+    <div class="section-header">
+      <h2>39. Connection to Earlier Chapters</h2>
+      <button class="bookmark-btn" data-id="s-39" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Earlier chapter</th>
+<th>Healthcare connection</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C20 Logistic Regression</td>
+<td>probability-like binary score</td>
+</tr>
+<tr>
+<td>C24 Confusion Matrix</td>
+<td>clinical error accounting</td>
+</tr>
+<tr>
+<td>C25 Precision/Recall/ROC/AUC</td>
+<td>screening/evaluation</td>
+</tr>
+<tr>
+<td>C17 Bias/Variance</td>
+<td>generalization and deployment</td>
+</tr>
+<tr>
+<td>C26–C29 Regularization</td>
+<td>controlling model complexity</td>
+</tr>
+<tr>
+<td>C36 CNN</td>
+<td>medical-image modelling</td>
+</tr>
+<tr>
+<td>C37–C38 RNN/LSTM</td>
+<td>longitudinal patient sequences</td>
+</tr>
+<tr>
+<td>C43 NLP</td>
+<td>clinical text processing</td>
+</tr>
+<tr>
+<td>C46 Ethics</td>
+<td>fairness, accountability, human oversight</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 40: Chapter Exit Test -->
+  <section id="s-40" data-search-section="Chapter Exit Test" class="content-section">
+    <div class="section-header">
+      <h2>40. Chapter Exit Test</h2>
+      <button class="bookmark-btn" data-id="s-40" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You are ready to leave this chapter when you can:</p>
+<ul>
+<li>describe at least four healthcare AI task families;</li>
+<li>distinguish prediction score from decision threshold;</li>
+<li>explain TP, FP, TN and FN in a healthcare workflow;</li>
+<li>calculate recall, specificity, precision and FPR;</li>
+<li>explain why class imbalance can make accuracy misleading;</li>
+<li>explain why AUC does not select the operating threshold;</li>
+<li>explain calibration at an intuitive level;</li>
+<li>identify temporal leakage;</li>
+<li>explain why performance can change between hospitals;</li>
+<li>connect CNN, NLP and sequence models to healthcare data types;</li>
+<li>describe a meaningful human-in-the-loop design;</li>
+<li>explain post-deployment monitoring.</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 41: Resource Shelf -->
+  <section id="s-41" data-search-section="Resource Shelf" class="content-section">
+    <div class="section-header">
+      <h2>41. Resource Shelf</h2>
+      <button class="bookmark-btn" data-id="s-41" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>READ FIRST</h3>
+<ul>
+<li><strong>Course boundary:</strong> DSC-14 syllabus / Unit IV healthcare applications. <strong>Source ID:</strong> <code>UNI-SYL-01</code>  </li>
+<li><strong>Evaluation foundation:</strong> <code>Lecture07.pdf</code> — confusion matrix, precision, recall, F-score and related ML evaluation. <strong>Source ID:</strong> <code>UNI-NOTE-08</code></li>
+<li><strong>CNN foundation:</strong> C36 / <code>ML-U3-C36</code></li>
+<li><strong>NLP foundation:</strong> C43 / <code>ML-U4-C43</code></li>
+</ul>
+<h3>WATCH</h3>
+<p>The master resource guide does not identify a dedicated healthcare video as the single required route. It places healthcare under Unit IV case studies using standard AI/ML case-study material. filecitefile_0000000086b882089e85dbe6281521e6</p>
+<h3>GO DEEPER</h3>
+<p>Use standard case-study material from authoritative AI/ML courses and textbooks after the core chapter is understood.</p>
+<p>The guide specifically points to AIMA / Stanford / standard ML case-study material for Unit IV applications. filecitefile_0000000086b882089e85dbe6281521e6</p>
+<h3>PRACTICE</h3>
+<ul>
+<li>Build small confusion matrices.</li>
+<li>Change thresholds and trace the resulting decisions.</li>
+<li>Construct examples of class imbalance.</li>
+<li>Compare a training environment with a shifted deployment environment.</li>
+</ul>
+<h3>EXAM</h3>
+<p>Planned Exam Book mapping: <code>EX-AI-HEALTHCARE-*</code></p>
+<h3>MATH</h3>
+<ul>
+<li>Conditional probability</li>
+<li>Confusion matrix and derived rates</li>
+<li>ROC/AUC</li>
+<li>Expected-value intuition</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 42: Source &amp; Boundary Note -->
+  <section id="s-42" data-search-section="Source &amp; Boundary Note" class="content-section">
+    <div class="section-header">
+      <h2>42. Source &amp; Boundary Note</h2>
+      <button class="bookmark-btn" data-id="s-42" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The course resource guide confirms healthcare as a Unit IV application topic but does not provide a dedicated healthcare lecture among the supplied notes. filecitefile_0000000086b882089e85dbe6281521e6</p>
+<p>Accordingly:</p>
+<ul>
+<li><strong>Syllabus layer:</strong> healthcare is treated as an examinable Unit IV application.</li>
+<li><strong>Course-connected layer:</strong> evaluation mathematics comes from the supplied ML notes.</li>
+<li><strong>Universal layer:</strong> the healthcare workflow, threshold analysis, leakage example, deployment-shift reasoning and system-level case study are pedagogical expansions.</li>
+</ul>
+<p>This chapter is about <strong>AI/ML application reasoning</strong>, not clinical practice or medical treatment guidance.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 43: Connection Forward -->
+  <section id="s-43" data-search-section="Connection Forward" class="content-section">
+    <div class="section-header">
+      <h2>43. Connection Forward</h2>
+      <button class="bookmark-btn" data-id="s-43" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The next chapter applies the same framework to <strong>autonomous vehicles</strong>.</p>
+<p>The recurring pattern is:</p>
+<div class="ascii-box"><pre>perception
+→ prediction
+→ decision
+→ action
+→ feedback
+→ safety monitoring</pre></div>
+<p>Healthcare and autonomous systems look very different on the surface, but they share a deep AI engineering problem:</p>
+<blockquote>
+<p><strong>How do we turn uncertain model outputs into real-world actions under consequences?</strong></p>
+</blockquote>
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="ch46-ai-ethics-bias-fairness.html" class="nav-btn">← Ch 46 — AI Ethics & Bias</a>
+    <a href="ch48-autonomous-vehicles.html" class="nav-btn primary">Next: Ch 48 — Autonomous Vehicles →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch47-ai-in-healthcare.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 47</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

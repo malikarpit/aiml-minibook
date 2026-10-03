@@ -1,0 +1,349 @@
+/*
+ * AI & MACHINE LEARNING MINIBOOK
+ * chapters.css — Chapter Layout, Hero, TOC, Study Roadmap & Section Framing
+ */
+
+/* ─────────────────────────────────────────────────────────────────────
+   01 · CHAPTER HERO & ORIENTATION
+   ───────────────────────────────────────────────────────────────────── */
+.chapter-hero {
+  margin-bottom: var(--em-space-8);
+  border-bottom: 1px solid var(--em-border);
+  padding-bottom: var(--em-space-6);
+}
+
+.chapter-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--em-space-2);
+  font-size: 0.80rem;
+  color: var(--em-text-muted);
+  margin-bottom: var(--em-space-3);
+}
+
+.chapter-breadcrumb a {
+  color: var(--em-text-secondary);
+  text-decoration: none;
+  transition: color var(--em-motion-fast) var(--em-ease);
+}
+.chapter-breadcrumb a:hover {
+  color: var(--em-accent);
+}
+
+.chapter-num {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--em-accent);
+  margin-bottom: var(--em-space-2);
+}
+
+.chapter-part-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--em-space-2);
+  padding: 4px 10px;
+  border-radius: var(--em-radius-sm);
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--em-space-4);
+}
+
+.part-banner-badge {
+  background: var(--em-surface-1);
+  padding: 2px 6px;
+  border-radius: var(--em-radius-sm);
+  border: 1px solid var(--em-border);
+}
+
+.chapter-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.0rem, 4.5vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--em-text);
+  margin-bottom: var(--em-space-3);
+  letter-spacing: -0.02em;
+}
+
+.chapter-desc {
+  font-size: 1.12rem;
+  line-height: 1.6;
+  color: var(--em-text-secondary);
+  margin-bottom: var(--em-space-5);
+  max-width: 66ch;
+}
+
+.chapter-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--em-space-2);
+  align-items: center;
+}
+
+.chapter-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--em-surface-1);
+  border: 1px solid var(--em-border);
+  padding: 4px 10px;
+  border-radius: var(--em-radius-full);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--em-text-secondary);
+}
+
+.chapter-meta-item.uni-badge {
+  background: var(--em-accent-soft);
+  border-color: var(--em-accent-border);
+  color: var(--em-accent-text);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   02 · OFFICIAL SYLLABUS CALLOUT & FILTER SWITCH
+   ───────────────────────────────────────────────────────────────────── */
+.uni-syllabus-callout {
+  background: var(--em-surface-1);
+  border: 1px solid var(--em-border);
+  border-left: 4px solid var(--em-accent);
+  border-radius: var(--em-radius-md);
+  padding: var(--em-space-4) var(--em-space-5);
+  margin-bottom: var(--em-space-5);
+  font-size: 0.90rem;
+  line-height: 1.55;
+}
+
+.uni-callout-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--em-accent);
+  margin-bottom: var(--em-space-2);
+}
+
+.uni-mode-toggle-card {
+  background: var(--em-surface-1);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-md);
+  padding: var(--em-space-4) var(--em-space-5);
+  margin-bottom: var(--em-space-6);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--em-space-4);
+  flex-wrap: wrap;
+}
+
+.uni-filter-switch {
+  display: flex;
+  gap: var(--em-space-2);
+}
+
+.uni-toggle-btn {
+  background: var(--em-surface-2);
+  border: 1px solid var(--em-border);
+  color: var(--em-text-secondary);
+  border-radius: var(--em-radius-sm);
+  padding: 6px 12px;
+  font-size: 0.80rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--em-motion-fast) var(--em-ease);
+}
+
+.uni-toggle-btn:hover {
+  background: var(--em-surface-3);
+  color: var(--em-text);
+}
+
+.uni-toggle-btn.active {
+  background: var(--em-accent);
+  color: #FFFFFF;
+  border-color: var(--em-accent);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   03 · TABLE OF CONTENTS CARD
+   ───────────────────────────────────────────────────────────────────── */
+.toc-card {
+  background: var(--em-surface-1);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-md);
+  padding: var(--em-space-5);
+  margin-bottom: var(--em-space-6);
+  box-shadow: var(--sh-sm);
+}
+
+.toc-title {
+  font-size: 0.84rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--em-text);
+  margin-bottom: var(--em-space-4);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--em-space-3);
+}
+
+.toc-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--em-surface-2);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-sm);
+  text-decoration: none;
+  font-size: 0.86rem;
+  color: var(--em-text);
+  transition: all var(--em-motion-fast) var(--em-ease);
+}
+
+.toc-item:hover {
+  border-color: var(--em-accent);
+  transform: translateX(2px);
+}
+
+.toc-num {
+  font-weight: 700;
+  color: var(--em-accent);
+  margin-right: 8px;
+}
+
+.toc-uni-tag {
+  font-size: 0.70rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: var(--em-radius-sm);
+  background: var(--em-accent-soft);
+  color: var(--em-accent-text);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   04 · FIRST-PRINCIPLES STUDY PATH ROADMAP
+   ───────────────────────────────────────────────────────────────────── */
+.study-path {
+  background: var(--em-surface-1);
+  border: 1px dashed var(--em-border-strong);
+  border-radius: var(--em-radius-md);
+  padding: var(--em-space-4) var(--em-space-5);
+  margin-bottom: var(--em-space-8);
+  font-size: 0.88rem;
+}
+
+.study-path .path {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--em-space-2);
+  margin-top: var(--em-space-2);
+  font-size: 0.86rem;
+}
+
+.study-path .path span {
+  background: var(--em-surface-2);
+  border: 1px solid var(--em-border);
+  padding: 4px 10px;
+  border-radius: var(--em-radius-sm);
+  font-weight: 600;
+  color: var(--em-text);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   05 · CONTENT SECTIONS & HEADINGS
+   ───────────────────────────────────────────────────────────────────── */
+.content-section {
+  margin-bottom: var(--em-space-12);
+  scroll-margin-top: calc(var(--header-h) + 20px);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--em-border);
+  padding-bottom: var(--em-space-3);
+  margin-bottom: var(--em-space-5);
+}
+
+.section-heading h2 {
+  font-family: var(--font-sans);
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: var(--em-text);
+  letter-spacing: -0.01em;
+}
+
+.bookmark-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity var(--em-motion-fast) var(--em-ease);
+}
+.bookmark-btn:hover, .bookmark-btn.bookmarked {
+  opacity: 1;
+}
+
+.uni-req-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--em-space-3);
+  background: var(--em-surface-2);
+  border: 1px solid var(--em-border);
+  padding: 6px 12px;
+  border-radius: var(--em-radius-sm);
+  font-size: 0.82rem;
+  margin-bottom: var(--em-space-4);
+}
+
+.uni-req-badge {
+  font-weight: 700;
+  color: var(--em-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.72rem;
+}
+
+.prose {
+  font-size: var(--em-body-size);
+  line-height: var(--em-body-leading);
+  color: var(--em-text);
+}
+
+.prose p {
+  margin-bottom: var(--em-space-4);
+}
+
+.prose h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: var(--em-space-6) 0 var(--em-space-3);
+  color: var(--em-text);
+}
+
+.prose h4 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: var(--em-space-5) 0 var(--em-space-2);
+  color: var(--em-text);
+}
+
+.section-hr {
+  border: none;
+  border-top: 1px solid var(--em-border);
+  margin: var(--em-space-10) 0;
+}

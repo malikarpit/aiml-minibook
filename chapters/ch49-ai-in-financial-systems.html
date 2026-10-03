@@ -1,0 +1,1866 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 49: AI in Financial Systems — AI & Machine Learning MiniBook. Algorithmic Trading, Extreme Class Imbalance Fraud Detection, Credit Scoring, Sub-50ms Real-Time Inference, and Risk Management">
+<title>Ch 49 — AI in Financial Systems | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-xxi">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 49 — AI in Financial Systems</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 49 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why This Chapter Exists <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. One-Minute Intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Major Financial AI Use Cases <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. The Financial AI Pipeline <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Fraud Detection — The Most Useful Example <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Why Threshold Choice Matters <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Fraud Detection Confusion Matrix <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Worked Numerical Example — Precision and Recall <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Class Imbalance <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Anomaly Detection <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Credit Risk <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Credit Decision vs Credit Prediction <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Bias and Fairness in Finance <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Proxy Variables <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Fairness Is Not One Formula <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Explainability <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Privacy <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. NLP in Finance <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Example — Text Classification </a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Time-Series Data <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Avoiding Temporal Data Leakage </a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Train/Test Splitting for Time </a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Dataset Shift in Finance </a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Model Drift Monitoring </a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Calibration <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Worked Case Study — Suspicious Transaction Review </a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Decision Pipeline </a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Reinforcement Learning in Finance — Conceptual Link </a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Why Backtesting Can Mislead </a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Overfitting in Financial Models </a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. A Numerical Overfitting Illustration </a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Risk-Aware Evaluation </a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Common Traps </a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Exam Connection </a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Active Recall </a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Formula Sheet </a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. One-Screen Summary </a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Connection Map </a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Resource Shelf </a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Chapter Exit Test </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link active"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit IV</span><span>›</span><span>Part XXI — Applied AI & Autonomous Domain Systems</span><span>›</span><span style="color:var(--em-text)">Chapter 49</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 49 · Unit IV · Part XXI</div>
+    <div class="chapter-part-banner part-xxi">
+      <span class="part-banner-badge">Unit IV · Part XXI</span>
+      <span>Applied AI & Autonomous Domain Systems</span>
+    </div>
+    <h1 class="chapter-title">AI in Financial Systems</h1>
+    <div class="concept-id-tag">[CONCEPT-APP-049]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: Core Applied Domain</span>
+      <span class="chapter-meta-item">📖 ~45 min read</span>
+      <span class="chapter-meta-item">🎯 40 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>AI in Financial Systems:</strong> Real-time fraud detection pipelines, Extreme class imbalance techniques (SMOTE, Focal Loss, Cost-sensitive trees), Precision-Recall AUC optimization, Low-latency streaming inference (<30ms), Credit scoring models, Explainability under lending laws, and Algorithmic trading strategies.</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why This Chapter Exists</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">One-Minute Intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Major Financial AI Use Cases</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">The Financial AI Pipeline</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Fraud Detection — The Most Useful Example</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Why Threshold Choice Matters</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Fraud Detection Confusion Matrix</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Worked Numerical Example — Precision and Recall</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Class Imbalance</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Anomaly Detection</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Credit Risk</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Credit Decision vs Credit Prediction</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Bias and Fairness in Finance</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Proxy Variables</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Fairness Is Not One Formula</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Explainability</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Privacy</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">NLP in Finance</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Example — Text Classification</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Time-Series Data</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Avoiding Temporal Data Leakage</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Train/Test Splitting for Time</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Dataset Shift in Finance</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Model Drift Monitoring</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Calibration</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Worked Case Study — Suspicious Transaction Review</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Decision Pipeline</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Reinforcement Learning in Finance — Conceptual Link</span></a></li>
+      <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Why Backtesting Can Mislead</span></a></li>
+      <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Overfitting in Financial Models</span></a></li>
+      <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">A Numerical Overfitting Illustration</span></a></li>
+      <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Risk-Aware Evaluation</span></a></li>
+      <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Common Traps</span></a></li>
+      <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Exam Connection</span></a></li>
+      <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Active Recall</span></a></li>
+      <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Formula Sheet</span></a></li>
+      <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">One-Screen Summary</span></a></li>
+      <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Connection Map</span></a></li>
+      <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Resource Shelf</span></a></li>
+      <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Chapter Exit Test</span></a></li>
+    </ul>
+  </div>
+
+  <div class="chapter-preamble-card"><h1>MAIN-U4-C49 — AI in Financial Systems</h1>
+<blockquote>
+<p><strong>Main Book:</strong> AI &amp; Machine Learning — Visual + Mathematical Self-Learning Textbook<br />
+<strong>Unit:</strong> IV — Advanced Topics and AI Applications<br />
+<strong>Topic ID:</strong> <code>ML-U4-C49</code><br />
+<strong>Coverage:</strong> CORE APPLICATION CASE STUDY + STANDARD EXPANSION<br />
+<strong>Syllabus position:</strong> AI applications — financial systems<br />
+<strong>Prerequisites:</strong> C14–C29 (ML), C30–C39 (deep learning), C40–C43 (RL/NLP foundations)</p>
+</blockquote>
+<hr /></div>
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 1: Why This Chapter Exists -->
+  <section id="s-01" data-search-section="Why This Chapter Exists" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>1. Why This Chapter Exists</h2>
+      <button class="bookmark-btn" data-id="s-01" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Financial systems generate large amounts of structured and unstructured data.</p>
+<p>Examples include:</p>
+<ul>
+<li>transaction records;</li>
+<li>account activity;</li>
+<li>market prices;</li>
+<li>company reports;</li>
+<li>news;</li>
+<li>customer interactions;</li>
+<li>payment histories;</li>
+<li>loan applications.</li>
+</ul>
+<p>AI/ML can be used to identify patterns, estimate risk, classify events, detect unusual behaviour and support decisions.</p>
+<p>But finance is also a domain where:</p>
+<ul>
+<li>false positives have costs;</li>
+<li>false negatives have costs;</li>
+<li>data distributions change;</li>
+<li>decisions can affect people;</li>
+<li>privacy matters;</li>
+<li>explanations and accountability matter.</li>
+</ul>
+<p>Therefore, this chapter is not “AI predicts the stock market.”</p>
+<p>It is a <strong>case study of how the AI/ML toolbox is applied to financial problems</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 2: One-Minute Intuition -->
+  <section id="s-02" data-search-section="One-Minute Intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. One-Minute Intuition</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine a bank receiving thousands of transactions every minute.</p>
+<p>A simple rule might say:</p>
+<div class="ascii-box"><pre>transaction &gt; ₹1,00,000 → suspicious</pre></div>
+<p>But that rule can be poor.</p>
+<p>A ₹2 lakh transaction might be completely normal for one customer and extremely unusual for another.</p>
+<p>A useful ML system can consider several signals together:</p>
+<div class="ascii-box"><pre>amount
++ time
++ location
++ device
++ merchant
++ recent behaviour
++ historical pattern
+      ↓
+model score
+      ↓
+review / approve / block / escalate</pre></div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish teacher explanation</div>
+
+Socho bank ke paas lakhon transactions aa rahi hain.
+
+Sirf amount dekhke fraud decide karna weak hoga.
+
+Tum puchoge:
+
+> “Amount kitna hai?”  
+> “Usually ye customer kya karta hai?”  
+> “Ye transaction kahan se aayi?”  
+> “Device same hai?”  
+> “Ekdam unusual pattern hai kya?”
+
+Yaani AI ek **pattern-based risk signal** de sakta hai.
+
+Lekin model ka score final truth nahi hota.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: Major Financial AI Use Cases -->
+  <section id="s-03" data-search-section="Major Financial AI Use Cases" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>3. Major Financial AI Use Cases</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Problem</th>
+<th>Typical framing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fraud detection</td>
+<td>binary classification / anomaly detection</td>
+</tr>
+<tr>
+<td>Credit-risk estimation</td>
+<td>classification / regression</td>
+</tr>
+<tr>
+<td>Customer churn</td>
+<td>classification</td>
+</tr>
+<tr>
+<td>AML alert prioritization</td>
+<td>classification / ranking / anomaly detection</td>
+</tr>
+<tr>
+<td>Market forecasting</td>
+<td>time-series prediction</td>
+</tr>
+<tr>
+<td>Document processing</td>
+<td>NLP</td>
+</tr>
+<tr>
+<td>Customer support</td>
+<td>NLP / classification</td>
+</tr>
+<tr>
+<td>Transaction categorization</td>
+<td>classification</td>
+</tr>
+<tr>
+<td>Portfolio/decision support</td>
+<td>optimization / sequential decision ideas</td>
+</tr>
+</tbody>
+</table></div>
+<p>These are <strong>problem formulations</strong>, not guarantees that one algorithm is always appropriate.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: The Financial AI Pipeline -->
+  <section id="s-04" data-search-section="The Financial AI Pipeline" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>4. The Financial AI Pipeline</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="diagram-box"><pre class="mermaid">
+graph LR
+    TX["Incoming Transaction Stream<br/>(Card Swipe / Wire / UPI)"] --> FEAT["Real-Time Feature Engineering<br/>(Velocity, Geolocation Jump, Amount Deviation)"]
+    FEAT --> ENSEMBLE["Gradient Boosting / GBDT Model<br/>(LightGBM / XGBoost inference < 15ms)"]
+    ENSEMBLE --> ANOMALY["Anomaly & Outlier Scoring<br/>(Autoencoder reconstruction error)"]
+    ANOMALY --> DECISION{"Risk Score vs Threshold"}
+    DECISION -->|"Score < τ (Low Risk)"| APPROVE["Auto-Approve Transaction"]
+    DECISION -->|"τ ≤ Score < θ (Medium Risk)"| CHALLENGE["Trigger 2FA / OTP Verification"]
+    DECISION -->|"Score ≥ θ (High Risk)"| BLOCK["Block Card & Alert Fraud Ops Team"]
+</pre></div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher explanation — Hinglish</div>
+
+Financial AI mein do sabse bade challenge hote hain:
+1. **Extreme Class Imbalance:** Lakho transactions mein se sirf kuch gine-chune fraud hote hain (0.01%). Yahan standard accuracy bekaar hoti hai — hume Precision-Recall AUC aur Cost-Sensitive loss use karna padta hai.
+2. **Sub-50ms Latency Requirement:** Jab aap store par card tap karte ho, toh swipe machine sirf 50 millisecond intazaar karti hai. Model ko feature engineering, fraud probability prediction, aur approval sab kuch 15 se 30 millisecond mein finish karna hota hai!
+
+
+
+
+<div class="diagram-box"><pre class="mermaid">
+graph LR
+    TX["Incoming Transaction Stream<br/>(Card Swipe / Wire / UPI)"] --> FEAT["Real-Time Feature Engineering<br/>(Velocity, Geolocation Jump, Amount Deviation)"]
+    FEAT --> ENSEMBLE["Gradient Boosting / GBDT Model<br/>(LightGBM / XGBoost inference < 15ms)"]
+    ENSEMBLE --> ANOMALY["Anomaly & Outlier Scoring<br/>(Autoencoder reconstruction error)"]
+    ANOMALY --> DECISION{"Risk Score vs Threshold"}
+    DECISION -->|"Score < τ (Low Risk)"| APPROVE["Auto-Approve Transaction"]
+    DECISION -->|"τ ≤ Score < θ (Medium Risk)"| CHALLENGE["Trigger 2FA / OTP Verification"]
+    DECISION -->|"Score ≥ θ (High Risk)"| BLOCK["Block Card & Alert Fraud Ops Team"]
+</pre></div>
+
+
+
+</div>
+
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher explanation — Hinglish</div>
+
+Financial AI mein do sabse bade challenge hote hain:
+1. **Extreme Class Imbalance:** Lakho transactions mein se sirf kuch gine-chune fraud hote hain (0.01%). Yahan standard accuracy bekaar hoti hai — hume Precision-Recall AUC aur Cost-Sensitive loss use karna padta hai.
+2. **Sub-50ms Latency Requirement:** Jab aap store par card tap karte ho, toh swipe machine sirf 50 millisecond intazaar karti hai. Model ko feature engineering, fraud probability prediction, aur approval sab kuch 15 se 30 millisecond mein finish karna hota hai!
+
+
+
+
+<div class="ascii-box"><pre>DATA
+ │
+ ├── transactions
+ ├── customer/account information
+ ├── market data
+ ├── documents/text
+ └── external signals
+ │
+ ▼
+DATA QUALITY + GOVERNANCE
+ │
+ ▼
+FEATURE / REPRESENTATION
+ │
+ ▼
+MODEL
+ │
+ ├── classification
+ ├── regression
+ ├── anomaly detection
+ ├── NLP
+ └── sequence models
+ │
+ ▼
+RISK / PREDICTION SCORE
+ │
+ ▼
+THRESHOLD / RANK / DECISION SUPPORT
+ │
+ ▼
+HUMAN OR SYSTEM ACTION
+ │
+ ▼
+MONITORING + FEEDBACK</pre></div>
+
+
+
+The important insight is that the **model is only one component**.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: Fraud Detection — The Most Useful Example -->
+  <section id="s-05" data-search-section="Fraud Detection — The Most Useful Example" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>5. Fraud Detection — The Most Useful Example</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose each transaction is represented as:</p>
+<div class="formula-math">\[
+x=
+[
+\text{amount},
+\text{hour},
+\text{location},
+\text{merchant type},
+\text{device features},
+\text{recent activity},
+\ldots
+].
+\]</div>
+<p>The model estimates:</p>
+<div class="formula-math">\[
+\hat p=P(Y=1\mid x)
+\]</div>
+<p>where:</p>
+<ul>
+<li>\(Y=1\) means the transaction belongs to the chosen fraud class;</li>
+<li>\(\hat p\) is the model's estimated score/probability under the model.</li>
+</ul>
+<p>Then a threshold may be applied:</p>
+<div class="formula-math">\[
+\hat y=
+\begin{cases}
+1,&\hat p\ge t\\
+0,&\hat p\lt t.
+\end{cases}
+\]</div>
+<p>This connects directly to logistic regression, classification metrics and threshold selection.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: Why Threshold Choice Matters -->
+  <section id="s-06" data-search-section="Why Threshold Choice Matters" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>6. Why Threshold Choice Matters</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<div class="formula-math">\[
+t=0.5.
+\]</div>
+<p>Any score above 0.5 is flagged.</p>
+<p>Now lower the threshold to:</p>
+<div class="formula-math">\[
+t=0.2.
+\]</div>
+<p>More transactions are likely to be flagged.</p>
+<p>That may increase the number of suspicious cases caught, but it may also increase false positives.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>lower threshold
+      ↓
+more alerts
+      ↓
+potentially more TP
+      +
+potentially more FP</pre></div>
+<p>This is why precision, recall and the confusion matrix matter.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: Fraud Detection Confusion Matrix -->
+  <section id="s-07" data-search-section="Fraud Detection Confusion Matrix" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>7. Fraud Detection Confusion Matrix</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th></th>
+<th>Predicted fraud</th>
+<th>Predicted normal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Actual fraud</td>
+<td>TP</td>
+<td>FN</td>
+</tr>
+<tr>
+<td>Actual normal</td>
+<td>FP</td>
+<td>TN</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Why the distinction matters</h3>
+<ul>
+<li><strong>FN:</strong> real fraud missed.</li>
+<li><strong>FP:</strong> legitimate customer incorrectly flagged.</li>
+</ul>
+<p>The operational costs can differ significantly.</p>
+<p>A financial institution may therefore optimize for a business objective rather than blindly maximizing accuracy.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: Worked Numerical Example — Precision and Recall -->
+  <section id="s-08" data-search-section="Worked Numerical Example — Precision and Recall" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>8. Worked Numerical Example — Precision and Recall</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a validation sample contains:</p>
+<ul>
+<li>TP = 40</li>
+<li>FP = 10</li>
+<li>FN = 20</li>
+<li>TN = 930</li>
+</ul>
+<p>Then:</p>
+<div class="formula-math">\[
+\text{Precision}
+=
+\frac{TP}{TP+FP}
+=
+\frac{40}{50}
+=
+0.80
+\]</div>
+<div class="formula-math">\[
+\text{Recall}
+=
+\frac{TP}{TP+FN}
+=
+\frac{40}{60}
+\approx0.667
+\]</div>
+<p>So:</p>
+<ul>
+<li>precision = 80%;</li>
+<li>recall ≈ 66.7%.</li>
+</ul>
+<h3>Interpretation</h3>
+<p>Of flagged transactions, 80% are actually in the positive class.</p>
+<p>The model caught approximately 66.7% of actual positive cases in this sample.</p>
+<p>This is much more informative than simply saying:</p>
+<blockquote>
+<p>“The model has 97% accuracy.”</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: Class Imbalance -->
+  <section id="s-09" data-search-section="Class Imbalance" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>9. Class Imbalance</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Fraud is often rare relative to normal transactions.</p>
+<p>Imagine:</p>
+<div class="ascii-box"><pre>1,000,000 transactions
+999,000 normal
+  1,000 fraud</pre></div>
+<p>A useless classifier that predicts “normal” every time gets:</p>
+<div class="formula-math">\[
+\frac{999000}{1000000}=99.9\%
+\]</div>
+<p>accuracy.</p>
+<p>Yet it catches:</p>
+<div class="formula-math">\[
+0\%
+\]</div>
+<p>of fraud.</p>
+<p>This is a classic demonstration of why imbalanced classification must be evaluated with appropriate metrics.</p>
+<p>Your Unit II Lecture07 explicitly introduces this idea through confusion-matrix metrics and class imbalance.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: Anomaly Detection -->
+  <section id="s-10" data-search-section="Anomaly Detection" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>10. Anomaly Detection</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Not every financial system has perfect fraud labels.</p>
+<p>An alternative framing is:</p>
+<blockquote>
+<p>“Find activity that is unusual relative to normal behaviour.”</p>
+</blockquote>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>normal cluster
+████████████████
+
+             •
+         unusual point</pre></div>
+<p>Possible anomaly signals include:</p>
+<ul>
+<li>extreme transaction amount;</li>
+<li>unusual timing;</li>
+<li>unexpected geographic change;</li>
+<li>unusual sequence of transactions;</li>
+<li>device/account mismatch.</li>
+</ul>
+<p>But:</p>
+<blockquote>
+<p><strong>Unusual ≠ fraudulent.</strong></p>
+</blockquote>
+<p>Anomaly detection identifies behaviour worthy of attention; it does not automatically establish wrongdoing.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: Credit Risk -->
+  <section id="s-11" data-search-section="Credit Risk" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>11. Credit Risk</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a lender wants to estimate whether an applicant belongs to a risk class.</p>
+<p>Features might include:</p>
+<ul>
+<li>income-related variables;</li>
+<li>repayment history;</li>
+<li>debt-related variables;</li>
+<li>employment information;</li>
+<li>account history.</li>
+</ul>
+<p>A classifier could estimate:</p>
+<div class="formula-math">\[
+P(Y=1\mid X=x)
+\]</div>
+<p>where \(Y\) might represent a defined risk outcome.</p>
+<p>A regression model could instead estimate a continuous quantity.</p>
+<p>The model choice depends on the target variable and business formulation.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: Credit Decision vs Credit Prediction -->
+  <section id="s-12" data-search-section="Credit Decision vs Credit Prediction" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>12. Credit Decision vs Credit Prediction</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This distinction is important.</p>
+<h3>Model output</h3>
+<blockquote>
+<p>“Estimated probability of outcome = 0.18”</p>
+</blockquote>
+<h3>Business decision</h3>
+<blockquote>
+<p>“Approve / reject / request review.”</p>
+</blockquote>
+<p>These are not necessarily the same layer.</p>
+<p>A robust system can separate:</p>
+<div class="ascii-box"><pre>prediction
+   ↓
+policy constraints
+   ↓
+decision
+   ↓
+human review when required</pre></div>
+<p>This separation improves auditability.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: Bias and Fairness in Finance -->
+  <section id="s-13" data-search-section="Bias and Fairness in Finance" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>13. Bias and Fairness in Finance</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Financial decisions can affect:</p>
+<ul>
+<li>access to credit;</li>
+<li>pricing;</li>
+<li>account monitoring;</li>
+<li>fraud review;</li>
+<li>insurance or risk assessment.</li>
+</ul>
+<p>Bias can enter through:</p>
+<div class="ascii-box"><pre>historical data
+      ↓
+feature choices
+      ↓
+labels
+      ↓
+sampling
+      ↓
+model
+      ↓
+threshold
+      ↓
+deployment process</pre></div>
+<p>Therefore:</p>
+<blockquote>
+<p><strong>A mathematically accurate model can still create problematic outcomes for particular groups or contexts.</strong></p>
+</blockquote>
+<p>This connects directly to C46.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: Proxy Variables -->
+  <section id="s-14" data-search-section="Proxy Variables" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>14. Proxy Variables</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A variable may not explicitly represent a sensitive attribute but may correlate with it.</p>
+<p>For example, some location-based or behavioural variables can indirectly encode population differences.</p>
+<p>The lesson is not:</p>
+<blockquote>
+<p>“Never use correlated variables.”</p>
+</blockquote>
+<p>The real lesson is:</p>
+<blockquote>
+<p><strong>Check what information a feature captures and what consequences its use can create.</strong></p>
+</blockquote>
+<p>Technical fairness analysis needs the actual population, features, labels and decision process.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: Fairness Is Not One Formula -->
+  <section id="s-15" data-search-section="Fairness Is Not One Formula" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>15. Fairness Is Not One Formula</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Different fairness ideas can examine different quantities.</p>
+<p>Examples include:</p>
+<h3>Group-wise positive rates</h3>
+<div class="formula-math">\[
+P(\hat Y=1\mid A=a)
+\]</div>
+<h3>Group-wise true-positive rates</h3>
+<div class="formula-math">\[
+TPR_a=P(\hat Y=1\mid Y=1,A=a)
+\]</div>
+<h3>Group-wise false-positive rates</h3>
+<div class="formula-math">\[
+FPR_a=P(\hat Y=1\mid Y=0,A=a)
+\]</div>
+<p>Different fairness criteria can conflict.</p>
+<p>Therefore a statement such as:</p>
+<blockquote>
+<p>“The model is fair.”</p>
+</blockquote>
+<p>is incomplete without specifying:</p>
+<ul>
+<li>fair by what criterion?</li>
+<li>on which population?</li>
+<li>for which decision?</li>
+<li>at what threshold?</li>
+<li>using which data period?</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: Explainability -->
+  <section id="s-16" data-search-section="Explainability" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>16. Explainability</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A financial system may need to answer:</p>
+<blockquote>
+<p>“Why did this application receive this risk assessment?”</p>
+</blockquote>
+<p>Different levels of explanation exist.</p>
+<h3>Feature-level explanation</h3>
+<p>Which features influenced the model output?</p>
+<h3>Case-level explanation</h3>
+<p>Why did this particular case receive this score?</p>
+<h3>Model-level explanation</h3>
+<p>How does the model behave overall?</p>
+<p>These are distinct questions.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: Privacy -->
+  <section id="s-17" data-search-section="Privacy" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>17. Privacy</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Financial data can be highly sensitive.</p>
+<p>A useful mental model is:</p>
+<div class="ascii-box"><pre>collect
+  ↓
+store
+  ↓
+process
+  ↓
+model
+  ↓
+decision</pre></div>
+<p>Privacy considerations can arise at every stage.</p>
+<p>Examples:</p>
+<ul>
+<li>data minimization;</li>
+<li>access control;</li>
+<li>secure storage;</li>
+<li>retention policies;</li>
+<li>appropriate anonymization/pseudonymization;</li>
+<li>monitoring access and use.</li>
+</ul>
+<p>AI capability does not remove data-governance requirements.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: NLP in Finance -->
+  <section id="s-18" data-search-section="NLP in Finance" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>18. NLP in Finance</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Financial institutions process enormous amounts of text.</p>
+<p>Examples:</p>
+<ul>
+<li>annual reports;</li>
+<li>earnings statements;</li>
+<li>customer messages;</li>
+<li>regulatory documents;</li>
+<li>support conversations;</li>
+<li>news.</li>
+</ul>
+<p>An NLP pipeline can look like:</p>
+<div class="ascii-box"><pre>raw document
+     ↓
+tokenization / normalization
+     ↓
+representation
+     ↓
+classification / extraction / retrieval
+     ↓
+decision-support output</pre></div>
+<p>This connects directly to C43.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: Example — Text Classification -->
+  <section id="s-19" data-search-section="Example — Text Classification" class="content-section">
+    <div class="section-header">
+      <h2>19. Example — Text Classification</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a bank wants to classify customer messages:</p>
+<div class="ascii-box"><pre>“This transaction is not mine.”</pre></div>
+<p>Possible classes:</p>
+<div class="ascii-box"><pre>fraud complaint
+billing issue
+technical issue
+general query</pre></div>
+<p>This is a multi-class text-classification problem.</p>
+<p>A simple classical pipeline could be:</p>
+<div class="ascii-box"><pre>message
+ ↓
+tokens
+ ↓
+TF-IDF
+ ↓
+classifier
+ ↓
+class label</pre></div>
+<p>A neural NLP pipeline may instead use learned embeddings and a neural classifier.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: Time-Series Data -->
+  <section id="s-20" data-search-section="Time-Series Data" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>20. Time-Series Data</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Financial systems contain time-dependent observations:</p>
+<div class="formula-math">\[
+x_1,x_2,x_3,\ldots,x_T.
+\]</div>
+<p>Examples:</p>
+<ul>
+<li>daily transaction volume;</li>
+<li>account balance over time;</li>
+<li>market price series;</li>
+<li>payment behaviour.</li>
+</ul>
+<p>The ordering matters.</p>
+<p>This makes sequence modelling concepts relevant.</p>
+<p>A simplified model might use:</p>
+<div class="formula-math">\[
+h_t=f(x_t,h_{t-1})
+\]</div>
+<p>from the RNN framework.</p>
+<p>The important point is:</p>
+<blockquote>
+<p><strong>Time ordering creates information that a bag-of-features representation can lose.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: Avoiding Temporal Data Leakage -->
+  <section id="s-21" data-search-section="Avoiding Temporal Data Leakage" class="content-section">
+    <div class="section-header">
+      <h2>21. Avoiding Temporal Data Leakage</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A serious financial modelling trap is using future information to predict the past.</p>
+<p>Suppose you are predicting:</p>
+<blockquote>
+<p>“Will a customer default next month?”</p>
+</blockquote>
+<p>You must not accidentally include a feature generated <strong>after</strong> that future event.</p>
+<p>Bad:</p>
+<div class="ascii-box"><pre>prediction date
+      ↓
+future information accidentally included
+      ↓
+model
+      ↓
+artificially strong performance</pre></div>
+<p>Correct:</p>
+<div class="ascii-box"><pre>information available at prediction time
+      ↓
+model
+      ↓
+future outcome</pre></div>
+<h3>Memory anchor</h3>
+<blockquote>
+<p><strong>At prediction time, only use information that would actually have been available then.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: Train/Test Splitting for Time -->
+  <section id="s-22" data-search-section="Train/Test Splitting for Time" class="content-section">
+    <div class="section-header">
+      <h2>22. Train/Test Splitting for Time</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Randomly mixing time periods can create unrealistic evaluation.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>2019 ── 2020 ── 2021 ── 2022
+          ↑ training
+          ↑ test accidentally mixed</pre></div>
+<p>For time-dependent tasks, chronological evaluation is often more meaningful:</p>
+<div class="ascii-box"><pre>past data ─────────► training
+later data ────────► validation
+future data ───────► test</pre></div>
+<p>The exact split depends on the problem.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: Dataset Shift in Finance -->
+  <section id="s-23" data-search-section="Dataset Shift in Finance" class="content-section">
+    <div class="section-header">
+      <h2>23. Dataset Shift in Finance</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Financial behaviour changes.</p>
+<p>Examples:</p>
+<ul>
+<li>new regulations;</li>
+<li>economic shocks;</li>
+<li>seasonal changes;</li>
+<li>new fraud patterns;</li>
+<li>new payment technologies;</li>
+<li>new customer behaviour.</li>
+</ul>
+<p>Therefore:</p>
+<div class="formula-math">\[
+P_{\text{train}}(X,Y)\neq P_{\text{deployment}}(X,Y)
+\]</div>
+<p>can occur.</p>
+<p>A model can degrade even when the underlying software has not changed.</p>
+<p>This is why monitoring is essential.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: Model Drift Monitoring -->
+  <section id="s-24" data-search-section="Model Drift Monitoring" class="content-section">
+    <div class="section-header">
+      <h2>24. Model Drift Monitoring</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A production system can monitor:</p>
+<div class="ascii-box"><pre>input distribution
+      ↓
+prediction distribution
+      ↓
+observed outcomes
+      ↓
+metric trend
+      ↓
+drift / degradation detection</pre></div>
+<p>Possible signals include:</p>
+<ul>
+<li>rising false positives;</li>
+<li>declining recall;</li>
+<li>population changes;</li>
+<li>feature-distribution shifts;</li>
+<li>calibration deterioration.</li>
+</ul>
+<p>The monitoring rule depends on the business problem.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: Calibration -->
+  <section id="s-25" data-search-section="Calibration" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>25. Calibration</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a set of transactions receives predicted probability:</p>
+<div class="formula-math">\[
+\hat p=0.8.
+\]</div>
+<p>Calibration asks whether cases assigned probability around 0.8 actually show the event at roughly that frequency over an appropriate population.</p>
+<p>A well-calibrated probability estimate is useful for downstream risk decisions.</p>
+<h3>Important distinction</h3>
+<p>A model can rank cases well but still be poorly calibrated.</p>
+<p>So:</p>
+<div class="ascii-box"><pre>discrimination / ranking
+≠
+calibration</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: Worked Case Study — Suspicious Transaction Review -->
+  <section id="s-26" data-search-section="Worked Case Study — Suspicious Transaction Review" class="content-section">
+    <div class="section-header">
+      <h2>26. Worked Case Study — Suspicious Transaction Review</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a system receives:</p>
+<div class="ascii-box"><pre>amount = ₹85,000
+time = 02:14
+new device = yes
+location = unusual
+recent failed logins = 3</pre></div>
+<p>The model outputs:</p>
+<div class="formula-math">\[
+\hat p=0.87.
+\]</div>
+<p>A policy threshold is:</p>
+<div class="formula-math">\[
+t=0.80.
+\]</div>
+<p>Therefore the system flags the transaction.</p>
+<p>But the correct system interpretation is:</p>
+<blockquote>
+<p>“This case crossed the configured model/policy threshold and should receive the defined downstream action.”</p>
+</blockquote>
+<p>Not:</p>
+<blockquote>
+<p>“The customer is definitely committing fraud.”</p>
+</blockquote>
+<p>This distinction is central to responsible deployment.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: Decision Pipeline -->
+  <section id="s-27" data-search-section="Decision Pipeline" class="content-section">
+    <div class="section-header">
+      <h2>27. Decision Pipeline</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A mature system may look like:</p>
+<div class="ascii-box"><pre>transaction
+    ↓
+feature generation
+    ↓
+model score
+    ↓
+policy / threshold
+    ↓
+ ┌───────────────┬─────────────────┐
+ ↓               ↓                 ↓
+approve       additional review    block/hold
+                  │
+                  ▼
+             human analysis
+                  │
+                  ▼
+            final disposition
+                  │
+                  ▼
+            feedback / labels
+                  │
+                  └────► future model improvement</pre></div>
+<p>This is much closer to real system thinking than:</p>
+<div class="ascii-box"><pre>transaction → neural network → yes/no</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: Reinforcement Learning in Finance — Conceptual Link -->
+  <section id="s-28" data-search-section="Reinforcement Learning in Finance — Conceptual Link" class="content-section">
+    <div class="section-header">
+      <h2>28. Reinforcement Learning in Finance — Conceptual Link</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Sequential decision problems can sometimes be expressed using RL ideas.</p>
+<p>For example:</p>
+<ul>
+<li>state = portfolio or operational state;</li>
+<li>action = a decision;</li>
+<li>reward = defined objective;</li>
+<li>transition = resulting state.</li>
+</ul>
+<p>A simplified MDP framing is:</p>
+<div class="formula-math">\[
+(S,A,P,R,\gamma).
+\]</div>
+<p>However, this does <strong>not</strong> mean:</p>
+<blockquote>
+<p>“Use Q-learning to trade stocks and it will work.”</p>
+</blockquote>
+<p>Financial environments are uncertain, non-stationary, affected by many interacting agents and constrained by risk and policy.</p>
+<p>The RL framework is a modelling language; it is not a guarantee of profitable or safe decisions.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 29: Why Backtesting Can Mislead -->
+  <section id="s-29" data-search-section="Why Backtesting Can Mislead" class="content-section">
+    <div class="section-header">
+      <h2>29. Why Backtesting Can Mislead</h2>
+      <button class="bookmark-btn" data-id="s-29" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine a strategy has excellent historical performance.</p>
+<p>That does not automatically prove future performance.</p>
+<p>Potential issues include:</p>
+<ul>
+<li>data leakage;</li>
+<li>look-ahead bias;</li>
+<li>overfitting;</li>
+<li>unrealistic transaction costs;</li>
+<li>unrealistic execution assumptions;</li>
+<li>changing market conditions;</li>
+<li>selection bias.</li>
+</ul>
+<p>This is another manifestation of the generalization problem you learned in Unit II.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 30: Overfitting in Financial Models -->
+  <section id="s-30" data-search-section="Overfitting in Financial Models" class="content-section">
+    <div class="section-header">
+      <h2>30. Overfitting in Financial Models</h2>
+      <button class="bookmark-btn" data-id="s-30" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a model is extremely flexible and trained on historical market data.</p>
+<p>It may learn:</p>
+<div class="ascii-box"><pre>real pattern
++
+noise
++
+historical quirks</pre></div>
+<p>Training performance can look excellent.</p>
+<p>Future performance can then be much weaker.</p>
+<p>This is the same bias-variance/generalization idea from C17.</p>
+<h3>Memory anchor</h3>
+<blockquote>
+<p>A historical pattern is not automatically a durable pattern.</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 31: A Numerical Overfitting Illustration -->
+  <section id="s-31" data-search-section="A Numerical Overfitting Illustration" class="content-section">
+    <div class="section-header">
+      <h2>31. A Numerical Overfitting Illustration</h2>
+      <button class="bookmark-btn" data-id="s-31" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Model</th>
+<th style="text-align: right;">Training score</th>
+<th style="text-align: right;">Future/test score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model A</td>
+<td style="text-align: right;">90%</td>
+<td style="text-align: right;">84%</td>
+</tr>
+<tr>
+<td>Model B</td>
+<td style="text-align: right;">99%</td>
+<td style="text-align: right;">61%</td>
+</tr>
+</tbody>
+</table></div>
+<p>Model B fits the historical data more closely but generalizes much worse in this hypothetical example.</p>
+<p>The lesson is about <strong>generalization</strong>, not about declaring one algorithm universally better.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 32: Risk-Aware Evaluation -->
+  <section id="s-32" data-search-section="Risk-Aware Evaluation" class="content-section">
+    <div class="section-header">
+      <h2>32. Risk-Aware Evaluation</h2>
+      <button class="bookmark-btn" data-id="s-32" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Different financial systems need different evaluation measures.</p>
+<h3>Fraud</h3>
+<ul>
+<li>precision;</li>
+<li>recall;</li>
+<li>F1;</li>
+<li>ROC-AUC;</li>
+<li>false-positive burden.</li>
+</ul>
+<h3>Credit risk</h3>
+<ul>
+<li>discrimination;</li>
+<li>calibration;</li>
+<li>class-specific error analysis;</li>
+<li>fairness analysis.</li>
+</ul>
+<h3>Forecasting</h3>
+<ul>
+<li>suitable time-series error metrics;</li>
+<li>out-of-sample testing;</li>
+<li>robustness across periods.</li>
+</ul>
+<h3>NLP support systems</h3>
+<ul>
+<li>classification quality;</li>
+<li>escalation quality;</li>
+<li>human review burden.</li>
+</ul>
+<p>There is no universal “finance AI metric.”</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 33: Common Traps -->
+  <section id="s-33" data-search-section="Common Traps" class="content-section">
+    <div class="section-header">
+      <h2>33. Common Traps</h2>
+      <button class="bookmark-btn" data-id="s-33" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Trap 1 — “99.9% accuracy = excellent fraud model”</h2>
+<p>Class imbalance can make this meaningless.</p>
+<h2>Trap 2 — “High model score = fraud confirmed”</h2>
+<p>A score is not the same as a verified event.</p>
+<h2>Trap 3 — “A protected variable was removed, so bias is gone”</h2>
+<p>Proxy information can remain elsewhere.</p>
+<h2>Trap 4 — “Random train/test splitting is always fine”</h2>
+<p>Time-dependent problems can require chronological evaluation.</p>
+<h2>Trap 5 — “Historical backtest = future guarantee”</h2>
+<p>No.</p>
+<p>A backtest is an evaluation on historical data under assumptions.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 34: Exam Connection -->
+  <section id="s-34" data-search-section="Exam Connection" class="content-section">
+    <div class="section-header">
+      <h2>34. Exam Connection</h2>
+      <button class="bookmark-btn" data-id="s-34" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="exam-ladder-card"><div class="ladder-mark-badge">📝 2-mark question</div>
+
+**Q:** Name three applications of AI in financial systems.
+
+Possible answers:
+
+> Fraud detection, credit-risk assessment, document/text classification.
+
+</div>
+
+<div class="exam-ladder-card"><div class="ladder-mark-badge">📝 5-mark question</div>
+
+**Q:** Explain how ML can be used for fraud detection.
+
+Structure:
+
+1. represent transactions with features;
+2. train a classifier/anomaly detector;
+3. generate a fraud-risk score;
+4. apply a threshold or ranking policy;
+5. evaluate using confusion-matrix metrics;
+6. handle class imbalance;
+7. monitor drift and false-positive burden.
+
+</div>
+
+<h3>Application question</h3>
+<p><strong>Q:</strong> Why is accuracy often insufficient for fraud detection?</p>
+<p>Because the positive class may be rare, so a classifier can have high accuracy while detecting very few actual fraud cases. Precision, recall and confusion-matrix analysis provide additional information.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 35: Active Recall -->
+  <section id="s-35" data-search-section="Active Recall" class="content-section">
+    <div class="section-header">
+      <h2>35. Active Recall</h2>
+      <button class="bookmark-btn" data-id="s-35" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Close the chapter and answer:</p>
+<ol>
+<li>Name five financial AI use cases.</li>
+<li>Draw the financial AI pipeline.</li>
+<li>What does \(\hat p=P(Y=1|x)\) represent?</li>
+<li>Why does threshold selection matter?</li>
+<li>Why can 99.9% accuracy be misleading in fraud detection?</li>
+<li>Define TP, FP, FN and TN for fraud.</li>
+<li>What is anomaly detection?</li>
+<li>Why is unusual behaviour not automatically fraud?</li>
+<li>What is temporal leakage?</li>
+<li>Why can random splitting be misleading for time-dependent data?</li>
+<li>Explain model drift.</li>
+<li>What does calibration mean?</li>
+<li>How can bias enter a financial AI pipeline?</li>
+<li>Why is removing one sensitive feature not enough to guarantee fairness?</li>
+<li>Why is a model score not the same as a final business decision?</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 36: Formula Sheet -->
+  <section id="s-36" data-search-section="Formula Sheet" class="content-section">
+    <div class="section-header">
+      <h2>36. Formula Sheet</h2>
+      <button class="bookmark-btn" data-id="s-36" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Binary decision threshold</h2>
+<div class="formula-math">\[
+\hat y=
+\begin{cases}
+1,&\hat p\ge t\\
+0,&\hat p\lt t
+\end{cases}
+\]</div>
+<h2>Precision</h2>
+<div class="formula-math">\[
+\text{Precision}
+=
+\frac{TP}{TP+FP}
+\]</div>
+<h2>Recall</h2>
+<div class="formula-math">\[
+\text{Recall}
+=
+\frac{TP}{TP+FN}
+\]</div>
+<h2>F1</h2>
+<div class="formula-math">\[
+F_1=
+2\frac{\text{Precision}\cdot\text{Recall}}
+{\text{Precision}+\text{Recall}}
+\]</div>
+<h2>Probability-style model output</h2>
+<div class="formula-math">\[
+\hat p=P(Y=1\mid X=x)
+\]</div>
+<p>This denotes a model's estimated conditional probability under the chosen modelling framework.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 37: One-Screen Summary -->
+  <section id="s-37" data-search-section="One-Screen Summary" class="content-section">
+    <div class="section-header">
+      <h2>37. One-Screen Summary</h2>
+      <button class="bookmark-btn" data-id="s-37" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>FINANCIAL AI
+                      │
+        ┌─────────────┼─────────────┐
+        │             │             │
+      FRAUD        CREDIT          NLP
+        │             │             │
+  classify /      risk score     documents /
+  anomaly detect     │            messages
+        │             │             │
+        └─────────────┼─────────────┘
+                      ↓
+                 MODEL OUTPUT
+                      ↓
+             threshold / ranking
+                      ↓
+              business workflow
+                      ↓
+             human / system action
+                      ↓
+        monitoring + feedback + governance</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 38: Connection Map -->
+  <section id="s-38" data-search-section="Connection Map" class="content-section">
+    <div class="section-header">
+      <h2>38. Connection Map</h2>
+      <button class="bookmark-btn" data-id="s-38" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>C17
+bias / variance / generalization
+        │
+        └────► financial model validation
+
+C24–C25
+confusion matrix / precision / recall / ROC-AUC
+        │
+        └────► fraud and risk evaluation
+
+C27–C29
+regularization
+        │
+        └────► overfitting control
+
+C30–C39
+neural networks / RNN / LSTM
+        │
+        └────► sequence and unstructured-data modelling
+
+C43
+NLP
+        │
+        └────► financial documents and customer text
+
+C46
+ethics / fairness / accountability
+        │
+        └────► financial decision governance
+
+C49
+        │
+        └────► complete financial AI case study</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 39: Resource Shelf -->
+  <section id="s-39" data-search-section="Resource Shelf" class="content-section">
+    <div class="section-header">
+      <h2>39. Resource Shelf</h2>
+      <button class="bookmark-btn" data-id="s-39" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <blockquote>
+<p><strong>READ FIRST</strong><br />
+Unit II chapters on classification/evaluation/regularization and C43 for NLP.</p>
+<p><strong>WATCH</strong><br />
+Use focused ML/statistics videos from the master resource guide for confusion matrices, ROC-AUC, classification and model evaluation.</p>
+<p><strong>GO DEEPER</strong><br />
+Standard ML and responsible-AI material can extend the case study into calibration, fairness and deployment monitoring.</p>
+<p><strong>PRACTICE</strong><br />
+Work confusion-matrix numericals and construct a toy fraud-detection pipeline conceptually.</p>
+<p><strong>EXAM</strong><br />
+Unit IV AI applications — financial systems.</p>
+<p><strong>MATH</strong><br />
+C24–C29 for evaluation and regularization; C43 for NLP representation; C40–C42 for sequential decision concepts.</p>
+</blockquote>
+<h3>Source boundary</h3>
+<p>The stored course/resource guide explicitly lists <strong>financial systems as an official Unit IV AI application topic</strong>, but the supplied lecture-note inventory does not contain a dedicated finance lecture. Therefore, this chapter is a structured <strong>application-level gap-fill</strong> built from the already taught ML/NLP/ethics concepts, rather than a reproduction of a course-specific lecture.</p>
+<p>Source anchors: <code>UNI-SYL-01</code>, <code>UNI-NOTE-08</code>, <code>UNI-NOTE-09</code>, <code>UNI-NOTE-11</code>, <code>EXT-NPTEL-ML</code>, <code>EXT-NPTEL-RL</code>, <code>EXT-STAN-CS224N</code>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 40: Chapter Exit Test -->
+  <section id="s-40" data-search-section="Chapter Exit Test" class="content-section">
+    <div class="section-header">
+      <h2>40. Chapter Exit Test</h2>
+      <button class="bookmark-btn" data-id="s-40" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Explain</h3>
+<p>Why can accuracy be misleading in fraud detection?</p>
+<h3>Draw</h3>
+<p>Draw the fraud-detection decision pipeline from transaction → model → threshold → action.</p>
+<h3>Calculate</h3>
+<p>For:</p>
+<div class="formula-math">\[
+TP=30,\quad FP=10,\quad FN=20
+\]</div>
+<p>calculate precision and recall.</p>
+<h3>Diagnose</h3>
+<p>A model was trained on 2018–2021 data and tested by randomly mixing all years. Explain one possible problem.</p>
+<h3>Transfer</h3>
+<p>Explain how C46's fairness ideas apply to credit-risk modelling.</p>
+<p>If you can explain, calculate, diagnose and transfer these ideas without notes, this case study is complete.</p>
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="ch48-autonomous-vehicles.html" class="nav-btn">← Ch 48 — Autonomous Vehicles</a>
+    <a href="ch50-unit-4-consolidation.html" class="nav-btn primary">Next: Ch 50 — Unit IV Consolidation & Grand Mastery →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch49-ai-in-financial-systems.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 49</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

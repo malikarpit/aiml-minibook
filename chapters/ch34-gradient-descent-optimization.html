@@ -1,0 +1,2093 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 34: Gradient Descent &amp; Neural Network Optimization — AI & Machine Learning MiniBook. Loss Landscapes, Batch GD, Stochastic GD, Mini-Batch GD, Learning Rate Dynamics, Momentum, RMSprop, and Adam Optimizer">
+<title>Ch 34 — Gradient Descent &amp; Neural Network Optimization | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-xiii">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 34 — Gradient Descent &amp; Neural Network Optimization</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 34 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why This Chapter Exists <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. One-Minute Intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. The Optimization Problem <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Math You Need Now — Derivative First <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. From Derivative to Gradient <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. The Core Update Equation <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Why the Minus Sign? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Visualizing One-Dimensional Gradient Descent <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Worked Example — Complete Update <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Learning Rate — The Most Important Hyperparameter Here <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Learning Rate and Convergence <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Why Scaling Helps Optimization <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Gradient Descent for a Neural Network <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Batch, Stochastic and Mini-Batch Gradient Descent <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. What Is an Epoch? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. A Complete Mini-Batch Training Cycle <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. The Role of Initialization <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Convex vs Non-Convex Optimization <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Saddle Points <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Stopping Conditions <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Gradient Descent vs Closed-Form Solutions </a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Worked Neural Example — A Single Trainable Weight </a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Why the Gradient Is Not “the Answer” </a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Gradient Descent and Backpropagation — Do Not Confuse Them </a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Common Misconceptions </a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Formula Card <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Formula Card — Mini-Batch Gradient </a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Algorithm — Gradient Descent </a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Complexity Intuition </a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Connection to Regularization </a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Advanced Optimizers — Preview Only </a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Active Recall — Close the Book </a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Practice Set </a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. University Exam Lens </a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Memory Anchors <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Resource Shelf </a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Course Lens and Scope Boundary </a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Math Companion Links </a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Chapter Exit Test </a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Connection to the Next Topic </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link active"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit III</span><span>›</span><span>Part XIII — Optimization & Backpropagation</span><span>›</span><span style="color:var(--em-text)">Chapter 34</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 34 · Unit III · Part XIII</div>
+    <div class="chapter-part-banner part-xiii">
+      <span class="part-banner-badge">Unit III · Part XIII</span>
+      <span>Optimization & Backpropagation</span>
+    </div>
+    <h1 class="chapter-title">Gradient Descent &amp; Neural Network Optimization</h1>
+    <div class="concept-id-tag">[CONCEPT-DL-034]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: Highest Yield (10-mark guarantee)</span>
+      <span class="chapter-meta-item">📖 ~50 min read</span>
+      <span class="chapter-meta-item">🎯 40 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>Optimization in Neural Networks:</strong> Non-convex loss surfaces, Saddle points, Batch Gradient Descent vs SGD vs Mini-Batch GD, Learning rate selection, Oscillations in ravines, Momentum optimizer, RMSprop adaptive learning rate, and Adam optimizer formulation.</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why This Chapter Exists</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">One-Minute Intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">The Optimization Problem</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Math You Need Now — Derivative First</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">From Derivative to Gradient</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">The Core Update Equation</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Why the Minus Sign?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Visualizing One-Dimensional Gradient Descent</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Worked Example — Complete Update</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Learning Rate — The Most Important Hyperparameter Here</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Learning Rate and Convergence</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Why Scaling Helps Optimization</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Gradient Descent for a Neural Network</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Batch, Stochastic and Mini-Batch Gradient Descent</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">What Is an Epoch?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">A Complete Mini-Batch Training Cycle</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">The Role of Initialization</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Convex vs Non-Convex Optimization</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Saddle Points</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Stopping Conditions</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Gradient Descent vs Closed-Form Solutions</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Worked Neural Example — A Single Trainable Weight</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Why the Gradient Is Not “the Answer”</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Gradient Descent and Backpropagation — Do Not Confuse Them</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Common Misconceptions</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Formula Card</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Formula Card — Mini-Batch Gradient</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Algorithm — Gradient Descent</span></a></li>
+      <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Complexity Intuition</span></a></li>
+      <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Connection to Regularization</span></a></li>
+      <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Advanced Optimizers — Preview Only</span></a></li>
+      <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Active Recall — Close the Book</span></a></li>
+      <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Practice Set</span></a></li>
+      <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">University Exam Lens</span></a></li>
+      <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Memory Anchors</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Resource Shelf</span></a></li>
+      <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Course Lens and Scope Boundary</span></a></li>
+      <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Math Companion Links</span></a></li>
+      <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Chapter Exit Test</span></a></li>
+      <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Connection to the Next Topic</span></a></li>
+    </ul>
+  </div>
+
+  
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 1: Why This Chapter Exists -->
+  <section id="s-01" data-search-section="Why This Chapter Exists" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>1. Why This Chapter Exists</h2>
+      <button class="bookmark-btn" data-id="s-01" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>In C30–C33, the network learned to <strong>compute</strong> a prediction and a loss.</p>
+<p>We can now write the training problem as:</p>
+<div class="formula-math">\[
+\text{Choose parameters }\theta\text{ that make the loss small.}
+\]</div>
+<p>But one question is still unanswered:</p>
+<blockquote>
+<p><strong>How do we actually change millions of parameters in a useful direction?</strong></p>
+</blockquote>
+<p>The central mechanism is <strong>gradient descent</strong>.</p>
+<p>The complete training story becomes:</p>
+<div class="ascii-box"><pre>Parameters
+   ↓
+Forward pass
+   ↓
+Prediction
+   ↓
+Loss
+   ↓
+Gradient
+   ↓
+Which direction increases the loss?
+   ↓
+Move in the opposite direction
+   ↓
+New parameters
+   ↓
+Repeat</pre></div>
+<p>This is the bridge between a neural-network architecture and an actual learning procedure.</p>
+<p>The supplied resource guide identifies <code>prac_7_neural_network.ipynb</code> as covering neuron parameters, activations, losses and gradient-descent concepts. It also maps calculus, gradients and gradient descent to the Unit III dependency chain. The supplied <code>Lecture10 copy.pdf</code> provides the broader regularized-optimization and learned-representation context. The detailed training equations in this chapter are a standard mathematical expansion used to make that concept self-contained.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 2: One-Minute Intuition -->
+  <section id="s-02" data-search-section="One-Minute Intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. One-Minute Intuition</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>English</h2>
+<p>Imagine standing on a foggy mountain and trying to reach the lowest point.</p>
+<p>You cannot see the whole landscape. You can only determine the <strong>local slope</strong> around your feet.</p>
+<p>If the slope points upward when you move north, you move south instead.</p>
+<p>Repeat:</p>
+<div class="ascii-box"><pre>Look at local slope
+       ↓
+Move downhill
+       ↓
+Recalculate
+       ↓
+Move downhill again
+       ↓
+Eventually approach a low point</pre></div>
+<p>Gradient descent does exactly this in a parameter space.</p>
+<p>The difference is that instead of your position being described by two physical coordinates, it may be described by thousands or millions of neural-network parameters.</p>
+<h2>Hinglish</h2>
+<p>Socho tum ek pahaad par ho aur tumhe sabse neeche wali jagah tak pahunchna hai, lekin fog ki wajah se poora mountain dikh nahi raha.</p>
+<p>Tum local slope check karte ho.</p>
+<p>Agar current direction mein height badh rahi hai, toh uske opposite jaoge.</p>
+<p>ML mein:</p>
+<blockquote>
+<p><strong>Gradient batata hai loss kis direction mein sabse tez badh raha hai.</strong></p>
+</blockquote>
+<p>Isliye hum uske opposite direction mein move karte hain.</p>
+<div class="ascii-box"><pre>Gradient → uphill direction
+Negative gradient → downhill direction</pre></div>
+<p>Bas isi idea ko parameters par repeatedly apply karna gradient descent hai.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: The Optimization Problem -->
+  <section id="s-03" data-search-section="The Optimization Problem" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>3. The Optimization Problem</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a neural network has parameters collected into one object:</p>
+<div class="formula-math">\[
+\theta.
+\]</div>
+<p>Here \(\theta\) may contain:</p>
+<ul>
+<li>weights;</li>
+<li>biases;</li>
+<li>and, depending on the model, other trainable parameters.</li>
+</ul>
+<p>The training objective is:</p>
+<div class="formula-math">\[
+\boxed{
+\theta^*=\arg\min_{\theta}J(\theta)
+}
+\]</div>
+<p>where \(J(\theta)\) is the objective or loss over the training data.</p>
+<p>For a dataset of \(n\) examples, a common empirical objective is:</p>
+<div class="formula-math">\[
+J(\theta)=\frac{1}{n}\sum_{i=1}^{n}\ell(f_\theta(x_i),y_i).
+\]</div>
+<h3>Terminology</h3>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Parameter</td>
+<td>Quantity learned from data, such as a weight or bias</td>
+</tr>
+<tr>
+<td>Objective / loss</td>
+<td>Quantity we try to minimize during training</td>
+</tr>
+<tr>
+<td>Gradient</td>
+<td>Vector of partial derivatives with respect to parameters</td>
+</tr>
+<tr>
+<td>Learning rate</td>
+<td>Step-size control in the update</td>
+</tr>
+<tr>
+<td>Iteration / update</td>
+<td>One parameter-change step</td>
+</tr>
+<tr>
+<td>Epoch</td>
+<td>One complete pass through the training set</td>
+</tr>
+<tr>
+<td>Batch</td>
+<td>Set of training examples used to compute an update</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: Math You Need Now — Derivative First -->
+  <section id="s-04" data-search-section="Math You Need Now — Derivative First" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>4. Math You Need Now — Derivative First</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Before gradients, understand the one-variable derivative.</p>
+<p>For a function</p>
+<div class="formula-math">\[
+f(x),
+\]</div>
+<p>the derivative</p>
+<div class="formula-math">\[
+f'(x)
+\]</div>
+<p>describes local rate of change.</p>
+<p>For example:</p>
+<div class="formula-math">\[
+f(x)=x^2
+\]</div>
+<p>has</p>
+<div class="formula-math">\[
+f'(x)=2x.
+\]</div>
+<p>At \(x=3\):</p>
+<div class="formula-math">\[
+f'(3)=6.
+\]</div>
+<p>So near \(x=3\), increasing \(x\) increases \(f(x)\).</p>
+<p>At \(x=-3\):</p>
+<div class="formula-math">\[
+f'(-3)=-6.
+\]</div>
+<p>So increasing \(x\) locally decreases \(f(x)\).</p>
+<h3>The sign matters</h3>
+<div class="ascii-box"><pre>Derivative &gt; 0 → increasing x increases f
+Derivative &lt; 0 → increasing x decreases f
+Derivative = 0 → locally flat</pre></div>
+<p>That is the key idea gradient descent generalizes.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: From Derivative to Gradient -->
+  <section id="s-05" data-search-section="From Derivative to Gradient" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>5. From Derivative to Gradient</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A neural network has many parameters.</p>
+<p>Suppose:</p>
+<div class="formula-math">\[
+\theta=(\theta_1,\theta_2,\ldots,\theta_p).
+\]</div>
+<p>The loss is:</p>
+<div class="formula-math">\[
+J(\theta_1,\ldots,\theta_p).
+\]</div>
+<p>We can ask:</p>
+<ul>
+<li>how does the loss change when \(\theta_1\) changes?</li>
+<li>how does it change when \(\theta_2\) changes?</li>
+<li>and so on.</li>
+</ul>
+<p>Collect those partial derivatives:</p>
+<div class="formula-math">\[
+\boxed{
+\nabla_\theta J
+=
+\begin{bmatrix}
+\frac{\partial J}{\partial \theta_1}\\
+\frac{\partial J}{\partial \theta_2}\\
+\vdots\\
+\frac{\partial J}{\partial \theta_p}
+\end{bmatrix}
+}
+\]</div>
+<p>This is the <strong>gradient</strong>.</p>
+<h3>Interpretation</h3>
+<p>The gradient points in the direction of the steepest local increase of the function.</p>
+<p>Therefore:</p>
+<div class="formula-math">\[
+-\nabla_\theta J
+\]</div>
+<p>points in the local steepest-descent direction.</p>
+<p>This is why the algorithm is called <strong>gradient descent</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: The Core Update Equation -->
+  <section id="s-06" data-search-section="The Core Update Equation" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>6. The Core Update Equation</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The central formula of this chapter is:</p>
+<div class="formula-math">\[
+\boxed{
+\theta\leftarrow\theta-\eta\nabla_\theta J(\theta)
+}
+\]</div>
+<p>where:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>\(\theta\)</td>
+<td>Current parameter vector</td>
+</tr>
+<tr>
+<td>\(J(\theta)\)</td>
+<td>Current objective/loss</td>
+</tr>
+<tr>
+<td>\(\nabla_\theta J\)</td>
+<td>Gradient of loss with respect to parameters</td>
+</tr>
+<tr>
+<td>\(\eta\)</td>
+<td>Learning rate</td>
+</tr>
+<tr>
+<td>\(-\eta\nabla_\theta J\)</td>
+<td>Parameter change</td>
+</tr>
+</tbody>
+</table></div>
+<h2>Formula reading</h2>
+<p>Read it as:</p>
+<blockquote>
+<p><strong>New parameter = old parameter − learning rate × gradient.</strong></p>
+</blockquote>
+<p>The minus sign is essential because the gradient points uphill.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: Why the Minus Sign? -->
+  <section id="s-07" data-search-section="Why the Minus Sign?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>7. Why the Minus Sign?</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose one parameter has gradient:</p>
+<div class="formula-math">\[
+\frac{\partial J}{\partial w}=+4.
+\]</div>
+<p>That means increasing \(w\) locally increases the loss.</p>
+<p>To reduce the loss, we should decrease \(w\).</p>
+<p>Gradient descent does:</p>
+<div class="formula-math">\[
+w_{new}=w_{old}-\eta(4).
+\]</div>
+<p>If \(\eta=0.1\):</p>
+<div class="formula-math">\[
+w_{new}=w_{old}-0.4.
+\]</div>
+<p>Now suppose:</p>
+<div class="formula-math">\[
+\frac{\partial J}{\partial w}=-4.
+\]</div>
+<p>Increasing \(w\) locally decreases the loss.</p>
+<p>Then:</p>
+<div class="formula-math">\[
+w_{new}=w_{old}-0.1(-4)
+=w_{old}+0.4.
+\]</div>
+<p>So the minus sign automatically makes the movement go downhill.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: Visualizing One-Dimensional Gradient Descent -->
+  <section id="s-08" data-search-section="Visualizing One-Dimensional Gradient Descent" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>8. Visualizing One-Dimensional Gradient Descent</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Consider:</p>
+<div class="formula-math">\[
+J(w)=(w-3)^2.
+\]</div>
+<p>The minimum is at:</p>
+<div class="formula-math">\[
+w^*=3.
+\]</div>
+<p>The derivative is:</p>
+<div class="formula-math">\[
+J'(w)=2(w-3).
+\]</div>
+<p>Suppose:</p>
+<div class="formula-math">\[
+w_0=0,\qquad \eta=0.25.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+J'(0)=2(0-3)=-6.
+\]</div>
+<p>Update:</p>
+<div class="formula-math">\[
+w_1=0-0.25(-6)=1.5.
+\]</div>
+<p>Next:</p>
+<div class="formula-math">\[
+J'(1.5)=2(1.5-3)=-3.
+\]</div>
+<div class="formula-math">\[
+w_2=1.5-0.25(-3)=2.25.
+\]</div>
+<p>Next:</p>
+<div class="formula-math">\[
+J'(2.25)=2(2.25-3)=-1.5.
+\]</div>
+<div class="formula-math">\[
+w_3=2.25-0.25(-1.5)=2.625.
+\]</div>
+<p>The parameter moves toward 3:</p>
+<div class="ascii-box"><pre>0 → 1.5 → 2.25 → 2.625 → 2.8125 → … → 3</pre></div>
+<p>This is the simplest possible gradient-descent trace.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: Worked Example — Complete Update -->
+  <section id="s-09" data-search-section="Worked Example — Complete Update" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>9. Worked Example — Complete Update</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<div class="formula-math">\[
+J(w)=3w^2+2w+5.
+\]</div>
+<h3>Step 1 — Differentiate</h3>
+<div class="formula-math">\[
+\frac{dJ}{dw}=6w+2.
+\]</div>
+<h3>Step 2 — Current parameter</h3>
+<p>Let:</p>
+<div class="formula-math">\[
+w=2.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\frac{dJ}{dw}=6(2)+2=14.
+\]</div>
+<h3>Step 3 — Learning rate</h3>
+<p>Let:</p>
+<div class="formula-math">\[
+\eta=0.05.
+\]</div>
+<h3>Step 4 — Update</h3>
+<div class="formula-math">\[
+w_{new}=2-0.05(14)
+\]</div>
+<div class="formula-math">\[
+\boxed{w_{new}=1.3}
+\]</div>
+<h3>Interpretation</h3>
+<p>The gradient was strongly positive, so the update moved \(w\) downward.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: Learning Rate — The Most Important Hyperparameter Here -->
+  <section id="s-10" data-search-section="Learning Rate — The Most Important Hyperparameter Here" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>10. Learning Rate — The Most Important Hyperparameter Here</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The learning rate \(\eta\) controls how far we move along the negative gradient.</p>
+<h3>Very small learning rate</h3>
+<div class="ascii-box"><pre>Tiny step
+   ↓
+Very slow progress
+   ↓
+Many updates may be required</pre></div>
+<h3>Reasonable learning rate</h3>
+<div class="ascii-box"><pre>Useful-sized steps
+   ↓
+Efficient progress toward a low-loss region</pre></div>
+<h3>Very large learning rate</h3>
+<div class="ascii-box"><pre>Huge steps
+   ↓
+Overshoot
+   ↓
+Possible oscillation / divergence</pre></div>
+<h3>Visual idea</h3>
+<div class="ascii-box"><pre>Loss
+ ↑
+ │      [0m
+ │    \        /
+ │     \  ●   /
+ │      \/ \/
+ │       ●
+ │        ●
+ └────────────────→ parameter</pre></div>
+<p>A bad learning rate can prevent useful convergence even when the gradient itself is correct.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: Learning Rate and Convergence -->
+  <section id="s-11" data-search-section="Learning Rate and Convergence" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>11. Learning Rate and Convergence</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A typical healthy trajectory looks like:</p>
+<div class="ascii-box"><pre>Loss
+│●
+│ \
+│  ●
+│   \
+│    ●
+│     ●
+│      ●
+│       ●__
+└────────────────→ updates</pre></div>
+<p>But actual training may look different.</p>
+<h3>Too large</h3>
+<div class="ascii-box"><pre>●
+   ●     ●
+      ●
+   ●     ●</pre></div>
+<p>The algorithm can jump around the low-loss region or move away from it.</p>
+<h3>Too small</h3>
+<div class="ascii-box"><pre>●
+ ●
+  ●
+   ●
+    ●
+     ●</pre></div>
+<p>It may make progress so slowly that training becomes impractical.</p>
+<p>Important distinction:</p>
+<blockquote>
+<p><strong>A lower learning rate is not automatically better.</strong></p>
+</blockquote>
+<p>The useful value depends on the optimization landscape, model, scale of inputs, batch construction and parameterization.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: Why Scaling Helps Optimization -->
+  <section id="s-12" data-search-section="Why Scaling Helps Optimization" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>12. Why Scaling Helps Optimization</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You already studied feature scaling in Unit II.</p>
+<p>The same principle reappears here.</p>
+<p>Suppose one feature varies around:</p>
+<div class="formula-math">\[
+0\text{–}1
+\]</div>
+<p>while another varies around:</p>
+<div class="formula-math">\[
+0\text{–}1,000,000.
+\]</div>
+<p>The resulting parameter landscape can have very different sensitivities in different directions.</p>
+<p>A gradient-based optimizer may then face an awkward geometry.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>Poorly scaled landscape
+
+        ______
+      /        \
+     /          \
+     \          /
+      \________/
+
+Long narrow valley</pre></div>
+<p>versus a better-conditioned situation:</p>
+<div class="ascii-box"><pre>______
+    /        \
+   |          |
+    \________/
+
+More balanced directions</pre></div>
+<p>This is one reason standardization can be useful before gradient-based learning.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: Gradient Descent for a Neural Network -->
+  <section id="s-13" data-search-section="Gradient Descent for a Neural Network" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>13. Gradient Descent for a Neural Network</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Now replace the simple parameter \(w\) with all trainable network parameters.</p>
+<p>For a network:</p>
+<div class="formula-math">\[
+\theta=\{W^{(1)},b^{(1)},W^{(2)},b^{(2)},\ldots,W^{(L)},b^{(L)}\}.
+\]</div>
+<p>Training becomes:</p>
+<div class="ascii-box"><pre>Initialize W, b
+      ↓
+Forward pass
+      ↓
+Compute loss J
+      ↓
+Compute gradients
+      ↓
+W ← W − η ∂J/∂W
+b ← b − η ∂J/∂b
+      ↓
+Repeat</pre></div>
+<h3>Critical point</h3>
+<p>Gradient descent tells us <strong>how parameters are updated</strong>.</p>
+<p>It does not by itself tell us how to efficiently calculate every partial derivative in a deep network.</p>
+<p>That second problem is the job of <strong>backpropagation</strong>.</p>
+<p>This distinction is extremely important:</p>
+<div class="ascii-box"><pre>Backpropagation
+→ efficiently computes gradients
+
+Gradient descent
+→ uses gradients to update parameters</pre></div>
+<p>C35 develops the first part.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: Batch, Stochastic and Mini-Batch Gradient Descent -->
+  <section id="s-14" data-search-section="Batch, Stochastic and Mini-Batch Gradient Descent" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>14. Batch, Stochastic and Mini-Batch Gradient Descent</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the objective is:</p>
+<div class="formula-math">\[
+J(\theta)=\frac1n\sum_{i=1}^{n}\ell_i(\theta).
+\]</div>
+<p>There are several ways to estimate the gradient.</p>
+<h2>14.1 Batch Gradient Descent</h2>
+<p>Use the entire training set for one update:</p>
+<div class="formula-math">\[
+\nabla J(\theta)
+=
+\frac1n\sum_{i=1}^{n}\nabla \ell_i(\theta).
+\]</div>
+<p>One update uses all examples.</p>
+<h3>Intuition</h3>
+<blockquote>
+<p>Read every student's answer before deciding how to adjust the teaching.</p>
+</blockquote>
+<h3>Advantages</h3>
+<ul>
+<li>exact gradient of the chosen empirical objective;</li>
+<li>stable update direction;</li>
+<li>conceptually simple.</li>
+</ul>
+<h3>Limitation</h3>
+<p>A large dataset can make each update expensive.</p>
+<hr />
+<h2>14.2 Stochastic Gradient Descent</h2>
+<p>Use one example at a time:</p>
+<div class="formula-math">\[
+\theta
+\leftarrow
+\theta-[0m
+\eta\nabla\ell_i(\theta).
+\]</div>
+<p>The update direction is noisy because it is based on one example.</p>
+<h3>Intuition</h3>
+<blockquote>
+<p>Adjust your teaching after hearing one student's response.</p>
+</blockquote>
+<h3>Behaviour</h3>
+<p>The path may look noisy:</p>
+<div class="ascii-box"><pre>●
+  ●
+ ●
+   ●
+  ●
+    ●
+     ●</pre></div>
+<p>but the noise can still lead the process toward useful low-loss regions.</p>
+<hr />
+<h2>14.3 Mini-Batch Gradient Descent</h2>
+<p>Use a subset of examples:</p>
+<div class="formula-math">\[
+B\subseteq\{1,\ldots,n\}.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\boxed{
+\theta
+\leftarrow
+\theta-
+\eta
+\frac1{|B|}\sum_{i\in B}\nabla\ell_i(\theta)
+}
+\]</div>
+<p>Mini-batch training is a practical compromise between:</p>
+<div class="ascii-box"><pre>Batch → stable but potentially expensive
+
+SGD → cheap noisy updates
+
+Mini-batch → moderate computation + moderate noise</pre></div>
+<h3>Important terminology note</h3>
+<p>In modern ML discussions, the word “SGD” is sometimes used broadly for stochastic or mini-batch variants. In an exam, state exactly what convention you are using.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: What Is an Epoch? -->
+  <section id="s-15" data-search-section="What Is an Epoch?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>15. What Is an Epoch?</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>An <strong>epoch</strong> is one complete pass through the training dataset.</p>
+<p>Suppose there are:</p>
+<div class="formula-math">\[
+10,000
+\]</div>
+<p>training examples.</p>
+<p>If batch size is:</p>
+<div class="formula-math">\[
+100,
+\]</div>
+<p>then one epoch contains approximately:</p>
+<div class="formula-math">\[
+\frac{10,000}{100}=100
+\]</div>
+<p>parameter updates, assuming a simple full-partitioning setup.</p>
+<p>So:</p>
+<div class="ascii-box"><pre>1 epoch
+= all training examples have been processed once</pre></div>
+<p>An epoch is not the same as an update.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: A Complete Mini-Batch Training Cycle -->
+  <section id="s-16" data-search-section="A Complete Mini-Batch Training Cycle" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>16. A Complete Mini-Batch Training Cycle</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="diagram-box"><pre class="mermaid">
+graph LR
+    subgraph Batch["Batch GD (Full N)"]
+        B1["Computes gradient over all N samples"]
+        B2["Smooth trajectory, guaranteed convergence"]
+        B3["Slow per step, huge RAM requirement"]
+    end
+    subgraph MiniBatch["Mini-Batch GD (32–256) ★ Standard"]
+        M1["Computes gradient over small batch B"]
+        M2["Fast GPU tensor parallelism"]
+        M3["Mild noise helps jump out of shallow saddle points"]
+    end
+    subgraph SGD["Stochastic GD (Batch=1)"]
+        S1["Computes gradient for 1 single sample"]
+        S2["Fastest step, very low memory"]
+        S3["Highly noisy, oscillates heavily near minimum"]
+    end
+</pre></div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher explanation — Hinglish</div>
+
+Optimization ka sabse bada challenge hota hai: "Pahaad se neeche utarna hai par ghanera kohra hai!" Full Batch GD har step lene se pehle poore pahaad ka survey karta hai (bohot slow). Pure SGD bina soche har kadam par rukh badal leta hai (bohot noisy). Mini-Batch GD aage ke 64 kadamon ka average nikaalta hai — fast bhi hai aur sahi disha bhi pakadta hai!
+
+
+Consider:
+
+
+
+<div class="ascii-box"><pre>Training dataset
+      ↓
+Shuffle / organize examples
+      ↓
+Select mini-batch
+      ↓
+Forward pass
+      ↓
+Compute predictions
+      ↓
+Compute loss
+      ↓
+Compute gradients
+      ↓
+Update W and b
+      ↓
+Next mini-batch
+      ↓
+Eventually finish epoch
+      ↓
+Repeat for more epochs</pre></div>
+
+
+
+This cycle is the practical form of optimization used throughout neural-network training.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: The Role of Initialization -->
+  <section id="s-17" data-search-section="The Role of Initialization" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>17. The Role of Initialization</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Gradient descent needs a starting point.</p>
+<p>So we begin with initial values:</p>
+<div class="formula-math">\[
+\theta_0.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\theta_1
+=
+\theta_0-\eta\nabla J(\theta_0).
+\]</div>
+<p>The starting point matters because different initializations can lead to different optimization trajectories, especially in non-convex models.</p>
+<h3>Why not set every weight to the same value?</h3>
+<p>If identical neurons start identically and receive identical inputs, they can remain symmetric and learn redundant functions.</p>
+<p>Therefore practical neural-network initialization aims to preserve useful variation rather than giving every unit the same starting state.</p>
+<p>A full treatment of initialization schemes is beyond the immediate syllabus core, but this symmetry idea is important.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: Convex vs Non-Convex Optimization -->
+  <section id="s-18" data-search-section="Convex vs Non-Convex Optimization" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>18. Convex vs Non-Convex Optimization</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You saw convexity in Linear Regression.</p>
+<p>For a suitable convex objective:</p>
+<div class="ascii-box"><pre>local minimum
+      =
+(global) minimum</pre></div>
+<p>Neural-network loss surfaces are generally more complicated and are not globally guaranteed to be convex.</p>
+<p>Therefore gradient descent can encounter structures such as:</p>
+<ul>
+<li>local minima;</li>
+<li>saddle points;</li>
+<li>flat regions;</li>
+<li>steep regions;</li>
+<li>parameter symmetries.</li>
+</ul>
+<h3>Important correction to a common oversimplification</h3>
+<p>It is tempting to say:</p>
+<blockquote>
+<p>“Gradient descent always finds the global minimum.”</p>
+</blockquote>
+<p>That is <strong>not</strong> a general statement about neural-network training.</p>
+<p>The guaranteed geometry you saw for convex least squares should not automatically be transferred to deep networks.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: Saddle Points -->
+  <section id="s-19" data-search-section="Saddle Points" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>19. Saddle Points</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A saddle point is a point that can look flat in some directions while still allowing the function to decrease in other directions.</p>
+<p>A visual analogy:</p>
+<div class="ascii-box"><pre>\        /
+       \      /
+        \____/
+        /    \
+       /      \</pre></div>
+<p>A point can behave like a minimum along one direction and a maximum-like turning point along another.</p>
+<p>This is why:</p>
+<div class="formula-math">\[
+\nabla J=0
+\]</div>
+<p>does not universally mean:</p>
+<blockquote>
+<p>“We have reached the unique global minimum.”</p>
+</blockquote>
+<p>It means only that the first-order slope information is zero at that point.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: Stopping Conditions -->
+  <section id="s-20" data-search-section="Stopping Conditions" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>20. Stopping Conditions</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Gradient-based training can stop for several reasons.</p>
+<h3>Small parameter change</h3>
+<div class="formula-math">\[
+\|\theta_{t+1}-\theta_t\|
+\lt \varepsilon
+\]</div>
+<h3>Small gradient</h3>
+<div class="formula-math">\[
+\|\nabla J(\theta_t)\|\lt \varepsilon
+\]</div>
+<h3>Loss improvement becomes small</h3>
+<div class="formula-math">\[
+|J_{t+1}-J_t|\lt \varepsilon
+\]</div>
+<h3>Fixed training budget</h3>
+<p>For example:</p>
+<div class="ascii-box"><pre>Stop after K epochs</pre></div>
+<p>In practical ML, stopping is usually a training-design decision rather than simply “keep updating until the formula becomes exactly zero.”</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: Gradient Descent vs Closed-Form Solutions -->
+  <section id="s-21" data-search-section="Gradient Descent vs Closed-Form Solutions" class="content-section">
+    <div class="section-header">
+      <h2>21. Gradient Descent vs Closed-Form Solutions</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Compare two situations.</p>
+<h3>Least-squares linear regression</h3>
+<p>For suitable assumptions, we can derive a closed-form solution.</p>
+<h3>Neural network</h3>
+<p>With many layers and nonlinear activations, a simple closed-form parameter solution is generally unavailable.</p>
+<p>So we use iterative optimization:</p>
+<div class="ascii-box"><pre>Initial parameters
+      ↓
+Gradient
+      ↓
+Update
+      ↓
+Gradient
+      ↓
+Update
+      ↓
+...</pre></div>
+<p>This difference is conceptually important.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: Worked Neural Example — A Single Trainable Weight -->
+  <section id="s-22" data-search-section="Worked Neural Example — A Single Trainable Weight" class="content-section">
+    <div class="section-header">
+      <h2>22. Worked Neural Example — A Single Trainable Weight</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a one-parameter toy model is:</p>
+<div class="formula-math">\[
+\hat y=wx.
+\]</div>
+<p>Take one training example:</p>
+<div class="formula-math">\[
+x=2,\qquad y=6.
+\]</div>
+<p>Use squared loss:</p>
+<div class="formula-math">\[
+J(w)=\frac12(wx-y)^2.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+J(w)=\frac12(2w-6)^2.
+\]</div>
+<p>We can differentiate:</p>
+<div class="formula-math">\[
+\frac{dJ}{dw}
+=
+(2w-6)(2)
+=4w-12.
+\]</div>
+<p>Suppose:</p>
+<div class="formula-math">\[
+w=1,
+\qquad \eta=0.1.
+\]</div>
+<p>Gradient:</p>
+<div class="formula-math">\[
+4(1)-12=-8.
+\]</div>
+<p>Update:</p>
+<div class="formula-math">\[
+w_{new}=1-0.1(-8)=1.8.
+\]</div>
+<p>Prediction before update:</p>
+<div class="formula-math">\[
+\hat y=1(2)=2.
+\]</div>
+<p>Prediction after update:</p>
+<div class="formula-math">\[
+\hat y=1.8(2)=3.6.
+\]</div>
+<p>The weight moved in a direction that improves the fit for this example.</p>
+<p>This is a deliberately tiny model so that every training step can be seen explicitly.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: Why the Gradient Is Not “the Answer” -->
+  <section id="s-23" data-search-section="Why the Gradient Is Not “the Answer”" class="content-section">
+    <div class="section-header">
+      <h2>23. Why the Gradient Is Not “the Answer”</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The gradient is a <strong>local direction signal</strong>, not a complete future plan.</p>
+<p>Suppose the landscape curves strongly.</p>
+<p>A direction that looks excellent at the current point might lead into a region where the geometry changes.</p>
+<p>That is why the algorithm repeatedly recomputes the gradient.</p>
+<div class="ascii-box"><pre>Current point
+   ↓
+Local information
+   ↓
+Small movement
+   ↓
+New point
+   ↓
+New local information</pre></div>
+<p>This is the same reason a hiking analogy should not be interpreted as “one gradient tells you the whole route.”</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: Gradient Descent and Backpropagation — Do Not Confuse Them -->
+  <section id="s-24" data-search-section="Gradient Descent and Backpropagation — Do Not Confuse Them" class="content-section">
+    <div class="section-header">
+      <h2>24. Gradient Descent and Backpropagation — Do Not Confuse Them</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This distinction is exam-critical.</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Question</th>
+<th>Gradient Descent</th>
+<th>Backpropagation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Main job</td>
+<td>Update parameters</td>
+<td>Compute gradients efficiently</td>
+</tr>
+<tr>
+<td>Key equation</td>
+<td>\(\theta\leftarrow\theta-\eta\nabla J\)</td>
+<td>Chain-rule recursion through layers</td>
+</tr>
+<tr>
+<td>Needs derivatives?</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Works only for neural networks?</td>
+<td>No</td>
+<td>Primarily taught for layered differentiable networks</td>
+</tr>
+<tr>
+<td>Where used?</td>
+<td>Regression, neural nets, many optimizers</td>
+<td>Neural-network training</td>
+</tr>
+</tbody>
+</table></div>
+<h3>One-sentence memory anchor</h3>
+<blockquote>
+<p><strong>Backprop tells you how wrong each parameter was; gradient descent decides how to change it.</strong></p>
+</blockquote>
+<p>The sentence is intentionally simplified. More precisely, backpropagation computes derivatives of a loss with respect to intermediate quantities and parameters; an optimizer then uses those gradients to update the parameters.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: Common Misconceptions -->
+  <section id="s-25" data-search-section="Common Misconceptions" class="content-section">
+    <div class="section-header">
+      <h2>25. Common Misconceptions</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Misconception 1 — “The gradient points toward the minimum.”</h2>
+<p>Not generally.</p>
+<p>The gradient points toward steepest local <strong>increase</strong>.</p>
+<p>Gradient descent moves in the opposite direction.</p>
+<hr />
+<h2>Misconception 2 — “A zero gradient always means the global minimum.”</h2>
+<p>Not for a general non-convex neural-network objective.</p>
+<hr />
+<h2>Misconception 3 — “Large learning rate means faster training.”</h2>
+<p>It can mean larger steps, but excessively large steps can overshoot or become unstable.</p>
+<hr />
+<h2>Misconception 4 — “One epoch means one update.”</h2>
+<p>No.</p>
+<p>An epoch is one pass through the dataset; the number of updates depends on batch size.</p>
+<hr />
+<h2>Misconception 5 — “Backpropagation and gradient descent are the same algorithm.”</h2>
+<p>They are related but distinct mechanisms.</p>
+<hr />
+<h2>Misconception 6 — “More epochs are always better.”</h2>
+<p>Training longer can reduce training loss while eventually hurting generalization if the model begins to overfit.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: Formula Card -->
+  <section id="s-26" data-search-section="Formula Card" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>26. Formula Card</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="diagram-box"><pre class="mermaid">
+flowchart TD
+    START(["Compute Gradient gₜ = ∇J(w)"]) --> M1["Update First Moment (Direction Momentum):<br/>mₜ = β₁ mₜ₋₁ + (1 - β₁) gₜ"]
+    START --> M2["Update Second Moment (Adaptive Learning Rate):<br/>vₜ = β₂ vₜ₋₁ + (1 - β₂) gₜ²"]
+    M1 --> BC1["Bias Correction:<br/>m̂ₜ = mₜ / (1 - β₁ᵗ)"]
+    M2 --> BC2["Bias Correction:<br/>v̂ₜ = vₜ / (1 - β₂ᵗ)"]
+    BC1 --> UPDATE["Parameter Update:<br/>w ← w - η · m̂ₜ / (√v̂ₜ + ε)"]
+    BC2 --> UPDATE
+    UPDATE --> DONE(["Adam Optimizer Step Finished ⚡"])
+</pre></div>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+class AdamOptimizer:
+    def __init__(self, lr=0.001, beta1=0.9, beta2=0.999, eps=1e-8):
+        self.lr = lr
+        self.beta1 = beta1
+        self.beta2 = beta2
+        self.eps = eps
+        self.m = None
+        self.v = None
+        self.t = 0
+
+    def update(self, w, grad):
+        if self.m is None:
+            self.m = np.zeros_like(grad)
+            self.v = np.zeros_like(grad)
+        
+        self.t += 1
+        self.m = self.beta1 * self.m + (1.0 - self.beta1) * grad
+        self.v = self.beta2 * self.v + (1.0 - self.beta2) * (grad ** 2)
+        
+        m_hat = self.m / (1.0 - self.beta1 ** self.t)
+        v_hat = self.v / (1.0 - self.beta2 ** self.t)
+        
+        w_next = w - self.lr * m_hat / (np.sqrt(v_hat) + self.eps)
+        return w_next
+
+opt = AdamOptimizer(lr=0.1)
+w = np.array([2.0, -3.0])
+grad = np.array([10.0, 0.01])
+w_updated = opt.update(w, grad)
+print(&quot;Original weights:&quot;, w)
+print(&quot;Updated weights:&quot;, w_updated.round(4))</code></pre></div>
+<blockquote>
+<h2>GRADIENT DESCENT</h2>
+</blockquote>
+<div class="formula-math">\[
+\gt  \boxed{\theta\leftarrow\theta-\eta\nabla_\theta J(\theta)}
+\gt  \]</div>
+<blockquote>
+<p><strong>Meaning:</strong> move parameters opposite the local steepest-increase direction.</p>
+<p><strong>Symbols:</strong></p>
+<ul>
+<li>\(\theta\): trainable parameters</li>
+<li>\(J\): objective/loss</li>
+<li>\(\nabla_\theta J\): gradient with respect to parameters</li>
+<li>\(\eta\): learning rate</li>
+</ul>
+<p><strong>Trigger:</strong> “Update the weights using gradient descent.”</p>
+<p><strong>Common mistake:</strong> forgetting the negative sign.</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: Formula Card — Mini-Batch Gradient -->
+  <section id="s-27" data-search-section="Formula Card — Mini-Batch Gradient" class="content-section">
+    <div class="section-header">
+      <h2>27. Formula Card — Mini-Batch Gradient</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="formula-math">\[
+\boxed{
+\theta
+\leftarrow
+\theta-
+\eta
+\frac1{|B|}
+\sum_{i\in B}
+\nabla_\theta\ell_i(\theta)
+}
+\]</div>
+<p>Read it as:</p>
+<blockquote>
+<p>Calculate the average gradient over the chosen mini-batch and take one downhill step.</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: Algorithm — Gradient Descent -->
+  <section id="s-28" data-search-section="Algorithm — Gradient Descent" class="content-section">
+    <div class="section-header">
+      <h2>28. Algorithm — Gradient Descent</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Problem</h2>
+<p>Minimize a differentiable objective:</p>
+<div class="formula-math">\[
+J(\theta).
+\]</div>
+<h2>Inputs</h2>
+<ul>
+<li>objective function;</li>
+<li>initial parameters;</li>
+<li>learning rate \(\eta\);</li>
+<li>stopping condition.</li>
+</ul>
+<h2>Procedure</h2>
+<div class="ascii-box"><pre>1. Initialize θ
+2. Repeat:
+      a. Compute J(θ)
+      b. Compute ∇θ J(θ)
+      c. θ ← θ − η ∇θ J(θ)
+3. Stop according to the chosen criterion
+4. Return θ</pre></div>
+<h2>In a neural network</h2>
+<p>The “compute gradient” step is normally supplied efficiently by backpropagation.</p>
+<p>So practical training becomes:</p>
+<div class="ascii-box"><pre>Forward pass
+→ loss
+→ backpropagation
+→ gradients
+→ optimizer update</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 29: Complexity Intuition -->
+  <section id="s-29" data-search-section="Complexity Intuition" class="content-section">
+    <div class="section-header">
+      <h2>29. Complexity Intuition</h2>
+      <button class="bookmark-btn" data-id="s-29" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For a parameter vector with \(P\) trainable parameters, one update conceptually involves computing information related to those parameters and the selected batch.</p>
+<p>The exact computational cost depends on:</p>
+<ul>
+<li>number of layers;</li>
+<li>matrix dimensions;</li>
+<li>batch size;</li>
+<li>activation functions;</li>
+<li>architecture;</li>
+<li>implementation details.</li>
+</ul>
+<p>For a dense layer with weight matrix:</p>
+<div class="formula-math">\[
+W\in\mathbb R^{d_{out}\times d_{in}},
+\]</div>
+<p>the number of weights is:</p>
+<div class="formula-math">\[
+d_{out}d_{in}.
+\]</div>
+<p>Gradient computation must produce a derivative for every trainable parameter.</p>
+<p>The important conceptual point is:</p>
+<blockquote>
+<p><strong>A neural network may have a huge parameter space, so efficient gradient computation is essential.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 30: Connection to Regularization -->
+  <section id="s-30" data-search-section="Connection to Regularization" class="content-section">
+    <div class="section-header">
+      <h2>30. Connection to Regularization</h2>
+      <button class="bookmark-btn" data-id="s-30" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You already learned:</p>
+<div class="formula-math">\[
+J_{reg}(\theta)
+=
+J_{data}(\theta)+\lambda\Omega(\theta).
+\]</div>
+<p>Gradient descent can optimize this regularized objective too.</p>
+<p>Then:</p>
+<div class="formula-math">\[
+\nabla J_{reg}
+=
+\nabla J_{data}+
+\lambda\nabla\Omega
+\]</div>
+<p>when the penalty is differentiable at the point considered.</p>
+<p>So regularization changes the objective being optimized; gradient descent remains the optimization mechanism.</p>
+<p>This connects Unit II Ridge/Lasso to Unit III neural-network training.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 31: Advanced Optimizers — Preview Only -->
+  <section id="s-31" data-search-section="Advanced Optimizers — Preview Only" class="content-section">
+    <div class="section-header">
+      <h2>31. Advanced Optimizers — Preview Only</h2>
+      <button class="bookmark-btn" data-id="s-31" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Many practical systems use optimizer variants that modify plain gradient descent.</p>
+<p>Examples include:</p>
+<ul>
+<li>momentum-based methods;</li>
+<li>AdaGrad;</li>
+<li>RMSProp;</li>
+<li>Adam.</li>
+</ul>
+<p>These methods add mechanisms such as accumulated directional information or adaptive step scaling.</p>
+<p>They are useful to know as terminology, but they do not replace the core conceptual sequence:</p>
+<div class="ascii-box"><pre>loss
+→ gradients
+→ parameter update</pre></div>
+<p>The immediate syllabus core here remains gradient descent.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 32: Active Recall — Close the Book -->
+  <section id="s-32" data-search-section="Active Recall — Close the Book" class="content-section">
+    <div class="section-header">
+      <h2>32. Active Recall — Close the Book</h2>
+      <button class="bookmark-btn" data-id="s-32" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Answer without looking:</p>
+<ol>
+<li>What optimization problem does neural-network training solve?</li>
+<li>Define a gradient.</li>
+<li>Why does the gradient point toward local increase?</li>
+<li>Write the gradient-descent update equation.</li>
+<li>What does the learning rate control?</li>
+<li>What can happen when the learning rate is too large?</li>
+<li>What can happen when it is too small?</li>
+<li>Distinguish parameter, gradient and learning rate.</li>
+<li>Distinguish batch, stochastic and mini-batch gradient descent.</li>
+<li>Define an epoch.</li>
+<li>Distinguish an epoch from an update.</li>
+<li>Why does initialization matter?</li>
+<li>Why is neural-network optimization generally more complicated than convex least squares?</li>
+<li>What is a saddle point?</li>
+<li>Distinguish backpropagation from gradient descent.</li>
+<li>Why can feature scaling help gradient-based optimization?</li>
+<li>What happens when the gradient is zero?</li>
+<li>Why is zero gradient not automatically a global minimum?</li>
+<li>How does regularization alter the objective?</li>
+<li>What part of training does backpropagation provide to the optimizer?</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 33: Practice Set -->
+  <section id="s-33" data-search-section="Practice Set" class="content-section">
+    <div class="section-header">
+      <h2>33. Practice Set</h2>
+      <button class="bookmark-btn" data-id="s-33" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>A. Direct numericals</h2>
+<h3>Q1</h3>
+<p>Given:</p>
+<div class="formula-math">\[
+w=4,\quad \frac{dJ}{dw} = 6,\quad \eta=0.2,
+\]</div>
+<p>compute the updated weight.</p>
+<h3>Q2</h3>
+<p>Given:</p>
+<div class="formula-math">\[
+\theta=
+\begin{bmatrix}
+2\\-1
+\end{bmatrix},
+\quad
+\nabla J=
+\begin{bmatrix}
+3\\-4
+\end{bmatrix},
+\quad
+\eta=0.1,
+\]</div>
+<p>compute the new parameter vector.</p>
+<h3>Q3</h3>
+<p>For:</p>
+<div class="formula-math">\[
+J(w)=(w-5)^2,
+\]</div>
+<p>find the derivative and perform one update from \(w=1\) with \(\eta=0.1\).</p>
+<hr />
+<h2>B. Conceptual</h2>
+<h3>Q4</h3>
+<p>Why is the negative gradient used?</p>
+<h3>Q5</h3>
+<p>Why is mini-batch gradient descent often described as a compromise between full-batch and one-example updates?</p>
+<h3>Q6</h3>
+<p>Explain why backpropagation and gradient descent are not synonymous.</p>
+<hr />
+<h2>C. Exam numerical</h2>
+<h3>Q7</h3>
+<p>A model has:</p>
+<div class="formula-math">\[
+\theta=(2,-3,1)
+\]</div>
+<p>and gradient:</p>
+<div class="formula-math">\[
+\nabla J=(4,-2,6).
+\]</div>
+<p>For \(\eta=0.05\), calculate the updated parameters.</p>
+<hr />
+<h2>D. Explanation</h2>
+<h3>Q8</h3>
+<p>Explain gradient descent using the mountain analogy and then give the mathematical update.</p>
+<h3>Q9</h3>
+<p>Compare batch, stochastic and mini-batch gradient descent.</p>
+<h3>Q10</h3>
+<p>Explain how gradient descent is connected to neural-network training.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 34: University Exam Lens -->
+  <section id="s-34" data-search-section="University Exam Lens" class="content-section">
+    <div class="section-header">
+      <h2>34. University Exam Lens</h2>
+      <button class="bookmark-btn" data-id="s-34" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>2-Mark Questions</h2>
+<ul>
+<li>Define gradient descent.</li>
+<li>What is a gradient?</li>
+<li>State the gradient-descent update rule.</li>
+<li>Define learning rate.</li>
+<li>What is an epoch?</li>
+<li>What is mini-batch gradient descent?</li>
+<li>Differentiate gradient descent and backpropagation.</li>
+</ul>
+<h2>5-Mark Questions</h2>
+<blockquote>
+<p>Explain the gradient-descent algorithm with a suitable example.</p>
+</blockquote>
+<p>Suggested answer sequence:</p>
+<ol>
+<li>Define optimization objective.</li>
+<li>Define gradient.</li>
+<li>Explain negative-gradient direction.</li>
+<li>Write update equation.</li>
+<li>Explain learning rate.</li>
+<li>Give one numerical step.</li>
+</ol>
+<h2>5-Mark Comparison</h2>
+<blockquote>
+<p>Compare batch, stochastic and mini-batch gradient descent.</p>
+</blockquote>
+<p>Include:</p>
+<ul>
+<li>amount of data per update;</li>
+<li>update stability;</li>
+<li>computational cost per update;</li>
+<li>typical interpretation.</li>
+</ul>
+<h2>10-Mark Question</h2>
+<blockquote>
+<p>Explain how gradient descent trains a neural network.</p>
+</blockquote>
+<p>Recommended structure:</p>
+<ol>
+<li>Define network parameters.</li>
+<li>Define loss/objective.</li>
+<li>Explain forward pass.</li>
+<li>Explain gradient.</li>
+<li>State gradient-descent equation.</li>
+<li>Explain learning rate.</li>
+<li>Explain batch/mini-batch training.</li>
+<li>Explain repeated updates.</li>
+<li>Distinguish backpropagation from optimization.</li>
+<li>Mention practical issues such as scaling, initialization and non-convexity.</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 35: Memory Anchors -->
+  <section id="s-35" data-search-section="Memory Anchors" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>35. Memory Anchors</h2>
+      <button class="bookmark-btn" data-id="s-35" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Gradient</h3>
+<blockquote>
+<p><strong>How fast and in which parameter direction is the loss increasing?</strong></p>
+</blockquote>
+<h3>Gradient descent</h3>
+<blockquote>
+<p><strong>Move opposite the gradient.</strong></p>
+</blockquote>
+<h3>Learning rate</h3>
+<blockquote>
+<p><strong>How big a step should I take?</strong></p>
+</blockquote>
+<h3>Batch</h3>
+<blockquote>
+<p><strong>Everyone votes before one update.</strong></p>
+</blockquote>
+<h3>SGD</h3>
+<blockquote>
+<p><strong>One example gives the next update.</strong></p>
+</blockquote>
+<h3>Mini-batch</h3>
+<blockquote>
+<p><strong>A small group votes together.</strong></p>
+</blockquote>
+<h3>Backpropagation</h3>
+<blockquote>
+<p><strong>Efficiently distribute derivative information backward through the network.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 36: Resource Shelf -->
+  <section id="s-36" data-search-section="Resource Shelf" class="content-section">
+    <div class="section-header">
+      <h2>36. Resource Shelf</h2>
+      <button class="bookmark-btn" data-id="s-36" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Core supplied resources</h2>
+<h3><code>prac_7_neural_network.ipynb</code></h3>
+<p>Use as the practical companion for neuron parameters, activations, losses and gradient-descent concepts.</p>
+<h3><code>Lecture10 copy.pdf</code></h3>
+<p>Use to connect optimization to the earlier discussion of flexible learned representations and regularized learning.</p>
+<h2>Focused external reinforcement</h2>
+<ul>
+<li><strong>StatQuest — Gradient Descent, Step-by-Step</strong> — use for visual intuition after reading this chapter.</li>
+<li><strong>NPTEL — Introduction to Machine Learning</strong> — use for a longer-form mathematical/course treatment.</li>
+<li><strong>3Blue1Brown — calculus material</strong> — use when derivative and gradient geometry still feel abstract.</li>
+</ul>
+<p>The resource guide explicitly places gradient descent in the Unit III learning order after neural foundations and before backpropagation, and identifies <code>prac_7_neural_network.ipynb</code> as a core practical companion.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 37: Course Lens and Scope Boundary -->
+  <section id="s-37" data-search-section="Course Lens and Scope Boundary" class="content-section">
+    <div class="section-header">
+      <h2>37. Course Lens and Scope Boundary</h2>
+      <button class="bookmark-btn" data-id="s-37" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied resource mapping supports the following chain:</p>
+<div class="ascii-box"><pre>Neuron
+↓
+Perceptron / MLP
+↓
+Activations + losses
+↓
+Gradient descent
+↓
+Backpropagation
+↓
+CNN / RNN / LSTM</pre></div>
+<p>The supplied <code>prac_7_neural_network.ipynb</code> is mapped to gradient-descent concepts, while the resource guide lists gradient descent as a core Unit III topic. The complete calculus-based optimization exposition above is a standard expansion intended to make the course topic learnable from first principles; it should not be read as a claim that every displayed derivation appears verbatim in the practical notebook.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 38: Math Companion Links -->
+  <section id="s-38" data-search-section="Math Companion Links" class="content-section">
+    <div class="section-header">
+      <h2>38. Math Companion Links</h2>
+      <button class="bookmark-btn" data-id="s-38" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <ul>
+<li><code>MATH-CALC-01</code> — Functions and derivatives</li>
+<li><code>MATH-CALC-03</code> — Partial derivatives</li>
+<li><code>MATH-CALC-05</code> — Gradients</li>
+<li><code>MATH-CALC-07</code> — Chain rule</li>
+<li><code>MATH-OPT-01</code> — Objective functions</li>
+<li><code>MATH-OPT-03</code> — Gradient descent</li>
+<li><code>MATH-OPT-05</code> — Convexity and stationary points</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 39: Chapter Exit Test -->
+  <section id="s-39" data-search-section="Chapter Exit Test" class="content-section">
+    <div class="section-header">
+      <h2>39. Chapter Exit Test</h2>
+      <button class="bookmark-btn" data-id="s-39" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You are ready for C35 when you can:</p>
+<ul>
+<li>[ ] define an objective function;</li>
+<li>[ ] compute a derivative;</li>
+<li>[ ] explain a gradient geometrically;</li>
+<li>[ ] write the gradient-descent update;</li>
+<li>[ ] perform a vector update numerically;</li>
+<li>[ ] explain the learning rate;</li>
+<li>[ ] explain too-small and too-large learning rates;</li>
+<li>[ ] distinguish batch, SGD and mini-batch methods;</li>
+<li>[ ] define an epoch;</li>
+<li>[ ] explain initialization conceptually;</li>
+<li>[ ] distinguish convex from non-convex optimization;</li>
+<li>[ ] distinguish a gradient from a global optimization guarantee;</li>
+<li>[ ] explain the role of backpropagation;</li>
+<li>[ ] connect regularization to the optimized objective.</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 40: Connection to the Next Topic -->
+  <section id="s-40" data-search-section="Connection to the Next Topic" class="content-section">
+    <div class="section-header">
+      <h2>40. Connection to the Next Topic</h2>
+      <button class="bookmark-btn" data-id="s-40" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Gradient descent tells us what to do <strong>once we know the gradient</strong>.</p>
+<p>A deep network, however, may contain thousands or millions of parameters connected through many layers.</p>
+<p>So the next question is:</p>
+<blockquote>
+<p><strong>How can we efficiently calculate the loss derivative with respect to every weight and bias by using the chain rule?</strong></p>
+</blockquote>
+<p>That is the purpose of:</p>
+<p><strong><code>MAIN-U3-C35 — Backpropagation</code>.</strong></p>
+<hr />
+<h1>Status</h1>
+<p><strong><code>ML-U3-C34</code> — COMPLETE</strong></p>
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="ch33-activations-and-loss-functions.html" class="nav-btn">← Ch 33 — Activations & Loss Functions</a>
+    <a href="ch35-backpropagation.html" class="nav-btn primary">Next: Ch 35 — Backpropagation & Chain Rule →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch34-gradient-descent-optimization.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 34</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

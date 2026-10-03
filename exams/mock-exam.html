@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Arpit">
+  <meta name="description" content="AI & Machine Learning Mock Examination Simulator">
+  <title>Mock Exam Simulator | AIML MiniBook 🤖 Arpit</title>
+
+  <link rel="manifest" href="../manifest.json">
+  <meta name="theme-color" content="#17365D">
+
+  <link rel="stylesheet" href="../assets/css/main.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <link rel="stylesheet" href="../assets/css/animations.css">
+  <link rel="stylesheet" href="../assets/css/timer.css">
+  <link rel="stylesheet" href="../assets/css/chapters.css">
+
+  <style>
+    .exam-header-card {
+      background: var(--em-surface-1);
+      border: 1px solid var(--em-border);
+      border-radius: var(--em-radius-lg);
+      padding: var(--em-space-6);
+      margin-bottom: var(--em-space-6);
+    }
+    .filter-bar {
+      display: flex;
+      gap: var(--em-space-2);
+      flex-wrap: wrap;
+      margin: var(--em-space-4) 0;
+    }
+    .filter-btn {
+      padding: 6px 14px;
+      border-radius: var(--em-radius-sm);
+      border: 1px solid var(--em-border);
+      background: var(--em-surface-2);
+      color: var(--em-text-secondary);
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--em-motion-fast) var(--em-ease);
+    }
+    .filter-btn:hover {
+      border-color: var(--em-border-strong);
+      color: var(--em-text);
+    }
+    .filter-btn.active {
+      background: var(--em-accent);
+      color: #FFFFFF;
+      border-color: var(--em-accent);
+    }
+    .score-card {
+      background: var(--em-surface-2);
+      border: 1px solid var(--em-border);
+      border-radius: var(--em-radius-md);
+      padding: var(--em-space-4);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--em-space-6);
+    }
+    .q-card {
+      background: var(--em-surface-1);
+      border: 1px solid var(--em-border);
+      border-radius: var(--em-radius-md);
+      padding: var(--em-space-5);
+      margin-bottom: var(--em-space-5);
+    }
+    .q-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--em-space-3);
+    }
+    .q-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--em-radius-full);
+      background: var(--em-surface-2);
+      color: var(--em-text-muted);
+    }
+    .q-text {
+      font-size: 1.02rem;
+      font-weight: 600;
+      line-height: 1.55;
+      color: var(--em-text);
+      margin-bottom: var(--em-space-4);
+    }
+    .q-opts {
+      display: flex;
+      flex-direction: column;
+      gap: var(--em-space-2);
+    }
+    .q-opt {
+      padding: 10px 14px;
+      border-radius: var(--em-radius-sm);
+      border: 1px solid var(--em-border);
+      background: var(--em-surface-2);
+      font-size: 0.90rem;
+      color: var(--em-text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all var(--em-motion-fast) var(--em-ease);
+    }
+    .q-opt:hover {
+      background: var(--em-surface-3);
+      border-color: var(--em-accent);
+    }
+    .q-opt.correct {
+      background: var(--tint-practice-bg) !important;
+      border-color: var(--success) !important;
+      color: var(--tint-practice-text) !important;
+      font-weight: 700;
+    }
+    .q-opt.wrong {
+      background: var(--tint-caution-bg) !important;
+      border-color: var(--danger) !important;
+      color: var(--tint-caution-text) !important;
+    }
+    .q-exp {
+      margin-top: var(--em-space-4);
+      padding: var(--em-space-3) var(--em-space-4);
+      background: var(--em-surface-2);
+      border-left: 3px solid var(--em-accent);
+      border-radius: var(--em-radius-sm);
+      font-size: 0.86rem;
+      line-height: 1.55;
+      color: var(--em-text-secondary);
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="progress-bar"></div>
+
+  <!-- HEADER -->
+  <header id="main-header">
+    <div class="header-left">
+      <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle Navigation">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <a href="../index.html" class="brand-logo">
+        <div class="brand-icon">🤖</div>
+        <div class="brand-text">
+          <span class="main">AIML MiniBook</span>
+          <span class="sub">Mock Exam Suite</span>
+        </div>
+      </a>
+    </div>
+
+    <span class="header-chapter-title">Examination Simulator</span>
+
+    <div class="header-right">
+      <a href="../index.html" class="icon-btn" title="Home Portal">🏠</a>
+      <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)"></button>
+    </div>
+  </header>
+
+  <!-- SIDEBAR -->
+  <div id="sidebar-overlay"></div>
+  <aside id="sidebar">
+    <nav class="sidebar-nav">
+      <div class="sidebar-section">
+        <div class="sidebar-section-label">Navigation</div>
+        <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+        <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+        <a href="mock-exam.html" class="sidebar-link active"><span class="link-icon">📝</span>Mock Exam Simulator</a>
+        <a href="unit-quiz.html" class="sidebar-link"><span class="link-icon">⚡</span>Custom Quiz Builder</a>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- MAIN READING CANVAS -->
+  <main id="main-content">
+    <div class="content-inner">
+
+      <div class="exam-header-card">
+        <span class="part-banner part-i">Mock Examination Suite</span>
+        <h1 style="font-family:var(--font-display); font-size:1.8rem; margin:10px 0 6px;">AI &amp; Machine Learning Examination Simulator</h1>
+        <p style="color:var(--em-text-secondary); font-size:0.92rem;">Test your conceptual understanding and exam readiness across Units I and II.</p>
+
+        <div class="filter-bar">
+          <button class="filter-btn active" onclick="filterQuiz('all', this)">All Curriculum</button>
+          <button class="filter-btn" onclick="filterQuiz('Unit I', this)">Unit I (AI &amp; Search)</button>
+          <button class="filter-btn" onclick="filterQuiz('Unit II', this)">Unit II (Machine Learning)</button>
+          <button class="filter-btn" onclick="filterQuiz('Unit III', this)">Unit III (Deep Learning)</button>
+        </div>
+      </div>
+
+      <div class="score-card">
+        <div><strong>Current Score:</strong> <span id="score-display">0 / 0</span></div>
+        <button class="action-btn" onclick="resetQuiz()">🔄 Reset Exam</button>
+      </div>
+
+      <div id="quiz-container"></div>
+
+    </div>
+  </main>
+
+  <script src="../assets/js/quiz-data.js"></script>
+  <script src="../assets/js/state.js"></script>
+  <script src="../assets/js/core.js"></script>
+  <script>
+    let activeFilter = 'all';
+    let userAnswers = {};
+
+    function renderQuiz() {
+      const container = document.getElementById('quiz-container');
+      const questions = (typeof AIML_QUIZ_DATA !== 'undefined' ? AIML_QUIZ_DATA : []).filter(q => {
+        if (activeFilter === 'all') return true;
+        return q.unit === activeFilter;
+      });
+
+      if (!questions.length) {
+        container.innerHTML = '<p style="color:var(--em-text-muted)">No questions available for this unit yet.</p>';
+        return;
+      }
+
+      container.innerHTML = questions.map((q, idx) => `
+        <div class="q-card" id="q-${q.id}">
+          <div class="q-header">
+            <span class="q-tag">${q.unit} · ${q.topic}</span>
+            <span class="q-tag">${q.diff}</span>
+          </div>
+          <div class="q-text">${idx + 1}. ${q.q}</div>
+          <div class="q-opts">
+            ${q.options.map((opt, oIdx) => `
+              <div class="q-opt" onclick="selectAnswer(${q.id}, ${oIdx}, ${q.ans})">
+                <span style="font-weight:700; width:20px;">${String.fromCharCode(65 + oIdx)}.</span>
+                <span>${opt}</span>
+              </div>
+            `).join('')}
+          </div>
+          <div class="q-exp" id="exp-${q.id}">
+            <strong>Explanation:</strong> ${q.exp}
+          </div>
+        </div>
+      `).join('');
+
+      updateScore();
+    }
+
+    function selectAnswer(qId, selectedIdx, correctIdx) {
+      if (userAnswers[qId] !== undefined) return; // already answered
+      userAnswers[qId] = selectedIdx;
+
+      const card = document.getElementById(`q-${qId}`);
+      const opts = card.querySelectorAll('.q-opt');
+      opts[correctIdx].classList.add('correct');
+      if (selectedIdx !== correctIdx) {
+        opts[selectedIdx].classList.add('wrong');
+      }
+
+      const exp = document.getElementById(`exp-${qId}`);
+      if (exp) exp.style.display = 'block';
+
+      updateScore();
+    }
+
+    function updateScore() {
+      let correct = 0;
+      let total = Object.keys(userAnswers).length;
+      (typeof AIML_QUIZ_DATA !== 'undefined' ? AIML_QUIZ_DATA : []).forEach(q => {
+        if (userAnswers[q.id] === q.ans) correct++;
+      });
+      document.getElementById('score-display').textContent = `${correct} / ${total} answered`;
+    }
+
+    function filterQuiz(unit, btn) {
+      activeFilter = unit;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      userAnswers = {};
+      renderQuiz();
+    }
+
+    function resetQuiz() {
+      userAnswers = {};
+      renderQuiz();
+    }
+
+    document.addEventListener('DOMContentLoaded', renderQuiz);
+  </script>
+</body>
+</html>

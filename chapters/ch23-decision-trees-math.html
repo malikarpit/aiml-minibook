@@ -1,0 +1,2473 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 23: Decision Trees Mathematics: Entropy, Information Gain &amp; Gini — AI & Machine Learning MiniBook. Shannon Entropy, Information Gain Weighted Reduction, Gini Impurity, Node vs Split Metrics, ID3 &amp; CART Foundations, and Multi-Class Extensions">
+<title>Ch 23 — Decision Trees Mathematics: Entropy, Information Gain &amp; Gini | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-viii">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 23 — Decision Trees Mathematics: Entropy, Information Gain &amp; Gini</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 23 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why This Mathematics Matters <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Math Prerequisite: Probabilities Inside a Node <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. The Pure Node <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. The Most Mixed Two-Class Node <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Entropy — First Intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Entropy Formula <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Formula Card — Entropy <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Entropy Worked Example — Pure Node <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Entropy Worked Example — 50/50 Node <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Entropy Worked Example — 80/20 <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Why Entropy Is a Good Fit for Trees </a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Information Gain — Intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Information Gain Formula <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Why Do We Need the Weighted Average? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Information Gain Worked Example <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Perfect Split Example </a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. A Bad Split </a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Decision-Tree Split Selection <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Gini Impurity — Why Another Measure? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Gini Formula <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Gini Worked Example — Pure Node <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Gini Worked Example — 50/50 <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Gini Worked Example — 80/20 <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Lower Gini Is Better for a Node </a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Entropy vs Gini <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Another Analogy — Cleaning a Classroom </a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. A Full Small Numerical Problem <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. The Same Problem with Gini <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Information Gain Is Not “Information” in Every Possible Sense </a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Why a Single Numerical Threshold Is Often Enough to Split </a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. The Geometry Behind Splits </a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Why Trees Can Represent Interactions Naturally </a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Statistical-Learning Connection </a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Entropy and Probability Connection </a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Logarithm Refresher </a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Why the Negative Sign Is There </a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. A Very Important Distinction: Node Impurity vs Split Quality </a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. What Happens with More Than Two Classes? <span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Maximum Entropy for K Classes <span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Maximum Gini for K Classes <span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Entropy vs Gini: Which One Should You Memorize? </a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Common Calculation Trap — Forgetting the Weights </a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Common Calculation Trap — Choosing the Wrong Direction </a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. A Complete Split-Selection Workflow <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. Exam Numerical Template <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-46" class="sidebar-link"><span class="link-icon">📌</span>46. Comparison Numerical — Two Candidate Splits <span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a>
+      <a href="#s-47" class="sidebar-link"><span class="link-icon">📌</span>47. Why Entropy and Gini Can Disagree Numerically but Similar in Practice </a>
+      <a href="#s-48" class="sidebar-link"><span class="link-icon">📌</span>48. Universal vs Course Lens </a>
+      <a href="#s-49" class="sidebar-link"><span class="link-icon">📌</span>49. Math Connections to Earlier Chapters </a>
+      <a href="#s-50" class="sidebar-link"><span class="link-icon">📌</span>50. Active Recall — Close the Book </a>
+      <a href="#s-51" class="sidebar-link"><span class="link-icon">📌</span>51. Practice Set </a>
+      <a href="#s-52" class="sidebar-link"><span class="link-icon">📌</span>52. Mini Formula Sheet <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-53" class="sidebar-link"><span class="link-icon">📌</span>53. Common Exam Traps </a>
+      <a href="#s-54" class="sidebar-link"><span class="link-icon">📌</span>54. Exam Lens <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-55" class="sidebar-link"><span class="link-icon">📌</span>55. Resource Shelf </a>
+      <a href="#s-56" class="sidebar-link"><span class="link-icon">📌</span>56. Chapter Exit Test <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link active"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit II</span><span>›</span><span>Part VIII — Decision Trees & Tree-Based Learning</span><span>›</span><span style="color:var(--em-text)">Chapter 23</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 23 · Unit II · Part VIII</div>
+    <div class="chapter-part-banner part-viii">
+      <span class="part-banner-badge">Unit II · Part VIII</span>
+      <span>Decision Trees & Tree-Based Learning</span>
+    </div>
+    <h1 class="chapter-title">Decision Trees Mathematics: Entropy, Information Gain &amp; Gini</h1>
+    <div class="concept-id-tag">[CONCEPT-ML-023]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: Highest Yield Mathematical Calculations</span>
+      <span class="chapter-meta-item">📖 ~60 min read</span>
+      <span class="chapter-meta-item">🎯 56 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>Decision Tree Mathematics & Split Criteria:</strong> Shannon Entropy \(H(S) = -\sum p_i \log_2 p_i\), Information Gain \(IG(S, A) = H(S) - \sum \frac{|S_v|}{|S|} H(S_v)\), Gini Impurity \(Gini(S) = 1 - \sum p_i^2\), Worked numerical problems on candidate splits, and ID3 vs CART split selection.</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why This Mathematics Matters</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Math Prerequisite: Probabilities Inside a Node</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">The Pure Node</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">The Most Mixed Two-Class Node</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Entropy — First Intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Entropy Formula</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Formula Card — Entropy</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Entropy Worked Example — Pure Node</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Entropy Worked Example — 50/50 Node</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Entropy Worked Example — 80/20</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Why Entropy Is a Good Fit for Trees</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Information Gain — Intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Information Gain Formula</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Why Do We Need the Weighted Average?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Information Gain Worked Example</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Perfect Split Example</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">A Bad Split</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Decision-Tree Split Selection</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Gini Impurity — Why Another Measure?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Gini Formula</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Gini Worked Example — Pure Node</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Gini Worked Example — 50/50</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Gini Worked Example — 80/20</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Lower Gini Is Better for a Node</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Entropy vs Gini</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Another Analogy — Cleaning a Classroom</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">A Full Small Numerical Problem</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">The Same Problem with Gini</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Information Gain Is Not “Information” in Every Possible Sense</span></a></li>
+      <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Why a Single Numerical Threshold Is Often Enough to Split</span></a></li>
+      <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">The Geometry Behind Splits</span></a></li>
+      <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Why Trees Can Represent Interactions Naturally</span></a></li>
+      <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Statistical-Learning Connection</span></a></li>
+      <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Entropy and Probability Connection</span></a></li>
+      <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Logarithm Refresher</span></a></li>
+      <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Why the Negative Sign Is There</span></a></li>
+      <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">A Very Important Distinction: Node Impurity vs Split Quality</span></a></li>
+      <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">What Happens with More Than Two Classes?</span><span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a></li>
+      <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Maximum Entropy for K Classes</span><span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a></li>
+      <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Maximum Gini for K Classes</span><span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a></li>
+      <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Entropy vs Gini: Which One Should You Memorize?</span></a></li>
+      <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Common Calculation Trap — Forgetting the Weights</span></a></li>
+      <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Common Calculation Trap — Choosing the Wrong Direction</span></a></li>
+      <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">A Complete Split-Selection Workflow</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">Exam Numerical Template</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-46"><span class="toc-num">46</span><span class="toc-name">Comparison Numerical — Two Candidate Splits</span><span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a></li>
+      <li class="toc-item"><a href="#s-47"><span class="toc-num">47</span><span class="toc-name">Why Entropy and Gini Can Disagree Numerically but Similar in Practice</span></a></li>
+      <li class="toc-item"><a href="#s-48"><span class="toc-num">48</span><span class="toc-name">Universal vs Course Lens</span></a></li>
+      <li class="toc-item"><a href="#s-49"><span class="toc-num">49</span><span class="toc-name">Math Connections to Earlier Chapters</span></a></li>
+      <li class="toc-item"><a href="#s-50"><span class="toc-num">50</span><span class="toc-name">Active Recall — Close the Book</span></a></li>
+      <li class="toc-item"><a href="#s-51"><span class="toc-num">51</span><span class="toc-name">Practice Set</span></a></li>
+      <li class="toc-item"><a href="#s-52"><span class="toc-num">52</span><span class="toc-name">Mini Formula Sheet</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-53"><span class="toc-num">53</span><span class="toc-name">Common Exam Traps</span></a></li>
+      <li class="toc-item"><a href="#s-54"><span class="toc-num">54</span><span class="toc-name">Exam Lens</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-55"><span class="toc-num">55</span><span class="toc-name">Resource Shelf</span></a></li>
+      <li class="toc-item"><a href="#s-56"><span class="toc-num">56</span><span class="toc-name">Chapter Exit Test</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+    </ul>
+  </div>
+
+  <div class="chapter-preamble-card"><h1>MAIN-U2-C23 — Decision Trees Mathematics: Entropy, Information Gain &amp; Gini</h1>
+<blockquote>
+<p><strong>Main Book:</strong> AI &amp; Machine Learning — Visual + Mathematical Self-Learning Textbook<br />
+<strong>Unit:</strong> II — Machine Learning Fundamentals<br />
+<strong>Topic ID:</strong> <code>ML-U2-C23</code><br />
+<strong>Prerequisites:</strong> <code>ML-U2-C22</code> Decision Trees, basic probability, fractions, logarithms, expectation/weighted average<br />
+<strong>University syllabus:</strong> Unit II — Decision Trees<br />
+<strong>Primary note status:</strong> The supplied lecture set does not contain a dedicated decision-tree mathematics lecture; this chapter is therefore an explicitly marked universal/external expansion.<br />
+<strong>External academic basis:</strong> NPTEL decision-tree material, <em>An Introduction to Statistical Learning</em>, and scikit-learn's mathematical formulation of classification-tree impurity.<br />
+<strong>Coding:</strong> Intentionally omitted here; implementation belongs to your separate coding workflow.</p>
+</blockquote>
+<hr /></div>
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 1: Why This Mathematics Matters -->
+  <section id="s-01" data-search-section="Why This Mathematics Matters" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>1. Why This Mathematics Matters</h2>
+      <button class="bookmark-btn" data-id="s-01" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>C22 gave you the picture:</p>
+<blockquote>
+<p><strong>At every node, choose a useful question.</strong></p>
+</blockquote>
+<p>But “useful” is vague.</p>
+<p>We need a number that lets us compare two candidate splits.</p>
+<p>That creates the mathematical problem:</p>
+<div class="ascii-box"><pre>How mixed is this node?
+        ↓
+How mixed are the children after a split?
+        ↓
+Did the split reduce the mixing?
+        ↓
+Choose the split with the better reduction</pre></div>
+<p>Three ideas become central:</p>
+<ol>
+<li><strong>Entropy</strong></li>
+<li><strong>Information Gain</strong></li>
+<li><strong>Gini Impurity</strong></li>
+</ol>
+<p>The same basic story sits underneath all three:</p>
+<blockquote>
+<p><strong>Measure impurity → evaluate a candidate split → choose a split that makes the child nodes cleaner.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 2: Math Prerequisite: Probabilities Inside a Node -->
+  <section id="s-02" data-search-section="Math Prerequisite: Probabilities Inside a Node" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. Math Prerequisite: Probabilities Inside a Node</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a node contains:</p>
+<ul>
+<li>8 examples of class A;</li>
+<li>2 examples of class B.</li>
+</ul>
+<p>Total:</p>
+<div class="formula-math">\[
+8+2=10
+\]</div>
+<p>The class proportions are:</p>
+<div class="formula-math">\[
+p_A=\frac{8}{10}=0.8
+\]</div>
+<div class="formula-math">\[
+p_B=\frac{2}{10}=0.2
+\]</div>
+<p>These proportions behave like a probability distribution over the classes inside that node.</p>
+<div class="ascii-box"><pre>Node
+├── A: 80%
+└── B: 20%</pre></div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> Node ke andar kaun kitna hai, uska percentage nikaalo. Ye percentages hi baad mein impurity calculate karne ke liye use honge.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: The Pure Node -->
+  <section id="s-03" data-search-section="The Pure Node" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>3. The Pure Node</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a node contains:</p>
+<div class="ascii-box"><pre>10 A
+0 B</pre></div>
+<p>Then:</p>
+<div class="formula-math">\[
+p_A=1,
+\qquad p_B=0
+\]</div>
+<p>There is no class uncertainty.</p>
+<p>The model can say:</p>
+<blockquote>
+<p>“Everything reaching this node is class A.”</p>
+</blockquote>
+<p>So the node is <strong>pure</strong>.</p>
+<p>A good impurity measure should therefore assign its minimum value to a pure node.</p>
+<p>For entropy and Gini impurity, that minimum is <strong>0</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: The Most Mixed Two-Class Node -->
+  <section id="s-04" data-search-section="The Most Mixed Two-Class Node" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>4. The Most Mixed Two-Class Node</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a node contains:</p>
+<div class="ascii-box"><pre>5 A
+5 B</pre></div>
+<p>Then:</p>
+<div class="formula-math">\[
+p_A=0.5,
+\qquad p_B=0.5
+\]</div>
+<p>The node is maximally uncertain for the two-class case.</p>
+<p>This gives the basic visual relationship:</p>
+<div class="ascii-box"><pre>Pure                  Most mixed
+100/0    90/10   70/30   50/50
+  ↓        ↓       ↓       ↓
+Low impurity  ─────────→  High impurity</pre></div>
+<p>Entropy and Gini quantify this idea differently.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: Entropy — First Intuition -->
+  <section id="s-05" data-search-section="Entropy — First Intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>5. Entropy — First Intuition</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Entropy measures uncertainty in a probability distribution.</p>
+<p>For a classification node:</p>
+<blockquote>
+<p><strong>High entropy = classes are mixed.</strong><br />
+<strong>Low entropy = one class dominates.</strong></p>
+</blockquote>
+<h3>Everyday analogy</h3>
+<p>Imagine a bag containing coloured balls.</p>
+<h3>Bag A</h3>
+<div class="ascii-box"><pre>10 red
+0 blue</pre></div>
+<p>You already know what you will pull.</p>
+<p>Very little uncertainty.</p>
+<h3>Bag B</h3>
+<div class="ascii-box"><pre>5 red
+5 blue</pre></div>
+<p>You are much less certain.</p>
+<p>Higher uncertainty → higher entropy.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: Entropy Formula -->
+  <section id="s-06" data-search-section="Entropy Formula" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>6. Entropy Formula</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For a node with classes \(1,2,\dots,K\):</p>
+<div class="formula-math">\[
+\boxed{
+H(S)=-\sum_{k=1}^{K}p_k\log_2 p_k
+}
+\]</div>
+<p>where:</p>
+<ul>
+<li>\(S\) = node/data subset;</li>
+<li>\(K\) = number of classes;</li>
+<li>\(p_k\) = proportion of examples belonging to class \(k\).</li>
+</ul>
+<h3>Important convention</h3>
+<p>When:</p>
+<div class="formula-math">\[
+p_k=0
+\]</div>
+<p>we take:</p>
+<div class="formula-math">\[
+p_k\log p_k=0
+\]</div>
+<p>by the standard limiting convention.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: Formula Card — Entropy -->
+  <section id="s-07" data-search-section="Formula Card — Entropy" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>7. Formula Card — Entropy</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Formula</h2>
+<div class="formula-math">\[
+H(S)=-\sum_{k=1}^{K}p_k\log_2p_k
+\]</div>
+<h2>Meaning</h2>
+<blockquote>
+<p>Average uncertainty associated with the class distribution.</p>
+</blockquote>
+<h2>Hinglish</h2>
+<blockquote>
+<p>“Node kitna mixed hai?”</p>
+</blockquote>
+<h2>Pure node</h2>
+<div class="formula-math">\[
+H=0
+\]</div>
+<h2>Two-class 50/50 node</h2>
+<div class="formula-math">\[
+H=1
+\]</div>
+<p>using \(\log_2\).</p>
+<h3>Why base 2?</h3>
+<p>Using base 2 expresses entropy in <strong>bits</strong>.</p>
+<p>The choice of log base changes the numerical scale consistently, not the basic ranking of splits when the same base is used throughout.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: Entropy Worked Example — Pure Node -->
+  <section id="s-08" data-search-section="Entropy Worked Example — Pure Node" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>8. Entropy Worked Example — Pure Node</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<div class="ascii-box"><pre>10 A
+0 B</pre></div>
+<p>Then:</p>
+<div class="formula-math">\[
+p_A=1,
+\quad p_B=0
+\]</div>
+<p>So:</p>
+<div class="formula-math">\[
+H
+=-\left(1\log_2 1+0\log_2 0\right)
+\]</div>
+<p>Using the standard zero-term convention:</p>
+<div class="formula-math">\[
+\log_2 1=0
+\]</div>
+<p>therefore:</p>
+<div class="formula-math">\[
+\boxed{H=0}
+\]</div>
+<h3>Interpretation</h3>
+<p>No class uncertainty.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: Entropy Worked Example — 50/50 Node -->
+  <section id="s-09" data-search-section="Entropy Worked Example — 50/50 Node" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>9. Entropy Worked Example — 50/50 Node</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<div class="ascii-box"><pre>5 A
+5 B</pre></div>
+<p>Then:</p>
+<div class="formula-math">\[
+p_A=0.5,
+\qquad p_B=0.5
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+H
+=-\left(0.5\log_2 0.5+0.5\log_2 0.5\right)
+\]</div>
+<p>Because:</p>
+<div class="formula-math">\[
+\log_2 0.5=-1
+\]</div>
+<p>we get:</p>
+<div class="formula-math">\[
+H
+=-\left(0.5(-1)+0.5(-1)\right)
+\]</div>
+<div class="formula-math">\[
+=1
+\]</div>
+<p>So:</p>
+<div class="formula-math">\[
+\boxed{H=1\text{ bit}}
+\]</div>
+<h3>Interpretation</h3>
+<p>For a binary class distribution, this is the maximum entropy.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: Entropy Worked Example — 80/20 -->
+  <section id="s-10" data-search-section="Entropy Worked Example — 80/20" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>10. Entropy Worked Example — 80/20</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<div class="ascii-box"><pre>8 A
+2 B</pre></div>
+<p>Then:</p>
+<div class="formula-math">\[
+p_A=0.8,
+\qquad p_B=0.2
+\]</div>
+<p>Entropy:</p>
+<div class="formula-math">\[
+H=-\left(0.8\log_2 0.8+0.2\log_2 0.2\right)
+\]</div>
+<p>Numerically:</p>
+<div class="formula-math">\[
+H\approx0.722
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{H\approx0.722\text{ bits}}
+\]</div>
+<p>This is lower than 1 because the node is less mixed than a 50/50 node.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: Why Entropy Is a Good Fit for Trees -->
+  <section id="s-11" data-search-section="Why Entropy Is a Good Fit for Trees" class="content-section">
+    <div class="section-header">
+      <h2>11. Why Entropy Is a Good Fit for Trees</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>At a decision-tree node, we want to know:</p>
+<blockquote>
+<p>“How much uncertainty remains about the class?”</p>
+</blockquote>
+<p>Entropy gives us exactly a number for that.</p>
+<p>Then we can compare:</p>
+<div class="ascii-box"><pre>Parent entropy
+       ↓
+Candidate split
+       ↓
+Child entropies
+       ↓
+How much uncertainty disappeared?</pre></div>
+<p>That last question is <strong>information gain</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: Information Gain — Intuition -->
+  <section id="s-12" data-search-section="Information Gain — Intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>12. Information Gain — Intuition</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine a teacher gives you a box containing mixed red and blue balls.</p>
+<p>Before asking a question, you are uncertain.</p>
+<p>After asking a useful question, the boxes become much cleaner.</p>
+<p>The information gained is related to:</p>
+<blockquote>
+<p><strong>How much uncertainty did the split remove?</strong></p>
+</blockquote>
+<p>So:</p>
+<div class="ascii-box"><pre>Information Gain
+      =
+Parent uncertainty
+      −
+Weighted child uncertainty</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: Information Gain Formula -->
+  <section id="s-13" data-search-section="Information Gain Formula" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>13. Information Gain Formula</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For parent dataset \(S\) split into children \(S_1,S_2,\dots,S_m\):</p>
+<div class="formula-math">\[
+\boxed{
+IG(S,A)=H(S)-
+\sum_{j=1}^{m}\frac{|S_j|}{|S|}H(S_j)
+}
+\]</div>
+<p>where:</p>
+<ul>
+<li>\(A\) = candidate splitting rule/attribute;</li>
+<li>\(H(S)\) = parent entropy;</li>
+<li>\(|S_j|/|S|\) = fraction of examples sent to child \(j\);</li>
+<li>\(H(S_j)\) = entropy of child \(j\).</li>
+</ul>
+<p>The weighting is crucial.</p>
+<p>A tiny child with zero entropy should not automatically make a split look perfect if it contains almost no data.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: Why Do We Need the Weighted Average? -->
+  <section id="s-14" data-search-section="Why Do We Need the Weighted Average?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>14. Why Do We Need the Weighted Average?</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a split creates:</p>
+<div class="ascii-box"><pre>Child A → 99 samples
+Child B → 1 sample</pre></div>
+<p>Imagine Child A is moderately pure and Child B is perfectly pure.</p>
+<p>Should the 1-example child dominate our decision?</p>
+<p>No.</p>
+<p>The split criterion should reflect how the <strong>whole dataset</strong> is distributed.</p>
+<p>Hence:</p>
+<div class="formula-math">\[
+\frac{|S_j|}{|S|}
+\]</div>
+<p>acts as a weight.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “Ek 1-example leaf ko 99-example leaf ke barabar importance nahi de sakte.”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: Information Gain Worked Example -->
+  <section id="s-15" data-search-section="Information Gain Worked Example" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>15. Information Gain Worked Example</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Let's use a simple parent node.</p>
+<h2>Parent</h2>
+<div class="ascii-box"><pre>10 examples
+5 A
+5 B</pre></div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+H(parent)=1
+\]</div>
+<p>Now suppose a candidate split produces:</p>
+<h3>Left child</h3>
+<div class="ascii-box"><pre>4 A
+1 B</pre></div>
+<h3>Right child</h3>
+<div class="ascii-box"><pre>1 A
+4 B</pre></div>
+<p>Both children have the same class proportions:</p>
+<div class="formula-math">\[
+(0.8,0.2)
+\]</div>
+<p>so both have entropy approximately:</p>
+<div class="formula-math">\[
+0.722
+\]</div>
+<p>Each child contains 5 of the 10 examples.</p>
+<p>Weighted child entropy:</p>
+<div class="formula-math">\[
+\frac5{10}(0.722)+\frac5{10}(0.722)
+=0.722
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+IG=1-0.722
+\]</div>
+<div class="formula-math">\[
+\boxed{IG\approx0.278}
+\]</div>
+<p>The split reduced uncertainty by about 0.278 bits.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: Perfect Split Example -->
+  <section id="s-16" data-search-section="Perfect Split Example" class="content-section">
+    <div class="section-header">
+      <h2>16. Perfect Split Example</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the same parent:</p>
+<div class="ascii-box"><pre>5 A
+5 B</pre></div>
+<p>is split into:</p>
+<div class="ascii-box"><pre>Left  → 5 A, 0 B
+Right → 0 A, 5 B</pre></div>
+<p>Then:</p>
+<div class="formula-math">\[
+H(left)=0
+\]</div>
+<div class="formula-math">\[
+H(right)=0
+\]</div>
+<p>Weighted child entropy:</p>
+<div class="formula-math">\[
+0
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+IG=1-0
+\]</div>
+<div class="formula-math">\[
+\boxed{IG=1}
+\]</div>
+<p>This is the maximum possible information gain for this binary parent with equal class proportions.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: A Bad Split -->
+  <section id="s-17" data-search-section="A Bad Split" class="content-section">
+    <div class="section-header">
+      <h2>17. A Bad Split</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the parent is:</p>
+<div class="ascii-box"><pre>5 A
+5 B</pre></div>
+<p>and a split creates:</p>
+<div class="ascii-box"><pre>Left  → 3 A, 2 B
+Right → 2 A, 3 B</pre></div>
+<p>The children are still mixed.</p>
+<p>Their entropy is around the same value for both children and therefore the information gain is much smaller than in the perfect split case.</p>
+<h3>Mental rule</h3>
+<blockquote>
+<p><strong>If the children look almost like the parent, the split did not teach us much.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: Decision-Tree Split Selection -->
+  <section id="s-18" data-search-section="Decision-Tree Split Selection" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>18. Decision-Tree Split Selection</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Put everything together:</p>
+<div class="ascii-box"><pre>For each candidate split:
+
+      Parent
+        │
+        ▼
+    Calculate H(parent)
+        │
+        ▼
+   Split the examples
+      /      \
+     /        \
+ Child 1    Child 2
+    ↓           ↓
+calculate    calculate
+entropy      entropy
+     \         /
+      \       /
+    weighted child
+       entropy
+           ↓
+      information gain
+           ↓
+   compare candidates
+           ↓
+ choose best split</pre></div>
+<p>This is the mathematical heart of an information-gain decision-tree learner.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: Gini Impurity — Why Another Measure? -->
+  <section id="s-19" data-search-section="Gini Impurity — Why Another Measure?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>19. Gini Impurity — Why Another Measure?</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Entropy is not the only way to quantify node impurity.</p>
+<p>A second popular criterion is <strong>Gini impurity</strong>.</p>
+<p>It answers a related question:</p>
+<blockquote>
+<p><strong>How mixed is this node?</strong></p>
+</blockquote>
+<p>A pure node has:</p>
+<div class="formula-math">\[
+Gini=0
+\]</div>
+<p>More mixed nodes have larger Gini values.</p>
+<p>Current scikit-learn documentation uses Gini as a standard classification-tree criterion and gives its mathematical formulation in terms of class proportions. citeturn507024search8</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: Gini Formula -->
+  <section id="s-20" data-search-section="Gini Formula" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>20. Gini Formula</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For a node containing class proportions \(p_1,p_2,\dots,p_K\):</p>
+<div class="formula-math">\[
+\boxed{
+Gini(S)=1-
+\sum_{k=1}^{K}p_k^2
+}
+\]</div>
+<p>An equivalent expression often appears as:</p>
+<div class="formula-math">\[
+Gini(S)=
+\sum_{k=1}^{K}p_k(1-p_k)
+\]</div>
+<p>because:</p>
+<div class="formula-math">\[
+\sum_k p_k(1-p_k)
+=
+\sum_k p_k-
+\sum_k p_k^2
+=1-
+\sum_k p_k^2
+\]</div>
+<p>since:</p>
+<div class="formula-math">\[
+\sum_k p_k=1.
+\]</div>
+<p>scikit-learn presents the equivalent class-proportion formulation in its tree documentation. citeturn507024search8</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: Gini Worked Example — Pure Node -->
+  <section id="s-21" data-search-section="Gini Worked Example — Pure Node" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>21. Gini Worked Example — Pure Node</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<div class="ascii-box"><pre>10 A
+0 B</pre></div>
+<p>Then:</p>
+<div class="formula-math">\[
+p_A=1,
+\qquad p_B=0
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+Gini
+=1-(1^2+0^2)
+\]</div>
+<div class="formula-math">\[
+=1-1
+\]</div>
+<div class="formula-math">\[
+\boxed{Gini=0}
+\]</div>
+<p>As desired.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: Gini Worked Example — 50/50 -->
+  <section id="s-22" data-search-section="Gini Worked Example — 50/50" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>22. Gini Worked Example — 50/50</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For:</p>
+<div class="formula-math">\[
+p_A=0.5,
+\qquad p_B=0.5
+\]</div>
+<p>we get:</p>
+<div class="formula-math">\[
+Gini=1-(0.5^2+0.5^2)
+\]</div>
+<div class="formula-math">\[
+=1-(0.25+0.25)
+\]</div>
+<div class="formula-math">\[
+=0.5
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{Gini=0.5}
+\]</div>
+<p>For a binary classification node, 0.5 is the maximum Gini impurity.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: Gini Worked Example — 80/20 -->
+  <section id="s-23" data-search-section="Gini Worked Example — 80/20" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>23. Gini Worked Example — 80/20</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For:</p>
+<div class="formula-math">\[
+p_A=0.8,
+\qquad p_B=0.2
+\]</div>
+<div class="formula-math">\[
+Gini=1-(0.8^2+0.2^2)
+\]</div>
+<div class="formula-math">\[
+=1-(0.64+0.04)
+\]</div>
+<div class="formula-math">\[
+=0.32
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{Gini=0.32}
+\]</div>
+<p>Compare:</p>
+<div class="ascii-box"><pre>Distribution  Entropy   Gini
+100/0         0         0
+80/20         0.722     0.32
+50/50         1         0.50</pre></div>
+<p>The numerical scales differ, but the qualitative story is the same: more mixing → more impurity.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: Lower Gini Is Better for a Node -->
+  <section id="s-24" data-search-section="Lower Gini Is Better for a Node" class="content-section">
+    <div class="section-header">
+      <h2>24. Lower Gini Is Better for a Node</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Remember:</p>
+<blockquote>
+<p><strong>For Gini impurity, lower means cleaner.</strong></p>
+</blockquote>
+<p>But when comparing <strong>splits</strong>, we generally compare the <strong>weighted child impurity</strong>.</p>
+<p>So the split-selection idea becomes:</p>
+<div class="formula-math">\[
+\boxed{
+\text{Choose the split with the smallest weighted child Gini}
+}
+\]</div>
+<p>Equivalently, we can describe a reduction in impurity:</p>
+<div class="formula-math">\[
+\text{Gini reduction}
+=
+Gini(parent)-weighted\ child\ Gini.
+\]</div>
+<p>Different textbooks and implementations phrase this selection criterion slightly differently, but the underlying optimization idea is the same.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: Entropy vs Gini -->
+  <section id="s-25" data-search-section="Entropy vs Gini" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>25. Entropy vs Gini</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Property</th>
+<th>Entropy</th>
+<th>Gini impurity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Measures</td>
+<td>Uncertainty / impurity</td>
+<td>Impurity</td>
+</tr>
+<tr>
+<td>Pure node</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Binary 50/50</td>
+<td>1 bit</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>Typical tree use</td>
+<td>Split criterion</td>
+<td>Split criterion</td>
+</tr>
+<tr>
+<td>Formula</td>
+<td>\(-\sum p_k\log p_k\)</td>
+<td>\(1-\sum p_k^2\)</td>
+</tr>
+<tr>
+<td>Intuition</td>
+<td>Information/uncertainty</td>
+<td>Probability of incorrect random-label assignment under the standard interpretation</td>
+</tr>
+<tr>
+<td>Numerical scale</td>
+<td>Depends on log base</td>
+<td>0 to &lt;1 for common finite-class formulation</td>
+</tr>
+</tbody>
+</table></div>
+<p>scikit-learn explicitly supports both Gini and entropy/log-loss as classification criteria. citeturn507024search6turn507024search8</p>
+<h3>Important exam point</h3>
+<p>Do not say:</p>
+<blockquote>
+<p>“Entropy is correct and Gini is an approximation of it.”</p>
+</blockquote>
+<p>Better:</p>
+<blockquote>
+<p><strong>Entropy and Gini are different impurity criteria that often produce similar tree-splitting behaviour, but they are not the same function.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: Another Analogy — Cleaning a Classroom -->
+  <section id="s-26" data-search-section="Another Analogy — Cleaning a Classroom" class="content-section">
+    <div class="section-header">
+      <h2>26. Another Analogy — Cleaning a Classroom</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine a classroom containing:</p>
+<ul>
+<li>20 students from Section A;</li>
+<li>20 students from Section B.</li>
+</ul>
+<p>Before separating them, the room is mixed.</p>
+<p>You can divide the room by asking:</p>
+<blockquote>
+<p>“Which side of the hallway does the student sit on?”</p>
+</blockquote>
+<p>If one side becomes mostly A and the other mostly B, the split is useful.</p>
+<p>Entropy/Gini quantify how mixed the groups are.</p>
+<p>Information gain measures how much cleaner the split made the groups.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> Parent room kitna mixed tha?  
+> Split ke baad rooms kitne clean hue?  
+> Difference = split se kitna benefit hua.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: A Full Small Numerical Problem -->
+  <section id="s-27" data-search-section="A Full Small Numerical Problem" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>27. A Full Small Numerical Problem</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>We will calculate a candidate split completely.</p>
+<h2>Parent node</h2>
+<div class="ascii-box"><pre>12 examples
+7 A
+5 B</pre></div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+p_A=\frac7{12}
+\]</div>
+<div class="formula-math">\[
+p_B=\frac5{12}
+\]</div>
+<p>Parent entropy:</p>
+<div class="formula-math">\[
+H(P)
+=-\frac7{12}\log_2\frac7{12}
+-\frac5{12}\log_2\frac5{12}
+\]</div>
+<p>Approximate value:</p>
+<div class="formula-math">\[
+H(P)\approx0.980
+\]</div>
+<p>Now suppose a candidate split creates:</p>
+<h3>Left</h3>
+<div class="ascii-box"><pre>6 examples
+5 A
+1 B</pre></div>
+<h3>Right</h3>
+<div class="ascii-box"><pre>6 examples
+2 A
+4 B</pre></div>
+<p>Their entropies are approximately:</p>
+<div class="formula-math">\[
+H(L)\approx0.650
+\]</div>
+<div class="formula-math">\[
+H(R)\approx0.918
+\]</div>
+<p>Weighted child entropy:</p>
+<div class="formula-math">\[
+\frac6{12}(0.650)+\frac6{12}(0.918)
+\]</div>
+<div class="formula-math">\[
+=0.784
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+IG
+\approx0.980-0.784
+\]</div>
+<div class="formula-math">\[
+\boxed{IG\approx0.196}
+\]</div>
+<h3>Interpretation</h3>
+<p>The split removed roughly 0.196 bits of entropy.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: The Same Problem with Gini -->
+  <section id="s-28" data-search-section="The Same Problem with Gini" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>28. The Same Problem with Gini</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Parent:</p>
+<div class="formula-math">\[
+Gini(P)=1-
+\left[
+\left(\frac7{12}\right)^2+
+\left(\frac5{12}\right)^2
+\right]
+\]</div>
+<div class="formula-math">\[
+\approx1-(0.3403+0.1736)
+\]</div>
+<div class="formula-math">\[
+\boxed{Gini(P)\approx0.4861}
+\]</div>
+<p>Left child:</p>
+<div class="formula-math">\[
+Gini(L)
+=1-\left[
+\left(\frac56\right)^2+
+\left(\frac16\right)^2
+\right]
+\]</div>
+<div class="formula-math">\[
+\approx0.2778
+\]</div>
+<p>Right child:</p>
+<div class="formula-math">\[
+Gini(R)
+=1-\left[
+\left(\frac26\right)^2+
+\left(\frac46\right)^2
+\right]
+\]</div>
+<div class="formula-math">\[
+\approx0.4444
+\]</div>
+<p>Weighted child Gini:</p>
+<div class="formula-math">\[
+\frac6{12}(0.2778)+
+\frac6{12}(0.4444)
+\]</div>
+<div class="formula-math">\[
+\approx0.3611
+\]</div>
+<p>Gini reduction:</p>
+<div class="formula-math">\[
+0.4861-0.3611
+\approx0.125
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{Gini\ reduction\approx0.125}
+\]</div>
+<p>Notice that entropy gain and Gini reduction have different numerical scales. That is expected.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 29: Information Gain Is Not “Information” in Every Possible Sense -->
+  <section id="s-29" data-search-section="Information Gain Is Not “Information” in Every Possible Sense" class="content-section">
+    <div class="section-header">
+      <h2>29. Information Gain Is Not “Information” in Every Possible Sense</h2>
+      <button class="bookmark-btn" data-id="s-29" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The phrase can sound grander than it is.</p>
+<p>Here, <strong>information gain</strong> means the reduction in entropy produced by a candidate split.</p>
+<p>It does not mean:</p>
+<blockquote>
+<p>“This feature contains all the information about the dataset.”</p>
+</blockquote>
+<p>It is specifically a split-selection criterion built from entropy.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 30: Why a Single Numerical Threshold Is Often Enough to Split -->
+  <section id="s-30" data-search-section="Why a Single Numerical Threshold Is Often Enough to Split" class="content-section">
+    <div class="section-header">
+      <h2>30. Why a Single Numerical Threshold Is Often Enough to Split</h2>
+      <button class="bookmark-btn" data-id="s-30" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the feature is age:</p>
+<div class="ascii-box"><pre>18, 21, 24, 29, 33, 36, 42, 50</pre></div>
+<p>A tree can consider threshold candidates such as:</p>
+<div class="formula-math">\[
+Age\lt 30
+\]</div>
+<p>or</p>
+<div class="formula-math">\[
+Age\lt 40
+\]</div>
+<p>and compare how each threshold changes impurity.</p>
+<p>The best threshold is the one that gives the best criterion under the chosen tree-learning method.</p>
+<p>This is why decision trees can naturally create nonlinear/piecewise decision boundaries.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 31: The Geometry Behind Splits -->
+  <section id="s-31" data-search-section="The Geometry Behind Splits" class="content-section">
+    <div class="section-header">
+      <h2>31. The Geometry Behind Splits</h2>
+      <button class="bookmark-btn" data-id="s-31" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the tree first uses:</p>
+<div class="formula-math">\[
+x_1\lt 5
+\]</div>
+<p>Then the input space is divided into two regions.</p>
+<p>A second split might use:</p>
+<div class="formula-math">\[
+x_2\lt 3
+\]</div>
+<p>Now one region is divided again.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>x2 ↑
+   │   ┌───────────────┐
+   │   │       B       │
+ 3 ├───┼───────────────┤
+   │ A │       C       │
+   └───┴───────────────┴──→ x1
+       5</pre></div>
+<p>The exact shape depends on the sequence of splits.</p>
+<p>In the common axis-aligned tree formulation, these regions are rectangular/hyperrectangular partitions in feature space.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 32: Why Trees Can Represent Interactions Naturally -->
+  <section id="s-32" data-search-section="Why Trees Can Represent Interactions Naturally" class="content-section">
+    <div class="section-header">
+      <h2>32. Why Trees Can Represent Interactions Naturally</h2>
+      <button class="bookmark-btn" data-id="s-32" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Consider:</p>
+<blockquote>
+<p>Approve the applicant only when <strong>income is high AND credit score is high</strong>.</p>
+</blockquote>
+<p>A tree can naturally represent this through sequential decisions:</p>
+<div class="ascii-box"><pre>Income high?
+   │
+  YES
+   │
+Credit high?
+   │
+  YES
+   ↓
+Approve</pre></div>
+<p>The second split is interpreted <strong>within the region created by the first split</strong>.</p>
+<p>That creates an interaction between conditions without requiring us to explicitly write a product term such as:</p>
+<div class="formula-math">\[
+x_1x_2.
+\]</div>
+<p>This is one reason trees can represent complex nonlinear rules.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 33: Statistical-Learning Connection -->
+  <section id="s-33" data-search-section="Statistical-Learning Connection" class="content-section">
+    <div class="section-header">
+      <h2>33. Statistical-Learning Connection</h2>
+      <button class="bookmark-btn" data-id="s-33" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Now connect the math to the previous chapters.</p>
+<div class="ascii-box"><pre>Candidate split
+      ↓
+Impurity calculation
+      ↓
+Split selection
+      ↓
+Tree growth
+      ↓
+Hypothesis class becomes richer
+      ↓
+Training error can fall
+      ↓
+Generalization must still be checked</pre></div>
+<p>So entropy/Gini do <strong>not</strong> solve the complete model-selection problem.</p>
+<p>They help construct the tree.</p>
+<p>Validation, pruning and other complexity controls address generalization.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 34: Entropy and Probability Connection -->
+  <section id="s-34" data-search-section="Entropy and Probability Connection" class="content-section">
+    <div class="section-header">
+      <h2>34. Entropy and Probability Connection</h2>
+      <button class="bookmark-btn" data-id="s-34" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This chapter deliberately depends on the probability work from your earlier math track.</p>
+<p>You need to recognize:</p>
+<div class="formula-math">\[
+p_k=\frac{\text{number of class-}k\ examples}{\text{total examples}}
+\]</div>
+<p>Then entropy simply consumes those probabilities.</p>
+<p>So:</p>
+<div class="ascii-box"><pre>Counts
+ ↓
+Proportions
+ ↓
+Probability distribution
+ ↓
+Entropy / Gini
+ ↓
+Split decision</pre></div>
+<p>That is why your Probability/Statistics foundation is not a disconnected math side quest.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 35: Logarithm Refresher -->
+  <section id="s-35" data-search-section="Logarithm Refresher" class="content-section">
+    <div class="section-header">
+      <h2>35. Logarithm Refresher</h2>
+      <button class="bookmark-btn" data-id="s-35" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Entropy uses logarithms.</p>
+<p>You should know:</p>
+<div class="formula-math">\[
+\log_2 1=0
+\]</div>
+<div class="formula-math">\[
+\log_2 0.5=-1
+\]</div>
+<div class="formula-math">\[
+\log_2 0.25=-2
+\]</div>
+<p>and more generally:</p>
+<div class="formula-math">\[
+\log_b(xy)=\log_bx+\log_by.
+\]</div>
+<p>For entropy questions, you will often use a calculator for logarithms.</p>
+<p>The conceptual requirement is more important than mental arithmetic:</p>
+<blockquote>
+<p><strong>Entropy becomes large when multiple classes have substantial probability and becomes zero when one class has probability 1.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 36: Why the Negative Sign Is There -->
+  <section id="s-36" data-search-section="Why the Negative Sign Is There" class="content-section">
+    <div class="section-header">
+      <h2>36. Why the Negative Sign Is There</h2>
+      <button class="bookmark-btn" data-id="s-36" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Entropy is written as:</p>
+<div class="formula-math">\[
+H=-\sum p_k\log p_k
+\]</div>
+<p>Since for probabilities between 0 and 1:</p>
+<div class="formula-math">\[
+\log(p_k)\le0,
+\]</div>
+<p>the raw term:</p>
+<div class="formula-math">\[
+p_k\log(p_k)
+\]</div>
+<p>is non-positive.</p>
+<p>The negative sign makes the overall entropy non-negative.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> Probability 0 aur 1 ke beech mein hai, toh log generally negative aayega. Isliye minus sign lagake entropy ko positive quantity banate hain.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 37: A Very Important Distinction: Node Impurity vs Split Quality -->
+  <section id="s-37" data-search-section="A Very Important Distinction: Node Impurity vs Split Quality" class="content-section">
+    <div class="section-header">
+      <h2>37. A Very Important Distinction: Node Impurity vs Split Quality</h2>
+      <button class="bookmark-btn" data-id="s-37" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Do not confuse these.</p>
+<h3>Entropy / Gini</h3>
+<p>Describe <strong>one node</strong>.</p>
+<h3>Information gain / impurity reduction</h3>
+<p>Compares <strong>a parent with its children after a split</strong>.</p>
+<p>So:</p>
+<div class="ascii-box"><pre>NODE METRIC
+Entropy / Gini
+
+        ↓
+
+SPLIT METRIC
+Information gain / impurity reduction</pre></div>
+<p>This distinction appears frequently in exam questions.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 38: What Happens with More Than Two Classes? -->
+  <section id="s-38" data-search-section="What Happens with More Than Two Classes?" class="content-section mode-gate">
+    <div class="section-header">
+      <h2>38. What Happens with More Than Two Classes?</h2>
+      <button class="bookmark-btn" data-id="s-38" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a node has:</p>
+<div class="ascii-box"><pre>Class A = 40%
+Class B = 35%
+Class C = 25%</pre></div>
+<p>Then entropy is:</p>
+<div class="formula-math">\[
+H
+=-\left(
+0.4\log_2 0.4+
+0.35\log_2 0.35+
+0.25\log_2 0.25
+\right)
+\]</div>
+<p>And Gini becomes:</p>
+<div class="formula-math">\[
+Gini
+=1-(0.4^2+0.35^2+0.25^2).
+\]</div>
+<p>Nothing fundamental changes.</p>
+<p>The formulas already handle \(K\gt 2\).</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 39: Maximum Entropy for K Classes -->
+  <section id="s-39" data-search-section="Maximum Entropy for K Classes" class="content-section mode-gate">
+    <div class="section-header">
+      <h2>39. Maximum Entropy for K Classes</h2>
+      <button class="bookmark-btn" data-id="s-39" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>When all \(K\) classes are equally likely:</p>
+<div class="formula-math">\[
+p_k=\frac1K
+\]</div>
+<p>then entropy becomes:</p>
+<div class="formula-math">\[
+H
+=-K\left(\frac1K\log_2\frac1K\right)
+\]</div>
+<div class="formula-math">\[
+=\log_2K.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{H_{max}=\log_2K}
+\]</div>
+<p>This is a useful higher-level fact.</p>
+<h3>Example: 4 classes</h3>
+<div class="formula-math">\[
+H_{max}=\log_2 4=2\text{ bits}.
+\]</div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 40: Maximum Gini for K Classes -->
+  <section id="s-40" data-search-section="Maximum Gini for K Classes" class="content-section mode-gate">
+    <div class="section-header">
+      <h2>40. Maximum Gini for K Classes</h2>
+      <button class="bookmark-btn" data-id="s-40" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>If all \(K\) classes are equally likely:</p>
+<div class="formula-math">\[
+p_k=\frac1K.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+Gini
+=1-K\left(\frac1K\right)^2
+\]</div>
+<div class="formula-math">\[
+=1-\frac1K
+\]</div>
+<p>So:</p>
+<div class="formula-math">\[
+\boxed{Gini_{max}=1-\frac1K}
+\]</div>
+<p>For binary classification:</p>
+<div class="formula-math">\[
+1-\frac12=0.5.
+\]</div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 41: Entropy vs Gini: Which One Should You Memorize? -->
+  <section id="s-41" data-search-section="Entropy vs Gini: Which One Should You Memorize?" class="content-section">
+    <div class="section-header">
+      <h2>41. Entropy vs Gini: Which One Should You Memorize?</h2>
+      <button class="bookmark-btn" data-id="s-41" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For your university exam, know <strong>both</strong> because the syllabus says Decision Trees and external formulations can use either.</p>
+<p>Memorize:</p>
+<div class="formula-math">\[
+\boxed{Entropy=-\sum p_k\log_2 p_k}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\boxed{Gini=1-\sum p_k^2}
+\]</div>
+<p>Then know the selection intuition:</p>
+<blockquote>
+<p><strong>Entropy:</strong> choose splits that reduce entropy / maximize information gain.<br />
+<strong>Gini:</strong> choose splits that reduce weighted Gini impurity.</p>
+</blockquote>
+<p>The current scikit-learn documentation confirms that its classification tree implementation supports <code>gini</code>, <code>entropy</code> and <code>log_loss</code> criteria. citeturn507024search6turn507024search8</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 42: Common Calculation Trap — Forgetting the Weights -->
+  <section id="s-42" data-search-section="Common Calculation Trap — Forgetting the Weights" class="content-section">
+    <div class="section-header">
+      <h2>42. Common Calculation Trap — Forgetting the Weights</h2>
+      <button class="bookmark-btn" data-id="s-42" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Wrong:</p>
+<div class="formula-math">\[
+\frac{H(L)+H(R)}2
+\]</div>
+<p>This assumes equal-sized children.</p>
+<p>Correct:</p>
+<div class="formula-math">\[
+\boxed{
+\frac{|L|}{|P|}H(L)
++
+\frac{|R|}{|P|}H(R)
+}
+\]</div>
+<p>More generally:</p>
+<div class="formula-math">\[
+\boxed{
+\sum_j\frac{|S_j|}{|S|}H(S_j)
+}
+\]</div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “Har child ko equal marks nahi milenge. Jis child mein zyada samples hain, uska weight zyada hoga.”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 43: Common Calculation Trap — Choosing the Wrong Direction -->
+  <section id="s-43" data-search-section="Common Calculation Trap — Choosing the Wrong Direction" class="content-section">
+    <div class="section-header">
+      <h2>43. Common Calculation Trap — Choosing the Wrong Direction</h2>
+      <button class="bookmark-btn" data-id="s-43" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For <strong>information gain</strong>:</p>
+<blockquote>
+<p>Higher is better.</p>
+</blockquote>
+<p>Because:</p>
+<div class="formula-math">\[
+IG=H(parent)-weighted\ child\ entropy.
+\]</div>
+<p>For <strong>weighted child entropy</strong>:</p>
+<blockquote>
+<p>Lower is better.</p>
+</blockquote>
+<p>For <strong>Gini impurity</strong>:</p>
+<blockquote>
+<p>Lower is better.</p>
+</blockquote>
+<p>For <strong>Gini reduction</strong>:</p>
+<blockquote>
+<p>Higher is better.</p>
+</blockquote>
+<h3>Master table</h3>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Quantity</th>
+<th>Better direction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Parent entropy</td>
+<td>Descriptive, not chosen directly</td>
+</tr>
+<tr>
+<td>Child entropy</td>
+<td>Lower</td>
+</tr>
+<tr>
+<td>Weighted child entropy</td>
+<td>Lower</td>
+</tr>
+<tr>
+<td>Information gain</td>
+<td>Higher</td>
+</tr>
+<tr>
+<td>Gini impurity</td>
+<td>Lower</td>
+</tr>
+<tr>
+<td>Weighted child Gini</td>
+<td>Lower</td>
+</tr>
+<tr>
+<td>Gini reduction</td>
+<td>Higher</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 44: A Complete Split-Selection Workflow -->
+  <section id="s-44" data-search-section="A Complete Split-Selection Workflow" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>44. A Complete Split-Selection Workflow</h2>
+      <button class="bookmark-btn" data-id="s-44" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>When given an exam problem:</p>
+<h3>Step 1 — Count classes in the parent</h3>
+<h3>Step 2 — Convert counts to probabilities</h3>
+<h3>Step 3 — Calculate parent entropy or Gini</h3>
+<h3>Step 4 — Apply the candidate split</h3>
+<h3>Step 5 — Count classes in every child</h3>
+<h3>Step 6 — Calculate each child's entropy/Gini</h3>
+<h3>Step 7 — Weight children by their sample counts</h3>
+<h3>Step 8 — Calculate information gain or impurity reduction</h3>
+<h3>Step 9 — Repeat for the other candidate splits</h3>
+<h3>Step 10 — Choose the best split according to the criterion</h3>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish memory</div>
+
+> **Count → proportion → impurity → split → child impurity → weight → compare.**
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 45: Exam Numerical Template -->
+  <section id="s-45" data-search-section="Exam Numerical Template" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>45. Exam Numerical Template</h2>
+      <button class="bookmark-btn" data-id="s-45" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>If the question says:</p>
+<blockquote>
+<p>“Calculate the information gain for attribute A.”</p>
+</blockquote>
+<p>Write:</p>
+<h3>1. Parent entropy</h3>
+<div class="formula-math">\[
+H(S)=...
+\]</div>
+<h3>2. Child entropy</h3>
+<div class="formula-math">\[
+H(S_1)=...
+\]</div>
+<div class="formula-math">\[
+H(S_2)=...
+\]</div>
+<h3>3. Weighted child entropy</h3>
+<div class="formula-math">\[
+H_{after}=...
+\]</div>
+<h3>4. Information gain</h3>
+<div class="formula-math">\[
+IG=H(S)-H_{after}
+\]</div>
+<h3>5. Final conclusion</h3>
+<blockquote>
+<p>“Attribute A gives information gain = X.”</p>
+</blockquote>
+<p>If comparing attributes, choose the larger information gain.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 46: Comparison Numerical — Two Candidate Splits -->
+  <section id="s-46" data-search-section="Comparison Numerical — Two Candidate Splits" class="content-section mode-gate">
+    <div class="section-header">
+      <h2>46. Comparison Numerical — Two Candidate Splits</h2>
+      <button class="bookmark-btn" data-id="s-46" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<div class="formula-math">\[
+H(parent)=0.95.
+\]</div>
+<p>Candidate A gives weighted child entropy:</p>
+<div class="formula-math">\[
+0.40.
+\]</div>
+<p>Candidate B gives:</p>
+<div class="formula-math">\[
+0.65.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+IG_A=0.95-0.40=0.55
+\]</div>
+<div class="formula-math">\[
+IG_B=0.95-0.65=0.30
+\]</div>
+<p>So:</p>
+<div class="formula-math">\[
+\boxed{IG_A\gt IG_B}
+\]</div>
+<p>Therefore A provides the larger information gain.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> A ke baad uncertainty zyada reduce hui, toh A better split hai.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 47: Why Entropy and Gini Can Disagree Numerically but Similar in Practice -->
+  <section id="s-47" data-search-section="Why Entropy and Gini Can Disagree Numerically but Similar in Practice" class="content-section">
+    <div class="section-header">
+      <h2>47. Why Entropy and Gini Can Disagree Numerically but Similar in Practice</h2>
+      <button class="bookmark-btn" data-id="s-47" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>They map the same class proportions to different numerical values.</p>
+<p>For example, at 80/20:</p>
+<div class="formula-math">\[
+Entropy\approx0.722
+\]</div>
+<p>while:</p>
+<div class="formula-math">\[
+Gini=0.32.
+\]</div>
+<p>These numbers cannot be compared directly.</p>
+<p>The scales are different.</p>
+<p>What matters for split selection is the <strong>relative quality under the chosen criterion</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 48: Universal vs Course Lens -->
+  <section id="s-48" data-search-section="Universal vs Course Lens" class="content-section">
+    <div class="section-header">
+      <h2>48. Universal vs Course Lens</h2>
+      <button class="bookmark-btn" data-id="s-48" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>University/course lens</h3>
+<p>Know:</p>
+<ul>
+<li>what a decision tree is;</li>
+<li>tree terminology;</li>
+<li>how splitting works;</li>
+<li>entropy/information gain/Gini;</li>
+<li>basic numerical calculation;</li>
+<li>relationship to overfitting.</li>
+</ul>
+<h3>Universal lens</h3>
+<p>Understand:</p>
+<ul>
+<li>trees as recursive partitions;</li>
+<li>tree hypothesis classes;</li>
+<li>classification vs regression trees;</li>
+<li>pruning/model complexity;</li>
+<li>relationship to ensemble trees.</li>
+</ul>
+<p>Your supplied notes do not determine the exact university convention for every tree criterion, so this chapter preserves the standard formulations and labels the external expansion instead of attributing it to your course notes.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 49: Math Connections to Earlier Chapters -->
+  <section id="s-49" data-search-section="Math Connections to Earlier Chapters" class="content-section">
+    <div class="section-header">
+      <h2>49. Math Connections to Earlier Chapters</h2>
+      <button class="bookmark-btn" data-id="s-49" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This chapter pulls together several previous ideas:</p>
+<div class="ascii-box"><pre>Probability
+   ↓
+Class proportions
+   ↓
+Entropy / Gini
+   ↓
+Information gain
+   ↓
+Split selection
+   ↓
+Decision tree
+   ↓
+Hypothesis class
+   ↓
+Bias / variance
+   ↓
+Generalization</pre></div>
+<p>This is exactly why the mathematics should be learned as a connected system rather than as isolated formulas.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 50: Active Recall — Close the Book -->
+  <section id="s-50" data-search-section="Active Recall — Close the Book" class="content-section">
+    <div class="section-header">
+      <h2>50. Active Recall — Close the Book</h2>
+      <button class="bookmark-btn" data-id="s-50" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <ol>
+<li>What is entropy?</li>
+<li>What does a pure node have as entropy?</li>
+<li>What is Gini impurity?</li>
+<li>What is the Gini value of a pure node?</li>
+<li>Write the entropy formula.</li>
+<li>Write the Gini formula.</li>
+<li>Why do we use class proportions?</li>
+<li>Why are child impurities weighted by child size?</li>
+<li>Define information gain.</li>
+<li>Which direction is better for information gain?</li>
+<li>Which direction is better for weighted child entropy?</li>
+<li>Which direction is better for Gini?</li>
+<li>Why is the negative sign present in entropy?</li>
+<li>Why is base 2 often used?</li>
+<li>What is the maximum binary entropy?</li>
+<li>What is the maximum binary Gini impurity?</li>
+<li>What happens when a split produces pure children?</li>
+<li>Why are entropy and Gini not directly numerically comparable?</li>
+<li>Distinguish node impurity from split quality.</li>
+<li>Explain the full split-selection workflow.</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 51: Practice Set -->
+  <section id="s-51" data-search-section="Practice Set" class="content-section">
+    <div class="section-header">
+      <h2>51. Practice Set</h2>
+      <button class="bookmark-btn" data-id="s-51" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>A. Entropy</h2>
+<h3>Q1</h3>
+<p>Calculate entropy for:</p>
+<div class="ascii-box"><pre>10 A, 0 B</pre></div>
+<h3>Q2</h3>
+<p>Calculate entropy for:</p>
+<div class="ascii-box"><pre>5 A, 5 B</pre></div>
+<h3>Q3</h3>
+<p>Calculate entropy for:</p>
+<div class="ascii-box"><pre>8 A, 2 B</pre></div>
+<h3>Q4</h3>
+<p>Explain why Q2 has larger entropy than Q3.</p>
+<h2>B. Gini</h2>
+<h3>Q5</h3>
+<p>Calculate Gini for 80/20.</p>
+<h3>Q6</h3>
+<p>Calculate Gini for 50/50.</p>
+<h3>Q7</h3>
+<p>Explain why a pure node has Gini 0.</p>
+<h2>C. Information Gain</h2>
+<h3>Q8</h3>
+<p>Parent entropy = 1.0. Weighted child entropy = 0.25. Find information gain.</p>
+<h3>Q9</h3>
+<p>Parent entropy = 0.91. Split A leaves weighted entropy 0.40. Split B leaves 0.55. Which has larger information gain?</p>
+<h3>Q10</h3>
+<p>Why must child entropy be weighted by child size?</p>
+<h2>D. Full Numerical</h2>
+<h3>Q11</h3>
+<p>Parent:</p>
+<div class="ascii-box"><pre>10 samples
+6 A
+4 B</pre></div>
+<p>Candidate split:</p>
+<div class="ascii-box"><pre>Left: 4 A, 1 B
+Right: 2 A, 3 B</pre></div>
+<p>Calculate:</p>
+<ol>
+<li>parent entropy;</li>
+<li>left entropy;</li>
+<li>right entropy;</li>
+<li>weighted child entropy;</li>
+<li>information gain.</li>
+</ol>
+<h2>E. Diagram recall</h2>
+<h3>Q12</h3>
+<p>Draw a parent node and two children. Label where entropy is calculated and where information gain is calculated.</p>
+<h2>F. Hinglish</h2>
+<h3>Q13</h3>
+<p>Explain entropy in your own Hinglish.</p>
+<h3>Q14</h3>
+<p>Explain information gain using the “cleaning two classrooms” analogy.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 52: Mini Formula Sheet -->
+  <section id="s-52" data-search-section="Mini Formula Sheet" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>52. Mini Formula Sheet</h2>
+      <button class="bookmark-btn" data-id="s-52" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Class proportion</h3>
+<div class="formula-math">\[
+\boxed{p_k=\frac{n_k}{n}}
+\]</div>
+<h3>Entropy</h3>
+<div class="formula-math">\[
+\boxed{H(S)=-\sum_{k=1}^{K}p_k\log_2p_k}
+\]</div>
+<h3>Information gain</h3>
+<div class="formula-math">\[
+\boxed{
+IG(S,A)=H(S)-
+\sum_j\frac{|S_j|}{|S|}H(S_j)
+}
+\]</div>
+<h3>Gini impurity</h3>
+<div class="formula-math">\[
+\boxed{Gini(S)=1-\sum_kp_k^2}
+\]</div>
+<h3>Maximum entropy with K classes</h3>
+<div class="formula-math">\[
+\boxed{H_{max}=\log_2K}
+\]</div>
+<h3>Maximum Gini with K classes</h3>
+<div class="formula-math">\[
+\boxed{Gini_{max}=1-\frac1K}
+\]</div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 53: Common Exam Traps -->
+  <section id="s-53" data-search-section="Common Exam Traps" class="content-section">
+    <div class="section-header">
+      <h2>53. Common Exam Traps</h2>
+      <button class="bookmark-btn" data-id="s-53" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Trap 1</h3>
+<p>Forgetting the negative sign in entropy.</p>
+<h3>Trap 2</h3>
+<p>Using raw counts instead of class probabilities.</p>
+<h3>Trap 3</h3>
+<p>Averaging child entropies without weighting.</p>
+<h3>Trap 4</h3>
+<p>Choosing the smaller information gain.</p>
+<h3>Trap 5</h3>
+<p>Choosing the larger Gini impurity as “better.”</p>
+<h3>Trap 6</h3>
+<p>Comparing entropy values directly with Gini values.</p>
+<h3>Trap 7</h3>
+<p>Calling entropy and information gain the same thing.</p>
+<h3>Trap 8</h3>
+<p>Saying Gini is always exactly equal to entropy.</p>
+<h3>Trap 9</h3>
+<p>Ignoring a candidate split's child sizes.</p>
+<h3>Trap 10</h3>
+<p>Calculating a tree split but not stating the final criterion used.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 54: Exam Lens -->
+  <section id="s-54" data-search-section="Exam Lens" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>54. Exam Lens</h2>
+      <button class="bookmark-btn" data-id="s-54" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="exam-ladder-card"><div class="ladder-mark-badge">📝 2-mark</div>
+
+> Define entropy.
+
+> Define Gini impurity.
+
+> Define information gain.
+
+</div>
+
+<div class="exam-ladder-card"><div class="ladder-mark-badge">📝 5-mark</div>
+
+> Explain how information gain is used to select a decision-tree split.
+
+Use:
+
+1. Parent entropy.
+2. Candidate split.
+3. Child entropies.
+4. Weighted child entropy.
+5. Information gain.
+6. Select maximum gain.
+
+</div>
+
+<div class="exam-ladder-card"><div class="ladder-mark-badge">📝 10-mark numerical</div>
+
+Given a dataset and several candidate attributes:
+
+1. Calculate class probabilities.
+2. Calculate parent entropy.
+3. Calculate each child entropy.
+4. Calculate weighted entropy.
+5. Calculate information gain.
+6. Compare attributes.
+7. State the selected split.
+
+If the question uses Gini instead:
+
+1. Calculate parent Gini.
+2. Calculate child Ginis.
+3. Compute weighted child Gini.
+4. Select the split with lower weighted impurity / greater reduction.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 55: Resource Shelf -->
+  <section id="s-55" data-search-section="Resource Shelf" class="content-section">
+    <div class="section-header">
+      <h2>55. Resource Shelf</h2>
+      <button class="bookmark-btn" data-id="s-55" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>NPTEL — primary gap-fill course</h2>
+<p><strong>NPTEL — Introduction to Machine Learning (IIT Madras, 2026)</strong><br />
+https://nptel.ac.in/courses/106106236</p>
+<p>The current course material explicitly includes <strong>Entropy and Information Gain</strong> and a <strong>Decision Tree tutorial</strong>. citeturn507024search0</p>
+<h2>NPTEL — longer structured route</h2>
+<p><strong>NPTEL — Introduction to Machine Learning</strong><br />
+https://onlinecourses-archive.nptel.ac.in/noc17_cs26/preview</p>
+<p>The course explicitly includes decision trees, hypothesis space, overfitting, bias/variance, evaluation and related ML algorithms. citeturn507024search16</p>
+<h2>Video</h2>
+<p><strong>StatQuest — Decision and Classification Trees, Clearly Explained!!!</strong><br />
+https://www.youtube.com/watch?v=_L39rN6gz7Y</p>
+<p>The video explicitly works through tree basics and Gini impurity and then discusses overfitting. citeturn361006youtube11</p>
+<h2>Book</h2>
+<p><strong>An Introduction to Statistical Learning (ISL / ISLP)</strong><br />
+https://www.statlearning.com/</p>
+<p>The official book site provides free editions and supporting materials; Chapter 8 is the tree-based-methods chapter. citeturn361006search0turn361006search3</p>
+<h2>Technical reference</h2>
+<p><strong>scikit-learn — Decision Trees</strong><br />
+https://scikit-learn.org/stable/modules/tree.html</p>
+<p>Useful for checking the formal implementation criteria and mathematical notation. citeturn507024search8</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 56: Chapter Exit Test -->
+  <section id="s-56" data-search-section="Chapter Exit Test" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>56. Chapter Exit Test</h2>
+      <button class="bookmark-btn" data-id="s-56" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You are ready to move forward when you can:</p>
+<ul>
+<li>[ ] Convert class counts into probabilities.</li>
+<li>[ ] Calculate entropy for a binary node.</li>
+<li>[ ] Interpret entropy without calculating it.</li>
+<li>[ ] Calculate Gini impurity.</li>
+<li>[ ] Explain why pure nodes have zero impurity.</li>
+<li>[ ] Calculate weighted child entropy.</li>
+<li>[ ] Calculate information gain.</li>
+<li>[ ] Select the best split using information gain.</li>
+<li>[ ] Calculate weighted child Gini.</li>
+<li>[ ] Select a split using Gini.</li>
+<li>[ ] Explain entropy vs Gini.</li>
+<li>[ ] Explain why child weighting is necessary.</li>
+<li>[ ] Solve a complete numerical split problem.</li>
+<li>[ ] Explain every formula symbol in English and Hinglish.</li>
+<li>[ ] Avoid the common exam-direction mistakes.</li>
+</ul>
+<hr />
+<h1>Source Grounding</h1>
+<p><strong>Course-specific foundation:</strong> <code>Lecture07.pdf</code>, <code>Lecture08.pdf</code>, <code>Lecture09.pdf</code> and <code>Lecture10 copy.pdf</code> for probability/ML notation, hypothesis classes, generalization, loss, vector notation and optimization foundations.</p>
+<p><strong>Gap-fill sources:</strong> NPTEL decision-tree material; <em>An Introduction to Statistical Learning</em>; scikit-learn tree documentation.</p>
+<p><strong>Source boundary:</strong> Your supplied lecture notes do not contain a dedicated decision-tree mathematics lecture. Entropy, information gain and Gini are therefore presented as a standard external mathematical treatment aligned to the official Unit II “Decision Trees” topic rather than being falsely attributed to your supplied course notes.</p>
+<hr />
+<h1>Cross-Book Links</h1>
+<ul>
+<li>Main Book concept: <code>ML-U2-C22</code></li>
+<li>Exam Book: <code>EXAM-ML-U2-C23</code></li>
+<li>Math Companion: <code>MATH-TREE-01</code> through <code>MATH-TREE-08</code></li>
+<li>Practice Bank: <code>PRAC-ML-U2-C23</code></li>
+<li>Resource Shelf: <code>RES-ML-DECISION-TREE-MATH</code></li>
+</ul>
+<hr />
+<h1>Status</h1>
+<p><strong><code>ML-U2-C23</code> — COMPLETE</strong></p>
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="ch22-decision-trees.html" class="nav-btn">← Ch 22 — Decision Trees</a>
+    <a href="ch24-confusion-matrix-evaluation.html" class="nav-btn primary">Next: Ch 24 — Confusion Matrix & Evaluation →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch23-decision-trees-math.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 23</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

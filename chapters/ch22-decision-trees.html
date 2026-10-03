@@ -1,0 +1,1786 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 22: Decision Trees — AI & Machine Learning MiniBook. Root Nodes, Internal Splitting, Leaf Outcomes, Greedy Top-Down Induction, Stopping Criteria, and Overfitting vs Pruning">
+<title>Ch 22 — Decision Trees | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-viii">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 22 — Decision Trees</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 22 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why This Chapter Exists <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. One-Minute Intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Real-World Analogy — Twenty Questions </a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. What Problem Does a Decision Tree Solve? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Main Visual — Anatomy of a Decision Tree <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Hinglish — Tree Ko Kaise Padhein? </a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. What Does One Prediction Look Like? </a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. A Tree Is a Hypothesis Class <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. The Central Question in Training </a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Recursive Partitioning <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Numerical Features <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Categorical Features <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Classification Tree <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Regression Tree <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. How Does the Tree Choose a Question? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Why Not Just Split Until Every Leaf Is Pure? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Tree Depth and Flexibility <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Stopping Rules <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Pruning <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Decision Tree as a Piecewise Rule System </a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Comparison: Decision Tree vs Linear Model <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Comparison: Decision Tree vs K-NN <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. A Complete Training Story </a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. What Does “Good Split” Mean? <span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Why Entropy Appears <span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Why Gini Appears <span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Decision Tree and the Bias-Variance Connection <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Important Terminology </a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Common Misconceptions </a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Hinglish Master Explanation </a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Algorithm-Level Mental Model </a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Complexity and Practical Reality </a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Where Decision Trees Fit in Your Course </a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Exam Lens <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Active Recall — Close the Book </a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Practice Set </a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Math Connection </a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Resource Shelf </a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Chapter Exit Test <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link active"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit II</span><span>›</span><span>Part VIII — Decision Trees & Tree-Based Learning</span><span>›</span><span style="color:var(--em-text)">Chapter 22</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 22 · Unit II · Part VIII</div>
+    <div class="chapter-part-banner part-viii">
+      <span class="part-banner-badge">Unit II · Part VIII</span>
+      <span>Decision Trees & Tree-Based Learning</span>
+    </div>
+    <h1 class="chapter-title">Decision Trees</h1>
+    <div class="concept-id-tag">[CONCEPT-ML-022]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: High Yield (10-mark guarantee)</span>
+      <span class="chapter-meta-item">📖 ~45 min read</span>
+      <span class="chapter-meta-item">🎯 39 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>Decision Trees:</strong> Concept of tree learning, Decision nodes, Chance/Leaf nodes, Greedy heuristic search, Inductive bias, Stopping criteria, Pre-pruning vs Post-pruning, and Comparison with Linear Models & KNN.</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why This Chapter Exists</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">One-Minute Intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Real-World Analogy — Twenty Questions</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">What Problem Does a Decision Tree Solve?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Main Visual — Anatomy of a Decision Tree</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Hinglish — Tree Ko Kaise Padhein?</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">What Does One Prediction Look Like?</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">A Tree Is a Hypothesis Class</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">The Central Question in Training</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Recursive Partitioning</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Numerical Features</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Categorical Features</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Classification Tree</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Regression Tree</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">How Does the Tree Choose a Question?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Why Not Just Split Until Every Leaf Is Pure?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Tree Depth and Flexibility</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Stopping Rules</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Pruning</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Decision Tree as a Piecewise Rule System</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Comparison: Decision Tree vs Linear Model</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Comparison: Decision Tree vs K-NN</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">A Complete Training Story</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">What Does “Good Split” Mean?</span><span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Why Entropy Appears</span><span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Why Gini Appears</span><span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Decision Tree and the Bias-Variance Connection</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Important Terminology</span></a></li>
+      <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Common Misconceptions</span></a></li>
+      <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Hinglish Master Explanation</span></a></li>
+      <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Algorithm-Level Mental Model</span></a></li>
+      <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Complexity and Practical Reality</span></a></li>
+      <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Where Decision Trees Fit in Your Course</span></a></li>
+      <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Exam Lens</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Active Recall — Close the Book</span></a></li>
+      <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Practice Set</span></a></li>
+      <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Math Connection</span></a></li>
+      <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Resource Shelf</span></a></li>
+      <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Chapter Exit Test</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+    </ul>
+  </div>
+
+  <div class="chapter-preamble-card"><h1>MAIN-U2-C22 — Decision Trees</h1>
+<blockquote>
+<p><strong>Main Book:</strong> AI &amp; Machine Learning — Visual + Mathematical Self-Learning Textbook<br />
+<strong>Unit:</strong> II — Machine Learning Fundamentals<br />
+<strong>Topic ID:</strong> <code>ML-U2-C22</code><br />
+<strong>Prerequisites:</strong> <code>ML-U2-C14</code> What Is Machine Learning, <code>ML-U2-C15</code> Machine Learning Paradigms, <code>ML-U2-C16</code> Hypothesis Classes / K-NN, <code>ML-U2-C17</code> Generalization / Bias-Variance<br />
+<strong>University syllabus:</strong> Unit II — Decision Trees<br />
+<strong>Primary course-note status:</strong> Your supplied <code>Lecture07.pdf</code>–<code>Lecture10.pdf</code> do not contain a dedicated decision-tree lecture.<br />
+<strong>External academic basis:</strong> NPTEL Introduction to Machine Learning material and <em>An Introduction to Statistical Learning</em> (ISL/ISLP), plus scikit-learn documentation for formal terminology and implementation-level definitions.<br />
+<strong>Coding:</strong> Intentionally omitted here; you will handle implementation separately.</p>
+</blockquote>
+<hr /></div>
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 1: Why This Chapter Exists -->
+  <section id="s-01" data-search-section="Why This Chapter Exists" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>1. Why This Chapter Exists</h2>
+      <button class="bookmark-btn" data-id="s-01" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You already know that supervised learning tries to learn a relationship between inputs and outputs.</p>
+<p>You have also seen two very different ways of thinking about a model:</p>
+<ul>
+<li><strong>K-NN:</strong> look at nearby examples;</li>
+<li><strong>Linear regression/logistic regression:</strong> describe a relationship using an equation.</li>
+</ul>
+<p>But suppose we want a model that behaves more like the way a person makes a sequence of simple decisions.</p>
+<p>For example, imagine deciding whether to carry an umbrella:</p>
+<div class="ascii-box"><pre>Is rain likely?
+                         │
+               ┌─────────┴─────────┐
+              YES                  NO
+               │                    │
+       Is wind strong?          Take no umbrella
+          ┌────┴────┐
+         YES        NO
+          │          │
+      Heavy coat   Umbrella</pre></div>
+<p>A <strong>decision tree</strong> turns this kind of branching logic into a learnable model.</p>
+<p>Instead of manually writing all the rules, the algorithm learns useful splitting questions from data.</p>
+<p>That is the central idea of this chapter.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 2: One-Minute Intuition -->
+  <section id="s-02" data-search-section="One-Minute Intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. One-Minute Intuition</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>English</h3>
+<p>A decision tree repeatedly asks a question about the input.</p>
+<p>Each answer sends the example down a different branch.</p>
+<p>Eventually the example reaches a <strong>leaf</strong>, where the tree produces a prediction.</p>
+<blockquote>
+<p><strong>Decision tree = a sequence of learned questions that narrows a problem until a prediction can be made.</strong></p>
+</blockquote>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> Decision tree basically ek **20-questions game** ki tarah socho.
+>
+> “Age 30 se zyada hai?”  
+> “Income high hai?”  
+> “Loan history achhi hai?”
+>
+> Har answer tumhe ek alag branch par bhejta hai. Aakhir mein jo leaf milti hai, wahi prediction deti hai.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: Real-World Analogy — Twenty Questions -->
+  <section id="s-03" data-search-section="Real-World Analogy — Twenty Questions" class="content-section">
+    <div class="section-header">
+      <h2>3. Real-World Analogy — Twenty Questions</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose I secretly choose one person from a group of 1,000 people.</p>
+<p>You could ask:</p>
+<blockquote>
+<p>“Is the person wearing glasses?”</p>
+</blockquote>
+<p>If half the candidates disappear, that question was useful.</p>
+<p>Then ask another question.</p>
+<p>Again, choose the question that makes the remaining uncertainty smaller.</p>
+<p>A decision tree does something conceptually similar:</p>
+<div class="ascii-box"><pre>Large mixed group
+       ↓
+Choose useful question
+       ↓
+Split group
+    /       \
+ group A   group B
+    ↓          ↓
+ another   another
+ question  question
+    ↓          ↓
+  leaves     leaves</pre></div>
+<h3>Mental anchor</h3>
+<blockquote>
+<p><strong>At every internal node, the tree asks: “Which split gives me the cleanest useful groups?”</strong></p>
+</blockquote>
+<p>The mathematical notion of “cleaner” will be introduced in C23 through <strong>entropy, information gain and Gini impurity</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: What Problem Does a Decision Tree Solve? -->
+  <section id="s-04" data-search-section="What Problem Does a Decision Tree Solve?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>4. What Problem Does a Decision Tree Solve?</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A decision tree can be used for both:</p>
+<h2>Classification</h2>
+<p>Predict a discrete class.</p>
+<p>Examples:</p>
+<ul>
+<li>spam / not spam;</li>
+<li>approved / rejected;</li>
+<li>disease class A/B/C.</li>
+</ul>
+<h2>Regression</h2>
+<p>Predict a continuous value.</p>
+<p>Examples:</p>
+<ul>
+<li>house price;</li>
+<li>demand;</li>
+<li>temperature.</li>
+</ul>
+<p>For your syllabus, the important phrase is simply:</p>
+<blockquote>
+<p><strong>Decision Trees are supervised-learning models that make predictions by recursively partitioning the input space.</strong></p>
+</blockquote>
+<p>The classification and regression versions share the tree idea but use different prediction/split criteria.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: Main Visual — Anatomy of a Decision Tree -->
+  <section id="s-05" data-search-section="Main Visual — Anatomy of a Decision Tree" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>5. Main Visual — Anatomy of a Decision Tree</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>[ROOT]
+                    Is income &gt; ₹50k?
+                      /            \
+                    YES             NO
+                    /                 \
+             [INTERNAL]             [LEAF]
+          Credit score &gt; 700?      Reject
+              /       \
+            YES       NO
+            /           \
+        [LEAF]         [LEAF]
+       Approve       Review</pre></div>
+<h2>How to read it</h2>
+<h3>Root</h3>
+<p>The first decision/question.</p>
+<h3>Internal node</h3>
+<p>A point where another split is made.</p>
+<h3>Branch</h3>
+<p>One outcome of a split.</p>
+<h3>Leaf / terminal node</h3>
+<p>A final region where the model outputs a prediction.</p>
+<h3>Depth</h3>
+<p>How many edges must be traversed from the root to a node.</p>
+<h3>Path</h3>
+<p>The sequence of decisions taken by one example.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: Hinglish — Tree Ko Kaise Padhein? -->
+  <section id="s-06" data-search-section="Hinglish — Tree Ko Kaise Padhein?" class="content-section">
+    <div class="section-header">
+      <h2>6. Hinglish — Tree Ko Kaise Padhein?</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <blockquote>
+<p>Root se start karo.</p>
+<p>Jo question diya hai uska answer nikalo.</p>
+<p>Answer ke according left/right branch choose karo.</p>
+<p>Phir next question par jao.</p>
+<p>Jab leaf par pahunch jao, prediction mil gaya.</p>
+</blockquote>
+<p>So a tree is literally a <strong>decision path</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: What Does One Prediction Look Like? -->
+  <section id="s-07" data-search-section="What Does One Prediction Look Like?" class="content-section">
+    <div class="section-header">
+      <h2>7. What Does One Prediction Look Like?</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose we want to classify an email.</p>
+<p>Features:</p>
+<ul>
+<li>number of links;</li>
+<li>sender known or unknown;</li>
+<li>suspicious words;</li>
+<li>attachment present.</li>
+</ul>
+<p>The tree could behave like this:</p>
+<div class="ascii-box"><pre>Unknown sender?
+                  /        \
+                Yes         No
+                 │            │
+          Many suspicious    Safe
+             words?
+            /      \
+          Yes       No
+           │         │
+         SPAM     Review</pre></div>
+<p>An individual email travels along exactly one root-to-leaf path.</p>
+<p>That makes tree predictions easy to <strong>trace manually</strong>, which is one reason decision trees are attractive pedagogically.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: A Tree Is a Hypothesis Class -->
+  <section id="s-08" data-search-section="A Tree Is a Hypothesis Class" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>8. A Tree Is a Hypothesis Class</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This connects directly to <code>MAIN-U2-C16</code>.</p>
+<p>A decision tree is not one fixed function.</p>
+<p>There are many possible trees:</p>
+<div class="ascii-box"><pre>Decision-tree hypothesis class
+                         │
+          ┌──────────────┼──────────────┐
+          ▼              ▼              ▼
+       shallow         medium          deep
+         tree            tree           tree</pre></div>
+<p>Changing:</p>
+<ul>
+<li>which feature is chosen;</li>
+<li>where a numerical feature is split;</li>
+<li>how many levels are allowed;</li>
+<li>when splitting stops;</li>
+</ul>
+<p>changes the function represented by the tree.</p>
+<p>So tree depth and other constraints control <strong>model flexibility</strong>.</p>
+<p>This connects directly to your Lecture 8 discussion of hypothesis classes and generalization.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: The Central Question in Training -->
+  <section id="s-09" data-search-section="The Central Question in Training" class="content-section">
+    <div class="section-header">
+      <h2>9. The Central Question in Training</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose we have a node containing 100 examples:</p>
+<div class="ascii-box"><pre>60 class A
+40 class B</pre></div>
+<p>We can ask:</p>
+<blockquote>
+<p>Which feature and threshold should I use to split these examples?</p>
+</blockquote>
+<p>A good split should produce child groups that are <strong>more homogeneous</strong>.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>Before split:
+[A A A A A A B B B B]
+
+After a useful split:
+Left : [A A A A A]
+Right: [A B B B B]</pre></div>
+<p>A perfect split would produce:</p>
+<div class="ascii-box"><pre>Left  = all A
+Right = all B</pre></div>
+<p>The mathematical criteria used to judge this are the subject of <strong>C23</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: Recursive Partitioning -->
+  <section id="s-10" data-search-section="Recursive Partitioning" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>10. Recursive Partitioning</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This is a phrase worth owning.</p>
+<h3>Recursive</h3>
+<p>The same procedure is repeated again and again.</p>
+<h3>Partitioning</h3>
+<p>The current dataset/region is divided into smaller regions.</p>
+<p>So:</p>
+<div class="ascii-box"><pre>Dataset
+   ↓
+Split
+ /   \
+A     B
+↓     ↓
+split split
+↓     ↓
+...   ...</pre></div>
+<p>The tree keeps partitioning until a stopping condition is reached.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: Numerical Features -->
+  <section id="s-11" data-search-section="Numerical Features" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>11. Numerical Features</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a feature is <code>Age</code>.</p>
+<p>A tree may consider a threshold such as:</p>
+<div class="formula-math">\[
+Age \lt  30
+\]</div>
+<p>This creates two regions:</p>
+<div class="ascii-box"><pre>Age &lt; 30        Age ≥ 30</pre></div>
+<p>Another possible threshold could be:</p>
+<div class="formula-math">\[
+Age \lt  42
+\]</div>
+<p>The learning algorithm compares candidate splits and chooses one according to its split criterion.</p>
+<p>For numerical variables, this creates <strong>piecewise regions</strong> in the input space.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: Categorical Features -->
+  <section id="s-12" data-search-section="Categorical Features" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>12. Categorical Features</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the feature is:</p>
+<div class="ascii-box"><pre>City ∈ {Delhi, Mumbai, Jaipur}</pre></div>
+<p>A tree can make a decision based on category membership.</p>
+<p>The exact treatment of categorical variables depends on the learning implementation and representation strategy.</p>
+<p>For the conceptual exam level, remember:</p>
+<blockquote>
+<p><strong>A tree's job is to divide the examples into groups that become increasingly useful for prediction.</strong></p>
+</blockquote>
+<p>Do not confuse this with the one-hot encoding discussion from your Lecture 9. Encoding is one way to represent categorical information; it is not the definition of a decision tree.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: Classification Tree -->
+  <section id="s-13" data-search-section="Classification Tree" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>13. Classification Tree</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For classification, a leaf usually predicts a class.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>Leaf contains:
+
+8 Cats
+2 Dogs
+
+Majority class = Cat
+
+Prediction = Cat</pre></div>
+<p>The leaf can also provide class probabilities based on the class proportions under common tree formulations.</p>
+<p>For example:</p>
+<div class="formula-math">\[
+P(Cat)=\frac{8}{10}=0.8
+\]</div>
+<div class="formula-math">\[
+P(Dog)=\frac{2}{10}=0.2
+\]</div>
+<p>A classification tree can therefore provide not only a class label but a distribution over classes, depending on the implementation.</p>
+<p>scikit-learn documents this node-level class proportion formulation and uses Gini impurity or entropy/log-loss criteria for classification trees. citeturn507024search8</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: Regression Tree -->
+  <section id="s-14" data-search-section="Regression Tree" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>14. Regression Tree</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For regression, a leaf does not normally output a class.</p>
+<p>It outputs a numerical value.</p>
+<p>A common simple rule is:</p>
+<blockquote>
+<p><strong>Use the average target value of the training samples that reach the leaf.</strong></p>
+</blockquote>
+<p>Example:</p>
+<div class="ascii-box"><pre>Leaf targets:
+₹10L
+₹12L
+₹11L
+₹13L
+
+Prediction ≈ average
+          = ₹11.5L</pre></div>
+<p>Regression trees therefore create <strong>piecewise constant predictions</strong>.</p>
+<p>A complete regression-tree treatment belongs mainly to the universal extension; your official syllabus simply names Decision Trees.</p>
+<p>ISL/ISLP treats regression trees and classification trees together under tree-based methods. citeturn361006search13turn361006search0</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: How Does the Tree Choose a Question? -->
+  <section id="s-15" data-search-section="How Does the Tree Choose a Question?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>15. How Does the Tree Choose a Question?</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This is the heart of the algorithm.</p>
+<p>At a node:</p>
+<div class="ascii-box"><pre>Current examples
+      │
+      ▼
+Generate candidate splits
+      │
+      ▼
+Measure split quality
+      │
+      ▼
+Choose best split
+      │
+      ▼
+Create children
+      │
+      ▼
+Repeat recursively</pre></div>
+<p>For classification, common measures include:</p>
+<ul>
+<li><strong>Gini impurity</strong></li>
+<li><strong>Entropy / information gain</strong></li>
+<li>related log-loss formulations</li>
+</ul>
+<p>scikit-learn's current tree documentation explicitly lists <code>gini</code>, <code>entropy</code> and <code>log_loss</code> as classification criteria. citeturn507024search6turn507024search8</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: Why Not Just Split Until Every Leaf Is Pure? -->
+  <section id="s-16" data-search-section="Why Not Just Split Until Every Leaf Is Pure?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>16. Why Not Just Split Until Every Leaf Is Pure?</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Because of <strong>overfitting</strong>.</p>
+<p>Imagine a tree with enough depth to create a tiny leaf for one unusual training example.</p>
+<p>The tree might effectively say:</p>
+<blockquote>
+<p>“If every single detail looks exactly like this training example, predict this class.”</p>
+</blockquote>
+<p>Training performance can become excellent.</p>
+<p>But the model may generalize poorly.</p>
+<p>This is exactly the connection you learned in C17.</p>
+<div class="ascii-box"><pre>More tree complexity
+        ↓
+More expressive hypothesis class
+        ↓
+Lower training error
+        ↓
+Potentially higher variance
+        ↓
+Potential overfitting</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: Tree Depth and Flexibility -->
+  <section id="s-17" data-search-section="Tree Depth and Flexibility" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>17. Tree Depth and Flexibility</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A shallow tree might look like:</p>
+<div class="ascii-box"><pre>Root
+       /    \
+      A      B</pre></div>
+<p>A deeper tree might look like:</p>
+<div class="ascii-box"><pre>Root
+             /           \
+           A               B
+         /   \           /   \
+       C      D         E      F
+      / \    / \       / \    / \
+     ...</pre></div>
+<p>The deeper tree can represent more complicated decision boundaries.</p>
+<p>Therefore:</p>
+<blockquote>
+<p><strong>Depth is one important control on tree flexibility.</strong></p>
+</blockquote>
+<p>The exact parameterization used by a software library includes several other controls as well.</p>
+<p>Current scikit-learn documentation, for example, exposes controls such as <code>max_depth</code>, <code>min_samples_split</code>, <code>min_samples_leaf</code>, <code>max_leaf_nodes</code> and <code>ccp_alpha</code>. citeturn507024search6</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: Stopping Rules -->
+  <section id="s-18" data-search-section="Stopping Rules" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>18. Stopping Rules</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A training procedure can stop splitting for reasons such as:</p>
+<ul>
+<li>maximum depth reached;</li>
+<li>too few samples remain;</li>
+<li>impurity reduction is too small;</li>
+<li>node is already pure enough;</li>
+<li>other implementation-specific limits.</li>
+</ul>
+<p>These rules affect the complexity of the learned tree.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> “Har jagah tree ko aur todte hi rehna zaroori nahi. Kab stop karna hai, woh bhi learning ka part hai.”
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: Pruning -->
+  <section id="s-19" data-search-section="Pruning" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>19. Pruning</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Another way to control a large tree is <strong>pruning</strong>.</p>
+<p>Idea:</p>
+<div class="ascii-box"><pre>Very large tree
+      ↓
+Remove branches that do not justify their complexity
+      ↓
+Smaller tree</pre></div>
+<p>The goal is not automatically “the smallest tree.”</p>
+<p>The goal is to obtain a tree that balances fit and generalization.</p>
+<p>This is directly connected to your bias-variance chapter.</p>
+<p>ISL includes pruning and tree-based model-selection material within its treatment of decision trees. citeturn361006search13turn361006search0</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: Decision Tree as a Piecewise Rule System -->
+  <section id="s-20" data-search-section="Decision Tree as a Piecewise Rule System" class="content-section">
+    <div class="section-header">
+      <h2>20. Decision Tree as a Piecewise Rule System</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>One powerful way to understand a tree mathematically is to imagine the input space being divided into regions.</p>
+<p>For two features:</p>
+<div class="ascii-box"><pre>Feature 2
+   ↑
+   │   ┌───────────────┐
+   │   │   Class A     │
+   │   ├───────┬───────┤
+   │   │ A     │   B   │
+   │   │       │       │
+   │   └───────┴───────┘
+   └────────────────────────→ Feature 1</pre></div>
+<p>Each split creates a region.</p>
+<p>Eventually every leaf corresponds to a region of the feature space.</p>
+<p>The model then assigns an output to that region.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: Comparison: Decision Tree vs Linear Model -->
+  <section id="s-21" data-search-section="Comparison: Decision Tree vs Linear Model" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>21. Comparison: Decision Tree vs Linear Model</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Property</th>
+<th>Linear model</th>
+<th>Decision tree</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Representation</td>
+<td>Equation</td>
+<td>Hierarchical rules/splits</td>
+</tr>
+<tr>
+<td>Boundary</td>
+<td>Usually linear</td>
+<td>Can form piecewise/nonlinear regions</td>
+</tr>
+<tr>
+<td>Interpretation</td>
+<td>Coefficients</td>
+<td>Decision paths/questions</td>
+</tr>
+<tr>
+<td>Scaling</td>
+<td>Often important</td>
+<td>Usually less central to split decisions</td>
+</tr>
+<tr>
+<td>Feature interactions</td>
+<td>Need explicit terms / transformations</td>
+<td>Can arise naturally through sequential splits</td>
+</tr>
+<tr>
+<td>Flexibility</td>
+<td>Controlled by representation</td>
+<td>Strongly affected by depth/structure</td>
+</tr>
+<tr>
+<td>Overfitting</td>
+<td>Possible</td>
+<td>Possible, especially with large/deep trees</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Important</h3>
+<p>This is a conceptual comparison, not a claim that one family is universally superior.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: Comparison: Decision Tree vs K-NN -->
+  <section id="s-22" data-search-section="Comparison: Decision Tree vs K-NN" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>22. Comparison: Decision Tree vs K-NN</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th></th>
+<th>K-NN</th>
+<th>Decision Tree</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Main idea</td>
+<td>Look at nearby training points</td>
+<td>Ask learned feature questions</td>
+</tr>
+<tr>
+<td>Training</td>
+<td>Minimal explicit fitting</td>
+<td>Build a tree structure</td>
+</tr>
+<tr>
+<td>Prediction</td>
+<td>Search for neighbors</td>
+<td>Traverse a path</td>
+</tr>
+<tr>
+<td>Distance sensitivity</td>
+<td>High</td>
+<td>Not based on distance in the same way</td>
+</tr>
+<tr>
+<td>Scaling</td>
+<td>Often important</td>
+<td>Generally less central to split selection</td>
+</tr>
+<tr>
+<td>Interpretability</td>
+<td>Example-based</td>
+<td>Rule/path based</td>
+</tr>
+</tbody>
+</table></div>
+<p>The important connection to C16 is that both are flexible hypothesis classes, but they encode very different inductive biases.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: A Complete Training Story -->
+  <section id="s-23" data-search-section="A Complete Training Story" class="content-section">
+    <div class="section-header">
+      <h2>23. A Complete Training Story</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose we have:</p>
+<div class="ascii-box"><pre>Data
+│
+├── Age
+├── Income
+├── Credit score
+└── Previous defaults
+
+Target = Loan approved?</pre></div>
+<p>Training proceeds conceptually as:</p>
+<div class="ascii-box"><pre>1. Put all training examples at the root.
+           ↓
+2. Consider candidate questions.
+           ↓
+3. Measure how good each split is.
+           ↓
+4. Choose a useful split.
+           ↓
+5. Send examples down the appropriate branches.
+           ↓
+6. Repeat for each child node.
+           ↓
+7. Stop according to complexity/stopping rules.
+           ↓
+8. Produce a final tree.</pre></div>
+<p>Prediction then becomes:</p>
+<div class="ascii-box"><pre>New applicant
+     ↓
+Question 1
+     ↓
+Question 2
+     ↓
+Question 3
+     ↓
+Leaf
+     ↓
+Approved / Rejected</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: What Does “Good Split” Mean? -->
+  <section id="s-24" data-search-section="What Does “Good Split” Mean?" class="content-section mode-gate">
+    <div class="section-header">
+      <h2>24. What Does “Good Split” Mean?</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This phrase should become automatic.</p>
+<p>A good classification split generally makes child nodes <strong>less mixed</strong> than the parent.</p>
+<p>Suppose:</p>
+<div class="ascii-box"><pre>Parent:
+A A A A B B B B</pre></div>
+<p>This is mixed.</p>
+<p>A useful split might create:</p>
+<div class="ascii-box"><pre>Child 1: A A A A
+Child 2: B B B B</pre></div>
+<p>Now each child is pure.</p>
+<p>An unhelpful split might create:</p>
+<div class="ascii-box"><pre>Child 1: A B A B
+Child 2: A B A B</pre></div>
+<p>The children are still mixed.</p>
+<p>C23 will turn this idea into mathematics.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: Why Entropy Appears -->
+  <section id="s-25" data-search-section="Why Entropy Appears" class="content-section mode-gate">
+    <div class="section-header">
+      <h2>25. Why Entropy Appears</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You already know from probability that a distribution can describe uncertainty.</p>
+<p>For classification, the class proportions inside a node form a probability-like distribution.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>Node A:
+70% Cat
+30% Dog</pre></div>
+<p>versus:</p>
+<div class="ascii-box"><pre>Node B:
+50% Cat
+50% Dog</pre></div>
+<p>Node B is more uncertain.</p>
+<p>Entropy gives one mathematical way to quantify that uncertainty.</p>
+<p>So the conceptual chain is:</p>
+<div class="ascii-box"><pre>Class proportions
+       ↓
+Uncertainty
+       ↓
+Entropy / impurity measure
+       ↓
+Compare candidate splits</pre></div>
+<p>The detailed equations are deliberately moved into <strong>C23 — Decision Trees Mathematics</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: Why Gini Appears -->
+  <section id="s-26" data-search-section="Why Gini Appears" class="content-section mode-gate">
+    <div class="section-header">
+      <h2>26. Why Gini Appears</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Gini impurity is another measure of how mixed a classification node is.</p>
+<p>A pure node:</p>
+<div class="ascii-box"><pre>100% A
+0% B</pre></div>
+<p>has zero Gini impurity.</p>
+<p>A strongly mixed node has larger impurity.</p>
+<p>Current scikit-learn documentation defines classification-node Gini impurity from the class proportions and distinguishes it from the entropy criterion. citeturn507024search8</p>
+<p>Again:</p>
+<blockquote>
+<p><strong>C22 explains the model. C23 teaches the mathematics.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: Decision Tree and the Bias-Variance Connection -->
+  <section id="s-27" data-search-section="Decision Tree and the Bias-Variance Connection" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>27. Decision Tree and the Bias-Variance Connection</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This should connect directly to C17.</p>
+<div class="ascii-box"><pre>Shallow / heavily constrained tree
+          ↓
+Less flexible
+          ↓
+Potentially higher bias
+          ↓
+Potential underfitting
+
+Deep / weakly constrained tree
+          ↓
+More flexible
+          ↓
+Potentially higher variance
+          ↓
+Potential overfitting</pre></div>
+<p>This is why tree complexity matters.</p>
+<p>It is also why simply saying:</p>
+<blockquote>
+<p>“More complex tree = better tree”</p>
+</blockquote>
+<p>is wrong.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: Important Terminology -->
+  <section id="s-28" data-search-section="Important Terminology" class="content-section">
+    <div class="section-header">
+      <h2>28. Important Terminology</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Root</td>
+<td>Top node of the tree</td>
+</tr>
+<tr>
+<td>Internal node</td>
+<td>Node where a split is made</td>
+</tr>
+<tr>
+<td>Branch</td>
+<td>Outcome/path after a split</td>
+</tr>
+<tr>
+<td>Leaf</td>
+<td>Terminal node that produces prediction</td>
+</tr>
+<tr>
+<td>Depth</td>
+<td>Number of edges from root</td>
+</tr>
+<tr>
+<td>Split</td>
+<td>Rule that partitions examples</td>
+</tr>
+<tr>
+<td>Impurity</td>
+<td>Degree to which a node contains mixed classes</td>
+</tr>
+<tr>
+<td>Entropy</td>
+<td>One measure of uncertainty/impurity</td>
+</tr>
+<tr>
+<td>Gini impurity</td>
+<td>Another classification impurity measure</td>
+</tr>
+<tr>
+<td>Information gain</td>
+<td>Reduction in entropy from a split</td>
+</tr>
+<tr>
+<td>Pruning</td>
+<td>Removing branches to control complexity</td>
+</tr>
+<tr>
+<td>Stopping criterion</td>
+<td>Rule determining when splitting stops</td>
+</tr>
+<tr>
+<td>Classification tree</td>
+<td>Tree predicting a class/distribution</td>
+</tr>
+<tr>
+<td>Regression tree</td>
+<td>Tree predicting a numerical value</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 29: Common Misconceptions -->
+  <section id="s-29" data-search-section="Common Misconceptions" class="content-section">
+    <div class="section-header">
+      <h2>29. Common Misconceptions</h2>
+      <button class="bookmark-btn" data-id="s-29" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Misconception 1</h2>
+<blockquote>
+<p>“Decision trees are just manually written if-else rules.”</p>
+</blockquote>
+<p>Not in ML.</p>
+<p>The learner <strong>infers the tree structure/splits from training data</strong>.</p>
+<h2>Misconception 2</h2>
+<blockquote>
+<p>“The first feature in the dataset becomes the root.”</p>
+</blockquote>
+<p>No.</p>
+<p>The algorithm chooses a split according to its criterion and candidate splits.</p>
+<h2>Misconception 3</h2>
+<blockquote>
+<p>“A deeper tree is always better.”</p>
+</blockquote>
+<p>No.</p>
+<p>A very deep tree can overfit.</p>
+<h2>Misconception 4</h2>
+<blockquote>
+<p>“Entropy and Gini are the same formula.”</p>
+</blockquote>
+<p>No.</p>
+<p>They are different impurity criteria, although they serve related purposes.</p>
+<h2>Misconception 5</h2>
+<blockquote>
+<p>“Decision trees always require feature scaling.”</p>
+</blockquote>
+<p>No.</p>
+<p>Tree split decisions are not based on Euclidean distance in the same way as K-NN; scaling is therefore much less central to the basic tree mechanism.</p>
+<h2>Misconception 6</h2>
+<blockquote>
+<p>“A leaf must contain only one training sample.”</p>
+</blockquote>
+<p>No.</p>
+<p>Leaves may contain many samples; their output is derived from the samples that reach that leaf.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 30: Hinglish Master Explanation -->
+  <section id="s-30" data-search-section="Hinglish Master Explanation" class="content-section">
+    <div class="section-header">
+      <h2>30. Hinglish Master Explanation</h2>
+      <button class="bookmark-btn" data-id="s-30" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <blockquote>
+<p>Decision tree ko ek intelligent <strong>question-asking system</strong> samjho.</p>
+<p>Uske paas saara data hai. Ab usse aise questions choose karne hain jo data ko useful groups mein tod dein.</p>
+<p>Pehla question root par hota hai.</p>
+<p>Phir har group ke andar dobara question choose hota hai.</p>
+<p>Yeh process tab tak chalta hai jab tak enough clean/useful groups nahi milte ya stopping rule aa jata hai.</p>
+<p>Final leaf par prediction milta hai.</p>
+<p><strong>Training ka main challenge hai: kaunsa question poochna hai aur kab poochna band karna hai.</strong></p>
+<p>“Kaunsa question?” → entropy/Gini/information gain.<br />
+“Kab band karna?” → complexity/stopping/pruning/generalization.</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 31: Algorithm-Level Mental Model -->
+  <section id="s-31" data-search-section="Algorithm-Level Mental Model" class="content-section">
+    <div class="section-header">
+      <h2>31. Algorithm-Level Mental Model</h2>
+      <button class="bookmark-btn" data-id="s-31" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Without code, the conceptual algorithm is:</p>
+<div class="ascii-box"><pre>BUILD-TREE(data):
+
+    If stopping condition is reached:
+        create a leaf
+
+    Otherwise:
+        find candidate splits
+        evaluate split quality
+        choose the best split
+        divide data into children
+        recursively build each child
+
+    return tree</pre></div>
+<p>This is the high-level algorithmic structure you should be able to explain in an exam.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 32: Complexity and Practical Reality -->
+  <section id="s-32" data-search-section="Complexity and Practical Reality" class="content-section">
+    <div class="section-header">
+      <h2>32. Complexity and Practical Reality</h2>
+      <button class="bookmark-btn" data-id="s-32" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A complete complexity analysis depends on:</p>
+<ul>
+<li>number of samples;</li>
+<li>number of features;</li>
+<li>number of candidate thresholds;</li>
+<li>tree depth;</li>
+<li>implementation details.</li>
+</ul>
+<p>Do not memorize one complexity expression without stating its assumptions.</p>
+<p>For exam preparation, the more important complexity idea is:</p>
+<blockquote>
+<p><strong>Training becomes more expensive as the number of candidate splits and the amount of data increase.</strong></p>
+</blockquote>
+<p>Prediction through a tree is conceptually proportional to the number of decisions encountered along the path.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 33: Where Decision Trees Fit in Your Course -->
+  <section id="s-33" data-search-section="Where Decision Trees Fit in Your Course" class="content-section">
+    <div class="section-header">
+      <h2>33. Where Decision Trees Fit in Your Course</h2>
+      <button class="bookmark-btn" data-id="s-33" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your official syllabus places Decision Trees in <strong>Unit II</strong>, alongside:</p>
+<ul>
+<li>linear regression;</li>
+<li>logistic regression;</li>
+<li>model evaluation;</li>
+<li>overfitting/underfitting;</li>
+<li>regularization.</li>
+</ul>
+<p>This is intentional.</p>
+<p>Decision trees are a natural place to connect:</p>
+<div class="ascii-box"><pre>Hypothesis class
+      ↓
+Model flexibility
+      ↓
+Overfitting
+      ↓
+Validation / test performance</pre></div>
+<p>The tree is therefore not an isolated algorithm.</p>
+<p>It is another example of how a hypothesis class imposes a particular way of learning from data.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 34: Exam Lens -->
+  <section id="s-34" data-search-section="Exam Lens" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>34. Exam Lens</h2>
+      <button class="bookmark-btn" data-id="s-34" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="exam-ladder-card"><div class="ladder-mark-badge">📝 2-mark questions</div>
+
+- Define a decision tree.
+- What is a root node?
+- What is a leaf node?
+- What is impurity?
+- What is a classification tree?
+- What is pruning?
+
+</div>
+
+<div class="exam-ladder-card"><div class="ladder-mark-badge">📝 5-mark questions</div>
+
+> Explain the structure of a decision tree.
+
+Use:
+
+1. Definition
+2. Root
+3. Internal node
+4. Branch
+5. Leaf
+6. Small diagram
+7. Prediction path
+
+</div>
+
+<h3>Another 5-mark question</h3>
+<blockquote>
+<p>Explain how a decision tree is constructed.</p>
+</blockquote>
+<p>Use:</p>
+<ol>
+<li>Start with training data.</li>
+<li>Generate candidate splits.</li>
+<li>Evaluate split quality.</li>
+<li>Select a split.</li>
+<li>Partition the data.</li>
+<li>Repeat recursively.</li>
+<li>Stop using a criterion.</li>
+</ol>
+<div class="exam-ladder-card"><div class="ladder-mark-badge">📝 10-mark question</div>
+
+> Explain decision-tree learning with entropy/Gini and information gain.
+
+That is where C23 becomes essential.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 35: Active Recall — Close the Book -->
+  <section id="s-35" data-search-section="Active Recall — Close the Book" class="content-section">
+    <div class="section-header">
+      <h2>35. Active Recall — Close the Book</h2>
+      <button class="bookmark-btn" data-id="s-35" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <ol>
+<li>What is a decision tree?</li>
+<li>What is the root?</li>
+<li>What is an internal node?</li>
+<li>What is a leaf?</li>
+<li>What is a branch?</li>
+<li>What is recursive partitioning?</li>
+<li>What makes a split useful?</li>
+<li>Why do we need an impurity measure?</li>
+<li>What is entropy?</li>
+<li>What is Gini impurity?</li>
+<li>What is information gain?</li>
+<li>Why can a deep tree overfit?</li>
+<li>What is pruning?</li>
+<li>How does a tree represent a hypothesis class?</li>
+<li>How is a classification tree different from a regression tree?</li>
+<li>Why is feature scaling less central to basic tree splitting than to K-NN?</li>
+<li>How does tree depth affect flexibility?</li>
+<li>How does this connect to bias-variance?</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 36: Practice Set -->
+  <section id="s-36" data-search-section="Practice Set" class="content-section">
+    <div class="section-header">
+      <h2>36. Practice Set</h2>
+      <button class="bookmark-btn" data-id="s-36" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>A. Conceptual</h2>
+<h3>Q1</h3>
+<p>Draw a decision tree that decides whether to carry an umbrella using at least three questions.</p>
+<h3>Q2</h3>
+<p>Explain why the second tree below is potentially more flexible than the first.</p>
+<div class="ascii-box"><pre>Tree A: depth 1
+Tree B: depth 6</pre></div>
+<h3>Q3</h3>
+<p>Why is “pure leaves” not enough to justify a tree as a good model?</p>
+<h3>Q4</h3>
+<p>Explain recursive partitioning in your own words.</p>
+<h2>B. Classification reasoning</h2>
+<h3>Q5</h3>
+<p>A node contains 20 examples: 18 of class A and 2 of class B. Is it relatively pure or mixed? Explain without calculating entropy.</p>
+<h3>Q6</h3>
+<p>Two candidate splits both preserve the same number of examples, but Split A produces purer children than Split B. Which split would an impurity-based learner generally prefer and why?</p>
+<h2>C. Diagram recall</h2>
+<h3>Q7</h3>
+<p>Draw and label:</p>
+<ul>
+<li>root;</li>
+<li>internal node;</li>
+<li>branch;</li>
+<li>leaf;</li>
+<li>depth;</li>
+<li>a root-to-leaf path.</li>
+</ul>
+<h2>D. Explain in Hinglish</h2>
+<h3>Q8</h3>
+<p>Explain a decision tree using the “20 questions” analogy.</p>
+<h3>Q9</h3>
+<p>Explain why a deep tree can overfit.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 37: Math Connection -->
+  <section id="s-37" data-search-section="Math Connection" class="content-section">
+    <div class="section-header">
+      <h2>37. Math Connection</h2>
+      <button class="bookmark-btn" data-id="s-37" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The next chapter is where the intuition becomes mathematics:</p>
+<ul>
+<li>class probability;</li>
+<li>entropy;</li>
+<li>information gain;</li>
+<li>Gini impurity;</li>
+<li>weighted child impurity;</li>
+<li>split quality;</li>
+<li>numerical calculations.</li>
+</ul>
+<p><strong>Next:</strong> <code>MAIN-U2-C23 — Decision Trees Mathematics: Entropy, Information Gain &amp; Gini</code></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 38: Resource Shelf -->
+  <section id="s-38" data-search-section="Resource Shelf" class="content-section">
+    <div class="section-header">
+      <h2>38. Resource Shelf</h2>
+      <button class="bookmark-btn" data-id="s-38" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Course material</h2>
+<p>Your supplied <code>Lecture07.pdf</code>–<code>Lecture10.pdf</code> establish the supervised-learning, hypothesis-class, preprocessing, linear-regression and generalization foundations, but <strong>they do not provide a dedicated decision-tree lecture</strong>. Treat this chapter as a deliberate syllabus-gap fill rather than pretending it came from the provided notes.</p>
+<h2>NPTEL</h2>
+<p><strong>NPTEL — Introduction to Machine Learning</strong><br />
+https://onlinecourses-archive.nptel.ac.in/noc17_cs26/preview</p>
+<p>The course explicitly lists decision trees among its core supervised-learning algorithms and also covers hypothesis space, overfitting, bias/variance and evaluation strategies. citeturn507024search16</p>
+<p><strong>NPTEL — Introduction to Machine Learning (IIT Madras, 2026)</strong><br />
+https://nptel.ac.in/courses/106106236</p>
+<p>The course material includes an explicit Decision Tree tutorial and an entropy/information-gain lecture sequence. citeturn507024search0</p>
+<h2>Video</h2>
+<p><strong>StatQuest — Decision and Classification Trees, Clearly Explained!!!</strong><br />
+https://www.youtube.com/watch?v=_L39rN6gz7Y</p>
+<p>This video explicitly walks through tree basics, Gini impurity, numeric/continuous variables, leaves and overfitting. citeturn361006youtube11</p>
+<h2>Reference book</h2>
+<p><strong>An Introduction to Statistical Learning (ISL / ISLP)</strong><br />
+https://www.statlearning.com/</p>
+<p>Chapter 8, <strong>Tree-Based Methods</strong>, covers regression trees, classification trees and trees versus linear models. citeturn361006search13turn361006search0</p>
+<h2>Technical reference</h2>
+<p><strong>scikit-learn — Decision Trees</strong><br />
+https://scikit-learn.org/stable/modules/tree.html</p>
+<p>Use this only when you want implementation-level definitions or parameter meaning; the Main Book deliberately remains implementation-independent. citeturn507024search8</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 39: Chapter Exit Test -->
+  <section id="s-39" data-search-section="Chapter Exit Test" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>39. Chapter Exit Test</h2>
+      <button class="bookmark-btn" data-id="s-39" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You are ready for C23 when you can:</p>
+<ul>
+<li>[ ] Explain a decision tree without memorized wording.</li>
+<li>[ ] Draw and label a tree.</li>
+<li>[ ] Trace a prediction from root to leaf.</li>
+<li>[ ] Explain recursive partitioning.</li>
+<li>[ ] Explain why split quality matters.</li>
+<li>[ ] Explain impurity intuitively.</li>
+<li>[ ] Distinguish classification and regression trees.</li>
+<li>[ ] Explain the role of depth and stopping rules.</li>
+<li>[ ] Explain overfitting in trees.</li>
+<li>[ ] Explain pruning at a high level.</li>
+<li>[ ] Explain why entropy, information gain and Gini are needed.</li>
+<li>[ ] Connect trees to hypothesis classes and bias-variance.</li>
+</ul>
+<hr />
+<h1>Source Grounding</h1>
+<p><strong>Course-specific sources used:</strong> <code>Lecture07.pdf</code>, <code>Lecture08.pdf</code>, <code>Lecture09.pdf</code>, <code>Lecture10 copy.pdf</code> for the preceding supervised-learning, hypothesis-class, preprocessing, linear-model and generalization concepts.</p>
+<p><strong>Gap-fill sources:</strong> NPTEL Introduction to Machine Learning; NPTEL Introduction to Machine Learning (IIT Madras, 2026); <em>An Introduction to Statistical Learning</em>; scikit-learn Decision Trees documentation.</p>
+<p><strong>Important source boundary:</strong> Because the supplied lecture-note set does not contain a dedicated decision-tree lecture, the detailed tree algorithm and split criteria in this chapter are explicitly treated as external academic material aligned to the official Unit II syllabus—not as material silently attributed to your supplied notes.</p>
+<hr />
+<h1>Cross-Book Links</h1>
+<ul>
+<li>Exam Book: <code>EXAM-ML-U2-C22</code></li>
+<li>Math Companion: <code>MATH-TREE-01</code> through <code>MATH-TREE-08</code></li>
+<li>Practice Bank: <code>PRAC-ML-U2-C22</code></li>
+<li>Resource Shelf: <code>RES-ML-DECISION-TREES</code></li>
+</ul>
+<hr />
+<h1>Status</h1>
+<p><strong><code>ML-U2-C22</code> — COMPLETE</strong></p>
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="ch21-logistic-regression-math.html" class="nav-btn">← Ch 21 — Logistic Regression Math</a>
+    <a href="ch23-decision-trees-math.html" class="nav-btn primary">Next: Ch 23 — Decision Trees Math →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch22-decision-trees.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 22</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

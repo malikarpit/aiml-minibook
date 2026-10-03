@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 37: Recurrent Neural Networks (RNN) — AI & Machine Learning MiniBook. Sequential Data, Hidden State Memory, Unrolling Through Time, Backpropagation Through Time (BPTT), and the Vanishing Gradient Problem">
+<title>Ch 37 — Recurrent Neural Networks (RNN) | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-xv">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 37 — Recurrent Neural Networks (RNN)</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 37 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why This Chapter Exists <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Course Grounding <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. One-Minute Intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Sequence Notation <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. The Core RNN Equations <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Unrolling the RNN <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Parameter Sharing Through Time <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. A Small Numerical Example <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Why the Hidden State Matters <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Types of RNN Input/Output Structures <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. RNN and Text <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. RNN and Embeddings <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. The Hidden State as a Function of History <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Backpropagation Through Time <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Why RNN Training Becomes Difficult <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. A Simple Gradient Intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Why Long-Term Dependencies Are Difficult <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. RNN vs Feedforward Network <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. RNN vs CNN </a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Output Design <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Shapes — Exam Skill </a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. The Most Important Diagram </a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. RNN Mathematics Summary </a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Common Mistakes </a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Exam Lens <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Active Recall </a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Chapter Exit Test </a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Resource Shelf </a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Source Boundary </a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Connection Forward </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link active"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit III</span><span>›</span><span>Part XV — Sequence Modeling & RNNs</span><span>›</span><span style="color:var(--em-text)">Chapter 37</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 37 · Unit III · Part XV</div>
+    <div class="chapter-part-banner part-xv">
+      <span class="part-banner-badge">Unit III · Part XV</span>
+      <span>Sequence Modeling & RNNs</span>
+    </div>
+    <h1 class="chapter-title">Recurrent Neural Networks (RNN)</h1>
+    <div class="concept-id-tag">[CONCEPT-DL-037]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: High Yield (10-mark guarantee)</span>
+      <span class="chapter-meta-item">📖 ~45 min read</span>
+      <span class="chapter-meta-item">🎯 30 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>Recurrent Neural Networks:</strong> Modeling sequential dependencies, Hidden recurrent state \(h_t = \tanh(W_{hh} h_{t-1} + W_{xh} x_t + b_h)\), Unrolling networks across time steps, Shared weight matrices across time, Backpropagation Through Time (BPTT), and Repeated Jacobian products leading to vanishing/exploding gradients.</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why This Chapter Exists</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Course Grounding</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">One-Minute Intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Sequence Notation</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">The Core RNN Equations</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Unrolling the RNN</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Parameter Sharing Through Time</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">A Small Numerical Example</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Why the Hidden State Matters</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Types of RNN Input/Output Structures</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">RNN and Text</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">RNN and Embeddings</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">The Hidden State as a Function of History</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Backpropagation Through Time</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Why RNN Training Becomes Difficult</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">A Simple Gradient Intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Why Long-Term Dependencies Are Difficult</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">RNN vs Feedforward Network</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">RNN vs CNN</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Output Design</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Shapes — Exam Skill</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">The Most Important Diagram</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">RNN Mathematics Summary</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Common Mistakes</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Exam Lens</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Active Recall</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Chapter Exit Test</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Resource Shelf</span></a></li>
+      <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Source Boundary</span></a></li>
+      <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Connection Forward</span></a></li>
+    </ul>
+  </div>
+
+  <div class="chapter-preamble-card"><h1>MAIN-U3-C37 — Recurrent Neural Networks (RNNs)</h1>
+<blockquote>
+<p><strong>Main Book:</strong> AI &amp; Machine Learning — Visual + Mathematical Self-Learning Textbook<br />
+<strong>Unit:</strong> III — Neural Networks and Deep Learning<br />
+<strong>Topic ID:</strong> <code>ML-U3-C37</code><br />
+<strong>Prerequisites:</strong> C30–C35 neural-network foundations, MLP, activations/losses, gradient descent, backpropagation<br />
+<strong>Syllabus position:</strong> Unit III — RNN<br />
+<strong>Coverage status:</strong> CORE + STANDARD EXPANSION</p>
+</blockquote>
+<hr /></div>
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 1: Why This Chapter Exists -->
+  <section id="s-01" data-search-section="Why This Chapter Exists" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>1. Why This Chapter Exists</h2>
+      <button class="bookmark-btn" data-id="s-01" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Many problems are not naturally represented by one fixed vector.</p>
+<p>Examples include:</p>
+<ul>
+<li>a sentence;</li>
+<li>a stock-price sequence;</li>
+<li>sensor readings over time;</li>
+<li>speech;</li>
+<li>a sequence of events;</li>
+<li>a time series.</li>
+</ul>
+<p>In these problems, <strong>order matters</strong>.</p>
+<p>Compare:</p>
+<blockquote>
+<p>“dog bites man”</p>
+</blockquote>
+<p>with:</p>
+<blockquote>
+<p>“man bites dog”</p>
+</blockquote>
+<p>The same words appear, but their order changes the meaning.</p>
+<p>A standard feedforward network does not automatically maintain a persistent state from one time step to the next.</p>
+<p>An <strong>RNN</strong> introduces a recurrent hidden state.</p>
+<p>The central idea is:</p>
+<blockquote>
+<p><strong>An RNN processes a sequence step by step while carrying information forward through a hidden state.</strong></p>
+</blockquote>
+<p>Conceptual flow:</p>
+<div class="ascii-box"><pre>x₁ → RNN → h₁
+          ↓
+x₂ → RNN → h₂
+          ↓
+x₃ → RNN → h₃
+          ↓
+...</pre></div>
+<p>Each hidden state can depend on:</p>
+<ul>
+<li>the current input;</li>
+<li>the previous hidden state.</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 2: Course Grounding -->
+  <section id="s-02" data-search-section="Course Grounding" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. Course Grounding</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied DSC-14 resource guide explicitly lists:</p>
+<div class="ascii-box"><pre>Unit III:
+Neural networks
+Perceptron
+MLP
+Backpropagation
+Gradient descent
+CNN
+RNN
+LSTM</pre></div>
+<p>The guide identifies RNN/LSTM as topics requiring additional coverage beyond the supplied core lecture material and recommends deep-learning resources for filling these gaps.</p>
+<p>Therefore:</p>
+<blockquote>
+<p>This chapter is a <strong>syllabus-aligned standard RNN expansion</strong> designed to make the topic self-contained.</p>
+</blockquote>
+<p>It does not claim that every equation or example below is present verbatim in the supplied lecture notes.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: One-Minute Intuition -->
+  <section id="s-03" data-search-section="One-Minute Intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>3. One-Minute Intuition</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>English</h2>
+<p>Imagine reading a sentence word by word.</p>
+<p>When you reach the word:</p>
+<blockquote>
+<p>“because”</p>
+</blockquote>
+<p>you may need information from earlier words to understand what comes next.</p>
+<p>An RNN maintains a hidden state:</p>
+<div class="ascii-box"><pre>past information
+      ↓
+ hidden state
+      ↓
+current input
+      ↓
+new hidden state</pre></div>
+<p>The hidden state is therefore a learned summary of information carried through the sequence.</p>
+<h2>Hinglish</h2>
+<p>RNN ko ek student samjho jo sentence ko ek-ek word karke padh raha hai.</p>
+<div class="ascii-box"><pre>word 1 → student remembers
+word 2 → student remembers previous + current
+word 3 → previous memory + current
+...</pre></div>
+<p>Har step pe student ke paas ek internal memory-like state hoti hai.</p>
+<p>Important:</p>
+<blockquote>
+<p>RNN ki hidden state human-like memory nahi hai.</p>
+</blockquote>
+<p>It is simply a vector of learned numerical state.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: Sequence Notation -->
+  <section id="s-04" data-search-section="Sequence Notation" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>4. Sequence Notation</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Let a sequence be:</p>
+<div class="formula-math">\[
+x_1,x_2,\ldots,x_T.
+\]</div>
+<p>Here:</p>
+<ul>
+<li>\(T\) = sequence length;</li>
+<li>\(x_t\) = input at time step \(t\).</li>
+</ul>
+<p>The RNN produces hidden states:</p>
+<div class="formula-math">\[
+h_1,h_2,\ldots,h_T.
+\]</div>
+<p>Depending on the task, we may produce outputs:</p>
+<div class="formula-math">\[
+y_1,y_2,\ldots,y_T
+\]</div>
+<p>or only a final output.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: The Core RNN Equations -->
+  <section id="s-05" data-search-section="The Core RNN Equations" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>5. The Core RNN Equations</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A basic RNN can be written as:</p>
+<div class="formula-math">\[
+\boxed{
+h_t=
+\phi(W_{xh}x_t+W_{hh}h_{t-1}+b_h)
+}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\boxed{
+y_t=
+\psi(W_{hy}h_t+b_y)
+}
+\]</div>
+<p>where:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>\(x_t\)</td>
+<td>current input</td>
+</tr>
+<tr>
+<td>\(h_{t-1}\)</td>
+<td>previous hidden state</td>
+</tr>
+<tr>
+<td>\(h_t\)</td>
+<td>current hidden state</td>
+</tr>
+<tr>
+<td>\(W_{xh}\)</td>
+<td>input-to-hidden weights</td>
+</tr>
+<tr>
+<td>\(W_{hh}\)</td>
+<td>hidden-to-hidden recurrent weights</td>
+</tr>
+<tr>
+<td>\(W_{hy}\)</td>
+<td>hidden-to-output weights</td>
+</tr>
+<tr>
+<td>\(b_h\)</td>
+<td>hidden bias</td>
+</tr>
+<tr>
+<td>\(b_y\)</td>
+<td>output bias</td>
+</tr>
+<tr>
+<td>\(\phi\)</td>
+<td>hidden activation</td>
+</tr>
+<tr>
+<td>\(\psi\)</td>
+<td>output transformation</td>
+</tr>
+</tbody>
+</table></div>
+<p>The most important term to understand is:</p>
+<div class="formula-math">\[
+W_{hh}h_{t-1}.
+\]</div>
+<p>It is the mechanism through which information from the previous step influences the current state.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: Unrolling the RNN -->
+  <section id="s-06" data-search-section="Unrolling the RNN" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>6. Unrolling the RNN</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="diagram-box"><pre class="mermaid">
+graph LR
+    subgraph Folded["Folded View"]
+        X["xₜ"] --> RNN["RNN Cell (hₜ)"]
+        RNN -->|Wₕₕ (Feedback)| RNN
+        RNN --> Y["ŷₜ"]
+    end
+    subgraph Unrolled["Unrolled Across Time Steps"]
+        x0["x₀"] --> h0["h₀ = tanh(Wₓₕ x₀ + b)"]
+        h0 --> y0["ŷ₀"]
+        
+        x1["x₁"] --> h1["h₁ = tanh(Wₓₕ x₁ + Wₕₕ h₀ + b)"]
+        h0 -->|Wₕₕ| h1
+        h1 --> y1["ŷ₁"]
+        
+        x2["x₂"] --> h2["h₂ = tanh(Wₓₕ x₂ + Wₕₕ h₁ + b)"]
+        h1 -->|Wₕₕ| h2
+        h2 --> y2["ŷ₂"]
+    end
+</pre></div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher explanation — Hinglish</div>
+
+Standard neural network har input ko azaad maanta hai (jaise ek image ka doosri image se koi lena-dena nahi). Lekin language aur speech mein order sabse important hota hai: "Ram ne Ravan ko maara" aur "Ravan ne Ram ko maara" mein wahi words hain, lekin order badalne se meaning ulta ho gaya! RNN pichle word ka context apne hidden state $h_t$ mein sambhaal kar aage bhejta hai.
+
+
+The compact recurrence can be visualized by **unrolling** it through time.
+
+
+
+<div class="ascii-box"><pre>┌───────────────┐
+x₁ ───→ │ RNN cell      │ ───→ h₁
+        └───────────────┘
+                 │
+                 ↓
+        ┌───────────────┐
+x₂ ───→ │ same RNN cell │ ───→ h₂
+        └───────────────┘
+                 │
+                 ↓
+        ┌───────────────┐
+x₃ ───→ │ same RNN cell │ ───→ h₃
+        └───────────────┘</pre></div>
+
+
+
+The phrase **same RNN cell** is important.
+
+The parameters are shared across time steps.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: Parameter Sharing Through Time -->
+  <section id="s-07" data-search-section="Parameter Sharing Through Time" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>7. Parameter Sharing Through Time</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a sequence has 100 time steps.</p>
+<p>An RNN does not normally learn a completely different \(W_{xh}\) and \(W_{hh}\) for every time step.</p>
+<p>Instead:</p>
+<div class="ascii-box"><pre>time 1 ──┐
+time 2 ──┤
+time 3 ──┤──→ shared parameters
+...      │
+time 100 ┘</pre></div>
+<p>This allows the same learned transition rule to be applied throughout the sequence.</p>
+<p>This is analogous in spirit to CNN parameter sharing, but the structure being shared is different:</p>
+<ul>
+<li>CNN: shared across spatial locations;</li>
+<li>RNN: shared across time steps.</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: A Small Numerical Example -->
+  <section id="s-08" data-search-section="A Small Numerical Example" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>8. A Small Numerical Example</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<div class="formula-math">\[
+x_t=2,
+\qquad
+h_{t-1}=1.
+\]</div>
+<p>Let:</p>
+<div class="formula-math">\[
+W_{xh}=0.5,
+\qquad
+W_{hh}=0.4,
+\qquad
+b_h=0.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+z_t
+=
+0.5(2)+0.4(1)
+\]</div>
+<div class="formula-math">\[
+=1+0.4
+\]</div>
+<div class="formula-math">\[
+=1.4.
+\]</div>
+<p>Using ReLU:</p>
+<div class="formula-math">\[
+h_t=\max(0,1.4)=1.4.
+\]</div>
+<p>So the current state depends on both:</p>
+<div class="ascii-box"><pre>current input
++
+previous state</pre></div>
+<p>That is the core recurrence.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: Why the Hidden State Matters -->
+  <section id="s-09" data-search-section="Why the Hidden State Matters" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>9. Why the Hidden State Matters</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine:</p>
+<div class="ascii-box"><pre>&quot;The movie was not ... &quot;</pre></div>
+<p>When the model later encounters:</p>
+<div class="ascii-box"><pre>&quot;... good&quot;</pre></div>
+<p>the earlier word <strong>not</strong> may matter.</p>
+<p>A recurrent state provides a mechanism for information to persist:</p>
+<div class="ascii-box"><pre>&quot;not&quot;
+  ↓
+hidden state
+  ↓
+...
+  ↓
+&quot;good&quot;
+  ↓
+new hidden state / output</pre></div>
+<p>The model does not explicitly store a sentence as words.</p>
+<p>It stores numerical state that is learned to be useful for the training objective.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: Types of RNN Input/Output Structures -->
+  <section id="s-10" data-search-section="Types of RNN Input/Output Structures" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>10. Types of RNN Input/Output Structures</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="diagram-box"><pre class="mermaid">
+flowchart LR
+    G5["∂ℒ/∂h₅"] -->|× Wₕₕᵀ| G4["∂ℒ/∂h₄"]
+    G4 -->|× Wₕₕᵀ| G3["∂ℒ/∂h₃"]
+    G3 -->|× Wₕₕᵀ| G2["∂ℒ/∂h₂"]
+    G2 -->|× Wₕₕᵀ| G1["∂ℒ/∂h₁"]
+    G1 -->|× Wₕₕᵀ| G0["∂ℒ/∂h₀ ≈ 0 (Vanished!)"]
+</pre></div>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+class VanillaRNNCell:
+    def __init__(self, input_dim, hidden_dim, output_dim):
+        self.W_xh = np.random.randn(hidden_dim, input_dim) * 0.01
+        self.W_hh = np.random.randn(hidden_dim, hidden_dim) * 0.01
+        self.W_hy = np.random.randn(output_dim, hidden_dim) * 0.01
+        self.b_h  = np.zeros((hidden_dim, 1))
+        self.b_y  = np.zeros((output_dim, 1))
+
+    def forward_sequence(self, X_seq):
+        hidden_dim = self.W_hh.shape[0]
+        h_t = np.zeros((hidden_dim, 1))
+        outputs = []
+
+        for x_t in X_seq:
+            h_t = np.tanh(np.dot(self.W_xh, x_t) + np.dot(self.W_hh, h_t) + self.b_h)
+            y_t = np.dot(self.W_hy, h_t) + self.b_y
+            outputs.append(y_t)
+        return outputs, h_t
+
+seq = [np.random.randn(4, 1) for _ in range(3)]
+rnn = VanillaRNNCell(input_dim=4, hidden_dim=8, output_dim=2)
+outs, final_h = rnn.forward_sequence(seq)
+print(f&quot;Processed sequence of length {len(seq)}.&quot;)
+print(&quot;Final hidden state shape:&quot;, final_h.shape)
+print(&quot;Output at step 3 shape:&quot;, outs[-1].shape)</code></pre></div>
+<p>RNNs can be used in several patterns.</p>
+<h2>Many-to-one</h2>
+<p>Sequence:</p>
+<div class="ascii-box"><pre>x₁ → x₂ → x₃ → x₄</pre></div>
+<p>produces one output:</p>
+<div class="ascii-box"><pre>→ y</pre></div>
+<p>Example:</p>
+<blockquote>
+<p>sentiment classification of an entire sentence.</p>
+</blockquote>
+<hr />
+<h2>One-to-many</h2>
+<p>One input produces a sequence.</p>
+<div class="ascii-box"><pre>x → RNN → y₁ → y₂ → y₃</pre></div>
+<p>Example:</p>
+<blockquote>
+<p>a conceptual sequence-generation setup.</p>
+</blockquote>
+<hr />
+<h2>Many-to-many, aligned</h2>
+<p>Each input step has an output:</p>
+<div class="ascii-box"><pre>x₁ → y₁
+x₂ → y₂
+x₃ → y₃</pre></div>
+<p>Example:</p>
+<blockquote>
+<p>sequence labeling.</p>
+</blockquote>
+<hr />
+<h2>Many-to-many, sequence-to-sequence</h2>
+<p>Input and output sequences may have different lengths:</p>
+<div class="ascii-box"><pre>x₁ x₂ x₃ x₄
+      ↓
+encoder/decoder system
+      ↓
+y₁ y₂ y₃</pre></div>
+<p>This idea appears in sequence-to-sequence architectures.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: RNN and Text -->
+  <section id="s-11" data-search-section="RNN and Text" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>11. RNN and Text</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Text is discrete.</p>
+<p>A neural network normally works with numerical vectors.</p>
+<p>So a simplified text pipeline is:</p>
+<div class="ascii-box"><pre>words / tokens
+      ↓
+numerical representation
+      ↓
+RNN
+      ↓
+hidden states
+      ↓
+output</pre></div>
+<p>The token representation may come from one-hot vectors, learned embeddings, or other representations.</p>
+<p>For a basic RNN chapter, the crucial idea is:</p>
+<blockquote>
+<p><strong>RNN operates on numerical representations of sequence elements, not raw words as strings.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: RNN and Embeddings -->
+  <section id="s-12" data-search-section="RNN and Embeddings" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>12. RNN and Embeddings</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<div class="ascii-box"><pre>&quot;cat&quot;</pre></div>
+<p>is converted to a vector:</p>
+<div class="formula-math">\[
+x_t\in\mathbb{R}^d.
+\]</div>
+<p>The RNN receives:</p>
+<div class="formula-math">\[
+x_t
+\]</div>
+<p>rather than the literal word.</p>
+<p>This allows matrix operations:</p>
+<div class="formula-math">\[
+W_{xh}x_t.
+\]</div>
+<p>Embedding details belong more naturally with the later NLP section, but the connection is important.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: The Hidden State as a Function of History -->
+  <section id="s-13" data-search-section="The Hidden State as a Function of History" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>13. The Hidden State as a Function of History</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Because:</p>
+<div class="formula-math">\[
+h_t=f(x_t,h_{t-1}),
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+h_{t-1}=f(x_{t-1},h_{t-2}),
+\]</div>
+<p>the current state indirectly depends on earlier inputs:</p>
+<div class="formula-math">\[
+h_t
+=
+f(x_t,x_{t-1},x_{t-2},\ldots,x_1).
+\]</div>
+<p>This is why RNNs can model sequence context.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: Backpropagation Through Time -->
+  <section id="s-14" data-search-section="Backpropagation Through Time" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>14. Backpropagation Through Time</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>RNN training uses gradient-based learning.</p>
+<p>Because the same recurrent computation occurs repeatedly, the network can be <strong>unrolled through time</strong>.</p>
+<p>Then ordinary backpropagation can be applied to this computational graph.</p>
+<p>This is called:</p>
+<blockquote>
+<p><strong>Backpropagation Through Time (BPTT).</strong></p>
+</blockquote>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>forward through time
+x₁ → h₁ → h₂ → h₃ → ... → hT
+                         ↓
+                       loss
+                         ↓
+backward through the unrolled graph</pre></div>
+<p>The important connection is:</p>
+<div class="ascii-box"><pre>RNN recurrence
+      ↓
+unrolled computation graph
+      ↓
+backpropagation
+      ↓
+shared parameter gradients
+      ↓
+gradient descent</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: Why RNN Training Becomes Difficult -->
+  <section id="s-15" data-search-section="Why RNN Training Becomes Difficult" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>15. Why RNN Training Becomes Difficult</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose information must travel through many time steps.</p>
+<p>During backpropagation, derivatives involve repeated multiplication through the recurrent computation.</p>
+<p>Repeated multiplication can cause gradients to become:</p>
+<ul>
+<li>extremely small;</li>
+<li>extremely large.</li>
+</ul>
+<p>These are known as:</p>
+<h3>Vanishing gradients</h3>
+<p>The gradient becomes very small.</p>
+<p>Then early time steps receive very weak learning signals.</p>
+<h3>Exploding gradients</h3>
+<p>The gradient becomes very large.</p>
+<p>This can make optimization unstable.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: A Simple Gradient Intuition -->
+  <section id="s-16" data-search-section="A Simple Gradient Intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>16. A Simple Gradient Intuition</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose, very roughly, a repeated derivative factor is:</p>
+<div class="formula-math">\[
+0.5.
+\]</div>
+<p>After 10 steps:</p>
+<div class="formula-math">\[
+0.5^{10}\approx0.00098.
+\]</div>
+<p>The signal becomes tiny.</p>
+<p>If the repeated factor were:</p>
+<div class="formula-math">\[
+2,
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+2^{10}=1024.
+\]</div>
+<p>The signal becomes huge.</p>
+<p>Real RNNs involve matrices and nonlinear derivatives, so the actual mathematics is richer than this scalar example.</p>
+<p>But the repeated-transformation intuition is essential.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: Why Long-Term Dependencies Are Difficult -->
+  <section id="s-17" data-search-section="Why Long-Term Dependencies Are Difficult" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>17. Why Long-Term Dependencies Are Difficult</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Consider:</p>
+<div class="ascii-box"><pre>The students who studied very hard for the final examination
+because they wanted a scholarship eventually ...</pre></div>
+<p>A useful prediction may depend on information many steps earlier.</p>
+<p>A basic RNN can theoretically carry information over long sequences, but optimization difficulties can make learning such long-range dependencies hard.</p>
+<p>This limitation is one of the main motivations for gated recurrent architectures such as <strong>LSTM</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: RNN vs Feedforward Network -->
+  <section id="s-18" data-search-section="RNN vs Feedforward Network" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>18. RNN vs Feedforward Network</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Property</th>
+<th>Feedforward network</th>
+<th>RNN</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Natural input</td>
+<td>Fixed vector</td>
+<td>Sequence</td>
+</tr>
+<tr>
+<td>Persistent hidden state</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Parameter sharing through time</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Order sensitivity</td>
+<td>Not inherently sequential</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Typical use</td>
+<td>Fixed-size prediction</td>
+<td>Sequence/time-series problems</td>
+</tr>
+<tr>
+<td>Main training issue</td>
+<td>Standard optimization</td>
+<td>Can suffer from vanishing/exploding gradients</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: RNN vs CNN -->
+  <section id="s-19" data-search-section="RNN vs CNN" class="content-section">
+    <div class="section-header">
+      <h2>19. RNN vs CNN</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Property</th>
+<th>CNN</th>
+<th>RNN</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Main structure</td>
+<td>Spatial</td>
+<td>Sequential</td>
+</tr>
+<tr>
+<td>Shared across</td>
+<td>Locations</td>
+<td>Time steps</td>
+</tr>
+<tr>
+<td>Core mechanism</td>
+<td>Local filters</td>
+<td>Recurrent hidden state</td>
+</tr>
+<tr>
+<td>Typical data</td>
+<td>Images/spatial signals</td>
+<td>Text/time series/sequences</td>
+</tr>
+<tr>
+<td>Important concept</td>
+<td>Receptive field</td>
+<td>Hidden state</td>
+</tr>
+<tr>
+<td>Major classic challenge</td>
+<td>Spatial computation/architecture</td>
+<td>Long-term dependencies</td>
+</tr>
+</tbody>
+</table></div>
+<p>Modern systems can combine these ideas.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: Output Design -->
+  <section id="s-20" data-search-section="Output Design" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>20. Output Design</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The output function depends on the task.</p>
+<p>For binary classification, an output might use:</p>
+<div class="formula-math">\[
+\hat p_t=\sigma(W_{hy}h_t+b_y).
+\]</div>
+<p>For multi-class classification:</p>
+<div class="formula-math">\[
+\hat{\mathbf p}_t
+=
+\operatorname{softmax}(W_{hy}h_t+b_y).
+\]</div>
+<p>For regression:</p>
+<div class="formula-math">\[
+\hat y_t=W_{hy}h_t+b_y
+\]</div>
+<p>may be appropriate.</p>
+<p>The architecture does not determine the task by itself.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: Shapes — Exam Skill -->
+  <section id="s-21" data-search-section="Shapes — Exam Skill" class="content-section">
+    <div class="section-header">
+      <h2>21. Shapes — Exam Skill</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<ul>
+<li>input dimension = \(d_x\);</li>
+<li>hidden-state size = \(d_h\).</li>
+</ul>
+<p>Then:</p>
+<div class="formula-math">\[
+W_{xh}\in\mathbb{R}^{d_h\times d_x}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+W_{hh}\in\mathbb{R}^{d_h\times d_h}.
+\]</div>
+<p>For output dimension \(d_y\):</p>
+<div class="formula-math">\[
+W_{hy}\in\mathbb{R}^{d_y\times d_h}.
+\]</div>
+<p>Including biases, parameter count is:</p>
+<div class="formula-math">\[
+d_hd_x+d_h^2+d_yd_h+d_h+d_y.
+\]</div>
+<h3>Example</h3>
+<p>Let:</p>
+<div class="formula-math">\[
+d_x=3,\quad d_h=4,\quad d_y=2.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+W_{xh}:4\times3=12
+\]</div>
+<div class="formula-math">\[
+W_{hh}:4\times4=16
+\]</div>
+<div class="formula-math">\[
+W_{hy}:2\times4=8
+\]</div>
+<p>Biases:</p>
+<div class="formula-math">\[
+4+2=6.
+\]</div>
+<p>Total:</p>
+<div class="formula-math">\[
+12+16+8+6
+=
+\boxed{42}.
+\]</div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: The Most Important Diagram -->
+  <section id="s-22" data-search-section="The Most Important Diagram" class="content-section">
+    <div class="section-header">
+      <h2>22. The Most Important Diagram</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Memorize this conceptual structure:</p>
+<div class="ascii-box"><pre>h₀
+                  │
+                  ▼
+x₁ ───────→ [ RNN ] ─────→ h₁
+                         │
+                         ▼
+x₂ ───────→ [ RNN ] ─────→ h₂
+                         │
+                         ▼
+x₃ ───────→ [ RNN ] ─────→ h₃
+                         │
+                         ▼
+                         ...
+                         │
+                         ▼
+xT ───────→ [ RNN ] ─────→ hT</pre></div>
+<p>And remember:</p>
+<blockquote>
+<p>The cells are shown separately after unrolling, but their parameters are shared.</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: RNN Mathematics Summary -->
+  <section id="s-23" data-search-section="RNN Mathematics Summary" class="content-section">
+    <div class="section-header">
+      <h2>23. RNN Mathematics Summary</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Hidden state</h3>
+<div class="formula-math">\[
+\boxed{
+h_t=
+\phi(W_{xh}x_t+W_{hh}h_{t-1}+b_h)
+}
+\]</div>
+<h3>Output</h3>
+<div class="formula-math">\[
+\boxed{
+y_t=
+\psi(W_{hy}h_t+b_y)
+}
+\]</div>
+<h3>Parameter count</h3>
+<div class="formula-math">\[
+\boxed{
+d_hd_x+d_h^2+d_yd_h+d_h+d_y
+}
+\]</div>
+<p>when one bias vector is used for each affine transformation.</p>
+<h3>Sequence dependency</h3>
+<div class="formula-math">\[
+\boxed{
+h_t=f(x_t,h_{t-1})
+}
+\]</div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: Common Mistakes -->
+  <section id="s-24" data-search-section="Common Mistakes" class="content-section">
+    <div class="section-header">
+      <h2>24. Common Mistakes</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Mistake 1</div>
+
+Thinking an RNN has a different network for every time step.
+
+**Correction:** the recurrent parameters are shared.
+
+</div>
+
+<div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Mistake 2</div>
+
+Thinking hidden state equals stored raw text.
+
+**Correction:** it is a numerical learned state.
+
+</div>
+
+<div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Mistake 3</div>
+
+Thinking RNN automatically remembers everything.
+
+**Correction:** basic RNNs can struggle with long-term dependencies.
+
+</div>
+
+<div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Mistake 4</div>
+
+Confusing hidden state and output.
+
+**Correction:**
+
+
+
+<div class="ascii-box"><pre>hidden state → internal recurrent representation
+output       → task-specific prediction</pre></div>
+
+
+
+</div>
+
+<div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Mistake 5</div>
+
+Thinking BPTT is a completely different learning algorithm from backpropagation.
+
+**Correction:** BPTT applies backpropagation to the network unrolled across time.
+
+</div>
+
+<div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Mistake 6</div>
+
+Thinking vanishing gradients only happen in RNNs.
+
+**Correction:** vanishing/exploding gradients can occur in deep computational graphs more generally; they are especially important historically in recurrent networks.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: Exam Lens -->
+  <section id="s-25" data-search-section="Exam Lens" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>25. Exam Lens</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>2 marks</h2>
+<ul>
+<li>Define RNN.</li>
+<li>What is a hidden state?</li>
+<li>What is recurrence?</li>
+<li>What is BPTT?</li>
+<li>What is vanishing gradient?</li>
+<li>What is exploding gradient?</li>
+</ul>
+<h2>5 marks</h2>
+<blockquote>
+<p>Explain the architecture and working of an RNN.</p>
+</blockquote>
+<p>Answer flow:</p>
+<ol>
+<li>Define sequence.</li>
+<li>Define hidden state.</li>
+<li>Write recurrence equation.</li>
+<li>Explain parameter sharing.</li>
+<li>Explain output.</li>
+<li>Draw unrolled architecture.</li>
+</ol>
+<h2>10 marks</h2>
+<blockquote>
+<p>Explain RNN with mathematical formulation, unrolling and BPTT. Discuss vanishing and exploding gradients.</p>
+</blockquote>
+<p>Include:</p>
+<ul>
+<li>sequence notation;</li>
+<li>\(h_t\) equation;</li>
+<li>\(y_t\) equation;</li>
+<li>unrolled diagram;</li>
+<li>parameter sharing;</li>
+<li>BPTT;</li>
+<li>gradient problem;</li>
+<li>motivation for LSTM.</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: Active Recall -->
+  <section id="s-26" data-search-section="Active Recall" class="content-section">
+    <div class="section-header">
+      <h2>26. Active Recall</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Without looking:</p>
+<ol>
+<li>Why do we need RNNs?</li>
+<li>What is \(x_t\)?</li>
+<li>What is \(h_t\)?</li>
+<li>Write the RNN recurrence.</li>
+<li>What does \(W_{hh}\) do?</li>
+<li>Why are parameters shared across time?</li>
+<li>What is an unrolled RNN?</li>
+<li>What is BPTT?</li>
+<li>Why can gradients vanish?</li>
+<li>Why can gradients explode?</li>
+<li>What is a many-to-one RNN?</li>
+<li>What is a many-to-many RNN?</li>
+<li>How is RNN different from CNN?</li>
+<li>Why does LSTM become useful?</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: Chapter Exit Test -->
+  <section id="s-27" data-search-section="Chapter Exit Test" class="content-section">
+    <div class="section-header">
+      <h2>27. Chapter Exit Test</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You are ready for LSTM when you can:</p>
+<ul>
+<li>[ ] Explain why sequence order matters.</li>
+<li>[ ] Define hidden state.</li>
+<li>[ ] Write the RNN recurrence equation.</li>
+<li>[ ] Explain every symbol in the equation.</li>
+<li>[ ] Draw an unrolled RNN.</li>
+<li>[ ] Explain parameter sharing through time.</li>
+<li>[ ] Explain many-to-one and many-to-many setups.</li>
+<li>[ ] Calculate basic RNN parameter counts.</li>
+<li>[ ] Explain BPTT.</li>
+<li>[ ] Explain vanishing gradients.</li>
+<li>[ ] Explain exploding gradients.</li>
+<li>[ ] Explain why long-term dependencies are difficult for a basic RNN.</li>
+<li>[ ] Explain why a gated architecture is motivated.</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: Resource Shelf -->
+  <section id="s-28" data-search-section="Resource Shelf" class="content-section">
+    <div class="section-header">
+      <h2>28. Resource Shelf</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Supplied course source</h2>
+<p><code>AI_ML_Master_Learning_Resource_Guide.pdf</code></p>
+<p>The guide places RNN and LSTM in Unit III and identifies them as areas requiring additional coverage beyond the supplied core notes.</p>
+<h2>Recommended reinforcement</h2>
+<p>The supplied resource guide recommends:</p>
+<ul>
+<li>NPTEL Deep Learning;</li>
+<li>NPTEL Machine Learning and Deep Learning: Fundamentals and Applications;</li>
+<li>DeepLearning.AI Deep Learning Specialization;</li>
+<li>StatQuest neural-network/RNN/LSTM material.</li>
+</ul>
+<h3>Study order</h3>
+<div class="ascii-box"><pre>Read C37
+   ↓
+Draw unrolled RNN
+   ↓
+Solve recurrence numerical
+   ↓
+Understand BPTT
+   ↓
+Understand vanishing/exploding gradients
+   ↓
+Move to C38 — LSTM</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 29: Source Boundary -->
+  <section id="s-29" data-search-section="Source Boundary" class="content-section">
+    <div class="section-header">
+      <h2>29. Source Boundary</h2>
+      <button class="bookmark-btn" data-id="s-29" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The syllabus scope and resource-gap statements in this chapter come from the supplied AI/ML resource guide.</p>
+<p>The recurrence equations, parameter-count derivation, BPTT explanation, numerical examples and detailed vanishing/exploding-gradient exposition are standard deep-learning elaborations added to make the chapter self-contained. They are not claimed to be verbatim material from the supplied University lecture notes.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 30: Connection Forward -->
+  <section id="s-30" data-search-section="Connection Forward" class="content-section">
+    <div class="section-header">
+      <h2>30. Connection Forward</h2>
+      <button class="bookmark-btn" data-id="s-30" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A basic RNN carries information through a hidden state, but long sequences can make learning long-term dependencies difficult.</p>
+<p>This motivates a more structured recurrent unit:</p>
+<blockquote>
+<p><strong>Long Short-Term Memory (LSTM).</strong></p>
+</blockquote>
+<p>Next:</p>
+<p><strong><code>MAIN-U3-C38 — Long Short-Term Memory (LSTM)</code>.</strong></p>
+<hr />
+<h1>Status</h1>
+<p><strong><code>ML-U3-C37</code> — COMPLETE</strong></p>
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="ch36-convolutional-neural-networks.html" class="nav-btn">← Ch 36 — Convolutional Neural Networks</a>
+    <a href="ch38-long-short-term-memory-lstm.html" class="nav-btn primary">Next: Ch 38 — Long Short-Term Memory →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch37-recurrent-neural-networks.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 37</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

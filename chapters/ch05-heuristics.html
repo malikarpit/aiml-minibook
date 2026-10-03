@@ -1,0 +1,2154 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 5: Heuristics &amp; Informed Search Foundations — AI & Machine Learning MiniBook. What makes a heuristic good? Admissibility h(n) &lt;= h*(n), Consistency (Triangle Inequality), Dominance, and Relaxed Problem Derivation">
+<title>Ch 5 — Heuristics &amp; Informed Search Foundations | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-ii">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 5 — Heuristics &amp; Informed Search Foundations</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 5 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Concept Identity <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. One-Minute Preview <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Why Do We Need a Heuristic? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Real-World Analogy — GPS <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Formal Definition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Teacher Explanation — English <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Teacher Explanation — Hinglish <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. The Most Important Notation <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Heuristic vs. True Cost </a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. True Remaining Cost: \(h^*(n)\) </a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Admissible Heuristic </a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Why Does “Never Overestimate” Matter? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Goal Nodes and the Heuristic </a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. A Concrete Heuristic Example — Road Navigation </a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Heuristics from the Romania Map <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Heuristics for the 8-Puzzle </a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Visualising the Two 8-Puzzle Heuristics </a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Heuristic Quality <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Dominance: Comparing Two Admissible Heuristics </a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Example of Dominance — 8-Puzzle <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Where Do Good Heuristics Come From? </a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Relaxed Problem Analogy </a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. What Makes a Heuristic Good? </a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Heuristic vs Evaluation Function </a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. The Three Questions You Must Ask About Any Heuristic <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Worked Example A — Simple Navigation </a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Worked Example B — Is a Heuristic Admissible? </a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Worked Example C — Build a Heuristic from a Relaxed Problem </a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. A Heuristic Is Problem-Specific Knowledge </a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. What a Heuristic Does NOT Do <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Common Misconceptions </a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Visual Summary — From Blind Search to Guided Search </a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Mathematical Summary </a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Comparison — No Heuristic vs Heuristic </a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Exam-Oriented Definitions <span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Active Recall — Close the Book </a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Recall Answers </a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Practice Set <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. University Exam Lens </a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Math Lens <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Course Lens — Your Provided Lecture </a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Resource Shelf </a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Chapter Exit Test </a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Memory Card </a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. What Comes Next? </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link active"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit I</span><span>›</span><span>Part II — Classical Search & Problem Solving</span><span>›</span><span style="color:var(--em-text)">Chapter 5</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 5 · Unit I · Part II</div>
+    <div class="chapter-part-banner part-ii">
+      <span class="part-banner-badge">Unit I · Part II</span>
+      <span>Classical Search & Problem Solving</span>
+    </div>
+    <h1 class="chapter-title">Heuristics &amp; Informed Search Foundations</h1>
+    <div class="concept-id-tag">[CONCEPT-AI-005]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: High Yield</span>
+      <span class="chapter-meta-item">📖 ~45 min read</span>
+      <span class="chapter-meta-item">🎯 45 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>Heuristics:</strong> Informed search, heuristic functions, admissibility condition, consistency condition, Euclidean vs Manhattan distances, pattern databases, and inventing admissible heuristics via relaxed problems.</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Concept Identity</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">One-Minute Preview</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Why Do We Need a Heuristic?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Real-World Analogy — GPS</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Formal Definition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Teacher Explanation — English</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Teacher Explanation — Hinglish</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">The Most Important Notation</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Heuristic vs. True Cost</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">True Remaining Cost: \(h^*(n)\)</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Admissible Heuristic</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Why Does “Never Overestimate” Matter?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Goal Nodes and the Heuristic</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">A Concrete Heuristic Example — Road Navigation</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Heuristics from the Romania Map</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Heuristics for the 8-Puzzle</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Visualising the Two 8-Puzzle Heuristics</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Heuristic Quality</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Dominance: Comparing Two Admissible Heuristics</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Example of Dominance — 8-Puzzle</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Where Do Good Heuristics Come From?</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Relaxed Problem Analogy</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">What Makes a Heuristic Good?</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Heuristic vs Evaluation Function</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">The Three Questions You Must Ask About Any Heuristic</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Worked Example A — Simple Navigation</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Worked Example B — Is a Heuristic Admissible?</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Worked Example C — Build a Heuristic from a Relaxed Problem</span></a></li>
+      <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">A Heuristic Is Problem-Specific Knowledge</span></a></li>
+      <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">What a Heuristic Does NOT Do</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Common Misconceptions</span></a></li>
+      <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Visual Summary — From Blind Search to Guided Search</span></a></li>
+      <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Mathematical Summary</span></a></li>
+      <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Comparison — No Heuristic vs Heuristic</span></a></li>
+      <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Exam-Oriented Definitions</span><span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a></li>
+      <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Active Recall — Close the Book</span></a></li>
+      <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Recall Answers</span></a></li>
+      <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Practice Set</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">University Exam Lens</span></a></li>
+      <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Math Lens</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Course Lens — Your Provided Lecture</span></a></li>
+      <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Resource Shelf</span></a></li>
+      <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Chapter Exit Test</span></a></li>
+      <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Memory Card</span></a></li>
+      <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">What Comes Next?</span></a></li>
+    </ul>
+  </div>
+
+  <div class="chapter-preamble-card"><h1>MAIN-U1-C05 — Heuristics</h1>
+<blockquote>
+<p><strong>Main Book:</strong> AI &amp; Machine Learning — Visual + Mathematical Self-Learning Textbook<br />
+<strong>Unit:</strong> I — Artificial Intelligence<br />
+<strong>Chapter:</strong> 5 — Heuristics<br />
+<strong>Chapter ID:</strong> <code>AI-U1-C05</code><br />
+<strong>Prerequisites:</strong> <code>AI-U1-C03 Problem Formulation</code>, <code>AI-U1-C04 Uninformed Search</code><br />
+<strong>Next:</strong> <code>AI-U1-C06 Greedy Best-First Search</code> and <code>AI-U1-C07 A* Search</code></p>
+</blockquote>
+<hr />
+<h2>0. Why this chapter exists</h2>
+<p>In the previous chapter, we learned how uninformed search works. Algorithms such as BFS and DFS know <strong>what problem we are solving</strong>, but they do not know which direction looks promising.</p>
+<p>That creates a natural question:</p>
+<blockquote>
+<p><strong>Can we give a search algorithm a useful hint about where the goal probably is?</strong></p>
+</blockquote>
+<p>That hint is the central idea of a <strong>heuristic</strong>.</p>
+<p>Your supplied <em>Informed Search</em> lecture introduces heuristics before Greedy search and A*, and later uses the heuristic value <code>h(n)</code> as an estimate of the cost from a node to a goal. It uses straight-line distance to Bucharest as the canonical Romania-map example. <code>lecture-informed-search.pdf</code>, slides 2, 3, 6, 8–9.</p>
+<hr /></div>
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 1: Concept Identity -->
+  <section id="s-01" data-search-section="Concept Identity" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>1. Concept Identity</h2>
+      <button class="bookmark-btn" data-id="s-01" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Concept</strong></td>
+<td>Heuristic / Heuristic Function</td>
+</tr>
+<tr>
+<td><strong>ID</strong></td>
+<td><code>AI-U1-C05</code></td>
+</tr>
+<tr>
+<td><strong>Unit</strong></td>
+<td>Unit I — Artificial Intelligence</td>
+</tr>
+<tr>
+<td><strong>Category</strong></td>
+<td>Informed Search Foundation</td>
+</tr>
+<tr>
+<td><strong>Prerequisites</strong></td>
+<td>State, node, search tree, frontier, path cost, goal</td>
+</tr>
+<tr>
+<td><strong>Immediate successors</strong></td>
+<td>Greedy Best-First Search, A*</td>
+</tr>
+<tr>
+<td><strong>Mathematical level</strong></td>
+<td>Basic function notation + inequalities</td>
+</tr>
+<tr>
+<td><strong>Exam importance</strong></td>
+<td>High</td>
+</tr>
+<tr>
+<td><strong>Visual importance</strong></td>
+<td>Very High</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Syllabus connection</h3>
+<p>Your official syllabus places <strong>heuristics</strong> inside the informed-search portion of Unit I, together with Greedy and A*. The syllabus does not treat heuristics as an isolated algorithm; they are a foundation for informed search.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 2: One-Minute Preview -->
+  <section id="s-02" data-search-section="One-Minute Preview" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. One-Minute Preview</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>The entire chapter in one picture</h3>
+<div class="ascii-box"><pre>UNINFORMED SEARCH
+
+&quot;I don&#x27;t know which direction is better.
+I will follow a fixed exploration strategy.&quot;
+
+             ↓
+
+INFORMED SEARCH
+
+&quot;I have a useful estimate that tells me
+which states look promising.&quot;
+
+             ↓
+
+            HEURISTIC
+
+          h(n) = estimate
+       of remaining cost
+
+             ↓
+
+      ┌───────────────┐
+      │ Greedy Search │  uses h(n)
+      └───────────────┘
+
+      ┌───────────────┐
+      │   A* Search   │  uses g(n) + h(n)
+      └───────────────┘</pre></div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish mental model</div>
+
+> **Heuristic ek smart guess hai.** Search algorithm ko poora future pata nahi hota, lekin woh ek estimate use karke decide karta hai ki kaunsa option promising lag raha hai.
+
+It is a **guide**, not a guaranteed answer.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: Why Do We Need a Heuristic? -->
+  <section id="s-03" data-search-section="Why Do We Need a Heuristic?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>3. Why Do We Need a Heuristic?</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine you are standing in a huge city and someone tells you:</p>
+<blockquote>
+<p>“Reach the airport.”</p>
+</blockquote>
+<p>You could try roads systematically. But if there are thousands of possible roads, blindly exploring them is expensive.</p>
+<p>Now suppose you have a rough idea of where the airport is.</p>
+<p>You might think:</p>
+<blockquote>
+<p>“This road appears to take me in the direction of the airport, so let's investigate that one first.”</p>
+</blockquote>
+<p>That directional information is similar to a heuristic.</p>
+<h3>Important distinction</h3>
+<p>The heuristic does <strong>not</strong> necessarily tell you the correct route.</p>
+<p>It tells you something more modest:</p>
+<blockquote>
+<p><strong>“This state looks promising according to the information I have.”</strong></p>
+</blockquote>
+<p>That distinction is essential.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: Real-World Analogy — GPS -->
+  <section id="s-04" data-search-section="Real-World Analogy — GPS" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>4. Real-World Analogy — GPS</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose you are travelling from <strong>Delhi to Jaipur</strong>.</p>
+<p>At some intermediate city, you have two possible roads.</p>
+<p>You know:</p>
+<ul>
+<li>Road A has already cost you 80 km.</li>
+<li>Road B has already cost you 40 km.</li>
+</ul>
+<p>But if you only compare the distance already travelled, Road B automatically looks better.</p>
+<p>However, Road B may take a huge detour.</p>
+<p>A smarter decision would also consider:</p>
+<blockquote>
+<p>“How far am I likely to be from Jaipur after taking this route?”</p>
+</blockquote>
+<p>That estimated remaining distance is the intuition behind <code>h(n)</code>.</p>
+<h3>Analogy mapping</h3>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Real world</th>
+<th>Search terminology</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Current location</td>
+<td>Current node/state</td>
+</tr>
+<tr>
+<td>Destination</td>
+<td>Goal</td>
+</tr>
+<tr>
+<td>Distance already travelled</td>
+<td><code>g(n)</code></td>
+</tr>
+<tr>
+<td>Estimated remaining distance</td>
+<td><code>h(n)</code></td>
+</tr>
+<tr>
+<td>Choosing a promising route</td>
+<td>Node expansion strategy</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Where the analogy breaks</h3>
+<p>A heuristic is <strong>not automatically a physical distance</strong>.</p>
+<p>It can be any useful estimate appropriate to the problem.</p>
+<p>For the 8-puzzle, for example, the lecture uses:</p>
+<ul>
+<li>number of misplaced tiles</li>
+<li>total Manhattan distance</li>
+</ul>
+<p>So the heuristic depends on the problem representation.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: Formal Definition -->
+  <section id="s-05" data-search-section="Formal Definition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>5. Formal Definition</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A <strong>heuristic function</strong> is a function that assigns an estimate of the remaining cost of reaching a goal from a node/state.</p>
+<p>We write it as:</p>
+<div class="formula-math">\[
+h(n)
+\]</div>
+<p>where:</p>
+<ul>
+<li><code>n</code> = current node/state</li>
+<li><code>h(n)</code> = estimated cost from <code>n</code> to a goal</li>
+</ul>
+<p>Your supplied lecture gives exactly this interpretation in the Greedy Search section and uses straight-line distance to Bucharest as an example.</p>
+<blockquote>
+<p><strong>Course framing:</strong> <code>h(n)</code> is an estimate of the cost from <code>n</code> to the closest goal.<br />
+Source: <code>lecture-informed-search.pdf</code>, slide 9.</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: Teacher Explanation — English -->
+  <section id="s-06" data-search-section="Teacher Explanation — English" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>6. Teacher Explanation — English</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Think of a search algorithm as a person exploring an unfamiliar building.</p>
+<p>Without a heuristic, the person has a map only of <strong>where they have been and what they can do next</strong>. They have no clue which unexplored room is more promising.</p>
+<p>With a heuristic, the person receives an additional clue:</p>
+<blockquote>
+<p>“Based on what you know, this room appears to be closer to the destination.”</p>
+</blockquote>
+<p>The person can now spend more of their effort on promising possibilities.</p>
+<p>That is the central purpose of a heuristic:</p>
+<blockquote>
+<p><strong>Use problem-specific knowledge to guide search toward promising states.</strong></p>
+</blockquote>
+<p>The word <strong>estimate</strong> is extremely important. A heuristic is not necessarily the true remaining cost.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: Teacher Explanation — Hinglish -->
+  <section id="s-07" data-search-section="Teacher Explanation — Hinglish" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>7. Teacher Explanation — Hinglish</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Socho tum ek giant mall mein ho aur tumhe ek specific shop dhoondhni hai.</p>
+<p>Agar tumhe kuch bhi idea nahi hai, toh tum systematically har floor aur har corridor explore karoge.</p>
+<p>Lekin agar security guard bol de:</p>
+<blockquote>
+<p>“Shop roughly east side mein hai.”</p>
+</blockquote>
+<p>Toh tum us information ka use karke pehle east side explore karoge.</p>
+<p><strong>Ye east-side wali information heuristic jaisi hai.</strong></p>
+<p>Tumhe exact answer nahi mila.</p>
+<p>Tumhe bas ek <strong>useful estimate</strong> mila.</p>
+<p>Aur search algorithm isi estimate ki help se decide karta hai:</p>
+<blockquote>
+<p>“Pehle kaunsi direction try karni hai?”</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: The Most Important Notation -->
+  <section id="s-08" data-search-section="The Most Important Notation" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>8. The Most Important Notation</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You will repeatedly see three symbols while studying informed search:</p>
+<div class="formula-math">\[
+g(n),\quad h(n),\quad f(n)
+\]</div>
+<p>For this chapter, focus primarily on <code>h(n)</code>.</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Meaning</th>
+<th>Question it answers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>g(n)</code></td>
+<td>Cost already spent to reach <code>n</code></td>
+<td>“Main yahan tak kitna aa chuka hoon?”</td>
+</tr>
+<tr>
+<td><code>h(n)</code></td>
+<td>Estimated remaining cost</td>
+<td>“Goal tak aur kitna lag sakta hai?”</td>
+</tr>
+<tr>
+<td><code>f(n)</code></td>
+<td>Search evaluation value</td>
+<td>“Overall, which node looks promising?”</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>g(n)</code> and <code>f(n)</code> become central in the next A* chapter. Here they are introduced only so the role of a heuristic is not isolated from the rest of informed search.</p>
+<p>The supplied lecture defines A* as <code>f(n)=g(n)+h(n)</code>, with <code>g(n)</code> as cost so far and <code>h(n)</code> as estimated cost to the goal. <code>lecture-informed-search.pdf</code>, slide 17.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: Heuristic vs. True Cost -->
+  <section id="s-09" data-search-section="Heuristic vs. True Cost" class="content-section">
+    <div class="section-header">
+      <h2>9. Heuristic vs. True Cost</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This is one of the easiest places to make a mistake.</p>
+<p>Suppose the actual cheapest remaining path from node <code>n</code> to a goal costs:</p>
+<div class="formula-math">\[
+17
+\]</div>
+<p>but our heuristic says:</p>
+<div class="formula-math">\[
+h(n)=12
+\]</div>
+<p>Then:</p>
+<ul>
+<li>True remaining cost = <code>17</code></li>
+<li>Estimated remaining cost = <code>12</code></li>
+</ul>
+<p>The heuristic is allowed to be different from the truth.</p>
+<p>The question is <strong>how</strong> it differs.</p>
+<p>That leads to the most important property of heuristics in A*.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: True Remaining Cost: \(h^*(n)\) -->
+  <section id="s-10" data-search-section="True Remaining Cost: \(h^*(n)\)" class="content-section">
+    <div class="section-header">
+      <h2>10. True Remaining Cost: \(h^*(n)\)</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>To reason mathematically about a heuristic, define:</p>
+<div class="formula-math">\[
+h^*(n)
+\]</div>
+<p>as the <strong>actual cost of the cheapest path from <code>n</code> to a goal</strong>.</p>
+<p>So:</p>
+<ul>
+<li><code>h(n)</code> → our estimate</li>
+<li><code>h*(n)</code> → the true optimal remaining cost</li>
+</ul>
+<p>Example:</p>
+<div class="ascii-box"><pre>Current node n
+      |
+      |  estimated by us
+      ↓
+   h(n) = 10
+
+But the actual cheapest remaining route is
+      ↓
+   h*(n) = 13</pre></div>
+<p>Here the heuristic underestimated the true cost.</p>
+<p>That is acceptable for an admissible heuristic.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: Admissible Heuristic -->
+  <section id="s-11" data-search-section="Admissible Heuristic" class="content-section">
+    <div class="section-header">
+      <h2>11. Admissible Heuristic</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your supplied lecture gives the A* requirement:</p>
+<div class="formula-math">\[
+h(n)\le h^*(n)
+\]</div>
+<p>and also requires:</p>
+<div class="formula-math">\[
+h(n)\ge 0
+\]</div>
+<p>Therefore, for an admissible heuristic:</p>
+<div class="formula-math">\[
+\boxed{0\le h(n)\le h^*(n)}
+\]</div>
+<h3>Plain English</h3>
+<p>An admissible heuristic <strong>never overestimates</strong> the true cheapest remaining cost.</p>
+<p>It can:</p>
+<ul>
+<li>underestimate</li>
+<li>exactly estimate</li>
+</ul>
+<p>but it must not estimate something <strong>more expensive than reality</strong>.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> Admissible heuristic ka simple rule: **“Guess zyada nahi karna.”**
+
+Agar actual remaining cost `13` hai, heuristic `10` ya `13` bol sakta hai.
+
+But `15` nahi bolna chahiye.
+
+Your lecture uses straight-line distance to Bucharest as an example that never overestimates actual road distance. `lecture-informed-search.pdf`, slide 17.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: Why Does “Never Overestimate” Matter? -->
+  <section id="s-12" data-search-section="Why Does “Never Overestimate” Matter?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>12. Why Does “Never Overestimate” Matter?</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This idea becomes extremely important in A*.</p>
+<p>Suppose the heuristic says a path is still cheap when it might actually be expensive.</p>
+<p>That is a form of uncertainty that A* can safely reason about.</p>
+<p>But if the heuristic is allowed to say:</p>
+<blockquote>
+<p>“This node will definitely cost 100 more,”</p>
+</blockquote>
+<p>when the real remaining cost is only 20,</p>
+<p>the search may reject a genuinely good path too aggressively.</p>
+<p>So admissibility gives a useful guarantee:</p>
+<blockquote>
+<p><strong>The heuristic is optimistic about remaining cost.</strong></p>
+</blockquote>
+<p>It can be pleasantly wrong by being too small.</p>
+<p>It cannot be pessimistically wrong by being too large.</p>
+<h3>Memory anchor</h3>
+<blockquote>
+<p><strong>Admissible = optimistic estimate.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: Goal Nodes and the Heuristic -->
+  <section id="s-13" data-search-section="Goal Nodes and the Heuristic" class="content-section">
+    <div class="section-header">
+      <h2>13. Goal Nodes and the Heuristic</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>At a goal node <code>G</code>, there is no remaining cost to reach a goal.</p>
+<p>Therefore:</p>
+<div class="formula-math">\[
+h^*(G)=0
+\]</div>
+<p>For an admissible heuristic with non-negative estimates:</p>
+<div class="formula-math">\[
+0\le h(G)\le 0
+\]</div>
+<p>so:</p>
+<div class="formula-math">\[
+\boxed{h(G)=0}
+\]</div>
+<p>This is why the supplied A* lecture explicitly notes that non-negative admissibility implies <code>h(G)=0</code> for a goal.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> Goal par pahunch gaye ho. Ab destination tak aur kitna cost? **Zero.**
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: A Concrete Heuristic Example — Road Navigation -->
+  <section id="s-14" data-search-section="A Concrete Heuristic Example — Road Navigation" class="content-section">
+    <div class="section-header">
+      <h2>14. A Concrete Heuristic Example — Road Navigation</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Consider a simplified map:</p>
+<div class="ascii-box"><pre>B = Goal
+                / \\
+               /   \\
+              C     D
+              |      |
+              |      |
+              A------E
+             Start</pre></div>
+<p>Suppose <code>A</code> is the current state and <code>B</code> is the goal.</p>
+<p>Imagine we can estimate the straight-line distance from each location to the goal.</p>
+<p>We might have:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Node</th>
+<th style="text-align: right;"><code>h(n)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td style="text-align: right;">100</td>
+</tr>
+<tr>
+<td>C</td>
+<td style="text-align: right;">70</td>
+</tr>
+<tr>
+<td>D</td>
+<td style="text-align: right;">40</td>
+</tr>
+<tr>
+<td>E</td>
+<td style="text-align: right;">30</td>
+</tr>
+<tr>
+<td>B</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table></div>
+<p>The smaller <code>h(n)</code> is, the closer the node <strong>appears</strong> to the goal according to this heuristic.</p>
+<h3>Important</h3>
+<p>This does <strong>not</strong> mean the actual road distance follows the same ordering.</p>
+<p>A road can be physically close but require a huge detour.</p>
+<p>That is why a heuristic is an estimate, not the complete answer.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: Heuristics from the Romania Map -->
+  <section id="s-15" data-search-section="Heuristics from the Romania Map" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>15. Heuristics from the Romania Map</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied lecture uses the classic Romania map.</p>
+<p>The heuristic example is:</p>
+<div class="formula-math">\[
+h_{SLD}(n)=\text{straight-line distance from }n\text{ to Bucharest}
+\]</div>
+<p>where SLD means <strong>Straight-Line Distance</strong>.</p>
+<p>The idea is simple:</p>
+<div class="ascii-box"><pre>Actual roads
+A ────────╲
+ \         ╲
+  \         ╲
+   ╲         B = Bucharest
+    ╲_______/
+
+Straight line is a direct geometric estimate.</pre></div>
+<p>The straight-line distance is never longer than the actual drivable road distance for the road-network example, so it provides a lower-bound style estimate appropriate to the lecture's admissibility discussion.</p>
+<p><strong>Source:</strong> <code>lecture-informed-search.pdf</code>, slides 8–9 and 17.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: Heuristics for the 8-Puzzle -->
+  <section id="s-16" data-search-section="Heuristics for the 8-Puzzle" class="content-section">
+    <div class="section-header">
+      <h2>16. Heuristics for the 8-Puzzle</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The supplied lecture gives two important heuristic examples for the 8-puzzle:</p>
+<h3>Heuristic 1 — Misplaced Tiles</h3>
+<div class="formula-math">\[
+\boxed{h_1(n)=\text{number of misplaced tiles}}
+\]</div>
+<p>Count how many tiles are not in their desired positions.</p>
+<h3>Heuristic 2 — Manhattan Distance</h3>
+<div class="formula-math">\[
+\boxed{h_2(n)=\text{total Manhattan distance}}
+\]</div>
+<p>For each tile, count how many horizontal + vertical squares it is away from its target position, then add the values.</p>
+<p>The lecture gives a worked state where:</p>
+<div class="formula-math">\[
+h_1(S)=6
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+h_2(S)=4+0+3+3+1+0+2+1=14
+\]</div>
+<p>This is a very useful example because the two heuristics look at <strong>different notions of “distance from the goal.”</strong> <code>lecture-informed-search.pdf</code>, slides 31–32.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: Visualising the Two 8-Puzzle Heuristics -->
+  <section id="s-17" data-search-section="Visualising the Two 8-Puzzle Heuristics" class="content-section">
+    <div class="section-header">
+      <h2>17. Visualising the Two 8-Puzzle Heuristics</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the target is:</p>
+<div class="ascii-box"><pre>+---+---+---+
+| 1 | 2 | 3 |
++---+---+---+
+| 4 | 5 | 6 |
++---+---+---+
+| 7 | 8 | _ |
++---+---+---+</pre></div>
+<p>Now suppose a current state has several misplaced tiles.</p>
+<h3>Misplaced-tile heuristic asks:</h3>
+<blockquote>
+<p>“How many tiles are simply in the wrong place?”</p>
+</blockquote>
+<h3>Manhattan heuristic asks:</h3>
+<blockquote>
+<p>“How far, in total, do the tiles have to move?”</p>
+</blockquote>
+<p>So Manhattan distance captures <strong>how wrong</strong> a tile is, while misplaced-tile count captures mainly <strong>whether</strong> it is wrong.</p>
+<p>That distinction helps explain why a heuristic can contain more useful information than another even when both are valid estimates.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: Heuristic Quality -->
+  <section id="s-18" data-search-section="Heuristic Quality" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>18. Heuristic Quality</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A heuristic is useful because it can reduce unnecessary search.</p>
+<p>Your supplied lecture explicitly states:</p>
+<blockquote>
+<p>Good heuristics can dramatically reduce search cost.</p>
+</blockquote>
+<p>This is the practical reason informed search exists.</p>
+<p>A heuristic that gives almost no useful information may behave much like uninformed search.</p>
+<p>A heuristic that gives a much more informative estimate can guide search toward promising states much faster.</p>
+<h3>The key trade-off</h3>
+<div class="ascii-box"><pre>Weak heuristic
+     ↓
+Cheap/simple estimate
+     ↓
+Less guidance
+     ↓
+More nodes may be explored
+
+Strong / informative heuristic
+     ↓
+Better guidance
+     ↓
+Fewer nodes may need exploration</pre></div>
+<p>This does <strong>not</strong> mean “the strongest-looking heuristic is always safe.” Its properties matter.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: Dominance: Comparing Two Admissible Heuristics -->
+  <section id="s-19" data-search-section="Dominance: Comparing Two Admissible Heuristics" class="content-section">
+    <div class="section-header">
+      <h2>19. Dominance: Comparing Two Admissible Heuristics</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your lecture introduces a useful comparison rule.</p>
+<p>Suppose <code>h1</code> and <code>h2</code> are both admissible and:</p>
+<div class="formula-math">\[
+h_2(n)\ge h_1(n)
+\]</div>
+<p>for every node <code>n</code>.</p>
+<p>Then <code>h2</code> <strong>dominates</strong> <code>h1</code>.</p>
+<p>The lecture calls the dominating heuristic better for search in this sense.</p>
+<h3>Why?</h3>
+<p>Because both are still valid lower-bound estimates, but <code>h2</code> gives a tighter estimate whenever it is larger.</p>
+<p>Think of it as:</p>
+<div class="ascii-box"><pre>True remaining cost
+|-----------------------------------------|
+
+h1        |---------|
+
+h2        |---------------|
+
+Both stay below the truth,
+but h2 is closer to the truth.</pre></div>
+<p><strong>Important:</strong> this is a relation under the condition that both heuristics are admissible and the inequality holds everywhere.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: Example of Dominance — 8-Puzzle -->
+  <section id="s-20" data-search-section="Example of Dominance — 8-Puzzle" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>20. Example of Dominance — 8-Puzzle</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your lecture gives:</p>
+<div class="formula-math">\[
+h_1(n)=\text{misplaced tiles}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+h_2(n)=\text{Manhattan distance}
+\]</div>
+<p>and uses the fact that the second can provide substantially stronger guidance.</p>
+<p>For the lecture's example state:</p>
+<div class="formula-math">\[
+h_1(S)=6
+\]</div>
+<p>while:</p>
+<div class="formula-math">\[
+h_2(S)=14
+\]</div>
+<p>The larger value is more informative <strong>because the heuristic remains a valid lower bound under the assumptions used for the 8-puzzle</strong>.</p>
+<p><strong>Source:</strong> <code>lecture-informed-search.pdf</code>, slides 31–33.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: Where Do Good Heuristics Come From? -->
+  <section id="s-21" data-search-section="Where Do Good Heuristics Come From?" class="content-section">
+    <div class="section-header">
+      <h2>21. Where Do Good Heuristics Come From?</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A natural question is:</p>
+<blockquote>
+<p>“Who invents the heuristic?”</p>
+</blockquote>
+<p>Often, the heuristic is designed by looking at a <strong>simplified version of the original problem</strong>.</p>
+<p>Your lecture calls this a <strong>relaxed problem</strong>.</p>
+<h3>Main idea</h3>
+<p>Remove some restrictions from the original problem.</p>
+<p>If the relaxed problem becomes easier to solve, its exact solution cost can become a useful estimate for the original problem.</p>
+<p>The lecture states that the optimal solution cost of a relaxed problem is no greater than the optimal solution cost of the real problem.</p>
+<p>Therefore, it can provide a lower-bound style estimate.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: Relaxed Problem Analogy -->
+  <section id="s-22" data-search-section="Relaxed Problem Analogy" class="content-section">
+    <div class="section-header">
+      <h2>22. Relaxed Problem Analogy</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine a real-life journey where:</p>
+<ul>
+<li>some roads are closed</li>
+<li>you must obey traffic rules</li>
+<li>you may have to stop</li>
+<li>you may have tolls</li>
+</ul>
+<p>Now imagine a fantasy version where some of those restrictions are removed.</p>
+<p>The fantasy version can usually be completed <strong>at no greater cost</strong> than the real version.</p>
+<p>That cheap idealised answer can tell you:</p>
+<blockquote>
+<p>“At the absolute minimum, you need to spend at least about this much.”</p>
+</blockquote>
+<p>That is precisely the kind of information a useful heuristic can provide.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> Real problem mein restrictions bahut hain. Relaxed problem mein kuch rules hata do. Agar relaxed version ka exact cost bhi itna hi low hai, toh original problem ke liye woh ek useful lower bound ban sakta hai.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: What Makes a Heuristic Good? -->
+  <section id="s-23" data-search-section="What Makes a Heuristic Good?" class="content-section">
+    <div class="section-header">
+      <h2>23. What Makes a Heuristic Good?</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For this course, remember three dimensions:</p>
+<h3>1. Relevance</h3>
+<p>Does it actually tell us something about distance to the goal?</p>
+<h3>2. Safety</h3>
+<p>For algorithms requiring admissibility, does it obey the required bound?</p>
+<h3>3. Informativeness</h3>
+<p>Does it substantially distinguish promising states from poor ones?</p>
+<p>A heuristic can be easy to compute but provide little useful information.</p>
+<p>A different heuristic may require more work to compute but save far more search later.</p>
+<p>This produces a classic engineering trade-off:</p>
+<blockquote>
+<p><strong>Spend some computation on a good estimate now to save much more computation later.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: Heuristic vs Evaluation Function -->
+  <section id="s-24" data-search-section="Heuristic vs Evaluation Function" class="content-section">
+    <div class="section-header">
+      <h2>24. Heuristic vs Evaluation Function</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>These words are related but not identical.</p>
+<h3>Heuristic function</h3>
+<p>A function that estimates the remaining cost or quality relevant to search.</p>
+<h3>Evaluation function</h3>
+<p>A function used by a search strategy to rank candidate nodes.</p>
+<p>Your supplied lecture introduces <strong>Best-First Search</strong> through an evaluation function and then identifies Greedy and A* as special cases. <code>lecture-informed-search.pdf</code>, slides 5–6.</p>
+<p>For the upcoming chapters:</p>
+<div class="ascii-box"><pre>Best-First Search
+       │
+       ├── Greedy → evaluation based on h(n)
+       │
+       └── A*     → evaluation based on g(n)+h(n)</pre></div>
+<p>This distinction will become much clearer in C06 and C07.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: The Three Questions You Must Ask About Any Heuristic -->
+  <section id="s-25" data-search-section="The Three Questions You Must Ask About Any Heuristic" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>25. The Three Questions You Must Ask About Any Heuristic</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Whenever you see a new heuristic, ask:</p>
+<h3>Question 1 — What is it estimating?</h3>
+<p>Usually:</p>
+<blockquote>
+<p>Remaining cost to a goal.</p>
+</blockquote>
+<h3>Question 2 — How is the estimate calculated?</h3>
+<p>Examples:</p>
+<ul>
+<li>straight-line distance</li>
+<li>misplaced tiles</li>
+<li>Manhattan distance</li>
+</ul>
+<h3>Question 3 — What guarantees does it have?</h3>
+<p>Especially:</p>
+<blockquote>
+<p>Is it admissible?</p>
+</blockquote>
+<p>Do not memorise the formula while ignoring the meaning.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: Worked Example A — Simple Navigation -->
+  <section id="s-26" data-search-section="Worked Example A — Simple Navigation" class="content-section">
+    <div class="section-header">
+      <h2>26. Worked Example A — Simple Navigation</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the goal is node <code>G</code>.</p>
+<div class="ascii-box"><pre>S
+├── A
+│   └── G
+└── B
+    └── G</pre></div>
+<p>Suppose the heuristic estimates are:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Node</th>
+<th style="text-align: right;"><code>h(n)</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr>
+<td>B</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr>
+<td>G</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table></div>
+<p>A heuristic-guided strategy that prefers smaller estimated remaining cost would consider <code>B</code> more promising than <code>A</code>.</p>
+<h3>Why?</h3>
+<p>Because:</p>
+<div class="formula-math">\[
+3\lt 6
+\]</div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> Algorithm ko B goal ke zyada paas **lag raha hai**.
+
+Notice the wording:
+
+**“lag raha hai.”**
+
+Not:
+
+**“definitely hai.”**
+
+That's the whole point of a heuristic.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: Worked Example B — Is a Heuristic Admissible? -->
+  <section id="s-27" data-search-section="Worked Example B — Is a Heuristic Admissible?" class="content-section">
+    <div class="section-header">
+      <h2>27. Worked Example B — Is a Heuristic Admissible?</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the actual optimal remaining costs are:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Node</th>
+<th style="text-align: right;"><code>h*(n)</code></th>
+<th style="text-align: right;">Proposed <code>h(n)</code></th>
+<th>Admissible?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">9</td>
+<td>✅ Yes</td>
+</tr>
+<tr>
+<td>B</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">10</td>
+<td>✅ Yes</td>
+</tr>
+<tr>
+<td>C</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">3</td>
+<td>✅ Yes</td>
+</tr>
+<tr>
+<td>D</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">18</td>
+<td>❌ No</td>
+</tr>
+</tbody>
+</table></div>
+<p>Check the rule:</p>
+<div class="formula-math">\[
+0\le h(n)\le h^*(n)
+\]</div>
+<p>For <code>D</code>:</p>
+<div class="formula-math">\[
+18\gt 15
+\]</div>
+<p>So <code>D</code> violates admissibility.</p>
+<h3>Exam rule</h3>
+<blockquote>
+<p><strong>One overestimate is enough to make the heuristic non-admissible.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: Worked Example C — Build a Heuristic from a Relaxed Problem -->
+  <section id="s-28" data-search-section="Worked Example C — Build a Heuristic from a Relaxed Problem" class="content-section">
+    <div class="section-header">
+      <h2>28. Worked Example C — Build a Heuristic from a Relaxed Problem</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose the real puzzle has three rules:</p>
+<ol>
+<li>Only adjacent moves are allowed.</li>
+<li>A move costs 1.</li>
+<li>A tile can only move into the blank position.</li>
+</ol>
+<p>Now create a relaxed version where a tile is allowed to move directly toward its destination without obeying all original restrictions.</p>
+<p>If solving the relaxed problem takes 5 steps, then:</p>
+<div class="formula-math">\[
+h(n)=5
+\]</div>
+<p>can act as a lower-bound style estimate for the real problem because the real problem has <strong>more restrictions</strong>.</p>
+<h3>Important</h3>
+<p>This is a teacher-built example of the relaxed-problem idea. The underlying method is the one described in your supplied informed-search lecture.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 29: A Heuristic Is Problem-Specific Knowledge -->
+  <section id="s-29" data-search-section="A Heuristic Is Problem-Specific Knowledge" class="content-section">
+    <div class="section-header">
+      <h2>29. A Heuristic Is Problem-Specific Knowledge</h2>
+      <button class="bookmark-btn" data-id="s-29" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>There is no universal heuristic that automatically works for every search problem.</p>
+<p>For example:</p>
+<h3>Road navigation</h3>
+<p>A geometric distance can be meaningful.</p>
+<h3>8-puzzle</h3>
+<p>Tile displacement is meaningful.</p>
+<h3>Timetabling</h3>
+<p>The number of unresolved conflicts may be meaningful.</p>
+<h3>Robot motion</h3>
+<p>Estimated remaining travel distance/time may be meaningful.</p>
+<p>Therefore:</p>
+<blockquote>
+<p><strong>A heuristic is tied to the structure of the problem.</strong></p>
+</blockquote>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+> Har problem ke liye same shortcut nahi chalega. Problem ko samjho, phir us problem ke structure se useful estimate banao.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 30: What a Heuristic Does NOT Do -->
+  <section id="s-30" data-search-section="What a Heuristic Does NOT Do" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>30. What a Heuristic Does NOT Do</h2>
+      <button class="bookmark-btn" data-id="s-30" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A heuristic does <strong>not</strong> automatically:</p>
+<ul>
+<li>guarantee the correct next node</li>
+<li>guarantee the optimal final solution by itself</li>
+<li>replace the search algorithm</li>
+<li>give the exact remaining cost</li>
+<li>eliminate the need for problem formulation</li>
+</ul>
+<p>Instead, it supplies information that a search strategy can use.</p>
+<p>This is why your lecture presents heuristics together with specific informed-search strategies such as Greedy and A*.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 31: Common Misconceptions -->
+  <section id="s-31" data-search-section="Common Misconceptions" class="content-section">
+    <div class="section-header">
+      <h2>31. Common Misconceptions</h2>
+      <button class="bookmark-btn" data-id="s-31" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Misconception 1</h2>
+<blockquote>
+<p>“A heuristic is the actual remaining cost.”</p>
+</blockquote>
+<h3>Correct</h3>
+<p>It is an <strong>estimate</strong>.</p>
+<hr />
+<h2>Misconception 2</h2>
+<blockquote>
+<p>“A larger heuristic is always better.”</p>
+</blockquote>
+<h3>Correct</h3>
+<p>Not automatically. Under the lecture's admissibility/dominance discussion, a larger estimate is meaningful only under the relevant validity conditions.</p>
+<hr />
+<h2>Misconception 3</h2>
+<blockquote>
+<p>“Admissible means exact.”</p>
+</blockquote>
+<h3>Correct</h3>
+<p>No.</p>
+<p>Admissible means:</p>
+<div class="formula-math">\[
+h(n)\le h^*(n)
+\]</div>
+<p>It can be much smaller than the truth.</p>
+<hr />
+<h2>Misconception 4</h2>
+<blockquote>
+<p>“Heuristic means random guess.”</p>
+</blockquote>
+<h3>Correct</h3>
+<p>A good heuristic is <strong>problem-informed</strong>. It is based on useful structure or knowledge about the problem.</p>
+<hr />
+<h2>Misconception 5</h2>
+<blockquote>
+<p>“Heuristic search means we no longer need search.”</p>
+</blockquote>
+<h3>Correct</h3>
+<p>The heuristic guides the search; it does not replace the search process.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 32: Visual Summary — From Blind Search to Guided Search -->
+  <section id="s-32" data-search-section="Visual Summary — From Blind Search to Guided Search" class="content-section">
+    <div class="section-header">
+      <h2>32. Visual Summary — From Blind Search to Guided Search</h2>
+      <button class="bookmark-btn" data-id="s-32" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>UNINFORMED SEARCH
+
+          Problem
+             │
+             ▼
+        Search Space
+             │
+             ▼
+   Fixed exploration rule
+             │
+             ▼
+        Next node
+
+
+INFORMED SEARCH
+
+          Problem
+             │
+             ▼
+        Search Space
+             │
+       + problem knowledge
+             │
+             ▼
+        Heuristic h(n)
+             │
+             ▼
+    Evaluation / ranking
+             │
+             ▼
+        Next node</pre></div>
+<h3>One-line memory anchor</h3>
+<blockquote>
+<p><strong>Uninformed search asks: “What can I explore next?”</strong><br />
+<strong>Informed search asks: “What should I explore first, given what I know?”</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 33: Mathematical Summary -->
+  <section id="s-33" data-search-section="Mathematical Summary" class="content-section">
+    <div class="section-header">
+      <h2>33. Mathematical Summary</h2>
+      <button class="bookmark-btn" data-id="s-33" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Heuristic</h3>
+<div class="formula-math">\[
+\boxed{h(n)=\text{estimated remaining cost from }n\text{ to a goal}}
+\]</div>
+<h3>True optimal remaining cost</h3>
+<div class="formula-math">\[
+\boxed{h^*(n)=\text{actual cheapest remaining cost from }n\text{ to a goal}}
+\]</div>
+<h3>Admissibility</h3>
+<div class="formula-math">\[
+\boxed{0\le h(n)\le h^*(n)}
+\]</div>
+<h3>Goal</h3>
+<div class="formula-math">\[
+\boxed{h(G)=0}
+\]</div>
+<h3>Greedy uses</h3>
+<div class="formula-math">\[
+\boxed{h(n)}
+\]</div>
+<h3>A* uses</h3>
+<div class="formula-math">\[
+\boxed{f(n)=g(n)+h(n)}
+\]</div>
+<p>The last two belong formally to the next chapters, but they should be mentally connected to the current idea.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 34: Comparison — No Heuristic vs Heuristic -->
+  <section id="s-34" data-search-section="Comparison — No Heuristic vs Heuristic" class="content-section">
+    <div class="section-header">
+      <h2>34. Comparison — No Heuristic vs Heuristic</h2>
+      <button class="bookmark-btn" data-id="s-34" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Property</th>
+<th>Uninformed Search</th>
+<th>Informed Search</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Problem definition</td>
+<td>Required</td>
+<td>Required</td>
+</tr>
+<tr>
+<td>Extra problem knowledge</td>
+<td>Little/none</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Heuristic</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Guidance toward goal</td>
+<td>Weak / strategy-driven</td>
+<td>Heuristic-guided</td>
+</tr>
+<tr>
+<td>Typical examples</td>
+<td>BFS, DFS, UCS</td>
+<td>Greedy, A*</td>
+</tr>
+<tr>
+<td>Main risk</td>
+<td>Explore too many irrelevant states</td>
+<td>Depend on heuristic quality/properties</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 35: Exam-Oriented Definitions -->
+  <section id="s-35" data-search-section="Exam-Oriented Definitions" class="content-section mode-gate">
+    <div class="section-header">
+      <h2>35. Exam-Oriented Definitions</h2>
+      <button class="bookmark-btn" data-id="s-35" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="exam-ladder-card"><div class="ladder-mark-badge">📝 2-mark answer — Define heuristic function.</div>
+
+> A heuristic function `h(n)` is a problem-specific estimate of the remaining cost from node `n` to a goal state. It is used to guide informed search toward promising nodes.
+
+</div>
+
+<div class="exam-ladder-card"><div class="ladder-mark-badge">📝 2-mark answer — Define admissible heuristic.</div>
+
+> A heuristic is admissible if it never overestimates the true optimal remaining cost, i.e. `0 ≤ h(n) ≤ h*(n)` for every node.
+
+</div>
+
+<div class="exam-ladder-card"><div class="ladder-mark-badge">📝 5-mark answer — Explain heuristic functions.</div>
+
+Your answer should include:
+
+1. Definition
+2. Meaning of `h(n)`
+3. Why heuristics are useful
+4. One example
+5. Admissibility if relevant
+
+</div>
+
+<div class="exam-ladder-card"><div class="ladder-mark-badge">📝 10-mark answer — Discuss heuristics in informed search.</div>
+
+Suggested structure:
+
+1. Motivation for informed search
+2. Definition of heuristic
+3. `h(n)` interpretation
+4. Example — Romania / straight-line distance
+5. Admissibility
+6. 8-puzzle examples
+7. Dominance
+8. Relaxed problems
+9. Connection to Greedy and A*
+10. Advantages and limitations
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 36: Active Recall — Close the Book -->
+  <section id="s-36" data-search-section="Active Recall — Close the Book" class="content-section">
+    <div class="section-header">
+      <h2>36. Active Recall — Close the Book</h2>
+      <button class="bookmark-btn" data-id="s-36" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Do not look at the answers yet.</p>
+<ol>
+<li>What is a heuristic?</li>
+<li>What does <code>h(n)</code> mean?</li>
+<li>What is the difference between <code>h(n)</code> and <code>h*(n)</code>?</li>
+<li>What does admissible mean?</li>
+<li>Can an admissible heuristic underestimate?</li>
+<li>Can an admissible heuristic overestimate?</li>
+<li>What is the value of <code>h(G)</code> at a goal?</li>
+<li>Give a navigation example of a heuristic.</li>
+<li>What is the misplaced-tile heuristic?</li>
+<li>What is Manhattan distance in the 8-puzzle?</li>
+<li>What does it mean for <code>h2</code> to dominate <code>h1</code>?</li>
+<li>What is a relaxed problem?</li>
+<li>Why can a relaxed problem help construct a heuristic?</li>
+<li>What is the difference between a heuristic function and an evaluation function?</li>
+<li>Why does a good heuristic reduce search effort?</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 37: Recall Answers -->
+  <section id="s-37" data-search-section="Recall Answers" class="content-section">
+    <div class="section-header">
+      <h2>37. Recall Answers</h2>
+      <button class="bookmark-btn" data-id="s-37" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <ol>
+<li>A heuristic is an estimate of remaining cost used to guide search.</li>
+<li><code>h(n)</code> estimates the remaining cost from <code>n</code> to a goal.</li>
+<li><code>h(n)</code> is an estimate; <code>h*(n)</code> is the true optimal remaining cost.</li>
+<li>Admissible means the heuristic never overestimates the true optimal remaining cost.</li>
+<li>Yes.</li>
+<li>No, not for an admissible heuristic.</li>
+<li><code>h(G)=0</code>.</li>
+<li>Straight-line distance to a destination.</li>
+<li>Count of tiles not in their target positions.</li>
+<li>Sum of horizontal + vertical distances of tiles from their target positions.</li>
+<li><code>h2(n) ≥ h1(n)</code> for all <code>n</code>, with both heuristics admissible.</li>
+<li>A simplified version of the original problem with some constraints relaxed.</li>
+<li>Its exact solution cost can provide a lower-bound style estimate for the original problem.</li>
+<li>A heuristic estimates; an evaluation function is what a search strategy uses to rank candidates.</li>
+<li>It can focus expansion on more promising states and avoid unnecessary exploration.</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 38: Practice Set -->
+  <section id="s-38" data-search-section="Practice Set" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>38. Practice Set</h2>
+      <button class="bookmark-btn" data-id="s-38" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>A. Concept Questions</h2>
+<h3>Q1</h3>
+<p>Why can't we simply use the heuristic as the final answer?</p>
+<h3>Q2</h3>
+<p>Why is “estimate” a critical word in the definition of a heuristic?</p>
+<h3>Q3</h3>
+<p>Why might Manhattan distance carry more useful information than simply counting misplaced tiles?</p>
+<h3>Q4</h3>
+<p>Why can relaxing a problem help create a heuristic?</p>
+<h3>Q5</h3>
+<p>What is the danger of allowing a heuristic to overestimate?</p>
+<hr />
+<h2>B. Numerical Questions</h2>
+<h3>Q1 — Admissibility</h3>
+<p>The true costs from four nodes are:</p>
+<div class="formula-math">\[
+ h^*(A)=12,\quad h^*(B)=9,\quad h^*(C)=6,\quad h^*(D)=15
+\]</div>
+<p>A proposed heuristic is:</p>
+<div class="formula-math">\[
+ h(A)=10,\quad h(B)=8,\quad h(C)=6,\quad h(D)=17
+\]</div>
+<p>Determine whether the heuristic is admissible.</p>
+<p><strong>Expected reasoning:</strong> compare each value with the corresponding true cost.</p>
+<hr />
+<h3>Q2 — Comparing heuristics</h3>
+<p>For a node:</p>
+<div class="formula-math">\[
+h_1(n)=5,
+\quad h_2(n)=9,
+\quad h^*(n)=12
+\]</div>
+<p>Both are individually admissible at this node.</p>
+<p>Which heuristic provides the tighter estimate at this node?</p>
+<hr />
+<h3>Q3 — Goal state</h3>
+<p>If a node is already a goal state and the heuristic must satisfy the non-negative admissibility condition, determine <code>h(n)</code>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 39: University Exam Lens -->
+  <section id="s-39" data-search-section="University Exam Lens" class="content-section">
+    <div class="section-header">
+      <h2>39. University Exam Lens</h2>
+      <button class="bookmark-btn" data-id="s-39" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>What your instructor may expect</h3>
+<p>For a question on heuristics, the safest conceptual chain is:</p>
+<div class="ascii-box"><pre>Definition
+   ↓
+Estimate of remaining cost
+   ↓
+h(n)
+   ↓
+Example
+   ↓
+Admissibility
+   ↓
+Use in Greedy / A*</pre></div>
+<h3>Important terms to remember exactly</h3>
+<ul>
+<li>heuristic</li>
+<li>estimate</li>
+<li>remaining cost</li>
+<li>goal</li>
+<li>admissible</li>
+<li>true cost</li>
+<li>relaxed problem</li>
+<li>dominance</li>
+<li>informed search</li>
+</ul>
+<h3>Do not write</h3>
+<blockquote>
+<p>“Heuristic gives the shortest path.”</p>
+</blockquote>
+<h3>Better</h3>
+<blockquote>
+<p>“A heuristic provides an estimate used to guide the search toward promising states.”</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 40: Math Lens -->
+  <section id="s-40" data-search-section="Math Lens" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>40. Math Lens</h2>
+      <button class="bookmark-btn" data-id="s-40" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This chapter does not require difficult mathematics.</p>
+<p>You mainly need:</p>
+<h3>Function notation</h3>
+<div class="formula-math">\[
+h(n)
+\]</div>
+<h3>Inequalities</h3>
+<div class="formula-math">\[
+h(n)\le h^*(n)
+\]</div>
+<h3>Lower-bound intuition</h3>
+<div class="ascii-box"><pre>Estimate                    Truth
+   h(n)  ---------------------&gt; h*(n)
+       must not exceed</pre></div>
+<p>The deeper mathematical reasoning appears when we study A* optimality.</p>
+<p><strong>Math Companion links:</strong></p>
+<ul>
+<li><code>MATH-M01</code> — Mathematical notation</li>
+<li><code>MATH-M08</code> — Functions / basic inequalities</li>
+<li><code>MATH-M10</code> — Optimization/search objective notation (later)</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 41: Course Lens — Your Provided Lecture -->
+  <section id="s-41" data-search-section="Course Lens — Your Provided Lecture" class="content-section">
+    <div class="section-header">
+      <h2>41. Course Lens — Your Provided Lecture</h2>
+      <button class="bookmark-btn" data-id="s-41" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h3>Primary source</h3>
+<p><strong><code>lecture-informed-search.pdf</code> — Philipp Koehn, Artificial Intelligence: Informed Search, 12 February 2026</strong></p>
+<p>The lecture sequence relevant to this chapter includes:</p>
+<ul>
+<li>Slide 2 — heuristic idea</li>
+<li>Slide 3 — informed-search outline</li>
+<li>Slides 5–6 — best-first and evaluation-function framing</li>
+<li>Slide 9 — <code>h(n)</code> and straight-line distance</li>
+<li>Slide 17 — A* and admissibility</li>
+<li>Slides 31–32 — 8-puzzle admissible heuristics</li>
+<li>Slide 33 — dominance</li>
+<li>Slides 34–36 — relaxed problems</li>
+<li>Slide 37 — A* summary</li>
+</ul>
+<p>The lecture later summarizes Greedy as selecting the lowest <code>h</code> and A* as selecting the lowest <code>g+h</code>, while noting that admissible heuristics do not overestimate. Those details are carried forward into C06/C07 rather than treated as separate heuristic theory here.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 42: Resource Shelf -->
+  <section id="s-42" data-search-section="Resource Shelf" class="content-section">
+    <div class="section-header">
+      <h2>42. Resource Shelf</h2>
+      <button class="bookmark-btn" data-id="s-42" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Your course material — <strong>Primary</strong></h2>
+<ul>
+<li><code>lecture-informed-search.pdf</code></li>
+<li><code>lecture-basic-search.pdf</code> for the preceding search concepts</li>
+</ul>
+<h2>Next Main Book chapters</h2>
+<ul>
+<li><code>MAIN-U1-C06 — Greedy Best-First Search</code></li>
+<li><code>MAIN-U1-C07 — A* Search</code></li>
+</ul>
+<h2>Reference book</h2>
+<h3>Russell &amp; Norvig — <em>Artificial Intelligence: A Modern Approach</em></h3>
+<p>Use the informed-search / heuristic-search sections for additional formal examples and terminology.</p>
+<h2>Structured course</h2>
+<h3>NPTEL — Artificial Intelligence: Search Methods for Problem Solving</h3>
+<p>Use the relevant informed-search lectures after the chapter if you need additional worked examples.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 43: Chapter Exit Test -->
+  <section id="s-43" data-search-section="Chapter Exit Test" class="content-section">
+    <div class="section-header">
+      <h2>43. Chapter Exit Test</h2>
+      <button class="bookmark-btn" data-id="s-43" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You have mastered this chapter when you can do all of the following <strong>without looking at the book</strong>:</p>
+<ul>
+<li>[ ] Explain why heuristics are needed.</li>
+<li>[ ] Define <code>h(n)</code>.</li>
+<li>[ ] Explain <code>h(n)</code> in English.</li>
+<li>[ ] Explain <code>h(n)</code> in Hinglish.</li>
+<li>[ ] Give a real-world heuristic example.</li>
+<li>[ ] Distinguish estimate from true cost.</li>
+<li>[ ] Explain <code>h*(n)</code>.</li>
+<li>[ ] Test whether a heuristic is admissible.</li>
+<li>[ ] Explain why <code>h(G)=0</code>.</li>
+<li>[ ] Compute misplaced tiles.</li>
+<li>[ ] Explain Manhattan distance.</li>
+<li>[ ] Explain dominance.</li>
+<li>[ ] Explain relaxed problems.</li>
+<li>[ ] Explain how heuristics connect to Greedy and A*.</li>
+<li>[ ] Explain why a good heuristic can reduce search effort.</li>
+</ul>
+<p>If you cannot do these comfortably, <strong>do not move straight to memorising A</strong>*. Revisit the worked examples first.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 44: Memory Card -->
+  <section id="s-44" data-search-section="Memory Card" class="content-section">
+    <div class="section-header">
+      <h2>44. Memory Card</h2>
+      <button class="bookmark-btn" data-id="s-44" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <blockquote>
+<h3>HEURISTIC = SMART ESTIMATE</h3>
+<p><code>h(n)</code> = estimated remaining cost</p>
+<p><code>h*(n)</code> = actual optimal remaining cost</p>
+<p><strong>Admissible:</strong></p>
+</blockquote>
+<div class="formula-math">\[
+\gt  0\le h(n)\le h^*(n)
+\gt  \]</div>
+<blockquote>
+<p><strong>Goal:</strong></p>
+</blockquote>
+<div class="formula-math">\[
+\gt  h(G)=0
+\gt  \]</div>
+<blockquote>
+<p><strong>Greedy:</strong> looks at <code>h(n)</code></p>
+<p><strong>A*:</strong> looks at <code>g(n)+h(n)</code></p>
+<p><strong>Relaxed problem:</strong> simplify the problem to derive a useful lower-bound estimate.</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 45: What Comes Next? -->
+  <section id="s-45" data-search-section="What Comes Next?" class="content-section">
+    <div class="section-header">
+      <h2>45. What Comes Next?</h2>
+      <button class="bookmark-btn" data-id="s-45" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>We now know what a heuristic <strong>is</strong>.</p>
+<p>The next question is:</p>
+<blockquote>
+<p><strong>How do we turn that heuristic into an actual search strategy?</strong></p>
+</blockquote>
+<p>There are two major answers in your course material:</p>
+<h3>C06 — Greedy Best-First Search</h3>
+<blockquote>
+<p>“Choose the node that appears closest to the goal.”</p>
+</blockquote>
+<p>It uses:</p>
+<div class="formula-math">\[
+h(n)
+\]</div>
+<h3>C07 — A* Search</h3>
+<p>It combines:</p>
+<div class="formula-math">\[
+g(n)+h(n)
+\]</div>
+<p>so that search considers both:</p>
+<ul>
+<li>the cost already spent</li>
+<li>the estimated cost remaining</li>
+</ul>
+<p>Your supplied lecture explicitly presents Best-First Search first and then identifies Greedy and A* as its important special cases. <code>lecture-informed-search.pdf</code>, slides 5–6.</p>
+<hr />
+<h1>Source Grounding</h1>
+<p>This chapter is primarily grounded in the user's supplied:</p>
+<ul>
+<li><strong><code>lecture-informed-search.pdf</code></strong> — heuristic definition, Best-First framing, <code>h(n)</code>, straight-line distance, admissibility, 8-puzzle heuristics, dominance, relaxed problems, and the connection to Greedy/A*.</li>
+<li><strong><code>lecture-basic-search.pdf</code></strong> — prerequisite concepts such as problem states, search nodes, expansion and search-strategy evaluation.</li>
+</ul>
+<p>Important course-source anchors include:</p>
+<ul>
+<li>Informed-search outline and Best-First Search: slides 2–6.</li>
+<li>Greedy heuristic <code>h(n)</code> and straight-line distance: slide 9.</li>
+<li>A* definition and admissibility: slide 17.</li>
+<li>8-puzzle admissible heuristics: slides 31–32.</li>
+<li>Dominance: slide 33.</li>
+<li>Relaxed problems: slides 34–36.</li>
+<li>Informed-search summary: slide 37.</li>
+</ul>
+<p>Where this chapter adds analogies, beginner explanations, visualisations, and teacher-built examples, those are <strong>pedagogical expansions</strong>, not quotations from the supplied lecture.</p>
+<hr />
+<h1>Cross-Book Links</h1>
+<ul>
+<li><strong>Exam Book:</strong> <code>EXAM-AI-U1-C05-HEURISTICS</code></li>
+<li><strong>Math Companion:</strong> <code>MATH-M01</code>, <code>MATH-M08</code></li>
+<li><strong>Practice Bank:</strong> <code>PRAC-AI-U1-C05</code></li>
+<li><strong>Resource Shelf:</strong> <code>RES-AI-HEURISTICS</code></li>
+<li><strong>Next:</strong> <code>MAIN-U1-C06</code>, <code>MAIN-U1-C07</code></li>
+</ul>
+<hr />
+<h1>Status</h1>
+<p><strong><code>AI-U1-C05</code> — COMPLETE</strong></p>
+<p><strong>Mastery gate:</strong> understand the heuristic before moving to Greedy and A*. The next chapters will reuse this chapter's notation rather than re-teaching it from scratch.</p>
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="ch04-uninformed-search.html" class="nav-btn">← Ch 4 — Uninformed Search</a>
+    <a href="ch06-greedy-best-first-search.html" class="nav-btn primary">Next: Ch 6 — Greedy Search →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch05-heuristics.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 5</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

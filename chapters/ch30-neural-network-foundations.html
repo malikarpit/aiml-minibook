@@ -1,0 +1,2120 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 30: Neural Network Foundations — AI & Machine Learning MiniBook. Biological vs Artificial Neurons, Weights, Bias, Linear Combinations, Activation Functions, and Network Topologies">
+<title>Ch 30 — Neural Network Foundations | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-xi">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 30 — Neural Network Foundations</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 30 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why This Chapter Exists <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. One-Minute Intuition <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. From Biological Neuron to Artificial Neuron <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. The Artificial Neuron <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. How to Read the Neuron Diagram <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. What Does a Weight Actually Mean? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. What Is the Bias? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. A First Numerical Example <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Why Do We Need an Activation Function? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Activation Functions <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Step / Threshold Activation <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Sigmoid <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Tanh <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. ReLU <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Activation Comparison Card <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. What Is a Layer? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Feedforward Neural Network <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Reading the MLP Equation <span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Matrix Dimensions — The Fastest Way to Catch Errors <span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Parameters vs Hyperparameters </a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. What Does a Neural Network Learn? </a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Representation Power — Why Multiple Layers Matter </a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Why a Single Neuron Is Limited </a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Forward Pass <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Worked Forward-Pass Example <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Loss Function: Why Do We Need One? </a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Training Loop — Big Picture <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. The Three Words You Must Keep Separate </a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Neural Network as Function Composition </a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. What Makes a Network “Deep”? </a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Common Architecture Vocabulary </a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Why Matrix Multiplication Matters So Much </a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Numerical Dimension Example <span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Neural Networks and Model Capacity </a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. A Complete Concept Map </a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Common Misconceptions </a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Memory Palace </a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Active Recall — Close the Book </a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Practice Set </a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. University Exam Lens <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Math You Need Now </a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Resource Shelf </a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Chapter Exit Test </a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Connection to the Next Topic </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link active"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit III</span><span>›</span><span>Part XI — Neural Network Foundations & The Perceptron</span><span>›</span><span style="color:var(--em-text)">Chapter 30</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 30 · Unit III · Part XI</div>
+    <div class="chapter-part-banner part-xi">
+      <span class="part-banner-badge">Unit III · Part XI</span>
+      <span>Neural Network Foundations & The Perceptron</span>
+    </div>
+    <h1 class="chapter-title">Neural Network Foundations</h1>
+    <div class="concept-id-tag">[CONCEPT-DL-030]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: Core Foundation</span>
+      <span class="chapter-meta-item">📖 ~45 min read</span>
+      <span class="chapter-meta-item">🎯 44 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>Neural Network Foundations:</strong> Biological vs artificial neuron architecture, Dendrites/Axons/Synapse mapping, McCulloch-Pitts formal neuron, Linear combination \(z = \sum w_i x_i + b\), Role of bias as an activation threshold, Activation function necessities, and Feedforward topologies.</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why This Chapter Exists</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">One-Minute Intuition</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">From Biological Neuron to Artificial Neuron</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">The Artificial Neuron</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">How to Read the Neuron Diagram</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">What Does a Weight Actually Mean?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">What Is the Bias?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">A First Numerical Example</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Why Do We Need an Activation Function?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Activation Functions</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Step / Threshold Activation</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Sigmoid</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Tanh</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">ReLU</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Activation Comparison Card</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">What Is a Layer?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Feedforward Neural Network</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Reading the MLP Equation</span><span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Matrix Dimensions — The Fastest Way to Catch Errors</span><span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Parameters vs Hyperparameters</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">What Does a Neural Network Learn?</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Representation Power — Why Multiple Layers Matter</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Why a Single Neuron Is Limited</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Forward Pass</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Worked Forward-Pass Example</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Loss Function: Why Do We Need One?</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Training Loop — Big Picture</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">The Three Words You Must Keep Separate</span></a></li>
+      <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Neural Network as Function Composition</span></a></li>
+      <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">What Makes a Network “Deep”?</span></a></li>
+      <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Common Architecture Vocabulary</span></a></li>
+      <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Why Matrix Multiplication Matters So Much</span></a></li>
+      <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Numerical Dimension Example</span><span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a></li>
+      <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Neural Networks and Model Capacity</span></a></li>
+      <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">A Complete Concept Map</span></a></li>
+      <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Common Misconceptions</span></a></li>
+      <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Memory Palace</span></a></li>
+      <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Active Recall — Close the Book</span></a></li>
+      <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Practice Set</span></a></li>
+      <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">University Exam Lens</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Math You Need Now</span></a></li>
+      <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Resource Shelf</span></a></li>
+      <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Chapter Exit Test</span></a></li>
+      <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Connection to the Next Topic</span></a></li>
+    </ul>
+  </div>
+
+  
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 1: Why This Chapter Exists -->
+  <section id="s-01" data-search-section="Why This Chapter Exists" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>1. Why This Chapter Exists</h2>
+      <button class="bookmark-btn" data-id="s-01" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You have already studied models such as linear regression, logistic regression and decision trees. A natural question now appears:</p>
+<blockquote>
+<p><strong>What if the relationship between inputs and outputs is too complicated for one simple model?</strong></p>
+</blockquote>
+<p>A neural network gives us a way to build a <strong>composition of simple computational units</strong> so that the complete model can represent much richer relationships.</p>
+<p>The central progression is:</p>
+<div class="ascii-box"><pre>Raw input
+   ↓
+Weighted combinations
+   ↓
+Activation functions
+   ↓
+Intermediate representations
+   ↓
+More transformations
+   ↓
+Prediction</pre></div>
+<p>The important conceptual shift is not merely:</p>
+<blockquote>
+<p>“A neural network has many neurons.”</p>
+</blockquote>
+<p>It is:</p>
+<blockquote>
+<p><strong>A neural network learns a useful representation of the input and then uses that representation to make predictions.</strong></p>
+</blockquote>
+<p>This connects directly to <code>Lecture10 copy.pdf</code>, where the supplied lecture describes a neural network through a learned feature map:</p>
+<div class="formula-math">\[
+\phi_\theta(x)
+\]</div>
+<p>followed by a final prediction such as</p>
+<div class="formula-math">\[
+f(x)=w^T\phi_\theta(x).
+\]</div>
+<p>The supplied resource guide identifies <code>prac_7_neural_network.ipynb</code> as covering neurons, weights/bias, activations, losses and gradient-descent concepts, while <code>CS6910 Lecture 2</code> covers biological/artificial neurons, threshold logic, perceptrons, the learning algorithm, MLPs and representation power. [<code>AI_ML_Master_Learning_Resource_Guide.pdf</code>]</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 2: One-Minute Intuition -->
+  <section id="s-02" data-search-section="One-Minute Intuition" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. One-Minute Intuition</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>English</h2>
+<p>A neuron is a small computation unit.</p>
+<p>It receives numbers, gives different importance to those numbers using <strong>weights</strong>, adds a <strong>bias</strong>, and then passes the result through an <strong>activation function</strong>.</p>
+<p>A network connects many such units.</p>
+<p>One layer can extract a simple pattern. Later layers can combine those patterns into more useful patterns.</p>
+<p>For example, in image recognition:</p>
+<div class="ascii-box"><pre>pixels
+  ↓
+edges
+  ↓
+shapes
+  ↓
+parts
+  ↓
+object</pre></div>
+<p>That is only an intuition; real learned representations are not necessarily so cleanly interpretable.</p>
+<h2>Hinglish</h2>
+<p>Neuron ko ek chhota decision-making calculator samjho.</p>
+<p>Uske paas kuch inputs aaye. Har input kitna important hai, woh <strong>weight</strong> batata hai. Phir neuron sab weighted inputs ko combine karta hai, bias add karta hai, aur activation function decide karta hai ki output kis form mein niklega.</p>
+<p>Ek neuron simple kaam kar sakta hai.</p>
+<p>Bahut saare neurons milkar complicated pattern bana sakte hain.</p>
+<p>Bilkul waise jaise ek team mein:</p>
+<div class="ascii-box"><pre>person 1 → ek clue
+person 2 → doosra clue
+person 3 → teesra clue
+             ↓
+          manager
+             ↓
+        final decision</pre></div>
+<p>Neural network ka power <strong>combination + learned weights + nonlinear transformations</strong> se aata hai.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: From Biological Neuron to Artificial Neuron -->
+  <section id="s-03" data-search-section="From Biological Neuron to Artificial Neuron" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>3. From Biological Neuron to Artificial Neuron</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="diagram-box"><pre class="mermaid">
+graph LR
+    subgraph Biological["🧠 Biological Neuron"]
+        D["Dendrites (Inputs)"] --> S["Soma / Cell Body (Summation)"]
+        S --> A["Axon (Transmission)"]
+        A --> SY["Synapses (Connection Strength)"]
+    end
+    subgraph Artificial["🤖 Artificial Neuron (Perceptron Model)"]
+        X["Inputs (x₁, x₂, ..., xₙ)"] --> SUM["Linear Sum: z = ∑ wᵢxᵢ + b"]
+        SUM --> ACT["Activation Function: a = σ(z)"]
+        ACT --> Y["Output Activation (ŷ)"]
+    end
+    D -.->|Analogue| X
+    S -.->|Analogue| SUM
+    A -.->|Analogue| ACT
+    SY -.->|Analogue| Y
+</pre></div>
+<h2>3.1 Biological inspiration</h2>
+<p>Artificial neural networks were inspired by the idea that biological nervous systems contain interconnected processing units.</p>
+<p>A biological neuron receives signals through its inputs and produces an output signal. An artificial neuron keeps only a highly simplified mathematical abstraction of this idea.</p>
+<h3>Important caution</h3>
+<p>Do <strong>not</strong> interpret the artificial neuron as a faithful simulation of a biological neuron.</p>
+<p>It is a mathematical model inspired by the broad idea of weighted signal aggregation and thresholding.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: The Artificial Neuron -->
+  <section id="s-04" data-search-section="The Artificial Neuron" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>4. The Artificial Neuron</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose a neuron receives an input vector</p>
+<div class="formula-math">\[
+x=(x_1,x_2,\ldots,x_d).
+\]</div>
+<p>It has weights</p>
+<div class="formula-math">\[
+w=(w_1,w_2,\ldots,w_d)
+\]</div>
+<p>and a bias</p>
+<div class="formula-math">\[
+b.
+\]</div>
+<p>First compute the weighted sum:</p>
+<div class="formula-math">\[
+z=w^Tx+b
+\]</div>
+<p>or explicitly:</p>
+<div class="formula-math">\[
+z=w_1x_1+w_2x_2+\cdots+w_dx_d+b.
+\]</div>
+<p>Then apply an activation function:</p>
+<div class="formula-math">\[
+\boxed{a=\phi(z)}.
+\]</div>
+<p>So the artificial neuron can be summarized as:</p>
+<div class="ascii-box"><pre>x1 ──× w1 ─┐
+          x2 ──× w2 ─┤
+          x3 ──× w3 ─┤
+                     ├── Σ ── + b ── φ ──→ a
+          ... ───────┤
+          xd ──× wd ─┘</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: How to Read the Neuron Diagram -->
+  <section id="s-05" data-search-section="How to Read the Neuron Diagram" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>5. How to Read the Neuron Diagram</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="diagram-box"><pre class="mermaid">
+graph TD
+    X1["x₁ (Feature 1)"] -->|w₁| SUM["∑ + b<br/>z = w₁x₁ + w₂x₂ + ... + b"]
+    X2["x₂ (Feature 2)"] -->|w₂| SUM
+    X3["x₃ (Feature 3)"] -->|w₃| SUM
+    BIAS["b (Bias = w₀ · 1)"] --> SUM
+    SUM --> ACT["Activation Function<br/>f(z)"]
+    ACT --> OUT["Output: ŷ"]
+</pre></div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher explanation — Hinglish</div>
+
+Neuron ko ek simple decision-maker samjho. Har input $x_i$ ek evidence hai, aur weight $w_i$ us evidence ki importance (vajan) hai. Bias $b$ neuron ka personal threshold hai — agar inputs zero bhi hon, toh neuron kitna eager hai fire karne ke liye. Jab tak weighted sum $z$ bias ke sath milkar threshold cross nahi karta, neuron chup rehta hai!
+
+
+When looking at a neuron diagram, identify four things in this order:
+
+</div>
+
+<h3>1. Inputs</h3>
+<div class="formula-math">\[
+x_1,x_2,\ldots,x_d
+\]</div>
+<p>These are the available features.</p>
+<h3>2. Weights</h3>
+<div class="formula-math">\[
+w_1,w_2,\ldots,w_d
+\]</div>
+<p>They determine how strongly each input contributes.</p>
+<h3>3. Bias</h3>
+<div class="formula-math">\[
+b
+\]</div>
+<p>It shifts the neuron's pre-activation value.</p>
+<h3>4. Activation</h3>
+<div class="formula-math">\[
+\phi(z)
+\]</div>
+<p>It transforms the weighted sum before the output is passed onward.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: What Does a Weight Actually Mean? -->
+  <section id="s-06" data-search-section="What Does a Weight Actually Mean?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>6. What Does a Weight Actually Mean?</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<div class="formula-math">\[
+z=2x_1-0.5x_2+1.
+\]</div>
+<p>Then:</p>
+<ul>
+<li>\(w_1=2\): increasing \(x_1\) tends to increase \(z\).</li>
+<li>\(w_2=-0.5\): increasing \(x_2\) tends to decrease \(z\).</li>
+<li>larger absolute weight magnitude means a stronger contribution to the weighted sum, all else equal.</li>
+</ul>
+<h3>Important nuance</h3>
+<p>A weight is not automatically a causal importance score.</p>
+<p>Its interpretation depends on scaling, architecture, interactions, activation functions and the learned representation.</p>
+<p>For exam intuition, however:</p>
+<blockquote>
+<p><strong>Weight = learned strength and direction of an input's contribution to the pre-activation.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: What Is the Bias? -->
+  <section id="s-07" data-search-section="What Is the Bias?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>7. What Is the Bias?</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Without a bias:</p>
+<div class="formula-math">\[
+z=w^Tx.
+\]</div>
+<p>With a bias:</p>
+<div class="formula-math">\[
+z=w^Tx+b.
+\]</div>
+<p>The bias gives the neuron an additional adjustable offset.</p>
+<h3>Geometry</h3>
+<p>For a threshold-style neuron,</p>
+<div class="formula-math">\[
+w^Tx+b=0
+\]</div>
+<p>defines a decision boundary.</p>
+<p>Changing \(b\) shifts that boundary.</p>
+<p>So an intuitive interpretation is:</p>
+<blockquote>
+<p><strong>Weights control orientation; bias controls position.</strong></p>
+</blockquote>
+<p>For a two-dimensional input, the decision boundary is a line. In higher dimensions, it becomes a hyperplane.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: A First Numerical Example -->
+  <section id="s-08" data-search-section="A First Numerical Example" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>8. A First Numerical Example</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+class ArtificialNeuron:
+    def __init__(self, weights, bias, activation_fn):
+        self.w = np.array(weights, dtype=float)
+        self.b = float(bias)
+        self.act = activation_fn
+
+    def forward(self, x):
+        z = np.dot(self.w, x) + self.b
+        return self.act(z)
+
+# Step function (McCulloch-Pitts / Heaviside)
+step = lambda z: 1 if z &gt;= 0 else 0
+
+# (A) Logic AND Gate: Fires only when both inputs are 1
+neuron_and = ArtificialNeuron(weights=[1.0, 1.0], bias=-1.5, activation_fn=step)
+print(&quot;AND Gate Tests:&quot;)
+for x in [[0,0], [0,1], [1,0], [1,1]]:
+    print(f&quot;  Inputs {x} -&gt; Output {neuron_and.forward(x)}&quot;)
+
+# (B) Logic OR Gate: Fires when at least one input is 1
+neuron_or = ArtificialNeuron(weights=[1.0, 1.0], bias=-0.5, activation_fn=step)
+print(&quot;OR Gate Tests:&quot;)
+for x in [[0,0], [0,1], [1,0], [1,1]]:
+    print(f&quot;  Inputs {x} -&gt; Output {neuron_or.forward(x)}&quot;)</code></pre></div>
+<p>Let</p>
+<div class="formula-math">\[
+x_1=2,\quad x_2=3,
+\]</div>
+<div class="formula-math">\[
+w_1=0.5,\quad w_2=-1,
+\]</div>
+<p>and</p>
+<div class="formula-math">\[
+b=1.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+z=(0.5)(2)+(-1)(3)+1.
+\]</div>
+<p>Therefore,</p>
+<div class="formula-math">\[
+z=1-3+1=-1.
+\]</div>
+<p>If the activation is ReLU,</p>
+<div class="formula-math">\[
+\operatorname{ReLU}(z)=\max(0,z),
+\]</div>
+<p>so:</p>
+<div class="formula-math">\[
+a=\operatorname{ReLU}(-1)=0.
+\]</div>
+<h3>Exam trace</h3>
+<div class="ascii-box"><pre>x = (2, 3)
+      ↓
+weighted sum = -1
+      ↓
+ReLU
+      ↓
+output = 0</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: Why Do We Need an Activation Function? -->
+  <section id="s-09" data-search-section="Why Do We Need an Activation Function?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>9. Why Do We Need an Activation Function?</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This is one of the most important questions in the chapter.</p>
+<p>Suppose every neuron only computes</p>
+<div class="formula-math">\[
+z=w^Tx+b
+\]</div>
+<p>and there is <strong>no nonlinear activation</strong> between layers.</p>
+<p>A sequence of linear/affine transformations can be collapsed into another affine transformation.</p>
+<p>For example,</p>
+<div class="formula-math">\[
+z_1=W_1x+b_1
+\]</div>
+<p>and then</p>
+<div class="formula-math">\[
+z_2=W_2z_1+b_2.
+\]</div>
+<p>Substitute:</p>
+<div class="formula-math">\[
+z_2=W_2(W_1x+b_1)+b_2
+\]</div>
+<div class="formula-math">\[
+z_2=(W_2W_1)x+(W_2b_1+b_2).
+\]</div>
+<p>That is still just another affine transformation.</p>
+<p>So simply stacking linear layers does <strong>not</strong> give the expressive power usually associated with deep neural networks.</p>
+<h3>Central insight</h3>
+<blockquote>
+<p><strong>Nonlinearity is what allows layered networks to model nonlinear relationships.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: Activation Functions -->
+  <section id="s-10" data-search-section="Activation Functions" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>10. Activation Functions</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The activation function transforms</p>
+<div class="formula-math">\[
+z
+\]</div>
+<p>into</p>
+<div class="formula-math">\[
+a=\phi(z).
+\]</div>
+<p>The course's neural-network resource set highlights activations; the broader course structure includes common functions such as sigmoid, ReLU and tanh. [<code>AI_ML_Master_Learning_Resource_Guide.pdf</code>]</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: Step / Threshold Activation -->
+  <section id="s-11" data-search-section="Step / Threshold Activation" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>11. Step / Threshold Activation</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The simplest threshold idea is:</p>
+<div class="formula-math">\[
+\phi(z)=
+\begin{cases}
+1,&z\ge 0\\
+0,&z\lt 0
+\end{cases}
+\]</div>
+<p>Interpretation:</p>
+<div class="ascii-box"><pre>z &lt; 0  →  0
+z ≥ 0  →  1</pre></div>
+<p>This is closely connected to threshold logic and the perceptron material identified in <code>CS6910 Lecture 2</code>.</p>
+<h3>Advantage</h3>
+<p>Very intuitive for binary decisions.</p>
+<h3>Limitation</h3>
+<p>Its discontinuous nature is inconvenient for gradient-based learning with ordinary derivatives.</p>
+<p>That motivates smoother or piecewise-differentiable activations in modern neural networks.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: Sigmoid -->
+  <section id="s-12" data-search-section="Sigmoid" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>12. Sigmoid</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The sigmoid function is</p>
+<div class="formula-math">\[
+\boxed{
+\sigma(z)=\frac{1}{1+e^{-z}}
+}
+\]</div>
+<p>Its output lies between 0 and 1:</p>
+<div class="formula-math">\[
+0\lt \sigma(z)\lt 1.
+\]</div>
+<h3>Behaviour</h3>
+<div class="ascii-box"><pre>large negative z → output near 0
+z = 0             → output 0.5
+large positive z → output near 1</pre></div>
+<h3>Intuition</h3>
+<p>Sigmoid smoothly converts an unrestricted real number into a bounded score in the interval \((0,1)\).</p>
+<p>It is especially natural in binary classification output layers when the value is interpreted as a probability-like quantity under the model.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: Tanh -->
+  <section id="s-13" data-search-section="Tanh" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>13. Tanh</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="formula-math">\[
+\boxed{
+\tanh(z)=\frac{e^z-e^{-z}}{e^z+e^{-z}}
+}
+\]</div>
+<p>Its output lies in</p>
+<div class="formula-math">\[
+(-1,1).
+\]</div>
+<p>Compared with sigmoid, tanh is zero-centered.</p>
+<p>A useful mental picture:</p>
+<div class="ascii-box"><pre>sigmoid → 0 to 1
+ tanh   → -1 to 1</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: ReLU -->
+  <section id="s-14" data-search-section="ReLU" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>14. ReLU</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The Rectified Linear Unit is</p>
+<div class="formula-math">\[
+\boxed{
+\operatorname{ReLU}(z)=\max(0,z)
+}
+\]</div>
+<p>So:</p>
+<div class="formula-math">\[
+\operatorname{ReLU}(z)=
+\begin{cases}
+0,&z\lt 0\\
+z,&z\ge 0
+\end{cases}
+\]</div>
+<h3>Why it is intuitive</h3>
+<p>Negative pre-activation → suppressed to zero.</p>
+<p>Positive pre-activation → passed through unchanged.</p>
+<h3>Simple trace</h3>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th style="text-align: right;">\(z\)</th>
+<th style="text-align: right;">ReLU\((z)\)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">-3</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td style="text-align: right;">-0.5</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: Activation Comparison Card -->
+  <section id="s-15" data-search-section="Activation Comparison Card" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>15. Activation Comparison Card</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Function</th>
+<th>Range</th>
+<th>Shape idea</th>
+<th>Common intuition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Step</td>
+<td>typically \(\{0,1\}\)</td>
+<td>hard threshold</td>
+<td>yes/no decision</td>
+</tr>
+<tr>
+<td>Sigmoid</td>
+<td>\((0,1)\)</td>
+<td>S-shaped</td>
+<td>probability-like output</td>
+</tr>
+<tr>
+<td>Tanh</td>
+<td>\((-1,1)\)</td>
+<td>centered S-shape</td>
+<td>signed bounded signal</td>
+</tr>
+<tr>
+<td>ReLU</td>
+<td>\([0,\infty)\)</td>
+<td>zero then line</td>
+<td>keep positive signal</td>
+</tr>
+</tbody>
+</table></div>
+<h3>Memory anchor</h3>
+<blockquote>
+<p><strong>Step decides. Sigmoid squashes. Tanh centers. ReLU gates.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: What Is a Layer? -->
+  <section id="s-16" data-search-section="What Is a Layer?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>16. What Is a Layer?</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A layer is a group of neurons that processes a representation and passes the result onward.</p>
+<p>A basic feedforward network contains:</p>
+<div class="ascii-box"><pre>Input Layer
+     ↓
+Hidden Layer(s)
+     ↓
+Output Layer</pre></div>
+<h3>Input layer</h3>
+<p>Receives the feature vector.</p>
+<h3>Hidden layer</h3>
+<p>Performs learned transformations that are not directly the final prediction.</p>
+<h3>Output layer</h3>
+<p>Produces the task output.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: Feedforward Neural Network -->
+  <section id="s-17" data-search-section="Feedforward Neural Network" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>17. Feedforward Neural Network</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>In a feedforward network, information moves from earlier layers toward later layers.</p>
+<p>There is no recurrent loop in the basic feedforward architecture.</p>
+<p>A one-hidden-layer network can be written as:</p>
+<div class="formula-math">\[
+h=\phi(W_1x+b_1)
+\]</div>
+<p>followed by</p>
+<div class="formula-math">\[
+\hat y=g(W_2h+b_2).
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+\hat y=g\left(W_2\phi(W_1x+b_1)+b_2\right)
+}
+\]</div>
+<p>This compact equation is worth understanding deeply.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: Reading the MLP Equation -->
+  <section id="s-18" data-search-section="Reading the MLP Equation" class="content-section mode-gate">
+    <div class="section-header">
+      <h2>18. Reading the MLP Equation</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For</p>
+<div class="formula-math">\[
+h=\phi(W_1x+b_1),
+\]</div>
+<p>identify:</p>
+<ul>
+<li>\(x\): input vector</li>
+<li>\(W_1\): weights connecting input to hidden layer</li>
+<li>\(b_1\): hidden-layer bias</li>
+<li>\(\phi\): hidden-layer activation</li>
+<li>\(h\): learned hidden representation</li>
+</ul>
+<p>For the output:</p>
+<div class="formula-math">\[
+\hat y=g(W_2h+b_2),
+\]</div>
+<p>identify:</p>
+<ul>
+<li>\(W_2\): hidden-to-output weights</li>
+<li>\(b_2\): output bias</li>
+<li>\(g\): output activation</li>
+<li>\(\hat y\): prediction</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: Matrix Dimensions — The Fastest Way to Catch Errors -->
+  <section id="s-19" data-search-section="Matrix Dimensions — The Fastest Way to Catch Errors" class="content-section mode-gate">
+    <div class="section-header">
+      <h2>19. Matrix Dimensions — The Fastest Way to Catch Errors</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<ul>
+<li>input dimension = \(d\)</li>
+<li>hidden layer width = \(m\)</li>
+<li>output dimension = \(k\)</li>
+</ul>
+<p>Then typically:</p>
+<div class="formula-math">\[
+x\in\mathbb R^d
+\]</div>
+<div class="formula-math">\[
+W_1\in\mathbb R^{m\times d}
+\]</div>
+<div class="formula-math">\[
+b_1\in\mathbb R^m
+\]</div>
+<div class="formula-math">\[
+h\in\mathbb R^m
+\]</div>
+<div class="formula-math">\[
+W_2\in\mathbb R^{k\times m}
+\]</div>
+<div class="formula-math">\[
+b_2\in\mathbb R^k.
+\]</div>
+<p>Check:</p>
+<div class="formula-math">\[
+(m\times d)(d\times1)=m\times1.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+(k\times m)(m\times1)=k\times1.
+\]</div>
+<h3>Exam habit</h3>
+<p>Whenever you see a neural-network matrix equation, write the dimensions beside every term.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: Parameters vs Hyperparameters -->
+  <section id="s-20" data-search-section="Parameters vs Hyperparameters" class="content-section">
+    <div class="section-header">
+      <h2>20. Parameters vs Hyperparameters</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Parameters</h2>
+<p>Learned from training data.</p>
+<p>Examples:</p>
+<ul>
+<li>weights</li>
+<li>biases</li>
+</ul>
+<h2>Hyperparameters</h2>
+<p>Set by the practitioner/training configuration rather than directly learned as ordinary model weights.</p>
+<p>Examples include:</p>
+<ul>
+<li>learning rate</li>
+<li>number of hidden layers</li>
+<li>hidden-layer width</li>
+<li>batch size</li>
+<li>number of epochs</li>
+</ul>
+<h3>Memory anchor</h3>
+<blockquote>
+<p><strong>Parameters are learned; hyperparameters control how learning is done.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: What Does a Neural Network Learn? -->
+  <section id="s-21" data-search-section="What Does a Neural Network Learn?" class="content-section">
+    <div class="section-header">
+      <h2>21. What Does a Neural Network Learn?</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A common beginner picture is:</p>
+<blockquote>
+<p>“The network learns the answer.”</p>
+</blockquote>
+<p>A better picture is:</p>
+<blockquote>
+<p><strong>The network learns parameters that transform the input into a useful representation and prediction.</strong></p>
+</blockquote>
+<p>The supplied <code>Lecture10 copy.pdf</code> is particularly important here. It presents the idea that a neural network can learn a feature representation in which the target becomes easier to model.</p>
+<p>Conceptually:</p>
+<div class="formula-math">\[
+x
+\xrightarrow{\phi_\theta}
+\text{learned representation}
+\xrightarrow{w^T}
+\text{prediction}
+\]</div>
+<p>This is one reason neural networks are sometimes described as <strong>representation-learning systems</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: Representation Power — Why Multiple Layers Matter -->
+  <section id="s-22" data-search-section="Representation Power — Why Multiple Layers Matter" class="content-section">
+    <div class="section-header">
+      <h2>22. Representation Power — Why Multiple Layers Matter</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Consider a classification problem where the original input coordinates do not make the classes linearly separable.</p>
+<p>A useful learned transformation can map the inputs into a new representation:</p>
+<div class="formula-math">\[
+x\rightarrow z=\phi_\theta(x)
+\]</div>
+<p>where the classes may become easier to separate.</p>
+<p><code>Lecture10 copy.pdf</code> specifically gives the intuition that original inputs can be non-linearly separable while a learned feature representation can become linearly separable. [<code>Lecture10 copy.pdf</code>]</p>
+<h3>Visual mental model</h3>
+<div class="ascii-box"><pre>Original space
+
+A  B  A
+ B A B
+A  B   A
+
+messy boundary
+       ↓
+learned transformation
+       ↓
+New feature space
+
+AAAA     BBBB
+AAAA     BBBB
+
+simple boundary</pre></div>
+<p>The point is not that every neural network produces two neat clusters. The point is that <strong>changing the representation can make the prediction problem easier</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: Why a Single Neuron Is Limited -->
+  <section id="s-23" data-search-section="Why a Single Neuron Is Limited" class="content-section">
+    <div class="section-header">
+      <h2>23. Why a Single Neuron Is Limited</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A single threshold neuron creates a single linear decision boundary:</p>
+<div class="formula-math">\[
+w^Tx+b=0.
+\]</div>
+<p>For two-dimensional inputs, this is a line.</p>
+<p>A single linear decision boundary cannot represent every possible classification pattern.</p>
+<p>This gives the motivation for connecting multiple neurons.</p>
+<div class="ascii-box"><pre>One neuron
+    ↓
+simple boundary
+
+Many neurons + nonlinear activations
+    ↓
+composed nonlinear representation
+    ↓
+more expressive decision functions</pre></div>
+<p>This distinction is fundamental:</p>
+<blockquote>
+<p><strong>Adding more neurons is useful because they are combined through nonlinear transformations, not merely because there are more arithmetic operations.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: Forward Pass -->
+  <section id="s-24" data-search-section="Forward Pass" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>24. Forward Pass</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The process of taking an input through the network to produce a prediction is the <strong>forward pass</strong> or <strong>forward propagation</strong>.</p>
+<p>For a simple MLP:</p>
+<div class="ascii-box"><pre>input x
+  ↓
+linear combination
+  ↓
+activation
+  ↓
+hidden representation
+  ↓
+linear combination
+  ↓
+output activation
+  ↓
+prediction ŷ</pre></div>
+<p>Mathematically:</p>
+<div class="formula-math">\[
+z_1=W_1x+b_1
+\]</div>
+<div class="formula-math">\[
+h=\phi(z_1)
+\]</div>
+<div class="formula-math">\[
+z_2=W_2h+b_2
+\]</div>
+<div class="formula-math">\[
+\hat y=g(z_2).
+\]</div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: Worked Forward-Pass Example -->
+  <section id="s-25" data-search-section="Worked Forward-Pass Example" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>25. Worked Forward-Pass Example</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Take a tiny network with two inputs and two hidden neurons.</p>
+<p>Let</p>
+<div class="formula-math">\[
+x=
+\begin{bmatrix}
+1\\2
+\end{bmatrix}
+\]</div>
+<p>and</p>
+<div class="formula-math">\[
+W_1=
+\begin{bmatrix}
+1&1\\
+2&-1
+\end{bmatrix},
+\qquad
+b_1=
+\begin{bmatrix}
+0\\1
+\end{bmatrix}.
+\]</div>
+<p>Compute:</p>
+<div class="formula-math">\[
+z_1=W_1x+b_1
+\]</div>
+<div class="formula-math">\[
+=
+\begin{bmatrix}
+1(1)+1(2)\\
+2(1)-1(2)
+\end{bmatrix}
++
+\begin{bmatrix}
+0\\1
+\end{bmatrix}
+\]</div>
+<div class="formula-math">\[
+=
+\begin{bmatrix}
+3\\1
+\end{bmatrix}.
+\]</div>
+<p>Using ReLU:</p>
+<div class="formula-math">\[
+h=\begin{bmatrix}3\\1\end{bmatrix}.
+\]</div>
+<p>Suppose output weights are</p>
+<div class="formula-math">\[
+W_2=\begin{bmatrix}2&-1\end{bmatrix}
+\]</div>
+<p>and</p>
+<div class="formula-math">\[
+b_2=0.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+z_2=2(3)-1(1)=5.
+\]</div>
+<p>A linear output would therefore be</p>
+<div class="formula-math">\[
+\hat y=5.
+\]</div>
+<p>The exact output interpretation depends on the task and output function.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: Loss Function: Why Do We Need One? -->
+  <section id="s-26" data-search-section="Loss Function: Why Do We Need One?" class="content-section">
+    <div class="section-header">
+      <h2>26. Loss Function: Why Do We Need One?</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A network generates a prediction \(\hat y\), but training requires a way to measure how different the prediction is from the target \(y\).</p>
+<p>That measurement is provided by a <strong>loss function</strong>.</p>
+<p>Generic notation:</p>
+<div class="formula-math">\[
+L(y,\hat y).
+\]</div>
+<p>Examples:</p>
+<h3>Regression</h3>
+<p>Mean squared error:</p>
+<div class="formula-math">\[
+MSE=\frac1n\sum_{i=1}^{n}(y_i-\hat y_i)^2.
+\]</div>
+<h3>Binary classification</h3>
+<p>A common choice is binary cross-entropy:</p>
+<div class="formula-math">\[
+L=-\left[y\log(\hat p)+(1-y)\log(1-\hat p)\right]
+\]</div>
+<p>for one example.</p>
+<p>The exact choice should match the task and output interpretation.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: Training Loop — Big Picture -->
+  <section id="s-27" data-search-section="Training Loop — Big Picture" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>27. Training Loop — Big Picture</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The neural-network training idea can be visualized as:</p>
+<div class="ascii-box"><pre>┌──────────────┐
+        │ Training data│
+        └──────┬───────┘
+               ↓
+          Forward pass
+               ↓
+           Prediction
+               ↓
+           Loss value
+               ↓
+        Compute gradients
+               ↓
+       Update parameters
+               ↓
+          Repeat many times</pre></div>
+<p>In symbols:</p>
+<div class="formula-math">\[
+\theta \leftarrow \theta-\eta\nabla_\theta L
+\]</div>
+<p>where:</p>
+<ul>
+<li>\(\theta\) = collection of trainable parameters</li>
+<li>\(\eta\) = learning rate</li>
+<li>\(\nabla_\theta L\) = gradient of loss with respect to parameters</li>
+</ul>
+<p>Backpropagation will later explain how these gradients are computed efficiently through a layered network.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: The Three Words You Must Keep Separate -->
+  <section id="s-28" data-search-section="The Three Words You Must Keep Separate" class="content-section">
+    <div class="section-header">
+      <h2>28. The Three Words You Must Keep Separate</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Students often mix these concepts:</p>
+<h3>Forward pass</h3>
+<p>Compute prediction.</p>
+<h3>Loss</h3>
+<p>Measure prediction error.</p>
+<h3>Backpropagation</h3>
+<p>Compute gradients of the loss with respect to parameters.</p>
+<p>Then an optimizer such as gradient descent uses those gradients to update the parameters.</p>
+<p>Memory chain:</p>
+<div class="ascii-box"><pre>Forward
+  ↓
+Prediction
+  ↓
+Loss
+  ↓
+Backprop
+  ↓
+Gradient
+  ↓
+Optimizer update</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 29: Neural Network as Function Composition -->
+  <section id="s-29" data-search-section="Neural Network as Function Composition" class="content-section">
+    <div class="section-header">
+      <h2>29. Neural Network as Function Composition</h2>
+      <button class="bookmark-btn" data-id="s-29" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A neural network can be viewed mathematically as repeated function composition.</p>
+<p>For example:</p>
+<div class="formula-math">\[
+f(x)=g_2(g_1(x))
+\]</div>
+<p>where each \(g_i\) may contain:</p>
+<ol>
+<li>a linear/affine transformation;</li>
+<li>an activation function.</li>
+</ol>
+<p>A deep network is therefore not mysterious mathematics. It is a <strong>composition of parameterized transformations</strong>.</p>
+<p>For a three-layer example:</p>
+<div class="formula-math">\[
+h_1=\phi_1(W_1x+b_1)
+\]</div>
+<div class="formula-math">\[
+h_2=\phi_2(W_2h_1+b_2)
+\]</div>
+<div class="formula-math">\[
+\hat y=g(W_3h_2+b_3).
+\]</div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 30: What Makes a Network “Deep”? -->
+  <section id="s-30" data-search-section="What Makes a Network “Deep”?" class="content-section">
+    <div class="section-header">
+      <h2>30. What Makes a Network “Deep”?</h2>
+      <button class="bookmark-btn" data-id="s-30" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>There is no single universal cutoff such as “three layers means deep.”</p>
+<p>In common usage, a network is called <strong>deep</strong> when it contains multiple layers of learned transformations.</p>
+<p>The important conceptual distinction is:</p>
+<div class="ascii-box"><pre>Shallow model → few transformations
+Deep model    → many stacked transformations</pre></div>
+<p>More layers can increase representational power, but also make optimization and generalization more challenging.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 31: Common Architecture Vocabulary -->
+  <section id="s-31" data-search-section="Common Architecture Vocabulary" class="content-section">
+    <div class="section-header">
+      <h2>31. Common Architecture Vocabulary</h2>
+      <button class="bookmark-btn" data-id="s-31" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Neuron</td>
+<td>basic computational unit</td>
+</tr>
+<tr>
+<td>Weight</td>
+<td>trainable coefficient multiplying an input</td>
+</tr>
+<tr>
+<td>Bias</td>
+<td>trainable offset</td>
+</tr>
+<tr>
+<td>Activation</td>
+<td>nonlinear or threshold transformation</td>
+</tr>
+<tr>
+<td>Layer</td>
+<td>collection of neurons at one stage</td>
+</tr>
+<tr>
+<td>Hidden layer</td>
+<td>intermediate learned representation</td>
+</tr>
+<tr>
+<td>Output layer</td>
+<td>produces final task output</td>
+</tr>
+<tr>
+<td>Forward pass</td>
+<td>computes a prediction</td>
+</tr>
+<tr>
+<td>Loss</td>
+<td>quantifies prediction error</td>
+</tr>
+<tr>
+<td>Parameter</td>
+<td>learned weight/bias</td>
+</tr>
+<tr>
+<td>Hyperparameter</td>
+<td>externally configured training/model setting</td>
+</tr>
+<tr>
+<td>MLP</td>
+<td>multilayer perceptron, a feedforward network built from fully connected layers</td>
+</tr>
+<tr>
+<td>Epoch</td>
+<td>one pass through the training dataset</td>
+</tr>
+<tr>
+<td>Batch</td>
+<td>subset of examples used for one update</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 32: Why Matrix Multiplication Matters So Much -->
+  <section id="s-32" data-search-section="Why Matrix Multiplication Matters So Much" class="content-section">
+    <div class="section-header">
+      <h2>32. Why Matrix Multiplication Matters So Much</h2>
+      <button class="bookmark-btn" data-id="s-32" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>For a layer:</p>
+<div class="formula-math">\[
+z=Wx+b,
+\]</div>
+<p>matrix multiplication performs many weighted sums at once.</p>
+<p>This is the bridge between the single-neuron view and the real neural-network view.</p>
+<h3>Single neuron</h3>
+<div class="formula-math">\[
+z=w^Tx+b
+\]</div>
+<h3>Multiple neurons</h3>
+<div class="formula-math">\[
+z=Wx+b
+\]</div>
+<p>One row of \(W\) can be viewed as the weight vector for one neuron.</p>
+<p>Therefore:</p>
+<blockquote>
+<p><strong>A dense layer is essentially many neurons performing their weighted sums in parallel.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 33: Numerical Dimension Example -->
+  <section id="s-33" data-search-section="Numerical Dimension Example" class="content-section mode-gate">
+    <div class="section-header">
+      <h2>33. Numerical Dimension Example</h2>
+      <button class="bookmark-btn" data-id="s-33" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose:</p>
+<ul>
+<li>4 input features</li>
+<li>3 hidden neurons</li>
+<li>2 output values</li>
+</ul>
+<p>Then:</p>
+<div class="formula-math">\[
+x\in\mathbb R^4
+\]</div>
+<div class="formula-math">\[
+W_1\in\mathbb R^{3\times4}
+\]</div>
+<div class="formula-math">\[
+b_1\in\mathbb R^3
+\]</div>
+<div class="formula-math">\[
+W_2\in\mathbb R^{2\times3}
+\]</div>
+<div class="formula-math">\[
+b_2\in\mathbb R^2.
+\]</div>
+<p>The hidden representation has size 3 and the output has size 2.</p>
+<h3>Parameter count</h3>
+<p>Ignoring any special parameter sharing:</p>
+<p>First layer:</p>
+<div class="formula-math">\[
+3\times4+3=15.
+\]</div>
+<p>Second layer:</p>
+<div class="formula-math">\[
+2\times3+2=8.
+\]</div>
+<p>Total:</p>
+<div class="formula-math">\[
+\boxed{23\text{ trainable parameters}}
+\]</div>
+<p>This kind of counting question is useful in exams and for understanding model capacity.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 34: Neural Networks and Model Capacity -->
+  <section id="s-34" data-search-section="Neural Networks and Model Capacity" class="content-section">
+    <div class="section-header">
+      <h2>34. Neural Networks and Model Capacity</h2>
+      <button class="bookmark-btn" data-id="s-34" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Recall the Unit II discussion of hypothesis classes, flexibility and overfitting.</p>
+<p>Neural networks expand the range of functions that can be represented.</p>
+<p>But:</p>
+<blockquote>
+<p><strong>More expressive does not automatically mean better generalization.</strong></p>
+</blockquote>
+<p>A sufficiently flexible model can fit complex training patterns, including patterns that do not generalize.</p>
+<p>This is why training neural networks later requires concepts such as:</p>
+<ul>
+<li>regularization;</li>
+<li>validation;</li>
+<li>early stopping;</li>
+<li>suitable architecture choices;</li>
+<li>optimization methods;</li>
+<li>data quality and scale.</li>
+</ul>
+<p>Do not treat these as separate topics with no connection to Unit II. They are the continuation of the same generalization problem.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 35: A Complete Concept Map -->
+  <section id="s-35" data-search-section="A Complete Concept Map" class="content-section">
+    <div class="section-header">
+      <h2>35. A Complete Concept Map</h2>
+      <button class="bookmark-btn" data-id="s-35" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="ascii-box"><pre>INPUT DATA
+   ↓
+features x
+   ↓
+WEIGHTS + BIAS
+   ↓
+linear / affine transform
+   ↓
+ACTIVATION
+   ↓
+hidden representation
+   ↓
+repeat transformation(s)
+   ↓
+OUTPUT
+   ↓
+prediction ŷ
+   ↓
+LOSS
+   ↓
+GRADIENTS
+   ↓
+PARAMETER UPDATE
+   ↓
+repeat</pre></div>
+<p>This is the mental skeleton for almost everything that follows in Unit III.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 36: Common Misconceptions -->
+  <section id="s-36" data-search-section="Common Misconceptions" class="content-section">
+    <div class="section-header">
+      <h2>36. Common Misconceptions</h2>
+      <button class="bookmark-btn" data-id="s-36" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Misconception 1 — “A neural network is just a large collection of if-else rules.”</h2>
+<p>Not exactly. It is a parameterized numerical function built from transformations and nonlinearities.</p>
+<h2>Misconception 2 — “More layers always improve accuracy.”</h2>
+<p>No. More capacity can help represent complex relationships, but architecture, data, optimization and regularization matter.</p>
+<h2>Misconception 3 — “Weights are manually assigned.”</h2>
+<p>Normally they are learned from training data through an optimization procedure.</p>
+<h2>Misconception 4 — “The activation function is optional.”</h2>
+<p>For a multilayer network intended to obtain nonlinear representational power, nonlinear activations are crucial.</p>
+<h2>Misconception 5 — “A hidden layer stores the final answer.”</h2>
+<p>A hidden layer produces an intermediate representation. Its meaning is determined by the complete learned network and may not have a simple human-readable interpretation.</p>
+<h2>Misconception 6 — “Forward propagation and backpropagation are the same thing.”</h2>
+<p>No.</p>
+<p>Forward pass computes predictions.</p>
+<p>Backpropagation computes gradients used for learning.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 37: Memory Palace -->
+  <section id="s-37" data-search-section="Memory Palace" class="content-section">
+    <div class="section-header">
+      <h2>37. Memory Palace</h2>
+      <button class="bookmark-btn" data-id="s-37" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine entering a neural-network factory:</p>
+<div class="ascii-box"><pre>INPUT COUNTER
+   ↓
+WEIGHTING MACHINE
+   ↓
+BIAS ADJUSTMENT
+   ↓
+ACTIVATION GATE
+   ↓
+HIDDEN WORKSHOP
+   ↓
+OUTPUT DESK
+   ↓
+LOSS INSPECTOR
+   ↓
+BACKPROP MESSENGER
+   ↓
+PARAMETER UPDATE</pre></div>
+<p>Remember:</p>
+<blockquote>
+<p><strong>Weighted sum → activation → representation → prediction → loss → gradients → update.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 38: Active Recall — Close the Book -->
+  <section id="s-38" data-search-section="Active Recall — Close the Book" class="content-section">
+    <div class="section-header">
+      <h2>38. Active Recall — Close the Book</h2>
+      <button class="bookmark-btn" data-id="s-38" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Answer without looking:</p>
+<ol>
+<li>What is an artificial neuron?</li>
+<li>Write \(z=w^Tx+b\).</li>
+<li>Why is the bias needed?</li>
+<li>What does a weight represent intuitively?</li>
+<li>What is an activation function?</li>
+<li>Why do nonlinear activations matter?</li>
+<li>Write the ReLU formula.</li>
+<li>What is the range of sigmoid?</li>
+<li>What is the range of tanh?</li>
+<li>What is a hidden layer?</li>
+<li>What is an MLP?</li>
+<li>Write the forward-pass equations of a one-hidden-layer network.</li>
+<li>What is a forward pass?</li>
+<li>What is a loss function?</li>
+<li>What is backpropagation?</li>
+<li>Distinguish parameters from hyperparameters.</li>
+<li>Why is matrix multiplication useful in a dense layer?</li>
+<li>How can learned representations make a problem easier?</li>
+<li>Why does one linear layer have limited representation power?</li>
+<li>Why does greater neural-network flexibility reconnect to overfitting?</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 39: Practice Set -->
+  <section id="s-39" data-search-section="Practice Set" class="content-section">
+    <div class="section-header">
+      <h2>39. Practice Set</h2>
+      <button class="bookmark-btn" data-id="s-39" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>A. Quick numerical</h2>
+<h3>Q1</h3>
+<p>Given</p>
+<div class="formula-math">\[
+x=(2,1),\quad w=(3,-2),\quad b=1,
+\]</div>
+<p>find \(z\).</p>
+<h3>Q2</h3>
+<p>Using ReLU on the result of Q1, find the output.</p>
+<h3>Q3</h3>
+<p>For sigmoid input \(z=0\), calculate the output.</p>
+<h3>Q4</h3>
+<p>A dense layer maps 5 inputs to 4 neurons. How many weights and biases does it have?</p>
+<h3>Q5</h3>
+<p>A network has 3 inputs, 4 hidden neurons and 2 outputs. Compute the number of parameters for fully connected input→hidden and hidden→output layers.</p>
+<hr />
+<h2>B. Conceptual</h2>
+<h3>Q6</h3>
+<p>Why can multiple linear layers without nonlinear activations be reduced to one affine transformation?</p>
+<h3>Q7</h3>
+<p>Explain the phrase “neural networks learn representations.”</p>
+<h3>Q8</h3>
+<p>Why is a single threshold neuron unable to represent every binary classification pattern?</p>
+<h3>Q9</h3>
+<p>Explain why the bias can shift a decision boundary.</p>
+<hr />
+<h2>C. Diagram</h2>
+<p>Draw and label:</p>
+<div class="ascii-box"><pre>2 inputs → 3 hidden neurons → 1 output</pre></div>
+<p>Show:</p>
+<ul>
+<li>inputs;</li>
+<li>weights;</li>
+<li>biases;</li>
+<li>hidden activations;</li>
+<li>output.</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 40: University Exam Lens -->
+  <section id="s-40" data-search-section="University Exam Lens" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>40. University Exam Lens</h2>
+      <button class="bookmark-btn" data-id="s-40" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>2 marks</h2>
+<ul>
+<li>Define artificial neuron.</li>
+<li>Define activation function.</li>
+<li>What is an MLP?</li>
+<li>What is a hidden layer?</li>
+<li>State the ReLU function.</li>
+<li>Distinguish parameter and hyperparameter.</li>
+</ul>
+<h2>5 marks</h2>
+<blockquote>
+<p>Explain the architecture of an artificial neural network.</p>
+</blockquote>
+<p>Suggested answer flow:</p>
+<ol>
+<li>Define neural network.</li>
+<li>Explain neuron.</li>
+<li>Explain weights and bias.</li>
+<li>Explain activation.</li>
+<li>Explain layers.</li>
+<li>Explain forward flow.</li>
+</ol>
+<h2>10 marks</h2>
+<blockquote>
+<p>Explain the working of a feedforward multilayer neural network with mathematical equations.</p>
+</blockquote>
+<p>Recommended structure:</p>
+<ol>
+<li>Biological inspiration.</li>
+<li>Artificial neuron.</li>
+<li>Weighted sum.</li>
+<li>Bias.</li>
+<li>Activation function.</li>
+<li>Hidden layers.</li>
+<li>Matrix form.</li>
+<li>Forward pass.</li>
+<li>Output.</li>
+<li>Role of nonlinear representation.</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 41: Math You Need Now -->
+  <section id="s-41" data-search-section="Math You Need Now" class="content-section">
+    <div class="section-header">
+      <h2>41. Math You Need Now</h2>
+      <button class="bookmark-btn" data-id="s-41" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You do not need a huge new mathematics block yet. You need the following pieces:</p>
+<h3>Dot product</h3>
+<div class="formula-math">\[
+w^Tx=\sum_jw_jx_j.
+\]</div>
+<h3>Matrix-vector multiplication</h3>
+<div class="formula-math">\[
+Wx.
+\]</div>
+<h3>Affine transformation</h3>
+<div class="formula-math">\[
+Wx+b.
+\]</div>
+<h3>Function composition</h3>
+<div class="formula-math">\[
+f(g(x)).
+\]</div>
+<h3>Derivative / gradient preview</h3>
+<div class="formula-math">\[
+\nabla_\theta L.
+\]</div>
+<h3>Gradient descent preview</h3>
+<div class="formula-math">\[
+\theta\leftarrow\theta-\eta\nabla_\theta L.
+\]</div>
+<p>The dedicated backpropagation chapter will deepen derivatives, partial derivatives, chain rule and computational graphs.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 42: Resource Shelf -->
+  <section id="s-42" data-search-section="Resource Shelf" class="content-section">
+    <div class="section-header">
+      <h2>42. Resource Shelf</h2>
+      <button class="bookmark-btn" data-id="s-42" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>Core supplied resources</h2>
+<h3><code>prac_7_neural_network.ipynb</code></h3>
+<p>Use this for the practical view of neurons, weights/bias, activations, losses and gradient-descent concepts. [<code>AI_ML_Master_Learning_Resource_Guide.pdf</code>]</p>
+<h3><code>CS6910 Lecture 2</code></h3>
+<p>Use this for biological/artificial neurons, threshold logic, perceptron, the learning algorithm, MLP and representation power. [<code>AI_ML_Master_Learning_Resource_Guide.pdf</code>]</p>
+<h3><code>Lecture10 copy.pdf</code></h3>
+<p>Use this to connect neural networks with learned feature representations and the idea that learned features can change the separability of the problem. [<code>Lecture10 copy.pdf</code>]</p>
+<h2>Focused video route</h2>
+<ul>
+<li><strong>StatQuest — Essential Main Ideas of Neural Networks</strong> — use after reading this chapter for fast intuition.</li>
+<li><strong>3Blue1Brown — Neural Networks / visual intuition series</strong> — use when you want geometric and conceptual visualization.</li>
+</ul>
+<h2>Learning rule</h2>
+<p>Read this chapter → watch one focused video → trace one tiny network on paper → then do the supplied practical.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 43: Chapter Exit Test -->
+  <section id="s-43" data-search-section="Chapter Exit Test" class="content-section">
+    <div class="section-header">
+      <h2>43. Chapter Exit Test</h2>
+      <button class="bookmark-btn" data-id="s-43" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You are ready to move to <code>ML-U3-C31</code> when you can explain all of the following without notes:</p>
+<ul>
+<li>[ ] artificial neuron;</li>
+<li>[ ] weighted sum;</li>
+<li>[ ] bias;</li>
+<li>[ ] activation function;</li>
+<li>[ ] threshold, sigmoid, tanh and ReLU at a conceptual level;</li>
+<li>[ ] input/hidden/output layers;</li>
+<li>[ ] feedforward network;</li>
+<li>[ ] MLP;</li>
+<li>[ ] matrix dimensions of a dense layer;</li>
+<li>[ ] forward pass;</li>
+<li>[ ] loss;</li>
+<li>[ ] parameters vs hyperparameters;</li>
+<li>[ ] representation learning intuition;</li>
+<li>[ ] why nonlinearity matters.</li>
+</ul>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 44: Connection to the Next Topic -->
+  <section id="s-44" data-search-section="Connection to the Next Topic" class="content-section">
+    <div class="section-header">
+      <h2>44. Connection to the Next Topic</h2>
+      <button class="bookmark-btn" data-id="s-44" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Now that we know what a neuron is, the next historical and mathematical question is:</p>
+<blockquote>
+<p><strong>How can a single threshold neuron learn a decision boundary from labelled examples?</strong></p>
+</blockquote>
+<p>That leads directly to:</p>
+<p><strong><code>MAIN-U3-C31 — Perceptron and the Perceptron Learning Algorithm</code>.</strong></p>
+<hr />
+<h1>Source Grounding</h1>
+<p>This chapter is grounded in the supplied resource inventory and source mapping:</p>
+<ul>
+<li><code>prac_7_neural_network.ipynb</code> — neurons, weights/bias, activations, losses, gradient-descent concept;</li>
+<li><code>CS6910 Lecture 2</code> — biological/artificial neurons, threshold logic, perceptron, learning algorithm, MLP, representation power;</li>
+<li><code>Lecture10 copy.pdf</code> — learned feature representations and the neural-network-as-feature-map viewpoint. [<code>AI_ML_Master_Learning_Resource_Guide.pdf</code>]</li>
+</ul>
+<p>Where the supplied materials are only identified at the topic level, this chapter uses standard mathematical exposition to make the topic self-contained. The chapter does not claim that every displayed derivation or example appears verbatim in the supplied lecture resources.</p>
+<hr />
+<h1>Status</h1>
+<p><strong><code>ML-U3-C30</code> — COMPLETE</strong></p>
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="ch29-ridge-vs-lasso-comparison.html" class="nav-btn">← Ch 29 — Ridge vs Lasso Comparison</a>
+    <a href="ch31-perceptron-learning-algorithm.html" class="nav-btn primary">Next: Ch 31 — The Perceptron & Learning Algorithm →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch30-neural-network-foundations.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 30</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

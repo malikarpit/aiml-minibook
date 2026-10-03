@@ -1,0 +1,2131 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="Chapter 1: What Is Artificial Intelligence? — AI & Machine Learning MiniBook. Definitions, Agent Lens, Automation vs AI, Family Tree, and the Problem-Solving Perspective">
+<title>Ch 1 — What Is Artificial Intelligence? | AIML MiniBook 🤖 Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<style>
+  .chapter-preamble-card {
+    background: var(--em-surface-1);
+    border: 1px solid var(--em-surface-3);
+    border-radius: var(--em-radius-md);
+    padding: var(--em-space-5);
+    margin-bottom: var(--em-space-8);
+  }
+  .chapter-preamble-card blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding-left: var(--em-space-4);
+    margin: var(--em-space-3) 0;
+    color: var(--em-text-secondary);
+    font-size: 0.90rem;
+  }
+  .section-body > p {
+    margin-bottom: var(--em-space-4);
+    line-height: 1.75;
+  }
+  .section-body blockquote {
+    border-left: 3px solid var(--em-accent);
+    padding: var(--em-space-3) var(--em-space-4);
+    margin: var(--em-space-5) 0;
+    background: var(--em-surface-1);
+    border-radius: 0 var(--em-radius-sm) var(--em-radius-sm) 0;
+    color: var(--em-text-secondary);
+    font-style: italic;
+  }
+</style>
+</head>
+<body class="part-i">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">🤖</div>
+      <div class="brand-text"><span class="main">AIML MiniBook</span><span class="sub">Artificial Intelligence &amp; ML</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Ch 1 — What Is Artificial Intelligence?</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="../progress.html" class="sidebar-link"><span class="link-icon">📊</span>Study Dashboard</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Unit I &amp; II Mock Exam</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Chapter 1 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. The First Question: What Is Intelligence? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. What Is Artificial Intelligence? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. AI Through the Agent Lens <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. The Simplest Real-Life Analogy: A Person Crossing a Road </a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Is a Calculator Intelligent? </a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Automation vs AI <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. What Is the Scope of AI? <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. The AI Family Tree <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. AI vs Machine Learning vs Deep Learning <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Where Does Reinforcement Learning Fit? </a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Four Ways People Historically Tried to Build Intelligent Systems <span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. AI Is a Problem-Solving Field </a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Application 1 — Natural Language Processing <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Application 2 — Robotics <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Application 3 — Expert Systems <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Application 4 — Vision Systems <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. AI as Search: Why Search Belongs Here <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. AI and Games </a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Narrow AI vs General AI <span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Can an AI System Be Intelligent Without Learning? </a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Can Machine Learning Exist Without Deep Learning? </a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Where Mathematics Enters AI/ML <span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. The Complete AI Mental Model </a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Teacher&#x27;s Hinglish Summary </a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. What AI Is NOT — Common Misconceptions </a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. A Small Mathematical Example: AI as a Function <span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Why This Chapter Matters for the Rest of Unit I </a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Course Lens — What Your University Specifically Wants <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Universal Lens — Beyond Your University </a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Active Recall — Close the Book <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Practice Set <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Self-Assessment Rubric </a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Memory Anchors </a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Diagram Recall Exercise </a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. What You Should NOT Memorize Yet </a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Resource Shelf </a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. History of AI — First-Pass Timeline <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Exam Bridge <span class="uni-syllabus-badge">🎓 Uni Core</span></a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Math Bridge </a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Next Concept </a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-i">Part I — AI &amp; Agents</div>
+      <a href="ch01-what-is-ai.html" class="sidebar-link active"><span class="link-icon">💡</span>Ch 1 — What Is AI?</a>
+      <a href="ch02-intelligent-agents.html" class="sidebar-link"><span class="link-icon">🤖</span>Ch 2 — Intelligent Agents</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ii">Part II — Classical Search</div>
+      <a href="ch03-problem-formulation.html" class="sidebar-link"><span class="link-icon">🗺️</span>Ch 3 — Problem Formulation</a>
+      <a href="ch04-uninformed-search.html" class="sidebar-link"><span class="link-icon">🔍</span>Ch 4 — Uninformed Search</a>
+      <a href="ch05-heuristics.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 5 — Heuristics</a>
+      <a href="ch06-greedy-best-first-search.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 6 — Greedy Best-First</a>
+      <a href="ch07-a-star-search.html" class="sidebar-link"><span class="link-icon">⭐</span>Ch 7 — A* Search</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iii">Part III — Beyond Classical Search</div>
+      <a href="ch08-local-and-evolutionary-search.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 8 — Local & Genetic Search</a>
+      <a href="ch09-constraint-satisfaction-problems.html" class="sidebar-link"><span class="link-icon">🧩</span>Ch 9 — Constraint Satisfaction (CSPs)</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-iv">Part IV — Game Playing &amp; Adversarial</div>
+      <a href="ch10-game-playing.html" class="sidebar-link"><span class="link-icon">♟️</span>Ch 10 — Game Playing</a>
+      <a href="ch11-minimax-and-alpha-beta-pruning.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 11 — Minimax &amp; Alpha-Beta</a>
+      <a href="ch12-resource-limited-game-search.html" class="sidebar-link"><span class="link-icon">⏱️</span>Ch 12 — Resource Limits</a>
+      <a href="ch13-unit-1-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 13 — Unit I Consolidation</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-v">Part V — Machine Learning Foundations</div>
+      <a href="ch14-what-is-ml.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 14 — What Is ML?</a>
+      <a href="ch15-ml-paradigms.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 15 — ML Paradigms</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vi">Part VI — Hypothesis &amp; Generalization</div>
+      <a href="ch16-hypothesis-classes-bias-knn.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 16 — Hypothesis &amp; KNN</a>
+      <a href="ch17-bias-variance-generalization.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 17 — Bias-Variance &amp; Generalization</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-vii">Part VII — Linear &amp; Logistic Models</div>
+      <a href="ch18-linear-regression.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 18 — Linear Regression</a>
+      <a href="ch19-linear-regression-math.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 19 — Linear Regression Math</a>
+      <a href="ch20-logistic-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 20 — Logistic Regression</a>
+      <a href="ch21-logistic-regression-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 21 — Logistic Regression Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-viii">Part VIII — Decision Trees</div>
+      <a href="ch22-decision-trees.html" class="sidebar-link"><span class="link-icon">🌳</span>Ch 22 — Decision Trees</a>
+      <a href="ch23-decision-trees-math.html" class="sidebar-link"><span class="link-icon">🧮</span>Ch 23 — Decision Trees Math</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-ix">Part IX — Model Evaluation</div>
+      <a href="ch24-confusion-matrix-evaluation.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 24 — Confusion Matrix & Evaluation</a>
+      <a href="ch25-precision-recall-roc-auc.html" class="sidebar-link"><span class="link-icon">📊</span>Ch 25 — Precision, Recall, ROC & AUC</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-x">Part X — Regularization & Feature Selection</div>
+      <a href="ch26-regularization-foundations.html" class="sidebar-link"><span class="link-icon">🛡️</span>Ch 26 — Regularization Foundations</a>
+      <a href="ch27-ridge-regression.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 27 — Ridge Regression</a>
+      <a href="ch28-lasso-regression.html" class="sidebar-link"><span class="link-icon">✂️</span>Ch 28 — Lasso Regression</a>
+      <a href="ch29-ridge-vs-lasso-comparison.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 29 — Ridge vs Lasso Comparison</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xi">Part XI — Neural Network Foundations</div>
+      <a href="ch30-neural-network-foundations.html" class="sidebar-link"><span class="link-icon">🧠</span>Ch 30 — Neural Network Foundations</a>
+      <a href="ch31-perceptron-learning-algorithm.html" class="sidebar-link"><span class="link-icon">⚡</span>Ch 31 — Perceptron & Learning Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xii">Part XII — MLPs & Activations</div>
+      <a href="ch32-multi-layer-perceptron.html" class="sidebar-link"><span class="link-icon">🧱</span>Ch 32 — Multi-Layer Perceptron</a>
+      <a href="ch33-activations-and-loss-functions.html" class="sidebar-link"><span class="link-icon">📐</span>Ch 33 — Activations & Loss Functions</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiii">Part XIII — Optimization & Backprop</div>
+      <a href="ch34-gradient-descent-optimization.html" class="sidebar-link"><span class="link-icon">📉</span>Ch 34 — Gradient Descent & Optimizers</a>
+      <a href="ch35-backpropagation.html" class="sidebar-link"><span class="link-icon">🔄</span>Ch 35 — Backpropagation & Chain Rule</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xiv">Part XIV — Computer Vision & CNNs</div>
+      <a href="ch36-convolutional-neural-networks.html" class="sidebar-link"><span class="link-icon">👁️</span>Ch 36 — Convolutional Neural Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xv">Part XV — Sequence Models & LSTMs</div>
+      <a href="ch37-recurrent-neural-networks.html" class="sidebar-link"><span class="link-icon">🔁</span>Ch 37 — Recurrent Neural Networks</a>
+      <a href="ch38-long-short-term-memory-lstm.html" class="sidebar-link"><span class="link-icon">🚪</span>Ch 38 — Long Short-Term Memory</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvi">Part XVI — Unit III Consolidation</div>
+      <a href="ch39-unit-3-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 39 — Unit III Consolidation & Mastery</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xvii">Part XVII — Reinforcement Learning</div>
+      <a href="ch40-markov-decision-processes.html" class="sidebar-link"><span class="link-icon">🎲</span>Ch 40 — Markov Decision Processes</a>
+      <a href="ch41-q-learning.html" class="sidebar-link"><span class="link-icon">🎯</span>Ch 41 — Q-Learning</a>
+      <a href="ch42-policy-gradient-methods.html" class="sidebar-link"><span class="link-icon">📈</span>Ch 42 — Policy Gradient Methods</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xviii">Part XVIII — NLP & Text Understanding</div>
+      <a href="ch43-nlp-preprocessing-text-classification.html" class="sidebar-link"><span class="link-icon">📝</span>Ch 43 — NLP & Text Classification</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xix">Part XIX — Generative AI & Representations</div>
+      <a href="ch44-autoencoders.html" class="sidebar-link"><span class="link-icon">🧬</span>Ch 44 — Autoencoders</a>
+      <a href="ch45-generative-adversarial-networks.html" class="sidebar-link"><span class="link-icon">🎨</span>Ch 45 — Generative Adversarial Networks</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xx">Part XX — AI Ethics & Governance</div>
+      <a href="ch46-ai-ethics-bias-fairness.html" class="sidebar-link"><span class="link-icon">⚖️</span>Ch 46 — AI Ethics, Bias & Fairness</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxi">Part XXI — Applied Domain Systems</div>
+      <a href="ch47-ai-in-healthcare.html" class="sidebar-link"><span class="link-icon">🏥</span>Ch 47 — AI in Healthcare</a>
+      <a href="ch48-autonomous-vehicles.html" class="sidebar-link"><span class="link-icon">🚗</span>Ch 48 — Autonomous Vehicles</a>
+      <a href="ch49-ai-in-financial-systems.html" class="sidebar-link"><span class="link-icon">💳</span>Ch 49 — AI in Financial Systems</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label part-label part-xxii">Part XXII — Unit IV Consolidation & Capstone</div>
+      <a href="ch50-unit-4-consolidation.html" class="sidebar-link"><span class="link-icon">🏆</span>Ch 50 — Unit IV Consolidation & Capstone</a>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">My Saved Notes</div>
+      <div id="notes-sidebar-list"></div>
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-brand-mark"><div class="mark">🤖</div><span>Arpit · AIML MiniBook 2026</span></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main id="main-content">
+<div class="content-inner">
+
+  <!-- CHAPTER HERO -->
+  <div class="chapter-hero">
+    <div class="chapter-breadcrumb">
+      <a href="../index.html">Home</a><span>›</span><span>Unit I</span><span>›</span><span>Part I — Foundations of AI & Agents</span><span>›</span><span style="color:var(--em-text)">Chapter 1</span>
+    </div>
+    <div class="chapter-num">🤖 Chapter 1 · Unit I · Part I</div>
+    <div class="chapter-part-banner part-i">
+      <span class="part-banner-badge">Unit I · Part I</span>
+      <span>Foundations of AI & Agents</span>
+    </div>
+    <h1 class="chapter-title">What Is Artificial Intelligence?</h1>
+    <div class="concept-id-tag">[CONCEPT-AI-001]</div>
+    <div class="chapter-meta">
+      <span class="chapter-meta-item" style="background:var(--em-accent-soft); border-color:var(--em-accent-dim); color:var(--em-accent); font-weight:700;">🎓 Uni Exam Priority: Core Foundation</span>
+      <span class="chapter-meta-item">📖 ~40 min read</span>
+      <span class="chapter-meta-item">🎯 40 Deep Sections</span>
+      <span class="chapter-meta-item">📝 Self-Teaching Dual Lens</span>
+    </div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS CALLOUT -->
+  <div class="uni-syllabus-callout">
+    <div class="uni-callout-title">🎓 Official University Syllabus Focus (DSC-14 AIML)</div>
+    <div><strong>Definition and Scope of AI:</strong> Foundations of AI, Agent-Environment loop, Automation vs AI, AI vs ML vs DL vs RL, NLP, Robotics, Expert Systems, Vision Systems, and the Problem-Solving paradigm.</div>
+  </div>
+
+  <!-- UNIVERSITY SYLLABUS FILTER SWITCH -->
+  <div class="uni-mode-toggle-card">
+    <div>
+      <div style="font-weight:700; font-size:0.95rem; color:var(--em-text); display:flex; align-items:center; gap:0.4rem;">
+        <span>🎓</span> University Exam Focus Filter
+      </div>
+      <div style="font-size:0.8rem; color:var(--em-text-muted); margin-top:0.2rem;">
+        Filter content specifically prescribed in the official University syllabus vs universal foundational deep-dives.
+      </div>
+    </div>
+    <div class="uni-filter-switch">
+      <button class="uni-toggle-btn active" id="filter-all-btn" data-mode="all" onclick="ModeManager.apply('all')">📚 Show Complete Book</button>
+      <button class="uni-toggle-btn" id="filter-uni-btn" data-mode="uni" onclick="ModeManager.apply('uni')">🎓 Focus Uni Syllabus Only</button>
+    </div>
+  </div>
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc-card">
+    <div class="toc-title"><span>📑</span> Table of Contents &amp; Visual Curriculum Map</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">The First Question: What Is Intelligence?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">What Is Artificial Intelligence?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">AI Through the Agent Lens</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">The Simplest Real-Life Analogy: A Person Crossing a Road</span></a></li>
+      <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Is a Calculator Intelligent?</span></a></li>
+      <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Automation vs AI</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">What Is the Scope of AI?</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">The AI Family Tree</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">AI vs Machine Learning vs Deep Learning</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Where Does Reinforcement Learning Fit?</span></a></li>
+      <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Four Ways People Historically Tried to Build Intelligent Systems</span><span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a></li>
+      <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">AI Is a Problem-Solving Field</span></a></li>
+      <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Application 1 — Natural Language Processing</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Application 2 — Robotics</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Application 3 — Expert Systems</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Application 4 — Vision Systems</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">AI as Search: Why Search Belongs Here</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">AI and Games</span></a></li>
+      <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Narrow AI vs General AI</span><span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a></li>
+      <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Can an AI System Be Intelligent Without Learning?</span></a></li>
+      <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Can Machine Learning Exist Without Deep Learning?</span></a></li>
+      <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Where Mathematics Enters AI/ML</span><span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a></li>
+      <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">The Complete AI Mental Model</span></a></li>
+      <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Teacher&#x27;s Hinglish Summary</span></a></li>
+      <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">What AI Is NOT — Common Misconceptions</span></a></li>
+      <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">A Small Mathematical Example: AI as a Function</span><span class="uni-syllabus-badge" style="background:var(--em-accent-soft);border-color:var(--em-accent-dim);color:var(--em-accent);">⚡ High Yield</span></a></li>
+      <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Why This Chapter Matters for the Rest of Unit I</span></a></li>
+      <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Course Lens — What Your University Specifically Wants</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Universal Lens — Beyond Your University</span></a></li>
+      <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Active Recall — Close the Book</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Practice Set</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Self-Assessment Rubric</span></a></li>
+      <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Memory Anchors</span></a></li>
+      <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Diagram Recall Exercise</span></a></li>
+      <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">What You Should NOT Memorize Yet</span></a></li>
+      <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Resource Shelf</span></a></li>
+      <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">History of AI — First-Pass Timeline</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Exam Bridge</span><span class="uni-syllabus-badge">🎓 Uni Core</span></a></li>
+      <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Math Bridge</span></a></li>
+      <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Next Concept</span></a></li>
+    </ul>
+  </div>
+
+  <div class="chapter-preamble-card"><h1>MAIN-U1-C01 — What Is Artificial Intelligence?</h1>
+<blockquote>
+<p><strong>Book:</strong> AI &amp; Machine Learning — Complete Visual &amp; Mathematical Textbook<br />
+<strong>Part:</strong> Unit I — Artificial Intelligence<br />
+<strong>Chapter ID:</strong> <code>MAIN-U1-C01</code><br />
+<strong>Status:</strong> Foundation / Universal + University Course Lens<br />
+<strong>Difficulty:</strong> Beginner → Intermediate<br />
+<strong>Prerequisites:</strong> None beyond ordinary school-level mathematics and programming familiarity<br />
+<strong>Primary syllabus source:</strong> Faculty of Technology, University of Delhi — DSC-14 Artificial Intelligence and Machine Learning, Unit I<br />
+<strong>Primary supplied lecture source:</strong> <code>lecture-intelligent-agents.pdf</code><br />
+<strong>Primary external references:</strong> Russell &amp; Norvig, <em>Artificial Intelligence: A Modern Approach</em>; Stanford HAI terminology explainer; Dartmouth AI history material  </p>
+</blockquote>
+<hr />
+<h2>How to use this chapter</h2>
+<p>This is the first real chapter of the Main Book. <strong>Read it slowly. Do not try to memorize everything on the first pass.</strong> The purpose of this chapter is to give you the mental structure needed for everything that follows.</p>
+<p>By the end, you should be able to answer five questions without looking at the page:</p>
+<ol>
+<li>What does <strong>Artificial Intelligence</strong> actually mean?</li>
+<li>What makes a system <strong>intelligent</strong> rather than merely automated?</li>
+<li>What is the relationship between <strong>AI, Machine Learning, Deep Learning, and Reinforcement Learning</strong>?</li>
+<li>What are the major areas/applications of AI?</li>
+<li>Why do search, agents, learning, vision, language, robotics, and games all appear inside one subject called AI?</li>
+</ol>
+<hr /></div>
+
+  <!-- MAIN SECTIONS -->
+  
+  <!-- SECTION 1: The First Question: What Is Intelligence? -->
+  <section id="s-01" data-search-section="The First Question: What Is Intelligence?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>1. The First Question: What Is Intelligence?</h2>
+      <button class="bookmark-btn" data-id="s-01" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Before defining <strong>artificial intelligence</strong>, we need to be careful about the word <strong>intelligence</strong>.</p>
+<p>At a simple level, intelligence is the ability to use information and capabilities to <strong>achieve goals, solve problems, learn from experience, adapt to changing situations, and make useful decisions</strong>.</p>
+<p>This does <strong>not</strong> mean that intelligence has to look exactly like human thinking.</p>
+<p>A bird can navigate without doing algebra.</p>
+<p>A person can recognize a familiar face without consciously calculating pixel values.</p>
+<p>A chess program can search millions of possible moves without experiencing the game emotionally.</p>
+<p>A navigation system can select a route without "understanding" a city in exactly the same way a human does.</p>
+<p>So, throughout this book, keep an important distinction in mind:</p>
+<blockquote>
+<p><strong>Intelligent behaviour is the behaviour we care about; human-like internal mechanisms are only one possible way of producing it.</strong></p>
+</blockquote>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish — teacher explanation</div>
+
+Socho intelligence ka matlab sirf **"insaan jaisa sochna"** nahi hai.
+
+Agar ek system ko situation samajh kar useful action lena aata hai, goal achieve karna aata hai, aur uncertainty ke andar decision lena aata hai, to hum us behaviour ko intelligent keh sakte hain — chahe andar se system human brain ki tarah kaam karta ho ya nahi.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 2: What Is Artificial Intelligence? -->
+  <section id="s-02" data-search-section="What Is Artificial Intelligence?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>2. What Is Artificial Intelligence?</h2>
+      <button class="bookmark-btn" data-id="s-02" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>2.1 The beginner definition</h2>
+<p><strong>Artificial Intelligence (AI)</strong> is the field of computing concerned with building systems that can perform tasks requiring capabilities commonly associated with intelligence, such as perception, reasoning, learning, planning, language understanding, decision-making, and problem solving.</p>
+<p>This is intentionally broad.</p>
+<p>AI is a <strong>field</strong>, not one algorithm.</p>
+<p>There is no single thing called "the AI algorithm."</p>
+<p>AI is a large umbrella containing many methods and subfields.</p>
+<hr />
+<h2>2.2 A more formal way to think about AI</h2>
+<p>A useful way to organize AI is:</p>
+<blockquote>
+<p><strong>An AI system receives information about some problem or environment, represents or processes that information, and chooses or produces outputs that help accomplish a goal.</strong></p>
+</blockquote>
+<p>That output may be:</p>
+<ul>
+<li>a decision,</li>
+<li>an action,</li>
+<li>a prediction,</li>
+<li>a plan,</li>
+<li>a generated response,</li>
+<li>a classification,</li>
+<li>a route,</li>
+<li>a movement of a robot,</li>
+<li>or a recommendation.</li>
+</ul>
+<p>This is why the word <strong>goal</strong> appears so frequently in AI.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 3: AI Through the Agent Lens -->
+  <section id="s-03" data-search-section="AI Through the Agent Lens" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>3. AI Through the Agent Lens</h2>
+      <button class="bookmark-btn" data-id="s-03" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your supplied course lecture introduces AI through <strong>intelligent agents</strong>. It defines an intelligent agent as a system that perceives its environment through sensors and acts rationally upon it with effectors. The same lecture introduces humans, robots, softbots, and thermostats as examples of agents and represents the agent function as a mapping from percept histories to actions. <span class="source-marker">Course source: <code>lecture-intelligent-agents.pdf</code>, pp. 2–8.</span>  </p>
+<p>The central picture is:</p>
+<div class="diagram-box"><pre class="mermaid">
+flowchart LR
+    E[Environment] -->|percepts / observations| A[Agent]
+    A -->|actions| E
+    A --> G[Goal / Performance Measure]
+    G --> A
+</pre></div>
+<h2>How to read this diagram</h2>
+<h3>Environment</h3>
+<p>The world in which the system operates.</p>
+<p>Examples:</p>
+<ul>
+<li>road traffic,</li>
+<li>a chess board,</li>
+<li>a factory floor,</li>
+<li>the internet,</li>
+<li>a game world,</li>
+<li>a room,</li>
+<li>a patient's medical data environment.</li>
+</ul>
+<h3>Percepts / observations</h3>
+<p>Information available to the agent.</p>
+<p>For a self-driving vehicle this might include camera images, lidar measurements, speed, GPS and other sensor data. Your supplied lecture uses exactly this kind of self-driving-car example. <span class="source-marker">Course source: <code>lecture-intelligent-agents.pdf</code>, self-driving-car example.</span> </p>
+<h3>Agent</h3>
+<p>The decision-making system.</p>
+<h3>Actions</h3>
+<p>What the system can do.</p>
+<p>For a car:</p>
+<ul>
+<li>steer,</li>
+<li>accelerate,</li>
+<li>brake,</li>
+<li>signal,</li>
+<li>display/speak.</li>
+</ul>
+<h3>Goal / performance measure</h3>
+<p>The system needs some criterion for judging whether its behaviour is useful.</p>
+<p>For a self-driving car, the course lecture lists goals such as safety, reaching the destination, obeying laws, and passenger comfort. <span class="source-marker">Course source: <code>lecture-intelligent-agents.pdf</code>, self-driving-car example.</span> </p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 4: The Simplest Real-Life Analogy: A Person Crossing a Road -->
+  <section id="s-04" data-search-section="The Simplest Real-Life Analogy: A Person Crossing a Road" class="content-section">
+    <div class="section-header">
+      <h2>4. The Simplest Real-Life Analogy: A Person Crossing a Road</h2>
+      <button class="bookmark-btn" data-id="s-04" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Imagine you want to cross a busy road.</p>
+<p>You do not simply say:</p>
+<blockquote>
+<p>"I have a road. Therefore I cross."</p>
+</blockquote>
+<p>You look around.</p>
+<p>You notice cars.</p>
+<p>You estimate their motion.</p>
+<p>You decide whether a gap is large enough.</p>
+<p>You move.</p>
+<p>While moving, you keep observing the environment.</p>
+<p>If a vehicle suddenly approaches, you change your action.</p>
+<p>That is an <strong>agent-like loop</strong>.</p>
+<div class="ascii-box"><pre>Observe → Understand/Estimate → Decide → Act
+   ↑                              │
+   └────────── New information ───┘</pre></div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+Road cross karte time tum ek fixed program follow nahi kar rahe:
+
+> "3 seconds rukna hai → exactly 2 metre chalna hai → road cross."
+
+Tum continuously situation dekh rahe ho.
+
+> Car aa rahi hai? Ruko.
+>
+> Gap bada hai? Chalo.
+>
+> Car speed badha rahi hai? Phir wait karo.
+
+Yeh **environment + perception + decision + action + feedback** ka loop hai.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 5: Is a Calculator Intelligent? -->
+  <section id="s-05" data-search-section="Is a Calculator Intelligent?" class="content-section">
+    <div class="section-header">
+      <h2>5. Is a Calculator Intelligent?</h2>
+      <button class="bookmark-btn" data-id="s-05" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose you enter:</p>
+<div class="formula-math">\[
+17\times 29
+\]</div>
+<p>and a calculator returns:</p>
+<div class="formula-math">\[
+493.
+\]</div>
+<p>Is that AI?</p>
+<p>Not automatically.</p>
+<p>The calculator is performing a computation according to a specified procedure. That alone does not make the system an AI system.</p>
+<p>This gives us a useful distinction:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>System</th>
+<th style="text-align: right;">Does it perform computation?</th>
+<th style="text-align: right;">Does that alone imply AI?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Calculator</td>
+<td style="text-align: right;">Yes</td>
+<td style="text-align: right;">No</td>
+</tr>
+<tr>
+<td>Ordinary sorting program</td>
+<td style="text-align: right;">Yes</td>
+<td style="text-align: right;">No</td>
+</tr>
+<tr>
+<td>Fixed thermostat</td>
+<td style="text-align: right;">Yes</td>
+<td style="text-align: right;">Not necessarily</td>
+</tr>
+<tr>
+<td>Route planner</td>
+<td style="text-align: right;">Yes</td>
+<td style="text-align: right;">It can be an AI application</td>
+</tr>
+<tr>
+<td>Chess-playing system</td>
+<td style="text-align: right;">Yes</td>
+<td style="text-align: right;">Common AI example</td>
+</tr>
+<tr>
+<td>Image classifier</td>
+<td style="text-align: right;">Yes</td>
+<td style="text-align: right;">AI/ML example</td>
+</tr>
+<tr>
+<td>Robot navigating uncertainty</td>
+<td style="text-align: right;">Yes</td>
+<td style="text-align: right;">AI example</td>
+</tr>
+</tbody>
+</table></div>
+<p>The exact boundary is not always mathematically sharp. The important lesson is that <strong>computation itself is not the definition of intelligence</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 6: Automation vs AI -->
+  <section id="s-06" data-search-section="Automation vs AI" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>6. Automation vs AI</h2>
+      <button class="bookmark-btn" data-id="s-06" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This is one of the easiest concepts to confuse.</p>
+<h3>Automation</h3>
+<p>A machine follows a known procedure.</p>
+<p>Example:</p>
+<blockquote>
+<p>If temperature &lt; 20°C → turn heater on.</p>
+</blockquote>
+<h3>AI-style decision making</h3>
+<p>A system may have to interpret observations, search among possibilities, estimate uncertainty, learn patterns, or choose an action using a model.</p>
+<p>Example:</p>
+<blockquote>
+<p>A robot receives noisy sensor information, determines where it is, predicts obstacles, plans a route, and changes its route when the environment changes.</p>
+</blockquote>
+<h3>Important nuance</h3>
+<p>A system can be <strong>highly sophisticated automation</strong> without using AI, and AI systems can also contain ordinary deterministic software components.</p>
+<p>So do not use:</p>
+<blockquote>
+<p>"It is automatic, therefore it is AI."</p>
+</blockquote>
+<p>That reasoning is incorrect.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 7: What Is the Scope of AI? -->
+  <section id="s-07" data-search-section="What Is the Scope of AI?" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>7. What Is the Scope of AI?</h2>
+      <button class="bookmark-btn" data-id="s-07" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>The word <strong>scope</strong> asks:</p>
+<blockquote>
+<p>"What kinds of problems are included within the field?"</p>
+</blockquote>
+<p>For your course, the most important areas are visible directly in Unit I:</p>
+<ul>
+<li>Natural Language Processing (NLP)</li>
+<li>Robotics</li>
+<li>Expert Systems</li>
+<li>Vision Systems</li>
+<li>Search and problem solving</li>
+<li>Heuristics</li>
+<li>Constraint Satisfaction Problems</li>
+<li>Game playing</li>
+<li>Adversarial search</li>
+</ul>
+<p>The later units add:</p>
+<ul>
+<li>Machine Learning</li>
+<li>Deep Learning</li>
+<li>Reinforcement Learning</li>
+<li>Generative Models</li>
+<li>NLP pipelines</li>
+<li>AI ethics</li>
+<li>AI applications</li>
+</ul>
+<p>So your course is deliberately showing you that AI is <strong>much larger than neural networks</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 8: The AI Family Tree -->
+  <section id="s-08" data-search-section="The AI Family Tree" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>8. The AI Family Tree</h2>
+      <button class="bookmark-btn" data-id="s-08" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This is one of the most important diagrams in the entire book.</p>
+<div class="diagram-box"><pre class="mermaid">
+flowchart TB
+    AI[ARTIFICIAL INTELLIGENCE]
+    AI --> SP[Search & Problem Solving]
+    AI --> RS[Reasoning / Knowledge]
+    AI --> AG[Agents & Robotics]
+    AI --> ML[Machine Learning]
+    AI --> NLP[Natural Language Processing]
+    AI --> CV[Vision]
+
+    ML --> SL[Supervised Learning]
+    ML --> UL[Unsupervised Learning]
+    ML --> RL[Reinforcement Learning]
+
+    SL --> CL[Classical ML]
+    SL --> DL[Deep Learning]
+    DL --> NN[Neural Networks]
+    NN --> CNN[CNN]
+    NN --> RNN[RNN]
+    RNN --> LSTM[LSTM]
+
+    ML --> GM[Generative Models]
+    GM --> AE[Autoencoders]
+    GM --> GAN[GANs]
+</pre></div>
+<h3>WARNING: this is a conceptual map, not a rigid taxonomy</h3>
+<p>Some areas overlap.</p>
+<p>For example:</p>
+<ul>
+<li>robotics can use ML,</li>
+<li>NLP can use deep learning,</li>
+<li>computer vision can use CNNs and transformers,</li>
+<li>reinforcement learning is often treated as part of ML but also sits naturally inside the broader AI problem-solving/agent perspective.</li>
+</ul>
+<p>The boxes are there to help you navigate the subject, not to imply that every research paper belongs to one and only one box.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 9: AI vs Machine Learning vs Deep Learning -->
+  <section id="s-09" data-search-section="AI vs Machine Learning vs Deep Learning" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>9. AI vs Machine Learning vs Deep Learning</h2>
+      <button class="bookmark-btn" data-id="s-09" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>This distinction must become automatic for you.</p>
+<h2>Artificial Intelligence</h2>
+<p>The broad field.</p>
+<blockquote>
+<p><strong>Goal:</strong> build systems exhibiting useful intelligent behaviour.</p>
+</blockquote>
+<h2>Machine Learning</h2>
+<p>A major approach within AI in which systems learn patterns or decision rules from data or interaction rather than having every behaviour explicitly specified.</p>
+<h2>Deep Learning</h2>
+<p>A family of machine-learning methods based on neural networks with multiple layers that learn representations of data.</p>
+<h3>The mental model</h3>
+<div class="ascii-box"><pre>AI
+└── ML
+    └── Deep Learning
+        └── Neural-network architectures</pre></div>
+<p>This picture is useful but incomplete because not every AI method is ML and not every ML method is deep learning.</p>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+AI ko **bada umbrella** samjho.
+
+ML AI ke andar ek approach hai:
+
+> "Rules manually likhne ke badle data se pattern learn karao."
+
+Deep Learning ML ke andar neural-network based approach hai, jahan multiple layers representations learn karti hain.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 10: Where Does Reinforcement Learning Fit? -->
+  <section id="s-10" data-search-section="Where Does Reinforcement Learning Fit?" class="content-section">
+    <div class="section-header">
+      <h2>10. Where Does Reinforcement Learning Fit?</h2>
+      <button class="bookmark-btn" data-id="s-10" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Reinforcement Learning (RL) is another ML paradigm in your syllabus.</p>
+<p>Instead of being given the correct answer for every training example, an agent interacts with an environment and receives <strong>rewards or penalties</strong>.</p>
+<p>Example:</p>
+<blockquote>
+<p>A game-playing agent makes a move → receives a reward/penalty → uses experience to improve future decisions.</p>
+</blockquote>
+<p>A simplified picture is:</p>
+<div class="diagram-box"><pre class="mermaid">
+flowchart LR
+    A[Agent] -->|action| E[Environment]
+    E -->|state / observation| A
+    E -->|reward| A
+</pre></div>
+<p>This explains why RL connects naturally to the <strong>agent</strong> idea introduced at the start of the course.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 11: Four Ways People Historically Tried to Build Intelligent Systems -->
+  <section id="s-11" data-search-section="Four Ways People Historically Tried to Build Intelligent Systems" class="content-section mode-gate">
+    <div class="section-header">
+      <h2>11. Four Ways People Historically Tried to Build Intelligent Systems</h2>
+      <button class="bookmark-btn" data-id="s-11" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>AI is not one philosophy.</p>
+<p>Different periods emphasized different approaches.</p>
+<h2>Approach A — Symbolic / rule-based reasoning</h2>
+<p>Idea:</p>
+<blockquote>
+<p>Represent knowledge explicitly and manipulate symbols/rules.</p>
+</blockquote>
+<p>Example:</p>
+<div class="ascii-box"><pre>IF fever AND cough
+THEN consider respiratory infection</pre></div>
+<p>This does not mean that real medical reasoning can safely be reduced to one rule. It is just a simplified example of rule-based representation.</p>
+<p>This family includes expert-system ideas.</p>
+<hr />
+<h2>Approach B — Search and planning</h2>
+<p>Idea:</p>
+<blockquote>
+<p>Represent possible states/actions and search for a useful sequence.</p>
+</blockquote>
+<p>Example:</p>
+<ul>
+<li>chess move selection,</li>
+<li>route finding,</li>
+<li>puzzle solving,</li>
+<li>planning.</li>
+</ul>
+<p>This is the part of Unit I you will study in detail through BFS, DFS, Greedy, A* and game playing.</p>
+<hr />
+<h2>Approach C — Learning from data</h2>
+<p>Idea:</p>
+<blockquote>
+<p>Instead of writing every decision rule manually, learn a model from examples.</p>
+</blockquote>
+<p>This takes us into Machine Learning.</p>
+<hr />
+<h2>Approach D — Neural representation learning</h2>
+<p>Idea:</p>
+<blockquote>
+<p>Use multi-layer neural networks to learn increasingly useful representations from data.</p>
+</blockquote>
+<p>This takes us into Deep Learning.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 12: AI Is a Problem-Solving Field -->
+  <section id="s-12" data-search-section="AI Is a Problem-Solving Field" class="content-section">
+    <div class="section-header">
+      <h2>12. AI Is a Problem-Solving Field</h2>
+      <button class="bookmark-btn" data-id="s-12" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A useful beginner mistake to avoid is thinking:</p>
+<blockquote>
+<p>"AI = predicting things."</p>
+</blockquote>
+<p>Prediction is only one activity.</p>
+<p>AI can involve:</p>
+<div class="ascii-box"><pre>Perceive
+   ↓
+Represent
+   ↓
+Reason
+   ↓
+Search / Plan
+   ↓
+Decide
+   ↓
+Act
+   ↓
+Learn from feedback
+   ↓
+Repeat</pre></div>
+<p>Different AI techniques occupy different parts of this loop.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 13: Application 1 — Natural Language Processing -->
+  <section id="s-13" data-search-section="Application 1 — Natural Language Processing" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>13. Application 1 — Natural Language Processing</h2>
+      <button class="bookmark-btn" data-id="s-13" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>What is NLP?</h2>
+<p><strong>Natural Language Processing (NLP)</strong> is the area concerned with enabling computers to process, analyze, interpret, generate, or interact using human language.</p>
+<p>Examples:</p>
+<ul>
+<li>translation,</li>
+<li>sentiment analysis,</li>
+<li>spam detection,</li>
+<li>question answering,</li>
+<li>text classification,</li>
+<li>speech/language interfaces,</li>
+<li>information extraction.</li>
+</ul>
+<h3>Simple pipeline</h3>
+<div class="diagram-box"><pre class="mermaid">
+flowchart LR
+    T[Human Language] --> P[Process / Represent]
+    P --> M[Model]
+    M --> O[Prediction / Generation]
+</pre></div>
+<h3>Real-life analogy</h3>
+<p>Suppose a friend sends:</p>
+<blockquote>
+<p>"Bhai this phone is amazing! Battery is crazy good."</p>
+</blockquote>
+<p>A human immediately understands a positive opinion.</p>
+<p>An NLP system has to transform the language into representations it can process and then perform a task such as sentiment classification.</p>
+<p>Later in your syllabus you will study:</p>
+<ul>
+<li>tokenization,</li>
+<li>stemming,</li>
+<li>lemmatization,</li>
+<li>text classification.</li>
+</ul>
+<p>So <strong>NLP appears in Unit I as an AI application and later becomes a technical Unit IV topic.</strong></p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 14: Application 2 — Robotics -->
+  <section id="s-14" data-search-section="Application 2 — Robotics" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>14. Application 2 — Robotics</h2>
+      <button class="bookmark-btn" data-id="s-14" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Robotics combines AI with a physical body.</p>
+<p>A robot may need to:</p>
+<ol>
+<li>perceive its surroundings,</li>
+<li>estimate its state,</li>
+<li>understand its task,</li>
+<li>plan actions,</li>
+<li>move,</li>
+<li>detect changes,</li>
+<li>react.</li>
+</ol>
+<div class="diagram-box"><pre class="mermaid">
+flowchart LR
+    S[Sensors] --> P[Perception]
+    P --> D[Decision / Planning]
+    D --> C[Control / Action]
+    C --> W[World]
+    W --> S
+</pre></div>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+Robot ke paas sirf motor hona enough nahi hai.
+
+Usko yeh bhi decide karna hai:
+
+> "Main kahan hoon?"
+>
+> "Obstacle kahan hai?"
+>
+> "Mujhe jaana kahan hai?"
+>
+> "Kaunsa path safe hai?"
+>
+> "Abhi kya action lena hai?"
+
+Yahan AI ka agent + perception + planning + decision making wala part kaam karta hai.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 15: Application 3 — Expert Systems -->
+  <section id="s-15" data-search-section="Application 3 — Expert Systems" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>15. Application 3 — Expert Systems</h2>
+      <button class="bookmark-btn" data-id="s-15" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>An <strong>expert system</strong> is a classical AI approach that attempts to capture domain knowledge explicitly and use it to reason about cases.</p>
+<p>A simplified architecture is:</p>
+<div class="diagram-box"><pre class="mermaid">
+flowchart LR
+    U[User / Case] --> I[Inference Engine]
+    KB[Knowledge Base] --> I
+    I --> A[Answer / Recommendation]
+</pre></div>
+<h3>Knowledge base</h3>
+<p>Contains domain knowledge.</p>
+<h3>Inference engine</h3>
+<p>Uses rules/logic to derive conclusions.</p>
+<h3>Important distinction</h3>
+<p>An expert system is not simply:</p>
+<blockquote>
+<p>"a database containing lots of information."</p>
+</blockquote>
+<p>A database stores information.</p>
+<p>An expert system also has a mechanism for applying represented knowledge to a problem.</p>
+<h3>Why this matters</h3>
+<p>It teaches an important historical AI idea:</p>
+<blockquote>
+<p><strong>Intelligence can be approached through explicit knowledge and reasoning, not only through statistical learning.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 16: Application 4 — Vision Systems -->
+  <section id="s-16" data-search-section="Application 4 — Vision Systems" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>16. Application 4 — Vision Systems</h2>
+      <button class="bookmark-btn" data-id="s-16" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Computer vision deals with extracting useful information from images or video.</p>
+<p>Example tasks:</p>
+<ul>
+<li>object recognition,</li>
+<li>image classification,</li>
+<li>object detection,</li>
+<li>segmentation,</li>
+<li>face-related recognition tasks,</li>
+<li>medical-image analysis.</li>
+</ul>
+<p>A human sees:</p>
+<blockquote>
+<p>"There is a red car near a pedestrian."</p>
+</blockquote>
+<p>A computer initially receives numerical data representing pixels.</p>
+<div class="ascii-box"><pre>Image
+  ↓
+Pixels / numerical representation
+  ↓
+Features / learned representations
+  ↓
+Model
+  ↓
+Prediction</pre></div>
+<p>Later in Unit III, CNNs will provide a central deep-learning approach for image processing.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 17: AI as Search: Why Search Belongs Here -->
+  <section id="s-17" data-search-section="AI as Search: Why Search Belongs Here" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>17. AI as Search: Why Search Belongs Here</h2>
+      <button class="bookmark-btn" data-id="s-17" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Suppose you are solving a maze.</p>
+<p>At every intersection, several choices exist.</p>
+<p>If you don't know which choice leads to the exit, you have to <strong>search</strong>.</p>
+<p>That is an AI problem.</p>
+<p>A state-space can be thought of as:</p>
+<div class="ascii-box"><pre>Start
+               /     \
+              A       B
+             / \     / \
+            C   D   E   F
+               ...
+                 \
+                 Goal</pre></div>
+<p>AI search asks:</p>
+<blockquote>
+<p>Which state should we explore next so that we find a solution efficiently?</p>
+</blockquote>
+<p>This leads directly to:</p>
+<ul>
+<li>BFS,</li>
+<li>DFS,</li>
+<li>Greedy search,</li>
+<li>A*,</li>
+<li>heuristics,</li>
+<li>game search.</li>
+</ul>
+<p>Your supplied <strong>Basic Search</strong> lecture begins with a problem-solving agent whose process is to formulate a goal, formulate a problem, and search for a solution; the solution is a sequence of actions. <span class="source-marker">Course source: <code>lecture-basic-search.pdf</code>.</span> </p>
+<p>So search is not some unrelated algorithm chapter.</p>
+<p>It is one of the original ways AI systems were designed to <strong>make decisions and solve problems</strong>.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 18: AI and Games -->
+  <section id="s-18" data-search-section="AI and Games" class="content-section">
+    <div class="section-header">
+      <h2>18. AI and Games</h2>
+      <button class="bookmark-btn" data-id="s-18" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Why does a chess-playing program belong to AI?</p>
+<p>Because the program must choose actions in an environment where:</p>
+<ul>
+<li>there are multiple possible actions,</li>
+<li>future consequences depend on current choices,</li>
+<li>the opponent responds,</li>
+<li>the best action is not directly given.</li>
+</ul>
+<p>That leads to <strong>game trees</strong> and eventually <strong>minimax</strong> and <strong>alpha-beta pruning</strong>.</p>
+<p>Your supplied Game Playing lecture explicitly introduces games, perfect play, minimax decisions, alpha-beta pruning, resource limits, games of chance and games with imperfect information. <span class="source-marker">Course source: <code>lecture-game-playing.pdf</code>.</span> </p>
+<p>The important mental connection is:</p>
+<blockquote>
+<p><strong>AI is often about choosing a good action when the correct action is not handed to you.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 19: Narrow AI vs General AI -->
+  <section id="s-19" data-search-section="Narrow AI vs General AI" class="content-section mode-gate">
+    <div class="section-header">
+      <h2>19. Narrow AI vs General AI</h2>
+      <button class="bookmark-btn" data-id="s-19" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Another distinction you should know.</p>
+<h2>Narrow / task-oriented AI</h2>
+<p>A system designed for a bounded set of tasks.</p>
+<p>Examples include systems specializing in:</p>
+<ul>
+<li>image classification,</li>
+<li>route planning,</li>
+<li>recommendation,</li>
+<li>speech recognition,</li>
+<li>game playing.</li>
+</ul>
+<h2>General AI / AGI</h2>
+<p>A research concept referring to a much broader form of machine intelligence capable of flexible performance across many kinds of tasks.</p>
+<p>Do <strong>not</strong> treat AGI as a normal synonym for today's AI.</p>
+<p>A current deployed AI system can be broad and highly capable without that automatically establishing that it is an artificial general intelligence system.</p>
+<h3>Exam-safe statement</h3>
+<blockquote>
+<p><strong>AI is a broad field; many practical systems are specialized, while AGI refers to a more general research goal/concept.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 20: Can an AI System Be Intelligent Without Learning? -->
+  <section id="s-20" data-search-section="Can an AI System Be Intelligent Without Learning?" class="content-section">
+    <div class="section-header">
+      <h2>20. Can an AI System Be Intelligent Without Learning?</h2>
+      <button class="bookmark-btn" data-id="s-20" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p><strong>Yes.</strong></p>
+<p>This is crucial.</p>
+<p>Consider a classical route-search system.</p>
+<p>If the road map is already provided and the system searches that map using A*, it is doing an AI problem-solving task without learning a new model from examples.</p>
+<p>Similarly, a rule-based expert system can reason using encoded rules without machine learning.</p>
+<p>Therefore:</p>
+<blockquote>
+<p><strong>AI is not equal to Machine Learning.</strong></p>
+</blockquote>
+<p>Machine Learning is one major approach within AI.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 21: Can Machine Learning Exist Without Deep Learning? -->
+  <section id="s-21" data-search-section="Can Machine Learning Exist Without Deep Learning?" class="content-section">
+    <div class="section-header">
+      <h2>21. Can Machine Learning Exist Without Deep Learning?</h2>
+      <button class="bookmark-btn" data-id="s-21" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Absolutely.</p>
+<p>Classical ML includes methods such as:</p>
+<ul>
+<li>linear regression,</li>
+<li>logistic regression,</li>
+<li>decision trees,</li>
+<li>k-NN,</li>
+<li>SVMs,</li>
+<li>clustering methods.</li>
+</ul>
+<p>Your Unit II focuses heavily on this classical ML layer.</p>
+<p>Deep learning comes later through neural networks.</p>
+<p>So the chain is:</p>
+<div class="ascii-box"><pre>AI
+│
+├── Classical symbolic/search methods
+│
+└── Machine Learning
+     │
+     ├── Classical ML
+     │
+     └── Deep Learning</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 22: Where Mathematics Enters AI/ML -->
+  <section id="s-22" data-search-section="Where Mathematics Enters AI/ML" class="content-section mode-gate">
+    <div class="section-header">
+      <h2>22. Where Mathematics Enters AI/ML</h2>
+      <button class="bookmark-btn" data-id="s-22" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>At this point you should not be frightened by the mathematics.</p>
+<p>The math becomes useful because AI/ML needs a way to represent and optimize things.</p>
+<h3>Linear algebra</h3>
+<p>Useful for:</p>
+<ul>
+<li>vectors,</li>
+<li>data matrices,</li>
+<li>model parameters,</li>
+<li>neural networks,</li>
+<li>image representations.</li>
+</ul>
+<p>Your Lecture 4 explicitly explains why ML uses a data vector \(x\in\mathbb{R}^d\), a dataset matrix \(X\in\mathbb{R}^{n\times d}\), and transformations such as \(y=\sigma(Wx+b)\). <span class="source-marker">Course source: <code>Lecture04.pdf</code>, pp. 3–5.</span> </p>
+<h3>Probability/statistics</h3>
+<p>Useful for:</p>
+<ul>
+<li>uncertainty,</li>
+<li>classification,</li>
+<li>distributions,</li>
+<li>expected performance,</li>
+<li>evaluation,</li>
+<li>probabilistic models.</li>
+</ul>
+<p>Your Lecture 1 introduces sample spaces, events, conditional probability, independence and Bayes rule; Lecture 2 develops random variables, PMF/PDF/CDF and joint/marginal/conditional distributions. [Course sources: <code>Lecture01.pdf</code>, <code>Lecture02.pdf</code>.] </p>
+<h3>Calculus/optimization</h3>
+<p>Useful for:</p>
+<ul>
+<li>minimizing loss,</li>
+<li>learning parameters,</li>
+<li>gradient descent,</li>
+<li>backpropagation.</li>
+</ul>
+<p>You will meet this much more heavily in Unit III.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 23: The Complete AI Mental Model -->
+  <section id="s-23" data-search-section="The Complete AI Mental Model" class="content-section">
+    <div class="section-header">
+      <h2>23. The Complete AI Mental Model</h2>
+      <button class="bookmark-btn" data-id="s-23" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>At this stage, you should be able to see the subject as a stack rather than a list.</p>
+<div class="diagram-box"><pre class="mermaid">
+flowchart TB
+    Q[REAL-WORLD PROBLEM]
+    Q --> F[FORMULATE THE PROBLEM]
+    F --> R{How can we solve it?}
+    R --> S[SEARCH / PLANNING]
+    R --> K[KNOWLEDGE + REASONING]
+    R --> L[LEARN FROM DATA]
+    R --> A[ACT IN ENVIRONMENT]
+
+    L --> CML[CLASSICAL ML]
+    L --> DL[DEEP LEARNING]
+    L --> RL[REINFORCEMENT LEARNING]
+
+    DL --> N[NEURAL NETWORKS]
+    N --> CV[CNN / VISION]
+    N --> SEQ[RNN / LSTM / SEQUENCE]
+</pre></div>
+<h3>The key idea</h3>
+<p>AI is not a collection of unrelated chapters.</p>
+<p>They are different answers to the same broad question:</p>
+<blockquote>
+<p><strong>How can a computational system use information to achieve useful goals in difficult environments?</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 24: Teacher&#x27;s Hinglish Summary -->
+  <section id="s-24" data-search-section="Teacher&#x27;s Hinglish Summary" class="content-section">
+    <div class="section-header">
+      <h2>24. Teacher&#x27;s Hinglish Summary</h2>
+      <button class="bookmark-btn" data-id="s-24" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>AI ko ek <strong>bade toolbox</strong> ki tarah socho.</p>
+<p>Problem alag ho to tool alag ho sakta hai.</p>
+<h3>Agar problem hai:</h3>
+<blockquote>
+<p>"Mujhe maze se bahar nikalna hai."</p>
+</blockquote>
+<p>Use <strong>search</strong>.</p>
+<h3>Agar problem hai:</h3>
+<blockquote>
+<p>"Mere paas bahut saare examples hain; pattern seekhna hai."</p>
+</blockquote>
+<p>Use <strong>machine learning</strong>.</p>
+<h3>Agar data image hai aur complex visual patterns hain:</h3>
+<p>Use <strong>deep learning / CNNs</strong> jaisi techniques.</p>
+<h3>Agar agent ko baar-baar environment mein action lena hai aur reward se improve karna hai:</h3>
+<p>Use <strong>reinforcement learning</strong>.</p>
+<h3>Agar problem language ki hai:</h3>
+<p>Use <strong>NLP</strong>.</p>
+<h3>Agar physical world mein action lena hai:</h3>
+<p>Use <strong>robotics + AI</strong>.</p>
+<h3>Agar expert knowledge ko rules ke form mein represent karna hai:</h3>
+<p>Use <strong>expert-system style reasoning</strong>.</p>
+<h3>Agar opponent bhi moves kar raha hai:</h3>
+<p>Use <strong>game playing / adversarial search</strong>.</p>
+<p>So AI ko ek sentence mein yaad rakho:</p>
+<blockquote>
+<p><strong>AI is the broad field; search, reasoning, learning, perception, language, planning and action are different tools for creating useful intelligent behaviour.</strong></p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 25: What AI Is NOT — Common Misconceptions -->
+  <section id="s-25" data-search-section="What AI Is NOT — Common Misconceptions" class="content-section">
+    <div class="section-header">
+      <h2>25. What AI Is NOT — Common Misconceptions</h2>
+      <button class="bookmark-btn" data-id="s-25" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Misconception 1</div>
+
+**"AI means robots."**
+
+False.
+
+Robots are physical systems; AI can exist entirely in software.
+
+</div>
+
+<hr />
+<div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Misconception 2</div>
+
+**"AI = machine learning."**
+
+False.
+
+ML is one major approach within AI.
+
+</div>
+
+<hr />
+<div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Misconception 3</div>
+
+**"Deep learning = all machine learning."**
+
+False.
+
+Linear regression, decision trees, k-NN and many other ML methods are not deep learning.
+
+</div>
+
+<hr />
+<div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Misconception 4</div>
+
+**"Anything automatic is AI."**
+
+False.
+
+Automation may follow fixed rules without the kind of adaptive problem-solving associated with AI.
+
+</div>
+
+<hr />
+<div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Misconception 5</div>
+
+**"An AI must think exactly like a human."**
+
+False.
+
+AI can produce intelligent behaviour through mechanisms very different from human cognition.
+
+</div>
+
+<hr />
+<div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> Misconception 6</div>
+
+**"AI always learns from data."**
+
+False.
+
+Classical search, rule-based reasoning and planning can operate without statistical learning from datasets.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 26: A Small Mathematical Example: AI as a Function -->
+  <section id="s-26" data-search-section="A Small Mathematical Example: AI as a Function" class="content-section mode-gate">
+    <div class="section-header">
+      <h2>26. A Small Mathematical Example: AI as a Function</h2>
+      <button class="bookmark-btn" data-id="s-26" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your course's agent lecture represents an agent function as a mapping from percept histories to actions:</p>
+<div class="formula-math">\[
+f:P^*\rightarrow A
+\]</div>
+<p>where:</p>
+<ul>
+<li>\(P\) represents percepts,</li>
+<li>\(P^*\) represents a history/sequence of percepts,</li>
+<li>\(A\) represents possible actions.</li>
+</ul>
+<p>Do not worry if \(P^*\) looks unfamiliar.</p>
+<p>It simply means:</p>
+<blockquote>
+<p>The agent's action can depend on everything it has observed so far, not necessarily only the latest observation.</p>
+</blockquote>
+<div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Hinglish</div>
+
+Agar robot ko sirf current information hi dekh kar decision lena hota, to woh limited ho sakta hai.
+
+Lekin agar usko pichhle observations bhi yaad hain, to woh history ko use kar sakta hai.
+
+Example:
+
+
+
+<div class="ascii-box"><pre>Observation 1 → Observation 2 → Observation 3
+                                      ↓
+                              Current decision</pre></div>
+
+
+
+This idea becomes important later when we talk about memory and sequential models.
+
+</div>
+
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 27: Why This Chapter Matters for the Rest of Unit I -->
+  <section id="s-27" data-search-section="Why This Chapter Matters for the Rest of Unit I" class="content-section">
+    <div class="section-header">
+      <h2>27. Why This Chapter Matters for the Rest of Unit I</h2>
+      <button class="bookmark-btn" data-id="s-27" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Everything in the next chapters is a specialization of ideas introduced here.</p>
+<h2>Agents</h2>
+<p>Who is making the decision?</p>
+<h2>Problem formulation</h2>
+<p>What exactly is the problem?</p>
+<h2>Search</h2>
+<p>Which possible sequence of actions should we explore?</p>
+<h2>Heuristics</h2>
+<p>How can we use extra knowledge to guide the search?</p>
+<h2>CSP</h2>
+<p>What if the problem is about satisfying multiple constraints?</p>
+<h2>Game playing</h2>
+<p>What if another intelligent agent actively tries to defeat our plan?</p>
+<p>That gives us the Unit I flow:</p>
+<div class="ascii-box"><pre>AI
+ ↓
+Agent
+ ↓
+Goal
+ ↓
+Problem formulation
+ ↓
+State space
+ ↓
+Search
+ ↓
+Heuristics
+ ↓
+Adversarial search</pre></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 28: Course Lens — What Your University Specifically Wants -->
+  <section id="s-28" data-search-section="Course Lens — What Your University Specifically Wants" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>28. Course Lens — What Your University Specifically Wants</h2>
+      <button class="bookmark-btn" data-id="s-28" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your official DSC-14 Unit I wording requires:</p>
+<blockquote>
+<p><strong>Definition and Scope of AI; History and Evolution of AI; AI Applications: NLP, Robotics, Expert Systems, and Vision Systems; Search Strategies: Uninformed Search (BFS, DFS), Informed Search (Greedy, A*), and Heuristics; Problem-Solving Techniques: Constraint Satisfaction Problems, Game Playing, and Adversarial Search.</strong></p>
+</blockquote>
+<p>This chapter has therefore established the conceptual foundation for the first part of that list.</p>
+<p>The search and game-playing portions will be taught in dedicated later chapters rather than being compressed here.</p>
+<h3>Course-source map</h3>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>University topic</th>
+<th>Main Book location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Definition of AI</td>
+<td><code>MAIN-U1-C01</code></td>
+</tr>
+<tr>
+<td>Scope of AI</td>
+<td><code>MAIN-U1-C01</code></td>
+</tr>
+<tr>
+<td>History &amp; evolution</td>
+<td><code>MAIN-U1-C01</code> + history expansion later if needed</td>
+</tr>
+<tr>
+<td>NLP application</td>
+<td><code>MAIN-U1-C01</code> + detailed Unit IV NLP chapters</td>
+</tr>
+<tr>
+<td>Robotics</td>
+<td><code>MAIN-U1-C01</code> + agent chapters</td>
+</tr>
+<tr>
+<td>Expert systems</td>
+<td><code>MAIN-U1-C01</code></td>
+</tr>
+<tr>
+<td>Vision systems</td>
+<td><code>MAIN-U1-C01</code> + CNN chapter</td>
+</tr>
+<tr>
+<td>BFS</td>
+<td><code>MAIN-U1-C04</code></td>
+</tr>
+<tr>
+<td>DFS</td>
+<td><code>MAIN-U1-C04</code></td>
+</tr>
+<tr>
+<td>Greedy</td>
+<td><code>MAIN-U1-C06</code></td>
+</tr>
+<tr>
+<td>A*</td>
+<td><code>MAIN-U1-C07</code></td>
+</tr>
+<tr>
+<td>Heuristics</td>
+<td><code>MAIN-U1-C05</code></td>
+</tr>
+<tr>
+<td>CSP</td>
+<td><code>MAIN-U1-C09</code></td>
+</tr>
+<tr>
+<td>Game playing</td>
+<td><code>MAIN-U1-C10</code></td>
+</tr>
+<tr>
+<td>Adversarial search</td>
+<td><code>MAIN-U1-C10</code></td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 29: Universal Lens — Beyond Your University -->
+  <section id="s-29" data-search-section="Universal Lens — Beyond Your University" class="content-section">
+    <div class="section-header">
+      <h2>29. Universal Lens — Beyond Your University</h2>
+      <button class="bookmark-btn" data-id="s-29" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>A student outside this course should still be able to take away:</p>
+<blockquote>
+<p>AI is a field concerned with computational systems that exhibit goal-directed, problem-solving, decision-making, perceptual, linguistic, or learning behaviour.</p>
+</blockquote>
+<p>The field contains multiple traditions:</p>
+<div class="ascii-box"><pre>Symbolic reasoning
+Search and planning
+Probabilistic reasoning
+Machine learning
+Neural networks
+Reinforcement learning
+Robotics
+Language
+Vision
+Generative modelling</pre></div>
+<p>No single technique explains all of AI.</p>
+<p>That is why learning the <strong>problem-solving perspective</strong> is more valuable than memorizing isolated definitions.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 30: Active Recall — Close the Book -->
+  <section id="s-30" data-search-section="Active Recall — Close the Book" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>30. Active Recall — Close the Book</h2>
+      <button class="bookmark-btn" data-id="s-30" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Try answering these without looking back.</p>
+<h3>Recall A — Definitions</h3>
+<ol>
+<li>What is Artificial Intelligence?</li>
+<li>Why is AI a field rather than a single algorithm?</li>
+<li>What is an intelligent agent?</li>
+<li>What are percepts?</li>
+<li>What are actions?</li>
+<li>What is a performance measure?</li>
+</ol>
+<h3>Recall B — Relationships</h3>
+<ol>
+<li>What is the relationship between AI and ML?</li>
+<li>What is the relationship between ML and deep learning?</li>
+<li>Where does reinforcement learning fit?</li>
+<li>Can an AI system exist without ML?</li>
+<li>Can ML exist without deep learning?</li>
+</ol>
+<h3>Recall C — Applications</h3>
+<ol>
+<li>Give two NLP tasks.</li>
+<li>Why does robotics need AI?</li>
+<li>What is the basic idea of an expert system?</li>
+<li>What does a vision system try to extract from images?</li>
+</ol>
+<h3>Recall D — Reasoning</h3>
+<ol>
+<li>Why isn't every automated program AI?</li>
+<li>Why is search considered an AI technique?</li>
+<li>Why does game playing become a different kind of search problem?</li>
+<li>Why does AI contain multiple approaches instead of one universal algorithm?</li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 31: Practice Set -->
+  <section id="s-31" data-search-section="Practice Set" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>31. Practice Set</h2>
+      <button class="bookmark-btn" data-id="s-31" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>A. Very Easy</h2>
+<p><strong>Q1.</strong> Define Artificial Intelligence in your own words.</p>
+<p><strong>Q2.</strong> Give one example of an AI system that does not need a physical robot.</p>
+<p><strong>Q3.</strong> Give one example of a robot that uses AI concepts.</p>
+<p><strong>Q4.</strong> Name the four application areas explicitly listed in your Unit I syllabus.</p>
+<hr />
+<h2>B. Standard</h2>
+<p><strong>Q5.</strong> Differentiate between AI and Machine Learning.</p>
+<p><strong>Q6.</strong> Differentiate between Machine Learning and Deep Learning.</p>
+<p><strong>Q7.</strong> Explain the agent-environment interaction with a suitable diagram.</p>
+<p><strong>Q8.</strong> Explain why a route-finding system can be an AI system even when it does not learn from examples.</p>
+<hr />
+<h2>C. Exam-Level</h2>
+<p><strong>Q9.</strong> Explain the scope of Artificial Intelligence. Discuss how search, machine learning, NLP, robotics and vision fit within the field.</p>
+<p><strong>Q10.</strong> Explain the difference between AI, ML, and DL with a suitable diagram and examples.</p>
+<p><strong>Q11.</strong> Describe the major application areas of AI mentioned in the syllabus: NLP, robotics, expert systems and vision systems.</p>
+<hr />
+<h2>D. Think / Don't Memorize</h2>
+<p><strong>Q12.</strong> A program sorts one million integers using a deterministic sorting algorithm. Is it automatically an AI system? Explain.</p>
+<p><strong>Q13.</strong> A thermostat observes temperature and turns heating on or off. Does merely having sensors and actions make it intelligent? What additional ideas should be considered?</p>
+<p><strong>Q14.</strong> A chess program searches possible moves but does not learn from new games. Can it still be considered an AI system? Why?</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 32: Self-Assessment Rubric -->
+  <section id="s-32" data-search-section="Self-Assessment Rubric" class="content-section">
+    <div class="section-header">
+      <h2>32. Self-Assessment Rubric</h2>
+      <button class="bookmark-btn" data-id="s-32" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You should mark yourself only after attempting the recall and practice questions.</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Level</th>
+<th>You can...</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🔴 0 — Not started</td>
+<td>Recognize the term AI but cannot explain it</td>
+</tr>
+<tr>
+<td>🟠 1 — Familiar</td>
+<td>Give a basic definition and examples</td>
+</tr>
+<tr>
+<td>🟡 2 — Understanding</td>
+<td>Explain AI vs ML vs DL and the agent model</td>
+</tr>
+<tr>
+<td>🔵 3 — Applied</td>
+<td>Explain the four AI application areas and connect them to examples</td>
+</tr>
+<tr>
+<td>🟢 4 — Exam ready</td>
+<td>Write a structured 5–10 mark answer with diagram</td>
+</tr>
+<tr>
+<td>🟣 5 — Teaching level</td>
+<td>Explain AI from scratch in English + Hinglish without notes</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Target before moving on:</strong> Level 4.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 33: Memory Anchors -->
+  <section id="s-33" data-search-section="Memory Anchors" class="content-section">
+    <div class="section-header">
+      <h2>33. Memory Anchors</h2>
+      <button class="bookmark-btn" data-id="s-33" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>The 4 A's of an intelligent system</h2>
+<blockquote>
+<p><strong>Observe → Analyze → Act → Adapt</strong></p>
+</blockquote>
+<p>This is a memory aid, not a formal definition.</p>
+<hr />
+<h2>AI family</h2>
+<blockquote>
+<p><strong>AI → ML → DL</strong></p>
+</blockquote>
+<p>Remember:</p>
+<blockquote>
+<p><strong>AI is the field; ML is a learning approach; DL is a neural-network-based ML family.</strong></p>
+</blockquote>
+<hr />
+<h2>Agent loop</h2>
+<blockquote>
+<p><strong>Perceive → Decide → Act → Observe again</strong></p>
+</blockquote>
+<hr />
+<h2>AI application mnemonic</h2>
+<p>For your Unit I syllabus:</p>
+<blockquote>
+<p><strong>N-R-E-V</strong></p>
+<p><strong>N</strong>LP<br />
+<strong>R</strong>obotics<br />
+<strong>E</strong>xpert systems<br />
+<strong>V</strong>ision systems</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 34: Diagram Recall Exercise -->
+  <section id="s-34" data-search-section="Diagram Recall Exercise" class="content-section">
+    <div class="section-header">
+      <h2>34. Diagram Recall Exercise</h2>
+      <button class="bookmark-btn" data-id="s-34" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Without looking at the earlier diagram, redraw this from memory:</p>
+<div class="ascii-box"><pre>?????????
+             ↑       ↓
+        ????????   ????????
+             ↑       ↓
+             ?????????</pre></div>
+<p>Your goal is to reconstruct:</p>
+<ul>
+<li>Environment</li>
+<li>Percepts</li>
+<li>Agent</li>
+<li>Actions</li>
+<li>Goal/performance</li>
+</ul>
+<p>Then explain each arrow in one sentence.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 35: What You Should NOT Memorize Yet -->
+  <section id="s-35" data-search-section="What You Should NOT Memorize Yet" class="content-section">
+    <div class="section-header">
+      <h2>35. What You Should NOT Memorize Yet</h2>
+      <button class="bookmark-btn" data-id="s-35" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Do not waste time memorizing:</p>
+<ul>
+<li>every historical date,</li>
+<li>every famous AI researcher,</li>
+<li>every AI application on the planet,</li>
+<li>philosophical definitions word-for-word,</li>
+<li>long lists of modern AI tools.</li>
+</ul>
+<p>For your first understanding pass, prioritize:</p>
+<ol>
+<li><strong>What AI is</strong></li>
+<li><strong>Why the definition is broad</strong></li>
+<li><strong>Agent-environment-goal thinking</strong></li>
+<li><strong>AI vs ML vs DL vs RL</strong></li>
+<li><strong>The four Unit I application areas</strong></li>
+<li><strong>Why search is an AI technique</strong></li>
+<li><strong>How the rest of Unit I grows from these foundations</strong></li>
+</ol>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 36: Resource Shelf -->
+  <section id="s-36" data-search-section="Resource Shelf" class="content-section">
+    <div class="section-header">
+      <h2>36. Resource Shelf</h2>
+      <button class="bookmark-btn" data-id="s-36" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <h2>A. Your Course Material — PRIMARY</h2>
+<h3><code>lecture-intelligent-agents.pdf</code></h3>
+<p>Use this for the course's agent framing, terminology and diagrams. The lecture introduces agents, percepts/actions, rationality, the intelligent-agent definition, sensors/effectors, and concrete examples including the vacuum world and self-driving car. <span class="source-marker">Course source: <code>lecture-intelligent-agents.pdf</code>, pp. 2–9.</span></p>
+<h3><code>sem5core.pdf</code> / <code>cse syllabus.pdf</code></h3>
+<p>Use the official syllabus as the <strong>boundary of what the course requires</strong>. Unit I explicitly lists AI definition/scope, history/evolution, NLP, robotics, expert systems, vision systems, BFS/DFS, Greedy/A*, heuristics, CSP, game playing and adversarial search. <span class="source-marker">Course source: syllabus, p. 7.</span></p>
+<hr />
+<h2>B. Structured Course — NPTEL</h2>
+<h3>NPTEL — Artificial Intelligence: Search Methods for Problem Solving</h3>
+<p><a href="https://nptel.ac.in/courses/106106126">Open NPTEL course</a></p>
+<p>Use it mainly once we enter the search chapters. It is especially relevant for:</p>
+<ul>
+<li>BFS/DFS</li>
+<li>heuristic search</li>
+<li>A*</li>
+<li>hill climbing</li>
+<li>simulated annealing</li>
+<li>genetic algorithms</li>
+<li>CSP</li>
+<li>minimax</li>
+<li>alpha-beta pruning</li>
+</ul>
+<p><strong>Do not watch the entire course merely because it is listed here.</strong> Use the lectures corresponding to the topic you are studying.</p>
+<hr />
+<h2>C. Book — University + Universal Reference</h2>
+<h3>Russell &amp; Norvig — <em>Artificial Intelligence: A Modern Approach</em></h3>
+<p>Recommended reading location:</p>
+<blockquote>
+<p><strong>Chapter 1 — Introduction</strong><br />
+<strong>Chapter 2 — Intelligent Agents</strong></p>
+</blockquote>
+<p>Use this when you want the formal textbook treatment after reading this chapter, not before.</p>
+<hr />
+<h2>D. External Universal Reference</h2>
+<h3>Stanford HAI — Brief Definitions of Key Terms in AI</h3>
+<p><a href="https://hai.stanford.edu/policy/brief-definitions-of-key-terms-in-ai">Read Stanford HAI explainer</a></p>
+<p>Useful for terminology around AI, machine learning, deep learning and related concepts.</p>
+<h3>Dartmouth — AI at Dartmouth: Our Story</h3>
+<p><a href="https://ai.dartmouth.edu/our-story">Read Dartmouth AI history</a></p>
+<p>Use this for the historical origin of the term and the Dartmouth workshop.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 37: History of AI — First-Pass Timeline -->
+  <section id="s-37" data-search-section="History of AI — First-Pass Timeline" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>37. History of AI — First-Pass Timeline</h2>
+      <button class="bookmark-btn" data-id="s-37" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>Your syllabus explicitly requires <strong>History and Evolution of AI</strong>, so we need a timeline. For now, learn the milestones conceptually; detailed historical depth can be expanded later if your professor expects it.</p>
+<div class="ascii-box"><pre>1940s–50s
+Foundations of computing, cybernetics, logic and early machine intelligence research
+        ↓
+1950
+Turing asks the question: can machines imitate intelligent behaviour?
+        ↓
+1955
+John McCarthy uses the term &quot;artificial intelligence&quot; in the proposal for the Dartmouth project
+        ↓
+1956
+Dartmouth Summer Research Project — AI becomes established as a named research field
+        ↓
+1950s–60s
+Early symbolic AI, game playing, theorem proving, search and neural models
+        ↓
+1970s–80s
+Expert systems and knowledge-based approaches become prominent
+        ↓
+1980s–90s
+Machine learning and neural-network research develop further; statistical methods become increasingly important
+        ↓
+1997
+IBM Deep Blue defeats Garry Kasparov in a match under standard match conditions
+        ↓
+2010s
+Large datasets + GPUs + deep learning produce major advances in vision, speech and other tasks
+        ↓
+2016
+AlphaGo&#x27;s success demonstrates the power of combining learning and search in a complex game
+        ↓
+2017 onward
+Transformer architecture becomes an important foundation for modern language and multimodal systems
+        ↓
+2020s
+Large-scale foundation models and generative AI become central areas of AI development</pre></div>
+<h3>Historical source note</h3>
+<p>Dartmouth's official history states that the <strong>1956 Dartmouth Summer Research Project on Artificial Intelligence</strong> was the formative event at which the field was established and that John McCarthy had coined the phrase in the 1955 proposal. <a href="https://ai.dartmouth.edu/our-story" target="_blank" rel="noopener" class="source-marker-ext">🔗 Source Reference</a></p>
+<p>Stanford HAI likewise notes that McCarthy coined the term in 1955 and describes AI as a broad field concerned with intelligent systems. <a href="https://hai.stanford.edu/policy/brief-definitions-of-key-terms-in-ai" target="_blank" rel="noopener" class="source-marker-ext">🔗 Source Reference</a></p>
+<p>IBM's maintained history overview gives a broader historical timeline into modern AI and generative AI. <a href="https://www.ibm.com/think/topics/history-of-artificial-intelligence" target="_blank" rel="noopener" class="source-marker-ext">🔗 Source Reference</a></p>
+<blockquote>
+<p><strong>Important:</strong> Historical dates are included here as orientation. When we make the dedicated history material deeper, we will verify each milestone against primary or institutional sources rather than relying on a simplified timeline.</p>
+</blockquote>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 38: Exam Bridge -->
+  <section id="s-38" data-search-section="Exam Bridge" class="content-section mode-uni">
+    <div class="section-header">
+      <h2>38. Exam Bridge</h2>
+      <button class="bookmark-btn" data-id="s-38" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p><strong>Exam Book target:</strong> <code>EXAM-U1-C01</code></p>
+<p>When the Exam Book is created, this chapter will be compressed into:</p>
+<ul>
+<li>definition of AI,</li>
+<li>scope,</li>
+<li>AI characteristics,</li>
+<li>history timeline,</li>
+<li>AI vs ML vs DL,</li>
+<li>AI applications,</li>
+<li>intelligent-agent diagram,</li>
+<li>likely 2/5/10-mark questions,</li>
+<li>common misconceptions,</li>
+<li>quick revision table.</li>
+</ul>
+<p>Do <strong>not</strong> use the future Exam Book instead of learning this chapter. The Main Book exists to give you understanding first.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 39: Math Bridge -->
+  <section id="s-39" data-search-section="Math Bridge" class="content-section">
+    <div class="section-header">
+      <h2>39. Math Bridge</h2>
+      <button class="bookmark-btn" data-id="s-39" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p><strong>Math Companion links:</strong></p>
+<ul>
+<li><code>MATH-FOUND-01</code> — notation</li>
+<li><code>MATH-LA-01</code> — vectors and data representation</li>
+<li><code>MATH-PROB-01</code> — probability basics</li>
+</ul>
+<p>There is no heavy mathematical derivation required for this chapter.</p>
+<p>The goal is to recognize where mathematics enters later.</p>
+<hr />
+    </div>
+  </section>
+
+  <!-- SECTION 40: Next Concept -->
+  <section id="s-40" data-search-section="Next Concept" class="content-section">
+    <div class="section-header">
+      <h2>40. Next Concept</h2>
+      <button class="bookmark-btn" data-id="s-40" title="Bookmark this section" aria-label="Bookmark section">📌</button>
+    </div>
+    <div class="section-body">
+      <p>You now have the answer to:</p>
+<blockquote>
+<p><strong>What is AI?</strong></p>
+</blockquote>
+<p>The natural next question is:</p>
+<blockquote>
+<p><strong>If an AI system has to act intelligently, how do we model the system that is doing the acting?</strong></p>
+</blockquote>
+<p>That brings us to:</p>
+<h1><code>MAIN-U1-C02 — Intelligent Agents</code></h1>
+<p>There we will go much deeper into:</p>
+<p><strong>agent → environment → sensors → percepts → effectors → actions → goals → performance measures → rationality → PEAS → environment properties → agent types.</strong></p>
+<hr />
+<h1>Chapter Exit Test</h1>
+<p>Do not move forward until you can answer these in your own words:</p>
+<h3>Concept</h3>
+<blockquote>
+<p><strong>What is AI?</strong></p>
+</blockquote>
+<h3>Distinction</h3>
+<blockquote>
+<p><strong>Why is AI not the same thing as ML?</strong></p>
+</blockquote>
+<h3>Structure</h3>
+<blockquote>
+<p><strong>Where does Deep Learning fit?</strong></p>
+</blockquote>
+<h3>Agent</h3>
+<blockquote>
+<p><strong>What connects an intelligent agent to an environment?</strong></p>
+</blockquote>
+<h3>Scope</h3>
+<blockquote>
+<p><strong>Why do search, robotics, NLP, expert systems and vision all belong to AI?</strong></p>
+</blockquote>
+<h3>Reasoning</h3>
+<blockquote>
+<p><strong>Can an AI system exist without machine learning? Give an example.</strong></p>
+</blockquote>
+<h3>Teaching test</h3>
+<p>Explain AI to a friend who knows programming but has never studied AI — <strong>without using the words "machine learning" until the final part of your explanation.</strong></p>
+<p>If you can do that clearly, the foundation is working.</p>
+<hr />
+<h2>Source &amp; attribution notes</h2>
+<p><strong>University course source:</strong> Faculty of Technology, University of Delhi, DSC-14 Artificial Intelligence and Machine Learning syllabus (<code>sem5core.pdf</code> / <code>cse syllabus.pdf</code>), Unit I, p. 7.  </p>
+<p><strong>Supplied course lecture:</strong> Philipp Koehn, <em>Artificial Intelligence: Intelligent Agents</em>, 5 February 2026 (<code>lecture-intelligent-agents.pdf</code>). The supplied lecture defines an intelligent agent through perception and rational action and includes agent/environment, vacuum-world and self-driving examples.  </p>
+<p><strong>Supplied search lecture:</strong> Philipp Koehn, <em>Artificial Intelligence: Basic Search</em>, 11 February 2025 (<code>lecture-basic-search.pdf</code>). It frames problem-solving agents as goal formulation, problem formulation and search for a solution.  </p>
+<p><strong>Supplied game lecture:</strong> Philipp Koehn, <em>Artificial Intelligence: Game Playing</em>, 17 February 2026 (<code>lecture-game-playing.pdf</code>). It covers games, minimax, alpha-beta pruning, resource limits, chance and imperfect information.  </p>
+<p><strong>External historical reference:</strong> Dartmouth, <em>Our Story — Where AI was Born</em>.  </p>
+<p><strong>External terminology reference:</strong> Stanford HAI, <em>Brief Definitions of Key Terms in AI</em>.  </p>
+<p><strong>External historical overview:</strong> IBM, <em>The History of Artificial Intelligence</em>.</p>
+<hr />
+<blockquote>
+<p><strong>Mastery standard for this chapter:</strong> You are not finished when you can repeat the definition. You are finished when you can explain the idea, draw the agent/AI relationship, distinguish AI from ML/DL, give examples, answer the practice questions, and connect this chapter naturally to search and agents.</p>
+</blockquote>
+    </div>
+  </section>
+
+  <!-- PREV / NEXT NAVIGATION -->
+  <div class="prev-next" style="margin-top: var(--em-space-10);">
+    <a href="../index.html" class="nav-btn">← Portal Home</a>
+    <a href="ch02-intelligent-agents.html" class="nav-btn primary">Next: Ch 2 — Intelligent Agents →</a>
+  </div>
+
+</div>
+</main>
+
+<!-- FLOATING MODE PANEL -->
+<div id="mode-panel">
+  <button class="mode-btn active" data-mode="all">📚 All Content</button>
+  <button class="mode-btn uni-btn" data-mode="uni">🎓 Uni Exam</button>
+  <button class="mode-btn gate-btn" data-mode="gate">⚡ High Yield</button>
+  <button class="mode-btn adv-btn" data-mode="advanced">🔬 Advanced</button>
+</div>
+
+<!-- TTS FLOATING PANEL -->
+<div id="tts-panel">
+  <div class="tts-controls">
+    <button class="tts-btn" id="tts-play" title="Play/Pause">▶</button>
+    <button class="tts-btn" id="tts-stop" title="Stop">⏹</button>
+    <div class="tts-speed"><span>Speed</span><input type="range" id="tts-rate" min="0.5" max="2" step="0.1" value="1"><span id="tts-rate-label">1.0x</span></div>
+  </div>
+  <div class="tts-voice"><select id="tts-voice-select"><option>Loading voices…</option></select></div>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal">
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search chapters, concepts, formulas, agent types, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="ch01-what-is-ai.html" class="mobile-nav-btn active"><span class="icon">📖</span>Ch 1</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>
