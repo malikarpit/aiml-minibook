@@ -3,8 +3,8 @@
  * Network-First for Navigation (always fresh HTML) + Cache-First for static assets
  */
 
-const CACHE_NAME    = 'aiml-minibook-v5';
-const RUNTIME_CACHE = 'aiml-minibook-runtime-v5';
+const CACHE_NAME    = 'aiml-minibook-v6';
+const RUNTIME_CACHE = 'aiml-minibook-runtime-v6';
 const ASSETS = [
   './',
   './index.html',
@@ -35,6 +35,10 @@ const ASSETS = [
   './math/m19-partial-derivatives.html',
   './math/m20-chain-rule-computational-graphs.html',
   './math/m21-gradients-and-jacobians.html',
+  './math/m22-optimization-gradient-descent.html',
+  './math/m23-sgd-mini-batches.html',
+  './math/m24-l1-l2-regularization.html',
+  './math/math-99-master-compendium.html',
   './assets/js/quiz-data.js',
   './assets/css/main.css',
   './assets/css/components.css',

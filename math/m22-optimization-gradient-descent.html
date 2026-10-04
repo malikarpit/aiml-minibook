@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="MATH-M22: Optimization, Loss & Gradient Descent — Math Companion for AI & Machine Learning. Objective Formulation, Convex Landscapes, Local vs Global Minima, Gradient Update Step, and Step-Size Dynamics">
+<title>MATH-M22: Optimization, Loss & Gradient Descent | Math Companion 📐 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/math.css">
+</head>
+<body class="math-module track-4">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">📐</div>
+      <div class="brand-text"><span class="main">Math Companion</span><span class="sub">AI &amp; ML Deep Layer</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">MATH-M22: Optimization, Loss &amp; Gradient Descent</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Foundations & Functions</div>
+  <a href="m01-mathematical-notation.html" class="sidebar-link"><span class="link-icon">📐</span>M01: Mathematical Notation, Symbols &amp; Summation</a>
+  <a href="m02-algebra-foundations.html" class="sidebar-link"><span class="link-icon">📐</span>M02: Algebra Foundations for AI/ML</a>
+  <a href="m03-functions-graphs-logs.html" class="sidebar-link"><span class="link-icon">📐</span>M03: Functions, Graphs, Exponents &amp; Logarithms</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Linear Algebra & Vectors</div>
+  <a href="m04-vectors-and-components.html" class="sidebar-link"><span class="link-icon">⚡</span>M04: Vectors &amp; Components</a>
+  <a href="m05-norms-and-distance.html" class="sidebar-link"><span class="link-icon">⚡</span>M05: Norms, Distance &amp; Geometric Intuition</a>
+  <a href="m06-dot-product-and-orthogonality.html" class="sidebar-link"><span class="link-icon">⚡</span>M06: Dot Product, Inner Product &amp; Orthogonality</a>
+  <a href="m07-matrices-and-indexing.html" class="sidebar-link"><span class="link-icon">⚡</span>M07: Matrices, Dimensions &amp; Indexing</a>
+  <a href="m08-matrix-multiplication-transforms.html" class="sidebar-link"><span class="link-icon">⚡</span>M08: Matrix Multiplication &amp; Linear Transformations</a>
+  <a href="m09-linear-systems-least-squares.html" class="sidebar-link"><span class="link-icon">⚡</span>M09: Linear Systems, Inverses &amp; Least Squares</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Probability & Statistics</div>
+  <a href="m10-probability-foundations.html" class="sidebar-link"><span class="link-icon">🎲</span>M10: Probability Foundations</a>
+  <a href="m11-conditional-prob-bayes.html" class="sidebar-link"><span class="link-icon">🎲</span>M11: Conditional Probability, Bayes &amp; Total Probability</a>
+  <a href="m12-independence.html" class="sidebar-link"><span class="link-icon">🎲</span>M12: Independence &amp; Conditional Independence</a>
+  <a href="m13-random-variables-pmf-pdf-cdf.html" class="sidebar-link"><span class="link-icon">🎲</span>M13: Random Variables, PMF, PDF &amp; CDF</a>
+  <a href="m14-joint-marginal-conditional.html" class="sidebar-link"><span class="link-icon">🎲</span>M14: Joint, Marginal &amp; Conditional Distributions</a>
+  <a href="m15-expectation-expected-value.html" class="sidebar-link"><span class="link-icon">🎲</span>M15: Expectation &amp; Expected Value</a>
+  <a href="m16-variance-standard-deviation.html" class="sidebar-link"><span class="link-icon">🎲</span>M16: Variance &amp; Standard Deviation</a>
+  <a href="m17-covariance-and-correlation.html" class="sidebar-link"><span class="link-icon">🎲</span>M17: Covariance, Correlation &amp; Statistical Relationships</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Calculus & Optimization</div>
+  <a href="m18-derivatives-rates-of-change.html" class="sidebar-link"><span class="link-icon">📈</span>M18: Derivatives &amp; Rates of Change</a>
+  <a href="m19-partial-derivatives.html" class="sidebar-link"><span class="link-icon">📈</span>M19: Partial Derivatives &amp; Multivariable Functions</a>
+  <a href="m20-chain-rule-computational-graphs.html" class="sidebar-link"><span class="link-icon">📈</span>M20: Chain Rule &amp; Computational Graphs</a>
+  <a href="m21-gradients-and-jacobians.html" class="sidebar-link"><span class="link-icon">📈</span>M21: Gradients, Jacobians &amp; Direction of Change</a>
+  <a href="m22-optimization-gradient-descent.html" class="sidebar-link active"><span class="link-icon">📈</span>M22: Optimization, Loss &amp; Gradient Descent</a>
+  <a href="m23-sgd-mini-batches.html" class="sidebar-link"><span class="link-icon">📈</span>M23: SGD, Mini-Batches &amp; Optimization Behaviour</a>
+  <a href="m24-l1-l2-regularization.html" class="sidebar-link"><span class="link-icon">📈</span>M24: L1/L2 Norms, Regularization Geometry &amp; Sparsity</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Master Compendium</div>
+  <a href="math-99-master-compendium.html" class="sidebar-link"><span class="link-icon">📜</span>MATH-99: Master Formula Map &amp; AI/ML Mathematics Revision</a>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">MATH-M22 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why Optimization Exists</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Loss and Objective</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Optimization Landscape</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Local vs Global Minimum</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Gradient as a Descent Signal</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. One-Dimensional Derivation</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Multivariable Derivation</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Coordinate Update</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Worked Example</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Learning Rate</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Feature Scaling and Optimization</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Least Squares Connection</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Why Gradient Descent Matters</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Stopping Conditions</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Gradient Descent vs Hill Climbing</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Hinglish Teacher Explanation</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Formula Cards</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Numerical Protocol</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Common Traps</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Active Recall</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Practice</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Exam Triggers</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Mastery Gate</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Dependencies &amp; Course Connections</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Math Companion</a>
+        <span>/</span>
+        <span>MATH-M22</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-4">Track 4: Calculus & Optimization</span></div>
+      <h1 class="chapter-title">Optimization, Loss &amp; Gradient Descent</h1>
+      <p class="chapter-desc">Objective Formulation, Convex Landscapes, Local vs Global Minima, Gradient Update Step, and Step-Size Dynamics</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~35 min read</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">MATH-INT</span> <span class="chapter-meta-item uni-badge">MATH-CALC</span> <span class="chapter-meta-item uni-badge">MATH-OPT</span> <span class="chapter-meta-item uni-badge">MATH-GEO</span>
+      </div>
+
+      <div class="math-meta-grid">
+        <div class="math-meta-box">
+          <div class="math-meta-label">Prerequisites</div>
+          <div class="math-meta-value">M21 Gradients & Jacobians, M09 Linear Systems</div>
+        </div>
+        <div class="math-meta-box">
+          <div class="math-meta-label">Feeds Directly Into</div>
+          <div class="math-meta-value">M23 SGD & Mini-Batches, M24 Regularization, Ch 18–19 Linear Regression, Ch 34 Neural Optimization</div>
+        </div>
+        <div class="math-meta-box" style="grid-column: 1 / -1;">
+          <div class="math-meta-label">AI / Machine Learning Connections</div>
+          <div class="math-meta-value">Weight updates w ← w - η∇J(w), Learning rate selection, Stationary points ∇J(w)=0, Convex MSE bowls</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="math-preamble-card"><h1>MATH-M22 --- Optimization, Loss Functions &amp; Gradient Descent</h1>
+<blockquote>
+<p><strong>Depth:</strong> <code>MATH-INT</code> <code>MATH-CALC</code> <code>MATH-DERIVE</code> <code>MATH-NUM</code> <code>MATH-OPT</code>
+<code>MATH-GEO</code>\
+<strong>Prerequisite:</strong> M21 --- Gradients, Jacobians &amp; Direction of Change;
+M09 --- Linear Systems, Inverses &amp; Least Squares\
+<strong>Next:</strong> M23 --- SGD, Mini-Batches &amp; Optimization Behaviour; M24 ---
+L1/L2 Regularization</p>
+</blockquote>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in MATH-M22 (24 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why Optimization Exists</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Loss and Objective</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Optimization Landscape</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Local vs Global Minimum</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Gradient as a Descent Signal</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">One-Dimensional Derivation</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Multivariable Derivation</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Coordinate Update</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Worked Example</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Learning Rate</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Feature Scaling and Optimization</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Least Squares Connection</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Why Gradient Descent Matters</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Stopping Conditions</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Gradient Descent vs Hill Climbing</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Hinglish Teacher Explanation</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Formula Cards</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Numerical Protocol</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Common Traps</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Active Recall</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Practice</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Exam Triggers</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Dependencies &amp; Course Connections</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">Why Optimization Exists</h2>
+      </div>
+      <div class="section-body">
+        <p>Machine learning ultimately needs good parameter values.</p>
+<p>Let a model be:</p>
+<div class="formula-math">\[ \hat y=f_{\mathbf w}(x) \]</div>
+<p>and let its training objective be:</p>
+<div class="formula-math">\[ \boxed{\min_{\mathbf w}J(\mathbf w)} \]</div>
+<p>The pipeline is:</p>
+<pre><code class="language-text">parameters → predictions → loss → gradient → parameter update → repeat
+</code></pre>
+<p>The supplied course material explicitly formulates supervised learning
+as minimizing average squared error and presents least squares as an
+optimization problem.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">Loss and Objective</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Mental Model</div>
+
+Optimization ka basic matlab hai: "Model ke parameters ko aisi direction mein twist karna jisse error (loss) sabse kam ho jaye."
+Agar tum ek andheri pahadi par ho aur niche ghaati tak pahunchna hai, toh sabse simple tariqa kya hai?
+Apne pairon ke niche ki dhalan (slope) check karo. Jis taraf dhalan sabse tezi se niche ja rahi ho (`-\nabla J`), usi direction mein ek chhota kadam (`\eta`) badhao.
+Yehi **Gradient Descent** hai!
+Lekin step size $\eta$ par dhyan dena zaroori hai:
+- $\eta$ bohot chhota hua $\to$ subah ho jayegi pahadi par (slow convergence).
+- $\eta$ bohot bada hua $\to$ samne wali pahadi par jump karke gir jaoge (divergence / oscillation)!
+
+</div>
+
+<p>For one example:</p>
+<div class="formula-math">\[ L_i(\mathbf w) \]</div>
+<p>is its loss.</p>
+<p>For (n) examples, the empirical average objective is:</p>
+<div class="formula-math">\[ \boxed{
+J(\mathbf w)=\frac1n\sum_{i=1}^{n}L_i(\mathbf w)
+} \]</div>
+<p>For squared error:</p>
+<div class="formula-math">\[ \boxed{
+J(\mathbf w)=
+\frac1n\sum_{i=1}^{n}
+(f_{\mathbf w}(\mathbf x_i)-y_i)^2
+} \]</div>
+<h3>Argmin</h3>
+<div class="formula-math">\[ \boxed{\arg\min_{\mathbf w}J(\mathbf w)} \]</div>
+<p>returns the parameter value(s) achieving the minimum.</p>
+<p>Example:</p>
+<div class="formula-math">\[ J(w)=(w-3)^2 \]</div>
+<p>gives:</p>
+<div class="formula-math">\[
+\arg\min_wJ(w)=3,\qquad \min_wJ(w)=0.
+\]</div>
+<p><strong>Trap:</strong> <code>argmin</code> is a parameter/value of the variable; <code>min</code> is the
+minimum objective value.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">Optimization Landscape</h2>
+      </div>
+      <div class="section-body">
+        <p>For one parameter:</p>
+<pre><code class="language-text">Loss
+ ↑
+ |       \       /
+ |        \_____/
+ |           *
+ +----------------→ w
+</code></pre>
+<p>At a smooth interior stationary point:</p>
+<div class="formula-math">\[ \boxed{J'(w^*)=0} \]</div>
+<p>For multiple parameters:</p>
+<div class="formula-math">\[ \boxed{\nabla J(\mathbf w^*)=\mathbf0} \]</div>
+<p>But zero gradient does <strong>not</strong> prove a global minimum.</p>
+<p>A stationary point can be a:</p>
+<ul>
+<li>local minimum,</li>
+<li>local maximum,</li>
+<li>saddle point,</li>
+<li>flat stationary point.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Local vs Global Minimum</h2>
+      </div>
+      <div class="section-body">
+        <p>A <strong>local minimum</strong> is no larger than sufficiently nearby values.</p>
+<p>A <strong>global minimum</strong> is no larger than every feasible value.</p>
+<p>This distinction matters especially for non-convex objectives.</p>
+<h3>Convex intuition</h3>
+<pre><code class="language-text">       \     /
+        \___/
+          *
+</code></pre>
+<h3>Non-convex intuition</h3>
+<pre><code class="language-text">   \_/ \____/ \_/
+      *      *
+</code></pre>
+<p>For a differentiable convex objective in the standard unconstrained
+setting, every local minimum is global.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Gradient as a Descent Signal</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph TD
+    A["Loss Landscape: J(w1, w2)"] --> B["Compute Gradient: ∇J(w_t)"]
+    B --> C["Scale by Learning Rate: η · ∇J(w_t)"]
+    C --> D["Descent Update: w_{t+1} = w_t - η · ∇J(w_t)"]
+    D --> E{"Convergence Check: ||∇J(w)|| < ε?"}
+    E -- No --> B
+    E -- Yes --> F["Optimal Weights w* at Minimum"]
+    style B fill:#1e293b,stroke:#a78bfa,color:#f8fafc
+    style D fill:#0f172a,stroke:#38bdf8,color:#38bdf8,stroke-width:2px
+    style F fill:#065f46,stroke:#34d399,color:#ffffff
+</pre></div>
+<p>From M21:</p>
+<div class="formula-math">\[ \nabla J(\mathbf w) \]</div>
+<p>points toward steepest local increase.</p>
+<p>Therefore:</p>
+<div class="formula-math">\[ \boxed{-\nabla J(\mathbf w)} \]</div>
+<p>points toward steepest local decrease.</p>
+<p>The basic gradient-descent update is:</p>
+<div class="formula-math">\[ \boxed{
+\mathbf w_{t+1}
+=
+\mathbf w_t-\eta\nabla J(\mathbf w_t)
+} \]</div>
+<p>where:</p>
+<div class="formula-math">\[ \eta\\gt 0 \]</div>
+<p>is the learning rate.</p>
+<h3>Meaning</h3>
+<pre><code class="language-text">gradient
+→ direction + local sensitivity
+
+η
+→ how far to move
+
+−gradient
+→ descent direction
+</code></pre>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">One-Dimensional Derivation</h2>
+      </div>
+      <div class="section-body">
+        <p>For:</p>
+<div class="formula-math">\[ J(w), \]</div>
+<p>the first-order approximation from M18 is:</p>
+<div class="formula-math">\[ J(w+\Delta w) \approx J(w)+J'(w)\Delta w. \]</div>
+<p>Choose:</p>
+<div class="formula-math">\[ \Delta w=-\eta J'(w). \]</div>
+<p>Then:</p>
+<div class="formula-math">\[ J(w-\eta J'(w)) \approx J(w)-\eta[J'(w)]^2.
+\]</div>
+<p>For (\eta&gt;0), the first-order predicted change is non-positive.</p>
+<p>Thus:</p>
+<div class="formula-math">\[ \boxed{
+w_{\text{new}}=w-\eta J'(w)
+} \]</div>
+<p>is locally sensible for minimization.</p>
+<p>This is a <strong>local first-order argument</strong>, not a guarantee that every
+finite step lowers the objective.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Multivariable Derivation</h2>
+      </div>
+      <div class="section-body">
+        <p>From M21:</p>
+<div class="formula-math">\[ J(\mathbf w+\Delta\mathbf w) \approx
+J(\mathbf w)+
+\nabla J(\mathbf w)^\top\Delta\mathbf w.
+\]</div>
+<p>Choose:</p>
+<div class="formula-math">\[
+\Delta\mathbf w=-\eta\nabla J(\mathbf w).
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[ J(\mathbf w+\Delta\mathbf w) \approx
+J(\mathbf w) -\eta
+\|\nabla J(\mathbf w)\|_2^2. \]</div>
+<p>Therefore the first-order predicted change is:</p>
+<div class="formula-math">\[ \boxed{
+-\eta\|\nabla J\|_2^2\le0.
+} \]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">Coordinate Update</h2>
+      </div>
+      <div class="section-body">
+        <p>If:</p>
+<div class="formula-math">\[ \mathbf w= \[w_1,\ldots,w_d\]</div>
+<p>\^\top, ]</p>
+<p>then:</p>
+<div class="formula-math">\[ \boxed{
+w_{j,t+1}
+=
+w_{j,t}
+-
+\eta
+\frac{\partial J}{\partial w_j}
+} \]</div>
+<p>for each parameter.</p>
+<p>This makes the connection between partial derivatives and learning
+explicit.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Worked Example</h2>
+      </div>
+      <div class="section-body">
+        <p>Let:</p>
+<div class="formula-math">\[ J(w)=(w-4)^2. \]</div>
+<p>Then:</p>
+<div class="formula-math">\[ J'(w)=2(w-4). \]</div>
+<p>Take:</p>
+<div class="formula-math">\[ \eta=0.25,\qquad w_0=0. \]</div>
+<h3>Step 1</h3>
+<div class="formula-math">\[ J'(0)=-8 \]</div>
+<div class="formula-math">\[ w_1=0-0.25(-8)=2 \]</div>
+<h3>Step 2</h3>
+<div class="formula-math">\[ J'(2)=-4 \]</div>
+<div class="formula-math">\[ w_2=2-0.25(-4)=3 \]</div>
+<h3>Step 3</h3>
+<div class="formula-math">\[ J'(3)=-2 \]</div>
+<div class="formula-math">\[ w_3=3-0.25(-2)=3.5 \]</div>
+<p>So:</p>
+<div class="formula-math">\[
+0\rightarrow2\rightarrow3\rightarrow3.5\rightarrow\cdots
+\]</div>
+<p>approaches:</p>
+<div class="formula-math">\[ \boxed{w^*=4}. \]</div>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+# 1. Quadratic Loss Landscape: J(w1, w2) = 0.5 * (w1^2 + 4 * w2^2)
+def loss(w):
+    return 0.5 * (w[0]**2 + 4.0 * w[1]**2)
+
+def grad(w):
+    return np.array([w[0], 4.0 * w[1]])
+
+# 2. Gradient Descent Simulation
+w = np.array([4.0, 3.0])  # Initial point
+lr = 0.2                  # Learning rate eta
+trajectory = [w.copy()]
+
+for step in range(25):
+    g = grad(w)
+    w = w - lr * g
+    trajectory.append(w.copy())
+    if np.linalg.norm(g) &lt; 1e-4:
+        break
+
+print(f&quot;Initial weights: [4.0, 3.0], Initial loss: {loss(np.array([4.0, 3.0])):.4f}&quot;)
+print(f&quot;Converged weights after {step+1} steps: {np.round(w, 5)}&quot;)
+print(f&quot;Final loss at minimum: {loss(w):.6e}&quot;)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Learning Rate</h2>
+      </div>
+      <div class="section-body">
+        <p>The learning rate controls step size.</p>
+<h3>Too small</h3>
+<pre><code class="language-text">tiny steps
+→ slow convergence
+</code></pre>
+<h3>Reasonable</h3>
+<pre><code class="language-text">progressive movement
+→ efficient convergence
+</code></pre>
+<h3>Too large</h3>
+<pre><code class="language-text">overshoot
+→ oscillation
+→ possible divergence
+</code></pre>
+<p>For:</p>
+<div class="formula-math">\[ J(w)=w^2, \]</div>
+<p>gradient descent gives:</p>
+<div class="formula-math">\[ w_{t+1} = w_t-2\eta w_t = (1-2\eta)w_t. \]</div>
+<p>For this particular quadratic, convergence requires:</p>
+<div class="formula-math">\[ \|1-2\eta\|\\lt 1 \]</div>
+<p>so:</p>
+<div class="formula-math">\[ \boxed{0\lt \eta\lt 1}. \]</div>
+<p>This is an example-specific result, not a universal learning-rate rule.</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+# 1. Quadratic Loss Landscape: J(w1, w2) = 0.5 * (w1^2 + 4 * w2^2)
+def loss(w):
+    return 0.5 * (w[0]**2 + 4.0 * w[1]**2)
+
+def grad(w):
+    return np.array([w[0], 4.0 * w[1]])
+
+# 2. Gradient Descent Simulation
+w = np.array([4.0, 3.0])  # Initial point
+lr = 0.2                  # Learning rate eta
+trajectory = [w.copy()]
+
+for step in range(25):
+    g = grad(w)
+    w = w - lr * g
+    trajectory.append(w.copy())
+    if np.linalg.norm(g) &lt; 1e-4:
+        break
+
+print(f&quot;Initial weights: [4.0, 3.0], Initial loss: {loss(np.array([4.0, 3.0])):.4f}&quot;)
+print(f&quot;Converged weights after {step+1} steps: {np.round(w, 5)}&quot;)
+print(f&quot;Final loss at minimum: {loss(w):.6e}&quot;)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Feature Scaling and Optimization</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Exam Trap & Common Misconception</div>
+
+**Stationary Point Ambiguity Trap:** When you set the gradient $\nabla J(w) = 0$, you have found a *stationary point*—NOT necessarily a minimum! In multivariable calculus:
+- If Hessian $H = \nabla^2 J(w)$ is positive definite ($H \succ 0$), it is a **local minimum**.
+- If $H$ is negative definite ($H \prec 0$), it is a **local maximum**.
+- If $H$ has both positive and negative eigenvalues, it is a **saddle point**!
+Always check the second derivative matrix (Hessian) or convexity condition in written university proofs!
+
+</div>
+
+<p>The supplied Lecture09 explicitly states that feature scaling can
+improve gradient-descent convergence speed and stability.</p>
+<p>If one feature is around (0!-!1) and another around (0!-!1{,}000{,}000),
+the optimization geometry can become badly stretched.</p>
+<p>Conceptually:</p>
+<pre><code class="language-text">poor scaling       better scaling
+
+  ______              ___
+ /      \            /   \
+|        |          |     |
+ \______/            \___/
+</code></pre>
+<p>Gradient-based methods may then take inefficient zig-zag paths.</p>
+<h3>Standardization</h3>
+<p>The supplied lecture gives:</p>
+<div class="formula-math">\[ \boxed{
+x_j\leftarrow\frac{x_j-\mu_j}{\sigma_j}
+} \]</div>
+<p>producing zero mean and unit variance under the stated convention.</p>
+<h3>Min-max scaling</h3>
+<div class="formula-math">\[ \boxed{
+x_j\leftarrow
+\frac{x_j-\min(x_j)}
+{\max(x_j)-\min(x_j)}
+} \]</div>
+<p>maps values to (</p>
+<div class="formula-math">\[0,1\]</div>
+<p>) when the denominator is nonzero.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Least Squares Connection</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Exam Trap & Common Misconception</div>
+
+**Stationary Point Ambiguity Trap:** When you set the gradient $\nabla J(w) = 0$, you have found a *stationary point*—NOT necessarily a minimum! In multivariable calculus:
+- If Hessian $H = \nabla^2 J(w)$ is positive definite ($H \succ 0$), it is a **local minimum**.
+- If $H$ is negative definite ($H \prec 0$), it is a **local maximum**.
+- If $H$ has both positive and negative eigenvalues, it is a **saddle point**!
+Always check the second derivative matrix (Hessian) or convexity condition in written university proofs!
+
+</div>
+
+<p>For linear regression:</p>
+<div class="formula-math">\[ \hat y_i=\mathbf x_i^\top\mathbf w
+\]</div>
+<p>and residual:</p>
+<div class="formula-math">\[ \mathbf x_i^\top\mathbf w-y_i. \]</div>
+<p>The supplied Lecture09 gives:</p>
+<div class="formula-math">\[ \boxed{
+\sum_{i=1}^{n}
+(\mathbf x_i^\top\mathbf w-y_i)^2
+=
+\|\mathbf X\mathbf w-\mathbf y\|_2^2
+} \]</div>
+<p>and therefore:</p>
+<div class="formula-math">\[ \boxed{
+\min_{\mathbf w}
+\|\mathbf X\mathbf w-\mathbf y\|_2^2.
+} \]</div>
+<p>If:</p>
+<div class="formula-math">\[ \mathbf X^\top\mathbf X \]</div>
+<p>is invertible, the same lecture gives the closed-form solution:</p>
+<div class="formula-math">\[ \boxed{
+\mathbf w^*
+=
+(\mathbf X^\top\mathbf X)^{-1}
+\mathbf X^\top\mathbf y.
+} \]</div>
+<p>So:</p>
+<pre><code class="language-text">closed form
+→ solve directly
+
+gradient descent
+→ iteratively approach solution
+</code></pre>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Why Gradient Descent Matters</h2>
+      </div>
+      <div class="section-body">
+        <p>Gradient descent is useful when:</p>
+<ul>
+<li>the objective is differentiable,</li>
+<li>parameters are numerous,</li>
+<li>a closed-form solution is unavailable or inconvenient,</li>
+<li>the model is a composition of many operations.</li>
+</ul>
+<p>For neural networks, M20's computational-graph chain rule provides the
+derivatives needed to calculate:</p>
+<div class="formula-math">\[ \nabla J. \]</div>
+<p>The supplied Lecture09 also describes gradient descent as a backbone of
+many deep-learning algorithms.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Stopping Conditions</h2>
+      </div>
+      <div class="section-body">
+        <p>Possible conditions:</p>
+<div class="formula-math">\[ \boxed{
+\|\nabla J(\mathbf w)\|\lt \epsilon
+} \]</div>
+<p>or:</p>
+<div class="formula-math">\[ \boxed{
+\|\mathbf w_{t+1}-\mathbf w_t\|\lt \epsilon
+} \]</div>
+<p>or:</p>
+<div class="formula-math">\[ \boxed{
+|J_{t+1}-J_t|\lt \epsilon.
+} \]</div>
+<p>Another practical limit is a maximum number of iterations.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">Gradient Descent vs Hill Climbing</h2>
+      </div>
+      <div class="section-body">
+        <p>The supplied AI search lecture describes hill climbing as iterative
+improvement: start from a current state, inspect neighbouring states,
+and move to a better state; it also lists gradient ascent/descent as a
+form of iterative improvement.</p>
+<p>The mathematical distinction is:</p>
+<pre><code class="language-text">generic hill climbing
+→ neighbourhood-based improvement
+
+gradient descent
+→ differentiable continuous objective
+→ gradient gives local descent direction
+</code></pre>
+<p>They share an iterative-improvement idea but are not identical
+algorithms.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">Hinglish Teacher Explanation</h2>
+      </div>
+      <div class="section-body">
+        <p>Optimization ka simple meaning:</p>
+<blockquote>
+<p>"Aise parameters dhoondo jahan model ka loss minimum ho."</p>
+</blockquote>
+<p>Agar:</p>
+<div class="formula-math">\[ L(w) \]</div>
+<p>loss hai, derivative:</p>
+<div class="formula-math">\[ L'(w) \]</div>
+<p>batata hai ki abhi loss kis direction mein badh raha hai.</p>
+<p>Isliye loss kam karne ke liye:</p>
+<div class="formula-math">\[ w_{\text{new}} = w-\eta L'(w). \]</div>
+<p>Multiple parameters mein:</p>
+<div class="formula-math">\[ \mathbf w_{\text{new}} =
+\mathbf w-\eta\nabla L. \]</div>
+<p>Yaad rakho:</p>
+<pre><code class="language-text">gradient
+→ direction
+
+learning rate
+→ step size
+</code></pre>
+<p>(\eta) bahut chhota hua toh training slow ho sakti hai. Bahut
+bada hua toh minimum ko repeatedly cross karke unstable behaviour ho
+sakta hai.</p>
+<p>Feature scaling bhi important hai because supplied lecture ke according
+scaling convergence speed aur stability improve kar sakti hai.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">Formula Cards</h2>
+      </div>
+      <div class="section-body">
+        <h3>F-M22-01 --- Objective</h3>
+<div class="formula-math">\[ \boxed{\min_{\mathbf w}J(\mathbf w)} \]</div>
+<h3>F-M22-02 --- Argmin</h3>
+<div class="formula-math">\[ \boxed{\arg\min_{\mathbf w}J(\mathbf w)} \]</div>
+<h3>F-M22-03 --- Gradient Descent</h3>
+<div class="formula-math">\[ \boxed{
+\mathbf w_{t+1}
+=
+\mathbf w_t-\eta\nabla J(\mathbf w_t)
+} \]</div>
+<h3>F-M22-04 --- Coordinate Update</h3>
+<div class="formula-math">\[ \boxed{
+w_{j,t+1}
+=
+w_{j,t}
+-\eta\frac{\partial J}{\partial w_j}
+} \]</div>
+<h3>F-M22-05 --- Local Approximation</h3>
+<div class="formula-math">\[ \boxed{
+J(\mathbf w+\Delta\mathbf w)
+\approx
+J(\mathbf w)+
+\nabla J^\top\Delta\mathbf w
+} \]</div>
+<h3>F-M22-06 --- Least Squares</h3>
+<div class="formula-math">\[ \boxed{
+\min_{\mathbf w}\|\mathbf X\mathbf w-\mathbf y\|_2^2
+} \]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Numerical Protocol</h2>
+      </div>
+      <div class="section-body">
+        <pre><code class="language-text">1. Write J(w)
+2. Calculate ∇J(w)
+3. Write η
+4. Write initial parameters
+5. Evaluate gradient
+6. Apply w_new = w − η∇J
+7. Repeat
+8. Track J if requested
+</code></pre>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">Common Traps</h2>
+      </div>
+      <div class="section-body">
+        <ul>
+<li>Using (+\eta\nabla J) when minimizing.</li>
+<li>Confusing <code>argmin</code> with <code>min</code>.</li>
+<li>Treating learning rate as part of the gradient.</li>
+<li>Assuming zero gradient proves global minimum.</li>
+<li>Assuming a larger learning rate is always faster.</li>
+<li>Ignoring feature scaling.</li>
+<li>Confusing closed-form least squares with iterative gradient descent.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Active Recall</h2>
+      </div>
+      <div class="section-body">
+        <ol>
+<li>What is optimization?</li>
+<li>What is a loss?</li>
+<li>What does <code>argmin</code> return?</li>
+<li>Why is the negative gradient a descent direction?</li>
+<li>Write the GD update.</li>
+<li>What does (\eta) control?</li>
+<li>What happens when (\eta) is too small?</li>
+<li>What can happen when it is too large?</li>
+<li>Why can feature scaling help?</li>
+<li>What is the difference between local and global minimum?</li>
+<li>What is convexity?</li>
+<li>Write the matrix form of least squares.</li>
+<li>What is the difference between closed-form and iterative
+    optimization?</li>
+</ol>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">Practice</h2>
+      </div>
+      <div class="section-body">
+        <h3>P22-01</h3>
+<p>Find the derivative of:</p>
+<div class="formula-math">\[ J(w)=(w-5)^2. \]</div>
+<h3>P22-02</h3>
+<p>Starting with (w_0=0), use (\eta=0.1) for three GD updates.</p>
+<h3>P22-03</h3>
+<p>For:</p>
+<div class="formula-math">\[ J(w_1,w_2)=(w_1-2)^2+(w_2+3)^2, \]</div>
+<p>find (\nabla J).</p>
+<h3>P22-04</h3>
+<p>Starting at ((0,0)) with (\eta=0.25), perform one update.</p>
+<h3>P22-05</h3>
+<p>Explain mathematically why (-\nabla J) is a descent direction.</p>
+<h3>P22-06</h3>
+<p>Explain why feature scaling can affect convergence.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">Exam Triggers</h2>
+      </div>
+      <div class="section-body">
+        <pre><code class="language-text">minimize objective → optimization
+argmin → parameter achieving minimum
+gradient descent → w_new = w − η∇J
+learning rate → step size
+large η → overshoot / instability
+small η → slow progress
+feature scaling → convergence speed/stability
+least squares → ||Xw−y||²
+</code></pre>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <p>You should be able to:</p>
+<pre><code class="language-text">formulate ML training as optimization
+define loss/objective/argmin
+derive gradient descent
+perform numerical updates
+explain learning-rate behaviour
+explain scaling
+connect least squares to optimization
+distinguish closed-form from iterative solutions
+distinguish local from global minima
+</code></pre>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">Dependencies &amp; Course Connections</h2>
+      </div>
+      <div class="section-body">
+        <pre><code class="language-text">M21 Gradient
+      ↓
+M22 Optimization + Gradient Descent
+      ↓
+M23 SGD + Mini-Batch
+      ↓
+M24 L1/L2 Regularization
+</code></pre>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="m21-gradients-and-jacobians.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← M21 — Gradients & Jacobians</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">📐 Math Index</span>
+      </a>
+      <a href="m23-sgd-mini-batches.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: M23 — SGD & Mini-Batches →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search math modules, formulas, proofs, theorems…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">📐</span>Math Hub</a>
+  <a href="m22-optimization-gradient-descent.html" class="mobile-nav-btn active"><span class="icon">📖</span>MATH-M22</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

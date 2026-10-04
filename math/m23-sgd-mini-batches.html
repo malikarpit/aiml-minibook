@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="MATH-M23: SGD, Mini-Batches & Optimization Behaviour — Math Companion for AI & Machine Learning. Full-Batch vs Stochastic Updates, Gradient Noise as Regularizer, Mini-Batch Variance Reduction, and Learning Rate Schedules">
+<title>MATH-M23: SGD, Mini-Batches & Optimization Behaviour | Math Companion 📐 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/math.css">
+</head>
+<body class="math-module track-4">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">📐</div>
+      <div class="brand-text"><span class="main">Math Companion</span><span class="sub">AI &amp; ML Deep Layer</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">MATH-M23: SGD, Mini-Batches &amp; Optimization Behaviour</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Foundations & Functions</div>
+  <a href="m01-mathematical-notation.html" class="sidebar-link"><span class="link-icon">📐</span>M01: Mathematical Notation, Symbols &amp; Summation</a>
+  <a href="m02-algebra-foundations.html" class="sidebar-link"><span class="link-icon">📐</span>M02: Algebra Foundations for AI/ML</a>
+  <a href="m03-functions-graphs-logs.html" class="sidebar-link"><span class="link-icon">📐</span>M03: Functions, Graphs, Exponents &amp; Logarithms</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Linear Algebra & Vectors</div>
+  <a href="m04-vectors-and-components.html" class="sidebar-link"><span class="link-icon">⚡</span>M04: Vectors &amp; Components</a>
+  <a href="m05-norms-and-distance.html" class="sidebar-link"><span class="link-icon">⚡</span>M05: Norms, Distance &amp; Geometric Intuition</a>
+  <a href="m06-dot-product-and-orthogonality.html" class="sidebar-link"><span class="link-icon">⚡</span>M06: Dot Product, Inner Product &amp; Orthogonality</a>
+  <a href="m07-matrices-and-indexing.html" class="sidebar-link"><span class="link-icon">⚡</span>M07: Matrices, Dimensions &amp; Indexing</a>
+  <a href="m08-matrix-multiplication-transforms.html" class="sidebar-link"><span class="link-icon">⚡</span>M08: Matrix Multiplication &amp; Linear Transformations</a>
+  <a href="m09-linear-systems-least-squares.html" class="sidebar-link"><span class="link-icon">⚡</span>M09: Linear Systems, Inverses &amp; Least Squares</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Probability & Statistics</div>
+  <a href="m10-probability-foundations.html" class="sidebar-link"><span class="link-icon">🎲</span>M10: Probability Foundations</a>
+  <a href="m11-conditional-prob-bayes.html" class="sidebar-link"><span class="link-icon">🎲</span>M11: Conditional Probability, Bayes &amp; Total Probability</a>
+  <a href="m12-independence.html" class="sidebar-link"><span class="link-icon">🎲</span>M12: Independence &amp; Conditional Independence</a>
+  <a href="m13-random-variables-pmf-pdf-cdf.html" class="sidebar-link"><span class="link-icon">🎲</span>M13: Random Variables, PMF, PDF &amp; CDF</a>
+  <a href="m14-joint-marginal-conditional.html" class="sidebar-link"><span class="link-icon">🎲</span>M14: Joint, Marginal &amp; Conditional Distributions</a>
+  <a href="m15-expectation-expected-value.html" class="sidebar-link"><span class="link-icon">🎲</span>M15: Expectation &amp; Expected Value</a>
+  <a href="m16-variance-standard-deviation.html" class="sidebar-link"><span class="link-icon">🎲</span>M16: Variance &amp; Standard Deviation</a>
+  <a href="m17-covariance-and-correlation.html" class="sidebar-link"><span class="link-icon">🎲</span>M17: Covariance, Correlation &amp; Statistical Relationships</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Calculus & Optimization</div>
+  <a href="m18-derivatives-rates-of-change.html" class="sidebar-link"><span class="link-icon">📈</span>M18: Derivatives &amp; Rates of Change</a>
+  <a href="m19-partial-derivatives.html" class="sidebar-link"><span class="link-icon">📈</span>M19: Partial Derivatives &amp; Multivariable Functions</a>
+  <a href="m20-chain-rule-computational-graphs.html" class="sidebar-link"><span class="link-icon">📈</span>M20: Chain Rule &amp; Computational Graphs</a>
+  <a href="m21-gradients-and-jacobians.html" class="sidebar-link"><span class="link-icon">📈</span>M21: Gradients, Jacobians &amp; Direction of Change</a>
+  <a href="m22-optimization-gradient-descent.html" class="sidebar-link"><span class="link-icon">📈</span>M22: Optimization, Loss &amp; Gradient Descent</a>
+  <a href="m23-sgd-mini-batches.html" class="sidebar-link active"><span class="link-icon">📈</span>M23: SGD, Mini-Batches &amp; Optimization Behaviour</a>
+  <a href="m24-l1-l2-regularization.html" class="sidebar-link"><span class="link-icon">📈</span>M24: L1/L2 Norms, Regularization Geometry &amp; Sparsity</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Master Compendium</div>
+  <a href="math-99-master-compendium.html" class="sidebar-link"><span class="link-icon">📜</span>MATH-99: Master Formula Map &amp; AI/ML Mathematics Revision</a>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">MATH-M23 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why SGD Exists</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Full-Batch Gradient Descent</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Stochastic Gradient Descent</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Why One Example Can Work</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Unbiased Does Not Mean Identical</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Mini-Batch Gradient Descent</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Three Regimes</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Gradient Noise</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Variance of a Gradient Estimate</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Mini-Batch Noise Reduction</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Numerical Variance Example</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Mini-Batch Example</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Epoch</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Batch Size Trade-Off</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Why Mini-Batches Are a Compromise</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Worked Training Trace</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. SGD Update from (w=0)</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Expected Update at (w=0)</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Why Gradient Noise Exists</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Noise Is Not Automatically Bad</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Learning Rate + Batch Size</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Data Shuffling</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Feature Scaling Connection</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Objective vs Gradient vs Estimate</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Bias vs Variance</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Hinglish Teacher Explanation</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Formula Cards</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Numerical Protocol</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Common Traps</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Active Recall</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Practice</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Exam Triggers</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Mastery Gate</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Dependencies &amp; Course Connections</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Math Companion</a>
+        <span>/</span>
+        <span>MATH-M23</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-4">Track 4: Calculus & Optimization</span></div>
+      <h1 class="chapter-title">SGD, Mini-Batches &amp; Optimization Behaviour</h1>
+      <p class="chapter-desc">Full-Batch vs Stochastic Updates, Gradient Noise as Regularizer, Mini-Batch Variance Reduction, and Learning Rate Schedules</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~35 min read</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">MATH-INT</span> <span class="chapter-meta-item uni-badge">MATH-CALC</span> <span class="chapter-meta-item uni-badge">MATH-NUM</span> <span class="chapter-meta-item uni-badge">MATH-OPT</span>
+      </div>
+
+      <div class="math-meta-grid">
+        <div class="math-meta-box">
+          <div class="math-meta-label">Prerequisites</div>
+          <div class="math-meta-value">M22 Optimization & Gradient Descent, M15 Expectation, M16 Variance</div>
+        </div>
+        <div class="math-meta-box">
+          <div class="math-meta-label">Feeds Directly Into</div>
+          <div class="math-meta-value">M24 Regularization, Ch 34 Neural Optimization, Ch 35 Backpropagation</div>
+        </div>
+        <div class="math-meta-box" style="grid-column: 1 / -1;">
+          <div class="math-meta-label">AI / Machine Learning Connections</div>
+          <div class="math-meta-value">Mini-batch size selection, GPU batch parallelism, Escaping shallow saddle points, Epoch schedules</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="math-preamble-card"><h1>MATH-M23 --- SGD, Mini-Batches &amp; Optimization Behaviour</h1>
+<blockquote>
+<p><strong>Depth:</strong> <code>MATH-INT</code> <code>MATH-CALC</code> <code>MATH-NUM</code> <code>MATH-OPT</code>\
+<strong>Prerequisite:</strong> M22 --- Optimization &amp; Gradient Descent; M15 ---
+Expectation; M16 --- Variance; M21 --- Gradients\
+<strong>Next:</strong> M24 --- L1/L2 Norms, Regularization &amp; Geometry</p>
+<p><strong>Source boundary:</strong> The supplied lectures retrieved here formulate
+training as an average over examples and state that feature scaling
+can improve gradient-descent convergence speed and stability. The
+retrieved excerpts do not provide a complete SGD/mini-batch chapter,
+so the stochastic-optimization mathematics below is an explicit
+foundational extension rather than a claim about exact lecture
+wording.</p>
+</blockquote>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in MATH-M23 (34 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why SGD Exists</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Full-Batch Gradient Descent</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Stochastic Gradient Descent</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Why One Example Can Work</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Unbiased Does Not Mean Identical</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Mini-Batch Gradient Descent</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Three Regimes</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Gradient Noise</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Variance of a Gradient Estimate</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Mini-Batch Noise Reduction</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Numerical Variance Example</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Mini-Batch Example</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Epoch</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Batch Size Trade-Off</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Why Mini-Batches Are a Compromise</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Worked Training Trace</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">SGD Update from (w=0)</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Expected Update at (w=0)</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Why Gradient Noise Exists</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Noise Is Not Automatically Bad</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Learning Rate + Batch Size</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Data Shuffling</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Feature Scaling Connection</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Objective vs Gradient vs Estimate</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Bias vs Variance</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Hinglish Teacher Explanation</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Formula Cards</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Numerical Protocol</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Common Traps</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Active Recall</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Practice</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Exam Triggers</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Dependencies &amp; Course Connections</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">Why SGD Exists</h2>
+      </div>
+      <div class="section-body">
+        <p>Full-batch gradient descent uses every training example for every
+update:</p>
+<div class="formula-math">\[ \boxed{
+\nabla J(\mathbf w)
+=
+\frac1n
+\sum_{i=1}^{n}
+\nabla L_i(\mathbf w)
+} \]</div>
+<p>For a very large dataset, repeatedly processing the entire dataset can
+be expensive.</p>
+<p>So we can estimate the full gradient from:</p>
+<ul>
+<li>one example → SGD,</li>
+<li>a subset → mini-batch GD.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">Full-Batch Gradient Descent</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Mental Model</div>
+
+Socho tum 10 lakh (1,000,000) students ka feedback lekar syllabus revise kar rahe ho:
+1. **Batch GD:** Tum sabhi 10 lakh students ke form bharne ka wait karte ho, sabka average nikalte ho, phir 1 kadam badhate ho. Ye bohot accurate hai lekin har kadam par ghanton lag jayenge!
+2. **Pure SGD:** Tum sadak par chalte hue 1 student ko pakadte ho aur uska feedback lekar turant step le lete ho. Ye bohot fast hai, lekin vo 1 student shayaad unusual ho, isiliye tumhara path kafi hil-dul (noisy zig-zag) karega.
+3. **Mini-Batch GD:** Tum 64 ya 128 students ka ek sample group bulate ho. Unka average kafi stable hota hai (variance $\sigma^2 / B$ ho jata hai), aur GPU matrix multiplication ise superfast process kar leta hai! Production deep learning mein 99.9% yahi use hota hai.
+
+</div>
+
+<p>Given:</p>
+<div class="formula-math">\[ J(\mathbf w) =
+\frac1n\sum_{i=1}^{n}L_i(\mathbf w), \]</div>
+<p>the update is:</p>
+<div class="formula-math">\[ \boxed{
+\mathbf w_{t+1}
+=
+\mathbf w_t
+-
+\eta
+\frac1n
+\sum_{i=1}^{n}
+\nabla L_i(\mathbf w_t).
+} \]</div>
+<p>Conceptually:</p>
+<pre><code class="language-text">all examples
+    ↓
+all gradients
+    ↓
+average
+    ↓
+update
+</code></pre>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">Stochastic Gradient Descent</h2>
+      </div>
+      <div class="section-body">
+        <p>Choose one example (i) randomly and use:</p>
+<div class="formula-math">\[ \nabla L_i(\mathbf w) \]</div>
+<p>as an estimate of the full gradient.</p>
+<p>The update is:</p>
+<div class="formula-math">\[ \boxed{
+\mathbf w_{t+1}
+=
+\mathbf w_t
+-
+\eta\nabla L_i(\mathbf w_t).
+} \]</div>
+<p>Conceptually:</p>
+<pre><code class="language-text">one example
+    ↓
+one gradient estimate
+    ↓
+update
+</code></pre>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Why One Example Can Work</h2>
+      </div>
+      <div class="section-body">
+        <p>If (i) is selected uniformly:</p>
+<div class="formula-math">\[ P(i)=\frac1n. \]</div>
+<p>Then:</p>
+<div class="formula-math">\[ E_i\[\nabla L_i(\mathbf w)\]</div>
+<p>=
+\sum_{i=1}\^{n}
+\frac1n\nabla L_i(\mathbf w). ]</p>
+<p>Therefore:</p>
+<div class="formula-math">\[ \boxed{
+E_i[\nabla L_i(\mathbf w)]
+=
+\nabla J(\mathbf w).
+} \]</div>
+<p>So the single-example gradient is an <strong>unbiased estimator</strong> of the full
+gradient under uniform sampling.</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+# Synthetic linear dataset: y = 2*x + 1 + noise
+np.random.seed(42)
+n = 1000
+X = np.random.randn(n, 1)
+y = 2.0 * X + 1.0 + np.random.randn(n, 1) * 0.2
+
+# Mini-batch gradient calculation
+batch_size = 32
+indices = np.random.choice(n, batch_size, replace=False)
+X_batch, y_batch = X[indices], y[indices]
+
+# w = [w_weight, w_bias]
+w = np.array([[0.0], [0.0]])
+X_b = np.hstack([X_batch, np.ones((batch_size, 1))])
+
+# Gradient for MSE: (2/B) * X^T (X*w - y)
+pred = X_b @ w
+errors = pred - y_batch
+grad_mb = (2.0 / batch_size) * (X_b.T @ errors)
+
+print(f&quot;Batch size: {batch_size} from total {n} examples&quot;)
+print(f&quot;Sample predictions (first 3):
+{pred[:3]}&quot;)
+print(f&quot;Mini-batch gradient vector:
+{grad_mb}&quot;)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Unbiased Does Not Mean Identical</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph LR
+    subgraph BatchGD ["Full-Batch GD (n Samples)"]
+        B1["All n Samples"] --> B2["Exact Gradient ∇J"]
+        B2 --> B3["Smooth, Direct Path"]
+        B3 --> B4["O(n) per Step: Very Slow for Big Data"]
+    end
+    subgraph SGD ["Stochastic GD (1 Sample)"]
+        S1["Random Sample i"] --> S2["Noisy Gradient ∇L_i"]
+        S2 --> S3["High Variance Zig-Zag"]
+        S3 --> S4["Fast Updates & Escapes Local Minima"]
+    end
+    subgraph MiniBatch ["Mini-Batch GD (B Samples)"]
+        M1["Batch of B Samples (32-256)"] --> M2["Sample Mean Gradient"]
+        M2 --> M3["Optimal Tradeoff: Variance σ²/B"]
+        M3 --> M4["Vectorized GPU Acceleration"]
+    end
+    style BatchGD fill:#1e293b,stroke:#38bdf8,color:#f8fafc
+    style SGD fill:#1e293b,stroke:#f59e0b,color:#f8fafc
+    style MiniBatch fill:#1e293b,stroke:#10b981,color:#f8fafc
+</pre></div>
+<p>Suppose the individual gradients are:</p>
+<div class="formula-math">\[ 2,\quad4,\quad8. \]</div>
+<p>The full gradient is:</p>
+<div class="formula-math">\[ \frac{2+4+8}{3} = \boxed{\frac{14}{3}\approx4.67}. \]</div>
+<p>An SGD step might use:</p>
+<div class="formula-math">\[ 2 \]</div>
+<p>or:</p>
+<div class="formula-math">\[ 4 \]</div>
+<p>or:</p>
+<div class="formula-math">\[ 8. \]</div>
+<p>Each is different from (4.67).</p>
+<p>But the expectation is:</p>
+<div class="formula-math">\[ E\[\hat g\]</div>
+<p>= \frac{2+4+8}{3} = 4.67. ]</p>
+<p>Thus:</p>
+<pre><code class="language-text">unbiased
+≠
+zero noise
+</code></pre>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Mini-Batch Gradient Descent</h2>
+      </div>
+      <div class="section-body">
+        <p>Choose a batch:</p>
+<div class="formula-math">\[ B \]</div>
+<p>with:</p>
+<div class="formula-math">\[ \|B\|=b. \]</div>
+<p>The batch gradient estimate is:</p>
+<div class="formula-math">\[ \boxed{
+\hat g_B(\mathbf w)
+=
+\frac1b
+\sum_{i\in B}
+\nabla L_i(\mathbf w)
+} \]</div>
+<p>and:</p>
+<div class="formula-math">\[ \boxed{
+\mathbf w_{t+1}
+=
+\mathbf w_t-\eta\hat g_B(\mathbf w_t).
+} \]</div>
+<p>Conceptually:</p>
+<pre><code class="language-text">small group of examples
+        ↓
+individual gradients
+        ↓
+average
+        ↓
+update
+</code></pre>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Three Regimes</h2>
+      </div>
+      <div class="section-body">
+        <p>Method            Examples/update Gradient character</p>
+<hr />
+<p>Full-batch GD               \(n\) exact empirical gradient
+  SGD                         \(1\) noisy estimate
+  Mini-batch              (1\&lt;b\&lt;n) intermediate estimate</p>
+<p>In practice, the term "SGD" is sometimes used broadly for mini-batch
+training; always interpret the convention from context.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">Gradient Noise</h2>
+      </div>
+      <div class="section-body">
+        <p>For one example:</p>
+<div class="formula-math">\[ \hat g_i=\nabla L_i. \]</div>
+<p>Usually:</p>
+<div class="formula-math">\[ \hat g_i\ne\nabla J. \]</div>
+<p>Therefore the update direction fluctuates.</p>
+<p>Visual intuition:</p>
+<pre><code class="language-text">full gradient:
+        ↓
+
+SGD:
+      ↙ ↓ ↘
+       ↘ ↓
+      ↙
+</code></pre>
+<p>The trajectory can zig-zag while still moving toward lower objective
+values on average.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Variance of a Gradient Estimate</h2>
+      </div>
+      <div class="section-body">
+        <p>Let:</p>
+<div class="formula-math">\[ g_i=\nabla L_i(\mathbf w) \]</div>
+<p>and:</p>
+<div class="formula-math">\[ g=\nabla J(\mathbf w). \]</div>
+<p>For a scalar component, variance measures spread around the expectation:</p>
+<div class="formula-math">\[ Var(g_i). \]</div>
+<p>For a vector, variance is understood component-wise or through a
+covariance matrix; for this foundation, the scalar-component picture is
+sufficient.</p>
+<p>SGD can therefore be thought of as:</p>
+<pre><code class="language-text">correct expected direction
++
+random sampling variation
+</code></pre>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Mini-Batch Noise Reduction</h2>
+      </div>
+      <div class="section-body">
+        <p>Under the simplified assumption that sampled gradient estimates are
+independent and have common variance:</p>
+<div class="formula-math">\[ \sigma_g^2, \]</div>
+<p>the average of (b) samples has:</p>
+<div class="formula-math">\[ \boxed{
+Var(\hat g_B)=\frac{\sigma_g^2}{b}.
+} \]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[ \boxed{
+SD(\hat g_B)
+=
+\frac{\sigma_g}{\sqrt b}.
+} \]</div>
+<p>This is a foundational idealized result.</p>
+<p>Real training can violate the independence assumption because examples
+may be correlated or sampled without replacement.</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+# Synthetic linear dataset: y = 2*x + 1 + noise
+np.random.seed(42)
+n = 1000
+X = np.random.randn(n, 1)
+y = 2.0 * X + 1.0 + np.random.randn(n, 1) * 0.2
+
+# Mini-batch gradient calculation
+batch_size = 32
+indices = np.random.choice(n, batch_size, replace=False)
+X_batch, y_batch = X[indices], y[indices]
+
+# w = [w_weight, w_bias]
+w = np.array([[0.0], [0.0]])
+X_b = np.hstack([X_batch, np.ones((batch_size, 1))])
+
+# Gradient for MSE: (2/B) * X^T (X*w - y)
+pred = X_b @ w
+errors = pred - y_batch
+grad_mb = (2.0 / batch_size) * (X_b.T @ errors)
+
+print(f&quot;Batch size: {batch_size} from total {n} examples&quot;)
+print(f&quot;Sample predictions (first 3):
+{pred[:3]}&quot;)
+print(f&quot;Mini-batch gradient vector:
+{grad_mb}&quot;)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Numerical Variance Example</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Exam Trap & Common Misconception</div>
+
+**The "Unbiased" vs "Zero Error" Fallacy:**
+In exams, questions often ask: *"Does SGD's single-sample gradient equal the true gradient?"*
+The correct answer is: **No, but it is an unbiased estimator.**
+
+
+<div class="formula-math">$$\mathbb{E}[\nabla L_i(w)] = \nabla J(w)$$</div>
+
+
+The expectation over random selection equals the true gradient, but the instantaneous gradient $\nabla L_i(w)$ has variance $\text{Var}(\nabla L_i) = \sigma^2$.
+Because of this variance, SGD will never settle quietly at the exact minimum with a constant learning rate—it will bounce around in a ball of radius $O(\eta)$. To guarantee convergence, you MUST decay the learning rate ($\sum \eta_t = \infty$ and $\sum \eta_t^2 \lt  \infty$).
+
+</div>
+
+<p>Suppose:</p>
+<div class="formula-math">\[ \sigma_g^2=100. \]</div>
+<p>For:</p>
+<div class="formula-math">\[ b=25, \]</div>
+<p>the idealized mini-batch variance is:</p>
+<div class="formula-math">\[ \frac{100}{25} = \boxed4. \]</div>
+<p>Therefore standard deviation:</p>
+<div class="formula-math">\[ \sqrt4 = \boxed2. \]</div>
+<p>For:</p>
+<div class="formula-math">\[ b=100, \]</div>
+<p>variance becomes:</p>
+<div class="formula-math">\[ \frac{100}{100} = \boxed1. \]</div>
+<p>Thus larger batches generally give smoother estimates under the
+simplified assumptions.</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+# Synthetic linear dataset: y = 2*x + 1 + noise
+np.random.seed(42)
+n = 1000
+X = np.random.randn(n, 1)
+y = 2.0 * X + 1.0 + np.random.randn(n, 1) * 0.2
+
+# Mini-batch gradient calculation
+batch_size = 32
+indices = np.random.choice(n, batch_size, replace=False)
+X_batch, y_batch = X[indices], y[indices]
+
+# w = [w_weight, w_bias]
+w = np.array([[0.0], [0.0]])
+X_b = np.hstack([X_batch, np.ones((batch_size, 1))])
+
+# Gradient for MSE: (2/B) * X^T (X*w - y)
+pred = X_b @ w
+errors = pred - y_batch
+grad_mb = (2.0 / batch_size) * (X_b.T @ errors)
+
+print(f&quot;Batch size: {batch_size} from total {n} examples&quot;)
+print(f&quot;Sample predictions (first 3):
+{pred[:3]}&quot;)
+print(f&quot;Mini-batch gradient vector:
+{grad_mb}&quot;)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Mini-Batch Example</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Exam Trap & Common Misconception</div>
+
+**The "Unbiased" vs "Zero Error" Fallacy:**
+In exams, questions often ask: *"Does SGD's single-sample gradient equal the true gradient?"*
+The correct answer is: **No, but it is an unbiased estimator.**
+
+
+<div class="formula-math">$$\mathbb{E}[\nabla L_i(w)] = \nabla J(w)$$</div>
+
+
+The expectation over random selection equals the true gradient, but the instantaneous gradient $\nabla L_i(w)$ has variance $\text{Var}(\nabla L_i) = \sigma^2$.
+Because of this variance, SGD will never settle quietly at the exact minimum with a constant learning rate—it will bounce around in a ball of radius $O(\eta)$. To guarantee convergence, you MUST decay the learning rate ($\sum \eta_t = \infty$ and $\sum \eta_t^2 \lt  \infty$).
+
+</div>
+
+<p>Suppose selected gradients are:</p>
+<div class="formula-math">\[ 1,\quad5,\quad7,\quad11. \]</div>
+<p>Then:</p>
+<div class="formula-math">\[ \hat g_B = \frac{1+5+7+11}{4} = \boxed6}. \]</div>
+<p>If the full dataset gradient were (5.7), this batch gives (6), a
+reasonably close estimate in this particular example.</p>
+<p>There is no guarantee that an arbitrary batch will be close.</p>
+<hr />
+<h3>Python &amp; NumPy From-Scratch Verification</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+# Synthetic linear dataset: y = 2*x + 1 + noise
+np.random.seed(42)
+n = 1000
+X = np.random.randn(n, 1)
+y = 2.0 * X + 1.0 + np.random.randn(n, 1) * 0.2
+
+# Mini-batch gradient calculation
+batch_size = 32
+indices = np.random.choice(n, batch_size, replace=False)
+X_batch, y_batch = X[indices], y[indices]
+
+# w = [w_weight, w_bias]
+w = np.array([[0.0], [0.0]])
+X_b = np.hstack([X_batch, np.ones((batch_size, 1))])
+
+# Gradient for MSE: (2/B) * X^T (X*w - y)
+pred = X_b @ w
+errors = pred - y_batch
+grad_mb = (2.0 / batch_size) * (X_b.T @ errors)
+
+print(f&quot;Batch size: {batch_size} from total {n} examples&quot;)
+print(f&quot;Sample predictions (first 3):
+{pred[:3]}&quot;)
+print(f&quot;Mini-batch gradient vector:
+{grad_mb}&quot;)</code></pre></div>
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Epoch</h2>
+      </div>
+      <div class="section-body">
+        <p>An <strong>epoch</strong> commonly means one pass through the training dataset.</p>
+<p>If:</p>
+<div class="formula-math">\[ n=10,000 \]</div>
+<p>and:</p>
+<div class="formula-math">\[ b=100, \]</div>
+<p>then, assuming every example is used exactly once:</p>
+<div class="formula-math">\[ \frac{10,000}{100} = \boxed{100} \]</div>
+<p>updates occur per epoch.</p>
+<p>Therefore:</p>
+<pre><code class="language-text">batch size
+→ examples per update
+
+epoch
+→ approximately one complete pass through data
+</code></pre>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Batch Size Trade-Off</h2>
+      </div>
+      <div class="section-body">
+        <h3>Small batch</h3>
+<pre><code class="language-text">less memory
+frequent updates
+more noise
+</code></pre>
+<h3>Large batch</h3>
+<pre><code class="language-text">more memory
+fewer updates per epoch
+less sampling noise
+</code></pre>
+<p>Neither is universally superior.</p>
+<p>Hardware, data, model, learning rate, and optimization objective all
+matter.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">Why Mini-Batches Are a Compromise</h2>
+      </div>
+      <div class="section-body">
+        <pre><code class="language-text">Full batch
+    │
+    ├─ stable estimate
+    └─ expensive update
+
+SGD
+    │
+    ├─ cheap update
+    └─ noisy estimate
+
+Mini-batch
+    │
+    ├─ partially smooth
+    ├─ computationally efficient
+    └─ still frequent updates
+</code></pre>
+<p>This is the main practical motivation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">Worked Training Trace</h2>
+      </div>
+      <div class="section-body">
+        <p>Consider:</p>
+<div class="formula-math">\[ L_1(w)=(w-1)^2, \]</div>
+<div class="formula-math">\[ L_2(w)=(w-3)^2, \]</div>
+<div class="formula-math">\[ L_3(w)=(w-5)^2. \]</div>
+<p>The full objective is:</p>
+<div class="formula-math">\[ J(w) = \frac13 \[(w-1)^2+(w-3)^2+(w-5)^2\]</div>
+<p>. ]</p>
+<p>Gradients:</p>
+<div class="formula-math">\[ L_1'(w)=2(w-1), \]</div>
+<div class="formula-math">\[ L_2'(w)=2(w-3), \]</div>
+<div class="formula-math">\[ L_3'(w)=2(w-5). \]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[ J'(w) = \frac13 \[2(w-1)+2(w-3)+2(w-5)\]</div>
+<p>. ]</p>
+<p>Simplify:</p>
+<div class="formula-math">\[ \boxed{
+J'(w)=2w-6.
+} \]</div>
+<p>The optimum is:</p>
+<div class="formula-math">\[ 2w-6=0 \]</div>
+<p>so:</p>
+<div class="formula-math">\[ \boxed{w^*=3}. \]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">SGD Update from (w=0)</h2>
+      </div>
+      <div class="section-body">
+        <p>Take:</p>
+<div class="formula-math">\[ w_0=0, \qquad \eta=0.1. \]</div>
+<p>If example 1 is selected:</p>
+<div class="formula-math">\[ L_1'(0)=-2. \]</div>
+<p>Then:</p>
+<div class="formula-math">\[ w_1 = 0-0.1(-2) = \boxed{0.2}. \]</div>
+<p>If instead example 3 is selected:</p>
+<div class="formula-math">\[ L_3'(0)=-10. \]</div>
+<p>Then:</p>
+<div class="formula-math">\[ w_1 = 0-0.1(-10) = \boxed1}. \]</div>
+<p>Same starting point, different random example, different update.</p>
+<p>That is stochastic behaviour.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Expected Update at (w=0)</h2>
+      </div>
+      <div class="section-body">
+        <p>The three individual gradients are:</p>
+<div class="formula-math">\[ -2,\quad-6,\quad-10. \]</div>
+<p>Their average is:</p>
+<div class="formula-math">\[ \frac{-2-6-10}{3} = \boxed{-6}. \]</div>
+<p>And:</p>
+<div class="formula-math">\[ J'(0)=-6. \]</div>
+<p>Thus:</p>
+<div class="formula-math">\[ \boxed{
+E[\hat g]=J'(0)
+} \]</div>
+<p>under uniform sampling.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">Why Gradient Noise Exists</h2>
+      </div>
+      <div class="section-body">
+        <p>Different examples may have:</p>
+<ul>
+<li>different features,</li>
+<li>different targets,</li>
+<li>different prediction errors,</li>
+<li>different gradients.</li>
+</ul>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\nabla L_1,\nabla L_2,\ldots,\nabla L_n
+\]</div>
+<p>need not point in exactly the same direction.</p>
+<p>Sampling only one or a few examples therefore creates variation in the
+update.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Noise Is Not Automatically Bad</h2>
+      </div>
+      <div class="section-body">
+        <p>Gradient noise can:</p>
+<ul>
+<li>make the trajectory less smooth,</li>
+<li>allow frequent inexpensive updates,</li>
+<li>sometimes help exploration in non-convex objectives.</li>
+</ul>
+<p>But do <strong>not</strong> conclude:</p>
+<blockquote>
+<p>"more noise is always better."</p>
+</blockquote>
+<p>The effect depends on:</p>
+<ul>
+<li>learning rate,</li>
+<li>batch size,</li>
+<li>objective,</li>
+<li>model,</li>
+<li>data,</li>
+<li>sampling strategy.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">Learning Rate + Batch Size</h2>
+      </div>
+      <div class="section-body">
+        <p>The update is:</p>
+<div class="formula-math">\[ \mathbf w_{t+1} =
+\mathbf w_t-\eta\hat g_B. \]</div>
+<p>Two independent ideas appear:</p>
+<pre><code class="language-text">η
+→ how strongly the estimate changes parameters
+
+batch size
+→ how noisy the estimate tends to be
+</code></pre>
+<p>A small batch with a huge learning rate can be particularly unstable.</p>
+<p>A huge batch with an excessively tiny learning rate can make progress
+slow.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">Data Shuffling</h2>
+      </div>
+      <div class="section-body">
+        <p>A common conceptual training cycle is:</p>
+<pre><code class="language-text">shuffle data
+↓
+split into batches
+↓
+batch 1 → update
+↓
+batch 2 → update
+↓
+...
+↓
+end epoch
+</code></pre>
+<p>Shuffling reduces the chance that a fixed ordering repeatedly creates
+systematic update patterns.</p>
+<p>The exact sampling strategy is an implementation choice.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">Feature Scaling Connection</h2>
+      </div>
+      <div class="section-body">
+        <p>The supplied Lecture09 states that feature scaling improves
+gradient-descent convergence speed and stability.</p>
+<p>This remains relevant to mini-batch methods because the gradients
+themselves depend on feature scales.</p>
+<p>The optimization chain is:</p>
+<pre><code class="language-text">feature scale
+→ gradient scale
+→ update scale
+→ optimization trajectory
+</code></pre>
+<p>Standardization from the supplied lecture is:</p>
+<div class="formula-math">\[ \boxed{
+x_j\leftarrow
+\frac{x_j-\mu_j}{\sigma_j}
+} \]</div>
+<p>and min-max scaling is:</p>
+<div class="formula-math">\[ \boxed{
+x_j\leftarrow
+\frac{x_j-\min(x_j)}
+{\max(x_j)-\min(x_j)}
+}. \]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">Objective vs Gradient vs Estimate</h2>
+      </div>
+      <div class="section-body">
+        <p>These are different objects:</p>
+<div class="formula-math">\[ \boxed{J(\mathbf w)} \]</div>
+<p>= objective.</p>
+<div class="formula-math">\[ \boxed{\nabla J(\mathbf w)} \]</div>
+<p>= exact gradient of the empirical objective.</p>
+<div class="formula-math">\[ \boxed{\hat g_B(\mathbf w)} \]</div>
+<p>= gradient estimate from a selected batch.</p>
+<p>Thus:</p>
+<pre><code class="language-text">objective
+≠ exact gradient
+≠ estimated gradient
+</code></pre>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">Bias vs Variance</h2>
+      </div>
+      <div class="section-body">
+        <p>For an estimator (\hat g) of (g):</p>
+<h3>Unbiased</h3>
+<div class="formula-math">\[ \boxed{
+E[\hat g]=g
+} \]</div>
+<h3>Biased</h3>
+<div class="formula-math">\[ E\[\hat g\]</div>
+<p>\ne g. ]</p>
+<h3>Variance</h3>
+<p>Measures random spread around the expectation.</p>
+<p>Remember:</p>
+<pre><code class="language-text">bias
+→ systematic error in expectation
+
+variance
+→ randomness/spread
+</code></pre>
+<p>An unbiased estimator can still have large variance.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">Hinglish Teacher Explanation</h2>
+      </div>
+      <div class="section-body">
+        <p>Full-batch GD mein har update ke liye poora dataset use hota hai.</p>
+<p>SGD mein:</p>
+<blockquote>
+<p>"Ek example uthao, gradient nikalo, update karo."</p>
+</blockquote>
+<p>Mini-batch mein:</p>
+<blockquote>
+<p>"Kuch examples uthao, unke gradients average karo, update karo."</p>
+</blockquote>
+<p>So:</p>
+<pre><code class="language-text">full batch
+→ accurate but expensive
+
+SGD
+→ cheap but noisy
+
+mini-batch
+→ middle ground
+</code></pre>
+<p>Agar examples randomly choose ho rahe hain:</p>
+<div class="formula-math">\[ E\[\hat g\]</div>
+<p>=\nabla J. ]</p>
+<p>Matlab har individual update exact nahi hai, lekin long-run average
+direction full gradient ke around correct hai.</p>
+<p>Batch size (b) badhne par idealized independent setting mein:</p>
+<div class="formula-math">\[ Var(\hat g_B)=\frac{\sigma_g^2}{b}. \]</div>
+<p>Yaani batch bada:</p>
+<blockquote>
+<p>gradient estimate smoother.</p>
+</blockquote>
+<p>Lekin batch bada karna free nahi hai --- memory aur computation per
+update badh sakte hain.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">Formula Cards</h2>
+      </div>
+      <div class="section-body">
+        <h3>F-M23-01 --- Empirical Objective</h3>
+<div class="formula-math">\[ \boxed{
+J(\mathbf w)=
+\frac1n\sum_{i=1}^{n}L_i(\mathbf w)
+} \]</div>
+<h3>F-M23-02 --- Full Gradient</h3>
+<div class="formula-math">\[ \boxed{
+\nabla J=
+\frac1n\sum_{i=1}^{n}\nabla L_i
+} \]</div>
+<h3>F-M23-03 --- SGD</h3>
+<div class="formula-math">\[ \boxed{
+\mathbf w_{t+1}
+=
+\mathbf w_t-\eta\nabla L_i(\mathbf w_t)
+} \]</div>
+<h3>F-M23-04 --- Mini-Batch Gradient</h3>
+<div class="formula-math">\[ \boxed{
+\hat g_B=
+\frac1b
+\sum_{i\in B}
+\nabla L_i
+} \]</div>
+<h3>F-M23-05 --- Mini-Batch Update</h3>
+<div class="formula-math">\[ \boxed{
+\mathbf w_{t+1}
+=
+\mathbf w_t-\eta\hat g_B
+} \]</div>
+<h3>F-M23-06 --- Unbiasedness</h3>
+<p>Under standard uniform sampling:</p>
+<div class="formula-math">\[ \boxed{
+E[\hat g_B]=\nabla J
+} \]</div>
+<h3>F-M23-07 --- Idealized Variance</h3>
+<div class="formula-math">\[ \boxed{
+Var(\hat g_B)=\frac{\sigma_g^2}{b}
+} \]</div>
+<h3>F-M23-08 --- Idealized Standard Deviation</h3>
+<div class="formula-math">\[ \boxed{
+SD(\hat g_B)=\frac{\sigma_g}{\sqrt b}
+} \]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">Numerical Protocol</h2>
+      </div>
+      <div class="section-body">
+        <h3>Full batch</h3>
+<pre><code class="language-text">1. Calculate every per-example gradient
+2. Average
+3. Update
+</code></pre>
+<h3>SGD</h3>
+<pre><code class="language-text">1. Select one example
+2. Calculate its gradient
+3. Update
+</code></pre>
+<h3>Mini-batch</h3>
+<pre><code class="language-text">1. Select B
+2. Calculate each gradient
+3. Average
+4. Update
+</code></pre>
+<h3>Expectation question</h3>
+<pre><code class="language-text">1. Identify sampling probabilities
+2. List possible gradient values
+3. Multiply each by probability
+4. Add
+5. Compare with full gradient
+</code></pre>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">Common Traps</h2>
+      </div>
+      <div class="section-body">
+        <ul>
+<li>Thinking an SGD gradient must equal the full gradient.</li>
+<li>Thinking unbiased means noise-free.</li>
+<li>Forgetting the (1/b) averaging factor.</li>
+<li>Confusing batch size with epoch.</li>
+<li>Treating (1/b) variance reduction as an exact universal law.</li>
+<li>Assuming larger batches are always better.</li>
+<li>Ignoring learning-rate interaction.</li>
+<li>Confusing the objective with its gradient estimate.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">Active Recall</h2>
+      </div>
+      <div class="section-body">
+        <ol>
+<li>Define full-batch GD.</li>
+<li>Define SGD.</li>
+<li>Define mini-batch GD.</li>
+<li>Why is SGD noisy?</li>
+<li>What does unbiased mean?</li>
+<li>Derive: </li>
+</ol>
+<div class="formula-math">\[ E\[\nabla L_i\]</div>
+<p>=\nabla J. ]
+7.  What happens to idealized variance as (b) increases?
+8.  Why does standard deviation scale as (1/\sqrt b)?
+9.  What is an epoch?
+10. What is batch size?
+11. Why can SGD zig-zag?
+12. Why is gradient noise not automatically bad?
+13. Why does feature scaling matter?
+14. Distinguish objective, exact gradient, and gradient estimate.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">Practice</h2>
+      </div>
+      <div class="section-body">
+        <h3>P23-01</h3>
+<p>Gradients are:</p>
+<div class="formula-math">\[ 2,\quad6,\quad10. \]</div>
+<p>Find the full gradient.</p>
+<h3>P23-02</h3>
+<p>If one is selected uniformly, find the expected SGD gradient.</p>
+<h3>P23-03</h3>
+<p>A batch has gradients:</p>
+<div class="formula-math">\[ 1,\quad5,\quad7,\quad11. \]</div>
+<p>Find its gradient estimate.</p>
+<h3>P23-04</h3>
+<p>If:</p>
+<div class="formula-math">\[ \sigma_g^2=100 \]</div>
+<p>and:</p>
+<div class="formula-math">\[ b=25, \]</div>
+<p>find idealized batch-gradient variance and standard deviation.</p>
+<h3>P23-05</h3>
+<p>For:</p>
+<div class="formula-math">\[ L_1(w)=(w-1)^2, \]</div>
+<p>with:</p>
+<div class="formula-math">\[ w=0,\quad\eta=0.1, \]</div>
+<p>perform one SGD update.</p>
+<h3>P23-06</h3>
+<p>Repeat using:</p>
+<div class="formula-math">\[ L_2(w)=(w-5)^2. \]</div>
+<p>Compare the updates.</p>
+<h3>P23-07</h3>
+<p>Explain why two consecutive SGD updates can point in different
+directions.</p>
+<h3>P23-08</h3>
+<p>Explain mini-batch GD as a compromise between full-batch GD and SGD.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">Exam Triggers</h2>
+      </div>
+      <div class="section-body">
+        <pre><code class="language-text">entire dataset
+→ full-batch GD
+
+one random example
+→ SGD
+
+subset of examples
+→ mini-batch
+
+expected gradient
+→ unbiased estimator
+
+larger batch
+→ lower idealized sampling variance
+
+one pass through data
+→ epoch
+
+examples per update
+→ batch size
+
+zig-zag/noisy path
+→ stochastic gradient
+</code></pre>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <p>You should be able to:</p>
+<pre><code class="language-text">write the empirical objective
+derive its full gradient
+explain SGD
+explain mini-batches
+derive unbiasedness
+calculate expected gradient
+calculate idealized gradient-estimator variance
+perform SGD updates
+distinguish batch size and epoch
+explain sampling noise
+connect expectation/variance to optimization
+</code></pre>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Dependencies &amp; Course Connections</h2>
+      </div>
+      <div class="section-body">
+        <pre><code class="language-text">M15 Expectation
+M16 Variance
+      ↓
+M21 Gradient
+      ↓
+M22 Gradient Descent
+      ↓
+M23 SGD / Mini-Batches
+      ↓
+M24 L1/L2 Regularization &amp; Geometry
+</code></pre>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="m22-optimization-gradient-descent.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← M22 — Optimization & Gradient Descent</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">📐 Math Index</span>
+      </a>
+      <a href="m24-l1-l2-regularization.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: M24 — L1/L2 Regularization Geometry →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search math modules, formulas, proofs, theorems…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">📐</span>Math Hub</a>
+  <a href="m23-sgd-mini-batches.html" class="mobile-nav-btn active"><span class="icon">📖</span>MATH-M23</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>
