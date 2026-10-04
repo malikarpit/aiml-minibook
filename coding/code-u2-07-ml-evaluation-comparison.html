@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="CODE-U2-07: ML Evaluation & Model Comparison Lab — AI & Machine Learning Coding Lab. Rigorous Benchmark Protocol, Identical Split Isolation, Decision Tree vs Logistic vs k-NN/Ridge, Imbalance Resilience, and Final Comparison Matrix">
+<title>CODE-U2-07: ML Evaluation & Model Comparison Lab | Coding Lab 💻 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/coding.css">
+</head>
+<body class="coding-module track-c2">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">💻</div>
+      <div class="brand-text"><span class="main">Coding Lab</span><span class="sub">AI &amp; ML From Scratch</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">CODE-U2-07: ML Evaluation &amp; Model Comparison Lab</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">💻</span>Coding Lab Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../math/index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 0: Environment & System</div>
+  <a href="code-00-coding-foundation.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-00: Coding Lab Foundation &amp; Implementation System</a>
+  <a href="code-01-python-numpy-workflow.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-01: Python, NumPy, Matplotlib &amp; Lab Workflow</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Classical AI & Search Labs</div>
+  <a href="code-u1-01-bfs-dfs.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-01: BFS and DFS From Scratch</a>
+  <a href="code-u1-02-greedy-a-star.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-02: Greedy Best-First &amp; A* Search From Scratch</a>
+  <a href="code-u1-03-csp-backtracking.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-03: CSPs and Backtracking Search</a>
+  <a href="code-u1-04-minimax-alpha-beta.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Supervised ML Labs</div>
+  <a href="code-u2-01-ml-workflow.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-01: ML Workflow: Preprocessing, Splitting &amp; Evaluation</a>
+  <a href="code-u2-02-linear-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-02: Linear Regression From Scratch</a>
+  <a href="code-u2-03-logistic-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-03: Logistic Regression From Scratch</a>
+  <a href="code-u2-04-decision-trees.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-04: Decision Trees From Scratch</a>
+  <a href="code-u2-05-classification-metrics-roc.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC &amp; Thresholds</a>
+  <a href="code-u2-06-ridge-lasso-regularization.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-06: Ridge &amp; Lasso From Scratch: Regularization &amp; Optimization</a>
+  <a href="code-u2-07-ml-evaluation-comparison.html" class="sidebar-link active"><span class="link-icon">📊</span>CODE-U2-07: ML Evaluation &amp; Model Comparison Lab</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Deep Learning Labs</div>
+  <a href="code-u3-01-neuron-perceptron.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-01: Neuron and Perceptron From Scratch</a>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>MLP, Backpropagation & Convolutions</span>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Advanced AI Labs (Upcoming)</div>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>Q-Learning, NLP & Generative Adversarial Loops</span>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">CODE-U2-07 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Coding Objective</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Practical Scenario</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Experimental Question</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Controlled Experiment Design</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Environment</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Load the Data</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Train/Test Split</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Leakage: The Rule That Must Not Be Broken</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Model 1 — Decision Tree</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Model 2 — k-Nearest Neighbours</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Model 3 — Support Vector Machine</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. A Unified Evaluation Function</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Why the Confusion Matrix Must Be Inspected</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Metric Interpretation</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Classification Report</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. ROC Curve Comparison</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Threshold Experiment</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Model Comparison Table</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Fairness of the Comparison</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Why Cross-Validation Is Not a Magic Wand</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Overfitting Experiment With Tree Depth</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Error Analysis</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. A Strong Experiment Log</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Common Mistakes</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Master Experiment Script Structure</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Extension — Add SVM, k-NN and Decision Tree Fairly</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Experiment Tasks</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Debugging Checklist</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Interpretation Template</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Practical Viva Questions</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Mastery Gate</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Connection to the Next Unit</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Source Notes</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Status</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Coding Lab</a>
+        <span>/</span>
+        <span>CODE-U2-07</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-c2">Track 2: Supervised Machine Learning Labs</span></div>
+      <h1 class="chapter-title">ML Evaluation &amp; Model Comparison Lab</h1>
+      <p class="chapter-desc">Rigorous Benchmark Protocol, Identical Split Isolation, Decision Tree vs Logistic vs k-NN/Ridge, Imbalance Resilience, and Final Comparison Matrix</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~45 min lab</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">BENCHMARK</span> <span class="chapter-meta-item uni-badge">MODEL-COMPARISON</span> <span class="chapter-meta-item uni-badge">ISOLATION</span> <span class="chapter-meta-item uni-badge">DSC-14-PRACTICAL</span> <span class="chapter-meta-item uni-badge">TRADE-OFFS</span>
+      </div>
+
+      <div class="lab-meta-grid">
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Prerequisites</div>
+          <div class="lab-meta-value">CODE-U2-01 through CODE-U2-06</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Main Book Concept</div>
+          <div class="lab-meta-value">Ch 14–26 (Complete Unit II Machine Learning)</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Math Companion Layer</div>
+          <div class="lab-meta-value">M15–M17 Statistics & Empirical Risk Minimization</div>
+        </div>
+        <div class="lab-meta-box" style="grid-column: 1 / -1;">
+          <div class="lab-meta-label">AI / Machine Learning Connections</div>
+          <div class="lab-meta-value">Standardized experimental design, Production model selection, Cost-benefit trade-offs, Business metric alignment</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-meta-card"><h1>CODE-U2-07 — ML Evaluation and Model Comparison Lab</h1>
+<blockquote>
+<p><strong>Purpose:</strong> Turn the Unit II algorithms into a disciplined experimental workflow: train multiple classifiers on the same task, evaluate them correctly, compare them fairly, and explain <em>why</em> their results differ.</p>
+</blockquote>
+<p>This is the integration chapter for the Unit II practical block.</p>
+<p>The official DSC-14 practical component asks for regression/classification models such as Decision Trees, k-NN and SVM, together with evaluation and comparison. The resource guide also recommends treating practical work as a pipeline of <strong>input → representation → algorithm → parameters → loss/reward → training/update → output → evaluation</strong>.<br />
+<strong>Source boundary:</strong> the experiment design below is a coding-book expansion of that practical requirement; it is not claimed to reproduce an instructor's exact experiment sheet.</p>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in CODE-U2-07 (34 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Coding Objective</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Practical Scenario</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Experimental Question</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Controlled Experiment Design</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Environment</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Load the Data</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Train/Test Split</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Leakage: The Rule That Must Not Be Broken</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Model 1 — Decision Tree</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Model 2 — k-Nearest Neighbours</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Model 3 — Support Vector Machine</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">A Unified Evaluation Function</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Why the Confusion Matrix Must Be Inspected</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Metric Interpretation</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Classification Report</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">ROC Curve Comparison</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Threshold Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Model Comparison Table</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Fairness of the Comparison</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Why Cross-Validation Is Not a Magic Wand</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Overfitting Experiment With Tree Depth</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Error Analysis</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">A Strong Experiment Log</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Common Mistakes</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Master Experiment Script Structure</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Extension — Add SVM, k-NN and Decision Tree Fairly</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Experiment Tasks</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Debugging Checklist</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Interpretation Template</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Practical Viva Questions</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Connection to the Next Unit</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Source Notes</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Status</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">Coding Objective</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph TD
+    Data["Benchmark Dataset (Classification / Regression)"] --> Prep["Preprocessing Pipeline: Fit on Train ONLY"]
+    Prep --> Split["Frozen Train / Test Evaluation Partition"]
+    Split --> M1["Model A: Logistic Regression (Linear, Probabilistic)"]
+    Split --> M2["Model B: Decision Tree (Non-linear, Hierarchical)"]
+    Split --> M3["Model C: Regularized Ridge / k-NN (Distance / Regularized)"]
+    M1 & M2 & M3 --> Eval["Unified Evaluation Engine: Accuracy, F1, ROC-AUC, Runtime"]
+    Eval --> Table["Comprehensive Model Comparison Leaderboard"]
+    Table --> Decision["Operational Selection: Accuracy vs Latency vs Explainability"]
+    style Split fill:#0f172a,stroke:#38bdf8,color:#38bdf8,stroke-width:2px
+    style Decision fill:#065f46,stroke:#34d399,color:#ffffff
+</pre></div>
+<p>By the end of this lab you should be able to:</p>
+<ul>
+<li>create one reproducible classification experiment;</li>
+<li>prepare data without leakage;</li>
+<li>compare at least three classifiers under the same train/test split;</li>
+<li>use a confusion matrix;</li>
+<li>calculate accuracy, precision, recall and F1;</li>
+<li>inspect ROC curves and AUC when probability/decision scores are available;</li>
+<li>recognize class-imbalance effects;</li>
+<li>distinguish model quality from threshold choice;</li>
+<li>record hyperparameters and results in a comparison table;</li>
+<li>explain <em>why</em> one model is preferable for a stated application.</li>
+</ul>
+<p>The important shift is:</p>
+<div class="ascii-box"><pre>&quot;Run three models&quot;
+        ↓
+not enough
+
+&quot;Run three models fairly, evaluate several dimensions,
+inspect errors, and justify the choice&quot;
+        ↓
+actual ML experiment</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">Practical Scenario</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Implementation Model</div>
+
+University lab exam ya interview mein sabse badi galti ye hoti hai ki students alag-alag models ko alag-alag splits ya alag metrics par compare kar dete hain.
+Scientific method ka golden rule hai: 'Fair Comparison'.
+Ek hi frozen train set, ek hi frozen test set, aur ek hi evaluation pipeline.
+Sirf accuracy mat dekho—dekhna padega ki kaunsa model explainable hai, kiski inference speed fast hai, aur kaunsa class imbalance mein fail nahi hota!
+
+</div>
+
+<p>Use a small binary classification dataset.</p>
+<p>A convenient first experiment is the breast-cancer dataset available through scikit-learn. It is useful for learning the evaluation workflow because it is already numerical and supports binary classification.</p>
+<p>For an external real-world dataset, do <strong>not</strong> assume that a dataset is perfectly clean, balanced, representative, or clinically suitable merely because a library provides it.</p>
+<p>The goal here is to practice the workflow, not to make a medical deployment claim.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">Experimental Question</h2>
+      </div>
+      <div class="section-body">
+        <p>Write the question before writing code.</p>
+<p>Example:</p>
+<blockquote>
+<p><strong>Which of Decision Tree, k-NN and SVM gives the strongest held-out classification performance for this dataset under the chosen preprocessing and evaluation protocol?</strong></p>
+</blockquote>
+<p>A stronger version is:</p>
+<blockquote>
+<p><strong>Which model gives the best trade-off among recall, precision, F1 and ROC-AUC under a fixed experimental protocol?</strong></p>
+</blockquote>
+<p>This prevents a common mistake:</p>
+<div class="ascii-box"><pre>metric chosen after seeing results</pre></div>
+<p>Instead:</p>
+<div class="ascii-box"><pre>task
+ ↓
+evaluation objective
+ ↓
+metric
+ ↓
+experiment</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Controlled Experiment Design</h2>
+      </div>
+      <div class="section-body">
+        <p>Keep these quantities fixed across models:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Experimental factor</th>
+<th style="text-align: right;">Keep consistent?</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dataset</td>
+<td style="text-align: right;">Yes</td>
+<td>Same task</td>
+</tr>
+<tr>
+<td>Train/test split</td>
+<td style="text-align: right;">Yes</td>
+<td>Fair comparison</td>
+</tr>
+<tr>
+<td>Random seed</td>
+<td style="text-align: right;">Yes</td>
+<td>Reproducibility</td>
+</tr>
+<tr>
+<td>Target labels</td>
+<td style="text-align: right;">Yes</td>
+<td>Same prediction task</td>
+</tr>
+<tr>
+<td>Evaluation set</td>
+<td style="text-align: right;">Yes</td>
+<td>Same evidence</td>
+</tr>
+<tr>
+<td>Primary metric</td>
+<td style="text-align: right;">Yes</td>
+<td>Comparable objective</td>
+</tr>
+<tr>
+<td>Preprocessing policy</td>
+<td style="text-align: right;">Consistent with model needs</td>
+<td>Prevent accidental differences</td>
+</tr>
+<tr>
+<td>Hyperparameter tuning budget</td>
+<td style="text-align: right;">Comparable</td>
+<td>Avoid giving one model an unfair advantage</td>
+</tr>
+</tbody>
+</table></div>
+<p>A model comparison is weak when one model receives extensive tuning and another receives default settings.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Environment</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+
+from sklearn.metrics import (
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
+    confusion_matrix,
+    roc_auc_score,
+    roc_curve,
+    classification_report,
+)</code></pre></div>
+<p>Recommended reproducibility seed:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">RANDOM_STATE = 42</code></pre></div>
+<p>The exact integer is not mathematically special. It is simply a fixed experiment seed.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Load the Data</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">data = load_breast_cancer()
+
+X = pd.DataFrame(data.data, columns=data.feature_names)
+y = pd.Series(data.target, name=&quot;target&quot;)
+
+print(X.shape)
+print(y.value_counts())
+print(X.head())</code></pre></div>
+<p>Inspect:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(X.dtypes)
+print(X.isna().sum().sum())
+print(y.value_counts(normalize=True))</code></pre></div>
+<p>Questions to answer before training:</p>
+<ul>
+<li>How many samples exist?</li>
+<li>How many features exist?</li>
+<li>Are features numeric?</li>
+<li>Are there missing values?</li>
+<li>Is the target binary?</li>
+<li>Is the class distribution balanced?</li>
+</ul>
+<p>Do not skip this step.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Train/Test Split</h2>
+      </div>
+      <div class="section-body">
+        <p>Use stratification for this binary classification example.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.20,
+    stratify=y,
+    random_state=RANDOM_STATE,
+)</code></pre></div>
+<p>Why <code>stratify=y</code>?</p>
+<p>It attempts to preserve class proportions across train and test subsets.</p>
+<p>The deeper principle is:</p>
+<blockquote>
+<p>The test set must remain an honest approximation of unseen data.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">Leakage: The Rule That Must Not Be Broken</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose you standardize features using:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">scaler.fit(X)</code></pre></div>
+<p>before the train/test split.</p>
+<p>The scaler has now seen test-set information.</p>
+<p>Even though the labels were not used, the transformation statistics were influenced by the test data.</p>
+<p>Correct:</p>
+<div class="ascii-box"><pre>training data
+    ↓
+fit scaler
+    ↓
+transform training data
+
+same fitted scaler
+    ↓
+transform test data</pre></div>
+<p>Incorrect:</p>
+<div class="ascii-box"><pre>all data
+  ↓
+fit scaler
+  ↓
+split</pre></div>
+<p>The safest implementation is a pipeline.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Model 1 — Decision Tree</h2>
+      </div>
+      <div class="section-body">
+        <p>Decision Trees generally do not require feature standardization for the ordinary split mechanism.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">tree = DecisionTreeClassifier(
+    max_depth=4,
+    random_state=RANDOM_STATE,
+)</code></pre></div>
+<p>Train:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">tree.fit(X_train, y_train)</code></pre></div>
+<p>Predict:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">tree_pred = tree.predict(X_test)</code></pre></div>
+<p>Probability/score:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">tree_prob = tree.predict_proba(X_test)[:, 1]</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Model 2 — k-Nearest Neighbours</h2>
+      </div>
+      <div class="section-body">
+        <p>Distance-based methods are sensitive to feature scale.</p>
+<p>Therefore use:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">knn = Pipeline(
+    steps=[
+        (&quot;scaler&quot;, StandardScaler()),
+        (&quot;model&quot;, KNeighborsClassifier(n_neighbors=5)),
+    ]
+)</code></pre></div>
+<p>Train:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">knn.fit(X_train, y_train)</code></pre></div>
+<p>Predict:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">knn_pred = knn.predict(X_test)
+knn_prob = knn.predict_proba(X_test)[:, 1]</code></pre></div>
+<p>Important lesson:</p>
+<blockquote>
+<p>Preprocessing is part of the model pipeline.</p>
+</blockquote>
+<p>Do not treat scaling as an unrelated cosmetic operation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Model 3 — Support Vector Machine</h2>
+      </div>
+      <div class="section-body">
+        <p>A common educational SVM pipeline is:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">svm = Pipeline(
+    steps=[
+        (&quot;scaler&quot;, StandardScaler()),
+        (&quot;model&quot;, SVC(
+            kernel=&quot;rbf&quot;,
+            probability=True,
+            random_state=RANDOM_STATE,
+        )),
+    ]
+)</code></pre></div>
+<p>Train:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">svm.fit(X_train, y_train)</code></pre></div>
+<p>Predict:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">svm_pred = svm.predict(X_test)
+svm_prob = svm.predict_proba(X_test)[:, 1]</code></pre></div>
+<p>For a learning lab, <code>probability=True</code> is convenient when you want probability estimates for ROC-AUC workflows. In other configurations, an SVM can expose a decision score through <code>decision_function()</code> instead.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">A Unified Evaluation Function</h2>
+      </div>
+      <div class="section-body">
+        <p>Repeated metric code is a source of mistakes.</p>
+<p>Write one evaluation function.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def evaluate_binary_classifier(
+    model_name: str,
+    y_true,
+    y_pred,
+    y_score,
+):
+    cm = confusion_matrix(y_true, y_pred)
+
+    return {
+        &quot;model&quot;: model_name,
+        &quot;accuracy&quot;: accuracy_score(y_true, y_pred),
+        &quot;precision&quot;: precision_score(y_true, y_pred, zero_division=0),
+        &quot;recall&quot;: recall_score(y_true, y_pred, zero_division=0),
+        &quot;f1&quot;: f1_score(y_true, y_pred, zero_division=0),
+        &quot;roc_auc&quot;: roc_auc_score(y_true, y_score),
+        &quot;tn&quot;: cm[0, 0],
+        &quot;fp&quot;: cm[0, 1],
+        &quot;fn&quot;: cm[1, 0],
+        &quot;tp&quot;: cm[1, 1],
+    }</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">results = [
+    evaluate_binary_classifier(
+        &quot;Decision Tree&quot;,
+        y_test,
+        tree_pred,
+        tree_prob,
+    ),
+    evaluate_binary_classifier(
+        &quot;k-NN&quot;,
+        y_test,
+        knn_pred,
+        knn_prob,
+    ),
+    evaluate_binary_classifier(
+        &quot;SVM&quot;,
+        y_test,
+        svm_pred,
+        svm_prob,
+    ),
+]
+
+results_df = pd.DataFrame(results)
+print(results_df)</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Why the Confusion Matrix Must Be Inspected</h2>
+      </div>
+      <div class="section-body">
+        <p>A single score compresses information.</p>
+<p>The confusion matrix keeps the error structure visible.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">for name, model, predictions in [
+    (&quot;Decision Tree&quot;, tree, tree_pred),
+    (&quot;k-NN&quot;, knn, knn_pred),
+    (&quot;SVM&quot;, svm, svm_pred),
+]:
+    cm = confusion_matrix(y_test, predictions)
+    print(name)
+    print(cm)</code></pre></div>
+<p>Visualization:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.metrics import ConfusionMatrixDisplay
+
+ConfusionMatrixDisplay.from_predictions(y_test, tree_pred)
+plt.title(&quot;Decision Tree — Confusion Matrix&quot;)
+plt.show()</code></pre></div>
+<p>Repeat for other models.</p>
+<p>Interpret:</p>
+<ul>
+<li><strong>TP</strong> — positive examples correctly found;</li>
+<li><strong>TN</strong> — negative examples correctly rejected;</li>
+<li><strong>FP</strong> — negative examples incorrectly called positive;</li>
+<li><strong>FN</strong> — positive examples incorrectly missed.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Metric Interpretation</h2>
+      </div>
+      <div class="section-body">
+        <h2>Accuracy</h2>
+<div class="ascii-box"><pre>fraction of all predictions that are correct</pre></div>
+<p>Useful when class costs are reasonably symmetric and class distribution is not problematic.</p>
+<h2>Precision</h2>
+<div class="ascii-box"><pre>among predicted positives, how many are actually positive?</pre></div>
+<p>High precision means relatively few false positives among positive predictions.</p>
+<h2>Recall</h2>
+<div class="ascii-box"><pre>among actual positives, how many did the model find?</pre></div>
+<p>High recall means relatively few false negatives.</p>
+<h2>F1</h2>
+<p>Harmonic mean of precision and recall.</p>
+<p>Use it when both matter and you want one combined summary.</p>
+<h2>ROC-AUC</h2>
+<p>Summarizes ranking/discrimination behaviour across thresholds.</p>
+<p>Do not confuse it with:</p>
+<div class="ascii-box"><pre>&quot;accuracy at the default threshold&quot;</pre></div>
+<p>They answer different questions.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">Classification Report</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(classification_report(y_test, svm_pred, zero_division=0))</code></pre></div>
+<p>This gives class-wise precision, recall and F1 plus aggregate summaries.</p>
+<p>For a serious experiment, do not paste the report into notes without interpreting it.</p>
+<p>Write:</p>
+<blockquote>
+<p>Model X has higher recall for the positive class, but Model Y has fewer false positives. Under the stated application objective, ___ is preferable because ___.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">ROC Curve Comparison</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">tree_fpr, tree_tpr, _ = roc_curve(y_test, tree_prob)
+knn_fpr, knn_tpr, _ = roc_curve(y_test, knn_prob)
+svm_fpr, svm_tpr, _ = roc_curve(y_test, svm_prob)
+
+plt.figure()
+
+plt.plot(
+    tree_fpr,
+    tree_tpr,
+    label=f&quot;Decision Tree (AUC={roc_auc_score(y_test, tree_prob):.3f})&quot;,
+)
+
+plt.plot(
+    knn_fpr,
+    knn_tpr,
+    label=f&quot;k-NN (AUC={roc_auc_score(y_test, knn_prob):.3f})&quot;,
+)
+
+plt.plot(
+    svm_fpr,
+    svm_tpr,
+    label=f&quot;SVM (AUC={roc_auc_score(y_test, svm_prob):.3f})&quot;,
+)
+
+plt.plot([0, 1], [0, 1], linestyle=&quot;--&quot;)
+
+plt.xlabel(&quot;False Positive Rate&quot;)
+plt.ylabel(&quot;True Positive Rate&quot;)
+plt.title(&quot;ROC Comparison&quot;)
+plt.legend()
+plt.show()</code></pre></div>
+<p>The main reading pattern is:</p>
+<div class="ascii-box"><pre>x-axis → false-positive rate
+y-axis → true-positive rate / recall</pre></div>
+<p>A curve closer to the desirable top-left region generally indicates stronger ranking performance over thresholds.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">Threshold Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>The model's score is not identical to the final class decision.</p>
+<p>For a probability-like score:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">threshold = 0.50
+
+custom_pred = (svm_prob &gt;= threshold).astype(int)</code></pre></div>
+<p>Now compare with another threshold:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">threshold = 0.30
+
+custom_pred = (svm_prob &gt;= threshold).astype(int)</code></pre></div>
+<p>Evaluate both.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">for threshold in [0.30, 0.50, 0.70]:
+    pred = (svm_prob &gt;= threshold).astype(int)
+
+    print(
+        threshold,
+        precision_score(y_test, pred, zero_division=0),
+        recall_score(y_test, pred, zero_division=0),
+        f1_score(y_test, pred, zero_division=0),
+    )</code></pre></div>
+<p>The lesson:</p>
+<blockquote>
+<p><strong>Changing the threshold changes the confusion matrix and therefore changes precision/recall/F1.</strong></p>
+</blockquote>
+<p>ROC-AUC evaluates a ranking across thresholds rather than committing to only one threshold.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Model Comparison Table</h2>
+      </div>
+      <div class="section-body">
+        <p>Build a compact report:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">comparison = results_df[
+    [&quot;model&quot;, &quot;accuracy&quot;, &quot;precision&quot;, &quot;recall&quot;, &quot;f1&quot;, &quot;roc_auc&quot;]
+].copy()
+
+print(
+    comparison.sort_values(
+        by=&quot;f1&quot;,
+        ascending=False,
+    )
+)</code></pre></div>
+<p>Do not automatically select the model in the first row.</p>
+<p>Instead ask:</p>
+<ol>
+<li>What is the task?</li>
+<li>Which error matters most?</li>
+<li>Is the class distribution problematic?</li>
+<li>Are threshold-dependent metrics important?</li>
+<li>Is interpretability important?</li>
+<li>Is computational cost relevant?</li>
+<li>Is performance stable under different splits?</li>
+</ol>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">Fairness of the Comparison</h2>
+      </div>
+      <div class="section-body">
+        <p>A stronger experiment repeats the comparison under cross-validation.</p>
+<p>For example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.model_selection import StratifiedKFold, cross_validate
+
+cv = StratifiedKFold(
+    n_splits=5,
+    shuffle=True,
+    random_state=RANDOM_STATE,
+)</code></pre></div>
+<p>You can evaluate multiple metrics:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">scoring = {
+    &quot;accuracy&quot;: &quot;accuracy&quot;,
+    &quot;precision&quot;: &quot;precision&quot;,
+    &quot;recall&quot;: &quot;recall&quot;,
+    &quot;f1&quot;: &quot;f1&quot;,
+    &quot;roc_auc&quot;: &quot;roc_auc&quot;,
+}</code></pre></div>
+<p>Example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">cv_result = cross_validate(
+    svm,
+    X,
+    y,
+    cv=cv,
+    scoring=scoring,
+    return_train_score=False,
+)
+
+for metric in scoring:
+    values = cv_result[f&quot;test_{metric}&quot;]
+    print(
+        metric,
+        values.mean(),
+        values.std(),
+    )</code></pre></div>
+<p>Interpretation:</p>
+<div class="ascii-box"><pre>mean → average validation performance
+std  → variation across folds</pre></div>
+<p>A model with slightly lower mean but much larger stability can deserve investigation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Why Cross-Validation Is Not a Magic Wand</h2>
+      </div>
+      <div class="section-body">
+        <p>Cross-validation reduces dependence on one particular train/test split.</p>
+<p>It does <strong>not</strong> automatically solve:</p>
+<ul>
+<li>data leakage;</li>
+<li>poor labels;</li>
+<li>distribution shift;</li>
+<li>unrepresentative data;</li>
+<li>bad preprocessing;</li>
+<li>careless hyperparameter selection;</li>
+<li>an inappropriate metric.</li>
+</ul>
+<p>Think:</p>
+<div class="ascii-box"><pre>better evaluation protocol
+≠
+perfect experiment</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">Overfitting Experiment With Tree Depth</h2>
+      </div>
+      <div class="section-body">
+        <p>Decision trees provide an especially useful demonstration.</p>
+<p>Train several trees:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">depths = [1, 2, 3, 4, 6, 8, None]
+
+tree_records = []
+
+for depth in depths:
+    model = DecisionTreeClassifier(
+        max_depth=depth,
+        random_state=RANDOM_STATE,
+    )
+
+    model.fit(X_train, y_train)
+
+    train_pred = model.predict(X_train)
+    test_pred = model.predict(X_test)
+
+    tree_records.append({
+        &quot;depth&quot;: depth,
+        &quot;train_accuracy&quot;: accuracy_score(y_train, train_pred),
+        &quot;test_accuracy&quot;: accuracy_score(y_test, test_pred),
+    })
+
+depth_df = pd.DataFrame(tree_records)
+print(depth_df)</code></pre></div>
+<p>Plot:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">plt.figure()
+
+plt.plot(
+    depth_df[&quot;depth&quot;].astype(str),
+    depth_df[&quot;train_accuracy&quot;],
+    marker=&quot;o&quot;,
+    label=&quot;Train&quot;,
+)
+
+plt.plot(
+    depth_df[&quot;depth&quot;].astype(str),
+    depth_df[&quot;test_accuracy&quot;],
+    marker=&quot;o&quot;,
+    label=&quot;Test&quot;,
+)
+
+plt.xlabel(&quot;Tree depth&quot;)
+plt.ylabel(&quot;Accuracy&quot;)
+plt.title(&quot;Decision Tree Capacity Experiment&quot;)
+plt.legend()
+plt.show()</code></pre></div>
+<p>The experiment makes the Unit II concept visible:</p>
+<div class="ascii-box"><pre>too simple
+   ↓
+underfitting
+
+useful capacity
+   ↓
+good generalization
+
+too flexible
+   ↓
+overfitting risk</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">Error Analysis</h2>
+      </div>
+      <div class="section-body">
+        <p>Do not stop at metrics.</p>
+<p>Find examples where two models disagree.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">tree_pred = tree.predict(X_test)
+svm_pred = svm.predict(X_test)
+
+disagreement = np.where(tree_pred != svm_pred)[0]
+
+print(&quot;Number of disagreements:&quot;, len(disagreement))
+print(X_test.iloc[disagreement].head())</code></pre></div>
+<p>Now ask:</p>
+<ul>
+<li>Which model is correct more often on disagreement cases?</li>
+<li>Are disagreements concentrated near the decision boundary?</li>
+<li>Do the examples look unusual?</li>
+<li>Does one model systematically produce more false negatives?</li>
+</ul>
+<p>This is the beginning of practical model diagnosis.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">A Strong Experiment Log</h2>
+      </div>
+      <div class="section-body">
+        <p>Record:</p>
+<div class="ascii-box"><pre>Dataset:
+Target:
+Number of samples:
+Number of features:
+Missing values:
+Class distribution:
+
+Train/test split:
+Random seed:
+
+Preprocessing:
+Model:
+Hyperparameters:
+
+Accuracy:
+Precision:
+Recall:
+F1:
+ROC-AUC:
+
+Confusion matrix:
+
+Observed strengths:
+Observed weaknesses:
+
+Final decision:
+Reason:</pre></div>
+<p>Never rely on memory after a multi-model experiment.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">Common Mistakes</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Lab Viva Trap & Runtime Gotcha</div>
+
+**The Unequal Split & Test-Set Snooping Trap:**
+If you train Model A on Split 1 and Model B on Split 2, your comparison is invalid because test difficulties differ!
+Also, tuning hyperparameters directly on the test set causes test-set contamination (snooping).
+For proper comparison, use K-Fold Cross Validation on the training split, and evaluate all candidates once on the frozen holdout test set!
+
+</div>
+
+<h2>Mistake 1 — Different test sets</h2>
+<p>Bad comparison:</p>
+<div class="ascii-box"><pre>Model A → test split A
+Model B → test split B</pre></div>
+<p>The evidence is no longer directly comparable.</p>
+<hr />
+<h2>Mistake 2 — Scaling before splitting</h2>
+<p>This creates leakage.</p>
+<hr />
+<h2>Mistake 3 — Choosing by accuracy automatically</h2>
+<p>Accuracy can hide class-specific failures.</p>
+<hr />
+<h2>Mistake 4 — Comparing tuned model vs untuned model</h2>
+<p>Hyperparameter budget matters.</p>
+<hr />
+<h2>Mistake 5 — Treating AUC as a threshold</h2>
+<p>AUC is a summary of ranking/discrimination over thresholds; it is not itself the deployed decision threshold.</p>
+<hr />
+<h2>Mistake 6 — Looking only at a metric table</h2>
+<p>The confusion matrix can reveal an important difference hidden by an aggregate number.</p>
+<hr />
+<h2>Mistake 7 — Reporting many decimals without interpretation</h2>
+<div class="ascii-box"><pre>0.9734 vs 0.9718</pre></div>
+<p>is not automatically meaningful.</p>
+<p>Discuss:</p>
+<ul>
+<li>protocol;</li>
+<li>sample size;</li>
+<li>variability;</li>
+<li>metric relevance;</li>
+<li>practical significance.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">Master Experiment Script Structure</h2>
+      </div>
+      <div class="section-body">
+        <p>A clean notebook should follow:</p>
+<div class="ascii-box"><pre>0. Goal
+1. Imports
+2. Seed
+3. Load data
+4. Inspect data
+5. Define target
+6. Split
+7. Build preprocessing/model pipelines
+8. Train
+9. Predict
+10. Evaluate
+11. Plot confusion matrices
+12. Plot ROC curves
+13. Compare metrics
+14. Threshold analysis
+15. Cross-validation
+16. Error analysis
+17. Interpretation
+18. Reproducibility record</pre></div>
+<p>This is much more valuable than a notebook containing disconnected code cells.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">Extension — Add SVM, k-NN and Decision Tree Fairly</h2>
+      </div>
+      <div class="section-body">
+        <p>For your university practical requirement, maintain a three-model minimum:</p>
+<div class="ascii-box"><pre>Decision Tree
+      │
+      ├── interpretable split structure
+      └── little preprocessing dependence
+
+k-NN
+      │
+      ├── distance based
+      └── scale sensitive
+
+SVM
+      │
+      ├── margin-based
+      └── commonly scale sensitive</pre></div>
+<p>The point of the comparison is not to memorize which model "always wins."</p>
+<p>There is no universal winner.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">Experiment Tasks</h2>
+      </div>
+      <div class="section-body">
+        <p>Complete these in order.</p>
+<h3>Task A — Baseline</h3>
+<p>Train all three models with simple settings.</p>
+<p>Record all metrics.</p>
+<h3>Task B — Confusion matrices</h3>
+<p>Draw three confusion matrices.</p>
+<p>Write two observations per model.</p>
+<h3>Task C — ROC</h3>
+<p>Plot all ROC curves together.</p>
+<p>Record AUC.</p>
+<h3>Task D — Thresholds</h3>
+<p>For the strongest model, evaluate thresholds:</p>
+<div class="ascii-box"><pre>0.30
+0.40
+0.50
+0.60
+0.70</pre></div>
+<p>Record precision, recall and F1.</p>
+<h3>Task E — Tree complexity</h3>
+<p>Run multiple <code>max_depth</code> values and inspect training/test performance.</p>
+<h3>Task F — Cross-validation</h3>
+<p>Repeat the comparison with stratified cross-validation.</p>
+<h3>Task G — Final decision</h3>
+<p>Write one paragraph:</p>
+<blockquote>
+<p><strong>I select ___ because ___, while acknowledging ___ as the main limitation.</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">Debugging Checklist</h2>
+      </div>
+      <div class="section-body">
+        <p>When results look suspicious:</p>
+<div class="ascii-box"><pre>[ ] Was the target correct?
+[ ] Was the split stratified?
+[ ] Was preprocessing fitted only on training data?
+[ ] Did I accidentally use test data during tuning?
+[ ] Are positive/negative labels interpreted correctly?
+[ ] Did I inspect class counts?
+[ ] Did I inspect the confusion matrix?
+[ ] Did I use score/probability values for ROC-AUC rather than hard labels?
+[ ] Did every model receive the same evaluation set?
+[ ] Is the result reproducible with the recorded seed?</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">Interpretation Template</h2>
+      </div>
+      <div class="section-body">
+        <p>Use this after every experiment:</p>
+<blockquote>
+<p><strong>Dataset:</strong> <strong><em><br />
+<strong>Models:</strong> </em></strong><br />
+<strong>Primary metric:</strong> <strong><em><br />
+<strong>Best model on primary metric:</strong> </em></strong><br />
+<strong>Main confusion-matrix observation:</strong> <strong><em><br />
+<strong>ROC-AUC observation:</strong> </em></strong><br />
+<strong>Threshold observation:</strong> <strong><em><br />
+<strong>Generalization observation:</strong> </em></strong><br />
+<strong>Practical choice:</strong> <strong><em><br />
+<strong>Reason:</strong> </em></strong><br />
+<strong>Limitation:</strong> ___</p>
+</blockquote>
+<p>This turns coding into engineering reasoning.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">Practical Viva Questions</h2>
+      </div>
+      <div class="section-body">
+        <h3>Q1. Why should the same test set be used?</h3>
+<p>Because otherwise the models are evaluated on different evidence, weakening the fairness of the comparison.</p>
+<h3>Q2. Why is scaling important for k-NN?</h3>
+<p>Because distance calculations depend on feature magnitudes.</p>
+<h3>Q3. Why might a Decision Tree not need ordinary feature standardization?</h3>
+<p>Its basic split decisions depend on threshold ordering rather than Euclidean distance.</p>
+<h3>Q4. Why can accuracy be misleading?</h3>
+<p>A classifier can obtain high accuracy while performing poorly on a minority class.</p>
+<h3>Q5. Why does threshold matter?</h3>
+<p>It converts a continuous model score into a discrete class decision.</p>
+<h3>Q6. Why use ROC-AUC?</h3>
+<p>To evaluate ranking/discrimination across decision thresholds rather than only at one threshold.</p>
+<h3>Q7. What does cross-validation add?</h3>
+<p>It estimates performance across multiple train/validation partitions, providing information about variability as well as average performance.</p>
+<h3>Q8. What is leakage?</h3>
+<p>Information from outside the training partition influences model fitting or preprocessing in a way that would not be available at genuine prediction time.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <p>Move forward only when you can:</p>
+<ul>
+<li>[ ] create a train/test split correctly;</li>
+<li>[ ] explain why leakage matters;</li>
+<li>[ ] build a preprocessing pipeline;</li>
+<li>[ ] train Decision Tree, k-NN and SVM;</li>
+<li>[ ] compute confusion-matrix metrics;</li>
+<li>[ ] explain precision vs recall;</li>
+<li>[ ] plot and interpret ROC curves;</li>
+<li>[ ] calculate/interpret AUC;</li>
+<li>[ ] change classification thresholds;</li>
+<li>[ ] inspect overfitting with tree depth;</li>
+<li>[ ] use cross-validation;</li>
+<li>[ ] perform basic error analysis;</li>
+<li>[ ] justify a final model choice in writing.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">Connection to the Next Unit</h2>
+      </div>
+      <div class="section-body">
+        <p>Unit II has now formed a complete coding pipeline:</p>
+<div class="ascii-box"><pre>ML workflow
+   ↓
+Linear Regression
+   ↓
+Logistic Regression
+   ↓
+Decision Trees
+   ↓
+Evaluation
+   ↓
+Ridge / Lasso
+   ↓
+Model comparison</pre></div>
+<p>Unit III now changes the computational building block itself:</p>
+<div class="ascii-box"><pre>linear model
+   ↓
+artificial neuron
+   ↓
+perceptron
+   ↓
+MLP
+   ↓
+gradient-based learning
+   ↓
+backpropagation</pre></div>
+<p>The next file starts at the most fundamental neural computation:</p>
+<p><strong><code>CODE-U3-01 — Neuron and Perceptron From Scratch</code></strong></p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Source Notes</h2>
+      </div>
+      <div class="section-body">
+        <h2>Course-specific sources</h2>
+<ul>
+<li>Official <strong>DSC-14 Artificial Intelligence and Machine Learning</strong> syllabus: Unit II lists supervised/unsupervised/reinforcement learning, Linear Regression, Logistic Regression, Decision Trees, Confusion Matrix, Precision, Recall, F1, ROC-AUC, overfitting/underfitting and Lasso/Ridge. The practical component calls for regression/classification implementations including Decision Trees, k-NN and SVM.  </li>
+<li><code>AI_ML_Master_Learning_Resource_Guide.pdf</code>: identifies <code>pract_6_bias_and_hypothesis_class.ipynb</code> as a Unit II practical companion and recommends the experiment chain of input → representation → algorithm → parameters → loss/reward → training/update → output → evaluation. It also explicitly identifies Decision Trees, k-NN and SVM as part of the practical scope.</li>
+</ul>
+<h2>Expansion boundary</h2>
+<p>The exact Python structure, comparison protocol, threshold experiment, error-analysis workflow and reproducibility checklist in this chapter are <strong>coding-book expansions</strong> designed to operationalize the supplied course requirements. They are not claimed to be copied from an instructor's experiment sheet.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Status</h2>
+      </div>
+      <div class="section-body">
+        <p><strong><code>CODE-U2-07</code> — COMPLETE</strong></p>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="code-u2-06-ridge-lasso-regularization.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← Unit 2 Lab 06 — Ridge & Lasso</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">💻 Coding Index</span>
+      </a>
+      <a href="code-u3-01-neuron-perceptron.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: Unit 3 Lab 01 — Neuron & Perceptron From Scratch →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search lab implementations, functions, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">💻</span>Lab Hub</a>
+  <a href="code-u2-07-ml-evaluation-comparison.html" class="mobile-nav-btn active"><span class="icon">📖</span>CODE-U2-07</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

@@ -3,8 +3,8 @@
  * Network-First for Navigation (always fresh HTML) + Cache-First for static assets
  */
 
-const CACHE_NAME    = 'aiml-minibook-v6';
-const RUNTIME_CACHE = 'aiml-minibook-runtime-v6';
+const CACHE_NAME    = 'aiml-minibook-v7';
+const RUNTIME_CACHE = 'aiml-minibook-runtime-v7';
 const ASSETS = [
   './',
   './index.html',
@@ -13,6 +13,21 @@ const ASSETS = [
   './exams/unit-quiz.html',
   './exams/written-papers.html',
   './exams/formula-sheet.html',
+  './coding/index.html',
+  './coding/code-00-coding-foundation.html',
+  './coding/code-01-python-numpy-workflow.html',
+  './coding/code-u1-01-bfs-dfs.html',
+  './coding/code-u1-02-greedy-a-star.html',
+  './coding/code-u1-03-csp-backtracking.html',
+  './coding/code-u1-04-minimax-alpha-beta.html',
+  './coding/code-u2-01-ml-workflow.html',
+  './coding/code-u2-02-linear-regression.html',
+  './coding/code-u2-03-logistic-regression.html',
+  './coding/code-u2-04-decision-trees.html',
+  './coding/code-u2-05-classification-metrics-roc.html',
+  './coding/code-u2-06-ridge-lasso-regularization.html',
+  './coding/code-u2-07-ml-evaluation-comparison.html',
+  './coding/code-u3-01-neuron-perceptron.html',
   './math/index.html',
   './math/m01-mathematical-notation.html',
   './math/m02-algebra-foundations.html',
@@ -45,6 +60,7 @@ const ASSETS = [
   './assets/css/chapters.css',
   './assets/css/animations.css',
   './assets/css/math.css',
+  './assets/css/coding.css',
   './chapters/ch01-what-is-ai.html',
   './chapters/ch02-intelligent-agents.html',
   './chapters/ch03-problem-formulation.html',

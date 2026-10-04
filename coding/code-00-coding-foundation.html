@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="CODE-00: Coding Lab Foundation & Implementation System — AI & Machine Learning Coding Lab. From-Scratch Philosophy, Testing Protocols, Trace Conventions, and Delhi University Lab Guidelines">
+<title>CODE-00: Coding Lab Foundation & Implementation System | Coding Lab 💻 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/coding.css">
+</head>
+<body class="coding-module track-c0">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">💻</div>
+      <div class="brand-text"><span class="main">Coding Lab</span><span class="sub">AI &amp; ML From Scratch</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">CODE-00: Coding Lab Foundation &amp; Implementation System</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">💻</span>Coding Lab Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../math/index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 0: Environment & System</div>
+  <a href="code-00-coding-foundation.html" class="sidebar-link active"><span class="link-icon">⚙️</span>CODE-00: Coding Lab Foundation &amp; Implementation System</a>
+  <a href="code-01-python-numpy-workflow.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-01: Python, NumPy, Matplotlib &amp; Lab Workflow</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Classical AI & Search Labs</div>
+  <a href="code-u1-01-bfs-dfs.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-01: BFS and DFS From Scratch</a>
+  <a href="code-u1-02-greedy-a-star.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-02: Greedy Best-First &amp; A* Search From Scratch</a>
+  <a href="code-u1-03-csp-backtracking.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-03: CSPs and Backtracking Search</a>
+  <a href="code-u1-04-minimax-alpha-beta.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Supervised ML Labs</div>
+  <a href="code-u2-01-ml-workflow.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-01: ML Workflow: Preprocessing, Splitting &amp; Evaluation</a>
+  <a href="code-u2-02-linear-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-02: Linear Regression From Scratch</a>
+  <a href="code-u2-03-logistic-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-03: Logistic Regression From Scratch</a>
+  <a href="code-u2-04-decision-trees.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-04: Decision Trees From Scratch</a>
+  <a href="code-u2-05-classification-metrics-roc.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC &amp; Thresholds</a>
+  <a href="code-u2-06-ridge-lasso-regularization.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-06: Ridge &amp; Lasso From Scratch: Regularization &amp; Optimization</a>
+  <a href="code-u2-07-ml-evaluation-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-07: ML Evaluation &amp; Model Comparison Lab</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Deep Learning Labs</div>
+  <a href="code-u3-01-neuron-perceptron.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-01: Neuron and Perceptron From Scratch</a>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>MLP, Backpropagation & Convolutions</span>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Advanced AI Labs (Upcoming)</div>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>Q-Learning, NLP & Generative Adversarial Loops</span>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">CODE-00 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why the Coding Book Exists</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. What This Book Will Teach</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. The Coding Book Does Not Mean “Copy and Run”</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Course-Syllabus Coding Map</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Planned Coding Book File Map</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Universal Practical Template</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. What “From Scratch” Means</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. What Libraries Are Allowed?</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Reproducibility Standard</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Data Handling Rule</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Shape Discipline</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Assertions Are Part of Learning</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Testing Philosophy</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Traceability</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Visualization Standard</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Debugging Method</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Numerical ML Debugging</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Core Engineering Rules</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Pseudocode Before Code</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Manual Trace Before Full Dataset</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Complexity Is Part of Coding</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. From-Scratch vs Production Code</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Implementation Notebook Standard</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. What the Learner Should Write Independently</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Main Book ↔ Coding Book Integration</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Resource Rule</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Coding Progress States</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Coding Book Quality Gate</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Final Foundation Mental Model</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Foundation Exit Test</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Next File</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Coding Lab</a>
+        <span>/</span>
+        <span>CODE-00</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-c0">Track 0: Environment & System</span></div>
+      <h1 class="chapter-title">Coding Lab Foundation &amp; Implementation System</h1>
+      <p class="chapter-desc">From-Scratch Philosophy, Testing Protocols, Trace Conventions, and Delhi University Lab Guidelines</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~30 min guide</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">LAB-FOUNDATION</span> <span class="chapter-meta-item uni-badge">PEP8</span> <span class="chapter-meta-item uni-badge">TESTING</span> <span class="chapter-meta-item uni-badge">DSC-14</span>
+      </div>
+
+      <div class="lab-meta-grid">
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Prerequisites</div>
+          <div class="lab-meta-value">Basic Python Fluency & Terminal Basics</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Main Book Concept</div>
+          <div class="lab-meta-value">Ch 01 What is AI, Ch 14 What is ML</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Math Companion Layer</div>
+          <div class="lab-meta-value">M01 Mathematical Notation</div>
+        </div>
+        <div class="lab-meta-box" style="grid-column: 1 / -1;">
+          <div class="lab-meta-label">AI / Machine Learning Connections</div>
+          <div class="lab-meta-value">Bridging conceptual theory (Main Book), formal mathematics (Math Companion), and verifiable code execution (Coding Lab)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-meta-card"><h1>CODE-00 — AI/ML Coding Book Foundation and Implementation System</h1>
+<blockquote>
+<p><strong>Coding Book — AI &amp; Machine Learning</strong></p>
+<p><strong>Course boundary:</strong> Faculty of Technology, University of Delhi — DSC-14 Artificial Intelligence and Machine Learning</p>
+<p><strong>Role of this book:</strong> Turn the concepts taught in the Main Book into executable programs, experiments, tests, traces, visualizations, and small implementation projects.</p>
+<p><strong>Companion relationship:</strong></p>
+</blockquote>
+<div class="ascii-box"><pre>&gt; Main Book      → understand the concept
+&gt; Math Companion → understand the mathematics
+&gt; Coding Book    → implement and experiment
+&gt; Exam Book      → recall and write under exam conditions
+&gt;</pre></div>
+<blockquote>
+<p><strong>Important:</strong> The Coding Book is not a replacement for the Main Book. Do not learn an algorithm only by copying code. Every implementation begins with the problem, representation, pseudocode, trace, and expected behaviour.</p>
+</blockquote>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in CODE-00 (31 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why the Coding Book Exists</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">What This Book Will Teach</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">The Coding Book Does Not Mean “Copy and Run”</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Course-Syllabus Coding Map</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Planned Coding Book File Map</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Universal Practical Template</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">What “From Scratch” Means</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">What Libraries Are Allowed?</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Reproducibility Standard</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Data Handling Rule</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Shape Discipline</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Assertions Are Part of Learning</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Testing Philosophy</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Traceability</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Visualization Standard</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Debugging Method</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Numerical ML Debugging</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Core Engineering Rules</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Pseudocode Before Code</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Manual Trace Before Full Dataset</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Complexity Is Part of Coding</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">From-Scratch vs Production Code</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Implementation Notebook Standard</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">What the Learner Should Write Independently</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Main Book ↔ Coding Book Integration</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Resource Rule</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Coding Progress States</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Coding Book Quality Gate</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Final Foundation Mental Model</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Foundation Exit Test</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Next File</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">Why the Coding Book Exists</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph TD
+    A["Conceptual Theory (Main Book)"] --> B["Mathematical Derivations (Math Companion)"]
+    B --> C["Algorithmic Representation & Pseudocode"]
+    C --> D["From-Scratch Python Implementation (Coding Lab)"]
+    D --> E["Unit Tests & State Trajectory Tracing"]
+    E --> F["Benchmark against Scikit-Learn Library"]
+    F --> G["Lab Viva & Practical Mastery"]
+    style A fill:#1e293b,stroke:#38bdf8,color:#f8fafc
+    style D fill:#0f172a,stroke:#38bdf8,color:#38bdf8,stroke-width:2px
+    style G fill:#065f46,stroke:#34d399,color:#ffffff
+</pre></div>
+<p>The official course outcomes explicitly include implementation-oriented abilities:</p>
+<ul>
+<li>implement machine-learning algorithms such as regression and decision trees;</li>
+<li>apply deep-learning techniques;</li>
+<li>implement and evaluate reinforcement-learning algorithms including Q-learning and policy gradients;</li>
+<li>apply NLP techniques;</li>
+<li>utilize generative models such as autoencoders and GANs.</li>
+</ul>
+<p>The supplied course resource guide also identifies <strong>Python practice</strong> as part of the practice layer and points to practical notebooks such as:</p>
+<ul>
+<li><code>pract_6_bias_and_hypothesis_class.ipynb</code>;</li>
+<li><code>prac_7_neural_network.ipynb</code>.</li>
+</ul>
+<p>The Coding Book therefore has a different job from the Main Book:</p>
+<div class="ascii-box"><pre>Concept
+  ↓
+Representation
+  ↓
+Pseudocode
+  ↓
+From-scratch implementation
+  ↓
+Unit tests
+  ↓
+Trace / visualization
+  ↓
+Library implementation
+  ↓
+Experiment
+  ↓
+Interpretation
+  ↓
+Debugging</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">What This Book Will Teach</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Implementation Model</div>
+
+Code copy-paste karke run karna 'learning' nahi hota.
+Asli engineer aur AI researcher vo hota hai jo pehle problem aur data structure ko dimaag mein imagine karta hai, paper par algorithm trace karta hai, aur phir clean, modular, zero-black-box code likhta hai.
+Coding Lab ka golden rule hai: **"No black boxes until you build the box yourself!"**
+
+</div>
+
+<p>The Coding Book should make you capable of answering:</p>
+<blockquote>
+<p>“I understand what this algorithm does. Can I actually build it?”</p>
+</blockquote>
+<p>For each major algorithm/model, the expected progression is:</p>
+<h3>Level C0 — Recognize</h3>
+<p>Identify the algorithm from its description.</p>
+<h3>Level C1 — Read</h3>
+<p>Understand existing implementation code.</p>
+<h3>Level C2 — Modify</h3>
+<p>Change a parameter or small section safely.</p>
+<h3>Level C3 — Implement</h3>
+<p>Write the core algorithm from pseudocode without copying a finished solution.</p>
+<h3>Level C4 — Test</h3>
+<p>Verify edge cases, expected outputs, and invariants.</p>
+<h3>Level C5 — Visualize</h3>
+<p>Inspect what the algorithm is doing.</p>
+<h3>Level C6 — Compare</h3>
+<p>Compare the from-scratch version with a mature library implementation.</p>
+<h3>Level C7 — Explain</h3>
+<p>Defend the design, complexity, assumptions, failure cases, and results.</p>
+<h3>Target</h3>
+<p>For university practicals:</p>
+<div class="formula-math">\[
+\boxed{\text{C3–C4}}
+\]</div>
+<p>For strong engineering ability:</p>
+<div class="formula-math">\[
+\boxed{\text{C5–C6}}
+\]</div>
+<p>For project/research readiness:</p>
+<div class="formula-math">\[
+\boxed{\text{C7}}
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">The Coding Book Does Not Mean “Copy and Run”</h2>
+      </div>
+      <div class="section-body">
+        <p>A dangerous learning pattern is:</p>
+<div class="ascii-box"><pre>Open notebook
+↓
+Copy code
+↓
+Run
+↓
+See output
+↓
+Assume learned</pre></div>
+<p>That produces very weak transfer.</p>
+<p>Instead use:</p>
+<div class="ascii-box"><pre>Read problem
+↓
+Draw representation
+↓
+Write pseudocode
+↓
+Predict behaviour
+↓
+Implement
+↓
+Test
+↓
+Trace
+↓
+Debug
+↓
+Explain output
+↓
+Only then use library implementation</pre></div>
+<p>The implementation is the <strong>last visible layer</strong> of understanding, not the first.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Course-Syllabus Coding Map</h2>
+      </div>
+      <div class="section-body">
+        <p>The official DSC-14 syllabus is the boundary for this coding track.</p>
+<h2>Unit I — AI</h2>
+<div class="ascii-box"><pre>Agents / problem formulation
+        ↓
+BFS / DFS
+        ↓
+Greedy best-first / A*
+        ↓
+Heuristics
+        ↓
+CSP
+        ↓
+Game playing / adversarial search</pre></div>
+<h2>Unit II — Machine Learning</h2>
+<div class="ascii-box"><pre>Dataset + preprocessing
+        ↓
+Supervised / unsupervised / RL framing
+        ↓
+Linear regression
+        ↓
+Logistic regression
+        ↓
+Decision trees
+        ↓
+Confusion matrix
+        ↓
+Precision / Recall / F1 / ROC-AUC
+        ↓
+Overfitting / underfitting
+        ↓
+Ridge / Lasso</pre></div>
+<h2>Unit III — Deep Learning</h2>
+<div class="ascii-box"><pre>Neuron
+  ↓
+Perceptron
+  ↓
+MLP
+  ↓
+Gradient descent
+  ↓
+Backpropagation
+  ↓
+CNN
+  ↓
+RNN
+  ↓
+LSTM</pre></div>
+<h2>Unit IV — Advanced AI</h2>
+<div class="ascii-box"><pre>MDP
+ ↓
+Q-learning
+ ↓
+Policy gradients
+ ↓
+NLP preprocessing
+ ↓
+Text classification
+ ↓
+Autoencoders
+ ↓
+GANs
+ ↓
+Responsible AI case studies</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Planned Coding Book File Map</h2>
+      </div>
+      <div class="section-body">
+        <p>The approximate final structure is:</p>
+<div class="ascii-box"><pre>CODE-00  Foundation and Coding System
+CODE-01  Python/NumPy/Matplotlib Lab Environment
+
+UNIT I
+CODE-U1-01  BFS and DFS
+CODE-U1-02  Greedy Best-First and A*
+CODE-U1-03  Constraint Satisfaction / Backtracking
+CODE-U1-04  Minimax and Alpha-Beta
+
+UNIT II
+CODE-U2-01  ML Workflow, Data Loading and Preprocessing
+CODE-U2-02  Linear Regression
+CODE-U2-03  Logistic Regression
+CODE-U2-04  Decision Trees
+CODE-U2-05  Classification Metrics and ROC-AUC
+CODE-U2-06  Ridge and Lasso
+CODE-U2-07  ML Evaluation and Model Comparison Lab
+
+UNIT III
+CODE-U3-01  Neuron and Perceptron
+CODE-U3-02  MLP and Forward Propagation
+CODE-U3-03  Gradient Descent and Backpropagation
+CODE-U3-04  CNN
+CODE-U3-05  RNN and LSTM
+
+UNIT IV
+CODE-U4-01  MDP and Q-Learning
+CODE-U4-02  Policy Gradients
+CODE-U4-03  NLP Preprocessing and Text Classification
+CODE-U4-04  Autoencoders
+CODE-U4-05  GANs
+
+FINAL INTEGRATION
+CODE-23  Debugging, Testing, Visualization and Reproducibility
+CODE-24  AI/ML Coding Capstone and Master Checklist</pre></div>
+<p>This is <strong>24 files total</strong>.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Universal Practical Template</h2>
+      </div>
+      <div class="section-body">
+        <p>Every substantial coding chapter follows this structure.</p>
+<h2>1. Coding objective</h2>
+<p>What are we implementing?</p>
+<h2>2. Learning target</h2>
+<p>What should you be able to implement from memory?</p>
+<h2>3. Required environment</h2>
+<p>Python version, libraries, hardware assumptions, and expected runtime.</p>
+<h2>4. Input representation</h2>
+<p>What do the data structures look like?</p>
+<h2>5. Problem setup</h2>
+<p>Use a small hand-checkable example before a large dataset.</p>
+<h2>6. Algorithm idea</h2>
+<p>Explain the implementation logic in plain English.</p>
+<h2>7. Pseudocode</h2>
+<p>Pseudocode must come <strong>before</strong> executable implementation.</p>
+<h2>8. From-scratch implementation</h2>
+<p>Implement the essential logic without hiding it inside a high-level library.</p>
+<h2>9. Line-by-line logic map</h2>
+<p>Explain the important portions rather than commenting every trivial syntax element.</p>
+<h2>10. Manual trace</h2>
+<p>Show the state changing step by step.</p>
+<h2>11. Tests</h2>
+<p>At minimum:</p>
+<ul>
+<li>normal case;</li>
+<li>boundary case;</li>
+<li>edge/failure case.</li>
+</ul>
+<h2>12. Complexity</h2>
+<p>State time and space complexity where meaningful.</p>
+<h2>13. Visualization</h2>
+<p>Show a graph, decision boundary, loss curve, search frontier, trajectory, confusion matrix, or other useful visual.</p>
+<h2>14. Library implementation</h2>
+<p>Only after the from-scratch implementation.</p>
+<h2>15. Compare</h2>
+<p>Compare:</p>
+<div class="ascii-box"><pre>from scratch
+vs
+library</pre></div>
+<p>in terms of:</p>
+<ul>
+<li>abstraction;</li>
+<li>correctness;</li>
+<li>performance;</li>
+<li>readability;</li>
+<li>flexibility.</li>
+</ul>
+<h2>16. Debugging lab</h2>
+<p>Show at least one realistic mistake and how to diagnose it.</p>
+<h2>17. Experiment</h2>
+<p>Change one or two variables and observe what changes.</p>
+<h2>18. Interpretation</h2>
+<p>Explain what the result actually means.</p>
+<h2>19. Active recall</h2>
+<p>Close the notebook and answer implementation questions.</p>
+<h2>20. Coding challenge</h2>
+<p>Write a small extension without copying the original implementation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">What “From Scratch” Means</h2>
+      </div>
+      <div class="section-body">
+        <p>From-scratch does <strong>not</strong> mean rebuilding Python.</p>
+<p>It means implementing the algorithm's essential logic yourself.</p>
+<h3>Good</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def bfs(graph, start):
+    ...</code></pre></div>
+<p>where the queue handling, visited tracking, and traversal logic are yours.</p>
+<h3>Not enough</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from some_library import bfs</code></pre></div>
+<p>followed by a one-line call.</p>
+<p>The library version is useful later for comparison, but it is not the learning implementation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">What Libraries Are Allowed?</h2>
+      </div>
+      <div class="section-body">
+        <p>Libraries are tools, not shortcuts around understanding.</p>
+<p>Typical tools in this book may include:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Purpose</th>
+<th>Typical library</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Numerical arrays</td>
+<td>NumPy</td>
+</tr>
+<tr>
+<td>Tables / datasets</td>
+<td>pandas</td>
+</tr>
+<tr>
+<td>Visualization</td>
+<td>Matplotlib</td>
+</tr>
+<tr>
+<td>Classical ML</td>
+<td>scikit-learn</td>
+</tr>
+<tr>
+<td>Deep learning</td>
+<td>PyTorch</td>
+</tr>
+<tr>
+<td>NLP</td>
+<td>scikit-learn / PyTorch / standard Python tools</td>
+</tr>
+<tr>
+<td>Image processing</td>
+<td>Pillow / torchvision where required</td>
+</tr>
+<tr>
+<td>Graph/search visualizations</td>
+<td>Matplotlib / simple Python structures</td>
+</tr>
+</tbody>
+</table></div>
+<p>The exact package set should remain minimal.</p>
+<p>Do not install a huge stack merely because it exists.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Reproducibility Standard</h2>
+      </div>
+      <div class="section-body">
+        <p>Every substantial experiment should make the important sources of randomness explicit.</p>
+<p>For example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+rng = np.random.default_rng(42)</code></pre></div>
+<p>or an equivalent framework-specific seed.</p>
+<p>A reproducible experiment records:</p>
+<div class="ascii-box"><pre>dataset
+↓
+preprocessing
+↓
+train/validation/test split
+↓
+random seed
+↓
+model configuration
+↓
+training settings
+↓
+evaluation metric
+↓
+result</pre></div>
+<p>A result that cannot be reproduced is much less useful as a learning artifact.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Data Handling Rule</h2>
+      </div>
+      <div class="section-body">
+        <p>Never silently leak test information into training.</p>
+<p>The safe conceptual workflow is:</p>
+<div class="ascii-box"><pre>Raw dataset
+    ↓
+Split
+ ┌──┴───────────────┐
+ ↓                  ↓
+Train              Test
+ ↓
+fit preprocessing
+ ↓
+train model
+ ↓
+evaluate on test</pre></div>
+<p>For validation-based model selection:</p>
+<div class="ascii-box"><pre>Train
+Validation
+Test</pre></div>
+<p>The test set should remain untouched until final evaluation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Shape Discipline</h2>
+      </div>
+      <div class="section-body">
+        <p>A large fraction of practical ML bugs are shape bugs.</p>
+<p>For every array, know its shape.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>X → (n_samples, n_features)
+y → (n_samples,)</pre></div>
+<p>A neural-network layer might use:</p>
+<div class="ascii-box"><pre>W → (n_out, n_in)
+b → (n_out,)
+x → (n_in,)</pre></div>
+<p>Then:</p>
+<div class="ascii-box"><pre>W @ x → (n_out,)</pre></div>
+<p>Do not proceed until dimensions make sense.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Assertions Are Part of Learning</h2>
+      </div>
+      <div class="section-body">
+        <p>Use assertions to catch incorrect assumptions early.</p>
+<p>Example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert X.ndim == 2
+assert len(X) == len(y)
+assert not np.isnan(X).any()</code></pre></div>
+<p>The exact assertions depend on the experiment.</p>
+<p>The philosophy is:</p>
+<blockquote>
+<p>Make important assumptions executable.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Testing Philosophy</h2>
+      </div>
+      <div class="section-body">
+        <p>Tests should answer:</p>
+<blockquote>
+<p>“Did I implement the intended algorithm?”</p>
+</blockquote>
+<p>Not merely:</p>
+<blockquote>
+<p>“Did Python run?”</p>
+</blockquote>
+<p>Example categories:</p>
+<h3>Example test</h3>
+<p>A small known input with an expected answer.</p>
+<h3>Boundary test</h3>
+<p>An input near an algorithmic edge.</p>
+<h3>Empty/minimal test</h3>
+<p>For example:</p>
+<div class="ascii-box"><pre>one node
+one feature
+one sample
+empty path</pre></div>
+<p>where applicable.</p>
+<h3>Failure test</h3>
+<p>An intentionally invalid input or impossible situation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Traceability</h2>
+      </div>
+      <div class="section-body">
+        <p>Every important implementation should make its internal state observable.</p>
+<p>Examples:</p>
+<h2>Search</h2>
+<div class="ascii-box"><pre>step
+current node
+frontier
+visited
+parent</pre></div>
+<h2>Linear regression</h2>
+<div class="ascii-box"><pre>iteration
+weights
+loss
+gradient</pre></div>
+<h2>Neural network</h2>
+<div class="ascii-box"><pre>layer
+activation
+loss
+gradient</pre></div>
+<h2>Q-learning</h2>
+<div class="ascii-box"><pre>state
+action
+reward
+next state
+old Q
+new Q</pre></div>
+<p>Without a trace, debugging becomes much harder.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">Visualization Standard</h2>
+      </div>
+      <div class="section-body">
+        <p>Do not add plots merely because plots look attractive.</p>
+<p>Visualize when the visual answers a question.</p>
+<p>Examples:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Algorithm</th>
+<th>Useful visual</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BFS/DFS</td>
+<td>search tree/frontier</td>
+</tr>
+<tr>
+<td>A*</td>
+<td>explored nodes + path</td>
+</tr>
+<tr>
+<td>Linear regression</td>
+<td>points + fitted line</td>
+</tr>
+<tr>
+<td>Logistic regression</td>
+<td>decision boundary</td>
+</tr>
+<tr>
+<td>Decision tree</td>
+<td>tree diagram</td>
+</tr>
+<tr>
+<td>Metrics</td>
+<td>confusion matrix / ROC</td>
+</tr>
+<tr>
+<td>Gradient descent</td>
+<td>loss curve</td>
+</tr>
+<tr>
+<td>CNN</td>
+<td>feature-map illustration</td>
+</tr>
+<tr>
+<td>RNN/LSTM</td>
+<td>sequence flow</td>
+</tr>
+<tr>
+<td>Q-learning</td>
+<td>value table / policy arrows</td>
+</tr>
+<tr>
+<td>NLP</td>
+<td>token counts / confusion matrix</td>
+</tr>
+<tr>
+<td>Autoencoder</td>
+<td>reconstruction</td>
+</tr>
+<tr>
+<td>GAN</td>
+<td>generated samples</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">Debugging Method</h2>
+      </div>
+      <div class="section-body">
+        <p>When code fails, do not randomly change lines.</p>
+<p>Use:</p>
+<div class="ascii-box"><pre>Observe
+↓
+Classify
+↓
+Localize
+↓
+Test hypothesis
+↓
+Fix
+↓
+Re-run
+↓
+Add regression test</pre></div>
+<h2>Error categories</h2>
+<h3>Syntax error</h3>
+<p>Python cannot parse the code.</p>
+<h3>Shape error</h3>
+<p>Arrays/tensors have incompatible dimensions.</p>
+<h3>Type error</h3>
+<p>The object is not the expected type.</p>
+<h3>Logic error</h3>
+<p>The program runs but gives the wrong result.</p>
+<h3>Numerical error</h3>
+<p>The mathematics is correct in principle but unstable, overflowing, underflowing, or poorly scaled.</p>
+<h3>Data error</h3>
+<p>Input assumptions are wrong.</p>
+<h3>Evaluation error</h3>
+<p>The code is technically correct but the experimental methodology is flawed.</p>
+<p>That last category matters enormously in ML.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">Numerical ML Debugging</h2>
+      </div>
+      <div class="section-body">
+        <p>When a model behaves strangely, inspect:</p>
+<div class="ascii-box"><pre>NaN?
+Inf?
+Exploding loss?
+Constant loss?
+Weights all zero?
+Weights enormous?
+Predictions constant?
+Train ≫ test?
+Test ≫ train?</pre></div>
+<p>For gradient-based models, also inspect:</p>
+<div class="formula-math">\[
+\|\nabla J\|
+\]</div>
+<p>and parameter magnitudes.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Core Engineering Rules</h2>
+      </div>
+      <div class="section-body">
+        <h2>Rule 1</h2>
+<p>Start small.</p>
+<div class="ascii-box"><pre>2–5 examples</pre></div>
+<p>before:</p>
+<div class="ascii-box"><pre>100,000 examples</pre></div>
+<h2>Rule 2</h2>
+<p>Know the expected result before executing.</p>
+<h2>Rule 3</h2>
+<p>Prefer explicit intermediate variables while learning.</p>
+<h2>Rule 4</h2>
+<p>Vectorize only after understanding the scalar logic.</p>
+<h2>Rule 5</h2>
+<p>Separate data, model, training, and evaluation logic.</p>
+<h2>Rule 6</h2>
+<p>Keep experiments reproducible.</p>
+<h2>Rule 7</h2>
+<p>Use tests to protect working code.</p>
+<h2>Rule 8</h2>
+<p>Never interpret an ML result without checking how it was obtained.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">Pseudocode Before Code</h2>
+      </div>
+      <div class="section-body">
+        <p>For a search algorithm:</p>
+<div class="ascii-box"><pre>Create frontier
+Mark start
+While frontier not empty:
+    remove next state
+    if goal:
+        return solution
+    generate successors
+    add valid successors
+return failure</pre></div>
+<p>For gradient descent:</p>
+<div class="ascii-box"><pre>Initialize parameters
+Repeat:
+    calculate predictions
+    calculate loss
+    calculate gradient
+    update parameters
+Return learned parameters</pre></div>
+<p>The exact pseudocode changes by algorithm, but this separation matters:</p>
+<div class="ascii-box"><pre>algorithm idea
+     ≠
+Python syntax</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Manual Trace Before Full Dataset</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose an algorithm operates on:</p>
+<div class="ascii-box"><pre>A → B
+A → C
+B → D
+C → E</pre></div>
+<p>First trace:</p>
+<div class="ascii-box"><pre>start = A</pre></div>
+<p>by hand.</p>
+<p>Only after the trace is understood should a larger graph be used.</p>
+<p>Likewise for ML:</p>
+<div class="ascii-box"><pre>X = tiny matrix
+y = tiny target</pre></div>
+<p>before using a large real dataset.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">Complexity Is Part of Coding</h2>
+      </div>
+      <div class="section-body">
+        <p>An implementation is not complete until you understand its computational behaviour.</p>
+<p>For algorithms, record:</p>
+<div class="formula-math">\[
+\boxed{\text{Time complexity}}
+\]</div>
+<p>and</p>
+<div class="formula-math">\[
+\boxed{\text{Space complexity}}
+\]</div>
+<p>where applicable.</p>
+<p>For ML, also consider:</p>
+<div class="ascii-box"><pre>number of samples
+number of features
+number of parameters
+epochs
+batch size
+memory</pre></div>
+<p>The same algorithm can behave very differently at different scales.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">From-Scratch vs Production Code</h2>
+      </div>
+      <div class="section-body">
+        <p>A university implementation might prioritize:</p>
+<div class="ascii-box"><pre>clarity
+↓
+traceability
+↓
+correctness</pre></div>
+<p>Production software additionally demands:</p>
+<div class="ascii-box"><pre>clarity
+correctness
+testing
+performance
+maintainability
+security
+observability
+reproducibility</pre></div>
+<p>The Coding Book should teach the bridge between the two.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">Implementation Notebook Standard</h2>
+      </div>
+      <div class="section-body">
+        <p>For practical work, use a consistent notebook structure:</p>
+<div class="ascii-box"><pre># Experiment title
+
+## Objective
+
+## Theory snapshot
+
+## Imports
+
+## Data
+
+## Representation checks
+
+## Pseudocode
+
+## From-scratch implementation
+
+## Example run
+
+## Trace
+
+## Tests
+
+## Visualization
+
+## Library implementation
+
+## Comparison
+
+## Experiment
+
+## Interpretation
+
+## Conclusion
+
+## Extension challenge</pre></div>
+<p>This creates a repeatable engineering habit.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">What the Learner Should Write Independently</h2>
+      </div>
+      <div class="section-body">
+        <p>The book should provide teaching code, but learning is complete only when you can recreate important pieces without looking.</p>
+<p>The learner should independently implement at least:</p>
+<div class="ascii-box"><pre>BFS
+DFS
+A*
+CSP backtracking
+Minimax
+Linear Regression
+Logistic Regression
+Decision Tree core split logic
+Metrics
+Perceptron
+MLP forward pass
+Gradient Descent
+Backpropagation
+CNN building blocks
+RNN/LSTM core intuition implementation
+Q-learning
+Policy-gradient core loop
+NLP preprocessing pipeline
+Autoencoder
+GAN training skeleton</pre></div>
+<p>The exact production-library internals are not the goal.</p>
+<p>The goal is understanding the computational mechanism.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">Main Book ↔ Coding Book Integration</h2>
+      </div>
+      <div class="section-body">
+        <p>Use explicit links.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>MAIN-U1-C07 — BFS
+        ↓
+CODE-U1-01 — BFS and DFS
+        ↓
+EXAM-U1 — BFS/DFS questions
+        ↓
+MATH-M04/M05/M08 as needed</pre></div>
+<p>For A*:</p>
+<div class="ascii-box"><pre>MAIN-U1-C09 — A*
+        ↓
+CODE-U1-02 — Greedy + A*
+        ↓
+MATH — cost / comparison foundations
+        ↓
+EXAM-U1 — A* dry runs + complexity</pre></div>
+<p>For regression:</p>
+<div class="ascii-box"><pre>MAIN-U2-C18/19
+        ↓
+CODE-U2-02 — Linear Regression
+        ↓
+MATH-M09/M18/M21/M22
+        ↓
+EXAM-U2 — regression numericals</pre></div>
+<p>For neural networks:</p>
+<div class="ascii-box"><pre>MAIN-U3-C30+
+        ↓
+CODE-U3-01+
+        ↓
+MATH-M20–M23
+        ↓
+EXAM-U3</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">Resource Rule</h2>
+      </div>
+      <div class="section-body">
+        <p>The supplied learning system says:</p>
+<div class="ascii-box"><pre>Syllabus
+  ↓
+Course notes
+  ↓
+Core video
+  ↓
+Practice / Python</pre></div>
+<p>The Coding Book therefore does not need to become a resource catalog.</p>
+<p>Use one strong implementation route, then add a reference only when the implementation becomes unclear.</p>
+<p>The resource guide identifies videos as the primary learning mode and Python as part of the practice layer.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">Coding Progress States</h2>
+      </div>
+      <div class="section-body">
+        <p>Use:</p>
+<h3>C0 — Seen</h3>
+<p>I have read it.</p>
+<h3>C1 — Run</h3>
+<p>I have executed it.</p>
+<h3>C2 — Trace</h3>
+<p>I understand the state changes.</p>
+<h3>C3 — Rebuild</h3>
+<p>I can implement the core logic with reference to pseudocode.</p>
+<h3>C4 — Test</h3>
+<p>I can write tests.</p>
+<h3>C5 — Modify</h3>
+<p>I can change the implementation safely.</p>
+<h3>C6 — Explain</h3>
+<p>I can explain design, complexity, failure cases, and output.</p>
+<h3>C7 — Transfer</h3>
+<p>I can adapt the technique to a new problem.</p>
+<p>Never mark a chapter “mastered” merely because the notebook executes.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">Coding Book Quality Gate</h2>
+      </div>
+      <div class="section-body">
+        <p>Before marking any coding chapter complete:</p>
+<ul>
+<li>[ ] Problem is clearly stated.</li>
+<li>[ ] Inputs and outputs are defined.</li>
+<li>[ ] Representation is explained.</li>
+<li>[ ] Pseudocode comes before implementation.</li>
+<li>[ ] Core from-scratch implementation exists.</li>
+<li>[ ] At least one manual trace exists.</li>
+<li>[ ] Tests exist.</li>
+<li>[ ] Edge/failure behaviour is discussed.</li>
+<li>[ ] Complexity is stated where relevant.</li>
+<li>[ ] Visualization exists when useful.</li>
+<li>[ ] Library implementation appears only after fundamentals.</li>
+<li>[ ] From-scratch vs library comparison exists.</li>
+<li>[ ] Debugging example exists.</li>
+<li>[ ] Experiment/change-one-variable task exists.</li>
+<li>[ ] Interpretation is explained.</li>
+<li>[ ] Active recall exists.</li>
+<li>[ ] Main/Math/Exam cross-links exist.</li>
+<li>[ ] Source boundary is visible.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">Final Foundation Mental Model</h2>
+      </div>
+      <div class="section-body">
+        <p>The Coding Book is not:</p>
+<div class="ascii-box"><pre>“a collection of Python answers.”</pre></div>
+<p>It is:</p>
+<div class="ascii-box"><pre>Algorithmic understanding
+        +
+Mathematical understanding
+        +
+Executable implementation
+        +
+Testing
+        +
+Observation
+        +
+Debugging
+        +
+Experimentation</pre></div>
+<p>The desired learner outcome is:</p>
+<blockquote>
+<p><strong>I do not merely know what an AI/ML algorithm is. I can represent it, implement its core mechanism, test it, inspect it, explain it, and recognize when it is failing.</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">Foundation Exit Test</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Lab Viva Trap & Runtime Gotcha</div>
+
+**Hardcoded Dimensions & Global State Trap:**
+Never hardcode shapes (like `for i in range(100):`) or rely on global variables in lab practicals!
+Always use `X.shape[0]`, pass parameters cleanly to functions/classes, write assertion tests, and set random seeds (`np.random.seed(42)`) for 100% reproducible lab evaluations.
+
+</div>
+
+<p>Before moving to CODE-01, answer:</p>
+<ol>
+<li>Why should pseudocode come before implementation?</li>
+<li>What does “from scratch” mean in this book?</li>
+<li>Why are library implementations placed after core implementations?</li>
+<li>What is the difference between a code error and an evaluation error?</li>
+<li>Why is shape checking important?</li>
+<li>What belongs in a reproducible experiment?</li>
+<li>Why should the test set be protected?</li>
+<li>Why should small hand-checkable examples come first?</li>
+<li>What are C0–C7?</li>
+<li>What makes a coding chapter complete?</li>
+</ol>
+<h3>Target</h3>
+<p>You should be able to explain the answers in your own words.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">Next File</h2>
+      </div>
+      <div class="section-body">
+        <p><code>CODE-01 — Python, NumPy, Matplotlib, Scientific Workflow, and Reusable AI/ML Lab Template</code></p>
+<p>That file establishes the actual programming environment before the first Unit I algorithm implementation.</p>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="index.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← Coding Lab Hub</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">💻 Coding Index</span>
+      </a>
+      <a href="code-01-python-numpy-workflow.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: Lab 01 — Python, NumPy & Matplotlib →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search lab implementations, functions, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">💻</span>Lab Hub</a>
+  <a href="code-00-coding-foundation.html" class="mobile-nav-btn active"><span class="icon">📖</span>CODE-00</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

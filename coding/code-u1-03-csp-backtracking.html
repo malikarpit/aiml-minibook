@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="CODE-U1-03: CSPs and Backtracking Search — AI & Machine Learning Coding Lab. Constraint Satisfaction Formulation, MRV & Degree Heuristics, Forward Checking, and AC-3 Arc Consistency">
+<title>CODE-U1-03: CSPs and Backtracking Search | Coding Lab 💻 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/coding.css">
+</head>
+<body class="coding-module track-c1">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">💻</div>
+      <div class="brand-text"><span class="main">Coding Lab</span><span class="sub">AI &amp; ML From Scratch</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">CODE-U1-03: CSPs and Backtracking Search</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">💻</span>Coding Lab Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../math/index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 0: Environment & System</div>
+  <a href="code-00-coding-foundation.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-00: Coding Lab Foundation &amp; Implementation System</a>
+  <a href="code-01-python-numpy-workflow.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-01: Python, NumPy, Matplotlib &amp; Lab Workflow</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Classical AI & Search Labs</div>
+  <a href="code-u1-01-bfs-dfs.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-01: BFS and DFS From Scratch</a>
+  <a href="code-u1-02-greedy-a-star.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-02: Greedy Best-First &amp; A* Search From Scratch</a>
+  <a href="code-u1-03-csp-backtracking.html" class="sidebar-link active"><span class="link-icon">🔍</span>CODE-U1-03: CSPs and Backtracking Search</a>
+  <a href="code-u1-04-minimax-alpha-beta.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Supervised ML Labs</div>
+  <a href="code-u2-01-ml-workflow.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-01: ML Workflow: Preprocessing, Splitting &amp; Evaluation</a>
+  <a href="code-u2-02-linear-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-02: Linear Regression From Scratch</a>
+  <a href="code-u2-03-logistic-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-03: Logistic Regression From Scratch</a>
+  <a href="code-u2-04-decision-trees.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-04: Decision Trees From Scratch</a>
+  <a href="code-u2-05-classification-metrics-roc.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC &amp; Thresholds</a>
+  <a href="code-u2-06-ridge-lasso-regularization.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-06: Ridge &amp; Lasso From Scratch: Regularization &amp; Optimization</a>
+  <a href="code-u2-07-ml-evaluation-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-07: ML Evaluation &amp; Model Comparison Lab</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Deep Learning Labs</div>
+  <a href="code-u3-01-neuron-perceptron.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-01: Neuron and Perceptron From Scratch</a>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>MLP, Backpropagation & Convolutions</span>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Advanced AI Labs (Upcoming)</div>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>Q-Learning, NLP & Generative Adversarial Loops</span>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">CODE-U1-03 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. What We Are Building</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. CSP Mental Model</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Why CSP Deserves Its Own Implementation</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. A First Toy CSP</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Representation</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Constraint Checking</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Consistency Function</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Basic Consistency Implementation</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Backtracking Idea</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Backtracking Pseudocode</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Basic Backtracking Solver</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Run the Toy CSP</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Why Order Matters</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Search Tree View</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Why Brute Force Is Worse</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Testing the Solver — Valid Solution</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Unsatisfiable CSP</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Single-Variable CSP</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Empty CSP</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Traceable Backtracking</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Why Tracing Is Especially Useful for CSP</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Classic Practical Example — Map Coloring</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Map Coloring Solver</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Why Representation Should Match the Problem</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Australia-Style Map Coloring Exercise</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. CSP Heuristic — MRV</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. MRV Implementation</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Why MRV Is a Search Heuristic</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Forward Checking</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Forward-Checking Mental Model</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Safe Domain-Copy Implementation</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Forward-Checking Solver Sketch</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. MRV + Forward Checking</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Important Warning About Domain Mutation</a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. CSP Testing Strategy</a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. CSP Performance Experiment</a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Backtrack Counter</a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Visualizing CSP</a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. CSP Failure Debugging Checklist</a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Common CSP Coding Mistakes</a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Applied CSP Exercise — Timetabling</a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Applied CSP Exercise — Sudoku</a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Coding Challenge — Generic CSP Class</a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Why This Matters for AI</a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. Connection to Other Search Algorithms</a>
+      <a href="#s-46" class="sidebar-link"><span class="link-icon">📌</span>46. Exam Bridge</a>
+      <a href="#s-47" class="sidebar-link"><span class="link-icon">📌</span>47. Active Recall</a>
+      <a href="#s-48" class="sidebar-link"><span class="link-icon">📌</span>48. Final Implementation Test</a>
+      <a href="#s-49" class="sidebar-link"><span class="link-icon">📌</span>49. Mastery Gate</a>
+      <a href="#s-50" class="sidebar-link"><span class="link-icon">📌</span>50. Final Memory Sheet</a>
+      <a href="#s-51" class="sidebar-link"><span class="link-icon">📌</span>51. Source Notes</a>
+      <a href="#s-52" class="sidebar-link"><span class="link-icon">📌</span>52. Status</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Coding Lab</a>
+        <span>/</span>
+        <span>CODE-U1-03</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-c1">Track 1: Classical AI & Search Labs</span></div>
+      <h1 class="chapter-title">CSPs and Backtracking Search</h1>
+      <p class="chapter-desc">Constraint Satisfaction Formulation, MRV &amp; Degree Heuristics, Forward Checking, and AC-3 Arc Consistency</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~40 min lab</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">CSP</span> <span class="chapter-meta-item uni-badge">BACKTRACKING</span> <span class="chapter-meta-item uni-badge">MRV</span> <span class="chapter-meta-item uni-badge">FORWARD-CHECKING</span> <span class="chapter-meta-item uni-badge">AC-3</span>
+      </div>
+
+      <div class="lab-meta-grid">
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Prerequisites</div>
+          <div class="lab-meta-value">CODE-U1-01 Search Foundations, Main Book Ch 09 CSPs</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Main Book Concept</div>
+          <div class="lab-meta-value">Ch 09 Constraint Satisfaction Problems</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Math Companion Layer</div>
+          <div class="lab-meta-value">Discrete constraint relations, Variable domains, Graph coloring</div>
+        </div>
+        <div class="lab-meta-box" style="grid-column: 1 / -1;">
+          <div class="lab-meta-label">AI / Machine Learning Connections</div>
+          <div class="lab-meta-value">University timetable scheduling, N-Queens problem, Map coloring, Hardware circuit layout</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-meta-card"><h1>CODE-U1-03 — Constraint Satisfaction Problems and Backtracking</h1>
+<blockquote>
+<p><strong>Coding Book — Unit I: Classical AI</strong></p>
+<p><strong>Topic ID:</strong> <code>CODE-U1-03</code></p>
+<p><strong>Main Book link:</strong> <code>MAIN-U1-C09 — Constraint Satisfaction Problems</code></p>
+<p><strong>Exam Book link:</strong> <code>EXAM-U1_Artificial_Intelligence_and_Search.md</code></p>
+<p><strong>Course scope:</strong> The DSC-14 syllabus explicitly includes <strong>Constraint Satisfaction Problems (CSP)</strong> in Unit I under problem-solving techniques.</p>
+<p><strong>Source boundary:</strong> The supplied syllabus establishes CSP as a required topic. The retrieved lecture snippets available for this batch do not provide a complete CSP implementation specification, so the implementation details below are a structured coding treatment of the standard CSP/backtracking framework rather than a claim about a specific teacher implementation.</p>
+</blockquote>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in CODE-U1-03 (52 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">What We Are Building</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">CSP Mental Model</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Why CSP Deserves Its Own Implementation</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">A First Toy CSP</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Representation</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Constraint Checking</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Consistency Function</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Basic Consistency Implementation</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Backtracking Idea</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Backtracking Pseudocode</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Basic Backtracking Solver</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Run the Toy CSP</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Why Order Matters</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Search Tree View</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Why Brute Force Is Worse</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Testing the Solver — Valid Solution</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Unsatisfiable CSP</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Single-Variable CSP</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Empty CSP</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Traceable Backtracking</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Why Tracing Is Especially Useful for CSP</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Classic Practical Example — Map Coloring</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Map Coloring Solver</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Why Representation Should Match the Problem</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Australia-Style Map Coloring Exercise</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">CSP Heuristic — MRV</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">MRV Implementation</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Why MRV Is a Search Heuristic</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Forward Checking</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Forward-Checking Mental Model</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Safe Domain-Copy Implementation</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Forward-Checking Solver Sketch</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">MRV + Forward Checking</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Important Warning About Domain Mutation</span></a></li>
+        <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">CSP Testing Strategy</span></a></li>
+        <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">CSP Performance Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Backtrack Counter</span></a></li>
+        <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Visualizing CSP</span></a></li>
+        <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">CSP Failure Debugging Checklist</span></a></li>
+        <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Common CSP Coding Mistakes</span></a></li>
+        <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Applied CSP Exercise — Timetabling</span></a></li>
+        <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Applied CSP Exercise — Sudoku</span></a></li>
+        <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Coding Challenge — Generic CSP Class</span></a></li>
+        <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Why This Matters for AI</span></a></li>
+        <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">Connection to Other Search Algorithms</span></a></li>
+        <li class="toc-item"><a href="#s-46"><span class="toc-num">46</span><span class="toc-name">Exam Bridge</span></a></li>
+        <li class="toc-item"><a href="#s-47"><span class="toc-num">47</span><span class="toc-name">Active Recall</span></a></li>
+        <li class="toc-item"><a href="#s-48"><span class="toc-num">48</span><span class="toc-name">Final Implementation Test</span></a></li>
+        <li class="toc-item"><a href="#s-49"><span class="toc-num">49</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-50"><span class="toc-num">50</span><span class="toc-name">Final Memory Sheet</span></a></li>
+        <li class="toc-item"><a href="#s-51"><span class="toc-num">51</span><span class="toc-name">Source Notes</span></a></li>
+        <li class="toc-item"><a href="#s-52"><span class="toc-num">52</span><span class="toc-name">Status</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">What We Are Building</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph TD
+    Var["Select Unassigned Variable via MRV (Fewest Legal Values)"] --> Val["Select Value via LCV (Least Constraining Value)"]
+    Val --> Check{"Is Value Consistent with Current Assignment?"}
+    Check -- Yes --> Assign["Assign Variable = Value"]
+    Assign --> Infer["Forward Checking / AC-3 Domain Pruning"]
+    Infer --> Recurse["Recursive Backtracking Call"]
+    Check -- No --> NextVal["Try Next Value"]
+    Recurse -- Fails --> Backtrack["Backtrack: Undo Assignment & Restore Domains"]
+    style Var fill:#1e293b,stroke:#38bdf8,color:#f8fafc
+    style Backtrack fill:#1e293b,stroke:#ef4444,color:#f8fafc
+    style Assign fill:#065f46,stroke:#34d399,color:#ffffff
+</pre></div>
+<p>A CSP is naturally different from ordinary route search.</p>
+<p>Instead of:</p>
+<div class="ascii-box"><pre>find a path from A to G</pre></div>
+<p>we often need:</p>
+<div class="ascii-box"><pre>assign values to variables
++
+satisfy every constraint</pre></div>
+<p>This lab will build:</p>
+<div class="ascii-box"><pre>CSP representation
+↓
+backtracking search
+↓
+constraint checking
+↓
+MRV variable selection
+↓
+forward checking
+↓
+trace + tests
+↓
+small practical problems</pre></div>
+<p>The first implementation target is a clean, understandable <strong>backtracking CSP solver</strong>.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">CSP Mental Model</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Implementation Model</div>
+
+CSP mein hum koi rasta nahi dhundh rahe, hum ek aisi state dhundh rahe hain jahan sabhi shartein (constraints) satisfy ho jayein.
+Backtracking basically intelligent trial-and-error hai.
+MRV (Minimum Remaining Values) ka funda hai 'Fail-First': jo variable sabse ziddi hai (jiske paas sabse kam options bache hain), use pehle assign karo. Agar fail hona hi hai, toh pehle hi step par ho jao taaki lakho bekaar branches explore na karni padein!
+
+</div>
+
+<p>A CSP contains three core components:</p>
+<div class="formula-math">\[
+\boxed{
+(X,D,C)
+}
+\]</div>
+<p>where:</p>
+<ul>
+<li>\(X\) = variables;</li>
+<li>\(D\) = domains of possible values;</li>
+<li>\(C\) = constraints.</li>
+</ul>
+<p>Example:</p>
+<div class="ascii-box"><pre>Variables:
+    A, B, C
+
+Domains:
+    {1, 2, 3}
+
+Constraints:
+    A != B
+    B != C</pre></div>
+<p>The goal is to find an assignment:</p>
+<div class="ascii-box"><pre>A = ?
+B = ?
+C = ?</pre></div>
+<p>such that every constraint is satisfied.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">Why CSP Deserves Its Own Implementation</h2>
+      </div>
+      <div class="section-body">
+        <p>Ordinary graph search usually asks:</p>
+<blockquote>
+<p>“Which state should I expand next?”</p>
+</blockquote>
+<p>CSP solving asks:</p>
+<blockquote>
+<p>“Which variable should I assign next, which value should I try, and does the partial assignment violate a constraint?”</p>
+</blockquote>
+<p>So the computational structure becomes:</p>
+<div class="ascii-box"><pre>partial assignment
+      ↓
+choose variable
+      ↓
+choose value
+      ↓
+check constraints
+      ↓
+if valid → recurse
+if invalid → backtrack</pre></div>
+<p>This is <strong>search over assignments</strong>.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">A First Toy CSP</h2>
+      </div>
+      <div class="section-body">
+        <p>Use:</p>
+<div class="ascii-box"><pre>Variables:
+    A, B, C
+
+Domains:
+    A ∈ {1,2,3}
+    B ∈ {1,2,3}
+    C ∈ {1,2,3}
+
+Constraints:
+    A != B
+    B != C</pre></div>
+<p>Possible solution:</p>
+<div class="ascii-box"><pre>A = 1
+B = 2
+C = 1</pre></div>
+<p>because:</p>
+<div class="formula-math">\[
+1\ne2
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+2\ne1.
+\]</div>
+<p>Notice:</p>
+<div class="ascii-box"><pre>A and C are allowed to share a value.</pre></div>
+<p>The solver must enforce exactly the constraints we define.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Representation</h2>
+      </div>
+      <div class="section-body">
+        <p>A practical Python representation:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">variables = [&quot;A&quot;, &quot;B&quot;, &quot;C&quot;]
+
+domains = {
+    &quot;A&quot;: [1, 2, 3],
+    &quot;B&quot;: [1, 2, 3],
+    &quot;C&quot;: [1, 2, 3],
+}</code></pre></div>
+<p>A partial assignment:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assignment = {
+    &quot;A&quot;: 1,
+    &quot;B&quot;: 2,
+}</code></pre></div>
+<p>A constraint can be represented as a callable.</p>
+<p>Example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def different(x, y):
+    return x != y</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">constraints = [
+    (&quot;A&quot;, &quot;B&quot;, different),
+    (&quot;B&quot;, &quot;C&quot;, different),
+]</code></pre></div>
+<p>This representation is intentionally explicit.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Constraint Checking</h2>
+      </div>
+      <div class="section-body">
+        <p>Given:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assignment = {&quot;A&quot;: 1, &quot;B&quot;: 1}</code></pre></div>
+<p>and:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">A != B</code></pre></div>
+<p>the assignment is invalid.</p>
+<p>But if:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assignment = {&quot;A&quot;: 1}</code></pre></div>
+<p>we cannot evaluate <code>A != B</code> yet because B has not been assigned.</p>
+<p>This gives us an important distinction:</p>
+<div class="ascii-box"><pre>complete violation
+vs
+not enough information yet</pre></div>
+<p>A partial assignment should be rejected only when an already-evaluable constraint is violated.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Consistency Function</h2>
+      </div>
+      <div class="section-body">
+        <p>Write:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def is_consistent(
+    variable,
+    value,
+    assignment,
+    constraints,
+):
+    ...</code></pre></div>
+<p>Its job:</p>
+<blockquote>
+<p>Temporarily consider <code>variable=value</code> and determine whether the partial assignment violates any applicable constraint.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">Basic Consistency Implementation</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def is_consistent(
+    variable,
+    value,
+    assignment,
+    constraints,
+):
+    for var_a, var_b, constraint in constraints:
+        if variable not in (var_a, var_b):
+            continue
+
+        if var_a == variable:
+            other = var_b
+        else:
+            other = var_a
+
+        if other not in assignment:
+            continue
+
+        if var_a == variable:
+            if not constraint(value, assignment[other]):
+                return False
+        else:
+            if not constraint(assignment[other], value):
+                return False
+
+    return True</code></pre></div>
+<p>This assumes the constraint callable is directional:</p>
+<div class="ascii-box"><pre>constraint(value_a, value_b)</pre></div>
+<p>If a constraint is symmetric, such as:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">a != b</code></pre></div>
+<p>the distinction does not matter.</p>
+<p>For asymmetric constraints, order must be handled deliberately.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Backtracking Idea</h2>
+      </div>
+      <div class="section-body">
+        <p>The core algorithm:</p>
+<div class="ascii-box"><pre>If assignment is complete:
+    return assignment
+
+Choose an unassigned variable
+
+For each possible value:
+    If value is consistent:
+        assign value
+        recursively solve
+        if solution:
+            return solution
+        remove assignment
+
+Return failure</pre></div>
+<p>The key operation is:</p>
+<div class="ascii-box"><pre>assign
+→ recurse
+→ undo</pre></div>
+<p>That is why it is called <strong>backtracking</strong>.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Backtracking Pseudocode</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>BACKTRACK(assignment):
+
+    if assignment is complete:
+        return assignment
+
+    variable ← select unassigned variable
+
+    for value in domain(variable):
+
+        if value is consistent:
+
+            assignment[variable] ← value
+
+            result ← BACKTRACK(assignment)
+
+            if result is not failure:
+                return result
+
+            remove assignment[variable]
+
+    return failure</pre></div>
+<p>The backtracking point is:</p>
+<div class="ascii-box"><pre>remove assignment[variable]</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Basic Backtracking Solver</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def backtrack(
+    variables,
+    domains,
+    constraints,
+    assignment=None,
+):
+    if assignment is None:
+        assignment = {}
+
+    if len(assignment) == len(variables):
+        return assignment.copy()
+
+    unassigned = [
+        v for v in variables
+        if v not in assignment
+    ]
+
+    variable = unassigned[0]
+
+    for value in domains[variable]:
+        if is_consistent(
+            variable,
+            value,
+            assignment,
+            constraints,
+        ):
+            assignment[variable] = value
+
+            result = backtrack(
+                variables,
+                domains,
+                constraints,
+                assignment,
+            )
+
+            if result is not None:
+                return result
+
+            del assignment[variable]
+
+    return None</code></pre></div>
+<p>This is deliberately simple.</p>
+<p>Do not optimize it before you understand the search tree.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Run the Toy CSP</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">variables = [&quot;A&quot;, &quot;B&quot;, &quot;C&quot;]
+
+domains = {
+    &quot;A&quot;: [1, 2, 3],
+    &quot;B&quot;: [1, 2, 3],
+    &quot;C&quot;: [1, 2, 3],
+}
+
+constraints = [
+    (&quot;A&quot;, &quot;B&quot;, lambda a, b: a != b),
+    (&quot;B&quot;, &quot;C&quot;, lambda a, b: a != b),
+]
+
+solution = backtrack(
+    variables,
+    domains,
+    constraints,
+)
+
+print(solution)</code></pre></div>
+<p>One valid result may be:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">{
+    &quot;A&quot;: 1,
+    &quot;B&quot;: 2,
+    &quot;C&quot;: 1
+}</code></pre></div>
+<p>The exact result depends on variable/domain ordering.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Why Order Matters</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="ascii-box"><pre>A has values [1,2,3]
+B has values [1,2,3]
+C has values [1,2,3]</pre></div>
+<p>Trying:</p>
+<div class="ascii-box"><pre>A=1
+B=1</pre></div>
+<p>fails immediately if:</p>
+<div class="formula-math">\[
+A\ne B.
+\]</div>
+<p>The solver can backtrack before assigning C.</p>
+<p>This is called <strong>early failure detection</strong>.</p>
+<p>The sooner an impossible partial assignment is detected, the smaller the search tree can become.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Search Tree View</h2>
+      </div>
+      <div class="section-body">
+        <p>For:</p>
+<div class="ascii-box"><pre>A,B,C ∈ {1,2}
+A != B
+B != C</pre></div>
+<p>the naive assignment tree begins:</p>
+<div class="ascii-box"><pre>{}
+              /    \
+            A=1    A=2
+            /        \
+         B=1        B=2
+          X          ...
+         B=2
+         /
+       C=1</pre></div>
+<p>Invalid branches are cut as soon as the corresponding constraint becomes evaluable.</p>
+<p>This is the key advantage of backtracking over blindly generating every complete assignment first.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">Why Brute Force Is Worse</h2>
+      </div>
+      <div class="section-body">
+        <p>If there are:</p>
+<div class="formula-math">\[
+n
+\]</div>
+<p>variables and each has approximately:</p>
+<div class="formula-math">\[
+d
+\]</div>
+<p>values, the complete assignment space can contain roughly:</p>
+<div class="formula-math">\[
+\boxed{d^n}
+\]</div>
+<p>combinations.</p>
+<p>That grows exponentially.</p>
+<p>Backtracking attempts to avoid exploring combinations that are already impossible.</p>
+<h3>Important distinction</h3>
+<p>Backtracking does not magically remove exponential worst-case behaviour.</p>
+<p>It <strong>prunes</strong> parts of the search tree.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">Testing the Solver — Valid Solution</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def all_constraints_satisfied(
+    assignment,
+    constraints,
+):
+    for var_a, var_b, constraint in constraints:
+        if var_a not in assignment or var_b not in assignment:
+            return False
+
+        if not constraint(
+            assignment[var_a],
+            assignment[var_b],
+        ):
+            return False
+
+    return True</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert solution is not None
+assert all_constraints_satisfied(
+    solution,
+    constraints,
+)</code></pre></div>
+<p>This tests the actual mathematical requirement.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">Unsatisfiable CSP</h2>
+      </div>
+      <div class="section-body">
+        <p>Create:</p>
+<div class="ascii-box"><pre>A ∈ {1}
+B ∈ {1}
+constraint: A != B</pre></div>
+<p>There is no solution.</p>
+<p>Test:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">variables = [&quot;A&quot;, &quot;B&quot;]
+
+domains = {
+    &quot;A&quot;: [1],
+    &quot;B&quot;: [1],
+}
+
+constraints = [
+    (&quot;A&quot;, &quot;B&quot;, lambda a, b: a != b),
+]
+
+assert backtrack(
+    variables,
+    domains,
+    constraints,
+) is None</code></pre></div>
+<p>This is a critical edge case.</p>
+<p>A solver must distinguish:</p>
+<div class="ascii-box"><pre>no solution</pre></div>
+<p>from:</p>
+<div class="ascii-box"><pre>program crashed.</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Single-Variable CSP</h2>
+      </div>
+      <div class="section-body">
+        <p>Test:</p>
+<div class="ascii-box"><pre>A ∈ {1,2,3}</pre></div>
+<p>with no constraints.</p>
+<p>Expected:</p>
+<div class="ascii-box"><pre>any legal value</pre></div>
+<p>This tests the simplest possible successful assignment.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">Empty CSP</h2>
+      </div>
+      <div class="section-body">
+        <p>An empty CSP:</p>
+<div class="ascii-box"><pre>variables = []</pre></div>
+<p>has a valid empty assignment under the usual formulation.</p>
+<p>Test:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert backtrack([], {}, []) == {}</code></pre></div>
+<p>This is a useful boundary case for recursive algorithms.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Traceable Backtracking</h2>
+      </div>
+      <div class="section-body">
+        <p>A trace makes backtracking visible:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def backtrack_trace(
+    variables,
+    domains,
+    constraints,
+    assignment=None,
+    trace=None,
+):
+    if assignment is None:
+        assignment = {}
+
+    if trace is None:
+        trace = []
+
+    if len(assignment) == len(variables):
+        return assignment.copy(), trace
+
+    variable = next(
+        v for v in variables
+        if v not in assignment
+    )
+
+    for value in domains[variable]:
+        consistent = is_consistent(
+            variable,
+            value,
+            assignment,
+            constraints,
+        )
+
+        trace.append({
+            &quot;variable&quot;: variable,
+            &quot;value&quot;: value,
+            &quot;consistent&quot;: consistent,
+            &quot;assignment_before&quot;: assignment.copy(),
+        })
+
+        if not consistent:
+            continue
+
+        assignment[variable] = value
+
+        result, trace = backtrack_trace(
+            variables,
+            domains,
+            constraints,
+            assignment,
+            trace,
+        )
+
+        if result is not None:
+            return result, trace
+
+        del assignment[variable]
+
+        trace.append({
+            &quot;backtrack&quot;: variable,
+            &quot;assignment_after_undo&quot;: assignment.copy(),
+        })
+
+    return None, trace</code></pre></div>
+<p>Then inspect the trace.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">Why Tracing Is Especially Useful for CSP</h2>
+      </div>
+      <div class="section-body">
+        <p>CSP errors can be subtle.</p>
+<p>You may think:</p>
+<blockquote>
+<p>“The solver didn't find a solution.”</p>
+</blockquote>
+<p>But the real bug might be:</p>
+<div class="ascii-box"><pre>constraint encoded backwards
+wrong variable selected
+domain accidentally mutated
+assignment not undone
+value skipped</pre></div>
+<p>Trace output lets you locate the first incorrect decision.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">Classic Practical Example — Map Coloring</h2>
+      </div>
+      <div class="section-body">
+        <p>Use regions:</p>
+<div class="ascii-box"><pre>A, B, C, D</pre></div>
+<p>Each domain:</p>
+<div class="ascii-box"><pre>{Red, Green, Blue}</pre></div>
+<p>Constraint:</p>
+<blockquote>
+<p>Adjacent regions must have different colors.</p>
+</blockquote>
+<p>A graph:</p>
+<div class="ascii-box"><pre>A ----- B
+| \     |
+|  \    |
+C ----- D</pre></div>
+<p>Represent adjacency:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">neighbors = {
+    &quot;A&quot;: {&quot;B&quot;, &quot;C&quot;, &quot;D&quot;},
+    &quot;B&quot;: {&quot;A&quot;, &quot;D&quot;},
+    &quot;C&quot;: {&quot;A&quot;, &quot;D&quot;},
+    &quot;D&quot;: {&quot;A&quot;, &quot;B&quot;, &quot;C&quot;},
+}</code></pre></div>
+<p>A simple consistency rule:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def not_same_color(color_a, color_b):
+    return color_a != color_b</code></pre></div>
+<p>This is an excellent practical CSP because the representation is visual.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">Map Coloring Solver</h2>
+      </div>
+      <div class="section-body">
+        <p>Create:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">variables = list(neighbors)
+
+domains = {
+    v: [&quot;R&quot;, &quot;G&quot;, &quot;B&quot;]
+    for v in variables
+}</code></pre></div>
+<p>Convert each adjacency relation into a constraint.</p>
+<p>Be careful not to create accidental duplicate semantics.</p>
+<p>A simpler approach is to make consistency check directly from the neighbor graph:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def color_consistent(
+    variable,
+    value,
+    assignment,
+    neighbors,
+):
+    for neighbor in neighbors[variable]:
+        if assignment.get(neighbor) == value:
+            return False
+
+    return True</code></pre></div>
+<p>This can be cleaner than a generic triple-based constraint representation for this specific application.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">Why Representation Should Match the Problem</h2>
+      </div>
+      <div class="section-body">
+        <p>A general constraint framework is useful for reuse.</p>
+<p>But a problem-specific representation can be easier to debug.</p>
+<p>This is an important engineering lesson:</p>
+<div class="ascii-box"><pre>generic abstraction
+        vs
+simple problem-specific representation</pre></div>
+<p>Do not automatically maximize abstraction.</p>
+<p>Use the smallest representation that keeps the logic clear.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">Australia-Style Map Coloring Exercise</h2>
+      </div>
+      <div class="section-body">
+        <p>Use regions:</p>
+<div class="ascii-box"><pre>WA  NT  Q  NSW  V  SA</pre></div>
+<p>with adjacency:</p>
+<div class="ascii-box"><pre>WA–NT
+WA–SA
+NT–SA
+NT–Q
+SA–Q
+SA–NSW
+SA–V
+Q–NSW
+NSW–V</pre></div>
+<p>Domains:</p>
+<div class="ascii-box"><pre>Red, Green, Blue</pre></div>
+<p>Goal:</p>
+<blockquote>
+<p>colour every region so adjacent regions differ.</p>
+</blockquote>
+<p>This gives a larger but still manageable CSP.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">CSP Heuristic — MRV</h2>
+      </div>
+      <div class="section-body">
+        <p>Backtracking becomes more effective if we choose the variable with the <strong>minimum remaining values</strong>.</p>
+<div class="formula-math">\[
+\boxed{
+\text{MRV}=
+\text{choose the unassigned variable with the smallest current domain}
+}
+\]</div>
+<p>Example:</p>
+<div class="ascii-box"><pre>A → {R,G,B}
+B → {R}
+C → {G,B}</pre></div>
+<p>Choose:</p>
+<div class="ascii-box"><pre>B</pre></div>
+<p>because it has only one remaining value.</p>
+<h3>Why?</h3>
+<p>A small-domain variable is close to becoming impossible.</p>
+<p>Testing it early can expose failure sooner.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">MRV Implementation</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def select_mrv_variable(
+    variables,
+    domains,
+    assignment,
+):
+    unassigned = [
+        v for v in variables
+        if v not in assignment
+    ]
+
+    return min(
+        unassigned,
+        key=lambda v: len(domains[v]),
+    )</code></pre></div>
+<p>Then replace:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">variable = unassigned[0]</code></pre></div>
+<p>with:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">variable = select_mrv_variable(
+    variables,
+    domains,
+    assignment,
+)</code></pre></div>
+<p>This does not change the underlying problem.</p>
+<p>It changes <strong>which branch we try first</strong>.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">Why MRV Is a Search Heuristic</h2>
+      </div>
+      <div class="section-body">
+        <p>The CSP may have the same solution set.</p>
+<p>MRV changes:</p>
+<div class="ascii-box"><pre>search order</pre></div>
+<p>not:</p>
+<div class="ascii-box"><pre>constraint definition.</pre></div>
+<p>This is conceptually similar to heuristic-guided graph search:</p>
+<div class="ascii-box"><pre>same problem
++
+better decision about what to explore next</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">Forward Checking</h2>
+      </div>
+      <div class="section-body">
+        <p>After assigning a value, remove incompatible values from neighboring unassigned variables.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>A = Red</pre></div>
+<p>and:</p>
+<div class="ascii-box"><pre>B != A</pre></div>
+<p>then B's domain changes:</p>
+<div class="ascii-box"><pre>{Red, Green, Blue}
+        ↓
+{Green, Blue}</pre></div>
+<p>This is <strong>forward checking</strong>.</p>
+<p>It detects future impossibility earlier.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">Forward-Checking Mental Model</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>Assign A = Red
+      ↓
+propagate consequence
+      ↓
+remove Red from B&#x27;s domain
+      ↓
+remove Red from C&#x27;s domain
+      ↓
+if some domain becomes empty
+      ↓
+BACKTRACK immediately</pre></div>
+<p>The key word is:</p>
+<blockquote>
+<p><strong>propagation</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">Safe Domain-Copy Implementation</h2>
+      </div>
+      <div class="section-body">
+        <p>For a learning implementation, copying domains before recursion is simple and safe:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">new_domains = {
+    variable: values.copy()
+    for variable, values in domains.items()
+}</code></pre></div>
+<p>Then prune:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">new_domains[neighbor].remove(value)</code></pre></div>
+<p>Do not silently mutate shared state and hope recursion restores it correctly.</p>
+<p>Explicit copying is often easier to understand while learning.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">Forward-Checking Solver Sketch</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def forward_check(
+    variable,
+    value,
+    assignment,
+    domains,
+    neighbors,
+):
+    new_domains = {
+        v: values.copy()
+        for v, values in domains.items()
+    }
+
+    new_domains[variable] = [value]
+
+    for neighbor in neighbors[variable]:
+        if neighbor in assignment:
+            continue
+
+        new_domains[neighbor] = [
+            candidate
+            for candidate in new_domains[neighbor]
+            if candidate != value
+        ]
+
+        if not new_domains[neighbor]:
+            return None
+
+    return new_domains</code></pre></div>
+<p>This simple version is appropriate for a basic map-colouring example.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">MRV + Forward Checking</h2>
+      </div>
+      <div class="section-body">
+        <p>A stronger solver can combine:</p>
+<div class="ascii-box"><pre>MRV
++
+forward checking
++
+backtracking</pre></div>
+<p>Flow:</p>
+<div class="ascii-box"><pre>select smallest domain
+        ↓
+try candidate
+        ↓
+propagate
+        ↓
+if any domain empty
+        ↓
+backtrack</pre></div>
+<p>This often reduces search effort dramatically on structured CSPs.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Important Warning About Domain Mutation</h2>
+      </div>
+      <div class="section-body">
+        <p>This is a classic recursive-programming bug.</p>
+<p>Bad pattern:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">domains[neighbor].remove(value)</code></pre></div>
+<p>followed by recursion without reliable restoration.</p>
+<p>Why bad?</p>
+<p>A failed branch may leave the domain permanently changed.</p>
+<p>Then later branches see corrupted state.</p>
+<p>Safer learning patterns:</p>
+<div class="ascii-box"><pre>copy domains</pre></div>
+<p>or:</p>
+<div class="ascii-box"><pre>record every mutation and restore exactly</pre></div>
+<p>The first is easier to reason about.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-35" class="section-block">
+      <div class="section-header">
+        <span class="section-num">35</span>
+        <h2 class="section-heading">CSP Testing Strategy</h2>
+      </div>
+      <div class="section-body">
+        <p>Test three levels.</p>
+<h2>Level 1 — Constraint function</h2>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert different(1, 2)
+assert not different(1, 1)</code></pre></div>
+<h2>Level 2 — Partial consistency</h2>
+<div class="ascii-box"><pre>A=1, B=2</pre></div>
+<p>should satisfy:</p>
+<div class="formula-math">\[
+A\ne B.
+\]</div>
+<h2>Level 3 — Whole solver</h2>
+<p>Returned assignment must satisfy every constraint.</p>
+<p>This separates:</p>
+<div class="ascii-box"><pre>constraint bug</pre></div>
+<p>from:</p>
+<div class="ascii-box"><pre>search bug.</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-36" class="section-block">
+      <div class="section-header">
+        <span class="section-num">36</span>
+        <h2 class="section-heading">CSP Performance Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Run the same problem with:</p>
+<div class="ascii-box"><pre>1. first-unassigned variable
+2. MRV
+3. MRV + forward checking</pre></div>
+<p>Record:</p>
+<div class="ascii-box"><pre>method
+nodes/assignments tried
+backtracks
+runtime</pre></div>
+<p>The educational question is:</p>
+<blockquote>
+<p>Which decision rule reduces the search tree?</p>
+</blockquote>
+<p>Do not assume every heuristic wins on every tiny problem.</p>
+<p>Measure.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-37" class="section-block">
+      <div class="section-header">
+        <span class="section-num">37</span>
+        <h2 class="section-heading">Backtrack Counter</h2>
+      </div>
+      <div class="section-body">
+        <p>Add:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">stats = {
+    &quot;assignments_tried&quot;: 0,
+    &quot;backtracks&quot;: 0,
+}</code></pre></div>
+<p>Before trying a value:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">stats[&quot;assignments_tried&quot;] += 1</code></pre></div>
+<p>Before returning from a failed branch:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">stats[&quot;backtracks&quot;] += 1</code></pre></div>
+<p>This turns an invisible recursion tree into measurable algorithm behaviour.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-38" class="section-block">
+      <div class="section-header">
+        <span class="section-num">38</span>
+        <h2 class="section-heading">Visualizing CSP</h2>
+      </div>
+      <div class="section-body">
+        <p>Useful visualizations include:</p>
+<h3>Map coloring</h3>
+<p>Show:</p>
+<div class="ascii-box"><pre>region
+↓
+current color</pre></div>
+<p>and update after assignments.</p>
+<h3>Sudoku</h3>
+<p>Show:</p>
+<div class="ascii-box"><pre>filled cells
+candidate counts
+backtracks</pre></div>
+<h3>Timetabling</h3>
+<p>Show:</p>
+<div class="ascii-box"><pre>course
+slot
+room
+conflict</pre></div>
+<p>The visualization should answer:</p>
+<blockquote>
+<p>“What assignment has the solver currently made?”</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-39" class="section-block">
+      <div class="section-header">
+        <span class="section-num">39</span>
+        <h2 class="section-heading">CSP Failure Debugging Checklist</h2>
+      </div>
+      <div class="section-body">
+        <p>If the solver says “no solution” unexpectedly:</p>
+<div class="ascii-box"><pre>1. Verify every domain
+2. Verify every constraint
+3. Print current assignment
+4. Print selected variable
+5. Print candidate value
+6. Print consistency result
+7. Check domain mutation
+8. Check backtracking undo
+9. Check duplicate/reversed constraints
+10. Verify the problem is actually satisfiable</pre></div>
+<p>Do not immediately increase recursion depth or change Python settings.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-40" class="section-block">
+      <div class="section-header">
+        <span class="section-num">40</span>
+        <h2 class="section-heading">Common CSP Coding Mistakes</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Lab Viva Trap & Runtime Gotcha</div>
+
+**In-Place Domain Mutation Bug:**
+Forward Checking and AC-3 prune values from neighbor domains.
+If you mutate domains in-place without creating a copy or tracking pruned values, when backtracking occurs the pruned values are permanently lost!
+Always pass deep copies of domains or maintain a prune-log to restore state during backtrack!
+
+</div>
+
+<h2>Mistake 1</h2>
+<p>Checking constraints that involve unassigned variables as though their values were known.</p>
+<h2>Mistake 2</h2>
+<p>Forgetting to undo an assignment during backtracking.</p>
+<h2>Mistake 3</h2>
+<p>Mutating domains without restoring/copying them.</p>
+<h2>Mistake 4</h2>
+<p>Assuming MRV changes the set of valid solutions.</p>
+<p>It changes search order.</p>
+<h2>Mistake 5</h2>
+<p>Confusing variables and values.</p>
+<div class="ascii-box"><pre>variable = course
+value = time slot</pre></div>
+<p>not the other way around.</p>
+<h2>Mistake 6</h2>
+<p>Encoding constraints incorrectly.</p>
+<h2>Mistake 7</h2>
+<p>Testing only successful CSPs.</p>
+<p>Unsatisfiable instances are essential tests.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-41" class="section-block">
+      <div class="section-header">
+        <span class="section-num">41</span>
+        <h2 class="section-heading">Applied CSP Exercise — Timetabling</h2>
+      </div>
+      <div class="section-body">
+        <p>Define:</p>
+<div class="ascii-box"><pre>Variables:
+    CSE
+    AI
+    DBMS
+    Cybersecurity
+
+Values:
+    Monday-9
+    Monday-11
+    Tuesday-9</pre></div>
+<p>Constraints:</p>
+<div class="ascii-box"><pre>CSE != DBMS
+AI != DBMS
+AI != Cybersecurity</pre></div>
+<p>Add an optional room capacity constraint.</p>
+<p>Then ask:</p>
+<div class="ascii-box"><pre>Can all courses be assigned?
+How many assignments are tried?
+How does MRV change the process?</pre></div>
+<p>This maps directly to the real-world CSP idea of scheduling.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-42" class="section-block">
+      <div class="section-header">
+        <span class="section-num">42</span>
+        <h2 class="section-heading">Applied CSP Exercise — Sudoku</h2>
+      </div>
+      <div class="section-body">
+        <p>A Sudoku cell is a variable.</p>
+<p>Its domain is:</p>
+<div class="ascii-box"><pre>{1,...,9}</pre></div>
+<p>Constraints:</p>
+<div class="ascii-box"><pre>same row → different
+same column → different
+same 3×3 box → different</pre></div>
+<p>This creates a large CSP.</p>
+<p>You do <strong>not</strong> need to build a full Sudoku optimizer first.</p>
+<p>Use a small puzzle to understand:</p>
+<div class="ascii-box"><pre>variable
+domain
+constraint
+backtracking
+MRV
+forward checking</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-43" class="section-block">
+      <div class="section-header">
+        <span class="section-num">43</span>
+        <h2 class="section-heading">Coding Challenge — Generic CSP Class</h2>
+      </div>
+      <div class="section-body">
+        <p>After the functional version is understood, create:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">class CSP:
+    def __init__(
+        self,
+        variables,
+        domains,
+        neighbors,
+        constraint,
+    ):
+        ...</code></pre></div>
+<p>Then methods:</p>
+<div class="ascii-box"><pre>consistent(...)
+select_unassigned_variable(...)
+order_domain_values(...)
+backtrack(...)</pre></div>
+<p>This is a larger abstraction.</p>
+<p>Only attempt it after the procedural version works.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-44" class="section-block">
+      <div class="section-header">
+        <span class="section-num">44</span>
+        <h2 class="section-heading">Why This Matters for AI</h2>
+      </div>
+      <div class="section-body">
+        <p>CSP demonstrates a fundamental AI idea:</p>
+<blockquote>
+<p>A good representation can dramatically simplify problem solving.</p>
+</blockquote>
+<p>Instead of searching arbitrary action sequences, we represent:</p>
+<div class="ascii-box"><pre>variables
+domains
+constraints</pre></div>
+<p>Then exploit that structure.</p>
+<p>This is an important transition from generic search to <strong>problem-specific reasoning</strong>.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-45" class="section-block">
+      <div class="section-header">
+        <span class="section-num">45</span>
+        <h2 class="section-heading">Connection to Other Search Algorithms</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>BFS / DFS
+    ↓
+generic state exploration
+
+Greedy / A*
+    ↓
+guided state exploration
+
+CSP
+    ↓
+structured assignment exploration
+    +
+constraints
+    +
+propagation</pre></div>
+<p>CSP is therefore not unrelated to search.</p>
+<p>It is a specialized search framework that exploits stronger problem structure.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-46" class="section-block">
+      <div class="section-header">
+        <span class="section-num">46</span>
+        <h2 class="section-heading">Exam Bridge</h2>
+      </div>
+      <div class="section-body">
+        <p>Be prepared to write:</p>
+<h3>2 marks</h3>
+<blockquote>
+<p>Define a CSP.</p>
+</blockquote>
+<p>Answer:</p>
+<blockquote>
+<p>A CSP consists of variables, domains of possible values, and constraints restricting allowed combinations of those values.</p>
+</blockquote>
+<h3>5 marks</h3>
+<blockquote>
+<p>Explain backtracking for CSP.</p>
+</blockquote>
+<p>Include:</p>
+<ol>
+<li>choose unassigned variable;</li>
+<li>choose candidate value;</li>
+<li>check consistency;</li>
+<li>assign;</li>
+<li>recurse;</li>
+<li>undo on failure.</li>
+</ol>
+<h3>10 marks</h3>
+<p>Add:</p>
+<ul>
+<li>MRV;</li>
+<li>forward checking;</li>
+<li>constraint propagation;</li>
+<li>complexity intuition;</li>
+<li>small worked example.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-47" class="section-block">
+      <div class="section-header">
+        <span class="section-num">47</span>
+        <h2 class="section-heading">Active Recall</h2>
+      </div>
+      <div class="section-body">
+        <p>Close the file.</p>
+<p>Answer:</p>
+<ol>
+<li>What are the three parts of a CSP?</li>
+<li>What is a partial assignment?</li>
+<li>What does a constraint do?</li>
+<li>Why is CSP a search problem?</li>
+<li>What is backtracking?</li>
+<li>Why do we undo an assignment?</li>
+<li>What is MRV?</li>
+<li>Why can MRV reduce search?</li>
+<li>What is forward checking?</li>
+<li>Why is domain copying useful?</li>
+<li>Why should unsatisfiable CSPs be tested?</li>
+<li>Why can a generic CSP framework be harder to debug?</li>
+<li>What does the variable represent in a timetable CSP?</li>
+<li>What is the value in that example?</li>
+<li>How is CSP different from BFS on a graph?</li>
+</ol>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-48" class="section-block">
+      <div class="section-header">
+        <span class="section-num">48</span>
+        <h2 class="section-heading">Final Implementation Test</h2>
+      </div>
+      <div class="section-body">
+        <p>Build a single notebook/script containing:</p>
+<div class="ascii-box"><pre>1. toy CSP
+2. satisfiable test
+3. unsatisfiable test
+4. cycle-free recursion trace
+5. map colouring
+6. MRV
+7. forward checking
+8. assignment/backtrack statistics</pre></div>
+<p>Then compare:</p>
+<div class="ascii-box"><pre>baseline backtracking
+vs
+MRV
+vs
+MRV + forward checking</pre></div>
+<p>Record:</p>
+<div class="ascii-box"><pre>solutions
+assignments tried
+backtracks
+runtime</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-49" class="section-block">
+      <div class="section-header">
+        <span class="section-num">49</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <h3>C3 — Rebuild</h3>
+<p>You can write a basic backtracking solver from pseudocode.</p>
+<h3>C4 — Test</h3>
+<p>You can verify complete assignments and unsatisfiable cases.</p>
+<h3>C5 — Modify</h3>
+<p>You can add:</p>
+<ul>
+<li>MRV;</li>
+<li>forward checking;</li>
+<li>statistics;</li>
+<li>tracing.</li>
+</ul>
+<h3>C6 — Explain</h3>
+<p>You can explain why these heuristics alter the search tree without altering the CSP itself.</p>
+<h3>C7 — Transfer</h3>
+<p>Given a new problem, you can identify:</p>
+<div class="ascii-box"><pre>variables
+domains
+constraints
+search order
+propagation opportunity</pre></div>
+<p>and build a solver.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-50" class="section-block">
+      <div class="section-header">
+        <span class="section-num">50</span>
+        <h2 class="section-heading">Final Memory Sheet</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>CSP
+│
+├── Variables
+├── Domains
+└── Constraints
+       ↓
+Backtracking
+       ↓
+choose variable
+       ↓
+choose value
+       ↓
+check consistency
+       ↓
+assign
+       ↓
+recurse
+       ↓
+failure?
+       └── undo + try another</pre></div>
+<p>Optimization ideas:</p>
+<div class="ascii-box"><pre>MRV
+→ choose the most constrained variable
+
+Forward checking
+→ propagate assignment effects into neighbours
+
+Constraint propagation
+→ detect impossible future assignments early</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-51" class="section-block">
+      <div class="section-header">
+        <span class="section-num">51</span>
+        <h2 class="section-heading">Source Notes</h2>
+      </div>
+      <div class="section-body">
+        <h2>Official syllabus</h2>
+<p>The DSC-14 Unit I syllabus explicitly includes:</p>
+<blockquote>
+<p>Constraint Satisfaction Problems</p>
+</blockquote>
+<p>under problem-solving techniques.</p>
+<h2>Supplied course-system guidance</h2>
+<p>The approved Design-04 integration system requires:</p>
+<ul>
+<li>pseudocode before implementation;</li>
+<li>from-scratch core implementation;</li>
+<li>tests;</li>
+<li>visualization where useful;</li>
+<li>debugging examples;</li>
+<li>coding links to Main Book and Math/Exam IDs.</li>
+</ul>
+<h2>Source boundary</h2>
+<p>The retrieved snippets for this batch do not contain a complete course-specific CSP implementation recipe. Therefore, the algorithmic framework in this file is presented as a standard coding expansion required to operationalize the syllabus topic, not as a quotation or reconstruction of a missing lecture.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-52" class="section-block">
+      <div class="section-header">
+        <span class="section-num">52</span>
+        <h2 class="section-heading">Status</h2>
+      </div>
+      <div class="section-body">
+        <p><strong><code>CODE-U1-03</code> — COMPLETE</strong></p>
+<p>Next:</p>
+<p><strong><code>CODE-U1-04 — Minimax and Alpha-Beta Pruning From Scratch</code></strong></p>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="code-u1-02-greedy-a-star.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← Unit 1 Lab 02 — Greedy & A*</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">💻 Coding Index</span>
+      </a>
+      <a href="code-u1-04-minimax-alpha-beta.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: Unit 1 Lab 04 — Minimax & Alpha-Beta →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search lab implementations, functions, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">💻</span>Lab Hub</a>
+  <a href="code-u1-03-csp-backtracking.html" class="mobile-nav-btn active"><span class="icon">📖</span>CODE-U1-03</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

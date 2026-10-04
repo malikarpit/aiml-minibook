@@ -1,0 +1,2553 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="CODE-U1-02: Greedy Best-First & A* Search From Scratch — AI & Machine Learning Coding Lab. Priority Queues via heapq, Manhattan vs Euclidean Heuristics, Path Cost Tracking, and Admissibility Tests">
+<title>CODE-U1-02: Greedy Best-First & A* Search From Scratch | Coding Lab 💻 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/coding.css">
+</head>
+<body class="coding-module track-c1">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">💻</div>
+      <div class="brand-text"><span class="main">Coding Lab</span><span class="sub">AI &amp; ML From Scratch</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">CODE-U1-02: Greedy Best-First &amp; A* Search From Scratch</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">💻</span>Coding Lab Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../math/index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 0: Environment & System</div>
+  <a href="code-00-coding-foundation.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-00: Coding Lab Foundation &amp; Implementation System</a>
+  <a href="code-01-python-numpy-workflow.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-01: Python, NumPy, Matplotlib &amp; Lab Workflow</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Classical AI & Search Labs</div>
+  <a href="code-u1-01-bfs-dfs.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-01: BFS and DFS From Scratch</a>
+  <a href="code-u1-02-greedy-a-star.html" class="sidebar-link active"><span class="link-icon">🔍</span>CODE-U1-02: Greedy Best-First &amp; A* Search From Scratch</a>
+  <a href="code-u1-03-csp-backtracking.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-03: CSPs and Backtracking Search</a>
+  <a href="code-u1-04-minimax-alpha-beta.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Supervised ML Labs</div>
+  <a href="code-u2-01-ml-workflow.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-01: ML Workflow: Preprocessing, Splitting &amp; Evaluation</a>
+  <a href="code-u2-02-linear-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-02: Linear Regression From Scratch</a>
+  <a href="code-u2-03-logistic-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-03: Logistic Regression From Scratch</a>
+  <a href="code-u2-04-decision-trees.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-04: Decision Trees From Scratch</a>
+  <a href="code-u2-05-classification-metrics-roc.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC &amp; Thresholds</a>
+  <a href="code-u2-06-ridge-lasso-regularization.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-06: Ridge &amp; Lasso From Scratch: Regularization &amp; Optimization</a>
+  <a href="code-u2-07-ml-evaluation-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-07: ML Evaluation &amp; Model Comparison Lab</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Deep Learning Labs</div>
+  <a href="code-u3-01-neuron-perceptron.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-01: Neuron and Perceptron From Scratch</a>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>MLP, Backpropagation & Convolutions</span>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Advanced AI Labs (Upcoming)</div>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>Q-Learning, NLP & Generative Adversarial Loops</span>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">CODE-U1-02 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. What You Will Build</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Why This Coding Step Matters</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. The Search Problem</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Why Weighted Costs Matter</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. The Heuristic</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Best-First Search View</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Why We Need a Priority Queue</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Priority Queue Thinking</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Why We Track `g(n)`</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Greedy Best-First Search</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Greedy Pseudocode</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Greedy Implementation</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Test Greedy</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Why Greedy Can Be Wrong</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. A* Pseudocode</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. A* Implementation</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Why Stale Queue Entries Exist</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. A* Cost Trace</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Admissibility</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Why Admissibility Matters</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Heuristic = 0</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Greedy and A* as One Priority Framework</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Heuristic Design</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Example: Grid Distance</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Heuristic Testing Function</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Be Careful With “Admissible”</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Weak vs Strong Heuristic</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. A* Trace Table</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Greedy Trace Table</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Greedy Failure Example</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. A* Unit Test — Valid Path</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. A* Unit Test — Known Optimal Cost</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Testing Greedy Correctly</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Priority-Queue Tie Breaking</a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. A Cleaner Priority Entry</a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Trace Version — Greedy</a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Trace Version — A*</a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Compare the Traces</a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Heuristic Quality Experiment</a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. What If the Heuristic Overestimates?</a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Heuristic Audit Utility</a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Computing True Costs for Tiny Graphs</a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Search Algorithm as a Data-Structure Design Pattern</a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Common Coding Mistakes — Greedy/A*</a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. Debugging Checklist</a>
+      <a href="#s-46" class="sidebar-link"><span class="link-icon">📌</span>46. Property-Based Thinking</a>
+      <a href="#s-47" class="sidebar-link"><span class="link-icon">📌</span>47. Experiment — Change Only the Heuristic</a>
+      <a href="#s-48" class="sidebar-link"><span class="link-icon">📌</span>48. Experiment — Remove Heuristic Guidance</a>
+      <a href="#s-49" class="sidebar-link"><span class="link-icon">📌</span>49. Experiment — Distort the Heuristic</a>
+      <a href="#s-50" class="sidebar-link"><span class="link-icon">📌</span>50. Visualization</a>
+      <a href="#s-51" class="sidebar-link"><span class="link-icon">📌</span>51. Manual A* Trace Exercise</a>
+      <a href="#s-52" class="sidebar-link"><span class="link-icon">📌</span>52. Manual Greedy Trace Exercise</a>
+      <a href="#s-53" class="sidebar-link"><span class="link-icon">📌</span>53. Complexity Thinking</a>
+      <a href="#s-54" class="sidebar-link"><span class="link-icon">📌</span>54. Library Comparison</a>
+      <a href="#s-55" class="sidebar-link"><span class="link-icon">📌</span>55. From-Scratch vs Library</a>
+      <a href="#s-56" class="sidebar-link"><span class="link-icon">📌</span>56. Coding Challenge — Implement a Generic Best-First Engine</a>
+      <a href="#s-57" class="sidebar-link"><span class="link-icon">📌</span>57. Coding Challenge — Search Statistics</a>
+      <a href="#s-58" class="sidebar-link"><span class="link-icon">📌</span>58. Coding Challenge — Heuristic Validator</a>
+      <a href="#s-59" class="sidebar-link"><span class="link-icon">📌</span>59. Integration With CODE-U1-01</a>
+      <a href="#s-60" class="sidebar-link"><span class="link-icon">📌</span>60. Exam Bridge</a>
+      <a href="#s-61" class="sidebar-link"><span class="link-icon">📌</span>61. Active Recall — Coding Edition</a>
+      <a href="#s-62" class="sidebar-link"><span class="link-icon">📌</span>62. Final Implementation Test</a>
+      <a href="#s-63" class="sidebar-link"><span class="link-icon">📌</span>63. Mastery Gate</a>
+      <a href="#s-64" class="sidebar-link"><span class="link-icon">📌</span>64. Final Memory Sheet</a>
+      <a href="#s-65" class="sidebar-link"><span class="link-icon">📌</span>65. Source Notes</a>
+      <a href="#s-66" class="sidebar-link"><span class="link-icon">📌</span>66. Status</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Coding Lab</a>
+        <span>/</span>
+        <span>CODE-U1-02</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-c1">Track 1: Classical AI & Search Labs</span></div>
+      <h1 class="chapter-title">Greedy Best-First &amp; A* Search From Scratch</h1>
+      <p class="chapter-desc">Priority Queues via heapq, Manhattan vs Euclidean Heuristics, Path Cost Tracking, and Admissibility Tests</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~45 min lab</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">HEURISTICS</span> <span class="chapter-meta-item uni-badge">A-STAR</span> <span class="chapter-meta-item uni-badge">PRIORITY-QUEUE</span> <span class="chapter-meta-item uni-badge">OPTIMALITY</span>
+      </div>
+
+      <div class="lab-meta-grid">
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Prerequisites</div>
+          <div class="lab-meta-value">CODE-U1-01 BFS & DFS, Main Book Ch 05 Heuristics & Ch 07 A* Search</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Main Book Concept</div>
+          <div class="lab-meta-value">Ch 05 Heuristics, Ch 06 Greedy Best-First, Ch 07 A* Search</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Math Companion Layer</div>
+          <div class="lab-meta-value">M05 Norms & Distance Metrics (L1 Manhattan vs L2 Euclidean)</div>
+        </div>
+        <div class="lab-meta-box" style="grid-column: 1 / -1;">
+          <div class="lab-meta-label">AI / Machine Learning Connections</div>
+          <div class="lab-meta-value">GPS route navigation, Game agent pathfinding, Robotic arm inverse kinematics</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-meta-card"><h1>CODE-U1-02 — Greedy Best-First Search and A* From Scratch</h1>
+<blockquote>
+<p><strong>Coding Book — Unit I: Classical AI Search</strong></p>
+<p><strong>Topic ID:</strong> <code>CODE-U1-02</code></p>
+<p><strong>Main Book links:</strong> <code>MAIN-U1-C06 — Greedy Best-First Search</code>, <code>MAIN-U1-C07 — A* Search</code></p>
+<p><strong>Exam Book links:</strong> <code>EXAM-U1_Artificial_Intelligence_and_Search.md</code></p>
+<p><strong>Primary source:</strong> your supplied <code>lecture-informed-search.pdf</code> by Philipp Koehn, which defines Best-First Search through an evaluation function, presents Greedy Search using \(f(n)=h(n)\), and A<em> using \(f(n)=g(n)+h(n)\). It also covers admissibility, dominance, and properties of Greedy and A</em>.</p>
+<p><strong>Scope:</strong> Build Greedy Best-First Search and A* from scratch, with priority queues, parent/path reconstruction, tracing, heuristic inspection, tests, failure cases, and controlled comparisons.</p>
+</blockquote>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in CODE-U1-02 (66 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">What You Will Build</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Why This Coding Step Matters</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">The Search Problem</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Why Weighted Costs Matter</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">The Heuristic</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Best-First Search View</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Why We Need a Priority Queue</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Priority Queue Thinking</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Why We Track `g(n)`</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Greedy Best-First Search</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Greedy Pseudocode</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Greedy Implementation</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Test Greedy</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Why Greedy Can Be Wrong</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">A* Pseudocode</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">A* Implementation</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Why Stale Queue Entries Exist</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">A* Cost Trace</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Admissibility</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Why Admissibility Matters</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Heuristic = 0</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Greedy and A* as One Priority Framework</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Heuristic Design</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Example: Grid Distance</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Heuristic Testing Function</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Be Careful With “Admissible”</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Weak vs Strong Heuristic</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">A* Trace Table</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Greedy Trace Table</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Greedy Failure Example</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">A* Unit Test — Valid Path</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">A* Unit Test — Known Optimal Cost</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Testing Greedy Correctly</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Priority-Queue Tie Breaking</span></a></li>
+        <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">A Cleaner Priority Entry</span></a></li>
+        <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Trace Version — Greedy</span></a></li>
+        <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Trace Version — A*</span></a></li>
+        <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Compare the Traces</span></a></li>
+        <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Heuristic Quality Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">What If the Heuristic Overestimates?</span></a></li>
+        <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Heuristic Audit Utility</span></a></li>
+        <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Computing True Costs for Tiny Graphs</span></a></li>
+        <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Search Algorithm as a Data-Structure Design Pattern</span></a></li>
+        <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Common Coding Mistakes — Greedy/A*</span></a></li>
+        <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">Debugging Checklist</span></a></li>
+        <li class="toc-item"><a href="#s-46"><span class="toc-num">46</span><span class="toc-name">Property-Based Thinking</span></a></li>
+        <li class="toc-item"><a href="#s-47"><span class="toc-num">47</span><span class="toc-name">Experiment — Change Only the Heuristic</span></a></li>
+        <li class="toc-item"><a href="#s-48"><span class="toc-num">48</span><span class="toc-name">Experiment — Remove Heuristic Guidance</span></a></li>
+        <li class="toc-item"><a href="#s-49"><span class="toc-num">49</span><span class="toc-name">Experiment — Distort the Heuristic</span></a></li>
+        <li class="toc-item"><a href="#s-50"><span class="toc-num">50</span><span class="toc-name">Visualization</span></a></li>
+        <li class="toc-item"><a href="#s-51"><span class="toc-num">51</span><span class="toc-name">Manual A* Trace Exercise</span></a></li>
+        <li class="toc-item"><a href="#s-52"><span class="toc-num">52</span><span class="toc-name">Manual Greedy Trace Exercise</span></a></li>
+        <li class="toc-item"><a href="#s-53"><span class="toc-num">53</span><span class="toc-name">Complexity Thinking</span></a></li>
+        <li class="toc-item"><a href="#s-54"><span class="toc-num">54</span><span class="toc-name">Library Comparison</span></a></li>
+        <li class="toc-item"><a href="#s-55"><span class="toc-num">55</span><span class="toc-name">From-Scratch vs Library</span></a></li>
+        <li class="toc-item"><a href="#s-56"><span class="toc-num">56</span><span class="toc-name">Coding Challenge — Implement a Generic Best-First Engine</span></a></li>
+        <li class="toc-item"><a href="#s-57"><span class="toc-num">57</span><span class="toc-name">Coding Challenge — Search Statistics</span></a></li>
+        <li class="toc-item"><a href="#s-58"><span class="toc-num">58</span><span class="toc-name">Coding Challenge — Heuristic Validator</span></a></li>
+        <li class="toc-item"><a href="#s-59"><span class="toc-num">59</span><span class="toc-name">Integration With CODE-U1-01</span></a></li>
+        <li class="toc-item"><a href="#s-60"><span class="toc-num">60</span><span class="toc-name">Exam Bridge</span></a></li>
+        <li class="toc-item"><a href="#s-61"><span class="toc-num">61</span><span class="toc-name">Active Recall — Coding Edition</span></a></li>
+        <li class="toc-item"><a href="#s-62"><span class="toc-num">62</span><span class="toc-name">Final Implementation Test</span></a></li>
+        <li class="toc-item"><a href="#s-63"><span class="toc-num">63</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-64"><span class="toc-num">64</span><span class="toc-name">Final Memory Sheet</span></a></li>
+        <li class="toc-item"><a href="#s-65"><span class="toc-num">65</span><span class="toc-name">Source Notes</span></a></li>
+        <li class="toc-item"><a href="#s-66"><span class="toc-num">66</span><span class="toc-name">Status</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">What You Will Build</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph TD
+    Node["Frontier Node n"] --> G["Past Cost g(n): Start to n"]
+    Node --> H["Heuristic Estimate h(n): n to Goal"]
+    G & H --> F["A* Evaluation Function: f(n) = g(n) + h(n)"]
+    F --> Heap["Priority Queue (heapq): Pop node with min f(n)"]
+    Heap --> Check{"Goal Reached?"}
+    Check -- Yes --> Opt["Optimal Shortest Path Guaranteed if h(n) is Admissible!"]
+    style F fill:#0f172a,stroke:#38bdf8,color:#38bdf8,stroke-width:2px
+    style Opt fill:#065f46,stroke:#34d399,color:#ffffff
+</pre></div>
+<p>This file moves from:</p>
+<div class="ascii-box"><pre>BFS / DFS</pre></div>
+<p>to:</p>
+<div class="ascii-box"><pre>priority-based frontier
+        ↓
+Greedy Best-First
+        ↓
+A*</pre></div>
+<p>You will implement:</p>
+<div class="ascii-box"><pre>priority queue
+↓
+Greedy Best-First Search
+↓
+heuristic function
+↓
+A* search
+↓
+path-cost tracking
+↓
+trace
+↓
+admissibility experiment
+↓
+tests
+↓
+comparison</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">Why This Coding Step Matters</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Implementation Model</div>
+
+Greedy Best-First Search bohot lalchi hota hai—sirf aage dekhta hai ($h(n)$). Jo node goal ke paas lage vahan chala jata hai, chahe pichla rasta kitna bhi lamba aur mehenga kyu na ho!
+A* Search sabse samajhdar hai: vo dono jodta hai: $f(n) = g(n) + h(n)$.
+'Kitna kharcha ho chuka hai' ($g$) plus 'Kitna bacha hai' ($h$).
+Agar tumhara heuristic $h(n)$ kabhi over-estimate nahi karta (admissible), toh A* hamesha sabse sasta path dhundh nikalega!
+
+</div>
+
+<p>BFS and DFS differ mainly in how the frontier chooses its next node.</p>
+<p>Now we make that choice more explicit.</p>
+<div class="ascii-box"><pre>BFS
+→ shallowest node
+
+DFS
+→ deepest node
+
+Greedy
+→ smallest h(n)
+
+A*
+→ smallest g(n)+h(n)</pre></div>
+<p>This gives one of the most reusable ideas in AI search:</p>
+<blockquote>
+<p><strong>The frontier can be ordered by an evaluation function.</strong></p>
+</blockquote>
+<p>The code becomes more general, while the conceptual architecture stays familiar.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">The Search Problem</h2>
+      </div>
+      <div class="section-body">
+        <p>Use a weighted graph.</p>
+<p>Each edge has a cost.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>B
+        /   \
+     2 /     \ 2
+      /       \
+     A         D
+      \       /
+     1 \     / 1
+        \   /
+          C
+          |
+          5
+          |
+          G</pre></div>
+<p>A practical dictionary representation:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">graph = {
+    &quot;A&quot;: [(&quot;B&quot;, 2), (&quot;C&quot;, 1)],
+    &quot;B&quot;: [(&quot;D&quot;, 2)],
+    &quot;C&quot;: [(&quot;D&quot;, 1), (&quot;G&quot;, 5)],
+    &quot;D&quot;: [(&quot;G&quot;, 1)],
+    &quot;G&quot;: [],
+}</code></pre></div>
+<p>Here:</p>
+<div class="ascii-box"><pre>A → B costs 2
+A → C costs 1
+B → D costs 2
+C → D costs 1
+C → G costs 5
+D → G costs 1</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Why Weighted Costs Matter</h2>
+      </div>
+      <div class="section-body">
+        <p>BFS only sees depth.</p>
+<p>For example:</p>
+<div class="ascii-box"><pre>A → C → G</pre></div>
+<p>has 2 steps.</p>
+<p>But:</p>
+<div class="formula-math">\[
+1+5=6
+\]</div>
+<p>total cost.</p>
+<p>Another route:</p>
+<div class="ascii-box"><pre>A → C → D → G</pre></div>
+<p>has 3 steps:</p>
+<div class="formula-math">\[
+1+1+1=3.
+\]</div>
+<p>So:</p>
+<div class="ascii-box"><pre>fewer steps
+≠
+lower cost</pre></div>
+<p>This is why cost-aware search is necessary.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">The Heuristic</h2>
+      </div>
+      <div class="section-body">
+        <p>A heuristic is an estimate of the remaining cost to reach a goal.</p>
+<p>Write:</p>
+<div class="formula-math">\[
+\boxed{
+h(n)
+}
+\]</div>
+<p>Example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">heuristic = {
+    &quot;A&quot;: 3,
+    &quot;B&quot;: 2,
+    &quot;C&quot;: 2,
+    &quot;D&quot;: 1,
+    &quot;G&quot;: 0,
+}</code></pre></div>
+<p>For example:</p>
+<div class="formula-math">\[
+h(D)=1
+\]</div>
+<p>means:</p>
+<blockquote>
+<p>“From D, I estimate the remaining cost to the goal is 1.”</p>
+</blockquote>
+<p>A heuristic does not need to equal the true cost.</p>
+<p>It is an estimate.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Best-First Search View</h2>
+      </div>
+      <div class="section-body">
+        <p>The supplied informed-search lecture frames these methods through an evaluation function:</p>
+<div class="formula-math">\[
+\boxed{
+f(n)
+}
+\]</div>
+<p>and the frontier selects the node with the smallest evaluation value.</p>
+<p>Then:</p>
+<h3>Greedy</h3>
+<div class="formula-math">\[
+\boxed{
+f(n)=h(n)
+}
+\]</div>
+<h3>A*</h3>
+<div class="formula-math">\[
+\boxed{
+f(n)=g(n)+h(n)
+}
+\]</div>
+<p>This is the central code-level abstraction.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Why We Need a Priority Queue</h2>
+      </div>
+      <div class="section-body">
+        <p>A FIFO queue gives:</p>
+<div class="ascii-box"><pre>first inserted → first removed</pre></div>
+<p>A LIFO stack gives:</p>
+<div class="ascii-box"><pre>last inserted → first removed</pre></div>
+<p>Now we need:</p>
+<div class="ascii-box"><pre>smallest f(n) → first removed</pre></div>
+<p>That requires a priority queue.</p>
+<p>Python provides:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import heapq</code></pre></div>
+<p>Basic pattern:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">heap = []
+
+heapq.heappush(heap, (priority, item))
+priority, item = heapq.heappop(heap)</code></pre></div>
+<p>The smallest priority comes out first.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">Priority Queue Thinking</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose the frontier contains:</p>
+<div class="ascii-box"><pre>Node   priority
+A        8
+B        3
+C        5</pre></div>
+<p>The next selected node is:</p>
+<div class="ascii-box"><pre>B</pre></div>
+<p>because:</p>
+<div class="formula-math">\[
+3\lt 5\lt 8.
+\]</div>
+<p>For Greedy:</p>
+<div class="ascii-box"><pre>priority = h(n)</pre></div>
+<p>For A*:</p>
+<div class="ascii-box"><pre>priority = g(n) + h(n)</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Why We Track `g(n)`</h2>
+      </div>
+      <div class="section-body">
+        <p>A* needs:</p>
+<div class="formula-math">\[
+g(n)
+\]</div>
+<p>the actual cost already spent getting from the start to \(n\).</p>
+<p>For example:</p>
+<div class="ascii-box"><pre>A → C → D</pre></div>
+<p>has:</p>
+<div class="formula-math">\[
+g(D)=1+1=2.
+\]</div>
+<p>So if:</p>
+<div class="formula-math">\[
+h(D)=1,
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+f(D)=g(D)+h(D)=3.
+\]</div>
+<p>This value determines A*'s frontier priority.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Greedy Best-First Search</h2>
+      </div>
+      <div class="section-body">
+        <p>Greedy ignores accumulated path cost for its priority.</p>
+<p>It uses:</p>
+<div class="formula-math">\[
+\boxed{
+f(n)=h(n)
+}
+\]</div>
+<p>Meaning:</p>
+<blockquote>
+<p>Choose the node that <strong>looks closest to the goal</strong>.</p>
+</blockquote>
+<p>This is exactly the attraction and weakness of Greedy.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Greedy Pseudocode</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>Greedy(problem):
+
+    frontier ← priority queue ordered by h(n)
+    add start
+
+    visited ← empty
+    parent[start] ← None
+
+    while frontier not empty:
+
+        current ← remove lowest-h node
+
+        if current is goal:
+            return reconstructed path
+
+        if current already visited:
+            continue
+
+        mark current visited
+
+        for each successor:
+            record parent if appropriate
+            push successor with priority h(successor)
+
+    return failure</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Greedy Implementation</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import heapq
+
+
+def greedy_best_first(graph, start, goal, heuristic):
+    frontier = []
+    heapq.heappush(frontier, (heuristic[start], start))
+
+    visited = set()
+    parent = {start: None}
+
+    while frontier:
+        _, current = heapq.heappop(frontier)
+
+        if current in visited:
+            continue
+
+        visited.add(current)
+
+        if current == goal:
+            return reconstruct_path(parent, goal)
+
+        for neighbor, _ in graph.get(current, []):
+            if neighbor not in visited:
+                if neighbor not in parent:
+                    parent[neighbor] = current
+
+                priority = heuristic[neighbor]
+                heapq.heappush(frontier, (priority, neighbor))
+
+    return None</code></pre></div>
+<p>This implementation deliberately leaves path cost out of the priority.</p>
+<p>That omission <strong>is Greedy's defining behaviour</strong>.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Test Greedy</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">graph = {
+    &quot;A&quot;: [(&quot;B&quot;, 2), (&quot;C&quot;, 1)],
+    &quot;B&quot;: [(&quot;D&quot;, 2)],
+    &quot;C&quot;: [(&quot;D&quot;, 1), (&quot;G&quot;, 5)],
+    &quot;D&quot;: [(&quot;G&quot;, 1)],
+    &quot;G&quot;: [],
+}
+
+heuristic = {
+    &quot;A&quot;: 3,
+    &quot;B&quot;: 2,
+    &quot;C&quot;: 2,
+    &quot;D&quot;: 1,
+    &quot;G&quot;: 0,
+}</code></pre></div>
+<p>Run:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">path = greedy_best_first(
+    graph,
+    &quot;A&quot;,
+    &quot;G&quot;,
+    heuristic,
+)
+
+print(path)</code></pre></div>
+<p>With this particular heuristic and tie-breaking convention, the result depends on how equal priorities are ordered. That is an intentional lesson:</p>
+<blockquote>
+<p><strong>Priority ties are part of the implementation behaviour.</strong></p>
+</blockquote>
+<p>Do not assume one universal path whenever two nodes have identical \(h\).</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Why Greedy Can Be Wrong</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose the frontier has:</p>
+<div class="ascii-box"><pre>Node B:
+g(B)=20
+h(B)=1
+f_greedy(B)=1
+
+Node C:
+g(C)=2
+h(C)=4
+f_greedy(C)=4</pre></div>
+<p>Greedy chooses B because:</p>
+<div class="formula-math">\[
+1\lt 4.
+\]</div>
+<p>But B is already expensive.</p>
+<p>If the remaining estimate is poor, Greedy can commit to an expensive route.</p>
+<p>A* sees:</p>
+<div class="formula-math">\[
+f(B)=20+1=21
+\]</div>
+<p>versus:</p>
+<div class="formula-math">\[
+f(C)=2+4=6.
+\]</div>
+<p>So A* would choose C.</p>
+<p>This is the computational meaning of:</p>
+<div class="ascii-box"><pre>Greedy = future estimate only
+A* = past cost + future estimate</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">A* Pseudocode</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>A*(problem):
+
+    frontier ← priority queue ordered by g(n)+h(n)
+    g(start) ← 0
+    parent[start] ← None
+
+    push start with priority h(start)
+
+    best_cost ← empty map
+    best_cost[start] ← 0
+
+    while frontier not empty:
+
+        current ← remove lowest-f node
+
+        if current is goal:
+            return reconstructed path
+
+        for each successor:
+
+            new_cost =
+                g(current) + step_cost(current, successor)
+
+            if successor unseen
+               or new_cost &lt; best_cost[successor]:
+
+                best_cost[successor] ← new_cost
+                parent[successor] ← current
+
+                f = new_cost + h(successor)
+
+                push successor with priority f
+
+    return failure</pre></div>
+<p>The <code>new_cost &lt; best_cost[successor]</code> condition is important.</p>
+<p>A state may be discovered through multiple paths.</p>
+<p>A* must care whether the newly discovered route is cheaper.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">A* Implementation</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import heapq
+
+
+def astar(graph, start, goal, heuristic):
+    frontier = []
+
+    g_cost = {start: 0}
+    parent = {start: None}
+
+    heapq.heappush(
+        frontier,
+        (heuristic[start], start),
+    )
+
+    while frontier:
+        current_f, current = heapq.heappop(frontier)
+
+        current_g = g_cost[current]
+
+        # Ignore stale priority-queue entries.
+        expected_f = current_g + heuristic[current]
+
+        if current_f != expected_f:
+            continue
+
+        if current == goal:
+            return reconstruct_path(parent, goal)
+
+        for neighbor, step_cost in graph.get(current, []):
+            new_g = current_g + step_cost
+
+            if neighbor not in g_cost or new_g &lt; g_cost[neighbor]:
+                g_cost[neighbor] = new_g
+                parent[neighbor] = current
+
+                new_f = new_g + heuristic[neighbor]
+
+                heapq.heappush(
+                    frontier,
+                    (new_f, neighbor),
+                )
+
+    return None</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">Why Stale Queue Entries Exist</h2>
+      </div>
+      <div class="section-body">
+        <p>Consider:</p>
+<div class="ascii-box"><pre>A → B cost 8
+A → C cost 2
+C → B cost 1</pre></div>
+<p>Initially:</p>
+<div class="formula-math">\[
+g(B)=8.
+\]</div>
+<p>Later we discover:</p>
+<div class="formula-math">\[
+A\to C\to B
+\]</div>
+<p>with cost:</p>
+<div class="formula-math">\[
+2+1=3.
+\]</div>
+<p>If the old queue entry with cost 8 remains in the heap, the priority queue now contains information from two different discoveries of B.</p>
+<p>Instead of mutating heap elements, a common Python approach is:</p>
+<blockquote>
+<p>push the improved entry and ignore stale entries when they are later popped.</p>
+</blockquote>
+<p>That is the purpose of:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">if current_f != expected_f:
+    continue</code></pre></div>
+<p>This is an important practical priority-queue pattern.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">A* Cost Trace</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="ascii-box"><pre>A → C cost 1
+C → D cost 1
+D → G cost 1</pre></div>
+<p>Then:</p>
+<div class="formula-math">\[
+g(A)=0
+\]</div>
+<div class="formula-math">\[
+g(C)=1
+\]</div>
+<div class="formula-math">\[
+g(D)=2
+\]</div>
+<div class="formula-math">\[
+g(G)=3.
+\]</div>
+<p>If:</p>
+<div class="formula-math">\[
+h(A)=3,\quad h(C)=2,\quad h(D)=1,\quad h(G)=0
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+f(A)=0+3=3
+\]</div>
+<div class="formula-math">\[
+f(C)=1+2=3
+\]</div>
+<div class="formula-math">\[
+f(D)=2+1=3
+\]</div>
+<div class="formula-math">\[
+f(G)=3+0=3.
+\]</div>
+<p>This is a perfect heuristic along this route because:</p>
+<div class="formula-math">\[
+h(n)=h^*(n)
+\]</div>
+<p>for those nodes.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">Admissibility</h2>
+      </div>
+      <div class="section-body">
+        <p>The supplied lecture defines an admissible heuristic as one that does not overestimate the actual optimal remaining cost:</p>
+<div class="formula-math">\[
+\boxed{
+h(n)\le h^*(n)
+}
+\]</div>
+<p>where:</p>
+<div class="formula-math">\[
+h^*(n)
+\]</div>
+<p>is the true cheapest remaining cost to the goal.</p>
+<h3>Code-level interpretation</h3>
+<p>Suppose the real remaining minimum cost is:</p>
+<div class="ascii-box"><pre>7</pre></div>
+<p>Then these are admissible:</p>
+<div class="ascii-box"><pre>0
+2
+5
+7</pre></div>
+<p>but:</p>
+<div class="ascii-box"><pre>8</pre></div>
+<p>is not admissible.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Why Admissibility Matters</h2>
+      </div>
+      <div class="section-body">
+        <p>The A* guarantee depends on assumptions.</p>
+<p>Under the standard assumptions used in the lecture:</p>
+<div class="ascii-box"><pre>admissible heuristic
+        ↓
+A* can safely use heuristic guidance
+        ↓
+optimality guarantee</pre></div>
+<p>The key idea is:</p>
+<blockquote>
+<p>The heuristic is allowed to be optimistic, but not pessimistic in the wrong direction.</p>
+</blockquote>
+<p>More precisely:</p>
+<blockquote>
+<p>It may underestimate the remaining cost, but it must not overestimate it.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">Heuristic = 0</h2>
+      </div>
+      <div class="section-body">
+        <p>A very important special case:</p>
+<div class="formula-math">\[
+\boxed{
+h(n)=0
+\quad\forall n
+}
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+f(n)=g(n).
+\]</div>
+<p>That is Uniform-Cost Search behaviour.</p>
+<p>So:</p>
+<div class="ascii-box"><pre>A*
+with h = 0
+        ↓
+f = g
+        ↓
+UCS</pre></div>
+<p>This is a beautiful connection between algorithms.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">Greedy and A* as One Priority Framework</h2>
+      </div>
+      <div class="section-body">
+        <p>You can write:</p>
+<div class="formula-math">\[
+\boxed{
+f(n)=\alpha g(n)+\beta h(n)
+}
+\]</div>
+<p>conceptually, with special choices producing different behaviours.</p>
+<p>For this course, the key cases are:</p>
+<div class="ascii-box"><pre>Greedy:
+α = 0
+β = 1
+
+A*:
+α = 1
+β = 1</pre></div>
+<p>Do not treat this weighted expression as the standard course algorithm definition; it is a conceptual bridge.</p>
+<p>The syllabus-relevant formulas remain:</p>
+<div class="formula-math">\[
+\boxed{
+f_{\text{Greedy}}=h
+}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\boxed{
+f_{A^*}=g+h.
+}
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">Heuristic Design</h2>
+      </div>
+      <div class="section-body">
+        <p>A heuristic should help the search identify promising states.</p>
+<p>A common way to create one is to solve a <strong>relaxed version</strong> of the original problem.</p>
+<p>The supplied informed-search lecture explicitly presents this idea.</p>
+<p>If:</p>
+<div class="ascii-box"><pre>real problem
+↓
+remove some restrictions
+↓
+easier problem
+↓
+solve exactly
+↓
+cost gives lower bound</pre></div>
+<p>then the relaxed-problem cost can be an admissible heuristic.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">Example: Grid Distance</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose a grid permits only four-direction moves:</p>
+<div class="ascii-box"><pre>up
+down
+left
+right</pre></div>
+<p>A natural heuristic is Manhattan distance:</p>
+<div class="formula-math">\[
+\boxed{
+h(n)
+=
+|x_n-x_g|
++
+|y_n-y_g|
+}
+\]</div>
+<p>provided each move has unit cost and obstacles can only make the true path longer.</p>
+<p>Why is it admissible?</p>
+<p>Because no valid route can require fewer unit moves than the required horizontal plus vertical displacement.</p>
+<p>This is a pedagogical example of deriving a lower-bound heuristic.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">Heuristic Testing Function</h2>
+      </div>
+      <div class="section-body">
+        <p>You can compute:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def is_admissible(
+    graph,
+    goal,
+    heuristic,
+    true_costs,
+):
+    for node, h_value in heuristic.items():
+        if h_value &gt; true_costs[node]:
+            return False
+    return True</code></pre></div>
+<p>This requires <code>true_costs</code>.</p>
+<p>For a small graph, you can calculate true optimal costs using a cost-optimal reference search such as Dijkstra/UCS.</p>
+<p>The purpose is educational:</p>
+<div class="ascii-box"><pre>candidate heuristic
+        ↓
+compare against true remaining cost
+        ↓
+check admissibility</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">Be Careful With “Admissible”</h2>
+      </div>
+      <div class="section-body">
+        <p>A heuristic being admissible means:</p>
+<div class="formula-math">\[
+h(n)\le h^*(n).
+\]</div>
+<p>It does <strong>not</strong> mean:</p>
+<ul>
+<li>accurate;</li>
+<li>close to the true cost;</li>
+<li>always fast;</li>
+<li>consistent;</li>
+<li>optimal by itself.</li>
+</ul>
+<p>An admissible heuristic can be very weak.</p>
+<p>For example:</p>
+<div class="formula-math">\[
+h(n)=0
+\]</div>
+<p>is admissible.</p>
+<p>But it provides no directional guidance.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">Weak vs Strong Heuristic</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose the true remaining cost is:</p>
+<div class="formula-math">\[
+h^*(n)=10.
+\]</div>
+<p>Compare:</p>
+<div class="ascii-box"><pre>h₁(n)=1
+h₂(n)=7
+h₃(n)=10</pre></div>
+<p>All are admissible.</p>
+<p>But \(h_3\) provides more information.</p>
+<p>Under the standard forward-search framing, an admissible heuristic with larger values where valid can dominate a weaker one when it is never less than the weaker heuristic.</p>
+<p>The supplied lecture explicitly discusses heuristic dominance and the construction:</p>
+<div class="formula-math">\[
+h(n)=\max(h_a(n),h_b(n))
+\]</div>
+<p>when both are admissible.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">A* Trace Table</h2>
+      </div>
+      <div class="section-body">
+        <p>Use:</p>
+<div class="ascii-box"><pre>Node   g   h   f=g+h
+A      0   6   6
+B      2   5   7
+C      3   2   5
+D      4   3   7
+G      8   0   8</pre></div>
+<p>A* selects the smallest current \(f\).</p>
+<p>So initially:</p>
+<div class="formula-math">\[
+C
+\]</div>
+<p>is more attractive than:</p>
+<div class="formula-math">\[
+B.
+\]</div>
+<p>Why?</p>
+<div class="formula-math">\[
+5\lt 7.
+\]</div>
+<p>This is how the mathematical formula becomes a concrete priority queue.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">Greedy Trace Table</h2>
+      </div>
+      <div class="section-body">
+        <p>Use:</p>
+<div class="ascii-box"><pre>Node   h
+A      6
+B      5
+C      2
+D      3
+G      0</pre></div>
+<p>Greedy sorts only by:</p>
+<div class="formula-math">\[
+h.
+\]</div>
+<p>Therefore:</p>
+<div class="ascii-box"><pre>G has highest priority
+C next
+D next
+B next
+A last</pre></div>
+<p>subject to which nodes are actually present in the frontier.</p>
+<p>This is why the trace must always distinguish:</p>
+<div class="ascii-box"><pre>all graph nodes</pre></div>
+<p>from:</p>
+<div class="ascii-box"><pre>current frontier</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">Greedy Failure Example</h2>
+      </div>
+      <div class="section-body">
+        <p>Construct:</p>
+<div class="ascii-box"><pre>B -------- G
+        /
+START - 
+        \
+          C -------- D -------- G</pre></div>
+<p>Suppose:</p>
+<div class="ascii-box"><pre>START → B = 10
+B → G = 10
+
+START → C = 1
+C → D = 1
+D → G = 1</pre></div>
+<p>True route costs:</p>
+<div class="formula-math">\[
+START\to B\to G=20
+\]</div>
+<div class="formula-math">\[
+START\to C\to D\to G=3.
+\]</div>
+<p>Now imagine the heuristic:</p>
+<div class="formula-math">\[
+h(B)=1
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+h(C)=3.
+\]</div>
+<p>Greedy prefers B:</p>
+<div class="formula-math">\[
+1\lt 3.
+\]</div>
+<p>It can therefore commit toward an expensive solution.</p>
+<p>A* sees:</p>
+<div class="formula-math">\[
+f(B)=10+1=11
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+f(C)=1+3=4.
+\]</div>
+<p>So A* prefers C.</p>
+<p>This is the simplest computational demonstration of why A* uses both \(g\) and \(h\).</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">A* Unit Test — Valid Path</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def test_astar_returns_valid_path():
+    path = astar(
+        graph,
+        &quot;A&quot;,
+        &quot;G&quot;,
+        heuristic,
+    )
+
+    assert is_valid_path(
+        graph,
+        path,
+        &quot;A&quot;,
+        &quot;G&quot;,
+    )</code></pre></div>
+<p>Do not only test:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert path == [&quot;A&quot;, &quot;C&quot;, &quot;D&quot;, &quot;G&quot;]</code></pre></div>
+<p>unless the exact tie-breaking and graph structure guarantee that path.</p>
+<p>Search correctness should be expressed through properties.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">A* Unit Test — Known Optimal Cost</h2>
+      </div>
+      <div class="section-body">
+        <p>Create a helper:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def path_cost(graph, path):
+    if path is None:
+        return float(&quot;inf&quot;)
+
+    total = 0
+
+    for current, nxt in zip(path, path[1:]):
+        for neighbor, cost in graph[current]:
+            if neighbor == nxt:
+                total += cost
+                break
+        else:
+            raise ValueError(&quot;Invalid edge in path.&quot;)
+
+    return total</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">path = astar(
+    graph,
+    &quot;A&quot;,
+    &quot;G&quot;,
+    heuristic,
+)
+
+assert path_cost(graph, path) == 3</code></pre></div>
+<p>This tests the property that matters:</p>
+<blockquote>
+<p>the returned path has the expected least cost for this known problem.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Testing Greedy Correctly</h2>
+      </div>
+      <div class="section-body">
+        <p>Greedy is not generally optimal.</p>
+<p>Therefore do <strong>not</strong> write:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert path_cost(graph, greedy_path) == optimal_cost</code></pre></div>
+<p>as a universal test.</p>
+<p>Instead test:</p>
+<div class="ascii-box"><pre>path exists
+path is valid
+algorithm terminates
+priority rule is respected</pre></div>
+<p>Then construct a separate experiment demonstrating that Greedy can produce a suboptimal route.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Priority-Queue Tie Breaking</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="ascii-box"><pre>B has h=2
+C has h=2</pre></div>
+<p>Which one is popped first?</p>
+<p>A tuple such as:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">(priority, node)</code></pre></div>
+<p>will use <code>node</code> as a secondary comparison in Python's heap ordering.</p>
+<p>That means lexical ordering may influence the result.</p>
+<p>This is an implementation detail, not an AI theorem.</p>
+<h3>Better engineering option</h3>
+<p>Use a counter:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from itertools import count
+
+counter = count()
+
+heapq.heappush(
+    frontier,
+    (priority, next(counter), node),
+)</code></pre></div>
+<p>Now ties are broken by insertion order.</p>
+<p>This makes behaviour more explicit and reproducible.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-35" class="section-block">
+      <div class="section-header">
+        <span class="section-num">35</span>
+        <h2 class="section-heading">A Cleaner Priority Entry</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">counter = count()
+
+heapq.heappush(
+    frontier,
+    (priority, next(counter), node),
+)</code></pre></div>
+<p>When popping:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">priority, _, node = heapq.heappop(frontier)</code></pre></div>
+<p>This is useful when node objects are not naturally comparable.</p>
+<p>It also makes your search implementation more robust.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-36" class="section-block">
+      <div class="section-header">
+        <span class="section-num">36</span>
+        <h2 class="section-heading">Trace Version — Greedy</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def greedy_trace(graph, start, goal, heuristic):
+    frontier = []
+    counter = count()
+
+    heapq.heappush(
+        frontier,
+        (heuristic[start], next(counter), start),
+    )
+
+    visited = set()
+    parent = {start: None}
+    trace = []
+
+    while frontier:
+        priority, _, current = heapq.heappop(frontier)
+
+        if current in visited:
+            continue
+
+        visited.add(current)
+
+        trace.append({
+            &quot;node&quot;: current,
+            &quot;priority&quot;: priority,
+            &quot;frontier_size&quot;: len(frontier),
+        })
+
+        if current == goal:
+            return reconstruct_path(parent, goal), trace
+
+        for neighbor, _ in graph.get(current, []):
+            if neighbor not in visited:
+                if neighbor not in parent:
+                    parent[neighbor] = current
+
+                heapq.heappush(
+                    frontier,
+                    (
+                        heuristic[neighbor],
+                        next(counter),
+                        neighbor,
+                    ),
+                )
+
+    return None, trace</code></pre></div>
+<p>The trace lets you see the priority-based frontier directly.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-37" class="section-block">
+      <div class="section-header">
+        <span class="section-num">37</span>
+        <h2 class="section-heading">Trace Version — A*</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def astar_trace(graph, start, goal, heuristic):
+    frontier = []
+    counter = count()
+
+    g_cost = {start: 0}
+    parent = {start: None}
+
+    heapq.heappush(
+        frontier,
+        (heuristic[start], next(counter), start),
+    )
+
+    trace = []
+
+    while frontier:
+        f_value, _, current = heapq.heappop(frontier)
+
+        current_g = g_cost[current]
+        expected_f = current_g + heuristic[current]
+
+        if f_value != expected_f:
+            continue
+
+        trace.append({
+            &quot;node&quot;: current,
+            &quot;g&quot;: current_g,
+            &quot;h&quot;: heuristic[current],
+            &quot;f&quot;: f_value,
+            &quot;frontier_size&quot;: len(frontier),
+        })
+
+        if current == goal:
+            return reconstruct_path(parent, goal), trace
+
+        for neighbor, step_cost in graph.get(current, []):
+            new_g = current_g + step_cost
+
+            if neighbor not in g_cost or new_g &lt; g_cost[neighbor]:
+                g_cost[neighbor] = new_g
+                parent[neighbor] = current
+
+                new_f = new_g + heuristic[neighbor]
+
+                heapq.heappush(
+                    frontier,
+                    (
+                        new_f,
+                        next(counter),
+                        neighbor,
+                    ),
+                )
+
+    return None, trace</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-38" class="section-block">
+      <div class="section-header">
+        <span class="section-num">38</span>
+        <h2 class="section-heading">Compare the Traces</h2>
+      </div>
+      <div class="section-body">
+        <p>For the same problem, create:</p>
+<div class="ascii-box"><pre>Greedy trace
+A:
+  h = ...
+
+B:
+  h = ...
+
+...
+
+A* trace
+A:
+  g = ...
+  h = ...
+  f = ...
+
+...</pre></div>
+<p>Then ask:</p>
+<blockquote>
+<p>“At the moment the algorithms diverge, what information does A* have that Greedy ignores?”</p>
+</blockquote>
+<p>The answer should be:</p>
+<div class="formula-math">\[
+\boxed{g(n)}
+\]</div>
+<p>the accumulated path cost.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-39" class="section-block">
+      <div class="section-header">
+        <span class="section-num">39</span>
+        <h2 class="section-heading">Heuristic Quality Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Create several admissible heuristics for one graph:</p>
+<div class="ascii-box"><pre>h0 = 0
+h1 = weak estimate
+h2 = stronger estimate</pre></div>
+<p>Run A* with each.</p>
+<p>Record:</p>
+<div class="ascii-box"><pre>heuristic
+path cost
+nodes expanded
+maximum frontier</pre></div>
+<p>Expected idea:</p>
+<div class="ascii-box"><pre>h = 0
+→ behaves like UCS
+→ little heuristic guidance
+
+stronger valid h
+→ often fewer expansions</pre></div>
+<p>Do not claim “stronger always means faster” without specifying the assumptions and implementation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-40" class="section-block">
+      <div class="section-header">
+        <span class="section-num">40</span>
+        <h2 class="section-heading">What If the Heuristic Overestimates?</h2>
+      </div>
+      <div class="section-body">
+        <p>Make one heuristic deliberately invalid:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">bad_heuristic = {
+    &quot;A&quot;: 10,
+    &quot;B&quot;: 20,
+    ...
+}</code></pre></div>
+<p>Compare it against the true remaining cost.</p>
+<p>The goal is not merely to make A* fail.</p>
+<p>The goal is to observe:</p>
+<div class="ascii-box"><pre>heuristic violates admissibility
+        ↓
+optimality guarantee no longer follows</pre></div>
+<p>This is an important software experiment because it connects a mathematical condition to an observable algorithmic consequence.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-41" class="section-block">
+      <div class="section-header">
+        <span class="section-num">41</span>
+        <h2 class="section-heading">Heuristic Audit Utility</h2>
+      </div>
+      <div class="section-body">
+        <p>Write a utility that prints:</p>
+<div class="ascii-box"><pre>node
+heuristic
+true_cost
+admissible?</pre></div>
+<p>Example:</p>
+<div class="ascii-box"><pre>A    h=3    true=4    YES
+B    h=2    true=2    YES
+C    h=5    true=3    NO</pre></div>
+<p>This is much more informative than a single boolean.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-42" class="section-block">
+      <div class="section-header">
+        <span class="section-num">42</span>
+        <h2 class="section-heading">Computing True Costs for Tiny Graphs</h2>
+      </div>
+      <div class="section-body">
+        <p>For small graphs, use a trusted cost-optimal reference algorithm such as Uniform-Cost Search / Dijkstra.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>goal
+↑
+reverse reasoning
+↑
+true cheapest remaining cost</pre></div>
+<p>Or compute shortest-path costs from every node to the goal in a small graph.</p>
+<p>The purpose here is only to create a reference for heuristic testing.</p>
+<p>Do not use the same potentially buggy implementation to validate itself.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-43" class="section-block">
+      <div class="section-header">
+        <span class="section-num">43</span>
+        <h2 class="section-heading">Search Algorithm as a Data-Structure Design Pattern</h2>
+      </div>
+      <div class="section-body">
+        <p>Now the Unit I pattern is visible:</p>
+<div class="ascii-box"><pre>SEARCH
+                      │
+          ┌───────────┴───────────┐
+          │                       │
+       frontier               evaluation
+          │                       │
+          ├── FIFO                ├── depth
+          ├── LIFO                ├── g
+          └── priority            ├── h
+                                  └── g+h</pre></div>
+<p>The future algorithms in this course reuse the same architecture with different selection criteria.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-44" class="section-block">
+      <div class="section-header">
+        <span class="section-num">44</span>
+        <h2 class="section-heading">Common Coding Mistakes — Greedy/A*</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Lab Viva Trap & Runtime Gotcha</div>
+
+**The Goal-Test-at-Generation Trap:**
+In BFS, you can goal-test when GENERATING a node.
+In A* Search, you must NEVER goal-test upon generation! You MUST goal-test ONLY when a node is POPPED from the priority queue!
+Testing at generation will prematurely return a suboptimal path that happened to be pushed first!
+
+</div>
+
+<h2>Mistake 1</h2>
+<p>Using:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">g + h</code></pre></div>
+<p>for Greedy.</p>
+<p>Wrong.</p>
+<p>Greedy uses:</p>
+<div class="formula-math">\[
+h.
+\]</div>
+<h2>Mistake 2</h2>
+<p>Using only:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">h</code></pre></div>
+<p>for A*.</p>
+<p>Wrong.</p>
+<p>A* uses:</p>
+<div class="formula-math">\[
+g+h.
+\]</div>
+<h2>Mistake 3</h2>
+<p>Never updating a state's best-known <code>g</code>.</p>
+<p>This can miss a cheaper route.</p>
+<h2>Mistake 4</h2>
+<p>Confusing edge cost with heuristic.</p>
+<p>They are different quantities.</p>
+<h2>Mistake 5</h2>
+<p>Assuming an arbitrary heuristic is admissible.</p>
+<p>It must satisfy:</p>
+<div class="formula-math">\[
+h(n)\le h^*(n).
+\]</div>
+<h2>Mistake 6</h2>
+<p>Treating the first discovery of a node as automatically its cheapest path.</p>
+<p>That is not generally safe in weighted search.</p>
+<h2>Mistake 7</h2>
+<p>Ignoring stale priority-queue entries.</p>
+<p>Your heap may contain old entries after a better path is found.</p>
+<h2>Mistake 8</h2>
+<p>Interpreting a tie-breaking rule as a theoretical property.</p>
+<p>It is usually an implementation detail.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-45" class="section-block">
+      <div class="section-header">
+        <span class="section-num">45</span>
+        <h2 class="section-heading">Debugging Checklist</h2>
+      </div>
+      <div class="section-body">
+        <p>If A* returns a strange path:</p>
+<div class="ascii-box"><pre>1. Print every edge cost
+2. Print g(n)
+3. Print h(n)
+4. Print f(n)
+5. Print parent map
+6. Inspect priority queue
+7. Check whether g improved
+8. Check stale entries
+9. Check heuristic values
+10. Verify path cost independently</pre></div>
+<p>If the returned path is suboptimal:</p>
+<div class="ascii-box"><pre>check heuristic admissibility
++
+check implementation
++
+check graph-search assumptions</pre></div>
+<p>Do not immediately blame the heuristic.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-46" class="section-block">
+      <div class="section-header">
+        <span class="section-num">46</span>
+        <h2 class="section-heading">Property-Based Thinking</h2>
+      </div>
+      <div class="section-body">
+        <p>Useful search properties include:</p>
+<h3>Path validity</h3>
+<p>Every consecutive pair is an actual edge.</p>
+<h3>Goal correctness</h3>
+<p>The final state satisfies the goal condition.</p>
+<h3>Cost correctness</h3>
+<p>The reported path cost equals the sum of edge costs.</p>
+<h3>A* optimality experiment</h3>
+<p>Under the intended assumptions, compare A* against a known cost-optimal reference.</p>
+<h3>Greedy non-optimality experiment</h3>
+<p>Construct a case where Greedy selects an expensive route.</p>
+<p>These are stronger tests than:</p>
+<div class="ascii-box"><pre>“the output looked right.”</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-47" class="section-block">
+      <div class="section-header">
+        <span class="section-num">47</span>
+        <h2 class="section-heading">Experiment — Change Only the Heuristic</h2>
+      </div>
+      <div class="section-body">
+        <p>Keep fixed:</p>
+<div class="ascii-box"><pre>graph
+start
+goal
+edge costs</pre></div>
+<p>Change only:</p>
+<div class="ascii-box"><pre>heuristic</pre></div>
+<p>Run:</p>
+<div class="ascii-box"><pre>Greedy
+A*</pre></div>
+<p>Record:</p>
+<div class="ascii-box"><pre>path
+cost
+expanded nodes</pre></div>
+<p>This isolates the effect of the heuristic.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-48" class="section-block">
+      <div class="section-header">
+        <span class="section-num">48</span>
+        <h2 class="section-heading">Experiment — Remove Heuristic Guidance</h2>
+      </div>
+      <div class="section-body">
+        <p>Set:</p>
+<div class="formula-math">\[
+h(n)=0.
+\]</div>
+<p>Run A*.</p>
+<p>Now observe:</p>
+<div class="ascii-box"><pre>f(n)=g(n)</pre></div>
+<p>Compare with a UCS implementation/reference.</p>
+<p>This demonstrates the relationship:</p>
+<div class="formula-math">\[
+\boxed{
+A^*(h=0)\approx UCS
+}
+\]</div>
+<p>under the same cost-search conventions.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-49" class="section-block">
+      <div class="section-header">
+        <span class="section-num">49</span>
+        <h2 class="section-heading">Experiment — Distort the Heuristic</h2>
+      </div>
+      <div class="section-body">
+        <p>Take an admissible heuristic \(h\) and multiply it:</p>
+<div class="formula-math">\[
+h'(n)=c\,h(n)
+\]</div>
+<p>for different values of \(c\).</p>
+<p>For:</p>
+<div class="formula-math">\[
+c\lt 1
+\]</div>
+<p>the heuristic becomes weaker.</p>
+<p>For:</p>
+<div class="formula-math">\[
+c\gt 1
+\]</div>
+<p>it may become inadmissible, depending on \(h\).</p>
+<p>Observe:</p>
+<div class="ascii-box"><pre>heuristic scale
+↓
+node ordering
+↓
+search behaviour
+↓
+possible optimality effects</pre></div>
+<p>This is a practical demonstration that heuristic values are not mere labels—they determine the computation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-50" class="section-block">
+      <div class="section-header">
+        <span class="section-num">50</span>
+        <h2 class="section-heading">Visualization</h2>
+      </div>
+      <div class="section-body">
+        <p>For A*, visualize:</p>
+<div class="ascii-box"><pre>all graph edges
++
+current frontier
++
+expanded nodes
++
+goal
++
+final solution path</pre></div>
+<p>For each node, optionally display:</p>
+<div class="ascii-box"><pre>g
+h
+f</pre></div>
+<p>Example label:</p>
+<div class="ascii-box"><pre>C
+g=3
+h=4
+f=7</pre></div>
+<p>This is one of the highest-value visualizations in the search unit.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-51" class="section-block">
+      <div class="section-header">
+        <span class="section-num">51</span>
+        <h2 class="section-heading">Manual A* Trace Exercise</h2>
+      </div>
+      <div class="section-body">
+        <p>Given:</p>
+<div class="ascii-box"><pre>S → A (2)
+S → B (5)
+A → C (2)
+B → C (1)
+C → G (3)</pre></div>
+<p>Heuristic:</p>
+<div class="ascii-box"><pre>h(S)=5
+h(A)=4
+h(B)=2
+h(C)=3
+h(G)=0</pre></div>
+<p>Compute:</p>
+<div class="ascii-box"><pre>g
+h
+f</pre></div>
+<p>and determine the frontier selection at each stage.</p>
+<p>Do this <strong>on paper first</strong>.</p>
+<p>Then implement and compare the program's trace.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-52" class="section-block">
+      <div class="section-header">
+        <span class="section-num">52</span>
+        <h2 class="section-heading">Manual Greedy Trace Exercise</h2>
+      </div>
+      <div class="section-body">
+        <p>Use the same graph.</p>
+<p>Greedy ignores accumulated \(g\).</p>
+<p>It uses:</p>
+<div class="formula-math">\[
+f=h.
+\]</div>
+<p>Therefore the next choice depends only on the heuristic of currently available nodes.</p>
+<p>Again:</p>
+<div class="ascii-box"><pre>manual trace
+↓
+code trace
+↓
+compare</pre></div>
+<p>If they disagree, debug the implementation rather than changing the expected answer blindly.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-53" class="section-block">
+      <div class="section-header">
+        <span class="section-num">53</span>
+        <h2 class="section-heading">Complexity Thinking</h2>
+      </div>
+      <div class="section-body">
+        <p>The supplied informed-search lecture discusses search cost in terms of branching and depth and shows that heuristic quality can dramatically reduce the number of nodes explored.</p>
+<p>Do not memorize a single universal “A* runtime formula.”</p>
+<p>Actual performance depends strongly on:</p>
+<ul>
+<li>graph structure;</li>
+<li>heuristic;</li>
+<li>branching;</li>
+<li>solution depth/cost;</li>
+<li>implementation;</li>
+<li>duplicate handling;</li>
+<li>priority queue operations.</li>
+</ul>
+<p>For university questions, use the exact complexity statement expected by your course/exam material.</p>
+<p>For engineering work, measure.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-54" class="section-block">
+      <div class="section-header">
+        <span class="section-num">54</span>
+        <h2 class="section-heading">Library Comparison</h2>
+      </div>
+      <div class="section-body">
+        <p>After the from-scratch versions are understood, compare against a suitable reference implementation.</p>
+<p>The point is not:</p>
+<div class="ascii-box"><pre>library is better</pre></div>
+<p>The point is:</p>
+<div class="ascii-box"><pre>What abstraction does the library provide?
+What details does it hide?
+What assumptions does it make?
+How does my implementation differ?</pre></div>
+<p>For standard shortest-path references, libraries such as NetworkX can be used for verification in a separate experiment.</p>
+<p>Keep the reference implementation outside the teaching core.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-55" class="section-block">
+      <div class="section-header">
+        <span class="section-num">55</span>
+        <h2 class="section-heading">From-Scratch vs Library</h2>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Question</th>
+<th>From scratch</th>
+<th>Library</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Learn algorithm</td>
+<td>excellent</td>
+<td>weaker</td>
+</tr>
+<tr>
+<td>Inspect internals</td>
+<td>direct</td>
+<td>abstracted</td>
+</tr>
+<tr>
+<td>Quick production use</td>
+<td>slower</td>
+<td>faster</td>
+</tr>
+<tr>
+<td>Custom state logic</td>
+<td>flexible</td>
+<td>depends on API</td>
+</tr>
+<tr>
+<td>Testing learning</td>
+<td>excellent</td>
+<td>limited</td>
+</tr>
+<tr>
+<td>Performance</td>
+<td>educational</td>
+<td>usually optimized</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-56" class="section-block">
+      <div class="section-header">
+        <span class="section-num">56</span>
+        <h2 class="section-heading">Coding Challenge — Implement a Generic Best-First Engine</h2>
+      </div>
+      <div class="section-body">
+        <p>After completing Greedy and A* separately, build a generic function conceptually of the form:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def best_first_search(
+    graph,
+    start,
+    goal,
+    priority_fn,
+):
+    ...</code></pre></div>
+<p>The priority function receives enough state information to calculate:</p>
+<div class="ascii-box"><pre>Greedy:
+priority_fn(node) = h(node)
+
+A*:
+priority_fn(node) = g(node) + h(node)</pre></div>
+<p>This is an <strong>advanced refactoring challenge</strong>.</p>
+<p>Do it only after the separate implementations are understood.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-57" class="section-block">
+      <div class="section-header">
+        <span class="section-num">57</span>
+        <h2 class="section-heading">Coding Challenge — Search Statistics</h2>
+      </div>
+      <div class="section-body">
+        <p>Return:</p>
+<div class="ascii-box"><pre>path
+cost
+expanded_count
+max_frontier</pre></div>
+<p>For A*, additionally return:</p>
+<div class="ascii-box"><pre>final g
+goal f</pre></div>
+<p>Do not mutate the algorithm's correctness while adding instrumentation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-58" class="section-block">
+      <div class="section-header">
+        <span class="section-num">58</span>
+        <h2 class="section-heading">Coding Challenge — Heuristic Validator</h2>
+      </div>
+      <div class="section-body">
+        <p>Implement:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def validate_admissibility(
+    heuristic,
+    true_costs,
+):
+    ...</code></pre></div>
+<p>Return detailed violations:</p>
+<div class="ascii-box"><pre>node C:
+h(C)=5
+true_cost=3
+excess=2</pre></div>
+<p>Then use it on:</p>
+<div class="ascii-box"><pre>valid heuristic
+invalid heuristic
+zero heuristic</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-59" class="section-block">
+      <div class="section-header">
+        <span class="section-num">59</span>
+        <h2 class="section-heading">Integration With CODE-U1-01</h2>
+      </div>
+      <div class="section-body">
+        <p>You now have:</p>
+<div class="ascii-box"><pre>BFS
+DFS
+Greedy
+A*</pre></div>
+<p>All four can be viewed as frontier-selection strategies.</p>
+<div class="ascii-box"><pre>Algorithm | Frontier rule
+----------|-----------------------------
+BFS       | FIFO / shallowest
+DFS       | LIFO / deepest
+Greedy    | min h
+A*        | min (g+h)</pre></div>
+<p>This is the conceptual backbone of Unit I implementation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-60" class="section-block">
+      <div class="section-header">
+        <span class="section-num">60</span>
+        <h2 class="section-heading">Exam Bridge</h2>
+      </div>
+      <div class="section-body">
+        <p>You should be able to implement the same distinctions you write in exams.</p>
+<h3>Greedy</h3>
+<div class="formula-math">\[
+\boxed{
+f(n)=h(n)
+}
+\]</div>
+<h3>A*</h3>
+<div class="formula-math">\[
+\boxed{
+f(n)=g(n)+h(n)
+}
+\]</div>
+<h3>Admissibility</h3>
+<div class="formula-math">\[
+\boxed{
+h(n)\le h^*(n)
+}
+\]</div>
+<h3>Major comparison</h3>
+<div class="ascii-box"><pre>Greedy
+→ heuristic only
+→ not generally optimal
+
+A*
+→ cost so far + estimate
+→ optimal under standard admissibility/graph-search assumptions</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-61" class="section-block">
+      <div class="section-header">
+        <span class="section-num">61</span>
+        <h2 class="section-heading">Active Recall — Coding Edition</h2>
+      </div>
+      <div class="section-body">
+        <p>Close the file.</p>
+<p>Answer:</p>
+<ol>
+<li>Why does Greedy need a priority queue?</li>
+<li>What value is placed in the Greedy priority?</li>
+<li>What does <code>g(n)</code> represent?</li>
+<li>What does <code>h(n)</code> represent?</li>
+<li>What does <code>f(n)</code> represent for A*?</li>
+<li>Why does A* need to track the best known <code>g</code>?</li>
+<li>Why can a node appear more than once in a priority queue?</li>
+<li>What is a stale queue entry?</li>
+<li>What is admissibility?</li>
+<li>Why does \(h=0\) make A* resemble UCS?</li>
+<li>Why can Greedy return a suboptimal solution?</li>
+<li>Why can a stronger admissible heuristic reduce search effort?</li>
+<li>Why do ties need an explicit policy?</li>
+<li>How would you independently verify an A* path cost?</li>
+<li>What is the difference between a heuristic value and an actual edge cost?</li>
+</ol>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-62" class="section-block">
+      <div class="section-header">
+        <span class="section-num">62</span>
+        <h2 class="section-heading">Final Implementation Test</h2>
+      </div>
+      <div class="section-body">
+        <p>From a blank file, implement:</p>
+<div class="ascii-box"><pre>reconstruct_path()
+path_cost()
+greedy_best_first()
+astar()
+is_valid_path()</pre></div>
+<p>Then test:</p>
+<div class="ascii-box"><pre>1. start == goal
+2. direct route
+3. multiple routes
+4. different edge costs
+5. suboptimal Greedy trap
+6. repeated-state discovery
+7. heuristic = 0
+8. admissible heuristic
+9. intentionally inadmissible heuristic
+10. missing goal</pre></div>
+<p>For each experiment, record:</p>
+<div class="ascii-box"><pre>algorithm
+heuristic
+path
+cost
+nodes expanded
+max frontier</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-63" class="section-block">
+      <div class="section-header">
+        <span class="section-num">63</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <h3>C3 — Rebuild</h3>
+<p>You can implement Greedy and A* from pseudocode.</p>
+<h3>C4 — Test</h3>
+<p>You can independently validate path correctness and cost.</p>
+<h3>C5 — Modify</h3>
+<p>You can add:</p>
+<ul>
+<li>tracing;</li>
+<li>statistics;</li>
+<li>tie-breaking;</li>
+<li>heuristic validation.</li>
+</ul>
+<h3>C6 — Explain</h3>
+<p>You can explain exactly why changing:</p>
+<div class="formula-math">\[
+h(n)
+\]</div>
+<p>changes frontier order and why changing:</p>
+<div class="formula-math">\[
+g(n)
+\]</div>
+<p>changes A*'s preference.</p>
+<h3>C7 — Transfer</h3>
+<p>Given a new weighted state-space problem, you can decide:</p>
+<div class="ascii-box"><pre>What is the state?
+What is the edge/action cost?
+What is the goal?
+What heuristic could be used?
+Is it admissible?
+Which search strategy fits?</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-64" class="section-block">
+      <div class="section-header">
+        <span class="section-num">64</span>
+        <h2 class="section-heading">Final Memory Sheet</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>BFS
+    shallowest
+    FIFO
+
+DFS
+    deepest
+    LIFO
+
+Greedy
+    h(n)
+    “looks closest”
+
+A*
+    g(n) + h(n)
+    “cost so far + estimated cost left”
+
+Admissible heuristic
+    h(n) ≤ true optimal remaining cost
+
+h = 0 in A*
+    ↓
+f = g
+    ↓
+UCS-like behaviour</pre></div>
+<p>The software pattern:</p>
+<div class="ascii-box"><pre>state
+↓
+generate successors
+↓
+calculate priority
+↓
+push into frontier
+↓
+pop best candidate
+↓
+goal test
+↓
+repeat</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-65" class="section-block">
+      <div class="section-header">
+        <span class="section-num">65</span>
+        <h2 class="section-heading">Source Notes</h2>
+      </div>
+      <div class="section-body">
+        <h2>Primary source</h2>
+<p><code>lecture-informed-search.pdf</code> — Philipp Koehn, <em>Artificial Intelligence: Informed Search</em>.</p>
+<p>Used for:</p>
+<ul>
+<li>Best-First Search framework;</li>
+<li>Greedy Search \(f(n)=h(n)\);</li>
+<li>A* \(f(n)=g(n)+h(n)\);</li>
+<li>heuristic functions;</li>
+<li>admissibility;</li>
+<li>dominance;</li>
+<li>relaxed-problem heuristic intuition;</li>
+<li>Greedy vs A* properties.</li>
+</ul>
+<h2>Supporting source</h2>
+<p><code>lecture-basic-search.pdf</code></p>
+<p>Used for:</p>
+<ul>
+<li>frontier/search-node framing;</li>
+<li>UCS connection;</li>
+<li>cost-sensitive search context.</li>
+</ul>
+<h2>Course scope</h2>
+<p>The official DSC-14 syllabus lists:</p>
+<ul>
+<li>Greedy;</li>
+<li>A*;</li>
+<li>heuristics;</li>
+</ul>
+<p>under Unit I informed search.</p>
+<h2>Companion files</h2>
+<ul>
+<li><code>CODE-U1-01_BFS_and_DFS_From_Scratch.md</code></li>
+<li><code>MAIN-U1-C06_Greedy_Best_First_Search.md</code></li>
+<li><code>MAIN-U1-C07_A_Star_Search.md</code></li>
+<li><code>EXAM-U1_Artificial_Intelligence_and_Search.md</code></li>
+<li><code>CODE-00_AI_ML_Coding_Book_Foundation_and_Implementation_System.md</code></li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-66" class="section-block">
+      <div class="section-header">
+        <span class="section-num">66</span>
+        <h2 class="section-heading">Status</h2>
+      </div>
+      <div class="section-body">
+        <p><strong><code>CODE-U1-02</code> — COMPLETE</strong></p>
+<p>The informed-search implementation foundation is now:</p>
+<div class="ascii-box"><pre>BFS / DFS
+    ↓
+priority queue
+    ↓
+Greedy
+    ↓
+heuristic
+    ↓
+A*
+    ↓
+admissibility
+    ↓
+heuristic experiments</pre></div>
+<p><strong>Next:</strong> <code>CODE-U1-03 — Constraint Satisfaction Problems and Backtracking</code></p>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="code-u1-01-bfs-dfs.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← Unit 1 Lab 01 — BFS & DFS</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">💻 Coding Index</span>
+      </a>
+      <a href="code-u1-03-csp-backtracking.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: Unit 1 Lab 03 — CSP & Backtracking →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search lab implementations, functions, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">💻</span>Lab Hub</a>
+  <a href="code-u1-02-greedy-a-star.html" class="mobile-nav-btn active"><span class="icon">📖</span>CODE-U1-02</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

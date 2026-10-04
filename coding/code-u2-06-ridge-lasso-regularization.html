@@ -1,0 +1,2146 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="CODE-U2-06: Ridge & Lasso From Scratch: Regularization & Optimization — AI & Machine Learning Coding Lab. L1 vs L2 Penalties, Ridge Closed-Form & Gradient Descent, Coordinate Descent with Soft-Thresholding for Lasso, and Coefficient Path Tracing">
+<title>CODE-U2-06: Ridge & Lasso From Scratch: Regularization & Optimization | Coding Lab 💻 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/coding.css">
+</head>
+<body class="coding-module track-c2">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">💻</div>
+      <div class="brand-text"><span class="main">Coding Lab</span><span class="sub">AI &amp; ML From Scratch</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">CODE-U2-06: Ridge &amp; Lasso From Scratch: Regularization &amp; Optimization</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">💻</span>Coding Lab Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../math/index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 0: Environment & System</div>
+  <a href="code-00-coding-foundation.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-00: Coding Lab Foundation &amp; Implementation System</a>
+  <a href="code-01-python-numpy-workflow.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-01: Python, NumPy, Matplotlib &amp; Lab Workflow</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Classical AI & Search Labs</div>
+  <a href="code-u1-01-bfs-dfs.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-01: BFS and DFS From Scratch</a>
+  <a href="code-u1-02-greedy-a-star.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-02: Greedy Best-First &amp; A* Search From Scratch</a>
+  <a href="code-u1-03-csp-backtracking.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-03: CSPs and Backtracking Search</a>
+  <a href="code-u1-04-minimax-alpha-beta.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Supervised ML Labs</div>
+  <a href="code-u2-01-ml-workflow.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-01: ML Workflow: Preprocessing, Splitting &amp; Evaluation</a>
+  <a href="code-u2-02-linear-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-02: Linear Regression From Scratch</a>
+  <a href="code-u2-03-logistic-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-03: Logistic Regression From Scratch</a>
+  <a href="code-u2-04-decision-trees.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-04: Decision Trees From Scratch</a>
+  <a href="code-u2-05-classification-metrics-roc.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC &amp; Thresholds</a>
+  <a href="code-u2-06-ridge-lasso-regularization.html" class="sidebar-link active"><span class="link-icon">📊</span>CODE-U2-06: Ridge &amp; Lasso From Scratch: Regularization &amp; Optimization</a>
+  <a href="code-u2-07-ml-evaluation-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-07: ML Evaluation &amp; Model Comparison Lab</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Deep Learning Labs</div>
+  <a href="code-u3-01-neuron-perceptron.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-01: Neuron and Perceptron From Scratch</a>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>MLP, Backpropagation & Convolutions</span>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Advanced AI Labs (Upcoming)</div>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>Q-Learning, NLP & Generative Adversarial Loops</span>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">CODE-U2-06 — Sections</div>
+      <a href="#s-00" class="sidebar-link"><span class="link-icon">📌</span>0. Why Regularization Enters the Coding Pipeline</a>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. What You Must Be Able to Code</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Representation</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Course-to-Code Map</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Build a Controlled Dataset First</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Train/Test Split Before Fitting Preprocessing</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Feature Scaling</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Baseline — Ordinary Least Squares From Scratch</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Ridge Objective</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Lasso Objective</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Penalty Functions in Code</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Ridge Gradient Derivation</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Ridge With Gradient Descent</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Why the Ridge Update Works</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Ridge Closed-Form Solution</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Compare Ridge Gradient Descent and Closed Form</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Ridge Objective Trace</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Numerical Stability / Learning-Rate Experiment</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Lasso — Why the Gradient Story Changes</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Soft-Thresholding Operator</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Lasso Coordinate Descent Setup</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Line-by-Line Logic of the Lasso Update</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Why Standardization Matters Even More Here</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Lasso Validation Experiment</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Ridge vs Lasso Coefficient Inspection</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Regularization Path Plot</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. The Effect of Lambda</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Bias-Variance Experiment</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Scratch Ridge vs scikit-learn Ridge</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Scratch Lasso vs scikit-learn Lasso</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Numerical Equivalence Test for Ridge</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Unit Tests</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Gradient Check Idea</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Lasso Subgradient Awareness</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Efficient Ridge Computation</a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Sparse Data Considerations</a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Common Coding Bugs</a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Model Evaluation Helper</a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Complete Hyperparameter Experiment</a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Visual Comparison</a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Library Comparison Table</a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Mini Project — Regularization Study</a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Interpretation Template</a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Debugging Lab</a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Manual Trace of Soft-Thresholding</a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. Ridge Geometry Experiment</a>
+      <a href="#s-46" class="sidebar-link"><span class="link-icon">📌</span>46. Lasso Geometry Experiment</a>
+      <a href="#s-47" class="sidebar-link"><span class="link-icon">📌</span>47. Complexity</a>
+      <a href="#s-48" class="sidebar-link"><span class="link-icon">📌</span>48. Numerical Sanity Checks</a>
+      <a href="#s-49" class="sidebar-link"><span class="link-icon">📌</span>49. Active Recall</a>
+      <a href="#s-50" class="sidebar-link"><span class="link-icon">📌</span>50. Coding Challenges</a>
+      <a href="#s-51" class="sidebar-link"><span class="link-icon">📌</span>51. Master Implementation Skeleton</a>
+      <a href="#s-52" class="sidebar-link"><span class="link-icon">📌</span>52. Recommended Notebook Structure</a>
+      <a href="#s-53" class="sidebar-link"><span class="link-icon">📌</span>53. Mastery Gate</a>
+      <a href="#s-54" class="sidebar-link"><span class="link-icon">📌</span>54. Source Notes</a>
+      <a href="#s-55" class="sidebar-link"><span class="link-icon">📌</span>55. Cross-Book Links</a>
+      <a href="#s-56" class="sidebar-link"><span class="link-icon">📌</span>56. Submission Checklist</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Coding Lab</a>
+        <span>/</span>
+        <span>CODE-U2-06</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-c2">Track 2: Supervised Machine Learning Labs</span></div>
+      <h1 class="chapter-title">Ridge &amp; Lasso From Scratch: Regularization &amp; Optimization</h1>
+      <p class="chapter-desc">L1 vs L2 Penalties, Ridge Closed-Form &amp; Gradient Descent, Coordinate Descent with Soft-Thresholding for Lasso, and Coefficient Path Tracing</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~55 min lab</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">REGULARIZATION</span> <span class="chapter-meta-item uni-badge">RIDGE-L2</span> <span class="chapter-meta-item uni-badge">LASSO-L1</span> <span class="chapter-meta-item uni-badge">COORDINATE-DESCENT</span> <span class="chapter-meta-item uni-badge">SPARSITY</span>
+      </div>
+
+      <div class="lab-meta-grid">
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Prerequisites</div>
+          <div class="lab-meta-value">CODE-U2-02 Linear Regression From Scratch, Math Companion M05 & M22</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Main Book Concept</div>
+          <div class="lab-meta-value">Ch 17 Bias-Variance Tradeoff & Overfitting, Ch 19 Linear Regression Math</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Math Companion Layer</div>
+          <div class="lab-meta-value">M05 L1 & L2 Norms, M09 Matrix Inversion with Regularization (X^TX + λI)^-1, Subgradients</div>
+        </div>
+        <div class="lab-meta-box" style="grid-column: 1 / -1;">
+          <div class="lab-meta-label">AI / Machine Learning Connections</div>
+          <div class="lab-meta-value">Collinearity handling, High-dimensional feature selection (p >> n), Weight shrinkage, Overfitting control in polynomial regression</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-meta-card"><h1>CODE-U2-06 — Ridge &amp; Lasso From Scratch</h1>
+<blockquote>
+<p><strong>Coding objective:</strong> implement regularized linear regression, understand exactly where the penalty enters the objective, derive the Ridge update used in gradient descent, construct a practical Lasso optimizer using coordinate descent / soft-thresholding, compare coefficient behaviour, and verify results with scikit-learn.</p>
+<p><strong>Course boundary:</strong> the official DSC-14 syllabus includes Ridge and Lasso. The supplied resource guide states that <code>Lecture10 copy.pdf</code> provides motivation for regularization through feature expansion/model flexibility but does not contain a complete Ridge/Lasso treatment. The complete optimization and coding procedures in this chapter are therefore explicit syllabus-aligned expansion material, supported by the regression mathematics in <code>Lecture09.pdf</code> and the regularization motivation in <code>Lecture10 copy.pdf</code>.</p>
+</blockquote>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in CODE-U2-06 (57 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-00"><span class="toc-num">00</span><span class="toc-name">Why Regularization Enters the Coding Pipeline</span></a></li>
+        <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">What You Must Be Able to Code</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Representation</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Course-to-Code Map</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Build a Controlled Dataset First</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Train/Test Split Before Fitting Preprocessing</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Feature Scaling</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Baseline — Ordinary Least Squares From Scratch</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Ridge Objective</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Lasso Objective</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Penalty Functions in Code</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Ridge Gradient Derivation</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Ridge With Gradient Descent</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Why the Ridge Update Works</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Ridge Closed-Form Solution</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Compare Ridge Gradient Descent and Closed Form</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Ridge Objective Trace</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Numerical Stability / Learning-Rate Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Lasso — Why the Gradient Story Changes</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Soft-Thresholding Operator</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Lasso Coordinate Descent Setup</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Line-by-Line Logic of the Lasso Update</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Why Standardization Matters Even More Here</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Lasso Validation Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Ridge vs Lasso Coefficient Inspection</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Regularization Path Plot</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">The Effect of Lambda</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Bias-Variance Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Scratch Ridge vs scikit-learn Ridge</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Scratch Lasso vs scikit-learn Lasso</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Numerical Equivalence Test for Ridge</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Unit Tests</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Gradient Check Idea</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Lasso Subgradient Awareness</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Efficient Ridge Computation</span></a></li>
+        <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Sparse Data Considerations</span></a></li>
+        <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Common Coding Bugs</span></a></li>
+        <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Model Evaluation Helper</span></a></li>
+        <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Complete Hyperparameter Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Visual Comparison</span></a></li>
+        <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Library Comparison Table</span></a></li>
+        <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Mini Project — Regularization Study</span></a></li>
+        <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Interpretation Template</span></a></li>
+        <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Debugging Lab</span></a></li>
+        <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Manual Trace of Soft-Thresholding</span></a></li>
+        <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">Ridge Geometry Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-46"><span class="toc-num">46</span><span class="toc-name">Lasso Geometry Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-47"><span class="toc-num">47</span><span class="toc-name">Complexity</span></a></li>
+        <li class="toc-item"><a href="#s-48"><span class="toc-num">48</span><span class="toc-name">Numerical Sanity Checks</span></a></li>
+        <li class="toc-item"><a href="#s-49"><span class="toc-num">49</span><span class="toc-name">Active Recall</span></a></li>
+        <li class="toc-item"><a href="#s-50"><span class="toc-num">50</span><span class="toc-name">Coding Challenges</span></a></li>
+        <li class="toc-item"><a href="#s-51"><span class="toc-num">51</span><span class="toc-name">Master Implementation Skeleton</span></a></li>
+        <li class="toc-item"><a href="#s-52"><span class="toc-num">52</span><span class="toc-name">Recommended Notebook Structure</span></a></li>
+        <li class="toc-item"><a href="#s-53"><span class="toc-num">53</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-54"><span class="toc-num">54</span><span class="toc-name">Source Notes</span></a></li>
+        <li class="toc-item"><a href="#s-55"><span class="toc-num">55</span><span class="toc-name">Cross-Book Links</span></a></li>
+        <li class="toc-item"><a href="#s-56"><span class="toc-num">56</span><span class="toc-name">Submission Checklist</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-00" class="section-block">
+      <div class="section-header">
+        <span class="section-num">00</span>
+        <h2 class="section-heading">Why Regularization Enters the Coding Pipeline</h2>
+      </div>
+      <div class="section-body">
+        <p>The ordinary least-squares workflow is:</p>
+<div class="ascii-box"><pre>X, y
+ ↓
+choose w
+ ↓
+prediction = Xw
+ ↓
+minimize data-fit loss</pre></div>
+<p>Regularization changes the objective to:</p>
+<div class="ascii-box"><pre>data-fit loss + complexity penalty</pre></div>
+<p>General pattern:</p>
+<div class="formula-math">\[
+J(w)=L(w)+\lambda\Omega(w)
+\]</div>
+<p>Two syllabus methods are:</p>
+<h3>Ridge</h3>
+<div class="formula-math">\[
+\boxed{J_R(w)=\|Xw-y\|_2^2+\lambda\|w\|_2^2}
+\]</div>
+<h3>Lasso</h3>
+<div class="formula-math">\[
+\boxed{J_L(w)=\|Xw-y\|_2^2+\lambda\|w\|_1}
+\]</div>
+<p>The coding challenge is not simply “call <code>Ridge()</code> and <code>Lasso()</code>.”</p>
+<p>You should understand:</p>
+<div class="ascii-box"><pre>objective
+   ↓
+penalty
+   ↓
+gradient / update rule
+   ↓
+coefficient behaviour
+   ↓
+model performance</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">What You Must Be Able to Code</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph TD
+    Data["Training Data (X, y) with Collinear Features"] --> RegChoice{"Choose Regularization"}
+    RegChoice -- L2 Penalty (Ridge) --> R_Obj["Loss = MSE + λ ||w||₂²"]
+    R_Obj --> R_Solve["Closed-Form: w* = (XᵀX + λI)⁻¹ Xᵀy (Always Invertible!)"]
+    R_Solve --> R_Shrink["Weights shrink smoothly toward 0 (Never exactly 0)"]
+    RegChoice -- L1 Penalty (Lasso) --> L_Obj["Loss = MSE + λ ||w||₁ (Non-differentiable at 0)"]
+    L_Obj --> L_Solve["Coordinate Descent with Soft-Thresholding: S(ρ, λ)"]
+    L_Solve --> L_Sparse["Weights forced to EXACTLY 0 (Automatic Feature Selection!)"]
+    style R_Shrink fill:#1e293b,stroke:#38bdf8,color:#f8fafc
+    style L_Sparse fill:#065f46,stroke:#34d399,color:#ffffff,stroke-width:2px
+</pre></div>
+<p>By the end of the chapter you should be able to:</p>
+<ul>
+<li>build a reproducible regression experiment;</li>
+<li>standardize features without leaking test-set information;</li>
+<li>compute the ordinary least-squares objective;</li>
+<li>compute L1 and L2 penalties;</li>
+<li>implement Ridge using gradient descent;</li>
+<li>derive and implement the Ridge gradient correctly;</li>
+<li>implement the Ridge closed-form solution;</li>
+<li>implement Lasso with coordinate descent;</li>
+<li>use a soft-thresholding operator;</li>
+<li>understand why the L1 objective is not differentiable at zero;</li>
+<li>compare coefficient magnitude and sparsity;</li>
+<li>study the effect of increasing <code>lambda</code>;</li>
+<li>compare scratch implementations with scikit-learn;</li>
+<li>use validation data for model/hyperparameter selection;</li>
+<li>interpret the bias/variance trade-off rather than assuming “more regularization is always better”.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">Representation</h2>
+      </div>
+      <div class="section-body">
+        <p>Let:</p>
+<div class="ascii-box"><pre>X ∈ R^(n × d)
+y ∈ R^n
+w ∈ R^d</pre></div>
+<p>and predict:</p>
+<div class="formula-math">\[
+\hat y = Xw
+\]</div>
+<p>For a simpler coding convention, handle the intercept separately:</p>
+<div class="formula-math">\[
+\hat y = Xw+b
+\]</div>
+<p>This avoids accidentally regularizing the intercept in the scratch implementations.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">Course-to-Code Map</h2>
+      </div>
+      <div class="section-body">
+        <p>The supplied course materials connect the relevant ideas as follows:</p>
+<div class="ascii-box"><pre>feature expansion / richer representations
+             ↓
+       more flexibility
+             ↓
+       overfitting risk
+             ↓
+       regularization
+             ↓
+  Ridge (L2) / Lasso (L1)</pre></div>
+<p><code>Lecture09.pdf</code> supplies the least-squares vector/matrix and gradient machinery used here.</p>
+<p><code>Lecture10 copy.pdf</code> supplies the motivation: richer feature representations can make a model more flexible, motivating control of model complexity.</p>
+<p>The full Ridge/Lasso optimization implementation below is the coding layer that operationalizes the official syllabus.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Build a Controlled Dataset First</h2>
+      </div>
+      <div class="section-body">
+        <p>A synthetic dataset makes regularization behaviour visible.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+rng = np.random.default_rng(42)
+
+n = 120
+p = 10
+
+X = rng.normal(size=(n, p))
+
+true_w = np.array([4.0, -3.0, 0.0, 0.0, 2.5, 0.0, 0.0, 0.0, 0.0, 0.0])
+noise = 0.8 * rng.normal(size=n)
+
+y = X @ true_w + noise</code></pre></div>
+<p>This gives a useful teaching dataset because only a subset of the true coefficients is large/non-zero.</p>
+<p>That does <strong>not</strong> mean Lasso must exactly recover the true support on every dataset. It simply creates a setting where sparse behaviour is easy to observe.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Train/Test Split Before Fitting Preprocessing</h2>
+      </div>
+      <div class="section-body">
+        <p>Use a deterministic split:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y,
+    test_size=0.2,
+    random_state=42,
+)</code></pre></div>
+<p>For a full experiment with hyperparameter selection, use:</p>
+<div class="ascii-box"><pre>train → fit preprocessing/model candidates
+validation → choose lambda
+test → final untouched estimate</pre></div>
+<p>Do not use the test set to choose the value of <code>lambda</code> and then report it as unbiased final performance.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Feature Scaling</h2>
+      </div>
+      <div class="section-body">
+        <p>Regularization is directly affected by coefficient magnitude.</p>
+<p>If one feature is measured in tiny units and another in huge units, the coefficient magnitudes are not directly comparable.</p>
+<p>Standardize using training statistics only:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">mu = X_train.mean(axis=0)
+sigma = X_train.std(axis=0)
+
+sigma_safe = np.where(sigma == 0, 1.0, sigma)
+
+X_train_s = (X_train - mu) / sigma_safe
+X_test_s = (X_test - mu) / sigma_safe</code></pre></div>
+<p>This connects directly to the scaling treatment in the supplied <code>Lecture09.pdf</code>.</p>
+<h3>Important</h3>
+<p>Never calculate:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">mu = X_all.mean(axis=0)</code></pre></div>
+<p>before splitting when those statistics are then used for model evaluation. That allows test-set information to leak into preprocessing.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Baseline — Ordinary Least Squares From Scratch</h2>
+      </div>
+      <div class="section-body">
+        <p>Start without regularization.</p>
+<p>Define residuals:</p>
+<div class="formula-math">\[
+r=Xw-y
+\]</div>
+<p>and squared-error objective:</p>
+<div class="formula-math">\[
+J_{OLS}(w)=\|Xw-y\|_2^2
+\]</div>
+<p>Scratch code:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def mse_objective(X, y, w):
+    residual = X @ w - y
+    return float(np.sum(residual ** 2))</code></pre></div>
+<p>If you prefer the average MSE used by many ML APIs:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def mean_squared_error(X, y, w):
+    residual = X @ w - y
+    return float(np.mean(residual ** 2))</code></pre></div>
+<p>Be consistent about whether you include a factor such as <code>1/n</code> or <code>1/2n</code>. Different conventions change the gradient scaling but not the conceptual optimization problem.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">Ridge Objective</h2>
+      </div>
+      <div class="section-body">
+        <p>The Ridge objective used in this chapter is:</p>
+<div class="formula-math">\[
+J_R(w)=\|Xw-y\|_2^2+\lambda\|w\|_2^2
+\]</div>
+<p>Since:</p>
+<div class="formula-math">\[
+\|w\|_2^2=\sum_{j=1}^{d}w_j^2
+\]</div>
+<p>we have:</p>
+<div class="formula-math">\[
+J_R(w)=\sum_i(\hat y_i-y_i)^2+\lambda\sum_j w_j^2
+\]</div>
+<p>The penalty grows quadratically with coefficient size.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Lasso Objective</h2>
+      </div>
+      <div class="section-body">
+        <p>The Lasso objective is:</p>
+<div class="formula-math">\[
+J_L(w)=\|Xw-y\|_2^2+\lambda\|w\|_1
+\]</div>
+<p>where:</p>
+<div class="formula-math">\[
+\|w\|_1=\sum_j|w_j|
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+J_L(w)=\sum_i(\hat y_i-y_i)^2+\lambda\sum_j|w_j|
+\]</div>
+<p>The absolute-value penalty behaves differently from the squared penalty, especially near zero.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Penalty Functions in Code</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def l2_squared(w):
+    w = np.asarray(w, dtype=float)
+    return float(np.sum(w ** 2))
+
+
+def l1_norm(w):
+    w = np.asarray(w, dtype=float)
+    return float(np.sum(np.abs(w)))</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def ridge_objective(X, y, w, lam):
+    residual = X @ w - y
+    return float(np.sum(residual ** 2) + lam * l2_squared(w))
+
+
+def lasso_objective(X, y, w, lam):
+    residual = X @ w - y
+    return float(np.sum(residual ** 2) + lam * l1_norm(w))</code></pre></div>
+<p>Always be clear about whether <code>lam</code> is applied to the intercept. In these scratch functions there is no intercept term, which is why the issue does not appear.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Ridge Gradient Derivation</h2>
+      </div>
+      <div class="section-body">
+        <p>Let:</p>
+<div class="formula-math">\[
+J_R(w)=\|Xw-y\|_2^2+\lambda w^Tw
+\]</div>
+<p>For the data-fit term:</p>
+<div class="formula-math">\[
+\nabla_w\|Xw-y\|_2^2=2X^T(Xw-y)
+\]</div>
+<p>For the Ridge penalty:</p>
+<div class="formula-math">\[
+\nabla_w(\lambda w^Tw)=2\lambda w
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{\nabla J_R(w)=2X^T(Xw-y)+2\lambda w}
+\]</div>
+<p>This is the central implementation formula.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Ridge With Gradient Descent</h2>
+      </div>
+      <div class="section-body">
+        <p>A reusable implementation:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def ridge_gd(X, y, lam=1.0, lr=1e-2, epochs=2000):
+    X = np.asarray(X, dtype=float)
+    y = np.asarray(y, dtype=float)
+
+    n, d = X.shape
+    w = np.zeros(d, dtype=float)
+    history = []
+
+    for epoch in range(epochs):
+        residual = X @ w - y
+        grad = 2 * X.T @ residual + 2 * lam * w
+
+        w -= lr * grad
+
+        if epoch % 100 == 0 or epoch == epochs - 1:
+            loss = ridge_objective(X, y, w, lam)
+            history.append((epoch, loss))
+
+    return w, history</code></pre></div>
+<h3>Shape audit</h3>
+<p>If:</p>
+<div class="ascii-box"><pre>X: (n, d)
+w: (d,)
+y: (n,)</pre></div>
+<p>then:</p>
+<div class="ascii-box"><pre>X @ w       → (n,)
+X @ w - y   → (n,)
+X.T @ r     → (d,)</pre></div>
+<p>Shape discipline is one of the most useful habits in numerical ML code.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Why the Ridge Update Works</h2>
+      </div>
+      <div class="section-body">
+        <p>The update is:</p>
+<div class="formula-math">\[
+w_{t+1}=w_t-\eta\left[2X^T(Xw_t-y)+2\lambda w_t\right]
+\]</div>
+<p>Compare with ordinary least squares:</p>
+<div class="formula-math">\[
+w_{t+1}=w_t-\eta\left[2X^T(Xw_t-y)\right]
+\]</div>
+<p>The only new gradient contribution is:</p>
+<div class="formula-math">\[
+2\lambda w_t
+\]</div>
+<p>This is the coding manifestation of regularization.</p>
+<p>The optimizer is now pulled not only toward lower training error, but also toward smaller coefficients.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Ridge Closed-Form Solution</h2>
+      </div>
+      <div class="section-body">
+        <p>Setting the gradient to zero gives:</p>
+<div class="formula-math">\[
+2X^T(Xw-y)+2\lambda w=0
+\]</div>
+<p>Divide by 2:</p>
+<div class="formula-math">\[
+X^TXw-X^Ty+\lambda w=0
+\]</div>
+<p>Group terms:</p>
+<div class="formula-math">\[
+(X^TX+\lambda I)w=X^Ty
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{w=(X^TX+\lambda I)^{-1}X^Ty}
+\]</div>
+<p>For implementation, solve the linear system rather than explicitly computing the inverse.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def ridge_closed_form(X, y, lam=1.0):
+    X = np.asarray(X, dtype=float)
+    y = np.asarray(y, dtype=float)
+
+    d = X.shape[1]
+    A = X.T @ X + lam * np.eye(d)
+    b = X.T @ y
+
+    return np.linalg.solve(A, b)</code></pre></div>
+<h3>Engineering principle</h3>
+<p>Prefer:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">np.linalg.solve(A, b)</code></pre></div>
+<p>over:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">np.linalg.inv(A) @ b</code></pre></div>
+<p>because solving the system directly is generally the more appropriate numerical linear-algebra operation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">Compare Ridge Gradient Descent and Closed Form</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">w_gd, history = ridge_gd(
+    X_train_s,
+    y_train,
+    lam=1.0,
+    lr=1e-3,
+    epochs=5000,
+)
+
+w_cf = ridge_closed_form(
+    X_train_s,
+    y_train,
+    lam=1.0,
+)
+
+print(&quot;max coefficient difference:&quot;, np.max(np.abs(w_gd - w_cf)))</code></pre></div>
+<p>The results should be close when gradient descent has converged sufficiently.</p>
+<p>Large differences can come from:</p>
+<ul>
+<li>learning rate too large;</li>
+<li>learning rate too small;</li>
+<li>too few iterations;</li>
+<li>inconsistent objective scaling;</li>
+<li>a coding bug;</li>
+<li>incorrect regularization term.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">Ridge Objective Trace</h2>
+      </div>
+      <div class="section-body">
+        <p>Store the full loss every iteration during debugging.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def ridge_gd_with_full_history(X, y, lam=1.0, lr=1e-3, epochs=2000):
+    X = np.asarray(X, dtype=float)
+    y = np.asarray(y, dtype=float)
+
+    w = np.zeros(X.shape[1], dtype=float)
+    losses = []
+
+    for _ in range(epochs):
+        residual = X @ w - y
+        grad = 2 * X.T @ residual + 2 * lam * w
+        w -= lr * grad
+        losses.append(ridge_objective(X, y, w, lam))
+
+    return w, np.array(losses)</code></pre></div>
+<p>Plot <code>losses</code>:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import matplotlib.pyplot as plt
+
+w, losses = ridge_gd_with_full_history(
+    X_train_s, y_train, lam=1.0, lr=1e-3, epochs=3000
+)
+
+plt.figure(figsize=(7, 4))
+plt.plot(losses)
+plt.xlabel(&quot;Iteration&quot;)
+plt.ylabel(&quot;Ridge objective&quot;)
+plt.title(&quot;Ridge Gradient Descent Convergence&quot;)
+plt.grid(True, alpha=0.3)
+plt.show()</code></pre></div>
+<p>The plot should generally trend downward after a sensible learning rate is chosen.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">Numerical Stability / Learning-Rate Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Try three learning rates:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">learning_rates = [1e-4, 1e-3, 1e-2]</code></pre></div>
+<p>Record:</p>
+<div class="ascii-box"><pre>learning rate
+final loss
+number of iterations
+convergence behaviour
+coefficient result</pre></div>
+<p>Then try an intentionally excessive value.</p>
+<p>You may observe:</p>
+<div class="ascii-box"><pre>small lr   → stable but slow
+reasonable → fast and stable
+large lr   → oscillation or divergence</pre></div>
+<p>This is not a Ridge-specific phenomenon. It is a general optimization behaviour connected to the gradient-descent material in your Math Companion.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Lasso — Why the Gradient Story Changes</h2>
+      </div>
+      <div class="section-body">
+        <p>For:</p>
+<div class="formula-math">\[
+\|w\|_1=\sum_j|w_j|
+\]</div>
+<p>consider one coefficient <code>w_j</code>.</p>
+<p>For non-zero values:</p>
+<div class="formula-math">\[
+\frac{d}{dw_j}|w_j|=sign(w_j)
+\]</div>
+<p>but at zero the ordinary derivative is not unique.</p>
+<p>That is why a simple line such as:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">grad = ... + lam * np.sign(w)</code></pre></div>
+<p>is useful as an intuition, but it is not by itself a complete derivation of the exact Lasso coordinate-descent solution.</p>
+<p>The coding approach below instead uses <strong>coordinate descent with soft-thresholding</strong>.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">Soft-Thresholding Operator</h2>
+      </div>
+      <div class="section-body">
+        <p>Define:</p>
+<div class="formula-math">\[
+S(z,\alpha)=sign(z)\max(|z|-\alpha,0)
+\]</div>
+<p>In Python:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def soft_threshold(z, alpha):
+    return np.sign(z) * max(abs(z) - alpha, 0.0)</code></pre></div>
+<p>Vector-friendly version:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def soft_threshold_vector(z, alpha):
+    z = np.asarray(z, dtype=float)
+    return np.sign(z) * np.maximum(np.abs(z) - alpha, 0.0)</code></pre></div>
+<p>This function captures the core sparse behaviour:</p>
+<div class="ascii-box"><pre>large positive → reduced but still positive
+small positive → pushed to zero
+small negative → pushed to zero
+large negative → reduced magnitude but stays negative</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Lasso Coordinate Descent Setup</h2>
+      </div>
+      <div class="section-body">
+        <p>For a normalized convention it is convenient to optimize:</p>
+<div class="formula-math">\[
+\frac{1}{2}\|y-Xw\|_2^2+\lambda\|w\|_1
+\]</div>
+<p>This differs by an overall scaling from the earlier educational objective, so do not mix the <code>lambda</code> calibration between the two conventions without care.</p>
+<p>For coordinate <code>j</code>, hold all other coefficients fixed and update only <code>w_j</code>.</p>
+<p>Let:</p>
+<div class="formula-math">\[
+r_j=y-X_{-j}w_{-j}
+\]</div>
+<p>The coordinate update can be expressed through the current partial residual.</p>
+<p>A practical implementation for standardized features is:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def lasso_coordinate_descent(X, y, lam=0.1, epochs=1000):
+    X = np.asarray(X, dtype=float)
+    y = np.asarray(y, dtype=float)
+
+    n, d = X.shape
+    w = np.zeros(d, dtype=float)
+
+    col_sq = np.sum(X ** 2, axis=0)
+
+    for _ in range(epochs):
+        for j in range(d):
+            residual_without_j = y - X @ w + X[:, j] * w[j]
+            rho = X[:, j] @ residual_without_j
+
+            if col_sq[j] == 0:
+                w[j] = 0.0
+                continue
+
+            w[j] = soft_threshold(rho, lam) / col_sq[j]
+
+    return w</code></pre></div>
+<p>This is the main scratch implementation to understand.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">Line-by-Line Logic of the Lasso Update</h2>
+      </div>
+      <div class="section-body">
+        <h2><code>residual_without_j</code></h2>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">residual_without_j = y - X @ w + X[:, j] * w[j]</code></pre></div>
+<p>Start with the current residual:</p>
+<div class="ascii-box"><pre>y - prediction</pre></div>
+<p>Then add back the contribution of feature <code>j</code>, because we want to ask:</p>
+<blockquote>
+<p>“What residual remains if coefficient <code>j</code> is removed from the current prediction?”</p>
+</blockquote>
+<h2><code>rho</code></h2>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">rho = X[:, j] @ residual_without_j</code></pre></div>
+<p>This measures how strongly feature <code>j</code> aligns with the remaining residual.</p>
+<h2>soft-threshold</h2>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">soft_threshold(rho, lam)</code></pre></div>
+<p>The L1 penalty pulls the coordinate toward zero and can push it exactly to zero.</p>
+<h2>divide by column energy</h2>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">/ col_sq[j]</code></pre></div>
+<p>This rescales the coordinate update by the squared magnitude of the feature column.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">Why Standardization Matters Even More Here</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose feature A has values around 1 and feature B has values around 10,000.</p>
+<p>A raw coefficient of:</p>
+<div class="ascii-box"><pre>w_A = 4
+w_B = 0.02</pre></div>
+<p>does not automatically mean B is less important.</p>
+<p>The physical units differ.</p>
+<p>For regularized models, coefficient magnitude directly enters the penalty, so feature scaling can strongly influence the regularization path.</p>
+<p>Therefore the standard practical workflow is:</p>
+<div class="ascii-box"><pre>split data
+ ↓
+fit scaler on train
+ ↓
+transform train/test
+ ↓
+fit regularized model
+ ↓
+evaluate</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">Lasso Validation Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Start with a sequence:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">lambdas = [0.001, 0.01, 0.1, 0.5, 1.0, 2.0]</code></pre></div>
+<p>For each value:</p>
+<div class="ascii-box"><pre>fit model
+↓
+count coefficients near zero
+↓
+calculate train MSE
+↓
+calculate validation MSE</pre></div>
+<p>A simple zero-count rule is:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def count_near_zero(w, tol=1e-4):
+    return int(np.sum(np.abs(w) &lt; tol))</code></pre></div>
+<p>Do not say that a coefficient is mathematically exactly zero unless your algorithm actually produces zero. In numerical code it is often more honest to report “near-zero” using an explicit tolerance.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">Ridge vs Lasso Coefficient Inspection</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">ridge_w = ridge_closed_form(X_train_s, y_train, lam=1.0)
+lasso_w = lasso_coordinate_descent(X_train_s, y_train, lam=1.0)
+
+print(&quot;Ridge coefficients:&quot;)
+print(np.round(ridge_w, 4))
+
+print(&quot;Lasso coefficients:&quot;)
+print(np.round(lasso_w, 4))</code></pre></div>
+<p>Then inspect:</p>
+<div class="ascii-box"><pre>coefficient magnitude
+number near zero
+train error
+validation error</pre></div>
+<p>The expected conceptual trend is:</p>
+<div class="ascii-box"><pre>Ridge → generally shrinks coefficients toward zero
+Lasso → can set some coefficients exactly to zero</pre></div>
+<p>This is a behavioural tendency and geometric consequence of the penalties, not a guarantee that Lasso will always perform feature selection on every dataset.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">Regularization Path Plot</h2>
+      </div>
+      <div class="section-body">
+        <p>A highly useful experiment is to plot each coefficient against <code>lambda</code>.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">lambdas = np.logspace(-3, 2, 20)
+coef_path = []
+
+for lam in lambdas:
+    w = ridge_closed_form(X_train_s, y_train, lam=lam)
+    coef_path.append(w)
+
+coef_path = np.array(coef_path)</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">for j in range(coef_path.shape[1]):
+    plt.plot(lambdas, coef_path[:, j], marker=&quot;o&quot;)
+
+plt.xscale(&quot;log&quot;)
+plt.xlabel(&quot;lambda&quot;)
+plt.ylabel(&quot;coefficient&quot;)
+plt.title(&quot;Ridge Coefficient Path&quot;)
+plt.grid(True, alpha=0.3)
+plt.show()</code></pre></div>
+<p>Repeat for Lasso.</p>
+<p>This lets you see the regularization effect directly instead of reading it only from final metrics.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">The Effect of Lambda</h2>
+      </div>
+      <div class="section-body">
+        <p>Think of:</p>
+<div class="formula-math">\[
+J=L+\lambda\Omega
+\]</div>
+<p>as a balance.</p>
+<h3><code>lambda = 0</code></h3>
+<p>The regularization penalty disappears.</p>
+<p>You recover the unregularized objective for the corresponding formulation.</p>
+<h3>Small <code>lambda</code></h3>
+<p>Data fit dominates.</p>
+<h3>Large <code>lambda</code></h3>
+<p>Complexity control becomes stronger.</p>
+<p>Potential outcome:</p>
+<div class="ascii-box"><pre>coefficients become smaller
+↓
+training fit becomes less flexible
+↓
+variance can decrease
+↓
+bias can increase</pre></div>
+<p>Too much regularization can therefore underfit.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">Bias-Variance Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Create a table:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th style="text-align: right;">Lambda</th>
+<th style="text-align: right;">Train MSE</th>
+<th style="text-align: right;">Validation MSE</th>
+<th style="text-align: right;">Coefficient norm</th>
+<th style="text-align: right;">Non-zero count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">…</td>
+<td style="text-align: right;">…</td>
+<td style="text-align: right;">…</td>
+<td style="text-align: right;">…</td>
+<td style="text-align: right;">…</td>
+</tr>
+</tbody>
+</table></div>
+<p>Interpret patterns rather than searching for a magical number.</p>
+<p>A typical educational pattern might be:</p>
+<div class="ascii-box"><pre>very low λ
+→ low training error
+→ potentially higher validation error
+
+moderate λ
+→ slightly higher training error
+→ lower validation error
+
+very high λ
+→ high training error
+→ validation error rises again</pre></div>
+<p>The exact curve depends on the dataset.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">Scratch Ridge vs scikit-learn Ridge</h2>
+      </div>
+      <div class="section-body">
+        <p>Reference implementation:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.linear_model import Ridge
+
+model = Ridge(alpha=1.0)
+model.fit(X_train_s, y_train)
+
+w_lib = model.coef_
+
+print(&quot;max |scratch - library|:&quot;, np.max(np.abs(ridge_w - w_lib)))</code></pre></div>
+<h3>Important parameter naming</h3>
+<p>In scikit-learn the hyperparameter is named <code>alpha</code>, whereas this chapter calls the mathematical strength parameter <code>lambda</code>.</p>
+<p>For this educational mapping:</p>
+<div class="ascii-box"><pre>mathematical λ  ↔  sklearn alpha</pre></div>
+<p>but always check the exact objective convention because factors such as <code>1/n</code> can change how numerical hyperparameter values correspond across implementations.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">Scratch Lasso vs scikit-learn Lasso</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.linear_model import Lasso
+
+model = Lasso(alpha=0.1, max_iter=10000)
+model.fit(X_train_s, y_train)
+
+w_lib_lasso = model.coef_</code></pre></div>
+<p>Because your scratch implementation may use a different objective scaling convention, do not demand exact coefficient equality for the same printed <code>lambda</code> unless the objectives and scaling are matched precisely.</p>
+<p>Instead:</p>
+<ol>
+<li>match conventions;</li>
+<li>compare objective values under the same definition;</li>
+<li>compare predictions;</li>
+<li>compare coefficient patterns;</li>
+<li>compare validation performance.</li>
+</ol>
+<p>This is a major experimental lesson.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">Numerical Equivalence Test for Ridge</h2>
+      </div>
+      <div class="section-body">
+        <p>For the one-dimensional problem:</p>
+<div class="formula-math">\[
+X^TX=4,
+\qquad X^Ty=8,
+\qquad \lambda=4
+\]</div>
+<p>Ridge gives:</p>
+<div class="formula-math">\[
+w=\frac{8}{4+4}=1
+\]</div>
+<p>Ordinary least squares gives:</p>
+<div class="formula-math">\[
+w_{OLS}=\frac{8}{4}=2
+\]</div>
+<p>So Ridge shrinks the coefficient from <code>2</code> to <code>1</code>.</p>
+<p>This is a compact unit test for the closed-form implementation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">Unit Tests</h2>
+      </div>
+      <div class="section-body">
+        <h2>Penalty tests</h2>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">w = np.array([2.0, -3.0, 4.0])
+
+assert np.isclose(l2_squared(w), 4 + 9 + 16)
+assert np.isclose(l1_norm(w), 2 + 3 + 4)</code></pre></div>
+<h2>Soft-threshold tests</h2>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert np.isclose(soft_threshold(5.0, 2.0), 3.0)
+assert np.isclose(soft_threshold(-5.0, 2.0), -3.0)
+assert np.isclose(soft_threshold(1.0, 2.0), 0.0)
+assert np.isclose(soft_threshold(-1.0, 2.0), 0.0)</code></pre></div>
+<h2>Ridge scalar test</h2>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X1 = np.array([[2.0]])
+y1 = np.array([4.0])
+
+# X^T X = 4, X^T y = 8
+w = ridge_closed_form(X1, y1, lam=4.0)
+assert np.allclose(w, np.array([1.0]))</code></pre></div>
+<h2>Convergence test</h2>
+<p>Compare the final gradient norm:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def ridge_gradient(X, y, w, lam):
+    return 2 * X.T @ (X @ w - y) + 2 * lam * w
+
+w = ridge_closed_form(X_train_s, y_train, lam=1.0)
+g = ridge_gradient(X_train_s, y_train, w, lam=1.0)
+
+assert np.linalg.norm(g) &lt; 1e-8</code></pre></div>
+<p>This is an excellent test because it checks the mathematical condition of the stationary point directly.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">Gradient Check Idea</h2>
+      </div>
+      <div class="section-body">
+        <p>For differentiable Ridge objectives, compare the analytic gradient against a finite-difference approximation.</p>
+<p>For coordinate <code>j</code>:</p>
+<div class="formula-math">\[
+\frac{\partial J}{\partial w_j}
+\approx
+\frac{J(w+\epsilon e_j)-J(w-\epsilon e_j)}{2\epsilon}
+\]</div>
+<p>Implementation sketch:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def numerical_gradient(func, w, eps=1e-6):
+    w = np.asarray(w, dtype=float)
+    grad = np.zeros_like(w)
+
+    for j in range(len(w)):
+        wp = w.copy()
+        wm = w.copy()
+        wp[j] += eps
+        wm[j] -= eps
+        grad[j] = (func(wp) - func(wm)) / (2 * eps)
+
+    return grad</code></pre></div>
+<p>Then compare with the analytic Ridge gradient.</p>
+<p>Do <strong>not</strong> use the same naive finite-difference check blindly at the Lasso non-differentiable point <code>w_j = 0</code> and then conclude the mathematics is wrong. The L1 term has a special subgradient structure at zero.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Lasso Subgradient Awareness</h2>
+      </div>
+      <div class="section-body">
+        <p>At zero, the L1 penalty has subgradients in:</p>
+<div class="formula-math">\[
+[-1,1]
+\]</div>
+<p>This matters because:</p>
+<div class="ascii-box"><pre>ordinary smooth derivative → insufficient at zero</pre></div>
+<p>while:</p>
+<div class="ascii-box"><pre>subgradient / coordinate update</pre></div>
+<p>captures the actual optimization structure.</p>
+<p>For the Coding Book, the practical takeaway is:</p>
+<blockquote>
+<p>Understand why soft-thresholding appears. Do not memorize it as unexplained magic.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Efficient Ridge Computation</h2>
+      </div>
+      <div class="section-body">
+        <p>Closed form is elegant but should be used thoughtfully.</p>
+<p>Instead of explicitly forming:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">np.linalg.inv(X.T @ X + lam * I)</code></pre></div>
+<p>use:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">np.linalg.solve(X.T @ X + lam * I, X.T @ y)</code></pre></div>
+<p>For very large datasets or high-dimensional feature spaces, iterative optimization may be more practical than dense matrix algebra.</p>
+<p>The right implementation depends on:</p>
+<div class="ascii-box"><pre>sample count
+feature count
+matrix structure
+memory
+sparsity
+repeated training needs</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-35" class="section-block">
+      <div class="section-header">
+        <span class="section-num">35</span>
+        <h2 class="section-heading">Sparse Data Considerations</h2>
+      </div>
+      <div class="section-body">
+        <p>Text and recommender-style problems can generate sparse matrices.</p>
+<p>A dense conversion such as:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X.toarray()</code></pre></div>
+<p>may destroy the memory advantage of sparse storage.</p>
+<p>The conceptual regularization ideas remain the same, but production implementations should use algorithms designed for sparse data when appropriate.</p>
+<p>For this undergraduate lab, dense NumPy arrays are usually the clearest first environment.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-36" class="section-block">
+      <div class="section-header">
+        <span class="section-num">36</span>
+        <h2 class="section-heading">Common Coding Bugs</h2>
+      </div>
+      <div class="section-body">
+        <h2>Bug 1 — regularizing the intercept accidentally</h2>
+<p>If you concatenate a column of ones and then penalize every coefficient, you may regularize the intercept unintentionally.</p>
+<p>Fix:</p>
+<div class="ascii-box"><pre>separate intercept
+or
+use a mask that excludes the intercept from the penalty</pre></div>
+<h2>Bug 2 — mismatched scaling conventions</h2>
+<p>A scratch implementation using:</p>
+<div class="formula-math">\[
+\|Xw-y\|^2+\lambda\|w\|_2^2
+\]</div>
+<p>is not numerically identical to another implementation using:</p>
+<div class="formula-math">\[
+\frac{1}{n}\|Xw-y\|^2+\lambda\|w\|_2^2
+\]</div>
+<p>for the same printed <code>lambda</code>.</p>
+<p>Keep the objective visible in your notebook.</p>
+<h2>Bug 3 — fitting scaler on the whole dataset</h2>
+<p>This leaks test information.</p>
+<h2>Bug 4 — selecting lambda on the test set</h2>
+<p>This turns the test set into a tuning set.</p>
+<h2>Bug 5 — assuming small coefficient = unimportant feature</h2>
+<p>Coefficient magnitude depends on feature scaling and model context.</p>
+<h2>Bug 6 — claiming Lasso “always selects features”</h2>
+<p>Lasso can create sparse coefficients, but the exact behaviour depends on data, scaling, lambda, correlations and optimization details.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-37" class="section-block">
+      <div class="section-header">
+        <span class="section-num">37</span>
+        <h2 class="section-heading">Model Evaluation Helper</h2>
+      </div>
+      <div class="section-body">
+        <p>Use common regression metrics after fitting:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.metrics import mean_squared_error, r2_score
+
+
+def regression_report(model, X_train, y_train, X_test, y_test):
+    train_pred = model.predict(X_train)
+    test_pred = model.predict(X_test)
+
+    return {
+        &quot;train_mse&quot;: mean_squared_error(y_train, train_pred),
+        &quot;test_mse&quot;: mean_squared_error(y_test, test_pred),
+        &quot;train_r2&quot;: r2_score(y_train, train_pred),
+        &quot;test_r2&quot;: r2_score(y_test, test_pred),
+    }</code></pre></div>
+<p>For scratch models:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def predict_linear(X, w):
+    return X @ w</code></pre></div>
+<p>Then calculate the same metrics.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-38" class="section-block">
+      <div class="section-header">
+        <span class="section-num">38</span>
+        <h2 class="section-heading">Complete Hyperparameter Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Build a table across multiple regularization strengths.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">lambdas = np.logspace(-4, 2, 15)
+results = []
+
+for lam in lambdas:
+    w_ridge = ridge_closed_form(X_train_s, y_train, lam=lam)
+
+    train_pred = X_train_s @ w_ridge
+    test_pred = X_test_s @ w_ridge
+
+    train_mse = np.mean((train_pred - y_train) ** 2)
+    test_mse = np.mean((test_pred - y_test) ** 2)
+    coef_norm = np.linalg.norm(w_ridge, ord=2)
+
+    results.append((lam, train_mse, test_mse, coef_norm))</code></pre></div>
+<p>Your final table should show:</p>
+<div class="ascii-box"><pre>lambda
+train MSE
+test/validation MSE
+L2 coefficient norm</pre></div>
+<p>For Lasso add:</p>
+<div class="ascii-box"><pre>near-zero coefficient count
+L1 norm</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-39" class="section-block">
+      <div class="section-header">
+        <span class="section-num">39</span>
+        <h2 class="section-heading">Visual Comparison</h2>
+      </div>
+      <div class="section-body">
+        <p>For a controlled synthetic dataset, make at least three plots.</p>
+<h2>Plot 1 — objective vs iteration</h2>
+<p>Shows optimization convergence.</p>
+<h2>Plot 2 — coefficient magnitude vs lambda</h2>
+<p>Shows the regularization path.</p>
+<h2>Plot 3 — validation error vs lambda</h2>
+<p>Shows model-selection behaviour.</p>
+<p>The plots together tell a better story than a single final metric.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-40" class="section-block">
+      <div class="section-header">
+        <span class="section-num">40</span>
+        <h2 class="section-heading">Library Comparison Table</h2>
+      </div>
+      <div class="section-body">
+        <p>After the scratch implementation, compare:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Scratch Ridge</th>
+<th>sklearn Ridge</th>
+<th>Scratch Lasso</th>
+<th>sklearn Lasso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>objective</td>
+<td>explicit</td>
+<td>library-defined</td>
+<td>explicit</td>
+<td>library-defined</td>
+</tr>
+<tr>
+<td>optimizer</td>
+<td>your GD / closed form</td>
+<td>library solver</td>
+<td>coordinate descent</td>
+<td>library solver</td>
+</tr>
+<tr>
+<td>scaling</td>
+<td>manual</td>
+<td>usually external preprocessing</td>
+<td>manual</td>
+<td>usually external preprocessing</td>
+</tr>
+<tr>
+<td>coefficient path</td>
+<td>manual</td>
+<td>can be repeated</td>
+<td>manual</td>
+<td>can be repeated</td>
+</tr>
+<tr>
+<td>educational value</td>
+<td>very high</td>
+<td>lower</td>
+<td>very high</td>
+<td>lower</td>
+</tr>
+<tr>
+<td>production convenience</td>
+<td>lower</td>
+<td>high</td>
+<td>lower</td>
+<td>high</td>
+</tr>
+</tbody>
+</table></div>
+<p>This is the intended coding-book philosophy:</p>
+<blockquote>
+<p><strong>First understand the algorithm. Then use the library confidently.</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-41" class="section-block">
+      <div class="section-header">
+        <span class="section-num">41</span>
+        <h2 class="section-heading">Mini Project — Regularization Study</h2>
+      </div>
+      <div class="section-body">
+        <p>Create a notebook named:</p>
+<div class="ascii-box"><pre>regularization_study.ipynb</pre></div>
+<p>Required sections:</p>
+<div class="ascii-box"><pre>1. Problem statement
+2. Dataset generation/loading
+3. Train/test split
+4. Training-only scaling
+5. OLS baseline
+6. Ridge from scratch
+7. Ridge closed form
+8. Lasso from scratch
+9. scikit-learn Ridge
+10. scikit-learn Lasso
+11. Lambda sweep
+12. coefficient comparison
+13. MSE comparison
+14. sparsity analysis
+15. plots
+16. interpretation
+17. limitations</pre></div>
+<p>Final question to answer:</p>
+<blockquote>
+<p><strong>Why can a model with slightly worse training error be preferable on unseen data?</strong></p>
+</blockquote>
+<p>Your answer should explicitly connect:</p>
+<div class="ascii-box"><pre>training fit
+→ complexity
+→ variance
+→ generalization</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-42" class="section-block">
+      <div class="section-header">
+        <span class="section-num">42</span>
+        <h2 class="section-heading">Interpretation Template</h2>
+      </div>
+      <div class="section-body">
+        <p>Use this after the experiment:</p>
+<div class="ascii-box"><pre>Dataset:
+Number of features:
+Preprocessing:
+Model:
+Lambda/alpha:
+
+Train MSE:
+Validation/Test MSE:
+
+Coefficient norm:
+Near-zero coefficient count:
+
+Observed effect of increasing regularization:
+
+Best validation setting:
+
+Interpretation:
+...</pre></div>
+<p>This makes your notebook a small scientific report rather than just a pile of code cells.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-43" class="section-block">
+      <div class="section-header">
+        <span class="section-num">43</span>
+        <h2 class="section-heading">Debugging Lab</h2>
+      </div>
+      <div class="section-body">
+        <h2>Exercise 1 — remove regularization</h2>
+<p>Set:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">lam = 0</code></pre></div>
+<p>Compare the Ridge solution to your OLS implementation.</p>
+<p>Expected conceptual result:</p>
+<div class="ascii-box"><pre>Ridge objective with λ=0
+→ unregularized least-squares objective</pre></div>
+<h2>Exercise 2 — exaggerate lambda</h2>
+<p>Try:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">lam = 1e6</code></pre></div>
+<p>Inspect coefficients.</p>
+<p>They should become heavily shrunk in a properly implemented Ridge solution.</p>
+<h2>Exercise 3 — duplicate a feature</h2>
+<p>Create:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X2 = np.column_stack([X, X[:, 0]])</code></pre></div>
+<p>Observe how correlated predictors alter coefficient allocation.</p>
+<p>Do not overinterpret one random run; repeat with several seeds.</p>
+<h2>Exercise 4 — unscale one feature</h2>
+<p>Multiply one column by 1000 and rerun with and without standardization.</p>
+<p>This demonstrates why feature scaling is important for coefficient-penalty methods.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-44" class="section-block">
+      <div class="section-header">
+        <span class="section-num">44</span>
+        <h2 class="section-heading">Manual Trace of Soft-Thresholding</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+z=5,
+\quad\alpha=2
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+S(5,2)=5-2=3
+\]</div>
+<p>For:</p>
+<div class="formula-math">\[
+z=-5
+\]</div>
+<div class="formula-math">\[
+S(-5,2)=-3
+\]</div>
+<p>For:</p>
+<div class="formula-math">\[
+z=1
+\]</div>
+<div class="formula-math">\[
+S(1,2)=0
+\]</div>
+<p>This is the central sparse-learning picture:</p>
+<div class="ascii-box"><pre>|z|
+            │
+     small  │  large
+       ↓    │    ↓
+     zero   │  shrunk</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-45" class="section-block">
+      <div class="section-header">
+        <span class="section-num">45</span>
+        <h2 class="section-heading">Ridge Geometry Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>You do not need a full 2D optimizer to see the geometry.</p>
+<p>For two coefficients:</p>
+<div class="formula-math">\[
+\|w\|_2^2=w_1^2+w_2^2
+\]</div>
+<p>constant-penalty contours are circles:</p>
+<div class="ascii-box"><pre>w2
+           ↑
+        .-----.
+      .&#x27;       &#x27;.
+     /           \\
+    |      •      |
+     \\           /
+      &#x27;.       .&#x27;
+        &#x27;-----&#x27;
+           └────────→ w1</pre></div>
+<p>The circle geometry helps explain why Ridge tends to shrink coordinates smoothly rather than favouring exact coordinate-axis solutions.</p>
+<p>This is a conceptual visualization task; the core coding requirement remains the objective and optimizer implementation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-46" class="section-block">
+      <div class="section-header">
+        <span class="section-num">46</span>
+        <h2 class="section-heading">Lasso Geometry Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>For two coefficients:</p>
+<div class="formula-math">\[
+\|w\|_1=|w_1|+|w_2|
+\]</div>
+<p>constant-penalty contours are diamond-shaped:</p>
+<div class="ascii-box"><pre>w2
+            ↑
+            /\\
+           /  \\
+          / •  \\
+         &lt;      &gt;
+          \\    /
+           \\/
+            └────────→ w1</pre></div>
+<p>The corners lie on coordinate axes.</p>
+<p>This geometric fact is one reason sparse solutions are natural under L1 regularization.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-47" class="section-block">
+      <div class="section-header">
+        <span class="section-num">47</span>
+        <h2 class="section-heading">Complexity</h2>
+      </div>
+      <div class="section-body">
+        <p>For dense data with <code>n</code> samples and <code>d</code> features:</p>
+<h2>Ridge closed form</h2>
+<p>Computing:</p>
+<div class="formula-math">\[
+X^TX
+\]</div>
+<p>is roughly <code>O(nd²)</code>.</p>
+<p>Solving the resulting <code>d × d</code> system is roughly cubic in <code>d</code> for generic dense methods.</p>
+<h2>Ridge gradient descent</h2>
+<p>Each iteration is dominated by matrix-vector operations, approximately <code>O(nd)</code>.</p>
+<p>Total cost depends on the number of iterations.</p>
+<h2>Lasso coordinate descent</h2>
+<p>A full sweep over all coordinates is approximately proportional to the number of nonzero matrix entries for sparse-aware implementations, or roughly <code>O(nd)</code> for dense data, with total cost depending on the number of sweeps to convergence.</p>
+<p>These are educational order-of-growth descriptions, not a replacement for profiling a real implementation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-48" class="section-block">
+      <div class="section-header">
+        <span class="section-num">48</span>
+        <h2 class="section-heading">Numerical Sanity Checks</h2>
+      </div>
+      <div class="section-body">
+        <p>A correct regularized regression experiment should satisfy sensible checks:</p>
+<h3>Check 1</h3>
+<p>For Ridge:</p>
+<div class="ascii-box"><pre>lambda ↑
+→ coefficient L2 norm should generally not increase wildly</pre></div>
+<h3>Check 2</h3>
+<p>At <code>lambda = 0</code>:</p>
+<div class="ascii-box"><pre>Ridge objective = OLS objective</pre></div>
+<h3>Check 3</h3>
+<p>For very large Ridge <code>lambda</code>:</p>
+<div class="ascii-box"><pre>coefficients → strongly shrunk toward zero</pre></div>
+<h3>Check 4</h3>
+<p>Lasso should exhibit a pathway where some coefficients can become exactly zero under the chosen formulation and numerical procedure.</p>
+<h3>Check 5</h3>
+<p>Changing units of a feature without changing the prediction problem can change the regularization effect if you do not rescale features.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-49" class="section-block">
+      <div class="section-header">
+        <span class="section-num">49</span>
+        <h2 class="section-heading">Active Recall</h2>
+      </div>
+      <div class="section-body">
+        <p>Without notes, answer:</p>
+<ol>
+<li>Why is regularization added to a loss function?</li>
+<li>Write the general objective.</li>
+<li>Write the Ridge objective.</li>
+<li>Write the Lasso objective.</li>
+<li>What is the L2 penalty?</li>
+<li>What is the L1 penalty?</li>
+<li>Derive the Ridge gradient.</li>
+<li>Why does the Ridge normal equation contain <code>lambda I</code>?</li>
+<li>Why should <code>solve</code> generally be preferred to explicitly forming an inverse?</li>
+<li>Why does Lasso need special treatment at zero?</li>
+<li>What is soft-thresholding?</li>
+<li>Why does feature scaling matter?</li>
+<li>What happens when <code>lambda = 0</code>?</li>
+<li>What happens as <code>lambda</code> becomes very large?</li>
+<li>Why can stronger regularization reduce variance?</li>
+<li>Why can excessive regularization create underfitting?</li>
+<li>Why can Lasso create sparse coefficients?</li>
+<li>Why are Ridge coefficients usually not exactly zero in ordinary continuous problems?</li>
+<li>Why should lambda selection use training/validation rather than the final test set?</li>
+<li>Why might two libraries produce different coefficients for the same printed <code>alpha</code>/<code>lambda</code>?</li>
+</ol>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-50" class="section-block">
+      <div class="section-header">
+        <span class="section-num">50</span>
+        <h2 class="section-heading">Coding Challenges</h2>
+      </div>
+      <div class="section-body">
+        <h2>Challenge A — Ridge only</h2>
+<p>Implement Ridge entirely with NumPy and no ML regression estimator.</p>
+<p>Required:</p>
+<div class="ascii-box"><pre>objective
+gradient
+GD
+closed form
+prediction
+MSE</pre></div>
+<h2>Challenge B — Gradient verification</h2>
+<p>Implement a numerical gradient checker and verify Ridge across several random vectors.</p>
+<h2>Challenge C — Lasso coordinate descent</h2>
+<p>Implement the scratch optimizer and plot coefficient paths.</p>
+<h2>Challenge D — Hyperparameter sweep</h2>
+<p>Evaluate 20 lambda values and choose the best validation model.</p>
+<h2>Challenge E — Scaling experiment</h2>
+<p>Repeat the same experiment with and without standardization and explain the difference.</p>
+<h2>Challenge F — Correlated features</h2>
+<p>Generate two strongly correlated predictors and compare Ridge/Lasso coefficient behaviour.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-51" class="section-block">
+      <div class="section-header">
+        <span class="section-num">51</span>
+        <h2 class="section-heading">Master Implementation Skeleton</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+
+def l2_squared(w):
+    return float(np.sum(w ** 2))
+
+
+def l1_norm(w):
+    return float(np.sum(np.abs(w)))
+
+
+def ridge_objective(X, y, w, lam):
+    r = X @ w - y
+    return float(np.sum(r ** 2) + lam * np.sum(w ** 2))
+
+
+def ridge_gradient(X, y, w, lam):
+    return 2 * X.T @ (X @ w - y) + 2 * lam * w
+
+
+def ridge_gd(X, y, lam=1.0, lr=1e-3, epochs=5000):
+    w = np.zeros(X.shape[1], dtype=float)
+    for _ in range(epochs):
+        w -= lr * ridge_gradient(X, y, w, lam)
+    return w
+
+
+def ridge_closed_form(X, y, lam=1.0):
+    d = X.shape[1]
+    A = X.T @ X + lam * np.eye(d)
+    b = X.T @ y
+    return np.linalg.solve(A, b)
+
+
+def soft_threshold(z, alpha):
+    return np.sign(z) * max(abs(z) - alpha, 0.0)
+
+
+def lasso_coordinate_descent(X, y, lam=0.1, epochs=1000):
+    n, d = X.shape
+    w = np.zeros(d, dtype=float)
+    col_sq = np.sum(X ** 2, axis=0)
+
+    for _ in range(epochs):
+        for j in range(d):
+            r = y - X @ w + X[:, j] * w[j]
+            rho = X[:, j] @ r
+            if col_sq[j] == 0:
+                w[j] = 0.0
+            else:
+                w[j] = soft_threshold(rho, lam) / col_sq[j]
+
+    return w</code></pre></div>
+<p>Treat this skeleton as a map to understand, not as a black box to paste without tracing.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-52" class="section-block">
+      <div class="section-header">
+        <span class="section-num">52</span>
+        <h2 class="section-heading">Recommended Notebook Structure</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>CODE-U2-06_regularization.ipynb
+│
+├── 01_problem_statement
+├── 02_imports_and_seed
+├── 03_dataset
+├── 04_train_test_split
+├── 05_training_only_scaling
+├── 06_OLS_baseline
+├── 07_Ridge_objective
+├── 08_Ridge_gradient_derivation
+├── 09_Ridge_gradient_descent
+├── 10_Ridge_closed_form
+├── 11_Ridge_verification
+├── 12_Lasso_soft_thresholding
+├── 13_Lasso_coordinate_descent
+├── 14_lambda_sweep
+├── 15_coefficient_paths
+├── 16_validation_error
+├── 17_library_comparison
+├── 18_debugging_tests
+└── 19_conclusions</pre></div>
+<p>This structure mirrors the Coding Book philosophy:</p>
+<div class="ascii-box"><pre>concept
+→ implementation
+→ verification
+→ experiment
+→ interpretation</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-53" class="section-block">
+      <div class="section-header">
+        <span class="section-num">53</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <p>You are ready to move on when you can independently produce:</p>
+<div class="ascii-box"><pre>OLS baseline
+    ↓
+regularized objective
+    ↓
+Ridge gradient
+    ↓
+Ridge GD
+    ↓
+Ridge closed form
+    ↓
+Lasso L1 objective
+    ↓
+soft-thresholding
+    ↓
+Lasso coordinate descent
+    ↓
+lambda sweep
+    ↓
+coefficient / error analysis
+    ↓
+library verification</pre></div>
+<p>And you can explain, rather than merely state:</p>
+<blockquote>
+<p><strong>Ridge shrinks coefficients through an L2 penalty, while Lasso uses an L1 penalty that can produce sparse solutions.</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-54" class="section-block">
+      <div class="section-header">
+        <span class="section-num">54</span>
+        <h2 class="section-heading">Source Notes</h2>
+      </div>
+      <div class="section-body">
+        <h2>Course-specific sources</h2>
+<ul>
+<li>Official DSC-14 syllabus (<code>cse syllabus.pdf</code> / <code>sem5core.md</code>): Unit II explicitly includes overfitting/underfitting and Ridge/Lasso regularization.</li>
+<li><code>Lecture08.pdf</code>: hypothesis classes, generalization, bias/variance, overfitting/underfitting and validation logic.</li>
+<li><code>Lecture09.pdf</code>: preprocessing/scaling, vector/matrix representation, residuals, least squares, gradients and matrix solution machinery.</li>
+<li><code>Lecture10 copy.pdf</code>: feature expansion, learned feature representations and the motivation for controlling excess model flexibility.</li>
+<li><code>AI_ML_Master_Learning_Resource_Guide.pdf</code>: identifies Ridge/Lasso as Unit II topics and marks the supplied Lecture 10 treatment as motivation rather than a complete derivation.</li>
+</ul>
+<h2>Coding expansion</h2>
+<p>The complete Ridge gradient-descent implementation, closed-form implementation, Lasso coordinate-descent implementation, soft-thresholding treatment, and experimental framework are coding-book expansions required to turn the syllabus topics into reproducible practical skill.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-55" class="section-block">
+      <div class="section-header">
+        <span class="section-num">55</span>
+        <h2 class="section-heading">Cross-Book Links</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Lab Viva Trap & Runtime Gotcha</div>
+
+**Regularizing the Bias Term & Standardizing Features:**
+1. NEVER penalize the bias intercept $b = w_0$! Regularizing the intercept shrinks the baseline prediction towards zero, destroying calibration.
+2. ALWAYS standardize features before Ridge/Lasso! If Feature 1 is in millimeters (1,000) and Feature 2 is in meters (1), the penalty will unfairly crush Feature 1!
+3. Lasso is non-differentiable at $w_j = 0$, so standard Gradient Descent oscillates; Coordinate Descent with soft-thresholding must be used instead!
+
+</div>
+
+<h3>Main Book</h3>
+<ul>
+<li><code>MAIN-U2-C26</code> — Regularization: Why It Exists</li>
+<li><code>MAIN-U2-C27</code> — Ridge Regression</li>
+<li><code>MAIN-U2-C28</code> — Lasso Regression</li>
+<li><code>MAIN-U2-C29</code> — Ridge vs Lasso</li>
+</ul>
+<h3>Math Companion</h3>
+<ul>
+<li>vector/matrix multiplication</li>
+<li>norms and geometry</li>
+<li>gradients</li>
+<li>convex optimization</li>
+<li>L1/L2 regularization</li>
+</ul>
+<h3>Exam Book</h3>
+<ul>
+<li><code>EXAM-U2</code> — Machine Learning &amp; Evaluation</li>
+<li>Ridge/Lasso formulas, derivations, numericals and comparisons</li>
+</ul>
+<h3>Previous Coding Chapters</h3>
+<ul>
+<li><code>CODE-U2-01</code> — workflow, preprocessing and evaluation</li>
+<li><code>CODE-U2-02</code> — Linear Regression from scratch</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-56" class="section-block">
+      <div class="section-header">
+        <span class="section-num">56</span>
+        <h2 class="section-heading">Submission Checklist</h2>
+      </div>
+      <div class="section-body">
+        <ul>
+<li>[ ] Dataset and target defined.</li>
+<li>[ ] Reproducible seed recorded.</li>
+<li>[ ] Train/test split performed before preprocessing.</li>
+<li>[ ] Scaler fit only on training data.</li>
+<li>[ ] OLS baseline included.</li>
+<li>[ ] Ridge objective implemented from scratch.</li>
+<li>[ ] Ridge gradient derived and implemented.</li>
+<li>[ ] Ridge gradient descent tested.</li>
+<li>[ ] Ridge closed-form solution tested.</li>
+<li>[ ] <code>solve</code> used rather than unnecessary explicit inverse.</li>
+<li>[ ] Lasso objective implemented.</li>
+<li>[ ] Soft-thresholding implemented and unit tested.</li>
+<li>[ ] Lasso coordinate descent implemented.</li>
+<li>[ ] Lambda sweep performed.</li>
+<li>[ ] Coefficient behaviour visualized.</li>
+<li>[ ] Validation/test performance compared.</li>
+<li>[ ] Scratch results checked against scikit-learn.</li>
+<li>[ ] Objective-scaling differences documented.</li>
+<li>[ ] Conclusions distinguish training fit from generalization.</li>
+</ul>
+<hr />
+<h1>Status</h1>
+<p><strong><code>CODE-U2-06</code> — COMPLETE</strong></p>
+<p>The Unit II regularization coding block is now connected:</p>
+<div class="ascii-box"><pre>Linear Regression
+      ↓
+Overfitting / generalization
+      ↓
+Regularization
+   ┌──┴──┐
+ Ridge  Lasso
+   │      │
+  L2     L1
+   │      │
+shrink  sparse</pre></div>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="code-u2-05-classification-metrics-roc.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← Unit 2 Lab 05 — Classification Metrics & ROC</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">💻 Coding Index</span>
+      </a>
+      <a href="code-u2-07-ml-evaluation-comparison.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: Unit 2 Lab 07 — ML Evaluation & Model Comparison →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search lab implementations, functions, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">💻</span>Lab Hub</a>
+  <a href="code-u2-06-ridge-lasso-regularization.html" class="mobile-nav-btn active"><span class="icon">📖</span>CODE-U2-06</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

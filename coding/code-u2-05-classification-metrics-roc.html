@@ -1,0 +1,1696 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC & Thresholds — AI & Machine Learning Coding Lab. Confusion Matrix From Scratch, Precision, Recall, F1-Score, Threshold Sweeping, ROC Curve Construction, and Numerical Trapezoidal AUC">
+<title>CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC & Thresholds | Coding Lab 💻 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/coding.css">
+</head>
+<body class="coding-module track-c2">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">💻</div>
+      <div class="brand-text"><span class="main">Coding Lab</span><span class="sub">AI &amp; ML From Scratch</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC &amp; Thresholds</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">💻</span>Coding Lab Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../math/index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 0: Environment & System</div>
+  <a href="code-00-coding-foundation.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-00: Coding Lab Foundation &amp; Implementation System</a>
+  <a href="code-01-python-numpy-workflow.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-01: Python, NumPy, Matplotlib &amp; Lab Workflow</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Classical AI & Search Labs</div>
+  <a href="code-u1-01-bfs-dfs.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-01: BFS and DFS From Scratch</a>
+  <a href="code-u1-02-greedy-a-star.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-02: Greedy Best-First &amp; A* Search From Scratch</a>
+  <a href="code-u1-03-csp-backtracking.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-03: CSPs and Backtracking Search</a>
+  <a href="code-u1-04-minimax-alpha-beta.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Supervised ML Labs</div>
+  <a href="code-u2-01-ml-workflow.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-01: ML Workflow: Preprocessing, Splitting &amp; Evaluation</a>
+  <a href="code-u2-02-linear-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-02: Linear Regression From Scratch</a>
+  <a href="code-u2-03-logistic-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-03: Logistic Regression From Scratch</a>
+  <a href="code-u2-04-decision-trees.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-04: Decision Trees From Scratch</a>
+  <a href="code-u2-05-classification-metrics-roc.html" class="sidebar-link active"><span class="link-icon">📊</span>CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC &amp; Thresholds</a>
+  <a href="code-u2-06-ridge-lasso-regularization.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-06: Ridge &amp; Lasso From Scratch: Regularization &amp; Optimization</a>
+  <a href="code-u2-07-ml-evaluation-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-07: ML Evaluation &amp; Model Comparison Lab</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Deep Learning Labs</div>
+  <a href="code-u3-01-neuron-perceptron.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-01: Neuron and Perceptron From Scratch</a>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>MLP, Backpropagation & Convolutions</span>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Advanced AI Labs (Upcoming)</div>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>Q-Learning, NLP & Generative Adversarial Loops</span>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">CODE-U2-05 — Sections</div>
+      <a href="#s-00" class="sidebar-link"><span class="link-icon">📌</span>0. Why This Lab Exists</a>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. What You Must Be Able to Code</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Learning Representation</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Confusion Matrix From Scratch</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Hand Trace</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Metric Functions From Scratch</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. One Combined Metric Function</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Numerical Example</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Unit Tests You Should Actually Write</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Thresholding Scores</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Threshold Trace</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Building ROC Points From Scratch</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. A More Efficient Threshold Sweep</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. AUC From Scratch With the Trapezoidal Rule</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. ROC Visualization</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Confusion Matrix Visualization</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Comparison With scikit-learn</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Threshold Experiment</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Class Imbalance Experiment</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Decision Rules and Application Context</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Common Coding Bugs</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Testing Protocol</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. ROC Sanity Checks</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Manual AUC Example</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Practical Lab Dataset Design</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Reproducibility Record</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Debugging Exercise</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Mini Project — Threshold Analysis Dashboard</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Master Implementation Skeleton</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Library Layer</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Complexity and Practical Behaviour</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Active Recall</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Coding Challenges</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Mastery Gate</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Source Notes</a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Cross-Book Links</a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Submission Checklist</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Coding Lab</a>
+        <span>/</span>
+        <span>CODE-U2-05</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-c2">Track 2: Supervised Machine Learning Labs</span></div>
+      <h1 class="chapter-title">Classification Metrics, Confusion Matrix, ROC-AUC &amp; Thresholds</h1>
+      <p class="chapter-desc">Confusion Matrix From Scratch, Precision, Recall, F1-Score, Threshold Sweeping, ROC Curve Construction, and Numerical Trapezoidal AUC</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~50 min lab</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">METRICS</span> <span class="chapter-meta-item uni-badge">CONFUSION-MATRIX</span> <span class="chapter-meta-item uni-badge">ROC-CURVE</span> <span class="chapter-meta-item uni-badge">AUC-TRAPEZOID</span> <span class="chapter-meta-item uni-badge">THRESHOLDS</span>
+      </div>
+
+      <div class="lab-meta-grid">
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Prerequisites</div>
+          <div class="lab-meta-value">CODE-U2-01 ML Workflow, CODE-U2-03 Logistic Regression</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Main Book Concept</div>
+          <div class="lab-meta-value">Ch 24 Classification Evaluation, Ch 25 Precision, Recall, F1, ROC & AUC</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Math Companion Layer</div>
+          <div class="lab-meta-value">M10 Probability, M11 Conditional Probability, Trapezoidal Rule Numerical Integration</div>
+        </div>
+        <div class="lab-meta-box" style="grid-column: 1 / -1;">
+          <div class="lab-meta-label">AI / Machine Learning Connections</div>
+          <div class="lab-meta-value">Class imbalance detection, Medical diagnosis (high recall), Spam detection (high precision), Threshold tuning, AUC ranking quality</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-meta-card"><h1>CODE-U2-05 — Classification Metrics, Confusion Matrix, ROC-AUC &amp; Thresholds</h1>
+<blockquote>
+<p><strong>Coding objective:</strong> turn classifier outputs into a correct evaluation pipeline, compute classification metrics from first principles, study how thresholds change decisions, construct ROC curves manually, approximate AUC numerically, and verify the complete workflow with standard Python/NumPy/scikit-learn tools.</p>
+<p><strong>Course boundary:</strong> the official DSC-14 syllabus explicitly includes confusion matrix, precision, recall, F1 and ROC-AUC. <code>Lecture07.pdf</code> is the primary supplied course note for confusion-matrix metrics; the supplied resource guide identifies ROC-AUC as a syllabus item that requires an explicit gap-filler treatment. This chapter therefore keeps the course terminology while making the coding layer complete.</p>
+</blockquote>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in CODE-U2-05 (37 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-00"><span class="toc-num">00</span><span class="toc-name">Why This Lab Exists</span></a></li>
+        <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">What You Must Be Able to Code</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Learning Representation</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Confusion Matrix From Scratch</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Hand Trace</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Metric Functions From Scratch</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">One Combined Metric Function</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Numerical Example</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Unit Tests You Should Actually Write</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Thresholding Scores</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Threshold Trace</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Building ROC Points From Scratch</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">A More Efficient Threshold Sweep</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">AUC From Scratch With the Trapezoidal Rule</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">ROC Visualization</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Confusion Matrix Visualization</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Comparison With scikit-learn</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Threshold Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Class Imbalance Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Decision Rules and Application Context</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Common Coding Bugs</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Testing Protocol</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">ROC Sanity Checks</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Manual AUC Example</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Practical Lab Dataset Design</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Reproducibility Record</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Debugging Exercise</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Mini Project — Threshold Analysis Dashboard</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Master Implementation Skeleton</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Library Layer</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Complexity and Practical Behaviour</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Active Recall</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Coding Challenges</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Source Notes</span></a></li>
+        <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Cross-Book Links</span></a></li>
+        <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Submission Checklist</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-00" class="section-block">
+      <div class="section-header">
+        <span class="section-num">00</span>
+        <h2 class="section-heading">Why This Lab Exists</h2>
+      </div>
+      <div class="section-body">
+        <p>A classification model usually does more than return a final class label.</p>
+<p>It can produce a score such as:</p>
+<div class="ascii-box"><pre>email A → 0.93 spam score
+email B → 0.18 spam score
+email C → 0.61 spam score</pre></div>
+<p>The coding problem is therefore not only:</p>
+<div class="ascii-box"><pre>&quot;Did the model predict correctly?&quot;</pre></div>
+<p>It is also:</p>
+<div class="ascii-box"><pre>score
+  ↓
+threshold
+  ↓
+predicted label
+  ↓
+compare with truth
+  ↓
+TP / FP / FN / TN
+  ↓
+metrics</pre></div>
+<p>A good implementation must preserve this separation. Otherwise it is easy to mix up model scores, labels, thresholds, and metrics.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">What You Must Be Able to Code</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph TD
+    Score["Model Prediction Probability p̂ ∈ [0, 1]"] --> Thresh["Apply Classification Threshold τ (default 0.5)"]
+    Thresh --> Pred["Discrete Prediction ŷ ∈ {0, 1}"]
+    Pred & Truth["Ground Truth y ∈ {0, 1}"] --> CM["Confusion Matrix: [[TN, FP], [FN, TP]]"]
+    CM --> P["Precision = TP / (TP + FP)"]
+    CM --> R["Recall = TP / (TP + FN)"]
+    P & R --> F1["F1-Score = 2PR / (P + R)"]
+    Score --> Sweep["Sweep τ from 1.0 down to 0.0"]
+    Sweep --> ROC["Plot FPR vs TPR (ROC Curve)"]
+    ROC --> AUC["Integrate Area via Trapezoid Rule (AUC)"]
+    style CM fill:#0f172a,stroke:#38bdf8,color:#38bdf8,stroke-width:2px
+    style AUC fill:#065f46,stroke:#34d399,color:#ffffff
+</pre></div>
+<p>By the end of this chapter you should be able to:</p>
+<ul>
+<li>store binary ground-truth labels correctly;</li>
+<li>store predicted labels and/or continuous scores;</li>
+<li>compute TP, FP, FN and TN without relying on a library;</li>
+<li>compute accuracy, precision, recall, specificity, F1 and FPR;</li>
+<li>handle zero denominators safely;</li>
+<li>convert scores into labels using an explicit threshold;</li>
+<li>sweep many thresholds;</li>
+<li>create ROC points from TPR and FPR;</li>
+<li>approximate AUC with the trapezoidal rule;</li>
+<li>compare your implementation with scikit-learn;</li>
+<li>test metric implementations against hand-calculated examples;</li>
+<li>visualize confusion matrices and ROC curves;</li>
+<li>explain why one metric should not automatically be treated as “the best”.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">Learning Representation</h2>
+      </div>
+      <div class="section-body">
+        <h2>2.1 Ground truth</h2>
+<p>For binary classification use:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">y_true = np.array([0, 0, 1, 1, 0, 1])</code></pre></div>
+<p>where, by convention for this chapter:</p>
+<div class="ascii-box"><pre>0 = Negative
+1 = Positive</pre></div>
+<p>Do not silently reverse this meaning later.</p>
+<h2>2.2 Predicted labels</h2>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">y_pred = np.array([0, 1, 1, 1, 0, 0])</code></pre></div>
+<p>These are already discrete decisions.</p>
+<h2>2.3 Continuous scores</h2>
+<p>A classifier can instead produce:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">scores = np.array([0.20, 0.72, 0.93, 0.61, 0.14, 0.45])</code></pre></div>
+<p>A threshold converts them into labels:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">y_pred = (scores &gt;= threshold).astype(int)</code></pre></div>
+<p>For example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">threshold = 0.50</code></pre></div>
+<p>means scores at least 0.50 become positive.</p>
+<h3>Critical distinction</h3>
+<div class="ascii-box"><pre>score ≠ label
+threshold ≠ model
+metric ≠ threshold</pre></div>
+<p>ROC analysis is particularly useful because it studies what happens as the threshold changes.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">Confusion Matrix From Scratch</h2>
+      </div>
+      <div class="section-body">
+        <p>The binary confusion matrix records four mutually exclusive outcomes.</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Actual</th>
+<th>Predicted</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>TP</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>FP</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>FN</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>TN</td>
+</tr>
+</tbody>
+</table></div>
+<p>A simple implementation is often clearer than trying to remember a library-specific matrix orientation.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+
+def confusion_counts(y_true, y_pred):
+    y_true = np.asarray(y_true).astype(int)
+    y_pred = np.asarray(y_pred).astype(int)
+
+    if y_true.shape != y_pred.shape:
+        raise ValueError(&quot;y_true and y_pred must have the same shape&quot;)
+
+    if not np.all(np.isin(y_true, [0, 1])):
+        raise ValueError(&quot;y_true must contain only 0 and 1&quot;)
+
+    if not np.all(np.isin(y_pred, [0, 1])):
+        raise ValueError(&quot;y_pred must contain only 0 and 1&quot;)
+
+    tp = np.sum((y_true == 1) &amp; (y_pred == 1))
+    fp = np.sum((y_true == 0) &amp; (y_pred == 1))
+    fn = np.sum((y_true == 1) &amp; (y_pred == 0))
+    tn = np.sum((y_true == 0) &amp; (y_pred == 0))
+
+    return int(tp), int(fp), int(fn), int(tn)</code></pre></div>
+<h2>3.1 Line-by-line logic</h2>
+<h3><code>np.asarray(...)</code></h3>
+<p>This lets the function accept lists or NumPy arrays.</p>
+<h3>Shape check</h3>
+<p>Metrics compare one prediction to one truth value.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">y_true.shape == y_pred.shape</code></pre></div>
+<p>must therefore hold.</p>
+<h3>Boolean masks</h3>
+<p>For TP:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">(y_true == 1) &amp; (y_pred == 1)</code></pre></div>
+<p>means both conditions are true.</p>
+<p>Summing a Boolean array counts the number of <code>True</code> values.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Hand Trace</h2>
+      </div>
+      <div class="section-body">
+        <p>Take:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">y_true = [1, 0, 1, 0, 1]
+y_pred = [1, 1, 0, 0, 1]</code></pre></div>
+<p>Trace row by row:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th style="text-align: right;">i</th>
+<th style="text-align: right;">Actual</th>
+<th style="text-align: right;">Predicted</th>
+<th>Outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td>TP</td>
+</tr>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td>FP</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td>FN</td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td>TN</td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td>TP</td>
+</tr>
+</tbody>
+</table></div>
+<p>Therefore:</p>
+<div class="ascii-box"><pre>TP = 2
+FP = 1
+FN = 1
+TN = 1</pre></div>
+<p>Before coding any metric, manually reconstructing these four numbers is an excellent debugging technique.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Metric Functions From Scratch</h2>
+      </div>
+      <div class="section-body">
+        <h2>5.1 Accuracy</h2>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def accuracy_from_counts(tp, fp, fn, tn):
+    total = tp + fp + fn + tn
+    return (tp + tn) / total if total else 0.0</code></pre></div>
+<p>Formula:</p>
+<div class="formula-math">\[
+Accuracy = \frac{TP+TN}{TP+FP+FN+TN}
+\]</div>
+<p>Use accuracy when the overall fraction of correct predictions is actually the question you care about.</p>
+<h2>5.2 Precision</h2>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def precision_from_counts(tp, fp):
+    denom = tp + fp
+    return tp / denom if denom else 0.0</code></pre></div>
+<div class="formula-math">\[
+Precision = \frac{TP}{TP+FP}
+\]</div>
+<p>Coding interpretation:</p>
+<blockquote>
+<p>Among everything predicted positive, how much was actually positive?</p>
+</blockquote>
+<h2>5.3 Recall / TPR</h2>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def recall_from_counts(tp, fn):
+    denom = tp + fn
+    return tp / denom if denom else 0.0</code></pre></div>
+<div class="formula-math">\[
+Recall = TPR = \frac{TP}{TP+FN}
+\]</div>
+<p>Coding interpretation:</p>
+<blockquote>
+<p>Among actual positives, how many did the classifier find?</p>
+</blockquote>
+<h2>5.4 Specificity</h2>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def specificity_from_counts(tn, fp):
+    denom = tn + fp
+    return tn / denom if denom else 0.0</code></pre></div>
+<div class="formula-math">\[
+Specificity = \frac{TN}{TN+FP}
+\]</div>
+<h2>5.5 False Positive Rate</h2>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def fpr_from_counts(tn, fp):
+    denom = fp + tn
+    return fp / denom if denom else 0.0</code></pre></div>
+<div class="formula-math">\[
+FPR = \frac{FP}{FP+TN}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+FPR = 1-Specificity
+\]</div>
+<h2>5.6 F1 score</h2>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def f1_from_counts(tp, fp, fn):
+    p = precision_from_counts(tp, fp)
+    r = recall_from_counts(tp, fn)
+    denom = p + r
+    return 2 * p * r / denom if denom else 0.0</code></pre></div>
+<p>Equivalent count form:</p>
+<div class="formula-math">\[
+F_1 = \frac{2TP}{2TP+FP+FN}
+\]</div>
+<p>The harmonic mean is deliberately used, so a very low precision or recall pulls F1 downward.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">One Combined Metric Function</h2>
+      </div>
+      <div class="section-body">
+        <p>For experiments, avoid scattering calculations across a notebook.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def binary_metrics(y_true, y_pred):
+    tp, fp, fn, tn = confusion_counts(y_true, y_pred)
+
+    return {
+        &quot;TP&quot;: tp,
+        &quot;FP&quot;: fp,
+        &quot;FN&quot;: fn,
+        &quot;TN&quot;: tn,
+        &quot;accuracy&quot;: accuracy_from_counts(tp, fp, fn, tn),
+        &quot;precision&quot;: precision_from_counts(tp, fp),
+        &quot;recall&quot;: recall_from_counts(tp, fn),
+        &quot;specificity&quot;: specificity_from_counts(tn, fp),
+        &quot;fpr&quot;: fpr_from_counts(tn, fp),
+        &quot;f1&quot;: f1_from_counts(tp, fp, fn),
+    }</code></pre></div>
+<p>This gives you a small reusable evaluation core.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Numerical Example</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="ascii-box"><pre>TP = 60
+FP = 20
+FN = 10
+TN = 110</pre></div>
+<p>Then:</p>
+<div class="formula-math">\[
+Accuracy = \frac{60+110}{200}=0.85
+\]</div>
+<div class="formula-math">\[
+Precision = \frac{60}{80}=0.75
+\]</div>
+<div class="formula-math">\[
+Recall = \frac{60}{70}\approx0.8571
+\]</div>
+<div class="formula-math">\[
+Specificity = \frac{110}{130}\approx0.8462
+\]</div>
+<div class="formula-math">\[
+FPR = \frac{20}{130}\approx0.1538
+\]</div>
+<div class="formula-math">\[
+F_1 = \frac{2(60)}{120+20+10}=\frac{120}{150}=0.80
+\]</div>
+<p>These values are excellent unit tests for your functions.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">Unit Tests You Should Actually Write</h2>
+      </div>
+      <div class="section-body">
+        <p>Do not trust a metric implementation because it “looks right”.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">m = binary_metrics(
+    np.array([1, 0, 1, 0, 1]),
+    np.array([1, 1, 0, 0, 1])
+)
+
+assert m[&quot;TP&quot;] == 2
+assert m[&quot;FP&quot;] == 1
+assert m[&quot;FN&quot;] == 1
+assert m[&quot;TN&quot;] == 1</code></pre></div>
+<p>Known formulas:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert np.isclose(m[&quot;accuracy&quot;], 3 / 5)
+assert np.isclose(m[&quot;precision&quot;], 2 / 3)
+assert np.isclose(m[&quot;recall&quot;], 2 / 3)
+assert np.isclose(m[&quot;specificity&quot;], 1 / 2)
+assert np.isclose(m[&quot;fpr&quot;], 1 / 2)
+assert np.isclose(m[&quot;f1&quot;], 2 / 3)</code></pre></div>
+<h2>Edge-case tests</h2>
+<p>Test at least:</p>
+<ol>
+<li>all predictions negative;</li>
+<li>all predictions positive;</li>
+<li>no actual positives;</li>
+<li>no actual negatives;</li>
+<li>perfect predictions;</li>
+<li>completely wrong predictions.</li>
+</ol>
+<p>Your convention for undefined ratios must be explicit. Returning <code>0.0</code> is acceptable for this educational implementation, but you should know that production libraries may expose a configurable <code>zero_division</code> policy.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Thresholding Scores</h2>
+      </div>
+      <div class="section-body">
+        <p>Write thresholding as its own function.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def scores_to_labels(scores, threshold=0.5):
+    scores = np.asarray(scores, dtype=float)
+
+    if not 0.0 &lt;= threshold &lt;= 1.0:
+        raise ValueError(&quot;threshold must be between 0 and 1&quot;)
+
+    return (scores &gt;= threshold).astype(int)</code></pre></div>
+<p>The function makes an important architectural boundary explicit:</p>
+<div class="ascii-box"><pre>model score
+    ↓
+scores_to_labels()
+    ↓
+y_pred
+    ↓
+binary_metrics()</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Threshold Trace</h2>
+      </div>
+      <div class="section-body">
+        <p>Use:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">scores = np.array([0.95, 0.82, 0.70, 0.58, 0.40, 0.25])
+y_true = np.array([1,   0,    1,    0,    1,    0])</code></pre></div>
+<p>At threshold 0.50:</p>
+<div class="ascii-box"><pre>pred = [1, 1, 1, 1, 0, 0]</pre></div>
+<p>At threshold 0.75:</p>
+<div class="ascii-box"><pre>pred = [1, 1, 0, 0, 0, 0]</pre></div>
+<p>Notice:</p>
+<div class="ascii-box"><pre>same scores
+same truth
+same model
+DIFFERENT THRESHOLD
+→ DIFFERENT PREDICTIONS
+→ DIFFERENT CONFUSION MATRIX
+→ DIFFERENT METRICS</pre></div>
+<p>That is the core computational idea behind ROC analysis.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Building ROC Points From Scratch</h2>
+      </div>
+      <div class="section-body">
+        <p>For ROC we need:</p>
+<div class="formula-math">\[
+TPR = Recall = \frac{TP}{TP+FN}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+FPR = \frac{FP}{FP+TN}
+\]</div>
+<p>At each threshold, compute both.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def roc_points_from_scratch(y_true, scores):
+    y_true = np.asarray(y_true).astype(int)
+    scores = np.asarray(scores, dtype=float)
+
+    if y_true.shape != scores.shape:
+        raise ValueError(&quot;y_true and scores must have the same shape&quot;)
+
+    thresholds = np.r_[np.inf, np.sort(np.unique(scores))[::-1], -np.inf]
+
+    points = []
+
+    for threshold in thresholds:
+        y_pred = (scores &gt;= threshold).astype(int)
+        tp, fp, fn, tn = confusion_counts(y_true, y_pred)
+        tpr = recall_from_counts(tp, fn)
+        fpr = fpr_from_counts(tn, fp)
+
+        points.append((fpr, tpr, threshold))
+
+    return np.array(points, dtype=float)</code></pre></div>
+<p>The key idea is more important than the exact implementation detail:</p>
+<div class="ascii-box"><pre>threshold 1 → confusion matrix → TPR/FPR
+threshold 2 → confusion matrix → TPR/FPR
+threshold 3 → confusion matrix → TPR/FPR
+...</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">A More Efficient Threshold Sweep</h2>
+      </div>
+      <div class="section-body">
+        <p>The previous implementation is educational because it makes the logic obvious.</p>
+<p>For small course datasets this is fine.</p>
+<p>For larger datasets you can sort scores once and update counts incrementally.</p>
+<p>A conceptual efficient strategy:</p>
+<div class="ascii-box"><pre>1. sort samples by decreasing score
+2. begin with every sample predicted negative
+3. moving one threshold downward flips one sample to positive
+4. update TP/FP in O(1)
+5. record TPR/FPR</pre></div>
+<p>This reduces repeated full-array scans.</p>
+<p>Do not optimize before the simple implementation is correct.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">AUC From Scratch With the Trapezoidal Rule</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Lab Viva Trap & Runtime Gotcha</div>
+
+**Confusion Matrix Axis Orientation & Accuracy Paradox:**
+1. Scikit-learn orientation is `y_true` as ROWS and `y_pred` as COLUMNS: `[[TN, FP], [FN, TP]]`.
+Swapping rows and columns reverses Precision and Recall!
+2. Accuracy Paradox: On an imbalanced dataset with 99 negative and 1 positive, a dumb model predicting 0 always gets 99% accuracy!
+Never evaluate an imbalanced model on Accuracy alone—always report Precision, Recall, and F1!
+
+</div>
+
+<p>Given ordered ROC points:</p>
+<div class="formula-math">\[
+(x_i,y_i)=(FPR_i,TPR_i)
+\]</div>
+<p>approximate area by:</p>
+<div class="formula-math">\[
+AUC \approx \sum_i (x_{i+1}-x_i)\frac{y_i+y_{i+1}}{2}
+\]</div>
+<p>Implementation:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def trapezoid_auc(fpr, tpr):
+    fpr = np.asarray(fpr, dtype=float)
+    tpr = np.asarray(tpr, dtype=float)
+
+    if fpr.shape != tpr.shape:
+        raise ValueError(&quot;fpr and tpr must have the same shape&quot;)
+
+    order = np.argsort(fpr)
+    fpr = fpr[order]
+    tpr = tpr[order]
+
+    return float(np.trapz(tpr, fpr))</code></pre></div>
+<h3>Important implementation note</h3>
+<p>You are learning the algorithmic idea here. The exact numerical routine available in a particular NumPy version can change over time, so for production code prefer a currently supported integration API or the metric implementation provided by your chosen ML library.</p>
+<p>For a small educational lab, you can also implement the summation manually:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def trapezoid_auc_manual(fpr, tpr):
+    order = np.argsort(fpr)
+    x = np.asarray(fpr)[order]
+    y = np.asarray(tpr)[order]
+
+    area = 0.0
+    for i in range(len(x) - 1):
+        width = x[i + 1] - x[i]
+        height = (y[i] + y[i + 1]) / 2.0
+        area += width * height
+
+    return float(area)</code></pre></div>
+<p>This version is ideal for a first-principles coding submission.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">ROC Visualization</h2>
+      </div>
+      <div class="section-body">
+        <p>Use Matplotlib only after the numerical pipeline works.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import matplotlib.pyplot as plt
+
+roc = roc_points_from_scratch(y_true, scores)
+fpr = roc[:, 0]
+tpr = roc[:, 1]
+
+plt.figure(figsize=(6, 5))
+plt.plot(fpr, tpr, marker=&quot;o&quot;, label=&quot;Model&quot;)
+plt.plot([0, 1], [0, 1], linestyle=&quot;--&quot;, label=&quot;Random reference&quot;)
+plt.xlabel(&quot;False Positive Rate&quot;)
+plt.ylabel(&quot;True Positive Rate&quot;)
+plt.title(&quot;ROC Curve&quot;)
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.show()</code></pre></div>
+<p>A visual is not a substitute for a correct implementation. Plot only after unit tests pass.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">Confusion Matrix Visualization</h2>
+      </div>
+      <div class="section-body">
+        <p>For a small educational implementation, a simple text representation is often enough:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def print_confusion_table(tp, fp, fn, tn):
+    print(&quot;                 Predicted&quot;)
+    print(&quot;                0       1&quot;)
+    print(f&quot;Actual 0      {tn:4d}    {fp:4d}&quot;)
+    print(f&quot;       1      {fn:4d}    {tp:4d}&quot;)</code></pre></div>
+<p>This removes ambiguity caused by different library matrix conventions.</p>
+<p>With scikit-learn, you can inspect the actual matrix before using any downstream metric:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.metrics import confusion_matrix
+
+cm = confusion_matrix(y_true, y_pred)
+print(cm)</code></pre></div>
+<p>Default binary layout is:</p>
+<div class="ascii-box"><pre>[[TN, FP],
+ [FN, TP]]</pre></div>
+<p>Always verify the orientation rather than relying on memory.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">Comparison With scikit-learn</h2>
+      </div>
+      <div class="section-body">
+        <p>Once the from-scratch version is correct, compare against the library.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.metrics import (
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
+    roc_curve,
+    roc_auc_score,
+)
+
+print(&quot;accuracy:&quot;, accuracy_score(y_true, y_pred))
+print(&quot;precision:&quot;, precision_score(y_true, y_pred, zero_division=0))
+print(&quot;recall:&quot;, recall_score(y_true, y_pred, zero_division=0))
+print(&quot;f1:&quot;, f1_score(y_true, y_pred, zero_division=0))
+print(&quot;roc_auc:&quot;, roc_auc_score(y_true, scores))</code></pre></div>
+<p>For ROC points:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">fpr_lib, tpr_lib, thresholds_lib = roc_curve(y_true, scores)</code></pre></div>
+<p>The objective is <strong>not</strong> to memorize the library API. The objective is to confirm:</p>
+<div class="ascii-box"><pre>your implementation
+       ↕
+reference implementation
+       ↓
+matching result</pre></div>
+<p>Small floating-point differences can be acceptable; large disagreements usually indicate a logic or orientation error.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">Threshold Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Build a threshold table.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">thresholds = np.linspace(0.0, 1.0, 11)
+
+rows = []
+for t in thresholds:
+    y_pred_t = scores_to_labels(scores, t)
+    m = binary_metrics(y_true, y_pred_t)
+    rows.append([
+        t,
+        m[&quot;precision&quot;],
+        m[&quot;recall&quot;],
+        m[&quot;f1&quot;],
+        m[&quot;fpr&quot;],
+    ])</code></pre></div>
+<p>Then inspect:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th style="text-align: right;">Threshold</th>
+<th style="text-align: right;">Precision</th>
+<th style="text-align: right;">Recall</th>
+<th style="text-align: right;">F1</th>
+<th style="text-align: right;">FPR</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">…</td>
+<td style="text-align: right;">…</td>
+<td style="text-align: right;">…</td>
+<td style="text-align: right;">…</td>
+</tr>
+<tr>
+<td style="text-align: right;">0.1</td>
+<td style="text-align: right;">…</td>
+<td style="text-align: right;">…</td>
+<td style="text-align: right;">…</td>
+<td style="text-align: right;">…</td>
+</tr>
+<tr>
+<td style="text-align: right;">…</td>
+<td style="text-align: right;">…</td>
+<td style="text-align: right;">…</td>
+<td style="text-align: right;">…</td>
+<td style="text-align: right;">…</td>
+</tr>
+<tr>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">…</td>
+<td style="text-align: right;">…</td>
+<td style="text-align: right;">…</td>
+<td style="text-align: right;">…</td>
+</tr>
+</tbody>
+</table></div>
+<p>The exercise is to observe that there is no universal threshold that simultaneously maximizes every metric.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Class Imbalance Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Create a deliberately imbalanced dataset:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">rng = np.random.default_rng(42)
+
+y_true = np.array([0] * 95 + [1] * 5)
+y_pred = np.zeros_like(y_true)</code></pre></div>
+<p>This classifier predicts every sample as negative.</p>
+<p>Accuracy becomes:</p>
+<div class="formula-math">\[
+Accuracy = \frac{95}{100}=0.95
+\]</div>
+<p>But:</p>
+<div class="ascii-box"><pre>TP = 0
+FN = 5
+Recall = 0</pre></div>
+<p>This coding experiment reproduces a central lesson from the supplied Unit II course material: overall accuracy can conceal poor positive-class detection when classes are imbalanced.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">Decision Rules and Application Context</h2>
+      </div>
+      <div class="section-body">
+        <p>Do not write:</p>
+<blockquote>
+<p>“F1 is always better than accuracy.”</p>
+</blockquote>
+<p>Instead ask:</p>
+<div class="ascii-box"><pre>What is the task?
+What counts as positive?
+What is the cost of FP?
+What is the cost of FN?
+Is the class distribution imbalanced?
+Do I need a thresholded decision or ranking quality?</pre></div>
+<p>Examples:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Task</th>
+<th>Potential emphasis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>spam filtering</td>
+<td>precision / recall trade-off</td>
+</tr>
+<tr>
+<td>safety screening</td>
+<td>recall may be critical</td>
+</tr>
+<tr>
+<td>rare-event retrieval</td>
+<td>precision-recall behaviour matters</td>
+</tr>
+<tr>
+<td>balanced educational classification</td>
+<td>accuracy may be informative</td>
+</tr>
+<tr>
+<td>score-ranking model</td>
+<td>ROC-AUC can summarize ranking discrimination</td>
+</tr>
+</tbody>
+</table></div>
+<p>These are examples, not universal prescriptions.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Common Coding Bugs</h2>
+      </div>
+      <div class="section-body">
+        <h2>Bug 1 — swapping FP and FN</h2>
+<p>Symptom:</p>
+<div class="ascii-box"><pre>precision looks like recall</pre></div>
+<p>Fix:</p>
+<p>Return to the question:</p>
+<ul>
+<li>FP = predicted positive, actually negative.</li>
+<li>FN = predicted negative, actually positive.</li>
+</ul>
+<h2>Bug 2 — using labels for AUC</h2>
+<p>Wrong:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">roc_auc_score(y_true, y_pred)</code></pre></div>
+<p>That discards score information.</p>
+<p>AUC normally evaluates continuous decision scores/probability-like outputs:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">roc_auc_score(y_true, scores)</code></pre></div>
+<h2>Bug 3 — inconsistent positive class</h2>
+<p>If you encode positive as <code>1</code> in training but interpret <code>0</code> as positive during evaluation, every metric interpretation breaks.</p>
+<h2>Bug 4 — threshold hidden inside evaluation code</h2>
+<p>A metric function should not secretly select a threshold. Keep thresholding separate.</p>
+<h2>Bug 5 — dividing by zero</h2>
+<p>A dataset can contain no predicted positives or no actual positives. Decide what your implementation does.</p>
+<h2>Bug 6 — trusting a plot without checking arrays</h2>
+<p>Print or inspect the first few <code>(threshold, FPR, TPR)</code> values before interpreting the ROC curve.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">Testing Protocol</h2>
+      </div>
+      <div class="section-body">
+        <p>For a serious lab submission, use this order:</p>
+<div class="ascii-box"><pre>1. hand-calculate a 5–10 row example
+2. implement confusion counts
+3. test counts
+4. implement metrics
+5. test metrics
+6. implement thresholding
+7. test thresholding
+8. generate ROC points
+9. test ROC endpoints
+10. calculate AUC
+11. compare against sklearn
+12. visualize
+13. run experiment
+14. interpret results</pre></div>
+<p>Do not reverse the order.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">ROC Sanity Checks</h2>
+      </div>
+      <div class="section-body">
+        <p>A correct ROC construction should exhibit the familiar endpoints in the threshold sweep, subject to the exact score/tie-handling implementation:</p>
+<div class="ascii-box"><pre>very strict threshold → almost nothing predicted positive
+very permissive threshold → almost everything predicted positive</pre></div>
+<p>You should be able to recover the conceptual endpoints:</p>
+<div class="ascii-box"><pre>(0, 0)
+...
+(1, 1)</pre></div>
+<p>Check that:</p>
+<ul>
+<li>FPR is between 0 and 1;</li>
+<li>TPR is between 0 and 1;</li>
+<li>thresholds correspond to changing score cutoffs;</li>
+<li>the plotted x-axis is FPR;</li>
+<li>the plotted y-axis is TPR.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">Manual AUC Example</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose your ROC points are:</p>
+<div class="formula-math">\[
+(0,0),\;(0,0.5),\;(0.25,0.75),\;(1,1)
+\]</div>
+<p>Trapezoid 1:</p>
+<div class="formula-math">\[
+(0-0)\frac{0+0.5}{2}=0
+\]</div>
+<p>Trapezoid 2:</p>
+<div class="formula-math">\[
+(0.25-0)\frac{0.5+0.75}{2}=0.15625
+\]</div>
+<p>Trapezoid 3:</p>
+<div class="formula-math">\[
+(1-0.25)\frac{0.75+1}{2}=0.65625
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+AUC=0.8125
+\]</div>
+<p>This is a good numerical test for your AUC implementation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">Practical Lab Dataset Design</h2>
+      </div>
+      <div class="section-body">
+        <p>You can complete this practical using either:</p>
+<h3>Option A — tiny synthetic data</h3>
+<p>Best for understanding formulas.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X = ...
+y = ...</code></pre></div>
+<h3>Option B — a standard binary classification dataset</h3>
+<p>Best for realistic model-output experiments.</p>
+<p>A generic workflow is:</p>
+<div class="ascii-box"><pre>load dataset
+↓
+split train/test
+↓
+fit classifier
+↓
+obtain scores/probabilities
+↓
+choose a demonstration threshold
+↓
+compute metrics
+↓
+plot ROC
+↓
+compute AUC
+↓
+compare threshold behaviour</pre></div>
+<p>Do not tune a threshold on the test set and then report that same test-set performance as if it were untouched evaluation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">Reproducibility Record</h2>
+      </div>
+      <div class="section-body">
+        <p>At the top of your notebook, record:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">SEED = 42</code></pre></div>
+<p>And document:</p>
+<div class="ascii-box"><pre>Dataset:
+Target definition:
+Positive class:
+Train/test split:
+Model:
+Preprocessing:
+Random seed:
+Threshold:
+Metrics:
+ROC-AUC:</pre></div>
+<p>If a preprocessing step learns parameters from the data, fit it only on training data and apply the learned transformation to validation/test data.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">Debugging Exercise</h2>
+      </div>
+      <div class="section-body">
+        <p>Intentionally introduce this bug:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def precision_bug(tp, fp):
+    return tp / (tp + fn)</code></pre></div>
+<p>Ask:</p>
+<blockquote>
+<p>Which metric did I accidentally implement?</p>
+</blockquote>
+<p>Answer:</p>
+<div class="ascii-box"><pre>Recall</pre></div>
+<p>This is a useful example because it teaches a debugging principle:</p>
+<blockquote>
+<p>A formula bug can still produce a plausible number. Unit tests need known expected values, not merely “the code runs.”</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">Mini Project — Threshold Analysis Dashboard</h2>
+      </div>
+      <div class="section-body">
+        <p>Build a notebook that accepts:</p>
+<div class="ascii-box"><pre>y_true
+scores</pre></div>
+<p>and produces:</p>
+<div class="ascii-box"><pre>1. confusion matrix at threshold 0.50
+2. precision / recall / F1
+3. ROC curve
+4. AUC
+5. threshold table
+6. threshold-vs-precision plot
+7. threshold-vs-recall plot
+8. threshold-vs-F1 plot
+9. threshold-vs-FPR plot</pre></div>
+<p>The notebook should end with a short written interpretation.</p>
+<p>Example structure:</p>
+<div class="ascii-box"><pre>MODEL EVALUATION REPORT
+-----------------------
+Positive class: ...
+Threshold: ...
+TP: ... FP: ... FN: ... TN: ...
+Precision: ...
+Recall: ...
+F1: ...
+ROC-AUC: ...
+
+Interpretation:
+...</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">Master Implementation Skeleton</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+
+def confusion_counts(y_true, y_pred):
+    y_true = np.asarray(y_true).astype(int)
+    y_pred = np.asarray(y_pred).astype(int)
+
+    if y_true.shape != y_pred.shape:
+        raise ValueError(&quot;shape mismatch&quot;)
+
+    tp = np.sum((y_true == 1) &amp; (y_pred == 1))
+    fp = np.sum((y_true == 0) &amp; (y_pred == 1))
+    fn = np.sum((y_true == 1) &amp; (y_pred == 0))
+    tn = np.sum((y_true == 0) &amp; (y_pred == 0))
+    return int(tp), int(fp), int(fn), int(tn)
+
+
+def safe_divide(a, b):
+    return a / b if b != 0 else 0.0
+
+
+def binary_metrics(y_true, y_pred):
+    tp, fp, fn, tn = confusion_counts(y_true, y_pred)
+
+    precision = safe_divide(tp, tp + fp)
+    recall = safe_divide(tp, tp + fn)
+    specificity = safe_divide(tn, tn + fp)
+    fpr = safe_divide(fp, fp + tn)
+    accuracy = safe_divide(tp + tn, tp + fp + fn + tn)
+    f1 = safe_divide(2 * precision * recall, precision + recall)
+
+    return {
+        &quot;TP&quot;: tp,
+        &quot;FP&quot;: fp,
+        &quot;FN&quot;: fn,
+        &quot;TN&quot;: tn,
+        &quot;accuracy&quot;: accuracy,
+        &quot;precision&quot;: precision,
+        &quot;recall&quot;: recall,
+        &quot;specificity&quot;: specificity,
+        &quot;fpr&quot;: fpr,
+        &quot;f1&quot;: f1,
+    }
+
+
+def scores_to_labels(scores, threshold=0.5):
+    scores = np.asarray(scores, dtype=float)
+    return (scores &gt;= threshold).astype(int)
+
+
+def roc_points_from_scratch(y_true, scores):
+    y_true = np.asarray(y_true).astype(int)
+    scores = np.asarray(scores, dtype=float)
+    thresholds = np.r_[np.inf, np.sort(np.unique(scores))[::-1], -np.inf]
+
+    points = []
+    for t in thresholds:
+        pred = (scores &gt;= t).astype(int)
+        tp, fp, fn, tn = confusion_counts(y_true, pred)
+        tpr = safe_divide(tp, tp + fn)
+        fpr = safe_divide(fp, fp + tn)
+        points.append((fpr, tpr, t))
+
+    return np.array(points, dtype=float)
+
+
+def trapezoid_auc(fpr, tpr):
+    order = np.argsort(fpr)
+    x = np.asarray(fpr)[order]
+    y = np.asarray(tpr)[order]
+
+    area = 0.0
+    for i in range(len(x) - 1):
+        area += (x[i + 1] - x[i]) * (y[i] + y[i + 1]) / 2.0
+    return area</code></pre></div>
+<p>This is the conceptual implementation you should understand before relying on a library.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">Library Layer</h2>
+      </div>
+      <div class="section-body">
+        <p>Once fundamentals are secure, a concise real workflow might look like:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import (
+    confusion_matrix,
+    precision_score,
+    recall_score,
+    f1_score,
+    roc_auc_score,
+    roc_curve,
+)
+
+model = LogisticRegression(max_iter=1000)
+model.fit(X_train, y_train)
+
+scores = model.predict_proba(X_test)[:, 1]
+y_pred = (scores &gt;= 0.5).astype(int)
+
+cm = confusion_matrix(y_test, y_pred)
+precision = precision_score(y_test, y_pred, zero_division=0)
+recall = recall_score(y_test, y_pred, zero_division=0)
+f1 = f1_score(y_test, y_pred, zero_division=0)
+auc = roc_auc_score(y_test, scores)
+fpr, tpr, thresholds = roc_curve(y_test, scores)</code></pre></div>
+<p>The from-scratch implementation teaches the mechanism; the library version is the practical engineering layer.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">Complexity and Practical Behaviour</h2>
+      </div>
+      <div class="section-body">
+        <p>For <code>n</code> examples:</p>
+<ul>
+<li>basic confusion counts: <code>O(n)</code> time, <code>O(1)</code> auxiliary counting space beyond input arrays;</li>
+<li>one threshold evaluation: <code>O(n)</code>;</li>
+<li>naive ROC sweep that rescans for every unique threshold: up to <code>O(n^2)</code>;</li>
+<li>sorting scores once: <code>O(n log n)</code>;</li>
+<li>incremental ROC construction after sorting: approximately <code>O(n)</code> after sorting.</li>
+</ul>
+<p>This comparison is useful because it shows how a conceptually simple algorithm can become inefficient if implemented naively.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">Active Recall</h2>
+      </div>
+      <div class="section-body">
+        <p>Close the notebook and answer:</p>
+<ol>
+<li>What is the difference between a score and a label?</li>
+<li>What exactly does TP mean?</li>
+<li>What exactly does FP mean?</li>
+<li>Write precision.</li>
+<li>Write recall.</li>
+<li>Why does precision use predicted positives in the denominator?</li>
+<li>Why does recall use actual positives in the denominator?</li>
+<li>Write F1.</li>
+<li>Write TPR.</li>
+<li>Write FPR.</li>
+<li>Why is recall equal to TPR?</li>
+<li>What changes when the threshold changes?</li>
+<li>What stays unchanged when only the threshold changes?</li>
+<li>Why should AUC use scores rather than a single thresholded label vector?</li>
+<li>What do ROC x and y axes represent?</li>
+<li>How is AUC approximated with trapezoids?</li>
+<li>Why can accuracy be misleading on an imbalanced dataset?</li>
+<li>What edge cases can cause division by zero?</li>
+<li>How do you verify a scratch implementation?</li>
+<li>Why should threshold tuning and final test evaluation be separated?</li>
+</ol>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">Coding Challenges</h2>
+      </div>
+      <div class="section-body">
+        <h2>Challenge A — Metrics only</h2>
+<p>Implement every binary metric without loops.</p>
+<h2>Challenge B — No metric libraries</h2>
+<p>Generate a confusion matrix, all metrics, ROC points and AUC using only NumPy.</p>
+<h2>Challenge C — Threshold explorer</h2>
+<p>Write a function:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">analyze_thresholds(y_true, scores, thresholds)</code></pre></div>
+<p>that returns a structured table.</p>
+<h2>Challenge D — Stable comparison</h2>
+<p>Compare your output against scikit-learn across 10 randomly generated binary datasets.</p>
+<h2>Challenge E — Imbalance stress test</h2>
+<p>Construct datasets with positive prevalence:</p>
+<div class="ascii-box"><pre>50%
+20%
+5%
+1%</pre></div>
+<p>and inspect how accuracy changes relative to recall, precision and F1.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <p>You have mastered this chapter when you can implement the following pipeline without copying it:</p>
+<div class="ascii-box"><pre>y_true + scores
+      ↓
+threshold
+      ↓
+y_pred
+      ↓
+TP/FP/FN/TN
+      ↓
+precision/recall/F1
+      ↓
+repeat over thresholds
+      ↓
+ROC points
+      ↓
+AUC
+      ↓
+compare with reference library</pre></div>
+<p>You should also be able to diagnose an FP/FN swap from the resulting numbers.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Source Notes</h2>
+      </div>
+      <div class="section-body">
+        <h2>Course-specific sources</h2>
+<ul>
+<li>Official DSC-14 syllabus (<code>cse syllabus.pdf</code> / <code>sem5core.md</code>): Unit II explicitly includes confusion matrix, precision, recall, F1 and ROC-AUC.</li>
+<li><code>Lecture07.pdf</code>: classification evaluation, confusion matrix, precision, recall and F-score; supplied course material emphasizes the limitations of relying only on accuracy under class imbalance.</li>
+<li><code>AI_ML_Master_Learning_Resource_Guide.pdf</code>: identifies ROC-AUC as a Unit II topic and recommends a gap-filler treatment for ROC/AUC alongside the supplied course notes.</li>
+</ul>
+<h2>Coding expansion</h2>
+<p>The explicit threshold sweep, ROC construction and first-principles AUC implementation are coding-book expansion material designed to operationalize the syllabus concepts.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-35" class="section-block">
+      <div class="section-header">
+        <span class="section-num">35</span>
+        <h2 class="section-heading">Cross-Book Links</h2>
+      </div>
+      <div class="section-body">
+        <h3>Main Book</h3>
+<ul>
+<li><code>MAIN-U2-C24</code> — Classification Evaluation &amp; Confusion Matrix</li>
+<li><code>MAIN-U2-C25</code> — Precision, Recall, F1, ROC &amp; AUC</li>
+</ul>
+<h3>Exam Book</h3>
+<ul>
+<li><code>EXAM-U2</code> — Machine Learning &amp; Evaluation</li>
+<li>mixed numerical and conceptual evaluation questions</li>
+</ul>
+<h3>Math Companion</h3>
+<ul>
+<li>conditional probability and ratios</li>
+<li>expectation/statistical interpretation</li>
+<li>threshold and decision-rule reasoning</li>
+</ul>
+<h3>Previous Coding Chapters</h3>
+<ul>
+<li><code>CODE-U2-01</code> — ML workflow, splitting and evaluation</li>
+<li><code>CODE-U2-03</code> — Logistic Regression, where continuous classifier scores arise naturally</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-36" class="section-block">
+      <div class="section-header">
+        <span class="section-num">36</span>
+        <h2 class="section-heading">Submission Checklist</h2>
+      </div>
+      <div class="section-body">
+        <ul>
+<li>[ ] Positive class clearly defined.</li>
+<li>[ ] Train/test separation respected.</li>
+<li>[ ] Confusion matrix orientation checked.</li>
+<li>[ ] TP/FP/FN/TN unit tested.</li>
+<li>[ ] Precision, recall and F1 verified.</li>
+<li>[ ] Threshold explicitly documented.</li>
+<li>[ ] ROC uses continuous scores.</li>
+<li>[ ] AUC computed from scores/ROC.</li>
+<li>[ ] Scratch implementation compared with a reference implementation.</li>
+<li>[ ] Imbalance experiment included.</li>
+<li>[ ] Results interpreted in plain language.</li>
+<li>[ ] Random seed / dataset / model configuration recorded.</li>
+</ul>
+<hr />
+<h1>Status</h1>
+<p><strong><code>CODE-U2-05</code> — COMPLETE</strong></p>
+<p>The Unit II evaluation pipeline is now connected:</p>
+<div class="ascii-box"><pre>Classifier
+   ↓
+scores
+   ↓
+threshold
+   ↓
+labels
+   ↓
+confusion matrix
+   ↓
+precision / recall / F1
+   ↓
+threshold sweep
+   ↓
+ROC
+   ↓
+AUC</pre></div>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="code-u2-04-decision-trees.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← Unit 2 Lab 04 — Decision Trees</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">💻 Coding Index</span>
+      </a>
+      <a href="code-u2-06-ridge-lasso-regularization.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: Unit 2 Lab 06 — Ridge & Lasso Regularization →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search lab implementations, functions, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">💻</span>Lab Hub</a>
+  <a href="code-u2-05-classification-metrics-roc.html" class="mobile-nav-btn active"><span class="icon">📖</span>CODE-U2-05</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

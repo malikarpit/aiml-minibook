@@ -164,6 +164,36 @@ A self-contained mathematical depth layer that deepens derivations, vector geome
 
 ---
 
+## 💻 Coding Lab Layer (14 Modules Live · 767 Sections · 533 Code Blocks)
+
+The Coding Lab answers: *"Help me build it from scratch, test its state transitions, and verify against standard production libraries."*
+Zero black boxes. Pure Python & NumPy implementations of classical search, heuristics, game trees, data pipelines, regression, regularizers, decision trees, evaluation suites, and artificial neurons with scikit-learn benchmarks and test assertions:
+
+### Track 0: Lab Environment & System Foundations
+- **[CODE-00: Coding Lab Foundation & Implementation System](coding/code-00-coding-foundation.html):** Zero-black-box philosophy, PEP-8 standards, state trajectory traces, reproducible seed discipline, and Delhi University lab guidelines.
+- **[CODE-01: Python, NumPy, Matplotlib & Lab Workflow](coding/code-01-python-numpy-workflow.html):** SIMD vectorization vs looping benchmarks (50x–100x speedup), array shapes, broadcasting rules, matrix slicing, and loss visualization.
+
+### Track 1: Classical AI & Search Algorithms (Unit I Complete)
+- **[CODE-U1-01: BFS and DFS From Scratch](coding/code-u1-01-bfs-dfs.html):** FIFO Queue (`collections.deque`) vs LIFO Stack (`list.pop()`), state exploration, cycle prevention with `explored` sets, frontier tracking, and path reconstruction.
+- **[CODE-U1-02: Greedy Best-First & A* Search From Scratch](coding/code-u1-02-greedy-a-star.html):** Priority Queues via `heapq`, Manhattan ($L_1$) vs Euclidean ($L_2$) heuristics, path cost tracking $f(n) = g(n) + h(n)$, and admissibility tests.
+- **[CODE-U1-03: CSPs and Backtracking Search](coding/code-u1-03-csp-backtracking.html):** Constraint Satisfaction formulation, MRV (Minimum Remaining Values) and Degree heuristics, Forward Checking, and AC-3 Arc Consistency.
+- **[CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch](coding/code-u1-04-minimax-alpha-beta.html):** Adversarial game search, terminal evaluation, Minimax recursion, Alpha-Beta cutoffs ($\beta \le \alpha$), move ordering, and Tic-Tac-Toe AI engine.
+
+### Track 2: Supervised Machine Learning Algorithms (Unit II Complete Suite)
+- **[CODE-U2-01: ML Workflow: Preprocessing, Splitting & Evaluation](coding/code-u2-01-ml-workflow.html):** Data cleaning, StandardScaler with zero leakage (fit on train ONLY), stratified splits, and baseline evaluation.
+- **[CODE-U2-02: Linear Regression From Scratch](coding/code-u2-02-linear-regression.html):** Batch Gradient Descent vs Normal Equations $(X^TX)^{-1}X^Ty$, loss surface trajectory, learning rate selection, and scikit-learn benchmark.
+- **[CODE-U2-03: Logistic Regression From Scratch](coding/code-u2-03-logistic-regression.html):** Vectorized Sigmoid $\sigma(z)$, Binary Cross-Entropy (Log-Loss), Gradient Descent updates, decision boundaries, and scikit-learn benchmark.
+- **[CODE-U2-04: Decision Trees From Scratch](coding/code-u2-04-decision-trees.html):** Shannon Entropy, Information Gain, Gini Impurity, recursive binary splitting, ASCII tree printing, stopping conditions, and scikit-learn benchmark.
+- **[CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC & Thresholds](coding/code-u2-05-classification-metrics-roc.html):** From-scratch confusion matrix, Precision, Recall, F1, threshold sweeping ($\tau \in [0, 1]$), manual ROC curve construction, and trapezoidal numerical AUC integration.
+- **[CODE-U2-06: Ridge & Lasso From Scratch: Regularization & Optimization](coding/code-u2-06-ridge-lasso-regularization.html):** $L_2$ Ridge closed-form $(X^TX + \lambda I)^{-1}X^Ty$, $L_1$ Lasso Coordinate Descent with soft-thresholding operator $S(\rho, \lambda)$, collinearity control, and coefficient path tracing.
+- **[CODE-U2-07: ML Evaluation & Model Comparison Lab](coding/code-u2-07-ml-evaluation-comparison.html):** Controlled experiment protocol, identical frozen train/test partitions, Decision Tree vs Logistic vs k-NN/Ridge, imbalance resilience, and final model selection trade-off matrix.
+
+### Track 3: Deep Learning & Neural Networks (Unit III Live Kickoff)
+- **[CODE-U3-01: Neuron and Perceptron From Scratch](coding/code-u3-01-neuron-perceptron.html):** Artificial neuron architecture, vectorized forward pass $z = \mathbf{w}^T\mathbf{x} + b$, Step vs Sigmoid activations, Perceptron Learning Rule, Hebbian weight updates, and mathematical proof of XOR non-separability.
+- *(Upcoming in Next Drop: Multi-Layer Perceptron (MLP) & Backpropagation, CNN Convolutions, and RNN/LSTM Sequence Rollouts).*
+
+---
+
 ## 🛠️ Pedagogical System & Dual-Lens Architecture
 
 Every single chapter in the book is engineered around an integrated 4-tier pedagogical system:

@@ -1,0 +1,2169 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="CODE-U2-01: ML Workflow: Preprocessing, Splitting & Evaluation — AI & Machine Learning Coding Lab. Data Cleaning, Feature Standardization, Stratified Train/Val/Test Splits, and Comprehensive Metric Evaluation">
+<title>CODE-U2-01: ML Workflow: Preprocessing, Splitting & Evaluation | Coding Lab 💻 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/coding.css">
+</head>
+<body class="coding-module track-c2">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">💻</div>
+      <div class="brand-text"><span class="main">Coding Lab</span><span class="sub">AI &amp; ML From Scratch</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">CODE-U2-01: ML Workflow: Preprocessing, Splitting &amp; Evaluation</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">💻</span>Coding Lab Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../math/index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 0: Environment & System</div>
+  <a href="code-00-coding-foundation.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-00: Coding Lab Foundation &amp; Implementation System</a>
+  <a href="code-01-python-numpy-workflow.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-01: Python, NumPy, Matplotlib &amp; Lab Workflow</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Classical AI & Search Labs</div>
+  <a href="code-u1-01-bfs-dfs.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-01: BFS and DFS From Scratch</a>
+  <a href="code-u1-02-greedy-a-star.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-02: Greedy Best-First &amp; A* Search From Scratch</a>
+  <a href="code-u1-03-csp-backtracking.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-03: CSPs and Backtracking Search</a>
+  <a href="code-u1-04-minimax-alpha-beta.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Supervised ML Labs</div>
+  <a href="code-u2-01-ml-workflow.html" class="sidebar-link active"><span class="link-icon">📊</span>CODE-U2-01: ML Workflow: Preprocessing, Splitting &amp; Evaluation</a>
+  <a href="code-u2-02-linear-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-02: Linear Regression From Scratch</a>
+  <a href="code-u2-03-logistic-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-03: Logistic Regression From Scratch</a>
+  <a href="code-u2-04-decision-trees.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-04: Decision Trees From Scratch</a>
+  <a href="code-u2-05-classification-metrics-roc.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC &amp; Thresholds</a>
+  <a href="code-u2-06-ridge-lasso-regularization.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-06: Ridge &amp; Lasso From Scratch: Regularization &amp; Optimization</a>
+  <a href="code-u2-07-ml-evaluation-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-07: ML Evaluation &amp; Model Comparison Lab</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Deep Learning Labs</div>
+  <a href="code-u3-01-neuron-perceptron.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-01: Neuron and Perceptron From Scratch</a>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>MLP, Backpropagation & Convolutions</span>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Advanced AI Labs (Upcoming)</div>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>Q-Learning, NLP & Generative Adversarial Loops</span>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">CODE-U2-01 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Why This File Comes Before the Models</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Learning Target</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Course Boundary</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. The ML Experiment Contract</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. First Dataset — A Tiny Controlled Regression Problem</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Inspect the Data</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Features and Target</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Regression vs Classification</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Categorical Features</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. One-Hot Encoding</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Ordinal Features</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Missing Values</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Why Train/Test Split Comes Early</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Train/Test Split in Python</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Why `random_state` Matters</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Classification Splits</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. The Data-Leakage Principle</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Standardization</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Min-Max Scaling</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Why Scaling Matters</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Inspect Scaling</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Reusable Preprocessing Pipeline</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Why Pipelines Are Useful</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. A Reusable Model Pipeline</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Regression Evaluation — MSE</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. MAE</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. R²</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Classification Evaluation Setup</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Confusion Matrix in Python</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Precision, Recall, F1 Setup</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. The Binary Metric Formulas</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Avoiding the “Accuracy Trap”</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Simple Classification Dataset</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Data Visualization Before Modelling</a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Experiment Reproducibility Checklist</a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Baseline First</a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Evaluation Workflow</a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Overfitting Experiment</a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. What to Observe</a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Leakage Demonstration</a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Common Workflow Bugs</a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Debugging Workflow</a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. A Reusable Evaluation Function</a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. A Reusable Classification Evaluation Function</a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. What Belongs in a Good ML Notebook?</a>
+      <a href="#s-46" class="sidebar-link"><span class="link-icon">📌</span>46. What Belongs in Reusable Source Code?</a>
+      <a href="#s-47" class="sidebar-link"><span class="link-icon">📌</span>47. Practical Challenge</a>
+      <a href="#s-48" class="sidebar-link"><span class="link-icon">📌</span>48. Practical Challenge — Classification</a>
+      <a href="#s-49" class="sidebar-link"><span class="link-icon">📌</span>49. Manual Evaluation Exercise</a>
+      <a href="#s-50" class="sidebar-link"><span class="link-icon">📌</span>50. Interpretation Exercise</a>
+      <a href="#s-51" class="sidebar-link"><span class="link-icon">📌</span>51. Model Comparison Table</a>
+      <a href="#s-52" class="sidebar-link"><span class="link-icon">📌</span>52. Unit II Coding Roadmap</a>
+      <a href="#s-53" class="sidebar-link"><span class="link-icon">📌</span>53. Active Recall</a>
+      <a href="#s-54" class="sidebar-link"><span class="link-icon">📌</span>54. Practical Test</a>
+      <a href="#s-55" class="sidebar-link"><span class="link-icon">📌</span>55. Mastery Gate</a>
+      <a href="#s-56" class="sidebar-link"><span class="link-icon">📌</span>56. Final Memory Sheet</a>
+      <a href="#s-57" class="sidebar-link"><span class="link-icon">📌</span>57. Source Notes</a>
+      <a href="#s-58" class="sidebar-link"><span class="link-icon">📌</span>58. Cross-Book Links</a>
+      <a href="#s-59" class="sidebar-link"><span class="link-icon">📌</span>59. Status</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Coding Lab</a>
+        <span>/</span>
+        <span>CODE-U2-01</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-c2">Track 2: Supervised Machine Learning Labs</span></div>
+      <h1 class="chapter-title">ML Workflow: Preprocessing, Splitting &amp; Evaluation</h1>
+      <p class="chapter-desc">Data Cleaning, Feature Standardization, Stratified Train/Val/Test Splits, and Comprehensive Metric Evaluation</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~45 min lab</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">DATA-PIPELINE</span> <span class="chapter-meta-item uni-badge">PREPROCESSING</span> <span class="chapter-meta-item uni-badge">EVALUATION</span> <span class="chapter-meta-item uni-badge">CONFUSION-MATRIX</span>
+      </div>
+
+      <div class="lab-meta-grid">
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Prerequisites</div>
+          <div class="lab-meta-value">CODE-01 NumPy Workflow, Main Book Ch 14–17 ML Paradigms & Bias-Variance</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Main Book Concept</div>
+          <div class="lab-meta-value">Ch 14 What is ML, Ch 15 Paradigms, Ch 17 Bias-Variance, Ch 24-25 Classification Evaluation</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Math Companion Layer</div>
+          <div class="lab-meta-value">M15 Expectation, M16 Variance, M17 Covariance & Correlation</div>
+        </div>
+        <div class="lab-meta-box" style="grid-column: 1 / -1;">
+          <div class="lab-meta-label">AI / Machine Learning Connections</div>
+          <div class="lab-meta-value">Data leakage prevention, Z-score standardization, Multi-class confusion matrix, Precision-Recall tradeoff, ROC-AUC</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-meta-card"><h1>CODE-U2-01 — ML Workflow, Data Loading, Preprocessing, Splitting, and Evaluation Setup</h1>
+<blockquote>
+<p><strong>Coding Book — Unit II: Machine Learning</strong></p>
+<p><strong>Topic ID:</strong> <code>CODE-U2-01</code></p>
+<p><strong>Main Book links:</strong> <code>MAIN-U2-C14</code>–<code>MAIN-U2-C18</code></p>
+<p><strong>Math links:</strong> <code>MATH-M04</code>–<code>MATH-M09</code>, <code>MATH-M15</code>–<code>MATH-M17</code></p>
+<p><strong>Exam links:</strong> <code>EXAM-U2_Machine_Learning_and_Evaluation.md</code></p>
+<p><strong>Primary course sources:</strong> <code>Lecture07.pdf</code>, <code>Lecture08.pdf</code>, <code>Lecture09.pdf</code>, and the official DSC-14 syllabus.</p>
+<p><strong>Practical scope:</strong> The official practical component calls for regression/classification models and evaluation, while the supplied resource guide says every experiment should make the path</p>
+</blockquote>
+<div class="ascii-box"><pre>&gt; input → representation → algorithm → parameters → loss/reward → update → output → evaluation
+&gt;</pre></div>
+<blockquote>
+<p>explicit.</p>
+<p><strong>Purpose of this chapter:</strong> Establish the reusable ML workflow that every later Unit II implementation will build on.</p>
+</blockquote>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in CODE-U2-01 (59 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Why This File Comes Before the Models</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Learning Target</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Course Boundary</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">The ML Experiment Contract</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">First Dataset — A Tiny Controlled Regression Problem</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Inspect the Data</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Features and Target</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Regression vs Classification</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Categorical Features</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">One-Hot Encoding</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Ordinal Features</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Missing Values</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Why Train/Test Split Comes Early</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Train/Test Split in Python</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Why `random_state` Matters</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Classification Splits</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">The Data-Leakage Principle</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Standardization</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Min-Max Scaling</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Why Scaling Matters</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Inspect Scaling</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Reusable Preprocessing Pipeline</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Why Pipelines Are Useful</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">A Reusable Model Pipeline</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Regression Evaluation — MSE</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">MAE</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">R²</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Classification Evaluation Setup</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Confusion Matrix in Python</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Precision, Recall, F1 Setup</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">The Binary Metric Formulas</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Avoiding the “Accuracy Trap”</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Simple Classification Dataset</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Data Visualization Before Modelling</span></a></li>
+        <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Experiment Reproducibility Checklist</span></a></li>
+        <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Baseline First</span></a></li>
+        <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Evaluation Workflow</span></a></li>
+        <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Overfitting Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">What to Observe</span></a></li>
+        <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Leakage Demonstration</span></a></li>
+        <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Common Workflow Bugs</span></a></li>
+        <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Debugging Workflow</span></a></li>
+        <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">A Reusable Evaluation Function</span></a></li>
+        <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">A Reusable Classification Evaluation Function</span></a></li>
+        <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">What Belongs in a Good ML Notebook?</span></a></li>
+        <li class="toc-item"><a href="#s-46"><span class="toc-num">46</span><span class="toc-name">What Belongs in Reusable Source Code?</span></a></li>
+        <li class="toc-item"><a href="#s-47"><span class="toc-num">47</span><span class="toc-name">Practical Challenge</span></a></li>
+        <li class="toc-item"><a href="#s-48"><span class="toc-num">48</span><span class="toc-name">Practical Challenge — Classification</span></a></li>
+        <li class="toc-item"><a href="#s-49"><span class="toc-num">49</span><span class="toc-name">Manual Evaluation Exercise</span></a></li>
+        <li class="toc-item"><a href="#s-50"><span class="toc-num">50</span><span class="toc-name">Interpretation Exercise</span></a></li>
+        <li class="toc-item"><a href="#s-51"><span class="toc-num">51</span><span class="toc-name">Model Comparison Table</span></a></li>
+        <li class="toc-item"><a href="#s-52"><span class="toc-num">52</span><span class="toc-name">Unit II Coding Roadmap</span></a></li>
+        <li class="toc-item"><a href="#s-53"><span class="toc-num">53</span><span class="toc-name">Active Recall</span></a></li>
+        <li class="toc-item"><a href="#s-54"><span class="toc-num">54</span><span class="toc-name">Practical Test</span></a></li>
+        <li class="toc-item"><a href="#s-55"><span class="toc-num">55</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-56"><span class="toc-num">56</span><span class="toc-name">Final Memory Sheet</span></a></li>
+        <li class="toc-item"><a href="#s-57"><span class="toc-num">57</span><span class="toc-name">Source Notes</span></a></li>
+        <li class="toc-item"><a href="#s-58"><span class="toc-num">58</span><span class="toc-name">Cross-Book Links</span></a></li>
+        <li class="toc-item"><a href="#s-59"><span class="toc-num">59</span><span class="toc-name">Status</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">Why This File Comes Before the Models</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph LR
+    Raw["Raw Dataset (X, y)"] --> Split["Train / Test Split (80 / 20)"]
+    Split --> TrainX["Train Features X_train"]
+    Split --> TestX["Test Features X_test"]
+    TrainX --> FitScaler["Fit StandardScaler: compute μ, σ from TRAIN ONLY"]
+    FitScaler --> ScaleTrain["Transform X_train"]
+    FitScaler --> ScaleTest["Transform X_test (NEVER FIT ON TEST!)"]
+    ScaleTrain --> Model["Train ML Model"]
+    Model --> Eval["Evaluate on X_test: Confusion Matrix, F1, ROC-AUC"]
+    style FitScaler fill:#0f172a,stroke:#38bdf8,color:#38bdf8,stroke-width:2px
+    style ScaleTest fill:#065f46,stroke:#34d399,color:#ffffff
+</pre></div>
+<p>A beginner may think machine learning is:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">model.fit(X, y)</code></pre></div>
+<p>But a real experiment is much larger:</p>
+<div class="ascii-box"><pre>raw data
+   ↓
+understand data
+   ↓
+define target/features
+   ↓
+split data
+   ↓
+fit preprocessing on training data
+   ↓
+transform validation/test data
+   ↓
+choose model
+   ↓
+train
+   ↓
+predict
+   ↓
+evaluate
+   ↓
+inspect errors
+   ↓
+compare
+   ↓
+interpret</pre></div>
+<p>If this workflow is wrong, even a mathematically correct model can produce a misleading result.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">Learning Target</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Implementation Model</div>
+
+Data Leakage machine learning ka sabse bada paap hai.
+Agar tumne poore dataset par `StandardScaler().fit_transform()` chala diya split karne se pehle, toh test set ke mean aur variance ki jaankari model mein pehle hi leak ho gayi!
+Rule yaad rakho: **Scaler ko sirf aur sirf Train set par `fit` karo.** Test set par bas wahi purana scaler use karke `transform` karo!
+
+</div>
+
+<p>By the end of this lab, you should be able to:</p>
+<ul>
+<li>load a small tabular dataset;</li>
+<li>inspect its dimensions and data types;</li>
+<li>identify features and target;</li>
+<li>distinguish numerical, nominal categorical, and ordinal features;</li>
+<li>detect missing values at a basic level;</li>
+<li>split data into training and test sets;</li>
+<li>explain why the test set must remain isolated;</li>
+<li>fit scaling/encoding using training data only;</li>
+<li>transform held-out data with the learned preprocessing;</li>
+<li>understand the basic regression/classification workflow;</li>
+<li>calculate simple regression and classification metrics;</li>
+<li>create a confusion matrix;</li>
+<li>build a reproducible experiment;</li>
+<li>detect common data leakage mistakes;</li>
+<li>create a reusable pipeline structure for later Coding Book chapters.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">Course Boundary</h2>
+      </div>
+      <div class="section-body">
+        <p>The official DSC-14 practical component requires:</p>
+<div class="ascii-box"><pre>1. Search-agent implementation
+2. Regression/classification models
+3. Neural network
+4. CNN image classification
+5. Q-learning
+6. NLP pipeline
+7. GAN</pre></div>
+<p>This file prepares the <strong>Unit II</strong> workflow.</p>
+<p>The supplied course resource guide identifies:</p>
+<ul>
+<li><code>Lecture07.pdf</code> — ML paradigms and evaluation;</li>
+<li><code>Lecture08.pdf</code> — generalization, hypothesis classes, KNN and validation;</li>
+<li><code>Lecture09.pdf</code> — preprocessing, categorical variables, scaling and linear regression;</li>
+<li><code>pract_6_bias_and_hypothesis_class.ipynb</code> — practical exploration of flexibility/overfitting;</li>
+<li><code>prac_7_neural_network.ipynb</code> — later Unit III neural-network practice.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">The ML Experiment Contract</h2>
+      </div>
+      <div class="section-body">
+        <p>Every practical should be able to answer:</p>
+<h3>Input</h3>
+<p>What data enters the system?</p>
+<h3>Representation</h3>
+<p>How are features represented numerically?</p>
+<h3>Algorithm</h3>
+<p>What model/algorithm is applied?</p>
+<h3>Parameters</h3>
+<p>What does the model learn?</p>
+<h3>Hyperparameters</h3>
+<p>What do we choose before/during training?</p>
+<h3>Loss or objective</h3>
+<p>What is minimized during training?</p>
+<h3>Update rule</h3>
+<p>How does the model learn?</p>
+<h3>Output</h3>
+<p>What predictions are produced?</p>
+<h3>Evaluation</h3>
+<p>How do we decide whether the predictions are useful?</p>
+<p>This is the practical version of the theoretical learning pipeline.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">First Dataset — A Tiny Controlled Regression Problem</h2>
+      </div>
+      <div class="section-body">
+        <p>Before downloading a real-world dataset, start with one whose structure we know.</p>
+<p>Create:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+import pandas as pd
+
+rng = np.random.default_rng(42)
+
+n = 50
+
+hours = rng.uniform(1, 10, size=n)
+sleep = rng.uniform(5, 9, size=n)
+
+noise = rng.normal(0, 4, size=n)
+
+score = 5 * hours + 2 * sleep + noise
+
+df = pd.DataFrame({
+    &quot;hours&quot;: hours,
+    &quot;sleep&quot;: sleep,
+    &quot;score&quot;: score,
+})</code></pre></div>
+<p>Known structure:</p>
+<div class="formula-math">\[
+score\approx5(hours)+2(sleep)+\epsilon.
+\]</div>
+<p>This makes the first experiments easier to debug.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Inspect the Data</h2>
+      </div>
+      <div class="section-body">
+        <p>Start with:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(df.head())
+print(df.shape)
+print(df.dtypes)
+print(df.describe())</code></pre></div>
+<p>You want to know:</p>
+<div class="ascii-box"><pre>How many rows?
+How many columns?
+Which columns are numerical?
+What are the value ranges?
+Are there obvious anomalies?</pre></div>
+<h3>Rule</h3>
+<blockquote>
+<p><strong>Inspect before modelling.</strong></p>
+</blockquote>
+<p>Never start by feeding an unknown dataframe directly into a model.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Features and Target</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="ascii-box"><pre>features = hours, sleep
+target = score</pre></div>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X = df[[&quot;hours&quot;, &quot;sleep&quot;]]
+y = df[&quot;score&quot;]</code></pre></div>
+<p>Typical shapes:</p>
+<div class="ascii-box"><pre>X → (n_samples, n_features)
+y → (n_samples,)</pre></div>
+<p>Check:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(X.shape)
+print(y.shape)</code></pre></div>
+<p>The target is what the model is asked to predict.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">Regression vs Classification</h2>
+      </div>
+      <div class="section-body">
+        <p>The course material distinguishes:</p>
+<h3>Regression</h3>
+<p>Predict a numerical response.</p>
+<p>Examples:</p>
+<div class="ascii-box"><pre>house price
+temperature
+salary
+exam score</pre></div>
+<h3>Classification</h3>
+<p>Predict a class/category.</p>
+<p>Examples:</p>
+<div class="ascii-box"><pre>spam / not spam
+disease / no disease
+cat / dog</pre></div>
+<p>This affects:</p>
+<ul>
+<li>output representation;</li>
+<li>loss;</li>
+<li>model configuration;</li>
+<li>evaluation metrics.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Categorical Features</h2>
+      </div>
+      <div class="section-body">
+        <p>Not every feature is numerical.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>city = Delhi / Jaipur / Mumbai</pre></div>
+<p>This is a <strong>nominal</strong> feature because categories do not have an inherent order.</p>
+<p>Do not encode it blindly as:</p>
+<div class="ascii-box"><pre>Delhi   = 1
+Jaipur  = 2
+Mumbai  = 3</pre></div>
+<p>because that may incorrectly suggest:</p>
+<div class="formula-math">\[
+3\gt 2\gt 1
+\]</div>
+<p>and that the numerical distances have meaning.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">One-Hot Encoding</h2>
+      </div>
+      <div class="section-body">
+        <p>For:</p>
+<div class="ascii-box"><pre>city ∈ {Delhi, Jaipur, Mumbai}</pre></div>
+<p>one-hot representation can be:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>city</th>
+<th style="text-align: right;">Delhi</th>
+<th style="text-align: right;">Jaipur</th>
+<th style="text-align: right;">Mumbai</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Delhi</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>Jaipur</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>Mumbai</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+</tr>
+</tbody>
+</table></div>
+<p>In scikit-learn:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.preprocessing import OneHotEncoder
+
+encoder = OneHotEncoder(
+    handle_unknown=&quot;ignore&quot;
+)</code></pre></div>
+<p><code>handle_unknown="ignore"</code> is useful when a category appears in held-out data that was not present in the training categories.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Ordinal Features</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="ascii-box"><pre>severity:
+Mild
+Moderate
+Severe</pre></div>
+<p>There is a meaningful order.</p>
+<p>An ordinal mapping can be:</p>
+<div class="ascii-box"><pre>Mild     → 1
+Moderate → 2
+Severe   → 3</pre></div>
+<p>But remember:</p>
+<blockquote>
+<p>The ordering is meaningful; the numerical spacing is not automatically a scientifically exact distance.</p>
+</blockquote>
+<p>Use an appropriate ordinal representation only when the feature actually has an ordered semantic structure.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Missing Values</h2>
+      </div>
+      <div class="section-body">
+        <p>Inspect:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(df.isna().sum())</code></pre></div>
+<p>Example:</p>
+<div class="ascii-box"><pre>hours    0
+sleep    2
+score    0</pre></div>
+<p>means the <code>sleep</code> column has two missing values.</p>
+<p>Do not silently replace missing values without documenting the strategy.</p>
+<p>Possible strategies include:</p>
+<div class="ascii-box"><pre>remove rows
+impute
+use a model that handles missing values</pre></div>
+<p>The appropriate choice depends on the dataset and modelling problem.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Why Train/Test Split Comes Early</h2>
+      </div>
+      <div class="section-body">
+        <p>The goal of ML is not merely:</p>
+<blockquote>
+<p>fit training data.</p>
+</blockquote>
+<p>It is to generalize to unseen data.</p>
+<p>Lecture 8 explicitly develops the idea of evaluating generalization with held-out data.</p>
+<p>The basic split is:</p>
+<div class="ascii-box"><pre>Dataset
+  │
+  ├── Training set
+  │       ↓
+  │     fit model
+  │
+  └── Test set
+          ↓
+       final evaluation</pre></div>
+<p>The test set acts as unseen data for the final evaluation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Train/Test Split in Python</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,
+    random_state=42,
+)</code></pre></div>
+<p>Here:</p>
+<div class="ascii-box"><pre>80% → training
+20% → testing</pre></div>
+<p>The exact ratio is not a universal law.</p>
+<p>The important principle is that the test set must remain separate from model fitting/model selection.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">Why `random_state` Matters</h2>
+      </div>
+      <div class="section-body">
+        <p>Without a fixed random state, repeated experiments may produce different splits.</p>
+<p>With:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">random_state=42</code></pre></div>
+<p>you obtain a reproducible split for that implementation.</p>
+<p>This makes debugging and comparison easier.</p>
+<p>The number 42 has no mathematical significance.</p>
+<p>It is simply a chosen seed.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">Classification Splits</h2>
+      </div>
+      <div class="section-body">
+        <p>For classification, class balance matters.</p>
+<p>Suppose:</p>
+<div class="ascii-box"><pre>95% → class 0
+5%  → class 1</pre></div>
+<p>A random split could accidentally create undesirable class proportions.</p>
+<p>A common scikit-learn option is stratification:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,
+    random_state=42,
+    stratify=y,
+)</code></pre></div>
+<p>This attempts to preserve class proportions across the split.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">The Data-Leakage Principle</h2>
+      </div>
+      <div class="section-body">
+        <p>A model must not gain information about held-out data through preprocessing.</p>
+<p>Bad:</p>
+<div class="ascii-box"><pre>whole dataset
+   ↓
+calculate mean/std
+   ↓
+scale entire dataset
+   ↓
+split</pre></div>
+<p>Why problematic?</p>
+<p>The scaling parameters contain information derived from the future test examples.</p>
+<p>Better:</p>
+<div class="ascii-box"><pre>dataset
+ ↓
+split
+ ├───────────────┐
+ ↓               ↓
+train            test
+ ↓
+fit scaler
+ ↓
+transform train
+ ↓
+use same scaler
+ └──────────────→ transform test</pre></div>
+<p>The supplied Lecture 9 emphasizes scaling as part of preprocessing and optimization.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Standardization</h2>
+      </div>
+      <div class="section-body">
+        <p>The course gives:</p>
+<div class="formula-math">\[
+\boxed{
+x'_j=\frac{x_j-\mu_j}{\sigma_j}
+}
+\]</div>
+<p>where:</p>
+<ul>
+<li>\(\mu_j\) = training mean of feature \(j\);</li>
+<li>\(\sigma_j\) = training standard deviation.</li>
+</ul>
+<p>In Python:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)</code></pre></div>
+<p>Notice the crucial difference:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">fit_transform(X_train)</code></pre></div>
+<p>versus:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">transform(X_test)</code></pre></div>
+<p>Do not call:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">scaler.fit_transform(X_test)</code></pre></div>
+<p>for the final test set in this workflow.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">Min-Max Scaling</h2>
+      </div>
+      <div class="section-body">
+        <p>The course also introduces min-max scaling.</p>
+<p>The conceptual formula is:</p>
+<div class="formula-math">\[
+\boxed{
+x'=
+\frac{x-x_{\min}}
+{x_{\max}-x_{\min}}
+}
+\]</div>
+<p>for mapping a feature to a \([0,1]\)-style range.</p>
+<p>In Python:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.preprocessing import MinMaxScaler
+
+scaler = MinMaxScaler()
+
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)</code></pre></div>
+<p>Again:</p>
+<blockquote>
+<p>Fit on training data; transform held-out data.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Why Scaling Matters</h2>
+      </div>
+      <div class="section-body">
+        <p>Lecture 9 connects scaling with:</p>
+<div class="ascii-box"><pre>better-conditioned optimization
+↓
+faster convergence
+↓
+greater stability</pre></div>
+<p>The course also illustrates that large-scale features can dominate distance calculations.</p>
+<p>Therefore scaling can matter especially for:</p>
+<ul>
+<li>KNN;</li>
+<li>gradient-based optimization;</li>
+<li>regularized linear models;</li>
+<li>other algorithms sensitive to feature magnitudes.</li>
+</ul>
+<p>Scaling is not equally necessary for every algorithm.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">Inspect Scaling</h2>
+      </div>
+      <div class="section-body">
+        <p>After standardization:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(X_train_scaled.mean(axis=0))
+print(X_train_scaled.std(axis=0))</code></pre></div>
+<p>For a simple non-degenerate numerical dataset, these should be approximately:</p>
+<div class="ascii-box"><pre>mean ≈ 0
+std  ≈ 1</pre></div>
+<p>subject to the scaler's numerical conventions.</p>
+<p>Then inspect the test transformation separately.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">Reusable Preprocessing Pipeline</h2>
+      </div>
+      <div class="section-body">
+        <p>For more complex data, scikit-learn's <code>Pipeline</code> and <code>ColumnTransformer</code> make the train/test separation explicit.</p>
+<p>Example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import (
+    OneHotEncoder,
+    StandardScaler,
+)</code></pre></div>
+<p>Define:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">numeric_features = [
+    &quot;hours&quot;,
+    &quot;sleep&quot;,
+]
+
+categorical_features = [
+    &quot;city&quot;,
+]</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">preprocessor = ColumnTransformer(
+    transformers=[
+        (
+            &quot;num&quot;,
+            StandardScaler(),
+            numeric_features,
+        ),
+        (
+            &quot;cat&quot;,
+            OneHotEncoder(
+                handle_unknown=&quot;ignore&quot;
+            ),
+            categorical_features,
+        ),
+    ]
+)</code></pre></div>
+<p>This provides a reusable preprocessing object.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">Why Pipelines Are Useful</h2>
+      </div>
+      <div class="section-body">
+        <p>A pipeline conceptually performs:</p>
+<div class="ascii-box"><pre>raw X
+ ↓
+preprocessing
+ ↓
+model</pre></div>
+<p>and, during fitting:</p>
+<div class="ascii-box"><pre>training data
+ ↓
+fit preprocessing
+ ↓
+fit model</pre></div>
+<p>while prediction uses:</p>
+<div class="ascii-box"><pre>new data
+ ↓
+existing preprocessing parameters
+ ↓
+model
+ ↓
+prediction</pre></div>
+<p>This reduces accidental leakage and makes the experiment easier to reproduce.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">A Reusable Model Pipeline</h2>
+      </div>
+      <div class="section-body">
+        <p>For linear regression:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.linear_model import LinearRegression
+from sklearn.pipeline import Pipeline
+
+model = Pipeline([
+    (&quot;preprocess&quot;, preprocessor),
+    (&quot;model&quot;, LinearRegression()),
+])</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">model.fit(X_train, y_train)
+
+predictions = model.predict(X_test)</code></pre></div>
+<p>This is the <strong>reference/library workflow</strong>.</p>
+<p>The from-scratch linear-regression implementation comes in <code>CODE-U2-02</code>.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">Regression Evaluation — MSE</h2>
+      </div>
+      <div class="section-body">
+        <p>Given:</p>
+<div class="formula-math">\[
+y_i,\hat y_i,
+\]</div>
+<p>the mean squared error is:</p>
+<div class="formula-math">\[
+\boxed{
+MSE
+=
+\frac1n\sum_{i=1}^{n}
+(y_i-\hat y_i)^2
+}
+\]</div>
+<p>Python:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.metrics import mean_squared_error
+
+mse = mean_squared_error(
+    y_test,
+    predictions,
+)
+
+print(&quot;MSE:&quot;, mse)</code></pre></div>
+<p>A lower MSE indicates smaller squared prediction error under the same evaluation setup.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">MAE</h2>
+      </div>
+      <div class="section-body">
+        <p>Mean absolute error:</p>
+<div class="formula-math">\[
+\boxed{
+MAE=
+\frac1n\sum_i|y_i-\hat y_i|
+}
+\]</div>
+<p>Python:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.metrics import mean_absolute_error
+
+mae = mean_absolute_error(
+    y_test,
+    predictions,
+)</code></pre></div>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>MSE → squares errors → strongly weights large errors
+MAE → absolute errors → more linear penalty</pre></div>
+<p>The supplied Lecture 7 discusses MSE/MAE and their behaviour with outliers.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">R²</h2>
+      </div>
+      <div class="section-body">
+        <p>A common regression metric is:</p>
+<div class="formula-math">\[
+\boxed{
+R^2
+=
+1-
+\frac{\sum_i(y_i-\hat y_i)^2}
+{\sum_i(y_i-\bar y)^2}
+}
+\]</div>
+<p>Python:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.metrics import r2_score
+
+r2 = r2_score(
+    y_test,
+    predictions,
+)</code></pre></div>
+<p>Interpret R² according to the dataset/model context.</p>
+<p>Do not reduce it to:</p>
+<blockquote>
+<p>“R² is accuracy.”</p>
+</blockquote>
+<p>It is not a generic accuracy metric.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">Classification Evaluation Setup</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="ascii-box"><pre>true labels:
+0 1 1 0 1
+
+predictions:
+0 1 0 0 1</pre></div>
+<p>We can construct a confusion matrix.</p>
+<p>The four basic outcomes are:</p>
+<div class="ascii-box"><pre>Predicted
+                 0      1
+Actual 0        TN     FP
+Actual 1        FN     TP</pre></div>
+<p>These terms are the foundation for:</p>
+<ul>
+<li>precision;</li>
+<li>recall;</li>
+<li>F1;</li>
+<li>ROC;</li>
+<li>AUC.</li>
+</ul>
+<p>The exact definitions are developed further in the later metrics coding chapter.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">Confusion Matrix in Python</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.metrics import confusion_matrix
+
+cm = confusion_matrix(
+    y_test,
+    predictions,
+)
+
+print(cm)</code></pre></div>
+<p>Visualize:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import matplotlib.pyplot as plt
+from sklearn.metrics import ConfusionMatrixDisplay
+
+ConfusionMatrixDisplay.from_predictions(
+    y_test,
+    predictions,
+)
+
+plt.title(&quot;Confusion Matrix&quot;)
+plt.show()</code></pre></div>
+<p>A visualization should help you inspect which classes are being confused.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">Precision, Recall, F1 Setup</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.metrics import (
+    precision_score,
+    recall_score,
+    f1_score,
+)
+
+precision = precision_score(
+    y_test,
+    predictions,
+)
+
+recall = recall_score(
+    y_test,
+    predictions,
+)
+
+f1 = f1_score(
+    y_test,
+    predictions,
+)</code></pre></div>
+<p>For multiclass problems, the <code>average=</code> choice matters.</p>
+<p>Do not copy the binary classification version into a multiclass problem without checking the metric definition and API requirements.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">The Binary Metric Formulas</h2>
+      </div>
+      <div class="section-body">
+        <p>For the positive class:</p>
+<div class="formula-math">\[
+\boxed{
+Precision=
+\frac{TP}{TP+FP}
+}
+\]</div>
+<div class="formula-math">\[
+\boxed{
+Recall=
+\frac{TP}{TP+FN}
+}
+\]</div>
+<div class="formula-math">\[
+\boxed{
+F1=
+2\frac{Precision\cdot Recall}
+{Precision+Recall}
+}
+\]</div>
+<p>Memory:</p>
+<div class="ascii-box"><pre>Precision:
+Of predicted positives, how many were correct?
+
+Recall:
+Of actual positives, how many did we find?
+
+F1:
+Balance precision and recall.</pre></div>
+<p>These formulas belong to the course's evaluation layer and will be treated more deeply in <code>CODE-U2-05</code>.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">Avoiding the “Accuracy Trap”</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Lab Viva Trap & Runtime Gotcha</div>
+
+**Data Leakage in Practical Exams:**
+When the external examiner inspects your preprocessing code, they will look for:
+`scaler.fit(X)` before `train_test_split(X, y)`.
+If you do this, you immediately lose 50% marks!
+Correct: `X_train, X_test = split(X); scaler.fit(X_train); X_train_s = scaler.transform(X_train); X_test_s = scaler.transform(X_test);`
+
+</div>
+
+<p>Suppose:</p>
+<div class="ascii-box"><pre>1000 examples
+990 negatives
+10 positives</pre></div>
+<p>A useless classifier that predicts:</p>
+<div class="ascii-box"><pre>negative for everything</pre></div>
+<p>gets:</p>
+<div class="formula-math">\[
+Accuracy=\frac{990}{1000}=99\%.
+\]</div>
+<p>Yet:</p>
+<div class="formula-math">\[
+Recall=0
+\]</div>
+<p>for the positive class.</p>
+<p>This is why the course explicitly includes:</p>
+<div class="ascii-box"><pre>Confusion Matrix
+Precision
+Recall
+F1
+ROC-AUC</pre></div>
+<p>and not accuracy alone.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Simple Classification Dataset</h2>
+      </div>
+      <div class="section-body">
+        <p>For a controlled experiment:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.datasets import make_classification
+
+X, y = make_classification(
+    n_samples=300,
+    n_features=2,
+    n_informative=2,
+    n_redundant=0,
+    random_state=42,
+)</code></pre></div>
+<p>The two features make the decision boundary easy to visualize.</p>
+<p>Split:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,
+    random_state=42,
+    stratify=y,
+)</code></pre></div>
+<p>This will be useful in later Logistic Regression and Decision Tree labs.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Data Visualization Before Modelling</h2>
+      </div>
+      <div class="section-body">
+        <p>For two features:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">plt.scatter(
+    X[:, 0],
+    X[:, 1],
+    c=y,
+)
+
+plt.xlabel(&quot;Feature 1&quot;)
+plt.ylabel(&quot;Feature 2&quot;)
+plt.title(&quot;Classification data&quot;)
+plt.show()</code></pre></div>
+<p>Before training, ask:</p>
+<div class="ascii-box"><pre>Do the classes look separable?
+Are there outliers?
+Is one region dominated by a class?</pre></div>
+<p>A plot is not proof of a model's performance.</p>
+<p>It is a diagnostic.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-35" class="section-block">
+      <div class="section-header">
+        <span class="section-num">35</span>
+        <h2 class="section-heading">Experiment Reproducibility Checklist</h2>
+      </div>
+      <div class="section-body">
+        <p>Record:</p>
+<div class="ascii-box"><pre>Dataset
+Random seed
+Train/test split
+Preprocessing
+Model
+Hyperparameters
+Metric
+Result</pre></div>
+<p>For example:</p>
+<div class="ascii-box"><pre>Dataset: synthetic classification
+Seed: 42
+Test size: 0.20
+Scaler: StandardScaler
+Model: LogisticRegression
+Metric: F1</pre></div>
+<p>This makes experiments comparable.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-36" class="section-block">
+      <div class="section-header">
+        <span class="section-num">36</span>
+        <h2 class="section-heading">Baseline First</h2>
+      </div>
+      <div class="section-body">
+        <p>Before trying a sophisticated model, establish a baseline.</p>
+<p>For classification:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.dummy import DummyClassifier
+
+baseline = DummyClassifier(
+    strategy=&quot;most_frequent&quot;
+)</code></pre></div>
+<p>For regression:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.dummy import DummyRegressor
+
+baseline = DummyRegressor(
+    strategy=&quot;mean&quot;
+)</code></pre></div>
+<p>The point is not that baselines are good models.</p>
+<p>The point is:</p>
+<blockquote>
+<p><strong>A model should demonstrate value relative to something simple.</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-37" class="section-block">
+      <div class="section-header">
+        <span class="section-num">37</span>
+        <h2 class="section-heading">Evaluation Workflow</h2>
+      </div>
+      <div class="section-body">
+        <p>Use:</p>
+<div class="ascii-box"><pre>Train
+ ↓
+predict train
+ ↓
+optional training diagnostics
+
+Test
+ ↓
+predict test
+ ↓
+compute held-out metric
+ ↓
+inspect error
+ ↓
+compare baseline</pre></div>
+<p>For model selection:</p>
+<div class="ascii-box"><pre>Train
+ ↓
+Validation / cross-validation
+ ↓
+choose settings
+ ↓
+final Test</pre></div>
+<p>Do not repeatedly tune your model until the test score looks good.</p>
+<p>That turns the test set into part of the training process.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-38" class="section-block">
+      <div class="section-header">
+        <span class="section-num">38</span>
+        <h2 class="section-heading">Overfitting Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Use:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
+from sklearn.pipeline import Pipeline</code></pre></div>
+<p>Create models of different degree:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">for degree in [1, 3, 10, 20]:
+    model = Pipeline([
+        (
+            &quot;poly&quot;,
+            PolynomialFeatures(
+                degree=degree,
+                include_bias=False,
+            ),
+        ),
+        (&quot;linear&quot;, LinearRegression()),
+    ])</code></pre></div>
+<p>Fit each and compare training/held-out performance.</p>
+<p>This connects directly to the supplied <code>pract_6_bias_and_hypothesis_class.ipynb</code> and Lecture 8's discussion of flexibility, generalization, bias and variance.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-39" class="section-block">
+      <div class="section-header">
+        <span class="section-num">39</span>
+        <h2 class="section-heading">What to Observe</h2>
+      </div>
+      <div class="section-body">
+        <p>Possible pattern:</p>
+<div class="ascii-box"><pre>Degree 1
+→ too rigid
+→ underfitting
+
+Moderate degree
+→ good fit
+→ good generalization
+
+Very high degree
+→ highly flexible
+→ can overfit</pre></div>
+<p>Do not expect one universal degree threshold.</p>
+<p>The experiment is about the relationship:</p>
+<div class="formula-math">\[
+\boxed{
+\text{model flexibility}
+\leftrightarrow
+\text{generalization behaviour}
+}
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-40" class="section-block">
+      <div class="section-header">
+        <span class="section-num">40</span>
+        <h2 class="section-heading">Leakage Demonstration</h2>
+      </div>
+      <div class="section-body">
+        <p>Construct two workflows.</p>
+<h3>Wrong</h3>
+<div class="ascii-box"><pre>all data
+ ↓
+fit scaler
+ ↓
+split</pre></div>
+<h3>Correct</h3>
+<div class="ascii-box"><pre>split
+ ↓
+fit scaler on train
+ ↓
+transform train
+ ↓
+transform test</pre></div>
+<p>Then explain why the first workflow allows the test distribution to influence preprocessing parameters.</p>
+<p>This is one of the most important practical habits in ML.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-41" class="section-block">
+      <div class="section-header">
+        <span class="section-num">41</span>
+        <h2 class="section-heading">Common Workflow Bugs</h2>
+      </div>
+      <div class="section-body">
+        <h2>Bug 1 — Target leakage</h2>
+<p>A feature directly or indirectly contains the target information.</p>
+<h2>Bug 2 — Preprocessing leakage</h2>
+<p>Statistics are learned from test data.</p>
+<h2>Bug 3 — Test-set tuning</h2>
+<p>Repeatedly changing the model based on test score.</p>
+<h2>Bug 4 — Wrong target type</h2>
+<p>Treating a continuous target as a categorical label or vice versa.</p>
+<h2>Bug 5 — Inconsistent preprocessing</h2>
+<p>Training data scaled one way and test data scaled another.</p>
+<h2>Bug 6 — Shape confusion</h2>
+<p><code>(n,)</code> vs <code>(n,1)</code>.</p>
+<h2>Bug 7 — Ignoring class imbalance</h2>
+<p>Using accuracy alone on highly imbalanced classification.</p>
+<h2>Bug 8 — Comparing incomparable metrics</h2>
+<p>Comparing MSE of one target scale with another dataset without context.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-42" class="section-block">
+      <div class="section-header">
+        <span class="section-num">42</span>
+        <h2 class="section-heading">Debugging Workflow</h2>
+      </div>
+      <div class="section-body">
+        <p>If a model performs suspiciously well:</p>
+<div class="ascii-box"><pre>1. Check target leakage
+2. Check train/test overlap
+3. Check preprocessing fit scope
+4. Check duplicate records
+5. Check features generated from future information
+6. Compare with a baseline</pre></div>
+<p>If performance is suspiciously poor:</p>
+<div class="ascii-box"><pre>1. Inspect target
+2. Inspect missing values
+3. Inspect feature scales
+4. Check labels
+5. Check prediction shape
+6. Check preprocessing
+7. Check model assumptions
+8. Try a simple baseline</pre></div>
+<p>Do not immediately increase model complexity.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-43" class="section-block">
+      <div class="section-header">
+        <span class="section-num">43</span>
+        <h2 class="section-heading">A Reusable Evaluation Function</h2>
+      </div>
+      <div class="section-body">
+        <p>For regression:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def evaluate_regression(y_true, y_pred):
+    return {
+        &quot;mse&quot;: mean_squared_error(
+            y_true,
+            y_pred,
+        ),
+        &quot;mae&quot;: mean_absolute_error(
+            y_true,
+            y_pred,
+        ),
+        &quot;r2&quot;: r2_score(
+            y_true,
+            y_pred,
+        ),
+    }</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">metrics = evaluate_regression(
+    y_test,
+    predictions,
+)
+
+print(metrics)</code></pre></div>
+<p>Keeping evaluation in a separate function prevents repeated mistakes.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-44" class="section-block">
+      <div class="section-header">
+        <span class="section-num">44</span>
+        <h2 class="section-heading">A Reusable Classification Evaluation Function</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def evaluate_binary_classification(
+    y_true,
+    y_pred,
+):
+    return {
+        &quot;precision&quot;: precision_score(
+            y_true,
+            y_pred,
+        ),
+        &quot;recall&quot;: recall_score(
+            y_true,
+            y_pred,
+        ),
+        &quot;f1&quot;: f1_score(
+            y_true,
+            y_pred,
+        ),
+    }</code></pre></div>
+<p>Later we will extend this to:</p>
+<div class="ascii-box"><pre>confusion matrix
+ROC curve
+AUC
+threshold analysis
+multiclass averaging</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-45" class="section-block">
+      <div class="section-header">
+        <span class="section-num">45</span>
+        <h2 class="section-heading">What Belongs in a Good ML Notebook?</h2>
+      </div>
+      <div class="section-body">
+        <p>Use:</p>
+<div class="ascii-box"><pre>1. Objective
+2. Imports
+3. Data source
+4. Data inspection
+5. Data representation
+6. Split
+7. Preprocessing
+8. Baseline
+9. Model
+10. Training
+11. Evaluation
+12. Visualization
+13. Error analysis
+14. Experiment
+15. Interpretation
+16. Conclusion</pre></div>
+<p>Do not mix all of these into one giant cell.</p>
+<p>Small logical cells make debugging easier.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-46" class="section-block">
+      <div class="section-header">
+        <span class="section-num">46</span>
+        <h2 class="section-heading">What Belongs in Reusable Source Code?</h2>
+      </div>
+      <div class="section-body">
+        <p>Move reusable logic into functions/modules:</p>
+<div class="ascii-box"><pre>data loading
+preprocessing construction
+model construction
+training helper
+evaluation
+visualization helper</pre></div>
+<p>The notebook should explain and experiment.</p>
+<p>The source module should provide reusable implementation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-47" class="section-block">
+      <div class="section-header">
+        <span class="section-num">47</span>
+        <h2 class="section-heading">Practical Challenge</h2>
+      </div>
+      <div class="section-body">
+        <p>Build a small regression workflow from scratch using the synthetic dataset:</p>
+<div class="ascii-box"><pre>create data
+↓
+inspect
+↓
+split
+↓
+standardize X
+↓
+train reference LinearRegression
+↓
+predict
+↓
+calculate MSE/MAE/R²
+↓
+plot predictions
+↓
+write interpretation</pre></div>
+<p>Then repeat without scaling.</p>
+<p>Compare the optimization-oriented discussion with the direct closed-form/library result.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-48" class="section-block">
+      <div class="section-header">
+        <span class="section-num">48</span>
+        <h2 class="section-heading">Practical Challenge — Classification</h2>
+      </div>
+      <div class="section-body">
+        <p>Create synthetic binary data.</p>
+<p>Then:</p>
+<div class="ascii-box"><pre>split
+↓
+train LogisticRegression
+↓
+predict labels
+↓
+confusion matrix
+↓
+precision
+↓
+recall
+↓
+F1
+↓
+plot data</pre></div>
+<p>The goal is not yet to master logistic regression.</p>
+<p>The goal is to master the <strong>workflow</strong>.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-49" class="section-block">
+      <div class="section-header">
+        <span class="section-num">49</span>
+        <h2 class="section-heading">Manual Evaluation Exercise</h2>
+      </div>
+      <div class="section-body">
+        <p>True:</p>
+<div class="formula-math">\[
+y=[1,1,0,0,1]
+\]</div>
+<p>Predicted:</p>
+<div class="formula-math">\[
+\hat y=[1,0,0,0,1]
+\]</div>
+<p>Compute:</p>
+<div class="ascii-box"><pre>TP
+TN
+FP
+FN
+precision
+recall
+F1</pre></div>
+<p>Then verify with scikit-learn.</p>
+<p>This creates an important pattern:</p>
+<div class="ascii-box"><pre>manual mathematics
+        ↓
+library computation
+        ↓
+agreement</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-50" class="section-block">
+      <div class="section-header">
+        <span class="section-num">50</span>
+        <h2 class="section-heading">Interpretation Exercise</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose a classifier gives:</p>
+<div class="ascii-box"><pre>Precision = 0.90
+Recall    = 0.50</pre></div>
+<p>Do not say:</p>
+<blockquote>
+<p>“The model is 90% accurate.”</p>
+</blockquote>
+<p>Instead say:</p>
+<blockquote>
+<p>When it predicts the positive class, 90% of those predictions are correct, but it identifies only about half of the actual positive cases.</p>
+</blockquote>
+<p>This is why metric interpretation is as important as metric calculation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-51" class="section-block">
+      <div class="section-header">
+        <span class="section-num">51</span>
+        <h2 class="section-heading">Model Comparison Table</h2>
+      </div>
+      <div class="section-body">
+        <p>When comparing later models, maintain:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Model</th>
+<th style="text-align: right;">Train metric</th>
+<th style="text-align: right;">Validation metric</th>
+<th style="text-align: right;">Test metric</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Baseline</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td>reference</td>
+</tr>
+<tr>
+<td>Model A</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td></td>
+</tr>
+<tr>
+<td>Model B</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td style="text-align: right;">—</td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>Never compare a model's test score with another model's training score and call it a fair comparison.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-52" class="section-block">
+      <div class="section-header">
+        <span class="section-num">52</span>
+        <h2 class="section-heading">Unit II Coding Roadmap</h2>
+      </div>
+      <div class="section-body">
+        <p>After this foundation:</p>
+<div class="ascii-box"><pre>CODE-U2-01
+ML workflow + preprocessing
+        ↓
+CODE-U2-02
+Linear Regression
+        ↓
+CODE-U2-03
+Logistic Regression
+        ↓
+CODE-U2-04
+Decision Trees
+        ↓
+CODE-U2-05
+Confusion Matrix + Precision/Recall/F1 + ROC-AUC
+        ↓
+CODE-U2-06
+Ridge + Lasso
+        ↓
+CODE-U2-07
+Model comparison + generalization lab</pre></div>
+<p>This mirrors the conceptual progression in the Main/Exam books.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-53" class="section-block">
+      <div class="section-header">
+        <span class="section-num">53</span>
+        <h2 class="section-heading">Active Recall</h2>
+      </div>
+      <div class="section-body">
+        <p>Close the file and answer:</p>
+<ol>
+<li>Why inspect data before modelling?</li>
+<li>What is the difference between feature and target?</li>
+<li>What is the difference between regression and classification?</li>
+<li>What is nominal categorical data?</li>
+<li>What is ordinal data?</li>
+<li>Why is one-hot encoding useful?</li>
+<li>Why split before fitting preprocessing?</li>
+<li>What does <code>fit_transform</code> do?</li>
+<li>Why should test data receive <code>transform</code>, not a new <code>fit</code>?</li>
+<li>Why does scaling help KNN?</li>
+<li>Why can scaling help optimization?</li>
+<li>What is data leakage?</li>
+<li>Why is accuracy dangerous on imbalanced data?</li>
+<li>What are MSE, MAE and R²?</li>
+<li>Why should a baseline be established?</li>
+<li>Why should test data not be repeatedly used during tuning?</li>
+<li>What should an ML experiment record for reproducibility?</li>
+<li>Why are library pipelines useful?</li>
+<li>What should you inspect when performance is suspiciously high?</li>
+<li>What should you inspect when performance is suspiciously poor?</li>
+</ol>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-54" class="section-block">
+      <div class="section-header">
+        <span class="section-num">54</span>
+        <h2 class="section-heading">Practical Test</h2>
+      </div>
+      <div class="section-body">
+        <p>Build one complete notebook that produces:</p>
+<div class="ascii-box"><pre>Dataset summary
+Train/test split
+Preprocessed features
+Baseline
+Model
+Predictions
+Evaluation
+One visualization
+One experiment
+One interpretation paragraph</pre></div>
+<p>Then answer:</p>
+<blockquote>
+<p><strong>Could another student reproduce my result from the information in this notebook?</strong></p>
+</blockquote>
+<p>If not, improve the record.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-55" class="section-block">
+      <div class="section-header">
+        <span class="section-num">55</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <h3>C2 — Modify</h3>
+<p>You can safely change:</p>
+<ul>
+<li>train/test ratio;</li>
+<li>random seed;</li>
+<li>scaler;</li>
+<li>evaluation metric.</li>
+</ul>
+<h3>C3 — Rebuild</h3>
+<p>You can create a complete train/evaluate workflow without copying the notebook.</p>
+<h3>C4 — Test</h3>
+<p>You can write checks for:</p>
+<ul>
+<li>shapes;</li>
+<li>missing values;</li>
+<li>train/test lengths;</li>
+<li>prediction length;</li>
+<li>valid metric ranges.</li>
+</ul>
+<h3>C5 — Modify</h3>
+<p>You can introduce a new feature, model or preprocessing step without breaking the workflow.</p>
+<h3>C6 — Explain</h3>
+<p>You can explain where leakage could occur and why.</p>
+<h3>C7 — Transfer</h3>
+<p>Given a new tabular dataset, you can design the full experimental workflow before choosing a model.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-56" class="section-block">
+      <div class="section-header">
+        <span class="section-num">56</span>
+        <h2 class="section-heading">Final Memory Sheet</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>RAW DATA
+   ↓
+INSPECT
+   ↓
+DEFINE X / y
+   ↓
+SPLIT
+   ↓
+FIT PREPROCESSING ON TRAIN
+   ↓
+TRANSFORM TRAIN + HELD-OUT
+   ↓
+BASELINE
+   ↓
+MODEL
+   ↓
+TRAIN
+   ↓
+PREDICT
+   ↓
+EVALUATE
+   ↓
+ERROR ANALYSIS
+   ↓
+INTERPRET</pre></div>
+<p>The most important safety rule:</p>
+<div class="formula-math">\[
+\boxed{
+\text{Never let held-out test information leak into model fitting or preprocessing.}
+}
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-57" class="section-block">
+      <div class="section-header">
+        <span class="section-num">57</span>
+        <h2 class="section-heading">Source Notes</h2>
+      </div>
+      <div class="section-body">
+        <h2>Primary course sources</h2>
+<h3><code>Lecture07.pdf</code></h3>
+<p>Used for:</p>
+<ul>
+<li>supervised learning framing;</li>
+<li>regression/classification distinction;</li>
+<li>regression losses;</li>
+<li>classification evaluation metrics;</li>
+<li>precision/recall/F-score;</li>
+<li>class-imbalance motivation.</li>
+</ul>
+<h3><code>Lecture08.pdf</code></h3>
+<p>Used for:</p>
+<ul>
+<li>generalization;</li>
+<li>held-out testing;</li>
+<li>hypothesis classes;</li>
+<li>model flexibility;</li>
+<li>overfitting/underfitting;</li>
+<li>validation/cross-validation.</li>
+</ul>
+<h3><code>Lecture09.pdf</code></h3>
+<p>Used for:</p>
+<ul>
+<li>categorical variables;</li>
+<li>one-hot/ordinal encoding;</li>
+<li>standardization;</li>
+<li>min-max scaling;</li>
+<li>scaling and optimization;</li>
+<li>linear-regression representation.</li>
+</ul>
+<h3>Official DSC-14 syllabus</h3>
+<p>Used to define the practical scope for Unit II.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-58" class="section-block">
+      <div class="section-header">
+        <span class="section-num">58</span>
+        <h2 class="section-heading">Cross-Book Links</h2>
+      </div>
+      <div class="section-body">
+        <ul>
+<li><code>MAIN-U2-C14</code> — ML foundations</li>
+<li><code>MAIN-U2-C15</code> — Learning types</li>
+<li><code>MAIN-U2-C16</code> — Hypothesis classes / KNN</li>
+<li><code>MAIN-U2-C17</code> — Generalization / bias-variance</li>
+<li><code>MAIN-U2-C18</code> — Linear Regression</li>
+<li><code>MATH-M04</code>–<code>MATH-M24</code></li>
+<li><code>EXAM-U2_Machine_Learning_and_Evaluation.md</code></li>
+<li><code>CODE-01_Python_NumPy_Matplotlib_and_AI_ML_Lab_Workflow.md</code></li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-59" class="section-block">
+      <div class="section-header">
+        <span class="section-num">59</span>
+        <h2 class="section-heading">Status</h2>
+      </div>
+      <div class="section-body">
+        <p><strong><code>CODE-U2-01</code> — COMPLETE</strong></p>
+<p>Next:</p>
+<p><strong><code>CODE-U2-02 — Linear Regression From Scratch, Gradient Descent, Closed Form, and Library Comparison</code></strong></p>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="code-u1-04-minimax-alpha-beta.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← Unit 1 Lab 04 — Minimax</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">💻 Coding Index</span>
+      </a>
+      <a href="code-u2-02-linear-regression.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: Unit 2 Lab 02 — Linear Regression →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search lab implementations, functions, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">💻</span>Lab Hub</a>
+  <a href="code-u2-01-ml-workflow.html" class="mobile-nav-btn active"><span class="icon">📖</span>CODE-U2-01</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

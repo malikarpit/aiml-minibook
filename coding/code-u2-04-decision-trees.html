@@ -1,0 +1,2736 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="CODE-U2-04: Decision Trees From Scratch — AI & Machine Learning Coding Lab. Shannon Entropy, Information Gain, Gini Impurity, Recursive Binary Splitting, Tree Printing, and Scikit-Learn Benchmark">
+<title>CODE-U2-04: Decision Trees From Scratch | Coding Lab 💻 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/coding.css">
+</head>
+<body class="coding-module track-c2">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">💻</div>
+      <div class="brand-text"><span class="main">Coding Lab</span><span class="sub">AI &amp; ML From Scratch</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">CODE-U2-04: Decision Trees From Scratch</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">💻</span>Coding Lab Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../math/index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 0: Environment & System</div>
+  <a href="code-00-coding-foundation.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-00: Coding Lab Foundation &amp; Implementation System</a>
+  <a href="code-01-python-numpy-workflow.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-01: Python, NumPy, Matplotlib &amp; Lab Workflow</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Classical AI & Search Labs</div>
+  <a href="code-u1-01-bfs-dfs.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-01: BFS and DFS From Scratch</a>
+  <a href="code-u1-02-greedy-a-star.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-02: Greedy Best-First &amp; A* Search From Scratch</a>
+  <a href="code-u1-03-csp-backtracking.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-03: CSPs and Backtracking Search</a>
+  <a href="code-u1-04-minimax-alpha-beta.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Supervised ML Labs</div>
+  <a href="code-u2-01-ml-workflow.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-01: ML Workflow: Preprocessing, Splitting &amp; Evaluation</a>
+  <a href="code-u2-02-linear-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-02: Linear Regression From Scratch</a>
+  <a href="code-u2-03-logistic-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-03: Logistic Regression From Scratch</a>
+  <a href="code-u2-04-decision-trees.html" class="sidebar-link active"><span class="link-icon">📊</span>CODE-U2-04: Decision Trees From Scratch</a>
+  <a href="code-u2-05-classification-metrics-roc.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC &amp; Thresholds</a>
+  <a href="code-u2-06-ridge-lasso-regularization.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-06: Ridge &amp; Lasso From Scratch: Regularization &amp; Optimization</a>
+  <a href="code-u2-07-ml-evaluation-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-07: ML Evaluation &amp; Model Comparison Lab</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Deep Learning Labs</div>
+  <a href="code-u3-01-neuron-perceptron.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-01: Neuron and Perceptron From Scratch</a>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>MLP, Backpropagation & Convolutions</span>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Advanced AI Labs (Upcoming)</div>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>Q-Learning, NLP & Generative Adversarial Loops</span>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">CODE-U2-04 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. What You Will Build</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Learning Objectives</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. One-Minute Intuition</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Real-World Analogy</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Classification Tree Representation</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Controlled Dataset</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Why a Tree Needs Impurity</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Class Proportions</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Gini Impurity</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Implement Gini Impurity</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Entropy</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Implement Entropy Safely</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Before/After Impurity</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Impurity Reduction</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Manual Gini Calculation</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Manual Entropy Calculation</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Candidate Thresholds</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Implement Candidate Thresholds</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Split a Dataset</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Weighted Child Impurity</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Best Split Search</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Find the Root Split</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Verify Candidate Splits Manually</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Leaf Prediction</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Node Data Structure</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Stopping Conditions</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Why `max_depth` Controls Complexity</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Recursive Tree Builder</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Prediction by Tree Traversal</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Wrap the Implementation</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Train the Scratch Tree</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Print the Tree Structure</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Manual Trace of One Prediction</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Why the Root Split Is Chosen</a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Gini vs Entropy</a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Compare Root Split with Both Criteria</a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Train/Test Split</a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Evaluate the Scratch Tree</a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Decision Regions in 2D</a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Experiment — Tree Depth</a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Experiment — Minimum Samples to Split</a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Experiment — Gini vs Entropy</a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Feature Importance — Conceptual View</a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Why Trees Handle Different Feature Scales Differently</a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. Why Trees Can Represent Nonlinear Boundaries</a>
+      <a href="#s-46" class="sidebar-link"><span class="link-icon">📌</span>46. But a Tree Can Become Too Specific</a>
+      <a href="#s-47" class="sidebar-link"><span class="link-icon">📌</span>47. Library Implementation</a>
+      <a href="#s-48" class="sidebar-link"><span class="link-icon">📌</span>48. Visualize the Library Tree</a>
+      <a href="#s-49" class="sidebar-link"><span class="link-icon">📌</span>49. Comparing Scratch and Library Trees</a>
+      <a href="#s-50" class="sidebar-link"><span class="link-icon">📌</span>50. Important Library Difference: Exact Objective and Details</a>
+      <a href="#s-51" class="sidebar-link"><span class="link-icon">📌</span>51. Reproducibility</a>
+      <a href="#s-52" class="sidebar-link"><span class="link-icon">📌</span>52. Unit Tests for the Core Functions</a>
+      <a href="#s-53" class="sidebar-link"><span class="link-icon">📌</span>53. Edge Cases</a>
+      <a href="#s-54" class="sidebar-link"><span class="link-icon">📌</span>54. Optional Extension — Multi-Class Trees</a>
+      <a href="#s-55" class="sidebar-link"><span class="link-icon">📌</span>55. Optional Extension — Regression Trees</a>
+      <a href="#s-56" class="sidebar-link"><span class="link-icon">📌</span>56. Practical Lab — Compare Logistic Regression and Decision Tree</a>
+      <a href="#s-57" class="sidebar-link"><span class="link-icon">📌</span>57. Practical Lab — Overfitting Demonstration</a>
+      <a href="#s-58" class="sidebar-link"><span class="link-icon">📌</span>58. Practical Lab — Inspect the Wrong Predictions</a>
+      <a href="#s-59" class="sidebar-link"><span class="link-icon">📌</span>59. Manual Exam-to-Code Connection</a>
+      <a href="#s-60" class="sidebar-link"><span class="link-icon">📌</span>60. Manual Questions</a>
+      <a href="#s-61" class="sidebar-link"><span class="link-icon">📌</span>61. Coding Challenge — Implement Entropy Without NumPy Helpers</a>
+      <a href="#s-62" class="sidebar-link"><span class="link-icon">📌</span>62. Coding Challenge — Best Split Trace</a>
+      <a href="#s-63" class="sidebar-link"><span class="link-icon">📌</span>63. Coding Challenge — Add `min_samples_leaf`</a>
+      <a href="#s-64" class="sidebar-link"><span class="link-icon">📌</span>64. Coding Challenge — Add Feature Importance</a>
+      <a href="#s-65" class="sidebar-link"><span class="link-icon">📌</span>65. Common Bugs</a>
+      <a href="#s-66" class="sidebar-link"><span class="link-icon">📌</span>66. Complexity of the Teaching Implementation</a>
+      <a href="#s-67" class="sidebar-link"><span class="link-icon">📌</span>67. Why Decision Trees Connect to Ensembles</a>
+      <a href="#s-68" class="sidebar-link"><span class="link-icon">📌</span>68. Comparison — Logistic Regression vs Decision Tree</a>
+      <a href="#s-69" class="sidebar-link"><span class="link-icon">📌</span>69. Master Workflow Card</a>
+      <a href="#s-70" class="sidebar-link"><span class="link-icon">📌</span>70. Memory Anchors</a>
+      <a href="#s-71" class="sidebar-link"><span class="link-icon">📌</span>71. Mastery Gate</a>
+      <a href="#s-72" class="sidebar-link"><span class="link-icon">📌</span>72. Source Boundary and Notes</a>
+      <a href="#s-73" class="sidebar-link"><span class="link-icon">📌</span>73. Cross-Book Links</a>
+      <a href="#s-74" class="sidebar-link"><span class="link-icon">📌</span>74. Status</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Coding Lab</a>
+        <span>/</span>
+        <span>CODE-U2-04</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-c2">Track 2: Supervised Machine Learning Labs</span></div>
+      <h1 class="chapter-title">Decision Trees From Scratch</h1>
+      <p class="chapter-desc">Shannon Entropy, Information Gain, Gini Impurity, Recursive Binary Splitting, Tree Printing, and Scikit-Learn Benchmark</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~55 min lab</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">DECISION-TREES</span> <span class="chapter-meta-item uni-badge">ENTROPY</span> <span class="chapter-meta-item uni-badge">INFORMATION-GAIN</span> <span class="chapter-meta-item uni-badge">GINI</span> <span class="chapter-meta-item uni-badge">RECURSION</span>
+      </div>
+
+      <div class="lab-meta-grid">
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Prerequisites</div>
+          <div class="lab-meta-value">CODE-U2-01 ML Workflow, Math Companion M03 & M10</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Main Book Concept</div>
+          <div class="lab-meta-value">Ch 22 Decision Trees, Ch 23 Decision Trees Math (Entropy & Gini)</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Math Companion Layer</div>
+          <div class="lab-meta-value">M03 Logarithms, M10 Probability, M13 Random Variables</div>
+        </div>
+        <div class="lab-meta-box" style="grid-column: 1 / -1;">
+          <div class="lab-meta-label">AI / Machine Learning Connections</div>
+          <div class="lab-meta-value">Non-linear decision boundaries, Feature importance ranking, Explainable AI, Ensemble methods (Random Forest, XGBoost)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-meta-card"><h1>CODE-U2-04 — Decision Trees From Scratch: Splitting Criteria, Recursion, and Library Comparison</h1>
+<blockquote>
+<p><strong>Coding Book — Unit II: Machine Learning</strong></p>
+<p><strong>Topic ID:</strong> <code>CODE-U2-04</code></p>
+<p><strong>Main Book links:</strong> <code>MAIN-U2-C22 — Decision Trees</code>, <code>MAIN-U2-C23 — Tree Splitting and Impurity</code></p>
+<p><strong>Math links:</strong> <code>MATH-M10</code>–<code>MATH-M17</code>, <code>MATH-M22</code>, <code>MATH-M24</code></p>
+<p><strong>Exam link:</strong> <code>EXAM-U2_Machine_Learning_and_Evaluation.md</code></p>
+<p><strong>Primary course boundary:</strong> The official DSC-14 syllabus explicitly includes <strong>Decision Trees</strong> in Unit II. The supplied resource guide identifies Decision Trees as a Unit II core topic and recommends a dedicated tree-splitting resource. The provided lecture set does not supply a complete implementation-level derivation of recursive tree induction, so the split criteria, recursion and coding details in this file are a <strong>standard-ML coding expansion</strong> built to satisfy the syllabus/practical goal.</p>
+<p><strong>Purpose:</strong> Understand a decision tree as a sequence of data-dependent questions, implement a small numerical classification tree from scratch, derive impurity reduction, trace recursive splitting, test the implementation, visualize the learned tree, and compare the result with a library model.</p>
+</blockquote>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in CODE-U2-04 (74 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">What You Will Build</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Learning Objectives</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">One-Minute Intuition</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Real-World Analogy</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Classification Tree Representation</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Controlled Dataset</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Why a Tree Needs Impurity</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Class Proportions</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Gini Impurity</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Implement Gini Impurity</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Entropy</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Implement Entropy Safely</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Before/After Impurity</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Impurity Reduction</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Manual Gini Calculation</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Manual Entropy Calculation</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Candidate Thresholds</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Implement Candidate Thresholds</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Split a Dataset</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Weighted Child Impurity</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Best Split Search</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Find the Root Split</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Verify Candidate Splits Manually</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Leaf Prediction</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Node Data Structure</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Stopping Conditions</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Why `max_depth` Controls Complexity</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Recursive Tree Builder</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Prediction by Tree Traversal</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Wrap the Implementation</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Train the Scratch Tree</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Print the Tree Structure</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Manual Trace of One Prediction</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Why the Root Split Is Chosen</span></a></li>
+        <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Gini vs Entropy</span></a></li>
+        <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Compare Root Split with Both Criteria</span></a></li>
+        <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Train/Test Split</span></a></li>
+        <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Evaluate the Scratch Tree</span></a></li>
+        <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Decision Regions in 2D</span></a></li>
+        <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Experiment — Tree Depth</span></a></li>
+        <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Experiment — Minimum Samples to Split</span></a></li>
+        <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Experiment — Gini vs Entropy</span></a></li>
+        <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Feature Importance — Conceptual View</span></a></li>
+        <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Why Trees Handle Different Feature Scales Differently</span></a></li>
+        <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">Why Trees Can Represent Nonlinear Boundaries</span></a></li>
+        <li class="toc-item"><a href="#s-46"><span class="toc-num">46</span><span class="toc-name">But a Tree Can Become Too Specific</span></a></li>
+        <li class="toc-item"><a href="#s-47"><span class="toc-num">47</span><span class="toc-name">Library Implementation</span></a></li>
+        <li class="toc-item"><a href="#s-48"><span class="toc-num">48</span><span class="toc-name">Visualize the Library Tree</span></a></li>
+        <li class="toc-item"><a href="#s-49"><span class="toc-num">49</span><span class="toc-name">Comparing Scratch and Library Trees</span></a></li>
+        <li class="toc-item"><a href="#s-50"><span class="toc-num">50</span><span class="toc-name">Important Library Difference: Exact Objective and Details</span></a></li>
+        <li class="toc-item"><a href="#s-51"><span class="toc-num">51</span><span class="toc-name">Reproducibility</span></a></li>
+        <li class="toc-item"><a href="#s-52"><span class="toc-num">52</span><span class="toc-name">Unit Tests for the Core Functions</span></a></li>
+        <li class="toc-item"><a href="#s-53"><span class="toc-num">53</span><span class="toc-name">Edge Cases</span></a></li>
+        <li class="toc-item"><a href="#s-54"><span class="toc-num">54</span><span class="toc-name">Optional Extension — Multi-Class Trees</span></a></li>
+        <li class="toc-item"><a href="#s-55"><span class="toc-num">55</span><span class="toc-name">Optional Extension — Regression Trees</span></a></li>
+        <li class="toc-item"><a href="#s-56"><span class="toc-num">56</span><span class="toc-name">Practical Lab — Compare Logistic Regression and Decision Tree</span></a></li>
+        <li class="toc-item"><a href="#s-57"><span class="toc-num">57</span><span class="toc-name">Practical Lab — Overfitting Demonstration</span></a></li>
+        <li class="toc-item"><a href="#s-58"><span class="toc-num">58</span><span class="toc-name">Practical Lab — Inspect the Wrong Predictions</span></a></li>
+        <li class="toc-item"><a href="#s-59"><span class="toc-num">59</span><span class="toc-name">Manual Exam-to-Code Connection</span></a></li>
+        <li class="toc-item"><a href="#s-60"><span class="toc-num">60</span><span class="toc-name">Manual Questions</span></a></li>
+        <li class="toc-item"><a href="#s-61"><span class="toc-num">61</span><span class="toc-name">Coding Challenge — Implement Entropy Without NumPy Helpers</span></a></li>
+        <li class="toc-item"><a href="#s-62"><span class="toc-num">62</span><span class="toc-name">Coding Challenge — Best Split Trace</span></a></li>
+        <li class="toc-item"><a href="#s-63"><span class="toc-num">63</span><span class="toc-name">Coding Challenge — Add `min_samples_leaf`</span></a></li>
+        <li class="toc-item"><a href="#s-64"><span class="toc-num">64</span><span class="toc-name">Coding Challenge — Add Feature Importance</span></a></li>
+        <li class="toc-item"><a href="#s-65"><span class="toc-num">65</span><span class="toc-name">Common Bugs</span></a></li>
+        <li class="toc-item"><a href="#s-66"><span class="toc-num">66</span><span class="toc-name">Complexity of the Teaching Implementation</span></a></li>
+        <li class="toc-item"><a href="#s-67"><span class="toc-num">67</span><span class="toc-name">Why Decision Trees Connect to Ensembles</span></a></li>
+        <li class="toc-item"><a href="#s-68"><span class="toc-num">68</span><span class="toc-name">Comparison — Logistic Regression vs Decision Tree</span></a></li>
+        <li class="toc-item"><a href="#s-69"><span class="toc-num">69</span><span class="toc-name">Master Workflow Card</span></a></li>
+        <li class="toc-item"><a href="#s-70"><span class="toc-num">70</span><span class="toc-name">Memory Anchors</span></a></li>
+        <li class="toc-item"><a href="#s-71"><span class="toc-num">71</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-72"><span class="toc-num">72</span><span class="toc-name">Source Boundary and Notes</span></a></li>
+        <li class="toc-item"><a href="#s-73"><span class="toc-num">73</span><span class="toc-name">Cross-Book Links</span></a></li>
+        <li class="toc-item"><a href="#s-74"><span class="toc-num">74</span><span class="toc-name">Status</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">What You Will Build</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph TD
+    Node["Parent Node: Impurity I(S)"] --> Split["Find Best Feature & Threshold that Maximizes Information Gain"]
+    Split --> Left["Left Child: S_left (x_j <= threshold)"]
+    Split --> Right["Right Child: S_right (x_j > threshold)"]
+    Left & Right --> Stop{"Stopping Condition: depth >= max_depth OR pure?"}
+    Stop -- Yes --> Leaf["Create Leaf Node with Majority Class"]
+    Stop -- No --> Recurse["Recursively Split Subsets"]
+    style Split fill:#0f172a,stroke:#fbbf24,color:#fbbf24,stroke-width:2px
+    style Leaf fill:#065f46,stroke:#34d399,color:#ffffff
+</pre></div>
+<p>The complete learning loop is:</p>
+<div class="ascii-box"><pre>data
+  ↓
+consider candidate questions
+  ↓
+measure impurity before split
+  ↓
+measure impurity after split
+  ↓
+choose best reduction
+  ↓
+split data
+  ↓
+repeat recursively
+  ↓
+stop when a criterion is met
+  ↓
+store a prediction at leaves</pre></div>
+<p>For a classification tree, a node asks a question such as:</p>
+<div class="ascii-box"><pre>Is age ≤ 30?
+Is income ≤ 50,000?
+Is feature_2 ≤ 1.7?</pre></div>
+<p>The tree then routes each sample left or right.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">Learning Objectives</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Implementation Model</div>
+
+Decision Tree 20 Questions game ki tarah hai: 'Kya pet char-pairi hai? Kya vo bhonkta hai?'.
+Har node par hum vo sawaal puchte hain jo impurity (confusion) ko sabse zyada kam kare.
+Entropy ka matlab hai 'confusion / uncertainty'. Information Gain ka matlab hai: 'Is feature par split karne ke baad uncertainty kitni ghat gayi?'
+Jitna zyada Information Gain, utna behtar sawaal!
+
+</div>
+
+<p>By the end of this file, you should be able to:</p>
+<ul>
+<li>represent a binary classification tree as nested decision nodes;</li>
+<li>explain why a tree needs a split criterion;</li>
+<li>calculate class proportions inside a node;</li>
+<li>calculate Gini impurity;</li>
+<li>calculate entropy;</li>
+<li>calculate weighted impurity after a split;</li>
+<li>calculate impurity reduction/information gain;</li>
+<li>search candidate feature thresholds for a small numerical dataset;</li>
+<li>implement recursive tree construction from scratch;</li>
+<li>implement prediction by traversing the learned tree;</li>
+<li>understand stopping criteria such as purity, maximum depth and minimum node size;</li>
+<li>visualize a decision tree and its decision regions;</li>
+<li>compare Gini and entropy conceptually;</li>
+<li>compare a scratch implementation with <code>sklearn.tree.DecisionTreeClassifier</code>;</li>
+<li>explain why deeper trees can memorize training data;</li>
+<li>connect tree depth to overfitting and generalization.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">One-Minute Intuition</h2>
+      </div>
+      <div class="section-body">
+        <p>A decision tree is a learned flowchart.</p>
+<p>Instead of computing one weighted sum of all features, it asks a sequence of questions:</p>
+<div class="ascii-box"><pre>root
+                 │
+           Is x₁ ≤ 4.5?
+             /       \
+           yes        no
+           /            \
+    Is x₂ ≤ 1.2?      class 1
+      /    \
+   class0  class1</pre></div>
+<p>The learning problem is therefore:</p>
+<blockquote>
+<p><strong>Which question should I ask next?</strong></p>
+</blockquote>
+<p>A good split makes the resulting groups more class-pure.</p>
+<h3>Hinglish</h3>
+<blockquote>
+<p>Decision tree ek learned flowchart hai. Har node par model ek question poochta hai. Achha question woh hai jo data ko aise groups mein baant de jahan classes zyada clear ho jaayein.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Real-World Analogy</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose you are manually classifying fruit.</p>
+<p>You could ask:</p>
+<div class="ascii-box"><pre>Is weight ≤ 150 g?
+      ↓
+Is color score ≤ 0.4?
+      ↓
+Is diameter ≤ 7 cm?</pre></div>
+<p>Eventually you reach:</p>
+<div class="ascii-box"><pre>mostly apple
+mostly orange
+mostly banana</pre></div>
+<p>A tree learns which questions produce the clearest groupings.</p>
+<p>This differs from logistic regression:</p>
+<div class="ascii-box"><pre>Logistic Regression
+all features → weighted sum → sigmoid
+
+Decision Tree
+features → question → branch → question → branch → leaf</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Classification Tree Representation</h2>
+      </div>
+      <div class="section-body">
+        <p>For the scratch implementation, use numerical features and binary splits.</p>
+<p>Each internal node stores:</p>
+<div class="ascii-box"><pre>feature_index
+threshold
+left_child
+right_child</pre></div>
+<p>Each leaf stores:</p>
+<div class="ascii-box"><pre>predicted_class</pre></div>
+<p>A sample is routed using:</p>
+<div class="formula-math">\[
+\boxed{x_j \le t}
+\]</div>
+<p>where:</p>
+<ul>
+<li>\(x_j\) is the chosen feature;</li>
+<li>\(t\) is the chosen threshold.</li>
+</ul>
+<p>If true:</p>
+<div class="ascii-box"><pre>left</pre></div>
+<p>otherwise:</p>
+<div class="ascii-box"><pre>right</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Controlled Dataset</h2>
+      </div>
+      <div class="section-body">
+        <p>Use a tiny dataset so the tree can be traced manually.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+X = np.array([
+    [1.0, 1.0],
+    [1.5, 0.8],
+    [2.0, 1.2],
+    [2.5, 1.0],
+    [4.5, 2.5],
+    [5.0, 2.8],
+    [5.5, 3.0],
+    [6.0, 3.2],
+])
+
+y = np.array([
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    1,
+], dtype=int)</code></pre></div>
+<p>Visual pattern:</p>
+<div class="ascii-box"><pre>feature 2
+  3.5 |                 1  1
+  3.0 |              1
+  2.5 |          1
+  2.0 |
+  1.5 |
+  1.0 |  0  0  0  0
+      +---------------------- feature 1
+         1  2  3  4  5  6</pre></div>
+<p>A threshold around the gap in <code>feature 1</code> should separate the classes well.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Why a Tree Needs Impurity</h2>
+      </div>
+      <div class="section-body">
+        <p>At the root, imagine the node contains:</p>
+<div class="ascii-box"><pre>4 zeros
+4 ones</pre></div>
+<p>That node is mixed.</p>
+<p>A useful split should produce children closer to:</p>
+<div class="ascii-box"><pre>left:  4 zeros, 0 ones
+right: 0 zeros, 4 ones</pre></div>
+<p>A useless split might produce:</p>
+<div class="ascii-box"><pre>left:  2 zeros, 2 ones
+right: 2 zeros, 2 ones</pre></div>
+<p>So the algorithm needs a numerical score that answers:</p>
+<blockquote>
+<p>How mixed is this node?</p>
+</blockquote>
+<p>This is the role of an impurity measure.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">Class Proportions</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose a node contains \(n\) samples and class \(k\) appears \(n_k\) times.</p>
+<p>The class proportion is:</p>
+<div class="formula-math">\[
+\boxed{
+p_k=\frac{n_k}{n}
+}
+\]</div>
+<p>For a binary node with:</p>
+<div class="ascii-box"><pre>6 class 0
+2 class 1</pre></div>
+<p>we have:</p>
+<div class="formula-math">\[
+p_0=6/8=0.75
+\]</div>
+<div class="formula-math">\[
+p_1=2/8=0.25.
+\]</div>
+<p>These proportions feed into Gini and entropy.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Gini Impurity</h2>
+      </div>
+      <div class="section-body">
+        <p>For \(K\) classes:</p>
+<div class="formula-math">\[
+\boxed{
+G=1-\sum_{k=1}^{K}p_k^2
+}
+\]</div>
+<p>For a pure node:</p>
+<div class="ascii-box"><pre>p = [1, 0]</pre></div>
+<p>so:</p>
+<div class="formula-math">\[
+G=1-(1^2+0^2)=0.
+\]</div>
+<p>For a balanced binary node:</p>
+<div class="ascii-box"><pre>p = [0.5, 0.5]</pre></div>
+<p>so:</p>
+<div class="formula-math">\[
+G=1-(0.25+0.25)=0.5.
+\]</div>
+<p>Thus:</p>
+<div class="ascii-box"><pre>pure node       → Gini 0
+balanced binary → Gini 0.5</pre></div>
+<h3>Hinglish</h3>
+<blockquote>
+<p>Gini zero ka matlab node mein classes mixed nahi hain — node perfectly pure hai. Binary case mein 0.5 maximum impurity ke paas hota hai jab dono classes equally mixed hon.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Implement Gini Impurity</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def gini_impurity(y):
+    y = np.asarray(y)
+
+    if len(y) == 0:
+        return 0.0
+
+    _, counts = np.unique(
+        y,
+        return_counts=True,
+    )
+
+    probabilities = counts / len(y)
+    return 1.0 - np.sum(probabilities ** 2)</code></pre></div>
+<p>Test:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert np.isclose(
+    gini_impurity(np.array([0, 0, 0])),
+    0.0,
+)
+
+assert np.isclose(
+    gini_impurity(np.array([0, 1])),
+    0.5,
+)</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Entropy</h2>
+      </div>
+      <div class="section-body">
+        <p>An alternative impurity measure is entropy:</p>
+<div class="formula-math">\[
+\boxed{
+H=-\sum_{k=1}^{K}p_k\log_2p_k
+}
+\]</div>
+<p>For a pure node:</p>
+<div class="formula-math">\[
+H=0.
+\]</div>
+<p>For a balanced binary node:</p>
+<div class="formula-math">\[
+H=-0.5\log_2(0.5)-0.5\log_2(0.5)=1.
+\]</div>
+<p>Thus for binary classification:</p>
+<div class="ascii-box"><pre>pure node        → entropy 0
+balanced node    → entropy 1</pre></div>
+<p>Entropy is sensitive to how evenly the classes are distributed.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Implement Entropy Safely</h2>
+      </div>
+      <div class="section-body">
+        <p>Because:</p>
+<div class="formula-math">\[
+\log(0)
+\]</div>
+<p>is undefined, ignore zero-probability terms.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def entropy(y):
+    y = np.asarray(y)
+
+    if len(y) == 0:
+        return 0.0
+
+    _, counts = np.unique(
+        y,
+        return_counts=True,
+    )
+
+    probabilities = counts / len(y)
+    nonzero = probabilities &gt; 0
+
+    return -np.sum(
+        probabilities[nonzero]
+        * np.log2(probabilities[nonzero])
+    )</code></pre></div>
+<p>Test:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert np.isclose(
+    entropy(np.array([0, 0, 0])),
+    0.0,
+)
+
+assert np.isclose(
+    entropy(np.array([0, 1])),
+    1.0,
+)</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Before/After Impurity</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose a node is split into left and right children.</p>
+<p>A sensible weighted impurity is:</p>
+<div class="formula-math">\[
+\boxed{
+I_{split}=
+\frac{n_L}{n}I(L)+
+\frac{n_R}{n}I(R)
+}
+\]</div>
+<p>where:</p>
+<ul>
+<li>\(n_L\) = number of left samples;</li>
+<li>\(n_R\) = number of right samples;</li>
+<li>\(n=n_L+n_R\).</li>
+</ul>
+<p>A good split has <strong>low weighted child impurity</strong>.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Impurity Reduction</h2>
+      </div>
+      <div class="section-body">
+        <p>Define parent impurity as \(I(P)\).</p>
+<p>Then the improvement from a split is:</p>
+<div class="formula-math">\[
+\boxed{
+Gain=I(P)-
+\left[
+\frac{n_L}{n}I(L)+
+\frac{n_R}{n}I(R)
+\right]
+}
+\]</div>
+<p>For entropy, this is commonly called <strong>information gain</strong>.</p>
+<p>For Gini, it is more accurate to call it impurity reduction or Gini gain rather than pretending every criterion has exactly the same terminology.</p>
+<p>The best split maximizes this reduction.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">Manual Gini Calculation</h2>
+      </div>
+      <div class="section-body">
+        <p>Parent node:</p>
+<div class="ascii-box"><pre>4 zeros
+4 ones</pre></div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+G(P)=0.5.
+\]</div>
+<p>Suppose a candidate split gives:</p>
+<div class="ascii-box"><pre>Left:  4 zeros, 0 ones
+Right: 0 zeros, 4 ones</pre></div>
+<p>Then:</p>
+<div class="formula-math">\[
+G(L)=0,
+\qquad
+G(R)=0.
+\]</div>
+<p>Weighted child impurity:</p>
+<div class="formula-math">\[
+\frac48(0)+\frac48(0)=0.
+\]</div>
+<p>Therefore gain:</p>
+<div class="formula-math">\[
+0.5-0=0.5.
+\]</div>
+<p>That is an ideal split.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">Manual Entropy Calculation</h2>
+      </div>
+      <div class="section-body">
+        <p>For the same parent:</p>
+<div class="formula-math">\[
+H(P)=1.
+\]</div>
+<p>After the perfect split:</p>
+<div class="formula-math">\[
+H(L)=0,
+\qquad
+H(R)=0.
+\]</div>
+<p>Weighted child entropy:</p>
+<div class="formula-math">\[
+0.
+\]</div>
+<p>Information gain:</p>
+<div class="formula-math">\[
+1-0=1.
+\]</div>
+<p>Again, the split receives maximal improvement for this tiny binary example.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">Candidate Thresholds</h2>
+      </div>
+      <div class="section-body">
+        <p>For numerical features, a simple scratch implementation can consider thresholds halfway between sorted unique values.</p>
+<p>Suppose:</p>
+<div class="ascii-box"><pre>1.0, 2.0, 5.0, 6.0</pre></div>
+<p>Candidate thresholds can be:</p>
+<div class="formula-math">\[
+1.5,
+\quad
+3.5,
+\quad
+5.5.
+\]</div>
+<p>Why midpoints?</p>
+<p>Because all values on one side of a threshold remain unchanged until the threshold crosses a sample value.</p>
+<p>This is a practical simplification for a teaching implementation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Implement Candidate Thresholds</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def candidate_thresholds(values):
+    values = np.sort(np.unique(values))
+
+    if len(values) &lt; 2:
+        return np.array([])
+
+    return (values[:-1] + values[1:]) / 2.0</code></pre></div>
+<p>Test:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">thresholds = candidate_thresholds(
+    np.array([1.0, 2.0, 5.0, 6.0])
+)
+
+print(thresholds)
+assert np.allclose(
+    thresholds,
+    np.array([1.5, 3.5, 5.5]),
+)</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">Split a Dataset</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def split_dataset(X, y, feature_index, threshold):
+    left_mask = X[:, feature_index] &lt;= threshold
+    right_mask = ~left_mask
+
+    return (
+        X[left_mask],
+        y[left_mask],
+        X[right_mask],
+        y[right_mask],
+    )</code></pre></div>
+<p>Basic test:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X_left, y_left, X_right, y_right = split_dataset(
+    X,
+    y,
+    feature_index=0,
+    threshold=3.5,
+)
+
+assert len(X_left) + len(X_right) == len(X)
+assert np.all(X_left[:, 0] &lt;= 3.5)
+assert np.all(X_right[:, 0] &gt; 3.5)</code></pre></div>
+<p>This function is the routing engine of the tree.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Weighted Child Impurity</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def weighted_child_impurity(
+    y_left,
+    y_right,
+    impurity_fn,
+):
+    n_left = len(y_left)
+    n_right = len(y_right)
+    n_total = n_left + n_right
+
+    if n_total == 0:
+        return 0.0
+
+    return (
+        (n_left / n_total) * impurity_fn(y_left)
+        + (n_right / n_total) * impurity_fn(y_right)
+    )</code></pre></div>
+<p>This implementation is generic enough to work with:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">gini_impurity
+tree_entropy</code></pre></div>
+<p>without rewriting the splitting logic.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">Best Split Search</h2>
+      </div>
+      <div class="section-body">
+        <p>Now search all features and candidate thresholds.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def best_split(X, y, impurity_fn=gini_impurity):
+    n_samples, n_features = X.shape
+
+    best = None
+    parent_impurity = impurity_fn(y)
+
+    for feature_index in range(n_features):
+        thresholds = candidate_thresholds(
+            X[:, feature_index]
+        )
+
+        for threshold in thresholds:
+            (
+                X_left,
+                y_left,
+                X_right,
+                y_right,
+            ) = split_dataset(
+                X,
+                y,
+                feature_index,
+                threshold,
+            )
+
+            if len(y_left) == 0 or len(y_right) == 0:
+                continue
+
+            child_impurity = weighted_child_impurity(
+                y_left,
+                y_right,
+                impurity_fn,
+            )
+
+            gain = parent_impurity - child_impurity
+
+            if best is None or gain &gt; best[&quot;gain&quot;]:
+                best = {
+                    &quot;feature_index&quot;: feature_index,
+                    &quot;threshold&quot;: threshold,
+                    &quot;gain&quot;: gain,
+                    &quot;child_impurity&quot;: child_impurity,
+                }
+
+    return best</code></pre></div>
+<p>This is the heart of tree induction.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">Find the Root Split</h2>
+      </div>
+      <div class="section-body">
+        <p>Run:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">root_split = best_split(X, y)
+print(root_split)</code></pre></div>
+<p>For the controlled dataset, the best threshold should fall in the gap separating the two classes, provided the candidate split search is working correctly.</p>
+<p>Do not hard-code the answer.</p>
+<p>The entire point of the exercise is that the algorithm discovers the threshold from the labels.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">Verify Candidate Splits Manually</h2>
+      </div>
+      <div class="section-body">
+        <p>Print every candidate:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def inspect_splits(X, y, impurity_fn=gini_impurity):
+    parent = impurity_fn(y)
+    rows = []
+
+    for feature_index in range(X.shape[1]):
+        for threshold in candidate_thresholds(X[:, feature_index]):
+            _, yl, _, yr = split_dataset(
+                X,
+                y,
+                feature_index,
+                threshold,
+            )
+
+            weighted = weighted_child_impurity(
+                yl,
+                yr,
+                impurity_fn,
+            )
+
+            rows.append({
+                &quot;feature&quot;: feature_index,
+                &quot;threshold&quot;: threshold,
+                &quot;left_n&quot;: len(yl),
+                &quot;right_n&quot;: len(yr),
+                &quot;child_impurity&quot;: weighted,
+                &quot;gain&quot;: parent - weighted,
+            })
+
+    return rows</code></pre></div>
+<p>Then inspect the rows sorted by gain.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">rows = inspect_splits(X, y)
+rows = sorted(
+    rows,
+    key=lambda r: r[&quot;gain&quot;],
+    reverse=True,
+)
+
+for row in rows:
+    print(row)</code></pre></div>
+<p>This is one of the best debugging techniques for decision trees because it makes the supposedly “intelligent” split selection fully visible.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">Leaf Prediction</h2>
+      </div>
+      <div class="section-body">
+        <p>At a leaf, a simple classification rule is majority class.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def majority_class(y):
+    values, counts = np.unique(
+        y,
+        return_counts=True,
+    )
+    return values[np.argmax(counts)]</code></pre></div>
+<p>For:</p>
+<div class="ascii-box"><pre>[0, 0, 1]</pre></div>
+<p>prediction is:</p>
+<div class="ascii-box"><pre>0</pre></div>
+<p>For:</p>
+<div class="ascii-box"><pre>[0, 1, 1, 1]</pre></div>
+<p>prediction is:</p>
+<div class="ascii-box"><pre>1</pre></div>
+<p>For ties, <code>np.argmax</code> chooses the first maximum according to the sorted class ordering returned by <code>np.unique</code>. In a more complete implementation, define a tie-breaking policy explicitly.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">Node Data Structure</h2>
+      </div>
+      <div class="section-body">
+        <p>A small Python dataclass keeps the tree readable.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from dataclasses import dataclass
+from typing import Optional
+
+@dataclass
+class Node:
+    feature_index: Optional[int] = None
+    threshold: Optional[float] = None
+    left: Optional[&quot;Node&quot;] = None
+    right: Optional[&quot;Node&quot;] = None
+    prediction: Optional[int] = None</code></pre></div>
+<p>Interpretation:</p>
+<div class="ascii-box"><pre>prediction is not None
+        ↓
+       leaf
+
+feature_index is not None
+        ↓
+   internal node</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">Stopping Conditions</h2>
+      </div>
+      <div class="section-body">
+        <p>Without stopping rules, recursive splitting can continue until every training sample is isolated.</p>
+<p>That can lead to memorization.</p>
+<p>Useful stopping controls include:</p>
+<div class="ascii-box"><pre>pure node
+max_depth
+minimum samples required to split
+minimum samples in a leaf
+no useful split</pre></div>
+<p>For the first implementation, use:</p>
+<div class="ascii-box"><pre>max_depth
+min_samples_split</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">Why `max_depth` Controls Complexity</h2>
+      </div>
+      <div class="section-body">
+        <p>Compare:</p>
+<div class="ascii-box"><pre>depth 1 → one decision question
+
+depth 2 → up to four leaf regions in a binary tree
+
+depth 3 → more regions
+...</pre></div>
+<p>As depth increases, the tree can carve the input space into increasingly specific regions.</p>
+<p>That usually increases training flexibility.</p>
+<p>But more flexibility can increase variance and overfitting.</p>
+<p>This connects directly to the course's generalization material.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">Recursive Tree Builder</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def build_tree(
+    X,
+    y,
+    depth=0,
+    max_depth=3,
+    min_samples_split=2,
+    impurity_fn=gini_impurity,
+):
+    node = Node()
+
+    # Stop if the node is pure.
+    if len(np.unique(y)) == 1:
+        node.prediction = int(y[0])
+        return node
+
+    # Stop if we cannot legally split further.
+    if depth &gt;= max_depth:
+        node.prediction = int(majority_class(y))
+        return node
+
+    if len(y) &lt; min_samples_split:
+        node.prediction = int(majority_class(y))
+        return node
+
+    split = best_split(
+        X,
+        y,
+        impurity_fn=impurity_fn,
+    )
+
+    if split is None or split[&quot;gain&quot;] &lt;= 0:
+        node.prediction = int(majority_class(y))
+        return node
+
+    feature_index = split[&quot;feature_index&quot;]
+    threshold = split[&quot;threshold&quot;]
+
+    left_mask = X[:, feature_index] &lt;= threshold
+    right_mask = ~left_mask
+
+    node.feature_index = feature_index
+    node.threshold = threshold
+
+    node.left = build_tree(
+        X[left_mask],
+        y[left_mask],
+        depth=depth + 1,
+        max_depth=max_depth,
+        min_samples_split=min_samples_split,
+        impurity_fn=impurity_fn,
+    )
+
+    node.right = build_tree(
+        X[right_mask],
+        y[right_mask],
+        depth=depth + 1,
+        max_depth=max_depth,
+        min_samples_split=min_samples_split,
+        impurity_fn=impurity_fn,
+    )
+
+    return node</code></pre></div>
+<p>This function is deliberately explicit.</p>
+<p>Do not compress it into clever one-liners while learning.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">Prediction by Tree Traversal</h2>
+      </div>
+      <div class="section-body">
+        <p>A sample follows one path from root to leaf.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def predict_one(node, x):
+    if node.prediction is not None:
+        return node.prediction
+
+    if x[node.feature_index] &lt;= node.threshold:
+        return predict_one(node.left, x)
+
+    return predict_one(node.right, x)</code></pre></div>
+<p>For a matrix:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def predict_tree(root, X):
+    return np.array([
+        predict_one(root, x)
+        for x in X
+    ])</code></pre></div>
+<p>The training algorithm is recursive; prediction is a simple path traversal.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">Wrap the Implementation</h2>
+      </div>
+      <div class="section-body">
+        <p>Create a small estimator-style interface.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">class DecisionTreeClassifierScratch:
+    def __init__(
+        self,
+        max_depth=3,
+        min_samples_split=2,
+        criterion=&quot;gini&quot;,
+    ):
+        self.max_depth = max_depth
+        self.min_samples_split = min_samples_split
+        self.criterion = criterion
+        self.root = None
+
+    def _impurity(self):
+        if self.criterion == &quot;gini&quot;:
+            return gini_impurity
+        if self.criterion == &quot;entropy&quot;:
+            return entropy
+        raise ValueError(
+            &quot;criterion must be &#x27;gini&#x27; or &#x27;entropy&#x27;&quot;
+        )
+
+    def fit(self, X, y):
+        X = np.asarray(X, dtype=float)
+        y = np.asarray(y, dtype=int)
+
+        if X.ndim != 2:
+            raise ValueError(&quot;X must be 2D&quot;)
+        if y.ndim != 1:
+            raise ValueError(&quot;y must be 1D&quot;)
+        if len(X) != len(y):
+            raise ValueError(&quot;X and y must align&quot;)
+
+        self.root = build_tree(
+            X,
+            y,
+            max_depth=self.max_depth,
+            min_samples_split=self.min_samples_split,
+            impurity_fn=self._impurity(),
+        )
+        return self
+
+    def predict(self, X):
+        if self.root is None:
+            raise RuntimeError(&quot;fit the model first&quot;)
+
+        X = np.asarray(X, dtype=float)
+        return predict_tree(self.root, X)</code></pre></div>
+<p>This is now a usable educational classifier.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">Train the Scratch Tree</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">model = DecisionTreeClassifierScratch(
+    max_depth=2,
+    min_samples_split=2,
+    criterion=&quot;gini&quot;,
+)
+
+model.fit(X, y)
+
+pred = model.predict(X)
+print(pred)</code></pre></div>
+<p>For this controlled dataset, the tree should be capable of separating the classes cleanly with a small depth.</p>
+<p>Check:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert np.array_equal(pred, y)</code></pre></div>
+<p>This assertion is appropriate for this <strong>controlled training dataset</strong>, not as a universal requirement for every tree.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">Print the Tree Structure</h2>
+      </div>
+      <div class="section-body">
+        <p>A readable tree printer is useful for debugging.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def print_tree(node, depth=0):
+    indent = &quot;  &quot; * depth
+
+    if node.prediction is not None:
+        print(
+            f&quot;{indent}Leaf → class {node.prediction}&quot;
+        )
+        return
+
+    print(
+        f&quot;{indent}X[:, {node.feature_index}] &quot;
+        f&quot;&lt;= {node.threshold:.4f}&quot;
+    )
+
+    print(f&quot;{indent}├── True&quot;)
+    print_tree(node.left, depth + 1)
+
+    print(f&quot;{indent}└── False&quot;)
+    print_tree(node.right, depth + 1)</code></pre></div>
+<p>Run:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print_tree(model.root)</code></pre></div>
+<p>Expected conceptual output:</p>
+<div class="ascii-box"><pre>X[:, feature] &lt;= threshold
+├── True
+│   └── Leaf → class 0
+└── False
+    └── Leaf → class 1</pre></div>
+<p>The exact threshold depends on the dataset.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Manual Trace of One Prediction</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose the root says:</p>
+<div class="ascii-box"><pre>feature 0 &lt;= 3.5 ?</pre></div>
+<p>and you classify:</p>
+<div class="ascii-box"><pre>x = [2.2, 1.1]</pre></div>
+<p>Then:</p>
+<div class="ascii-box"><pre>2.2 &lt;= 3.5 → True</pre></div>
+<p>Go left.</p>
+<p>Suppose the left child is a leaf:</p>
+<div class="ascii-box"><pre>class 0</pre></div>
+<p>The prediction ends there.</p>
+<p>Another sample:</p>
+<div class="ascii-box"><pre>x = [5.2, 2.9]</pre></div>
+<p>Then:</p>
+<div class="ascii-box"><pre>5.2 &lt;= 3.5 → False</pre></div>
+<p>Go right.</p>
+<p>If that child is a class-1 leaf:</p>
+<div class="ascii-box"><pre>prediction = 1</pre></div>
+<h3>Tree prediction is not gradient descent</h3>
+<p>No parameter update occurs during prediction.</p>
+<p>The learned structure is simply traversed.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Why the Root Split Is Chosen</h2>
+      </div>
+      <div class="section-body">
+        <p>At each node:</p>
+<div class="ascii-box"><pre>current data subset
+      ↓
+all candidate features
+      ↓
+all candidate thresholds
+      ↓
+calculate impurity reduction
+      ↓
+choose best</pre></div>
+<p>So the root is not chosen because a human “looks at the plot.”</p>
+<p>The plot is useful only for us to visualize what the algorithm discovered.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-35" class="section-block">
+      <div class="section-header">
+        <span class="section-num">35</span>
+        <h2 class="section-heading">Gini vs Entropy</h2>
+      </div>
+      <div class="section-body">
+        <p>Both are impurity measures.</p>
+<div class="ascii-box"><pre>Gini
+  ↓
+1 - Σ p²
+
+Entropy
+  ↓
+-Σ p log₂ p</pre></div>
+<p>Both are:</p>
+<div class="ascii-box"><pre>0 at a pure node
+larger when the node is mixed</pre></div>
+<p>Their numerical values are on different scales, so do not compare a Gini value of <code>0.3</code> directly against an entropy value of <code>0.3</code> as though they mean the same amount of impurity.</p>
+<p>The important algorithmic idea is shared:</p>
+<blockquote>
+<p>Prefer splits that create purer children according to the selected criterion.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-36" class="section-block">
+      <div class="section-header">
+        <span class="section-num">36</span>
+        <h2 class="section-heading">Compare Root Split with Both Criteria</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">for criterion in [&quot;gini&quot;, &quot;entropy&quot;]:
+    model = DecisionTreeClassifierScratch(
+        max_depth=2,
+        criterion=criterion,
+    )
+    model.fit(X, y)
+
+    print(&quot;criterion:&quot;, criterion)
+    print_tree(model.root)</code></pre></div>
+<p>The first split may be identical even though the criterion values differ.</p>
+<p>Do not expect Gini and entropy always to create exactly the same entire tree, especially on noisy data or when several splits have similar quality.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-37" class="section-block">
+      <div class="section-header">
+        <span class="section-num">37</span>
+        <h2 class="section-heading">Train/Test Split</h2>
+      </div>
+      <div class="section-body">
+        <p>Use the reusable workflow from <code>CODE-U2-01</code>.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.25,
+    random_state=42,
+    stratify=y,
+)</code></pre></div>
+<p>Unlike logistic regression, decision trees do not generally require feature scaling for their basic split logic because comparisons use ordering such as:</p>
+<div class="formula-math">\[
+x_j\le t.
+\]</div>
+<p>Multiplying a numerical feature by a positive constant changes threshold values but not the ordering.</p>
+<p>However, preprocessing can still matter for other parts of a larger pipeline, so do not turn “trees do not require scaling” into “preprocessing never matters.”</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-38" class="section-block">
+      <div class="section-header">
+        <span class="section-num">38</span>
+        <h2 class="section-heading">Evaluate the Scratch Tree</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">model = DecisionTreeClassifierScratch(
+    max_depth=3,
+    criterion=&quot;gini&quot;,
+)
+model.fit(X_train, y_train)
+
+pred = model.predict(X_test)</code></pre></div>
+<p>Use the standard metrics:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.metrics import (
+    confusion_matrix,
+    precision_score,
+    recall_score,
+    f1_score,
+)
+
+print(confusion_matrix(y_test, pred))
+print(&quot;precision:&quot;, precision_score(y_test, pred, zero_division=0))
+print(&quot;recall:&quot;, recall_score(y_test, pred, zero_division=0))
+print(&quot;f1:&quot;, f1_score(y_test, pred, zero_division=0))</code></pre></div>
+<p>Connect this directly to:</p>
+<div class="ascii-box"><pre>CODE-U2-03 → probabilities for logistic regression
+CODE-U2-04 → hard labels from tree
+CODE-U2-05 → evaluation system</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-39" class="section-block">
+      <div class="section-header">
+        <span class="section-num">39</span>
+        <h2 class="section-heading">Decision Regions in 2D</h2>
+      </div>
+      <div class="section-body">
+        <p>A tree creates piecewise-constant regions.</p>
+<p>For axis-aligned splits, the prediction space looks like blocks:</p>
+<div class="ascii-box"><pre>┌───────────────┬──────────┐
+│               │          │
+│    class 0    │ class 1  │
+│               │          │
+├───────┬───────┤          │
+│ class │ class │          │
+│   0   │   1   │          │
+└───────┴───────┴──────────┘</pre></div>
+<p>This contrasts with logistic regression's straight-line boundary.</p>
+<div class="ascii-box"><pre>Logistic regression
+       /
+      /
+-----/----------------
+    /
+
+Decision tree
+┌───────┬─────────────┐
+│  0    │      1      │
+├───────┼─────────────┤
+│  0    │      1      │
+└───────┴─────────────┘</pre></div>
+<p>For an educational plot, create a dense mesh and call <code>predict</code> over the grid.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">x_min, x_max = X[:, 0].min() - 0.5, X[:, 0].max() + 0.5
+x2_min, x2_max = X[:, 1].min() - 0.5, X[:, 1].max() + 0.5
+
+xx1, xx2 = np.meshgrid(
+    np.linspace(x_min, x_max, 300),
+    np.linspace(x2_min, x2_max, 300),
+)
+
+grid = np.column_stack([
+    xx1.ravel(),
+    xx2.ravel(),
+])
+
+Z = model.predict(grid).reshape(xx1.shape)
+
+plt.contourf(xx1, xx2, Z, alpha=0.2)
+plt.scatter(X[:, 0], X[:, 1], c=y)
+plt.xlabel(&quot;Feature 1&quot;)
+plt.ylabel(&quot;Feature 2&quot;)
+plt.title(&quot;Decision Tree Classification Regions&quot;)
+plt.show()</code></pre></div>
+<p>The resulting regions should look axis-aligned because the scratch implementation only uses feature-wise thresholds.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-40" class="section-block">
+      <div class="section-header">
+        <span class="section-num">40</span>
+        <h2 class="section-heading">Experiment — Tree Depth</h2>
+      </div>
+      <div class="section-body">
+        <p>Train trees with:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">depths = [1, 2, 3, 5, 10, None]</code></pre></div>
+<p>For the scratch implementation, replace <code>None</code> with a suitable large depth or keep a finite value. For the library implementation later, <code>None</code> is a supported concept for an unrestricted depth subject to other stopping constraints.</p>
+<p>Record:</p>
+<div class="ascii-box"><pre>max_depth
+training accuracy
+test accuracy
+training F1
+test F1
+number of leaves, if measured</pre></div>
+<p>Expected qualitative trend:</p>
+<div class="ascii-box"><pre>small depth
+   ↓
+possibly underfit
+
+moderate depth
+   ↓
+often stronger generalization
+
+very large depth
+   ↓
+can memorize training data</pre></div>
+<p>This is a practical demonstration of the course's overfitting/underfitting theme.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-41" class="section-block">
+      <div class="section-header">
+        <span class="section-num">41</span>
+        <h2 class="section-heading">Experiment — Minimum Samples to Split</h2>
+      </div>
+      <div class="section-body">
+        <p>Try:</p>
+<div class="ascii-box"><pre>min_samples_split = 2
+4
+6
+10</pre></div>
+<p>A higher minimum makes the tree stop earlier in many datasets.</p>
+<p>Observe:</p>
+<div class="ascii-box"><pre>less flexibility
+      ↓
+shallower/simpler structures
+      ↓
+potentially lower variance</pre></div>
+<p>But again, the final validation result is empirical.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-42" class="section-block">
+      <div class="section-header">
+        <span class="section-num">42</span>
+        <h2 class="section-heading">Experiment — Gini vs Entropy</h2>
+      </div>
+      <div class="section-body">
+        <p>Run both criteria on the same fixed split.</p>
+<p>Record:</p>
+<div class="ascii-box"><pre>criterion
+root feature
+root threshold
+train metric
+test metric</pre></div>
+<p>Use the same:</p>
+<div class="ascii-box"><pre>train/test data
+max depth
+min_samples_split</pre></div>
+<p>This isolates the criterion as the main changed factor.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-43" class="section-block">
+      <div class="section-header">
+        <span class="section-num">43</span>
+        <h2 class="section-heading">Feature Importance — Conceptual View</h2>
+      </div>
+      <div class="section-body">
+        <p>Trees can assign importance to features based on how much they contribute to impurity reduction across the tree.</p>
+<p>The intuition is:</p>
+<div class="ascii-box"><pre>large total impurity reduction
+             ↓
+more contribution to tree decisions</pre></div>
+<p>But treat feature importance carefully.</p>
+<p>High tree importance does not automatically prove:</p>
+<div class="ascii-box"><pre>causal importance
+real-world importance
+ethical importance</pre></div>
+<p>The metric is model-specific.</p>
+<p>For this scratch implementation, feature importance is intentionally omitted from the core to keep the learning target focused on split induction and recursion.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-44" class="section-block">
+      <div class="section-header">
+        <span class="section-num">44</span>
+        <h2 class="section-heading">Why Trees Handle Different Feature Scales Differently</h2>
+      </div>
+      <div class="section-body">
+        <p>Consider a feature:</p>
+<div class="ascii-box"><pre>age = 18, 25, 31, 42</pre></div>
+<p>Suppose a good split is:</p>
+<div class="formula-math">\[
+age\le30.
+\]</div>
+<p>Multiply age by 10:</p>
+<div class="ascii-box"><pre>180, 250, 310, 420</pre></div>
+<p>The equivalent split is:</p>
+<div class="formula-math">\[
+age'\le300.
+\]</div>
+<p>The ordering has not changed.</p>
+<p>Therefore the tree can often find an equivalent partition without standardization.</p>
+<p>This differs from gradient-based models such as logistic regression, where scale can strongly affect optimization behaviour.</p>
+<h3>Practical takeaway</h3>
+<div class="ascii-box"><pre>Logistic regression → scaling often important for GD
+Decision tree       → scaling usually not required for split logic</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-45" class="section-block">
+      <div class="section-header">
+        <span class="section-num">45</span>
+        <h2 class="section-heading">Why Trees Can Represent Nonlinear Boundaries</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose the data requires a rectangular rule:</p>
+<div class="ascii-box"><pre>x1 &gt; 2
+AND
+x2 &lt; 5</pre></div>
+<p>A tree can represent this naturally:</p>
+<div class="ascii-box"><pre>x1 &gt; 2?
+   ↓ yes
+x2 &lt; 5?
+   ↓ yes
+class 1</pre></div>
+<p>A single logistic-regression boundary cannot represent every such pattern.</p>
+<p>This is a major conceptual reason trees remain useful.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-46" class="section-block">
+      <div class="section-header">
+        <span class="section-num">46</span>
+        <h2 class="section-heading">But a Tree Can Become Too Specific</h2>
+      </div>
+      <div class="section-body">
+        <p>A deep tree can keep splitting until leaves contain tiny groups.</p>
+<p>Extreme example:</p>
+<div class="ascii-box"><pre>one training sample
+        ↓
+one highly specific leaf
+        ↓
+training prediction memorized</pre></div>
+<p>Training performance can approach perfection while test performance degrades.</p>
+<p>The key generalization question is:</p>
+<blockquote>
+<p>Is the tree learning reusable structure or memorizing accidental details of the training sample?</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-47" class="section-block">
+      <div class="section-header">
+        <span class="section-num">47</span>
+        <h2 class="section-heading">Library Implementation</h2>
+      </div>
+      <div class="section-body">
+        <p>Now compare with a standard estimator.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.tree import DecisionTreeClassifier
+
+library_tree = DecisionTreeClassifier(
+    criterion=&quot;gini&quot;,
+    max_depth=3,
+    min_samples_split=2,
+    random_state=42,
+)
+
+library_tree.fit(X_train, y_train)
+
+library_pred = library_tree.predict(X_test)</code></pre></div>
+<p>Evaluate with the same metrics as the scratch model.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(
+    confusion_matrix(
+        y_test,
+        library_pred,
+    )
+)
+
+print(
+    &quot;precision:&quot;,
+    precision_score(
+        y_test,
+        library_pred,
+        zero_division=0,
+    ),
+)
+
+print(
+    &quot;recall:&quot;,
+    recall_score(
+        y_test,
+        library_pred,
+        zero_division=0,
+    ),
+)
+
+print(
+    &quot;f1:&quot;,
+    f1_score(
+        y_test,
+        library_pred,
+        zero_division=0,
+    ),
+)</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-48" class="section-block">
+      <div class="section-header">
+        <span class="section-num">48</span>
+        <h2 class="section-heading">Visualize the Library Tree</h2>
+      </div>
+      <div class="section-body">
+        <p>The library implementation can also be visualized.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.tree import plot_tree
+
+plt.figure(figsize=(12, 7))
+plot_tree(
+    library_tree,
+    feature_names=[&quot;feature_1&quot;, &quot;feature_2&quot;],
+    class_names=[&quot;class_0&quot;, &quot;class_1&quot;],
+    filled=True,
+)
+plt.title(&quot;Library Decision Tree&quot;)
+plt.show()</code></pre></div>
+<p>Read each node from the top downward.</p>
+<p>Typical node information can include:</p>
+<div class="ascii-box"><pre>split condition
+impurity
+sample count
+class distribution
+predicted class</pre></div>
+<p>The exact displayed formatting is library-generated rather than part of the mathematical definition of a tree.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-49" class="section-block">
+      <div class="section-header">
+        <span class="section-num">49</span>
+        <h2 class="section-heading">Comparing Scratch and Library Trees</h2>
+      </div>
+      <div class="section-body">
+        <p>Do not use only:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">np.array_equal(scratch_pred, library_pred)</code></pre></div>
+<p>as the definition of correctness.</p>
+<p>A better validation ladder is:</p>
+<div class="ascii-box"><pre>1. impurity functions match known values
+2. candidate thresholds are correct
+3. split scores are correct
+4. root split is sensible
+5. recursive structure is sensible
+6. controlled dataset predictions are sensible
+7. held-out metrics are reasonable
+8. library model gives broadly consistent behaviour</pre></div>
+<p>A scratch implementation can differ in tie-breaking or stopping details while still implementing the intended algorithm correctly.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-50" class="section-block">
+      <div class="section-header">
+        <span class="section-num">50</span>
+        <h2 class="section-heading">Important Library Difference: Exact Objective and Details</h2>
+      </div>
+      <div class="section-body">
+        <p>Two decision tree implementations may differ because of:</p>
+<ul>
+<li>impurity criterion;</li>
+<li>split search details;</li>
+<li>tie handling;</li>
+<li>minimum leaf constraints;</li>
+<li>stopping rules;</li>
+<li>feature handling;</li>
+<li>pruning controls;</li>
+<li>numerical implementation details.</li>
+</ul>
+<p>Therefore:</p>
+<blockquote>
+<p><strong>Do not claim “my tree is wrong” merely because its exact structure differs from the library tree.</strong></p>
+</blockquote>
+<p>First confirm that the core split logic and evaluation behaviour are sound.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-51" class="section-block">
+      <div class="section-header">
+        <span class="section-num">51</span>
+        <h2 class="section-heading">Reproducibility</h2>
+      </div>
+      <div class="section-body">
+        <p>Whenever randomness enters a dataset generator, split or model configuration, use an explicit seed where supported.</p>
+<p>For example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">random_state=42</code></pre></div>
+<p>Record:</p>
+<div class="ascii-box"><pre>dataset
+train/test split
+criterion
+max_depth
+min_samples_split
+other stopping controls
+metrics</pre></div>
+<p>A model result without configuration is difficult to reproduce.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-52" class="section-block">
+      <div class="section-header">
+        <span class="section-num">52</span>
+        <h2 class="section-heading">Unit Tests for the Core Functions</h2>
+      </div>
+      <div class="section-body">
+        <p>Create dedicated tests.</p>
+<h3>Test 1 — Pure node</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert np.isclose(
+    gini_impurity(np.array([1, 1, 1])),
+    0.0,
+)</code></pre></div>
+<h3>Test 2 — Balanced binary node</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert np.isclose(
+    gini_impurity(np.array([0, 1])),
+    0.5,
+)</code></pre></div>
+<h3>Test 3 — Entropy</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert np.isclose(
+    entropy(np.array([0, 1])),
+    1.0,
+)</code></pre></div>
+<h3>Test 4 — Partition preservation</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">xl, yl, xr, yr = split_dataset(
+    X,
+    y,
+    0,
+    3.5,
+)
+
+assert len(yl) + len(yr) == len(y)</code></pre></div>
+<h3>Test 5 — Tree predicts legal labels</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">pred = model.predict(X)
+assert set(np.unique(pred)).issubset({0, 1})</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-53" class="section-block">
+      <div class="section-header">
+        <span class="section-num">53</span>
+        <h2 class="section-heading">Edge Cases</h2>
+      </div>
+      <div class="section-body">
+        <h2>Edge case 1 — Pure node</h2>
+<p>No split is useful. Return a leaf.</p>
+<h2>Edge case 2 — Constant feature</h2>
+<p>There may be no meaningful threshold candidate.</p>
+<h2>Edge case 3 — All features constant</h2>
+<p>The tree must stop rather than recurse forever.</p>
+<h2>Edge case 4 — Tiny node</h2>
+<p>Minimum-sample stopping rules matter.</p>
+<h2>Edge case 5 — Zero gain</h2>
+<p>If no split reduces impurity, stop.</p>
+<h2>Edge case 6 — Tie between splits</h2>
+<p>A deterministic tie-breaking rule improves reproducibility.</p>
+<h2>Edge case 7 — More than two classes</h2>
+<p>The impurity formulas already generalize to \(K\gt 2\), but the scratch implementation's type hints and examples are focused on binary classification for clarity.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-54" class="section-block">
+      <div class="section-header">
+        <span class="section-num">54</span>
+        <h2 class="section-heading">Optional Extension — Multi-Class Trees</h2>
+      </div>
+      <div class="section-body">
+        <p>For labels:</p>
+<div class="ascii-box"><pre>0, 1, 2</pre></div>
+<p>Gini remains:</p>
+<div class="formula-math">\[
+G=1-(p_0^2+p_1^2+p_2^2).
+\]</div>
+<p>Entropy becomes:</p>
+<div class="formula-math">\[
+H=-\sum_{k=0}^{2}p_k\log_2p_k.
+\]</div>
+<p>The recursive split algorithm does not fundamentally change.</p>
+<p>What changes is:</p>
+<div class="ascii-box"><pre>class distribution
+majority-class leaf prediction
+metric selection</pre></div>
+<p>Try this only after the binary version is fully understood.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-55" class="section-block">
+      <div class="section-header">
+        <span class="section-num">55</span>
+        <h2 class="section-heading">Optional Extension — Regression Trees</h2>
+      </div>
+      <div class="section-body">
+        <p>The same tree idea can be used for continuous targets.</p>
+<p>Instead of class impurity, a regression tree can reduce within-node squared error or variance.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>classification tree
+   ↓
+make classes purer
+
+regression tree
+   ↓
+make numerical targets more homogeneous</pre></div>
+<p>This is useful because it demonstrates that the tree is a general <strong>recursive partitioning framework</strong>, not merely a classifier.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-56" class="section-block">
+      <div class="section-header">
+        <span class="section-num">56</span>
+        <h2 class="section-heading">Practical Lab — Compare Logistic Regression and Decision Tree</h2>
+      </div>
+      <div class="section-body">
+        <p>Use exactly the same two-feature dataset.</p>
+<p>Train:</p>
+<div class="ascii-box"><pre>Model A — Logistic Regression
+Model B — Decision Tree</pre></div>
+<p>Measure:</p>
+<div class="ascii-box"><pre>accuracy
+precision
+recall
+F1
+ROC-AUC where probability/score is available</pre></div>
+<p>Then inspect the decision boundaries.</p>
+<p>The key learning question is:</p>
+<blockquote>
+<p><strong>What geometric assumption does each model make?</strong></p>
+</blockquote>
+<p>A useful first contrast is:</p>
+<div class="ascii-box"><pre>Logistic regression → one linear separator
+Decision tree       → recursive axis-aligned partitions</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-57" class="section-block">
+      <div class="section-header">
+        <span class="section-num">57</span>
+        <h2 class="section-heading">Practical Lab — Overfitting Demonstration</h2>
+      </div>
+      <div class="section-body">
+        <p>Use a noisy synthetic dataset.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.datasets import make_classification
+
+Xn, yn = make_classification(
+    n_samples=500,
+    n_features=2,
+    n_redundant=0,
+    n_informative=2,
+    flip_y=0.12,
+    class_sep=0.9,
+    random_state=42,
+)</code></pre></div>
+<p>Train several depths.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.metrics import accuracy_score
+
+Xtr, Xte, ytr, yte = train_test_split(
+    Xn,
+    yn,
+    test_size=0.3,
+    random_state=42,
+    stratify=yn,
+)
+
+for depth in [1, 2, 3, 5, 10, 20]:
+    tree = DecisionTreeClassifier(
+        max_depth=depth,
+        random_state=42,
+    )
+    tree.fit(Xtr, ytr)
+
+    train_acc = accuracy_score(
+        ytr,
+        tree.predict(Xtr),
+    )
+    test_acc = accuracy_score(
+        yte,
+        tree.predict(Xte),
+    )
+
+    print(depth, train_acc, test_acc)</code></pre></div>
+<p>Look for the pattern rather than a guaranteed exact shape:</p>
+<div class="ascii-box"><pre>very shallow
+→ underfit risk
+
+moderate
+→ useful bias/variance trade-off
+
+deep
+→ training accuracy may approach 1
+→ test accuracy may deteriorate</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-58" class="section-block">
+      <div class="section-header">
+        <span class="section-num">58</span>
+        <h2 class="section-heading">Practical Lab — Inspect the Wrong Predictions</h2>
+      </div>
+      <div class="section-body">
+        <p>Find misclassified samples.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">pred = library_tree.predict(X_test)
+
+wrong = np.where(pred != y_test)[0]
+
+for i in wrong:
+    print(
+        &quot;X:&quot;, X_test[i],
+        &quot;true:&quot;, y_test[i],
+        &quot;pred:&quot;, pred[i],
+    )</code></pre></div>
+<p>This connects evaluation to actual error analysis.</p>
+<p>Do not stop at:</p>
+<div class="ascii-box"><pre>F1 = 0.84</pre></div>
+<p>Ask:</p>
+<blockquote>
+<p>Which examples did the model get wrong, and what pattern do those errors share?</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-59" class="section-block">
+      <div class="section-header">
+        <span class="section-num">59</span>
+        <h2 class="section-heading">Manual Exam-to-Code Connection</h2>
+      </div>
+      <div class="section-body">
+        <h3>Exam concept</h3>
+<blockquote>
+<p>Choose the split that maximizes impurity reduction.</p>
+</blockquote>
+<h3>Code</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">gain = parent_impurity - weighted_child_impurity</code></pre></div>
+<h3>Exam concept</h3>
+<blockquote>
+<p>Split recursively until stopping conditions are met.</p>
+</blockquote>
+<h3>Code</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">node.left = build_tree(...)
+node.right = build_tree(...)</code></pre></div>
+<h3>Exam concept</h3>
+<blockquote>
+<p>Leaf predicts the majority class.</p>
+</blockquote>
+<h3>Code</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">majority_class(y)</code></pre></div>
+<p>This is the ideal conversion pipeline:</p>
+<div class="ascii-box"><pre>exam formula
+   ↓
+algorithm step
+   ↓
+code statement
+   ↓
+test</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-60" class="section-block">
+      <div class="section-header">
+        <span class="section-num">60</span>
+        <h2 class="section-heading">Manual Questions</h2>
+      </div>
+      <div class="section-body">
+        <p>Answer before reading the formulas again.</p>
+<h3>Q1</h3>
+<p>What is a decision tree in one sentence?</p>
+<h3>Q2</h3>
+<p>Why do we need impurity?</p>
+<h3>Q3</h3>
+<p>What is Gini impurity?</p>
+<h3>Q4</h3>
+<p>What is entropy?</p>
+<h3>Q5</h3>
+<p>What does a perfect classification split produce?</p>
+<h3>Q6</h3>
+<p>Why is child impurity weighted by child size?</p>
+<h3>Q7</h3>
+<p>What is information gain?</p>
+<h3>Q8</h3>
+<p>Why are thresholds chosen between sorted values in the simple implementation?</p>
+<h3>Q9</h3>
+<p>Why does increasing tree depth increase overfitting risk?</p>
+<h3>Q10</h3>
+<p>Why does a basic tree usually not need feature standardization?</p>
+<h3>Q11</h3>
+<p>What is the difference between internal node and leaf?</p>
+<h3>Q12</h3>
+<p>Why can scratch and library tree structures differ even when both are correct?</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-61" class="section-block">
+      <div class="section-header">
+        <span class="section-num">61</span>
+        <h2 class="section-heading">Coding Challenge — Implement Entropy Without NumPy Helpers</h2>
+      </div>
+      <div class="section-body">
+        <p>For mastery, implement entropy using only:</p>
+<div class="ascii-box"><pre>loops
+basic arithmetic
+math.log2</pre></div>
+<p>Then compare against the vectorized version.</p>
+<p>Use this to verify that you understand the mathematics independently of array operations.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-62" class="section-block">
+      <div class="section-header">
+        <span class="section-num">62</span>
+        <h2 class="section-heading">Coding Challenge — Best Split Trace</h2>
+      </div>
+      <div class="section-body">
+        <p>Write:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def ranked_candidate_splits(X, y):
+    ...</code></pre></div>
+<p>Return rows containing:</p>
+<div class="ascii-box"><pre>feature
+threshold
+left size
+right size
+parent impurity
+child impurity
+gain</pre></div>
+<p>Sort descending by gain.</p>
+<p>This should become your main debugging instrument for tree code.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-63" class="section-block">
+      <div class="section-header">
+        <span class="section-num">63</span>
+        <h2 class="section-heading">Coding Challenge — Add `min_samples_leaf`</h2>
+      </div>
+      <div class="section-body">
+        <p>Extend the scratch implementation.</p>
+<p>A candidate split is valid only if:</p>
+<div class="formula-math">\[
+|L|\ge m
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+|R|\ge m.
+\]</div>
+<p>This prevents tiny leaves.</p>
+<p>Add tests for:</p>
+<div class="ascii-box"><pre>min_samples_leaf = 1
+min_samples_leaf = 2
+min_samples_leaf = 4</pre></div>
+<p>and inspect how the tree structure changes.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-64" class="section-block">
+      <div class="section-header">
+        <span class="section-num">64</span>
+        <h2 class="section-heading">Coding Challenge — Add Feature Importance</h2>
+      </div>
+      <div class="section-body">
+        <p>Extend the tree so that every accepted split contributes its weighted impurity reduction to the selected feature.</p>
+<p>Conceptual accumulation:</p>
+<div class="ascii-box"><pre>feature j
+   ↓
+impurity reduction at split 1
+   +
+impurity reduction at split 2
+   +
+...
+   ↓
+feature importance score</pre></div>
+<p>Then normalize all feature scores to sum to 1.</p>
+<p>Be explicit about what weighting convention your implementation uses.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-65" class="section-block">
+      <div class="section-header">
+        <span class="section-num">65</span>
+        <h2 class="section-heading">Common Bugs</h2>
+      </div>
+      <div class="section-body">
+        <h2>Bug 1 — Forgetting the child-size weights</h2>
+<p>Wrong idea:</p>
+<div class="ascii-box"><pre>average impurity of left and right</pre></div>
+<p>without considering how many samples each child contains.</p>
+<p>Correct:</p>
+<div class="formula-math">\[
+\frac{n_L}{n}I(L)+\frac{n_R}{n}I(R).
+\]</div>
+<h2>Bug 2 — Accepting an empty child</h2>
+<p>Every candidate split must leave samples on both sides.</p>
+<h2>Bug 3 — Recursive infinite growth</h2>
+<p>Always implement stopping conditions.</p>
+<h2>Bug 4 — Using the wrong inequality consistently</h2>
+<p><code>&lt;= threshold</code> vs <code>&gt; threshold</code> must partition all samples exactly once.</p>
+<h2>Bug 5 — Mixing labels and predictions</h2>
+<p>The split criterion must use true labels at training time.</p>
+<h2>Bug 6 — Accidental data leakage in experiments</h2>
+<p>Do not choose hyperparameters from the test set repeatedly.</p>
+<h2>Bug 7 — Assuming the deepest tree is the best tree</h2>
+<p>Training fit and generalization are different objectives.</p>
+<h2>Bug 8 — Treating feature importance as causal evidence</h2>
+<p>It is a model-derived statistic, not proof of cause.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-66" class="section-block">
+      <div class="section-header">
+        <span class="section-num">66</span>
+        <h2 class="section-heading">Complexity of the Teaching Implementation</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose the current node contains \(n\) samples and \(d\) features.</p>
+<p>A simple threshold search may examine up to roughly \(O(n)\) candidate thresholds per feature.</p>
+<p>Evaluating each split naively may itself scan the node samples, giving a teaching implementation whose split search can approach:</p>
+<div class="formula-math">\[
+O(dn^2)
+\]</div>
+<p>per node in the worst-case style of this straightforward code.</p>
+<p>Recursive tree construction therefore can be expensive on large datasets.</p>
+<p>Production implementations use optimized data structures and split-search strategies.</p>
+<p>The important learning point is:</p>
+<blockquote>
+<p><strong>Readable from-scratch code and optimized production code solve the same conceptual problem at different engineering levels.</strong></p>
+</blockquote>
+<p>Prediction in a binary tree takes time proportional to tree depth:</p>
+<div class="formula-math">\[
+O(h)
+\]</div>
+<p>for one sample in the simplest view, where \(h\) is the path length.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-67" class="section-block">
+      <div class="section-header">
+        <span class="section-num">67</span>
+        <h2 class="section-heading">Why Decision Trees Connect to Ensembles</h2>
+      </div>
+      <div class="section-body">
+        <p>A single tree can have high variance.</p>
+<p>This motivates ensemble methods such as:</p>
+<div class="ascii-box"><pre>many trees
+   ↓
+combine predictions
+   ↓
+reduce dependence on one exact tree</pre></div>
+<p>Examples include random forests and gradient boosting.</p>
+<p>These are beyond the core DSC-14 Unit II tree topic in this coding chapter, but understanding the single-tree algorithm is the foundation for the later family.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-68" class="section-block">
+      <div class="section-header">
+        <span class="section-num">68</span>
+        <h2 class="section-heading">Comparison — Logistic Regression vs Decision Tree</h2>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Property</th>
+<th>Logistic Regression</th>
+<th>Decision Tree</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Basic structure</td>
+<td>linear score + sigmoid</td>
+<td>recursive splits</td>
+</tr>
+<tr>
+<td>Typical boundary</td>
+<td>linear</td>
+<td>piecewise axis-aligned</td>
+</tr>
+<tr>
+<td>Scaling</td>
+<td>often useful for optimization</td>
+<td>usually unnecessary for basic split logic</td>
+</tr>
+<tr>
+<td>Interpretability</td>
+<td>coefficients/log-odds</td>
+<td>human-readable questions/paths</td>
+</tr>
+<tr>
+<td>Nonlinearity</td>
+<td>requires feature engineering or extensions</td>
+<td>naturally captures many nonlinear partitions</td>
+</tr>
+<tr>
+<td>Overfitting control</td>
+<td>regularization, optimization/evaluation controls</td>
+<td>depth, leaf/sample controls, pruning/ensembles</td>
+</tr>
+<tr>
+<td>Probability output</td>
+<td>native probability estimate</td>
+<td>leaf class proportions in full implementations; simple scratch version here returns labels</td>
+</tr>
+<tr>
+<td>Training mechanism</td>
+<td>gradient-based optimization</td>
+<td>greedy recursive partitioning</td>
+</tr>
+<tr>
+<td>Core objective</td>
+<td>log loss</td>
+<td>impurity reduction</td>
+</tr>
+</tbody>
+</table></div>
+<p>The biggest conceptual contrast is:</p>
+<div class="ascii-box"><pre>Logistic regression:
+learn numerical weights
+
+Decision tree:
+learn a sequence of partitions</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-69" class="section-block">
+      <div class="section-header">
+        <span class="section-num">69</span>
+        <h2 class="section-heading">Master Workflow Card</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>1. define X and y
+2. verify shapes and labels
+3. split train/test
+4. choose impurity criterion
+5. inspect the current node
+6. compute parent impurity
+7. enumerate candidate feature thresholds
+8. split data
+9. reject empty/invalid splits
+10. compute weighted child impurity
+11. compute gain
+12. select best split
+13. apply stopping criteria
+14. recurse left
+15. recurse right
+16. predict by tree traversal
+17. inspect decision regions
+18. evaluate on held-out data
+19. vary depth / node constraints
+20. compare with library implementation
+21. document errors and observations</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-70" class="section-block">
+      <div class="section-header">
+        <span class="section-num">70</span>
+        <h2 class="section-heading">Memory Anchors</h2>
+      </div>
+      <div class="section-body">
+        <h3>Anchor 1 — Class proportions</h3>
+<div class="formula-math">\[
+\boxed{p_k=n_k/n}
+\]</div>
+<h3>Anchor 2 — Gini</h3>
+<div class="formula-math">\[
+\boxed{G=1-\sum_kp_k^2}
+\]</div>
+<h3>Anchor 3 — Entropy</h3>
+<div class="formula-math">\[
+\boxed{H=-\sum_kp_k\log_2p_k}
+\]</div>
+<h3>Anchor 4 — Weighted child impurity</h3>
+<div class="formula-math">\[
+\boxed{
+I_{split}=
+\frac{n_L}{n}I(L)+\frac{n_R}{n}I(R)
+}
+\]</div>
+<h3>Anchor 5 — Gain</h3>
+<div class="formula-math">\[
+\boxed{Gain=I(P)-I_{split}}
+\]</div>
+<h3>Anchor 6 — Split rule</h3>
+<div class="formula-math">\[
+\boxed{x_j\le t}
+\]</div>
+<h3>Hinglish memory line</h3>
+<blockquote>
+<p><strong>Question choose karo → left/right split karo → impurity compare karo → sabse achha gain wala split lo → recursively repeat karo → stopping rule par leaf banao.</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-71" class="section-block">
+      <div class="section-header">
+        <span class="section-num">71</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <p>Move forward only when you can:</p>
+<div class="ascii-box"><pre>[ ] Define an internal node and leaf
+[ ] Calculate class proportions
+[ ] Calculate Gini by hand
+[ ] Calculate entropy by hand
+[ ] Calculate weighted child impurity
+[ ] Calculate gain
+[ ] Generate midpoint thresholds
+[ ] Implement best-split search
+[ ] Implement recursive tree growth
+[ ] Implement prediction traversal
+[ ] Explain every stopping condition
+[ ] Print the learned tree structure
+[ ] Visualize decision regions
+[ ] Demonstrate depth-related overfitting
+[ ] Compare Gini vs entropy
+[ ] Compare scratch tree with library tree
+[ ] Explain why exact structures can differ</pre></div>
+<p>If you cannot manually compute one candidate split, revisit the impurity sections before relying on the implementation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-72" class="section-block">
+      <div class="section-header">
+        <span class="section-num">72</span>
+        <h2 class="section-heading">Source Boundary and Notes</h2>
+      </div>
+      <div class="section-body">
+        <h3>Course-grounded</h3>
+<p>The official DSC-14 syllabus explicitly includes Decision Trees in Unit II and expects implementation/evaluation of machine-learning algorithms. The supplied master resource guide lists Decision Trees among the Unit II core topics and points to tree-splitting material as the conceptual learning route.</p>
+<h3>Expansion in this coding file</h3>
+<p>The following are deliberate implementation-depth additions:</p>
+<ul>
+<li>Gini and entropy functions;</li>
+<li>midpoint threshold enumeration;</li>
+<li>exhaustive candidate split search for a small numerical dataset;</li>
+<li>recursive tree builder;</li>
+<li>stopping conditions;</li>
+<li>tree node data structure;</li>
+<li>tree traversal prediction;</li>
+<li>decision-region visualization;</li>
+<li>library comparison;</li>
+<li>feature-importance extension;</li>
+<li>complexity discussion.</li>
+</ul>
+<p>These are included to turn the syllabus topic into a reproducible coding lab. They are not presented as verbatim lecture content from the supplied PDFs.</p>
+<h3>Related supplied materials</h3>
+<ul>
+<li><code>cse syllabus.pdf</code> / <code>sem5core.md</code> — official DSC-14 Unit II scope.</li>
+<li><code>AI_ML_Master_Learning_Resource_Guide.pdf</code> — Unit II resource map and learning order.</li>
+<li><code>Lecture07.pdf</code> — classification/evaluation context.</li>
+<li><code>Lecture08.pdf</code> — hypothesis classes, generalization, overfitting/underfitting and validation context.</li>
+<li><code>Lecture09.pdf</code> — preprocessing and optimization context.</li>
+<li><code>MAIN-U2-C22</code> / <code>MAIN-U2-C23</code> — conceptual and mathematical treatment in the Main Book.</li>
+<li><code>EXAM-U2_Machine_Learning_and_Evaluation.md</code> — exam definitions, calculations and comparison prompts.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-73" class="section-block">
+      <div class="section-header">
+        <span class="section-num">73</span>
+        <h2 class="section-heading">Cross-Book Links</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Lab Viva Trap & Runtime Gotcha</div>
+
+**Overfitting & Infinite Tree Depth Trap:**
+If you don't enforce `max_depth` or `min_samples_split`, a decision tree will continue splitting until every single training example is in its own pure leaf node!
+This produces 100% training accuracy but abysmal test accuracy due to extreme overfitting! Always use stopping criteria and tree pruning.
+
+</div>
+
+<div class="ascii-box"><pre>MAIN-U2-C22 Decision Trees
+        │
+        ├── MATH-M10–M17 Probability / Statistics foundations
+        ├── MATH-M15 Expected Value
+        ├── MATH-M16 Variance
+        ├── MATH-M22 Optimization context
+        └── CODE-U2-04  ← this file
+                    │
+                    ├── CODE-U2-05 Classification Metrics
+                    ├── CODE-U2-07 Model Comparison Lab
+                    └── later ensemble concepts</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-74" class="section-block">
+      <div class="section-header">
+        <span class="section-num">74</span>
+        <h2 class="section-heading">Status</h2>
+      </div>
+      <div class="section-body">
+        <p><strong>Status:</strong> Complete coding chapter for Unit II.</p>
+<p><strong>Next chapter:</strong> <code>CODE-U2-05 — Classification Metrics, ROC-AUC, Threshold Sweeps, and Model Evaluation Lab</code></p>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="code-u2-03-logistic-regression.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← Unit 2 Lab 03 — Logistic Regression</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">💻 Coding Index</span>
+      </a>
+      <a href="code-u2-05-classification-metrics-roc.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: Unit 2 Lab 05 — Classification Metrics & ROC-AUC →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search lab implementations, functions, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">💻</span>Lab Hub</a>
+  <a href="code-u2-04-decision-trees.html" class="mobile-nav-btn active"><span class="icon">📖</span>CODE-U2-04</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

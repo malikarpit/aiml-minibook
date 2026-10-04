@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="AI & Machine Learning Coding Lab — Zero-Black-Box From-Scratch Algorithms in Python & NumPy for Delhi University B.Tech DSC-14. Search, CSP, Regression, Trees, Regularization, and Neural Networks.">
+<title>Coding Lab Hub 💻 | AI &amp; Machine Learning MiniBook | Arpit</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/coding.css">
+</head>
+<body class="coding-module">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">💻</div>
+      <div class="brand-text"><span class="main">Coding Lab</span><span class="sub">AI &amp; ML From Scratch</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">Coding Lab Hub — Algorithm Execution</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link active"><span class="link-icon">💻</span>Coding Lab Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../math/index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion (24 Modules)</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 0: Environment & System</div>
+  <a href="code-00-coding-foundation.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-00: Coding Lab Foundation &amp; Implementation System</a>
+  <a href="code-01-python-numpy-workflow.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-01: Python, NumPy, Matplotlib &amp; Lab Workflow</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Classical AI & Search Labs</div>
+  <a href="code-u1-01-bfs-dfs.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-01: BFS and DFS From Scratch</a>
+  <a href="code-u1-02-greedy-a-star.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-02: Greedy Best-First &amp; A* Search From Scratch</a>
+  <a href="code-u1-03-csp-backtracking.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-03: CSPs and Backtracking Search</a>
+  <a href="code-u1-04-minimax-alpha-beta.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Supervised ML Labs</div>
+  <a href="code-u2-01-ml-workflow.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-01: ML Workflow: Preprocessing, Splitting &amp; Evaluation</a>
+  <a href="code-u2-02-linear-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-02: Linear Regression From Scratch</a>
+  <a href="code-u2-03-logistic-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-03: Logistic Regression From Scratch</a>
+  <a href="code-u2-04-decision-trees.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-04: Decision Trees From Scratch</a>
+  <a href="code-u2-05-classification-metrics-roc.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC &amp; Thresholds</a>
+  <a href="code-u2-06-ridge-lasso-regularization.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-06: Ridge &amp; Lasso From Scratch: Regularization &amp; Optimization</a>
+  <a href="code-u2-07-ml-evaluation-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-07: ML Evaluation &amp; Model Comparison Lab</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Deep Learning Labs</div>
+  <a href="code-u3-01-neuron-perceptron.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-01: Neuron and Perceptron From Scratch</a>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>MLP, Backpropagation & Convolutions</span>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Advanced AI Labs (Upcoming)</div>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>Q-Learning, NLP & Generative Adversarial Loops</span>
+</div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- HUB HERO -->
+    <div class="chapter-hero" style="text-align:center; padding: 48px 24px;">
+      <div class="track-badge-row" style="display:flex; justify-content:center; gap:8px; margin-bottom:16px; flex-wrap:wrap;">
+        <span class="track-badge track-c0">Track 0: Environment (2)</span>
+        <span class="track-badge track-c1">Track 1: Classical AI (4)</span>
+        <span class="track-badge track-c2">Track 2: Supervised ML (7)</span>
+        <span class="track-badge track-c3">Track 3: Deep Learning (Live Kickoff)</span>
+        <span class="track-badge track-c4">Track 4: Advanced AI (Upcoming)</span>
+      </div>
+      <h1 class="hub-title" style="font-size:2.5rem; margin-bottom:16px; font-weight:800;">The From-Scratch Coding Engine &amp; Algorithm Lab</h1>
+      <p class="hub-subtitle" style="max-width:820px; margin:0 auto 24px; font-size:1.1rem; line-height:1.6; color:var(--em-text-secondary);">
+        "Help me build it from scratch, test its state transitions, and verify against standard production libraries."<br>
+        Zero black boxes. Pure Python &amp; NumPy implementations of classical search, heuristics, game trees, data pipelines, regression, regularizers, decision trees, evaluation suites, and artificial neurons.
+      </p>
+
+      <div class="chapter-meta" style="justify-content:center;">
+        <span class="chapter-meta-item">💻 14 Lab Modules Live</span>
+        <span class="chapter-meta-item">📌 767 Lab Sections</span>
+        <span class="chapter-meta-item">⚡ 500+ Code Blocks</span>
+        <span class="chapter-meta-item uni-badge">🎓 DU B.Tech DSC-14</span>
+      </div>
+    </div>
+
+    <!-- PHILOSOPHY BANNER -->
+    <div class="teacher-box">
+      <div class="teacher-box-title"><span>💡</span> The "Zero Black Box" Lab Philosophy</div>
+      <p>
+        Machine Learning aur AI mein sirf library functions (<code>fit()</code> aur <code>predict()</code>) call karna engineering nahi hai.
+        Jab tak aap ek algorithm ko khud scratch se Python aur NumPy mein implement nahi karte—uske data structures, loops, matrix dimensions, aur edge-cases ko dimaag mein nahi utarte—tab tak aap uske internals ko sach mein nahi samajhte.
+        Coding Lab mein har lab ka progression exact yahi hai:
+        <strong>Problem Definition</strong> → <strong>Mathematical Foundation</strong> → <strong>From-Scratch Python Class</strong> → <strong>Step-by-Step State Tracing</strong> → <strong>Assertion Tests</strong> → <strong>Benchmark with Scikit-Learn</strong>!
+      </p>
+    </div>
+
+    <!-- INTERACTIVE LAB ARCHITECTURE NETWORK -->
+    <div class="track-section-header">
+      <div class="track-section-title">
+        <span>🗺️ Coding Lab Algorithm &amp; Architecture Network</span>
+      </div>
+    </div>
+    <div class="diagram-box">
+      <pre class="mermaid">
+graph TD
+    classDef c0 fill:#002b36,stroke:#00bcd4,stroke-width:2px,color:#e0f7fa;
+    classDef c1 fill:#003322,stroke:#10b981,stroke-width:2px,color:#d1fae5;
+    classDef c2 fill:#3d2800,stroke:#f59e0b,stroke-width:2px,color:#fef3c7;
+    classDef c3 fill:#2d0a3d,stroke:#a855f7,stroke-width:2px,color:#f3e8ff;
+    classDef hub fill:#111827,stroke:#6366f1,stroke-width:3px,color:#ffffff;
+
+    HUB["Coding Lab Hub (aiml/coding/index.html)"]:::hub
+
+    subgraph Track0 ["Track 0: Environment & Foundations"]
+        C00["CODE-00: Lab Protocols & Testing System"]:::c0
+        C01["CODE-01: NumPy & Matplotlib Vectorization"]:::c0
+    end
+
+    subgraph Track1 ["Track 1: Classical AI & Search (Unit I)"]
+        U101["CODE-U1-01: BFS & DFS (Queues vs Stacks)"]:::c1
+        U102["CODE-U1-02: Greedy & A* (Priority Heuristics)"]:::c1
+        U103["CODE-U1-03: CSP & Backtracking (MRV / Forward Checking)"]:::c1
+        U104["CODE-U1-04: Minimax & Alpha-Beta (Game Search)"]:::c1
+    end
+
+    subgraph Track2 ["Track 2: Supervised Machine Learning (Unit II)"]
+        U201["CODE-U2-01: ML Pipeline & Preprocessing"]:::c2
+        U202["CODE-U2-02: Linear Regression (GD vs OLS)"]:::c2
+        U203["CODE-U2-03: Logistic Regression (Sigmoid / BCE)"]:::c2
+        U204["CODE-U2-04: Decision Trees (Entropy & Gini)"]:::c2
+        U205["CODE-U2-05: Metrics, Confusion Matrix & ROC-AUC"]:::c2
+        U206["CODE-U2-06: Ridge & Lasso (L1/L2 Regularization)"]:::c2
+        U207["CODE-U2-07: Model Comparison & Benchmark Lab"]:::c2
+    end
+
+    subgraph Track3 ["Track 3: Deep Learning & Neural Networks (Unit III)"]
+        U301["CODE-U3-01: Neuron & Perceptron From Scratch"]:::c3
+    end
+
+    HUB --> Track0
+    HUB --> Track1
+    HUB --> Track2
+    HUB --> Track3
+
+    C00 --> C01
+    C01 --> U101 --> U102 --> U103 --> U104
+    C01 --> U201 --> U202 --> U203 --> U204 --> U205 --> U206 --> U207
+    U203 --> U301
+      </pre>
+    </div>
+
+    <!-- TRACK 0 -->
+    <div class="track-section-header">
+      <div class="track-section-title">
+        <span class="track-badge track-c0">Track 0</span>
+        <span>Environment, NumPy Vectorization &amp; System</span>
+      </div>
+      <span class="track-count-badge">2 Modules Live</span>
+    </div>
+    <div class="coding-hub-grid">
+      
+      <a href="code-00-coding-foundation.html" class="coding-module-card">
+        <div>
+          <div class="coding-card-num"><span class="track-badge track-c0">CODE-00</span> • LAB-FOUNDATION</div>
+          <div class="coding-card-title">Coding Lab Foundation &amp; Implementation System</div>
+          <div class="coding-card-desc">From-Scratch Philosophy, Testing Protocols, Trace Conventions, and Delhi University Lab Guidelines</div>
+        </div>
+        <div class="coding-card-footer">
+          <span>⏱️ ~30 min guide</span>
+          <span>Start Lab →</span>
+        </div>
+      </a>
+      <a href="code-01-python-numpy-workflow.html" class="coding-module-card">
+        <div>
+          <div class="coding-card-num"><span class="track-badge track-c0">CODE-01</span> • NUMPY</div>
+          <div class="coding-card-title">Python, NumPy, Matplotlib &amp; Lab Workflow</div>
+          <div class="coding-card-desc">Vectorization vs Looping, Array Shapes, Broadcasting Rules, Matrix Slicing, and Loss Visualizations</div>
+        </div>
+        <div class="coding-card-footer">
+          <span>⏱️ ~45 min lab</span>
+          <span>Start Lab →</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- TRACK 1 -->
+    <div class="track-section-header">
+      <div class="track-section-title">
+        <span class="track-badge track-c1">Track 1</span>
+        <span>Classical AI, Heuristics &amp; Search Labs (Unit I)</span>
+      </div>
+      <span class="track-count-badge">4 Modules Live</span>
+    </div>
+    <div class="coding-hub-grid">
+      
+      <a href="code-u1-01-bfs-dfs.html" class="coding-module-card">
+        <div>
+          <div class="coding-card-num"><span class="track-badge track-c1">CODE-U1-01</span> • SEARCH</div>
+          <div class="coding-card-title">BFS and DFS From Scratch</div>
+          <div class="coding-card-desc">Queue vs Stack Mechanics, State Exploration, Cycle Prevention, Frontier Tracking, and Path Reconstruction</div>
+        </div>
+        <div class="coding-card-footer">
+          <span>⏱️ ~40 min lab</span>
+          <span>Start Lab →</span>
+        </div>
+      </a>
+      <a href="code-u1-02-greedy-a-star.html" class="coding-module-card">
+        <div>
+          <div class="coding-card-num"><span class="track-badge track-c1">CODE-U1-02</span> • HEURISTICS</div>
+          <div class="coding-card-title">Greedy Best-First &amp; A* Search From Scratch</div>
+          <div class="coding-card-desc">Priority Queues via heapq, Manhattan vs Euclidean Heuristics, Path Cost Tracking, and Admissibility Tests</div>
+        </div>
+        <div class="coding-card-footer">
+          <span>⏱️ ~45 min lab</span>
+          <span>Start Lab →</span>
+        </div>
+      </a>
+      <a href="code-u1-03-csp-backtracking.html" class="coding-module-card">
+        <div>
+          <div class="coding-card-num"><span class="track-badge track-c1">CODE-U1-03</span> • CSP</div>
+          <div class="coding-card-title">CSPs and Backtracking Search</div>
+          <div class="coding-card-desc">Constraint Satisfaction Formulation, MRV &amp; Degree Heuristics, Forward Checking, and AC-3 Arc Consistency</div>
+        </div>
+        <div class="coding-card-footer">
+          <span>⏱️ ~40 min lab</span>
+          <span>Start Lab →</span>
+        </div>
+      </a>
+      <a href="code-u1-04-minimax-alpha-beta.html" class="coding-module-card">
+        <div>
+          <div class="coding-card-num"><span class="track-badge track-c1">CODE-U1-04</span> • GAME-TREES</div>
+          <div class="coding-card-title">Minimax and Alpha-Beta Pruning From Scratch</div>
+          <div class="coding-card-desc">Adversarial Game Search, Terminal State Evaluation, Minimax Recursion, Alpha-Beta Cutoffs, and Move Ordering</div>
+        </div>
+        <div class="coding-card-footer">
+          <span>⏱️ ~45 min lab</span>
+          <span>Start Lab →</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- TRACK 2 -->
+    <div class="track-section-header">
+      <div class="track-section-title">
+        <span class="track-badge track-c2">Track 2</span>
+        <span>Supervised Machine Learning Algorithms (Unit II)</span>
+      </div>
+      <span class="track-count-badge">7 Modules Live (Complete Unit II Suite!)</span>
+    </div>
+    <div class="coding-hub-grid">
+      
+      <a href="code-u2-01-ml-workflow.html" class="coding-module-card">
+        <div>
+          <div class="coding-card-num"><span class="track-badge track-c2">CODE-U2-01</span> • DATA-PIPELINE</div>
+          <div class="coding-card-title">ML Workflow: Preprocessing, Splitting &amp; Evaluation</div>
+          <div class="coding-card-desc">Data Cleaning, Feature Standardization, Stratified Train/Val/Test Splits, and Comprehensive Metric Evaluation</div>
+        </div>
+        <div class="coding-card-footer">
+          <span>⏱️ ~45 min lab</span>
+          <span>Start Lab →</span>
+        </div>
+      </a>
+      <a href="code-u2-02-linear-regression.html" class="coding-module-card">
+        <div>
+          <div class="coding-card-num"><span class="track-badge track-c2">CODE-U2-02</span> • LINEAR-REGRESSION</div>
+          <div class="coding-card-title">Linear Regression From Scratch</div>
+          <div class="coding-card-desc">Batch Gradient Descent vs Normal Equations, Loss Surface Trajectory, Learning Rate Selection, and Scikit-Learn Benchmark</div>
+        </div>
+        <div class="coding-card-footer">
+          <span>⏱️ ~50 min lab</span>
+          <span>Start Lab →</span>
+        </div>
+      </a>
+      <a href="code-u2-03-logistic-regression.html" class="coding-module-card">
+        <div>
+          <div class="coding-card-num"><span class="track-badge track-c2">CODE-U2-03</span> • LOGISTIC-REGRESSION</div>
+          <div class="coding-card-title">Logistic Regression From Scratch</div>
+          <div class="coding-card-desc">Vectorized Sigmoid, Binary Cross-Entropy (Log-Loss), Gradient Descent Optimization, Decision Boundaries, and Scikit-Learn Benchmark</div>
+        </div>
+        <div class="coding-card-footer">
+          <span>⏱️ ~50 min lab</span>
+          <span>Start Lab →</span>
+        </div>
+      </a>
+      <a href="code-u2-04-decision-trees.html" class="coding-module-card">
+        <div>
+          <div class="coding-card-num"><span class="track-badge track-c2">CODE-U2-04</span> • DECISION-TREES</div>
+          <div class="coding-card-title">Decision Trees From Scratch</div>
+          <div class="coding-card-desc">Shannon Entropy, Information Gain, Gini Impurity, Recursive Binary Splitting, Tree Printing, and Scikit-Learn Benchmark</div>
+        </div>
+        <div class="coding-card-footer">
+          <span>⏱️ ~55 min lab</span>
+          <span>Start Lab →</span>
+        </div>
+      </a>
+      <a href="code-u2-05-classification-metrics-roc.html" class="coding-module-card">
+        <div>
+          <div class="coding-card-num"><span class="track-badge track-c2">CODE-U2-05</span> • METRICS</div>
+          <div class="coding-card-title">Classification Metrics, Confusion Matrix, ROC-AUC &amp; Thresholds</div>
+          <div class="coding-card-desc">Confusion Matrix From Scratch, Precision, Recall, F1-Score, Threshold Sweeping, ROC Curve Construction, and Numerical Trapezoidal AUC</div>
+        </div>
+        <div class="coding-card-footer">
+          <span>⏱️ ~50 min lab</span>
+          <span>Start Lab →</span>
+        </div>
+      </a>
+      <a href="code-u2-06-ridge-lasso-regularization.html" class="coding-module-card">
+        <div>
+          <div class="coding-card-num"><span class="track-badge track-c2">CODE-U2-06</span> • REGULARIZATION</div>
+          <div class="coding-card-title">Ridge &amp; Lasso From Scratch: Regularization &amp; Optimization</div>
+          <div class="coding-card-desc">L1 vs L2 Penalties, Ridge Closed-Form &amp; Gradient Descent, Coordinate Descent with Soft-Thresholding for Lasso, and Coefficient Path Tracing</div>
+        </div>
+        <div class="coding-card-footer">
+          <span>⏱️ ~55 min lab</span>
+          <span>Start Lab →</span>
+        </div>
+      </a>
+      <a href="code-u2-07-ml-evaluation-comparison.html" class="coding-module-card">
+        <div>
+          <div class="coding-card-num"><span class="track-badge track-c2">CODE-U2-07</span> • BENCHMARK</div>
+          <div class="coding-card-title">ML Evaluation &amp; Model Comparison Lab</div>
+          <div class="coding-card-desc">Rigorous Benchmark Protocol, Identical Split Isolation, Decision Tree vs Logistic vs k-NN/Ridge, Imbalance Resilience, and Final Comparison Matrix</div>
+        </div>
+        <div class="coding-card-footer">
+          <span>⏱️ ~45 min lab</span>
+          <span>Start Lab →</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- TRACK 3 -->
+    <div class="track-section-header">
+      <div class="track-section-title">
+        <span class="track-badge track-c3">Track 3</span>
+        <span>Deep Learning &amp; Neural Networks (Unit III)</span>
+      </div>
+      <span class="track-count-badge">1 Module Live (Track Live Kickoff!)</span>
+    </div>
+    <div class="coding-hub-grid">
+      
+      <a href="code-u3-01-neuron-perceptron.html" class="coding-module-card">
+        <div>
+          <div class="coding-card-num"><span class="track-badge track-c3">CODE-U3-01</span> • DEEP-LEARNING</div>
+          <div class="coding-card-title">Neuron and Perceptron From Scratch</div>
+          <div class="coding-card-desc">Artificial Neuron Architecture, Forward Pass Vectorization, Step vs Sigmoid Activations, Perceptron Learning Rule, and the XOR Non-Separability Proof</div>
+        </div>
+        <div class="coding-card-footer">
+          <span>⏱️ ~50 min lab</span>
+          <span>Start Lab →</span>
+        </div>
+      </a>
+      <div class="coding-module-card" style="border-style: dashed; opacity: 0.85;">
+        <div>
+          <div class="coding-card-num"><span class="track-badge track-c3">TRACK 3</span> • UPCOMING IN NEXT DROP</div>
+          <div class="coding-card-title">Multi-Layer Perceptron (MLP) &amp; Backpropagation</div>
+          <div class="coding-card-desc">From-scratch feedforward networks, matrix weight updates, vector activations, CNN convolutions, and RNN sequence rollouts.</div>
+        </div>
+        <div class="coding-card-footer"><span>⏳ Next Drop</span><span>Unit III Labs →</span></div>
+      </div>
+    </div>
+
+    <!-- TRACK 4 UPCOMING -->
+    <div class="track-section-header">
+      <div class="track-section-title">
+        <span class="track-badge track-c4">Track 4</span>
+        <span>Advanced AI &amp; Reinforcement Learning (Unit IV)</span>
+      </div>
+      <span class="track-count-badge">Upcoming in Next Drop</span>
+    </div>
+    <div class="coding-hub-grid">
+      <div class="coding-module-card" style="border-style: dashed; opacity: 0.85;">
+        <div>
+          <div class="coding-card-num"><span class="track-badge track-c4">TRACK 4</span> • ADVANCED AI</div>
+          <div class="coding-card-title">Reinforcement Learning, NLP, Autoencoders &amp; GANs</div>
+          <div class="coding-card-desc">Tabular Q-Learning gridworld, policy gradient REINFORCE, TF-IDF text preprocessor, and adversarial min-max training loops.</div>
+        </div>
+        <div class="coding-card-footer"><span>⏳ Next Drop</span><span>Unit IV Labs →</span></div>
+      </div>
+    </div>
+
+    <!-- 3-WAY CURRICULUM CROSS-REFERENCE TABLE -->
+    <div class="track-section-header">
+      <div class="track-section-title">
+        <span>🗺️ Theory Chapter ↔ Math Module ↔ Coding Lab Cross-Reference</span>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Algorithm / Topic</th>
+            <th>Theory Chapter</th>
+            <th>Math Companion</th>
+            <th>Coding Lab Module</th>
+            <th>From-Scratch Deliverable</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>NumPy Array Vectorization</strong></td>
+            <td>Part 0: Orientation</td>
+            <td><a href="../math/m04-vectors-and-components.html">M04</a>, <a href="../math/m07-matrices-and-indexing.html">M07</a></td>
+            <td><a href="code-01-python-numpy-workflow.html">CODE-01</a></td>
+            <td>SIMD vectorization, Broadcasting, Slicing</td>
+          </tr>
+          <tr>
+            <td><strong>Breadth &amp; Depth First Search</strong></td>
+            <td><a href="../chapters/ch04-uninformed-search.html">Ch 04</a>: Uninformed Search</td>
+            <td>Graph Adjacency Matrices</td>
+            <td><a href="code-u1-01-bfs-dfs.html">CODE-U1-01</a></td>
+            <td><code>bfs()</code>, <code>dfs()</code>, Frontier tracking, Cycle prevention</td>
+          </tr>
+          <tr>
+            <td><strong>Greedy &amp; A* Search</strong></td>
+            <td><a href="../chapters/ch06-greedy-best-first-search.html">Ch 06</a>, <a href="../chapters/ch07-a-star-search.html">Ch 07</a>: A* Search</td>
+            <td><a href="../math/m05-norms-and-distance.html">M05</a>: Distance Metrics</td>
+            <td><a href="code-u1-02-greedy-a-star.html">CODE-U1-02</a></td>
+            <td><code>a_star()</code> via <code>heapq</code>, Manhattan/Euclidean heuristics</td>
+          </tr>
+          <tr>
+            <td><strong>Constraint Satisfaction (CSP)</strong></td>
+            <td><a href="../chapters/ch09-constraint-satisfaction-problems.html">Ch 09</a>: CSPs</td>
+            <td>Discrete Relations &amp; Constraints</td>
+            <td><a href="code-u1-03-csp-backtracking.html">CODE-U1-03</a></td>
+            <td>Backtracking, MRV heuristic, Forward Checking, AC-3</td>
+          </tr>
+          <tr>
+            <td><strong>Minimax &amp; Alpha-Beta Pruning</strong></td>
+            <td><a href="../chapters/ch10-game-playing.html">Ch 10</a>, <a href="../chapters/ch11-minimax-and-alpha-beta-pruning.html">Ch 11</a>: Minimax</td>
+            <td>Game Tree Branching $O(b^m)$</td>
+            <td><a href="code-u1-04-minimax-alpha-beta.html">CODE-U1-04</a></td>
+            <td>Minimax game tree, Alpha-Beta cutoffs, Tic-Tac-Toe AI</td>
+          </tr>
+          <tr>
+            <td><strong>ML Preprocessing &amp; Pipeline</strong></td>
+            <td><a href="../chapters/ch14-what-is-ml.html">Ch 14</a>, <a href="../chapters/ch17-bias-variance-generalization.html">Ch 17</a></td>
+            <td><a href="../math/m15-expectation-expected-value.html">M15</a>, <a href="../math/m16-variance-standard-deviation.html">M16</a></td>
+            <td><a href="code-u2-01-ml-workflow.html">CODE-U2-01</a></td>
+            <td>StandardScaler, Train-test split without leakage, Evaluation baseline</td>
+          </tr>
+          <tr>
+            <td><strong>Linear Regression (GD &amp; OLS)</strong></td>
+            <td><a href="../chapters/ch18-linear-regression.html">Ch 18</a>, <a href="../chapters/ch19-linear-regression-math.html">Ch 19</a></td>
+            <td><a href="../math/m09-linear-systems-least-squares.html">M09</a>, <a href="../math/m22-optimization-gradient-descent.html">M22</a></td>
+            <td><a href="code-u2-02-linear-regression.html">CODE-U2-02</a></td>
+            <td>Batch Gradient Descent, Normal Equation $(X^TX)^-1X^Ty$</td>
+          </tr>
+          <tr>
+            <td><strong>Logistic Regression (Sigmoid)</strong></td>
+            <td><a href="../chapters/ch20-logistic-regression.html">Ch 20</a>, <a href="../chapters/ch21-logistic-regression-math.html">Ch 21</a></td>
+            <td><a href="../math/m03-functions-graphs-logs.html">M03</a>, <a href="../math/m21-gradients-and-jacobians.html">M21</a></td>
+            <td><a href="code-u2-03-logistic-regression.html">CODE-U2-03</a></td>
+            <td>Vectorized Sigmoid, Log-Loss (BCE), Decision boundaries</td>
+          </tr>
+          <tr>
+            <td><strong>Decision Trees (Entropy &amp; Gini)</strong></td>
+            <td><a href="../chapters/ch22-decision-trees.html">Ch 22</a>, <a href="../chapters/ch23-decision-trees-math.html">Ch 23</a></td>
+            <td><a href="../math/m03-functions-graphs-logs.html">M03</a>, <a href="../math/m10-probability-foundations.html">M10</a></td>
+            <td><a href="code-u2-04-decision-trees.html">CODE-U2-04</a></td>
+            <td>Entropy, Information Gain, Recursive binary split, Tree printer</td>
+          </tr>
+          <tr>
+            <td><strong>Classification Metrics &amp; ROC-AUC</strong></td>
+            <td><a href="../chapters/ch24-confusion-matrix-evaluation.html">Ch 24</a>, <a href="../chapters/ch25-precision-recall-roc-auc.html">Ch 25</a></td>
+            <td><a href="../math/m10-probability-foundations.html">M10</a>, <a href="../math/m11-conditional-prob-bayes.html">M11</a></td>
+            <td><a href="code-u2-05-classification-metrics-roc.html">CODE-U2-05</a></td>
+            <td>Confusion matrix, Precision, Recall, F1, Threshold sweep, Trapezoidal AUC</td>
+          </tr>
+          <tr>
+            <td><strong>Ridge &amp; Lasso Regularization</strong></td>
+            <td><a href="../chapters/ch27-ridge-regression.html">Ch 27</a>, <a href="../chapters/ch28-lasso-regression.html">Ch 28</a>, <a href="../chapters/ch29-ridge-vs-lasso-comparison.html">Ch 29</a></td>
+            <td><a href="../math/m05-norms-and-distance.html">M05</a>, <a href="../math/m09-linear-systems-least-squares.html">M09</a></td>
+            <td><a href="code-u2-06-ridge-lasso-regularization.html">CODE-U2-06</a></td>
+            <td>L2 Ridge closed-form, L1 Lasso coordinate descent &amp; soft-thresholding</td>
+          </tr>
+          <tr>
+            <td><strong>Model Comparison &amp; Benchmark Lab</strong></td>
+            <td><a href="../chapters/ch14-what-is-ml.html">Ch 14–26</a> (Unit II Synthesis)</td>
+            <td><a href="../math/m15-expectation-expected-value.html">M15</a>–<a href="../math/m16-variance-standard-deviation.html">M16</a> (Empirical Risk)</td>
+            <td><a href="code-u2-07-ml-evaluation-comparison.html">CODE-U2-07</a></td>
+            <td>Multi-model comparative leaderboard, Fair split isolation, Trade-off matrix</td>
+          </tr>
+          <tr>
+            <td><strong>Neuron &amp; Perceptron From Scratch</strong></td>
+            <td><a href="../chapters/ch30-neural-network-foundations.html">Ch 30</a>, <a href="../chapters/ch31-perceptron-learning-algorithm.html">Ch 31</a></td>
+            <td><a href="../math/m04-vectors-and-components.html">M04</a>, <a href="../math/m20-chain-rule-computational-graphs.html">M20</a></td>
+            <td><a href="code-u3-01-neuron-perceptron.html">CODE-U3-01</a></td>
+            <td>Artificial neuron, Vectorized forward pass, Perceptron learning rule, XOR proof</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search algorithms, classes, implementations…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="../index.html" class="mobile-nav-btn"><span class="icon">🏠</span>Home</a>
+  <a href="index.html" class="mobile-nav-btn active"><span class="icon">💻</span>Coding Hub</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/notes.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

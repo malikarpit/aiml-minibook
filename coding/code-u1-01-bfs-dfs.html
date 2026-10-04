@@ -1,0 +1,2333 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="CODE-U1-01: BFS and DFS From Scratch — AI & Machine Learning Coding Lab. Queue vs Stack Mechanics, State Exploration, Cycle Prevention, Frontier Tracking, and Path Reconstruction">
+<title>CODE-U1-01: BFS and DFS From Scratch | Coding Lab 💻 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/coding.css">
+</head>
+<body class="coding-module track-c1">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">💻</div>
+      <div class="brand-text"><span class="main">Coding Lab</span><span class="sub">AI &amp; ML From Scratch</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">CODE-U1-01: BFS and DFS From Scratch</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">💻</span>Coding Lab Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../math/index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 0: Environment & System</div>
+  <a href="code-00-coding-foundation.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-00: Coding Lab Foundation &amp; Implementation System</a>
+  <a href="code-01-python-numpy-workflow.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-01: Python, NumPy, Matplotlib &amp; Lab Workflow</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Classical AI & Search Labs</div>
+  <a href="code-u1-01-bfs-dfs.html" class="sidebar-link active"><span class="link-icon">🔍</span>CODE-U1-01: BFS and DFS From Scratch</a>
+  <a href="code-u1-02-greedy-a-star.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-02: Greedy Best-First &amp; A* Search From Scratch</a>
+  <a href="code-u1-03-csp-backtracking.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-03: CSPs and Backtracking Search</a>
+  <a href="code-u1-04-minimax-alpha-beta.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Supervised ML Labs</div>
+  <a href="code-u2-01-ml-workflow.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-01: ML Workflow: Preprocessing, Splitting &amp; Evaluation</a>
+  <a href="code-u2-02-linear-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-02: Linear Regression From Scratch</a>
+  <a href="code-u2-03-logistic-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-03: Logistic Regression From Scratch</a>
+  <a href="code-u2-04-decision-trees.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-04: Decision Trees From Scratch</a>
+  <a href="code-u2-05-classification-metrics-roc.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC &amp; Thresholds</a>
+  <a href="code-u2-06-ridge-lasso-regularization.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-06: Ridge &amp; Lasso From Scratch: Regularization &amp; Optimization</a>
+  <a href="code-u2-07-ml-evaluation-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-07: ML Evaluation &amp; Model Comparison Lab</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Deep Learning Labs</div>
+  <a href="code-u3-01-neuron-perceptron.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-01: Neuron and Perceptron From Scratch</a>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>MLP, Backpropagation & Convolutions</span>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Advanced AI Labs (Upcoming)</div>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>Q-Learning, NLP & Generative Adversarial Loops</span>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">CODE-U1-01 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. What You Will Build</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Learning Contract</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Problem Setup</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Why This Representation?</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Search Node vs State</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. BFS — Core Idea</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. BFS Pseudocode</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. BFS Data Structure</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. BFS — First Implementation</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Path Reconstruction</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Full BFS Example</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Manual BFS Trace</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. BFS Trace Table</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. BFS Goal-Test Convention</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. BFS Why It Finds a Shallow Solution First</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. BFS Complexity</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. BFS Unit Test</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. BFS Failure Test</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. BFS Edge Case — Start Is Goal</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. BFS Edge Case — Cycle</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. BFS Implementation Challenge</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. DFS — Core Idea</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. DFS Pseudocode</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. DFS Data Structure</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. DFS — First Implementation</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. DFS Trace</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. BFS vs DFS — Same Graph, Different Behaviour</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. DFS and the Deep-Path Problem</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. DFS and Cycles</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. DFS Complexity</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. DFS Unit Test</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Testing Path Validity</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Testing DFS Start Equals Goal</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Testing DFS Failure</a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Testing DFS Cycle</a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Traceable DFS</a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Tracing BFS and DFS</a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. A Unified Search Interface</a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. A Tiny Generic Search Skeleton</a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. BFS vs DFS Code-Level Difference</a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Complexity Experiment</a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Memory Experiment</a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. When BFS Is Attractive</a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. When DFS Is Attractive</a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. Important Difference: Search vs Traversal</a>
+      <a href="#s-46" class="sidebar-link"><span class="link-icon">📌</span>46. Common Coding Mistakes</a>
+      <a href="#s-47" class="sidebar-link"><span class="link-icon">📌</span>47. Debugging Checklist</a>
+      <a href="#s-48" class="sidebar-link"><span class="link-icon">📌</span>48. Path Reconstruction Bug Checklist</a>
+      <a href="#s-49" class="sidebar-link"><span class="link-icon">📌</span>49. Experimental Comparison</a>
+      <a href="#s-50" class="sidebar-link"><span class="link-icon">📌</span>50. A More Useful Comparison Metric</a>
+      <a href="#s-51" class="sidebar-link"><span class="link-icon">📌</span>51. Visualizing the Search</a>
+      <a href="#s-52" class="sidebar-link"><span class="link-icon">📌</span>52. Coding Challenge — BFS</a>
+      <a href="#s-53" class="sidebar-link"><span class="link-icon">📌</span>53. Coding Challenge — DFS</a>
+      <a href="#s-54" class="sidebar-link"><span class="link-icon">📌</span>54. Coding Challenge — Random Graph</a>
+      <a href="#s-55" class="sidebar-link"><span class="link-icon">📌</span>55. Experimental Trap</a>
+      <a href="#s-56" class="sidebar-link"><span class="link-icon">📌</span>56. Extension — Weighted Graph Thought Experiment</a>
+      <a href="#s-57" class="sidebar-link"><span class="link-icon">📌</span>57. Extension — Depth Limiting Thought Experiment</a>
+      <a href="#s-58" class="sidebar-link"><span class="link-icon">📌</span>58. Relation to A*</a>
+      <a href="#s-59" class="sidebar-link"><span class="link-icon">📌</span>59. Unit-I Exam Bridge</a>
+      <a href="#s-60" class="sidebar-link"><span class="link-icon">📌</span>60. Active Recall — Coding Edition</a>
+      <a href="#s-61" class="sidebar-link"><span class="link-icon">📌</span>61. Final Implementation Test</a>
+      <a href="#s-62" class="sidebar-link"><span class="link-icon">📌</span>62. Mastery Gate</a>
+      <a href="#s-63" class="sidebar-link"><span class="link-icon">📌</span>63. Final Memory Sheet</a>
+      <a href="#s-64" class="sidebar-link"><span class="link-icon">📌</span>64. Source Notes</a>
+      <a href="#s-65" class="sidebar-link"><span class="link-icon">📌</span>65. Status</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Coding Lab</a>
+        <span>/</span>
+        <span>CODE-U1-01</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-c1">Track 1: Classical AI & Search Labs</span></div>
+      <h1 class="chapter-title">BFS and DFS From Scratch</h1>
+      <p class="chapter-desc">Queue vs Stack Mechanics, State Exploration, Cycle Prevention, Frontier Tracking, and Path Reconstruction</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~40 min lab</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">SEARCH</span> <span class="chapter-meta-item uni-badge">GRAPH-TRAVERSAL</span> <span class="chapter-meta-item uni-badge">QUEUES</span> <span class="chapter-meta-item uni-badge">STACKS</span>
+      </div>
+
+      <div class="lab-meta-grid">
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Prerequisites</div>
+          <div class="lab-meta-value">CODE-01 NumPy Workflow, Main Book Ch 04 Uninformed Search</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Main Book Concept</div>
+          <div class="lab-meta-value">Ch 04 Uninformed Search</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Math Companion Layer</div>
+          <div class="lab-meta-value">Graph theory adjacency matrix & node indexing</div>
+        </div>
+        <div class="lab-meta-box" style="grid-column: 1 / -1;">
+          <div class="lab-meta-label">AI / Machine Learning Connections</div>
+          <div class="lab-meta-value">State space search, Path planning, Maze solving, Cycle detection in dependency graphs</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-meta-card"><h1>CODE-U1-01 — BFS and DFS From Scratch</h1>
+<blockquote>
+<p><strong>Coding Book — Unit I: Classical AI Search</strong></p>
+<p><strong>Topic IDs:</strong> <code>CODE-U1-01</code></p>
+<p><strong>Main Book links:</strong> <code>MAIN-U1-C04 — Uninformed Search</code></p>
+<p><strong>Exam Book links:</strong> <code>EXAM-U1_Artificial_Intelligence_and_Search.md</code></p>
+<p><strong>Math links:</strong> M01–M03 as needed for notation and complexity</p>
+<p><strong>Primary source:</strong> your supplied <code>lecture-basic-search.pdf</code>, which defines BFS as expanding the shallowest unexpanded node using a FIFO queue and DFS as expanding the deepest unexpanded node using a LIFO structure.</p>
+<p><strong>Scope note:</strong> The course syllabus explicitly names <strong>BFS and DFS</strong> under uninformed search. UCS, DLS, and IDS appear in the supplied lecture as useful extensions/bridges but are not the main implementation target of this file.</p>
+</blockquote>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in CODE-U1-01 (65 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">What You Will Build</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Learning Contract</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Problem Setup</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Why This Representation?</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Search Node vs State</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">BFS — Core Idea</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">BFS Pseudocode</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">BFS Data Structure</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">BFS — First Implementation</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Path Reconstruction</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Full BFS Example</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Manual BFS Trace</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">BFS Trace Table</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">BFS Goal-Test Convention</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">BFS Why It Finds a Shallow Solution First</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">BFS Complexity</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">BFS Unit Test</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">BFS Failure Test</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">BFS Edge Case — Start Is Goal</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">BFS Edge Case — Cycle</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">BFS Implementation Challenge</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">DFS — Core Idea</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">DFS Pseudocode</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">DFS Data Structure</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">DFS — First Implementation</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">DFS Trace</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">BFS vs DFS — Same Graph, Different Behaviour</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">DFS and the Deep-Path Problem</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">DFS and Cycles</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">DFS Complexity</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">DFS Unit Test</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Testing Path Validity</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Testing DFS Start Equals Goal</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Testing DFS Failure</span></a></li>
+        <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Testing DFS Cycle</span></a></li>
+        <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Traceable DFS</span></a></li>
+        <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Tracing BFS and DFS</span></a></li>
+        <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">A Unified Search Interface</span></a></li>
+        <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">A Tiny Generic Search Skeleton</span></a></li>
+        <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">BFS vs DFS Code-Level Difference</span></a></li>
+        <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Complexity Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Memory Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">When BFS Is Attractive</span></a></li>
+        <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">When DFS Is Attractive</span></a></li>
+        <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">Important Difference: Search vs Traversal</span></a></li>
+        <li class="toc-item"><a href="#s-46"><span class="toc-num">46</span><span class="toc-name">Common Coding Mistakes</span></a></li>
+        <li class="toc-item"><a href="#s-47"><span class="toc-num">47</span><span class="toc-name">Debugging Checklist</span></a></li>
+        <li class="toc-item"><a href="#s-48"><span class="toc-num">48</span><span class="toc-name">Path Reconstruction Bug Checklist</span></a></li>
+        <li class="toc-item"><a href="#s-49"><span class="toc-num">49</span><span class="toc-name">Experimental Comparison</span></a></li>
+        <li class="toc-item"><a href="#s-50"><span class="toc-num">50</span><span class="toc-name">A More Useful Comparison Metric</span></a></li>
+        <li class="toc-item"><a href="#s-51"><span class="toc-num">51</span><span class="toc-name">Visualizing the Search</span></a></li>
+        <li class="toc-item"><a href="#s-52"><span class="toc-num">52</span><span class="toc-name">Coding Challenge — BFS</span></a></li>
+        <li class="toc-item"><a href="#s-53"><span class="toc-num">53</span><span class="toc-name">Coding Challenge — DFS</span></a></li>
+        <li class="toc-item"><a href="#s-54"><span class="toc-num">54</span><span class="toc-name">Coding Challenge — Random Graph</span></a></li>
+        <li class="toc-item"><a href="#s-55"><span class="toc-num">55</span><span class="toc-name">Experimental Trap</span></a></li>
+        <li class="toc-item"><a href="#s-56"><span class="toc-num">56</span><span class="toc-name">Extension — Weighted Graph Thought Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-57"><span class="toc-num">57</span><span class="toc-name">Extension — Depth Limiting Thought Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-58"><span class="toc-num">58</span><span class="toc-name">Relation to A*</span></a></li>
+        <li class="toc-item"><a href="#s-59"><span class="toc-num">59</span><span class="toc-name">Unit-I Exam Bridge</span></a></li>
+        <li class="toc-item"><a href="#s-60"><span class="toc-num">60</span><span class="toc-name">Active Recall — Coding Edition</span></a></li>
+        <li class="toc-item"><a href="#s-61"><span class="toc-num">61</span><span class="toc-name">Final Implementation Test</span></a></li>
+        <li class="toc-item"><a href="#s-62"><span class="toc-num">62</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-63"><span class="toc-num">63</span><span class="toc-name">Final Memory Sheet</span></a></li>
+        <li class="toc-item"><a href="#s-64"><span class="toc-num">64</span><span class="toc-name">Source Notes</span></a></li>
+        <li class="toc-item"><a href="#s-65"><span class="toc-num">65</span><span class="toc-name">Status</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">What You Will Build</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph TD
+    Start["Start Node: A"] --> B["Explore Neighbors: [B, C]"]
+    subgraph BFS ["BFS (FIFO Queue: collections.deque)"]
+        Q["Pop Left (Oldest): Explores level by level (Ripples)"] --> Q_OPT["Optimal for unweighted shortest path"]
+    end
+    subgraph DFS ["DFS (LIFO Stack: list.pop())"]
+        S["Pop Right (Newest): Explores deep into one branch"] --> S_MEM["O(b·m) Space-efficient, can get stuck in cycles!"]
+    end
+    B --> BFS
+    B --> DFS
+    style BFS fill:#1e293b,stroke:#38bdf8,color:#f8fafc
+    style DFS fill:#1e293b,stroke:#a78bfa,color:#f8fafc
+</pre></div>
+<p>By the end of this lab, you should be able to implement:</p>
+<div class="ascii-box"><pre>BFS
+↓
+DFS
+↓
+path reconstruction
+↓
+graph-search duplicate handling
+↓
+search tracing
+↓
+tests
+↓
+visualization</pre></div>
+<p>You will also be able to explain:</p>
+<ul>
+<li>why BFS uses a queue;</li>
+<li>why DFS uses a stack;</li>
+<li>how traversal order depends on child ordering;</li>
+<li>why BFS is complete under standard finite-branching assumptions;</li>
+<li>why BFS is optimal only under the equal-step-cost condition;</li>
+<li>why DFS can become problematic in infinite-depth or cyclic spaces;</li>
+<li>why graph search needs duplicate-state handling;</li>
+<li>how the same search idea can operate over different problem representations.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">Learning Contract</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Implementation Model</div>
+
+BFS ek paani ki lehar (ripple) ki tarah charo taraf barabar failta hai—pehle 1-step doori ke nodes, phir 2-step. Isiliye shortest path milne ki 100% guarantee hoti hai (equal costs par).
+DFS ek tunnel explorer ki tarah hai jo ek raste par tab tak andha dhundh bhagta hai jab tak dead-end na aa jaye.
+Graph search mein `explored` set rakhna mandatory hai, varna cycle mein phans kar program crash ho jayega!
+
+</div>
+
+<p>Do <strong>not</strong> start by copying the implementation.</p>
+<p>Use this order:</p>
+<div class="ascii-box"><pre>Read the problem
+      ↓
+Choose representation
+      ↓
+Write pseudocode
+      ↓
+Predict traversal order
+      ↓
+Implement BFS
+      ↓
+Trace BFS
+      ↓
+Test BFS
+      ↓
+Implement DFS
+      ↓
+Trace DFS
+      ↓
+Test DFS
+      ↓
+Compare
+      ↓
+Experiment</pre></div>
+<h3>Mastery target</h3>
+<p>You should eventually be able to write both functions from a blank editor using only:</p>
+<div class="ascii-box"><pre>queue / stack
+visited set
+parent map
+goal test</pre></div>
+<p>and your own understanding.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">Problem Setup</h2>
+      </div>
+      <div class="section-body">
+        <p>We will represent a graph using an adjacency dictionary.</p>
+<p>Example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">graph = {
+    &quot;A&quot;: [&quot;B&quot;, &quot;C&quot;],
+    &quot;B&quot;: [&quot;D&quot;, &quot;E&quot;],
+    &quot;C&quot;: [&quot;F&quot;, &quot;G&quot;],
+    &quot;D&quot;: [],
+    &quot;E&quot;: [],
+    &quot;F&quot;: [],
+    &quot;G&quot;: [],
+}</code></pre></div>
+<p>Visually:</p>
+<div class="ascii-box"><pre>A
+         /   \
+        B     C
+       / \   / \
+      D   E F   G</pre></div>
+<p>Assume:</p>
+<ul>
+<li>graph edges represent possible actions;</li>
+<li>each listed edge has equal cost;</li>
+<li>the goal is a node such as <code>"G"</code>;</li>
+<li>child order is left-to-right according to the list.</li>
+</ul>
+<p>This gives us a hand-checkable environment.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Why This Representation?</h2>
+      </div>
+      <div class="section-body">
+        <p>The dictionary:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">graph[node] = successors</code></pre></div>
+<p>makes the problem definition explicit.</p>
+<p>For example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">graph[&quot;B&quot;]</code></pre></div>
+<p>returns:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">[&quot;D&quot;, &quot;E&quot;]</code></pre></div>
+<p>meaning:</p>
+<blockquote>
+<p>From B, the available next states are D and E.</p>
+</blockquote>
+<p>The algorithm should <strong>not</strong> care how the original problem generated that dictionary.</p>
+<p>That separation is important:</p>
+<div class="ascii-box"><pre>Problem representation
+        ↓
+Search algorithm</pre></div>
+<p>The search procedure can therefore be reused for:</p>
+<ul>
+<li>mazes;</li>
+<li>route finding;</li>
+<li>puzzles;</li>
+<li>state transitions;</li>
+<li>game states;</li>
+<li>scheduling states.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Search Node vs State</h2>
+      </div>
+      <div class="section-body">
+        <p>In a simple teaching implementation, a node can be represented by its state name.</p>
+<p>But real search systems often need more information:</p>
+<div class="ascii-box"><pre>Search node
+├── state
+├── parent
+├── action
+├── path cost
+└── depth</pre></div>
+<p>Why?</p>
+<p>Suppose the algorithm reaches:</p>
+<div class="ascii-box"><pre>G</pre></div>
+<p>It must know:</p>
+<blockquote>
+<p>“How did I get here?”</p>
+</blockquote>
+<p>A <code>parent</code> mapping lets us reconstruct the path.</p>
+<p>This file starts with the simple representation and then makes the parent relation explicit.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">BFS — Core Idea</h2>
+      </div>
+      <div class="section-body">
+        <p>The supplied lecture defines BFS as:</p>
+<blockquote>
+<p>Expand the <strong>shallowest unexpanded node</strong>.</p>
+</blockquote>
+<p>Implementation:</p>
+<blockquote>
+<p>Use a <strong>FIFO queue</strong>, so newly generated successors go to the back.</p>
+</blockquote>
+<p>Source: <code>lecture-basic-search.pdf</code>, Breadth-First Search slides 24–25.</p>
+<p>Memory hook:</p>
+<div class="formula-math">\[
+\boxed{\text{BFS}=\text{shallowest first}=\text{FIFO}}
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">BFS Pseudocode</h2>
+      </div>
+      <div class="section-body">
+        <p>Before Python, write the algorithm:</p>
+<div class="ascii-box"><pre>BFS(graph, start, goal):
+
+    create an empty FIFO frontier
+    add start to frontier
+
+    create visited set
+    create parent map
+    parent[start] = None
+
+    while frontier is not empty:
+
+        current = remove front of frontier
+
+        if current == goal:
+            reconstruct path
+            return path
+
+        mark current visited
+
+        for each neighbor of current:
+
+            if neighbor has not been seen:
+                record current as neighbor&#x27;s parent
+                add neighbor to frontier
+
+    return failure</pre></div>
+<h3>Important implementation choice</h3>
+<p>There are different conventions for when a node becomes “visited” or “seen.”</p>
+<p>For a clean graph-search implementation, we will usually mark a node as discovered when it enters the frontier rather than waiting until removal.</p>
+<p>Why?</p>
+<p>It prevents the same state from being inserted many times by different parents.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">BFS Data Structure</h2>
+      </div>
+      <div class="section-body">
+        <p>Python's <code>collections.deque</code> is a suitable queue:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from collections import deque</code></pre></div>
+<p>Basic operations:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">queue.append(x)      # add to back
+queue.popleft()      # remove from front</code></pre></div>
+<p>This matches FIFO behaviour.</p>
+<p>Do not use:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">list.pop(0)</code></pre></div>
+<p>for a large queue because removing from the front of a Python list requires shifting elements.</p>
+<p>The algorithmic idea is FIFO either way, but the data structure affects implementation efficiency.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">BFS — First Implementation</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from collections import deque
+
+
+def bfs(graph, start, goal):
+    queue = deque([start])
+
+    visited = {start}
+    parent = {start: None}
+
+    while queue:
+        current = queue.popleft()
+
+        if current == goal:
+            return reconstruct_path(parent, goal)
+
+        for neighbor in graph.get(current, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                parent[neighbor] = current
+                queue.append(neighbor)
+
+    return None</code></pre></div>
+<p>We have referenced a helper:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">reconstruct_path(...)</code></pre></div>
+<p>which we will write next.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Path Reconstruction</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="ascii-box"><pre>A → B → E → G</pre></div>
+<p>The parent map is:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">{
+    &quot;A&quot;: None,
+    &quot;B&quot;: &quot;A&quot;,
+    &quot;E&quot;: &quot;B&quot;,
+    &quot;G&quot;: &quot;E&quot;,
+}</code></pre></div>
+<p>Start at:</p>
+<div class="ascii-box"><pre>G</pre></div>
+<p>then follow parents:</p>
+<div class="ascii-box"><pre>G ← E ← B ← A</pre></div>
+<p>Reverse it:</p>
+<div class="ascii-box"><pre>A → B → E → G</pre></div>
+<p>Implementation:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def reconstruct_path(parent, goal):
+    path = []
+
+    current = goal
+
+    while current is not None:
+        path.append(current)
+        current = parent[current]
+
+    path.reverse()
+    return path</code></pre></div>
+<p>This small helper is one of the most reusable patterns in search programming.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Full BFS Example</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from collections import deque
+
+
+def reconstruct_path(parent, goal):
+    path = []
+    current = goal
+
+    while current is not None:
+        path.append(current)
+        current = parent[current]
+
+    path.reverse()
+    return path
+
+
+def bfs(graph, start, goal):
+    queue = deque([start])
+
+    visited = {start}
+    parent = {start: None}
+
+    while queue:
+        current = queue.popleft()
+
+        if current == goal:
+            return reconstruct_path(parent, goal)
+
+        for neighbor in graph.get(current, []):
+            if neighbor not in visited:
+                visited.add(neighbor)
+                parent[neighbor] = current
+                queue.append(neighbor)
+
+    return None</code></pre></div>
+<p>Test:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">graph = {
+    &quot;A&quot;: [&quot;B&quot;, &quot;C&quot;],
+    &quot;B&quot;: [&quot;D&quot;, &quot;E&quot;],
+    &quot;C&quot;: [&quot;F&quot;, &quot;G&quot;],
+    &quot;D&quot;: [],
+    &quot;E&quot;: [],
+    &quot;F&quot;: [],
+    &quot;G&quot;: [],
+}
+
+print(bfs(graph, &quot;A&quot;, &quot;G&quot;))</code></pre></div>
+<p>Expected path:</p>
+<div class="ascii-box"><pre>[&#x27;A&#x27;, &#x27;C&#x27;, &#x27;G&#x27;]</pre></div>
+<p>because G is reachable through C at depth 2.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Manual BFS Trace</h2>
+      </div>
+      <div class="section-body">
+        <p>Start:</p>
+<div class="ascii-box"><pre>frontier = [A]
+seen = {A}</pre></div>
+<p>Expand A:</p>
+<div class="ascii-box"><pre>remove A
+add B, C
+
+frontier = [B, C]
+seen = {A, B, C}</pre></div>
+<p>Expand B:</p>
+<div class="ascii-box"><pre>remove B
+add D, E
+
+frontier = [C, D, E]</pre></div>
+<p>Expand C:</p>
+<div class="ascii-box"><pre>remove C
+add F, G
+
+frontier = [D, E, F, G]</pre></div>
+<p>The goal G is now waiting in the frontier.</p>
+<p>This demonstrates the layer-by-layer behaviour.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">BFS Trace Table</h2>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th style="text-align: right;">Step</th>
+<th>Removed</th>
+<th>Frontier after expansion</th>
+<th>Seen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0</td>
+<td>—</td>
+<td><code>[A]</code></td>
+<td><code>{A}</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">1</td>
+<td>A</td>
+<td><code>[B,C]</code></td>
+<td><code>{A,B,C}</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td>B</td>
+<td><code>[C,D,E]</code></td>
+<td><code>{A,B,C,D,E}</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td>C</td>
+<td><code>[D,E,F,G]</code></td>
+<td><code>{A,B,C,D,E,F,G}</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>If your implementation produces a different ordering, inspect:</p>
+<ol>
+<li>adjacency-list order;</li>
+<li>when nodes are marked seen;</li>
+<li>when the goal test is performed;</li>
+<li>whether the implementation is tree search or graph search.</li>
+</ol>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">BFS Goal-Test Convention</h2>
+      </div>
+      <div class="section-body">
+        <p>There are two common conceptual conventions:</p>
+<h3>Test on removal</h3>
+<div class="ascii-box"><pre>pop node
+↓
+goal?
+↓
+expand</pre></div>
+<h3>Test on generation</h3>
+<div class="ascii-box"><pre>generate successor
+↓
+goal?</pre></div>
+<p>Both can be implemented correctly, but the observed trace can differ slightly.</p>
+<p>For this Coding Book, the teaching implementation uses:</p>
+<blockquote>
+<p><strong>goal test when the node is removed from the frontier.</strong></p>
+</blockquote>
+<p>The key is to state the convention rather than silently changing it between examples.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">BFS Why It Finds a Shallow Solution First</h2>
+      </div>
+      <div class="section-body">
+        <p>Because the queue preserves insertion order:</p>
+<div class="ascii-box"><pre>Depth 0
+  ↓
+Depth 1
+  ↓
+Depth 2
+  ↓
+Depth 3</pre></div>
+<p>The algorithm exhausts shallower layers before moving to deeper layers.</p>
+<p>So if all steps have equal cost:</p>
+<div class="formula-math">\[
+\text{path cost}=\text{number of steps}.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+\text{shallowest solution}
+=
+\text{least-cost solution}
+}
+\]</div>
+<p>under the equal-step-cost assumption.</p>
+<p>This is the mathematical reason behind BFS's standard optimality condition from the lecture.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">BFS Complexity</h2>
+      </div>
+      <div class="section-body">
+        <p>The supplied lecture gives:</p>
+<div class="formula-math">\[
+\boxed{
+O(b^{d+1})
+}
+\]</div>
+<p>for standard BFS time analysis and:</p>
+<div class="formula-math">\[
+\boxed{
+O(b^{d+1})
+}
+\]</div>
+<p>for space because many frontier nodes must remain in memory.</p>
+<p>Here:</p>
+<ul>
+<li>\(b\) = branching factor;</li>
+<li>\(d\) = depth of the shallowest solution.</li>
+</ul>
+<h3>Coding interpretation</h3>
+<p>Large branching factor + large depth:</p>
+<div class="ascii-box"><pre>→ enormous frontier
+→ high memory usage</pre></div>
+<p>This is why BFS's memory consumption is its famous weakness.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">BFS Unit Test</h2>
+      </div>
+      <div class="section-body">
+        <p>Use a known graph:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def test_bfs_finds_shallow_path():
+    graph = {
+        &quot;A&quot;: [&quot;B&quot;, &quot;C&quot;],
+        &quot;B&quot;: [&quot;D&quot;],
+        &quot;C&quot;: [&quot;G&quot;],
+        &quot;D&quot;: [&quot;G&quot;],
+        &quot;G&quot;: [],
+    }
+
+    path = bfs(graph, &quot;A&quot;, &quot;G&quot;)
+
+    assert path == [&quot;A&quot;, &quot;C&quot;, &quot;G&quot;]</code></pre></div>
+<p>Why should C be selected?</p>
+<div class="ascii-box"><pre>A → C → G = 2 steps
+A → B → D → G = 3 steps</pre></div>
+<p>BFS returns the shallower path.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">BFS Failure Test</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def test_bfs_returns_none_when_goal_absent():
+    graph = {
+        &quot;A&quot;: [&quot;B&quot;],
+        &quot;B&quot;: [&quot;C&quot;],
+        &quot;C&quot;: [],
+    }
+
+    assert bfs(graph, &quot;A&quot;, &quot;G&quot;) is None</code></pre></div>
+<p>This checks that:</p>
+<div class="ascii-box"><pre>frontier becomes empty
+↓
+no goal exists
+↓
+return failure</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">BFS Edge Case — Start Is Goal</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def test_bfs_start_equals_goal():
+    graph = {
+        &quot;A&quot;: [&quot;B&quot;],
+        &quot;B&quot;: [],
+    }
+
+    assert bfs(graph, &quot;A&quot;, &quot;A&quot;) == [&quot;A&quot;]</code></pre></div>
+<p>This is an important boundary condition.</p>
+<p>Never assume:</p>
+<blockquote>
+<p>“The goal must be somewhere after the first node.”</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">BFS Edge Case — Cycle</h2>
+      </div>
+      <div class="section-body">
+        <p>Consider:</p>
+<div class="ascii-box"><pre>A → B → C
+↑       |
+└───────┘</pre></div>
+<p>Without duplicate detection:</p>
+<div class="ascii-box"><pre>A → B → C → A → B → C → ...</pre></div>
+<p>The algorithm can loop.</p>
+<p>With:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">visited = {start}</code></pre></div>
+<p>and marking states when discovered, each state is added at most once.</p>
+<p>This is the difference between a toy tree-search implementation and a safer graph-search implementation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">BFS Implementation Challenge</h2>
+      </div>
+      <div class="section-body">
+        <p>Without looking at the implementation:</p>
+<p>Write:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def bfs(graph, start, goal):
+    ...</code></pre></div>
+<p>Requirements:</p>
+<ul>
+<li>use a <code>deque</code>;</li>
+<li>use a visited/seen set;</li>
+<li>store parents;</li>
+<li>return a path;</li>
+<li>return <code>None</code> if no path exists.</li>
+</ul>
+<p>Do not inspect the completed solution until you have tried.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">DFS — Core Idea</h2>
+      </div>
+      <div class="section-body">
+        <p>The supplied lecture defines DFS as:</p>
+<blockquote>
+<p>Expand the <strong>deepest unexpanded node</strong>.</p>
+</blockquote>
+<p>Implementation:</p>
+<blockquote>
+<p>Use a <strong>LIFO queue/stack</strong>, putting successors at the front.</p>
+</blockquote>
+<p>Source: <code>lecture-basic-search.pdf</code>, Depth-First Search slides 29 onward.</p>
+<p>Memory hook:</p>
+<div class="formula-math">\[
+\boxed{
+\text{DFS}=\text{deepest first}=\text{LIFO}
+}
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">DFS Pseudocode</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>DFS(graph, start, goal):
+
+    create an empty LIFO frontier
+    push start
+
+    create visited set
+    create parent map
+    parent[start] = None
+
+    while frontier is not empty:
+
+        current = pop frontier
+
+        if current == goal:
+            reconstruct path
+            return path
+
+        if current is already visited:
+            continue
+
+        mark current visited
+
+        for each neighbor in appropriate order:
+            if neighbor has not been visited:
+                record parent
+                push neighbor
+
+    return failure</pre></div>
+<p>There is an implementation detail here:</p>
+<blockquote>
+<p>The order in which successors are pushed determines which branch becomes the next deepest branch.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">DFS Data Structure</h2>
+      </div>
+      <div class="section-body">
+        <p>Python list:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">stack = []</code></pre></div>
+<p>Push:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">stack.append(x)</code></pre></div>
+<p>Pop top:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">stack.pop()</code></pre></div>
+<p>This gives LIFO behaviour.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>push A
+push B
+push C
+
+stack:
+[A, B, C]
+
+pop → C</pre></div>
+<p>The newest item leaves first.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">DFS — First Implementation</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def dfs(graph, start, goal):
+    stack = [start]
+
+    visited = set()
+    parent = {start: None}
+
+    while stack:
+        current = stack.pop()
+
+        if current in visited:
+            continue
+
+        visited.add(current)
+
+        if current == goal:
+            return reconstruct_path(parent, goal)
+
+        for neighbor in reversed(graph.get(current, [])):
+            if neighbor not in visited:
+                if neighbor not in parent:
+                    parent[neighbor] = current
+                stack.append(neighbor)
+
+    return None</code></pre></div>
+<p>Why <code>reversed(...)</code>?</p>
+<p>Suppose:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">graph[&quot;A&quot;] = [&quot;B&quot;, &quot;C&quot;]</code></pre></div>
+<p>We want B to be explored before C under left-to-right teaching order.</p>
+<p>Because a stack is LIFO, push:</p>
+<div class="ascii-box"><pre>C
+B</pre></div>
+<p>so that:</p>
+<div class="ascii-box"><pre>B</pre></div>
+<p>is popped first.</p>
+<p>This is a very common implementation detail.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">DFS Trace</h2>
+      </div>
+      <div class="section-body">
+        <p>Using:</p>
+<div class="ascii-box"><pre>A
+├── B
+│   ├── D
+│   └── E
+└── C
+    ├── F
+    └── G</pre></div>
+<p>Start:</p>
+<div class="ascii-box"><pre>stack = [A]</pre></div>
+<p>Pop A:</p>
+<div class="ascii-box"><pre>stack receives C then B
+stack = [C, B]</pre></div>
+<p>Pop B:</p>
+<div class="ascii-box"><pre>stack = [C, E, D]</pre></div>
+<p>Pop D:</p>
+<div class="ascii-box"><pre>stack = [C, E]</pre></div>
+<p>Pop E:</p>
+<div class="ascii-box"><pre>stack = [C]</pre></div>
+<p>Only then does DFS move to C.</p>
+<p>This is the fundamental difference from BFS.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">BFS vs DFS — Same Graph, Different Behaviour</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>GRAPH
+
+          A
+       /     \
+      B       C
+     / \     / \
+    D   E   F   G</pre></div>
+<h3>BFS</h3>
+<div class="ascii-box"><pre>A
+B C
+D E F G</pre></div>
+<p>Typical order:</p>
+<div class="ascii-box"><pre>A → B → C → D → E → F → G</pre></div>
+<h3>DFS</h3>
+<div class="ascii-box"><pre>A
+↓
+B
+↓
+D
+↓
+backtrack
+↓
+E
+↓
+backtrack
+↓
+C
+↓
+...</pre></div>
+<p>Typical order:</p>
+<div class="ascii-box"><pre>A → B → D → E → C → F → G</pre></div>
+<p>Exact sibling order depends on implementation convention.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">DFS and the Deep-Path Problem</h2>
+      </div>
+      <div class="section-body">
+        <p>Consider:</p>
+<div class="ascii-box"><pre>A
+├── B
+│   └── C
+│       └── D
+│           └── E
+│               └── ...
+└── GOAL</pre></div>
+<p>DFS can keep following:</p>
+<div class="ascii-box"><pre>A → B → C → D → E → ...</pre></div>
+<p>and never return to explore the right branch if the left path is infinite.</p>
+<p>The lecture identifies this as a reason DFS is not complete in general.</p>
+<h3>Coding lesson</h3>
+<p>A search implementation is not only about data structures.</p>
+<p>You must understand:</p>
+<div class="ascii-box"><pre>state-space structure
+        +
+algorithm assumptions</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">DFS and Cycles</h2>
+      </div>
+      <div class="section-body">
+        <p>Example:</p>
+<div class="ascii-box"><pre>A → B
+↑   |
+|   ↓
+D ← C</pre></div>
+<p>A naive DFS can repeatedly traverse the cycle.</p>
+<p>The graph-search version uses a visited set:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">visited = set()</code></pre></div>
+<p>to avoid repeatedly expanding the same state.</p>
+<h3>Important nuance</h3>
+<p>“Visited” is a state-level concept.</p>
+<p>In richer search problems, reaching the same apparent state with different path-cost or resource information may require a more careful state definition.</p>
+<p>Do not oversimplify the meaning of “state.”</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">DFS Complexity</h2>
+      </div>
+      <div class="section-body">
+        <p>The supplied lecture gives standard DFS analysis in terms of the maximum depth \(m\):</p>
+<div class="formula-math">\[
+\boxed{
+O(b^m)
+}
+\]</div>
+<p>for time, with standard depth-first space:</p>
+<div class="formula-math">\[
+\boxed{
+O(bm)
+}
+\]</div>
+<p>under the lecture's search-tree framing.</p>
+<p>Here:</p>
+<ul>
+<li>\(b\) = branching factor;</li>
+<li>\(m\) = maximum depth of the state space.</li>
+</ul>
+<h3>Key comparison</h3>
+<div class="ascii-box"><pre>BFS:
+memory grows with solution depth
+
+DFS:
+memory grows primarily with current depth</pre></div>
+<p>This is why DFS can be dramatically more memory-efficient.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">DFS Unit Test</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def test_dfs_finds_a_path():
+    graph = {
+        &quot;A&quot;: [&quot;B&quot;, &quot;C&quot;],
+        &quot;B&quot;: [&quot;D&quot;, &quot;E&quot;],
+        &quot;C&quot;: [&quot;F&quot;, &quot;G&quot;],
+        &quot;D&quot;: [],
+        &quot;E&quot;: [],
+        &quot;F&quot;: [],
+        &quot;G&quot;: [],
+    }
+
+    path = dfs(graph, &quot;A&quot;, &quot;G&quot;)
+
+    assert path == [&quot;A&quot;, &quot;C&quot;, &quot;G&quot;] or path is not None</code></pre></div>
+<p>Be careful here.</p>
+<p>A DFS implementation does not guarantee the shallowest path.</p>
+<p>Therefore a stronger correctness test is often:</p>
+<blockquote>
+<p>“The returned path is valid.”</p>
+</blockquote>
+<p>rather than:</p>
+<blockquote>
+<p>“The returned path must equal the BFS path.”</p>
+</blockquote>
+<p>This distinction is essential.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">Testing Path Validity</h2>
+      </div>
+      <div class="section-body">
+        <p>Write a general helper:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def is_valid_path(graph, path, start, goal):
+    if path is None:
+        return False
+
+    if not path:
+        return False
+
+    if path[0] != start:
+        return False
+
+    if path[-1] != goal:
+        return False
+
+    for a, b in zip(path, path[1:]):
+        if b not in graph.get(a, []):
+            return False
+
+    return True</code></pre></div>
+<p>Now test:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">path = dfs(graph, &quot;A&quot;, &quot;G&quot;)
+
+assert is_valid_path(graph, path, &quot;A&quot;, &quot;G&quot;)</code></pre></div>
+<p>This is a better software-engineering style test because it checks the required property rather than one incidental traversal order.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Testing DFS Start Equals Goal</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def test_dfs_start_equals_goal():
+    graph = {
+        &quot;A&quot;: [&quot;B&quot;],
+        &quot;B&quot;: [],
+    }
+
+    assert dfs(graph, &quot;A&quot;, &quot;A&quot;) == [&quot;A&quot;]</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Testing DFS Failure</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def test_dfs_goal_absent():
+    graph = {
+        &quot;A&quot;: [&quot;B&quot;],
+        &quot;B&quot;: [&quot;C&quot;],
+        &quot;C&quot;: [],
+    }
+
+    assert dfs(graph, &quot;A&quot;, &quot;Z&quot;) is None</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-35" class="section-block">
+      <div class="section-header">
+        <span class="section-num">35</span>
+        <h2 class="section-heading">Testing DFS Cycle</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def test_dfs_handles_cycle():
+    graph = {
+        &quot;A&quot;: [&quot;B&quot;],
+        &quot;B&quot;: [&quot;C&quot;],
+        &quot;C&quot;: [&quot;A&quot;, &quot;G&quot;],
+        &quot;G&quot;: [],
+    }
+
+    path = dfs(graph, &quot;A&quot;, &quot;G&quot;)
+
+    assert is_valid_path(graph, path, &quot;A&quot;, &quot;G&quot;)</code></pre></div>
+<p>The important property is:</p>
+<blockquote>
+<p>the implementation terminates and returns a valid path.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-36" class="section-block">
+      <div class="section-header">
+        <span class="section-num">36</span>
+        <h2 class="section-heading">Traceable DFS</h2>
+      </div>
+      <div class="section-body">
+        <p>During debugging, it is useful to see the stack.</p>
+<p>A tracing version:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def dfs_trace(graph, start, goal):
+    stack = [start]
+    visited = set()
+    parent = {start: None}
+
+    trace = []
+
+    while stack:
+        current = stack.pop()
+
+        trace.append({
+            &quot;popped&quot;: current,
+            &quot;stack_after_pop&quot;: stack.copy(),
+        })
+
+        if current in visited:
+            continue
+
+        visited.add(current)
+
+        if current == goal:
+            return reconstruct_path(parent, goal), trace
+
+        for neighbor in reversed(graph.get(current, [])):
+            if neighbor not in visited:
+                if neighbor not in parent:
+                    parent[neighbor] = current
+                stack.append(neighbor)
+
+    return None, trace</code></pre></div>
+<p>Then inspect:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">path, trace = dfs_trace(graph, &quot;A&quot;, &quot;G&quot;)
+
+for step in trace:
+    print(step)</code></pre></div>
+<p>This makes the abstract LIFO rule visible.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-37" class="section-block">
+      <div class="section-header">
+        <span class="section-num">37</span>
+        <h2 class="section-heading">Tracing BFS and DFS</h2>
+      </div>
+      <div class="section-body">
+        <p>A useful trace record contains:</p>
+<div class="ascii-box"><pre>step number
+current node
+frontier before
+frontier after
+visited/seen
+parent map</pre></div>
+<p>A search algorithm becomes much easier to understand when you can literally see the frontier changing.</p>
+<p>This also satisfies the debugging principle from <code>CODE-00</code>:</p>
+<blockquote>
+<p>Make important algorithm state observable.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-38" class="section-block">
+      <div class="section-header">
+        <span class="section-num">38</span>
+        <h2 class="section-heading">A Unified Search Interface</h2>
+      </div>
+      <div class="section-body">
+        <p>Notice that BFS and DFS have nearly the same structure.</p>
+<p>The key difference is:</p>
+<div class="ascii-box"><pre>BFS → remove_front()
+DFS → remove_last()</pre></div>
+<p>This suggests an abstract view:</p>
+<div class="ascii-box"><pre>Search
+  ↓
+Frontier
+  ↓
+Selection rule</pre></div>
+<p>BFS:</p>
+<div class="ascii-box"><pre>FIFO frontier</pre></div>
+<p>DFS:</p>
+<div class="ascii-box"><pre>LIFO frontier</pre></div>
+<p>Later:</p>
+<div class="ascii-box"><pre>UCS → priority by g(n)
+Greedy → priority by h(n)
+A* → priority by g(n)+h(n)</pre></div>
+<p>This is one of the most important software-design connections in the whole AI search unit.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-39" class="section-block">
+      <div class="section-header">
+        <span class="section-num">39</span>
+        <h2 class="section-heading">A Tiny Generic Search Skeleton</h2>
+      </div>
+      <div class="section-body">
+        <p>Conceptually:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def generic_search(graph, start, goal, frontier):
+    ...</code></pre></div>
+<p>You could represent the frontier behaviour separately.</p>
+<p>However, do <strong>not</strong> abstract too early while learning.</p>
+<p>First understand:</p>
+<div class="ascii-box"><pre>BFS
+DFS</pre></div>
+<p>as concrete algorithms.</p>
+<p>Then generalize the common structure.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-40" class="section-block">
+      <div class="section-header">
+        <span class="section-num">40</span>
+        <h2 class="section-heading">BFS vs DFS Code-Level Difference</h2>
+      </div>
+      <div class="section-body">
+        <p>At the simplest level:</p>
+<h3>BFS</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">queue.append(neighbor)
+current = queue.popleft()</code></pre></div>
+<h3>DFS</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">stack.append(neighbor)
+current = stack.pop()</code></pre></div>
+<p>That is a tiny code difference hiding a major algorithmic difference.</p>
+<p>This is a powerful programming lesson:</p>
+<blockquote>
+<p><strong>Data structure choice can determine algorithmic behaviour.</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-41" class="section-block">
+      <div class="section-header">
+        <span class="section-num">41</span>
+        <h2 class="section-heading">Complexity Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Create graphs with increasing branching factor.</p>
+<p>For example, conceptually:</p>
+<div class="ascii-box"><pre>b = 2
+b = 3
+b = 4</pre></div>
+<p>Measure:</p>
+<div class="ascii-box"><pre>number of generated nodes
+runtime
+frontier size</pre></div>
+<p>You should observe that search cost can increase very quickly.</p>
+<p>Do not overfit one small benchmark.</p>
+<p>The educational goal is to see how branching interacts with depth.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-42" class="section-block">
+      <div class="section-header">
+        <span class="section-num">42</span>
+        <h2 class="section-heading">Memory Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Instrument BFS:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">max_frontier = 0</code></pre></div>
+<p>and after each step:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">max_frontier = max(max_frontier, len(queue))</code></pre></div>
+<p>At the end:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">return path, max_frontier</code></pre></div>
+<p>Do the same for DFS using stack length.</p>
+<p>Compare.</p>
+<p>Expected conceptual result:</p>
+<div class="ascii-box"><pre>BFS → broader frontier
+DFS → narrower frontier</pre></div>
+<p>This makes the textbook space-complexity discussion concrete.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-43" class="section-block">
+      <div class="section-header">
+        <span class="section-num">43</span>
+        <h2 class="section-heading">When BFS Is Attractive</h2>
+      </div>
+      <div class="section-body">
+        <p>A natural choice when:</p>
+<div class="ascii-box"><pre>solution likely shallow
++
+equal action costs
++
+enough memory</pre></div>
+<p>Examples:</p>
+<ul>
+<li>shortest number-of-moves solution in an unweighted graph;</li>
+<li>minimum number of transitions;</li>
+<li>level-order exploration.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-44" class="section-block">
+      <div class="section-header">
+        <span class="section-num">44</span>
+        <h2 class="section-heading">When DFS Is Attractive</h2>
+      </div>
+      <div class="section-body">
+        <p>A natural choice when:</p>
+<div class="ascii-box"><pre>memory is constrained
++
+deep exploration is acceptable
++
+a shallowest/least-cost guarantee is not required</pre></div>
+<p>Examples:</p>
+<ul>
+<li>exhaustive exploration of a finite state space;</li>
+<li>backtracking-style problems;</li>
+<li>situations where a deep solution is acceptable.</li>
+</ul>
+<p>But remember:</p>
+<blockquote>
+<p>A deep-first strategy may spend substantial time in a poor branch.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-45" class="section-block">
+      <div class="section-header">
+        <span class="section-num">45</span>
+        <h2 class="section-heading">Important Difference: Search vs Traversal</h2>
+      </div>
+      <div class="section-body">
+        <p>These algorithms are often introduced as graph traversal methods, but in AI they are used for <strong>state-space search</strong>.</p>
+<p>Traversal question:</p>
+<blockquote>
+<p>“In what order will I visit graph nodes?”</p>
+</blockquote>
+<p>Search question:</p>
+<blockquote>
+<p>“Can I find a goal state, and what solution path should I return?”</p>
+</blockquote>
+<p>The second requires:</p>
+<ul>
+<li>goal testing;</li>
+<li>parent/path information;</li>
+<li>state representation;</li>
+<li>solution reconstruction.</li>
+</ul>
+<p>That is why this Coding Book implements <strong>search</strong>, not merely a traversal printout.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-46" class="section-block">
+      <div class="section-header">
+        <span class="section-num">46</span>
+        <h2 class="section-heading">Common Coding Mistakes</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Lab Viva Trap & Runtime Gotcha</div>
+
+**Graph Search vs Tree Search Trap:**
+In Tree Search, states can be visited multiple times. In Graph Search, you MUST maintain an `explored` set!
+If you forget the `explored` set on a graph with cycles (e.g. A-B-A), DFS will enter infinite recursion and throw `RecursionError: maximum recursion depth exceeded`!
+
+</div>
+
+<h2>Mistake 1 — Using <code>pop(0)</code> for a large BFS queue</h2>
+<p>This can make the implementation inefficient.</p>
+<p>Prefer:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">deque.popleft()</code></pre></div>
+<h2>Mistake 2 — Marking visited too late</h2>
+<p>The same state can enter the queue repeatedly.</p>
+<h2>Mistake 3 — Forgetting cycles</h2>
+<p>A graph can loop forever without duplicate handling.</p>
+<h2>Mistake 4 — Assuming DFS returns the shortest path</h2>
+<p>It does not generally do so.</p>
+<h2>Mistake 5 — Assuming traversal order is universal</h2>
+<p>Neighbour ordering matters.</p>
+<h2>Mistake 6 — Treating a state name as sufficient for every problem</h2>
+<p>Real search states may need richer representations.</p>
+<h2>Mistake 7 — Testing only one exact DFS path</h2>
+<p>Many valid DFS implementations can produce different valid paths.</p>
+<h2>Mistake 8 — Hiding the algorithm inside a library call</h2>
+<p>That defeats the from-scratch learning objective.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-47" class="section-block">
+      <div class="section-header">
+        <span class="section-num">47</span>
+        <h2 class="section-heading">Debugging Checklist</h2>
+      </div>
+      <div class="section-body">
+        <p>If BFS/DFS gives the wrong result:</p>
+<div class="ascii-box"><pre>1. Print graph adjacency lists
+2. Print frontier
+3. Print visited
+4. Print parent map
+5. Check start
+6. Check goal
+7. Check neighbour ordering
+8. Check goal-test location
+9. Check duplicate handling
+10. Validate reconstructed path</pre></div>
+<p>Do not rewrite the entire algorithm before locating the mismatch.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-48" class="section-block">
+      <div class="section-header">
+        <span class="section-num">48</span>
+        <h2 class="section-heading">Path Reconstruction Bug Checklist</h2>
+      </div>
+      <div class="section-body">
+        <p>If the search finds the goal but path reconstruction fails:</p>
+<p>Check:</p>
+<div class="ascii-box"><pre>Was parent[start] defined?
+Was parent[child] recorded?
+Was parent overwritten later?
+Does every returned node exist in parent?
+Does reconstruction terminate?</pre></div>
+<p>For a valid path:</p>
+<div class="ascii-box"><pre>path[0] == start
+path[-1] == goal</pre></div>
+<p>and every adjacent pair must correspond to a graph edge.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-49" class="section-block">
+      <div class="section-header">
+        <span class="section-num">49</span>
+        <h2 class="section-heading">Experimental Comparison</h2>
+      </div>
+      <div class="section-body">
+        <p>Use one graph and run both:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">bfs(graph, &quot;A&quot;, &quot;G&quot;)
+dfs(graph, &quot;A&quot;, &quot;G&quot;)</code></pre></div>
+<p>Record:</p>
+<div class="ascii-box"><pre>algorithm
+path
+path length
+nodes expanded
+maximum frontier size</pre></div>
+<p>Example output format:</p>
+<div class="ascii-box"><pre>BFS
+path: A → C → G
+length: 2
+expanded: 3
+max frontier: 4
+
+DFS
+path: ...
+length: ...
+expanded: ...
+max stack: ...</pre></div>
+<p>Do not expect DFS's path length to match BFS's.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-50" class="section-block">
+      <div class="section-header">
+        <span class="section-num">50</span>
+        <h2 class="section-heading">A More Useful Comparison Metric</h2>
+      </div>
+      <div class="section-body">
+        <p>Do not compare only runtime.</p>
+<p>For search, record:</p>
+<div class="formula-math">\[
+\boxed{
+\text{solution quality}
+}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\boxed{
+\text{search effort}
+}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\boxed{
+\text{memory usage}
+}
+\]</div>
+<p>A method can be fast on one graph but produce a poor solution.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-51" class="section-block">
+      <div class="section-header">
+        <span class="section-num">51</span>
+        <h2 class="section-heading">Visualizing the Search</h2>
+      </div>
+      <div class="section-body">
+        <p>A simple visualization can display:</p>
+<div class="ascii-box"><pre>nodes
+edges
+start
+goal
+visited nodes
+solution path</pre></div>
+<p>For the teaching graph:</p>
+<div class="ascii-box"><pre>A
+         /   \
+        B     C
+       / \   / \
+      D   E F   G</pre></div>
+<p>You can progressively mark:</p>
+<div class="ascii-box"><pre>unseen
+frontier
+expanded
+goal
+solution path</pre></div>
+<p>A useful visualization answers:</p>
+<blockquote>
+<p>“What is the algorithm doing at this moment?”</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-52" class="section-block">
+      <div class="section-header">
+        <span class="section-num">52</span>
+        <h2 class="section-heading">Coding Challenge — BFS</h2>
+      </div>
+      <div class="section-body">
+        <p>Implement:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def bfs(graph, start, goal):
+    ...</code></pre></div>
+<p>Then add:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def bfs_with_stats(...):
+    ...</code></pre></div>
+<p>which returns:</p>
+<div class="ascii-box"><pre>path
+expanded_count
+max_frontier</pre></div>
+<p>Do not change the search semantics while adding statistics.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-53" class="section-block">
+      <div class="section-header">
+        <span class="section-num">53</span>
+        <h2 class="section-heading">Coding Challenge — DFS</h2>
+      </div>
+      <div class="section-body">
+        <p>Implement:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def dfs(graph, start, goal):
+    ...</code></pre></div>
+<p>Then add:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def dfs_with_stats(...):
+    ...</code></pre></div>
+<p>Return:</p>
+<div class="ascii-box"><pre>path
+expanded_count
+max_stack</pre></div>
+<p>Again, statistics should observe the search rather than alter it.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-54" class="section-block">
+      <div class="section-header">
+        <span class="section-num">54</span>
+        <h2 class="section-heading">Coding Challenge — Random Graph</h2>
+      </div>
+      <div class="section-body">
+        <p>Generate a small directed graph with a fixed seed.</p>
+<p>Then compare BFS and DFS across several source-goal pairs.</p>
+<p>Questions:</p>
+<ol>
+<li>Do they always find a path when one exists?</li>
+<li>Do they always return the same path?</li>
+<li>Do they always return the same path length?</li>
+<li>Which explores fewer nodes on your examples?</li>
+<li>Does the answer change when adjacency ordering changes?</li>
+</ol>
+<p>This moves you from:</p>
+<div class="ascii-box"><pre>single toy example</pre></div>
+<p>to:</p>
+<div class="ascii-box"><pre>controlled experiment</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-55" class="section-block">
+      <div class="section-header">
+        <span class="section-num">55</span>
+        <h2 class="section-heading">Experimental Trap</h2>
+      </div>
+      <div class="section-body">
+        <p>Do <strong>not</strong> conclude:</p>
+<blockquote>
+<p>“DFS is faster than BFS.”</p>
+</blockquote>
+<p>from one graph.</p>
+<p>Instead report:</p>
+<blockquote>
+<p>“On this graph and implementation, DFS expanded X nodes while BFS expanded Y.”</p>
+</blockquote>
+<p>Then investigate whether the result changes across different graph structures.</p>
+<p>This is the difference between a measurement and a general claim.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-56" class="section-block">
+      <div class="section-header">
+        <span class="section-num">56</span>
+        <h2 class="section-heading">Extension — Weighted Graph Thought Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="ascii-box"><pre>A → B → G
+cost = 1 + 1
+
+A → C → D → G
+cost = 0.2 + 0.2 + 0.2</pre></div>
+<p>BFS prefers the second-level goal path based on depth.</p>
+<p>But the cheaper route has more steps.</p>
+<p>This demonstrates why:</p>
+<div class="formula-math">\[
+\boxed{
+\text{fewest steps}
+\neq
+\text{least cost}
+}
+\]</div>
+<p>when edge costs differ.</p>
+<p>The supplied lecture uses this distinction to motivate Uniform-Cost Search.</p>
+<p>This file does not implement UCS yet; that is intentionally reserved for the informed-search coding progression where priority-based frontiers become important.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-57" class="section-block">
+      <div class="section-header">
+        <span class="section-num">57</span>
+        <h2 class="section-heading">Extension — Depth Limiting Thought Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>If DFS can keep going too deep, add:</p>
+<div class="ascii-box"><pre>maximum depth l</pre></div>
+<p>Then:</p>
+<div class="ascii-box"><pre>depth &gt;= l
+↓
+do not expand further</pre></div>
+<p>This is the basic idea of Depth-Limited Search.</p>
+<p>Again, the current Coding Book file keeps the core syllabus implementations focused on BFS/DFS while preparing you for the next search family.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-58" class="section-block">
+      <div class="section-header">
+        <span class="section-num">58</span>
+        <h2 class="section-heading">Relation to A*</h2>
+      </div>
+      <div class="section-body">
+        <p>The same frontier architecture later becomes:</p>
+<div class="ascii-box"><pre>BFS
+priority = depth
+
+UCS
+priority = g(n)
+
+Greedy
+priority = h(n)
+
+A*
+priority = g(n) + h(n)</pre></div>
+<p>This is why learning the frontier abstraction now is so valuable.</p>
+<p>The implementation mechanism evolves, but the underlying search framework remains recognizable.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-59" class="section-block">
+      <div class="section-header">
+        <span class="section-num">59</span>
+        <h2 class="section-heading">Unit-I Exam Bridge</h2>
+      </div>
+      <div class="section-body">
+        <p>The Exam Book emphasizes:</p>
+<h3>BFS</h3>
+<div class="formula-math">\[
+\boxed{
+\text{shallowest}+\text{FIFO}
+}
+\]</div>
+<h3>DFS</h3>
+<div class="formula-math">\[
+\boxed{
+\text{deepest}+\text{LIFO}
+}
+\]</div>
+<h3>Core properties</h3>
+<p>BFS:</p>
+<div class="formula-math">\[
+\boxed{
+\text{complete under finite-branching assumptions}
+}
+\]</div>
+<div class="formula-math">\[
+\boxed{
+\text{optimal for equal step costs}
+}
+\]</div>
+<p>DFS:</p>
+<div class="formula-math">\[
+\boxed{
+\text{not generally complete}
+}
+\]</div>
+<div class="formula-math">\[
+\boxed{
+\text{not optimal}
+}
+\]</div>
+<p>Implementation questions should connect directly to these properties.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-60" class="section-block">
+      <div class="section-header">
+        <span class="section-num">60</span>
+        <h2 class="section-heading">Active Recall — Coding Edition</h2>
+      </div>
+      <div class="section-body">
+        <p>Close the file.</p>
+<p>Write answers from memory.</p>
+<ol>
+<li>Why does BFS use a queue?</li>
+<li>Why does DFS use a stack?</li>
+<li>What is the difference between shallowest and deepest expansion?</li>
+<li>Why does BFS require high memory?</li>
+<li>Why can DFS get stuck in a deep path?</li>
+<li>Why do cycles require duplicate detection?</li>
+<li>Why is parent information necessary?</li>
+<li>Why can different DFS implementations return different valid paths?</li>
+<li>Why is BFS optimal only under equal step costs?</li>
+<li>What changes in code when moving from BFS to DFS?</li>
+<li>What information should a search trace record?</li>
+<li>What should a path-validity test verify?</li>
+<li>What is the difference between traversal and search?</li>
+<li>Why should a library implementation come after the from-scratch implementation?</li>
+<li>How do BFS/DFS prepare you for UCS/Greedy/A*?</li>
+</ol>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-61" class="section-block">
+      <div class="section-header">
+        <span class="section-num">61</span>
+        <h2 class="section-heading">Final Implementation Test</h2>
+      </div>
+      <div class="section-body">
+        <p>Without looking at this chapter, create one Python file containing:</p>
+<div class="ascii-box"><pre>reconstruct_path()
+bfs()
+dfs()
+is_valid_path()</pre></div>
+<p>Then create tests for:</p>
+<div class="ascii-box"><pre>1. start == goal
+2. goal exists
+3. goal absent
+4. cycle exists
+5. multiple valid paths
+6. disconnected node</pre></div>
+<p>Then run both algorithms on the same graph.</p>
+<p>Record:</p>
+<div class="ascii-box"><pre>path
+expanded nodes
+maximum frontier</pre></div>
+<p>Finally write one paragraph explaining the result.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-62" class="section-block">
+      <div class="section-header">
+        <span class="section-num">62</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <p>You are at <strong>C3 — Rebuild</strong> when you can write BFS and DFS from pseudocode without copying the implementation.</p>
+<p>You are at <strong>C4 — Test</strong> when you can write the tests above.</p>
+<p>You are at <strong>C5 — Modify</strong> when you can add:</p>
+<ul>
+<li>search statistics;</li>
+<li>trace output;</li>
+<li>depth tracking;</li>
+<li>a path-validity checker.</li>
+</ul>
+<p>You are at <strong>C6 — Explain</strong> when you can explain why the code behaves differently despite sharing the same basic search skeleton.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-63" class="section-block">
+      <div class="section-header">
+        <span class="section-num">63</span>
+        <h2 class="section-heading">Final Memory Sheet</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>BFS
+│
+├── shallowest first
+├── FIFO
+├── queue
+├── high memory
+├── complete under standard finite-branching assumptions
+└── optimal when step costs are equal
+
+DFS
+│
+├── deepest first
+├── LIFO
+├── stack
+├── low memory
+├── can fail in infinite-depth/cyclic spaces
+└── not generally optimal</pre></div>
+<p>And the reusable software pattern:</p>
+<div class="ascii-box"><pre>problem
+  ↓
+frontier
+  ↓
+select next node
+  ↓
+goal test
+  ↓
+expand
+  ↓
+record parent
+  ↓
+avoid duplicates
+  ↓
+repeat</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-64" class="section-block">
+      <div class="section-header">
+        <span class="section-num">64</span>
+        <h2 class="section-heading">Source Notes</h2>
+      </div>
+      <div class="section-body">
+        <h2>Primary course source</h2>
+<p><code>lecture-basic-search.pdf</code></p>
+<p>Used for:</p>
+<ul>
+<li>BFS definition;</li>
+<li>FIFO implementation;</li>
+<li>BFS completeness;</li>
+<li>BFS time/space complexity;</li>
+<li>BFS equal-step-cost optimality;</li>
+<li>DFS definition;</li>
+<li>LIFO implementation;</li>
+<li>DFS depth/infinite-path warning;</li>
+<li>DFS complexity framing;</li>
+<li>UCS/DLS/IDS as lecture extensions.</li>
+</ul>
+<h2>Official syllabus</h2>
+<p>Your DSC-14 syllabus identifies:</p>
+<blockquote>
+<p><strong>Uninformed Search (BFS, DFS)</strong></p>
+</blockquote>
+<p>as a core Unit I syllabus item.</p>
+<h2>Companion resources</h2>
+<ul>
+<li><code>MAIN-U1-C04_Uninformed_Search.md</code></li>
+<li><code>EXAM-U1_Artificial_Intelligence_and_Search.md</code></li>
+<li><code>CODE-00_AI_ML_Coding_Book_Foundation_and_Implementation_System.md</code></li>
+<li><code>CODE-01_Python_NumPy_Matplotlib_and_AI_ML_Lab_Workflow.md</code></li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-65" class="section-block">
+      <div class="section-header">
+        <span class="section-num">65</span>
+        <h2 class="section-heading">Status</h2>
+      </div>
+      <div class="section-body">
+        <p><strong><code>CODE-U1-01</code> — COMPLETE</strong></p>
+<p>You now have the implementation foundation for:</p>
+<div class="ascii-box"><pre>BFS
+↕
+DFS
+↕
+frontier abstraction
+↕
+graph-search thinking</pre></div>
+<p><strong>Next:</strong> <code>CODE-U1-02 — Greedy Best-First Search and A*</code></p>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="code-01-python-numpy-workflow.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← Lab 01 — NumPy Workflow</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">💻 Coding Index</span>
+      </a>
+      <a href="code-u1-02-greedy-a-star.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: Unit 1 Lab 02 — Greedy & A* Search →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search lab implementations, functions, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">💻</span>Lab Hub</a>
+  <a href="code-u1-01-bfs-dfs.html" class="mobile-nav-btn active"><span class="icon">📖</span>CODE-U1-01</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

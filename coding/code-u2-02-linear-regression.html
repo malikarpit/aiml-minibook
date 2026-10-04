@@ -1,0 +1,2438 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="CODE-U2-02: Linear Regression From Scratch — AI & Machine Learning Coding Lab. Batch Gradient Descent vs Normal Equations, Loss Surface Trajectory, Learning Rate Selection, and Scikit-Learn Benchmark">
+<title>CODE-U2-02: Linear Regression From Scratch | Coding Lab 💻 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/coding.css">
+</head>
+<body class="coding-module track-c2">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">💻</div>
+      <div class="brand-text"><span class="main">Coding Lab</span><span class="sub">AI &amp; ML From Scratch</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">CODE-U2-02: Linear Regression From Scratch</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">💻</span>Coding Lab Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../math/index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 0: Environment & System</div>
+  <a href="code-00-coding-foundation.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-00: Coding Lab Foundation &amp; Implementation System</a>
+  <a href="code-01-python-numpy-workflow.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-01: Python, NumPy, Matplotlib &amp; Lab Workflow</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Classical AI & Search Labs</div>
+  <a href="code-u1-01-bfs-dfs.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-01: BFS and DFS From Scratch</a>
+  <a href="code-u1-02-greedy-a-star.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-02: Greedy Best-First &amp; A* Search From Scratch</a>
+  <a href="code-u1-03-csp-backtracking.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-03: CSPs and Backtracking Search</a>
+  <a href="code-u1-04-minimax-alpha-beta.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Supervised ML Labs</div>
+  <a href="code-u2-01-ml-workflow.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-01: ML Workflow: Preprocessing, Splitting &amp; Evaluation</a>
+  <a href="code-u2-02-linear-regression.html" class="sidebar-link active"><span class="link-icon">📊</span>CODE-U2-02: Linear Regression From Scratch</a>
+  <a href="code-u2-03-logistic-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-03: Logistic Regression From Scratch</a>
+  <a href="code-u2-04-decision-trees.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-04: Decision Trees From Scratch</a>
+  <a href="code-u2-05-classification-metrics-roc.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC &amp; Thresholds</a>
+  <a href="code-u2-06-ridge-lasso-regularization.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-06: Ridge &amp; Lasso From Scratch: Regularization &amp; Optimization</a>
+  <a href="code-u2-07-ml-evaluation-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-07: ML Evaluation &amp; Model Comparison Lab</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Deep Learning Labs</div>
+  <a href="code-u3-01-neuron-perceptron.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-01: Neuron and Perceptron From Scratch</a>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>MLP, Backpropagation & Convolutions</span>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Advanced AI Labs (Upcoming)</div>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>Q-Learning, NLP & Generative Adversarial Loops</span>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">CODE-U2-02 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. What You Will Build</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Linear Regression Model</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. First Tiny Dataset</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Add Small Noise</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Prediction Function</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Mean Squared Error</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. First Experiment — Bad Parameters</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Why We Need Optimization</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Deriving the Gradient — Scalar Form</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Gradient Derivation Step by Step</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Gradient Descent</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. From-Scratch Gradient-Descent Implementation</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Code-to-Math Map</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Run the Optimizer</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Plot the Loss</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Learning Rate Experiment</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Gradient Sanity Check</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Numerical Gradient Implementation</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Why Gradient Checking Matters</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Matrix Form</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Intercept via an Augmented Matrix</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Matrix Implementation</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Matrix Gradient</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Matrix Gradient-Descent Implementation</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Test the Matrix Implementation</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Closed-Form Least Squares</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Never Explicitly Invert Unless Needed</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Closed-Form Implementation</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Gradient Descent vs Closed Form</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Why Gradient Descent Still Matters</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Compare Solutions</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Why They May Differ</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Feature Scaling Experiment</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Why Scaling Changes the Optimization Geometry</a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Closed Form and Scaling</a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Training a Library Model</a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Reference Comparison Checklist</a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Important Intercept Trap</a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Testing the Model</a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Test Gradient Descent</a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Test Loss Monotonicity Carefully</a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Error Analysis</a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Visualizing a One-Feature Fit</a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Overfitting Connection</a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. Why Polynomial Regression Is Still “Linear” in Parameters</a>
+      <a href="#s-46" class="sidebar-link"><span class="link-icon">📌</span>46. Practical Experiment — Degree vs Generalization</a>
+      <a href="#s-47" class="sidebar-link"><span class="link-icon">📌</span>47. Common Coding Mistakes</a>
+      <a href="#s-48" class="sidebar-link"><span class="link-icon">📌</span>48. Gradient Debugging Checklist</a>
+      <a href="#s-49" class="sidebar-link"><span class="link-icon">📌</span>49. Experiment — Initialization</a>
+      <a href="#s-50" class="sidebar-link"><span class="link-icon">📌</span>50. Experiment — Batch vs Full Dataset</a>
+      <a href="#s-51" class="sidebar-link"><span class="link-icon">📌</span>51. Experiment — Add an Outlier</a>
+      <a href="#s-52" class="sidebar-link"><span class="link-icon">📌</span>52. Why This Matters Beyond Regression</a>
+      <a href="#s-53" class="sidebar-link"><span class="link-icon">📌</span>53. Unit II Integration</a>
+      <a href="#s-54" class="sidebar-link"><span class="link-icon">📌</span>54. Exam Bridge</a>
+      <a href="#s-55" class="sidebar-link"><span class="link-icon">📌</span>55. Active Recall — Coding Edition</a>
+      <a href="#s-56" class="sidebar-link"><span class="link-icon">📌</span>56. Final Practical Test</a>
+      <a href="#s-57" class="sidebar-link"><span class="link-icon">📌</span>57. Mastery Gate</a>
+      <a href="#s-58" class="sidebar-link"><span class="link-icon">📌</span>58. Final Memory Sheet</a>
+      <a href="#s-59" class="sidebar-link"><span class="link-icon">📌</span>59. Source Notes</a>
+      <a href="#s-60" class="sidebar-link"><span class="link-icon">📌</span>60. Cross-Book Links</a>
+      <a href="#s-61" class="sidebar-link"><span class="link-icon">📌</span>61. Status</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Coding Lab</a>
+        <span>/</span>
+        <span>CODE-U2-02</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-c2">Track 2: Supervised Machine Learning Labs</span></div>
+      <h1 class="chapter-title">Linear Regression From Scratch</h1>
+      <p class="chapter-desc">Batch Gradient Descent vs Normal Equations, Loss Surface Trajectory, Learning Rate Selection, and Scikit-Learn Benchmark</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~50 min lab</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">LINEAR-REGRESSION</span> <span class="chapter-meta-item uni-badge">GRADIENT-DESCENT</span> <span class="chapter-meta-item uni-badge">NORMAL-EQUATION</span> <span class="chapter-meta-item uni-badge">MSE-LOSS</span>
+      </div>
+
+      <div class="lab-meta-grid">
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Prerequisites</div>
+          <div class="lab-meta-value">CODE-U2-01 ML Workflow, Math Companion M09 & M22</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Main Book Concept</div>
+          <div class="lab-meta-value">Ch 18 Linear Regression, Ch 19 Linear Regression Math</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Math Companion Layer</div>
+          <div class="lab-meta-value">M08 Matrix Multiplication, M09 Normal Equations (X^TX)^-1 X^Ty, M22 Gradient Descent</div>
+        </div>
+        <div class="lab-meta-box" style="grid-column: 1 / -1;">
+          <div class="lab-meta-label">AI / Machine Learning Connections</div>
+          <div class="lab-meta-value">House price prediction, Trend forecasting, OLS closed-form solver, Learning rate overshoot, MSE optimization</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-meta-card"><h1>CODE-U2-02 — Linear Regression From Scratch, Gradient Descent, Closed Form, and Library Comparison</h1>
+<blockquote>
+<p><strong>Coding Book — Unit II: Machine Learning</strong></p>
+<p><strong>Topic ID:</strong> <code>CODE-U2-02</code></p>
+<p><strong>Main Book links:</strong> <code>MAIN-U2-C18 — Linear Regression</code>, <code>MAIN-U2-C19 — Linear Regression Mathematics and Least Squares</code></p>
+<p><strong>Math links:</strong> <code>MATH-M08</code>, <code>MATH-M09</code>, <code>MATH-M18</code>–<code>MATH-M23</code></p>
+<p><strong>Exam link:</strong> <code>EXAM-U2_Machine_Learning_and_Evaluation.md</code></p>
+<p><strong>Primary course source:</strong> <code>Lecture09.pdf</code></p>
+<p><strong>Source-grounded mathematical progression:</strong> The supplied Lecture 9 develops linear regression through vector notation, squared error, gradients, convexity, least-squares minimization, and the matrix formulation
+</p>
+</blockquote>
+<div class="formula-math">\[
+\gt  \min_w\|Xw-y\|_2^2
+\gt  \]</div>
+<blockquote>
+<p>with
+</p>
+</blockquote>
+<div class="formula-math">\[
+\gt  w^*=(X^TX)^{-1}X^Ty
+\gt  \]</div>
+<blockquote>
+<p>when \(X^TX\) is invertible.</p>
+<p><strong>Purpose:</strong> Implement the model yourself, understand its update rule, compare it with the closed-form solution, and then verify against a library implementation.</p>
+</blockquote>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in CODE-U2-02 (61 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">What You Will Build</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Linear Regression Model</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">First Tiny Dataset</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Add Small Noise</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Prediction Function</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Mean Squared Error</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">First Experiment — Bad Parameters</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Why We Need Optimization</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Deriving the Gradient — Scalar Form</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Gradient Derivation Step by Step</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Gradient Descent</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">From-Scratch Gradient-Descent Implementation</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Code-to-Math Map</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Run the Optimizer</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Plot the Loss</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Learning Rate Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Gradient Sanity Check</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Numerical Gradient Implementation</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Why Gradient Checking Matters</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Matrix Form</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Intercept via an Augmented Matrix</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Matrix Implementation</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Matrix Gradient</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Matrix Gradient-Descent Implementation</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Test the Matrix Implementation</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Closed-Form Least Squares</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Never Explicitly Invert Unless Needed</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Closed-Form Implementation</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Gradient Descent vs Closed Form</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Why Gradient Descent Still Matters</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Compare Solutions</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Why They May Differ</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Feature Scaling Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Why Scaling Changes the Optimization Geometry</span></a></li>
+        <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Closed Form and Scaling</span></a></li>
+        <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Training a Library Model</span></a></li>
+        <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Reference Comparison Checklist</span></a></li>
+        <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Important Intercept Trap</span></a></li>
+        <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Testing the Model</span></a></li>
+        <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Test Gradient Descent</span></a></li>
+        <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Test Loss Monotonicity Carefully</span></a></li>
+        <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Error Analysis</span></a></li>
+        <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Visualizing a One-Feature Fit</span></a></li>
+        <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Overfitting Connection</span></a></li>
+        <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">Why Polynomial Regression Is Still “Linear” in Parameters</span></a></li>
+        <li class="toc-item"><a href="#s-46"><span class="toc-num">46</span><span class="toc-name">Practical Experiment — Degree vs Generalization</span></a></li>
+        <li class="toc-item"><a href="#s-47"><span class="toc-num">47</span><span class="toc-name">Common Coding Mistakes</span></a></li>
+        <li class="toc-item"><a href="#s-48"><span class="toc-num">48</span><span class="toc-name">Gradient Debugging Checklist</span></a></li>
+        <li class="toc-item"><a href="#s-49"><span class="toc-num">49</span><span class="toc-name">Experiment — Initialization</span></a></li>
+        <li class="toc-item"><a href="#s-50"><span class="toc-num">50</span><span class="toc-name">Experiment — Batch vs Full Dataset</span></a></li>
+        <li class="toc-item"><a href="#s-51"><span class="toc-num">51</span><span class="toc-name">Experiment — Add an Outlier</span></a></li>
+        <li class="toc-item"><a href="#s-52"><span class="toc-num">52</span><span class="toc-name">Why This Matters Beyond Regression</span></a></li>
+        <li class="toc-item"><a href="#s-53"><span class="toc-num">53</span><span class="toc-name">Unit II Integration</span></a></li>
+        <li class="toc-item"><a href="#s-54"><span class="toc-num">54</span><span class="toc-name">Exam Bridge</span></a></li>
+        <li class="toc-item"><a href="#s-55"><span class="toc-num">55</span><span class="toc-name">Active Recall — Coding Edition</span></a></li>
+        <li class="toc-item"><a href="#s-56"><span class="toc-num">56</span><span class="toc-name">Final Practical Test</span></a></li>
+        <li class="toc-item"><a href="#s-57"><span class="toc-num">57</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-58"><span class="toc-num">58</span><span class="toc-name">Final Memory Sheet</span></a></li>
+        <li class="toc-item"><a href="#s-59"><span class="toc-num">59</span><span class="toc-name">Source Notes</span></a></li>
+        <li class="toc-item"><a href="#s-60"><span class="toc-num">60</span><span class="toc-name">Cross-Book Links</span></a></li>
+        <li class="toc-item"><a href="#s-61"><span class="toc-num">61</span><span class="toc-name">Status</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">What You Will Build</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph TD
+    Data["Training Data (X, y)"] --> Route{"Choose Solver"}
+    Route -- Closed Form --> NE["Normal Equation: w* = (XᵀX)⁻¹ Xᵀy"]
+    NE --> Direct["O(d³) Inversion: Instant & Exact for d < 10,000"]
+    Route -- Iterative --> GD["Gradient Descent: w ← w - η · (2/n) Xᵀ(Xw - y)"]
+    GD --> Loop["Iterative Steps until ||∇J|| < ε: O(n·d) per step, Scales to Big Data!"]
+    style NE fill:#1e293b,stroke:#34d399,color:#f8fafc
+    style GD fill:#1e293b,stroke:#38bdf8,color:#f8fafc
+</pre></div>
+<p>This lab contains three levels.</p>
+<h3>Level 1 — Predict</h3>
+<p>Implement:</p>
+<div class="formula-math">\[
+\boxed{
+\hat y=Xw+b
+}
+\]</div>
+<p>or an equivalent augmented-vector formulation.</p>
+<h3>Level 2 — Learn</h3>
+<p>Train parameters with gradient descent:</p>
+<div class="formula-math">\[
+\boxed{
+w\leftarrow w-\eta\nabla J(w)
+}
+\]</div>
+<h3>Level 3 — Verify</h3>
+<p>Compare:</p>
+<div class="ascii-box"><pre>from-scratch gradient descent
+        ↓
+closed-form least squares
+        ↓
+scikit-learn LinearRegression</pre></div>
+<p>This creates the full engineering loop:</p>
+<div class="ascii-box"><pre>theory
+↓
+from scratch
+↓
+mathematical reference
+↓
+library reference
+↓
+tests
+↓
+experiments</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">Linear Regression Model</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Implementation Model</div>
+
+Normal Equation ek calculator ki tarah hai—formula daalo aur ek jhatke mein exact best weights $w^*$ mil jate hain.
+Lekin agar dataset mein 1 lakh features hon, toh $(X^T X)^{-1}$ inverse nikalte-nikalte computer hang ho jayega ($O(d^3)$)!
+Tab Gradient Descent hero ban kar aata hai: har step par thoda-thoda dhalan ki taraf badhta hai aur chahe kitna bhi bada data ho, aram se optimize ho jata hai!
+
+</div>
+
+<p>For one feature:</p>
+<div class="formula-math">\[
+\boxed{
+\hat y=wx+b
+}
+\]</div>
+<p>For multiple features:</p>
+<div class="formula-math">\[
+\boxed{
+\hat y=w^Tx+b
+}
+\]</div>
+<p>For matrix \(X\):</p>
+<div class="formula-math">\[
+\boxed{
+\hat y=Xw+b
+}
+\]</div>
+<p>where adding a scalar \(b\) is conceptually applied to each sample.</p>
+<p>A convenient coding choice is to keep:</p>
+<div class="ascii-box"><pre>X
+w
+b</pre></div>
+<p>separate.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">First Tiny Dataset</h2>
+      </div>
+      <div class="section-body">
+        <p>Use a dataset with a known relationship:</p>
+<div class="formula-math">\[
+y=3x+2.
+\]</div>
+<p>Create:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+x = np.array([
+    0.0,
+    1.0,
+    2.0,
+    3.0,
+    4.0,
+])
+
+y = 3.0 * x + 2.0</code></pre></div>
+<p>Expected model:</p>
+<div class="formula-math">\[
+w=3,
+\qquad
+b=2.
+\]</div>
+<p>This is an ideal debugging dataset because the correct answer is known.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Add Small Noise</h2>
+      </div>
+      <div class="section-body">
+        <p>Real data is rarely exact.</p>
+<p>Use:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">rng = np.random.default_rng(42)
+
+noise = rng.normal(
+    0,
+    0.5,
+    size=x.shape,
+)
+
+y_noisy = 3.0 * x + 2.0 + noise</code></pre></div>
+<p>Now the optimal fitted values should be <strong>near</strong>:</p>
+<div class="formula-math">\[
+w=3,\qquad b=2,
+\]</div>
+<p>rather than exactly equal.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Prediction Function</h2>
+      </div>
+      <div class="section-body">
+        <p>Implement:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def predict(x, w, b):
+    return x * w + b</code></pre></div>
+<p>Test:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert predict(
+    2.0,
+    3.0,
+    2.0,
+) == 8.0</code></pre></div>
+<p>This tiny function is the computational form of:</p>
+<div class="formula-math">\[
+\hat y=wx+b.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Mean Squared Error</h2>
+      </div>
+      <div class="section-body">
+        <p>For predictions \(\hat y\):</p>
+<div class="formula-math">\[
+\boxed{
+J(w,b)
+=
+\frac1n
+\sum_{i=1}^{n}
+(\hat y_i-y_i)^2
+}
+\]</div>
+<p>Implement:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def mse(y_true, y_pred):
+    return np.mean(
+        (y_pred - y_true) ** 2
+    )</code></pre></div>
+<p>Test:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">y_true = np.array([1.0, 2.0])
+y_pred = np.array([1.0, 4.0])
+
+assert mse(
+    y_true,
+    y_pred,
+) == 2.0</code></pre></div>
+<p>because:</p>
+<div class="formula-math">\[
+\frac{0^2+2^2}{2}=2.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">First Experiment — Bad Parameters</h2>
+      </div>
+      <div class="section-body">
+        <p>Try:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">w = 0.0
+b = 0.0
+
+predictions = predict(
+    x,
+    w,
+    b,
+)
+
+loss = mse(
+    y,
+    predictions,
+)
+
+print(loss)</code></pre></div>
+<p>The loss should be positive.</p>
+<p>Now set:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">w = 3.0
+b = 2.0</code></pre></div>
+<p>The noiseless dataset should give:</p>
+<div class="formula-math">\[
+\boxed{
+MSE=0.
+}
+\]</div>
+<p>This confirms the model/loss implementation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">Why We Need Optimization</h2>
+      </div>
+      <div class="section-body">
+        <p>The model has unknown parameters:</p>
+<div class="formula-math">\[
+w,\quad b.
+\]</div>
+<p>We want:</p>
+<div class="formula-math">\[
+\boxed{
+(w^*,b^*)
+=
+\arg\min_{w,b}
+J(w,b)
+}
+\]</div>
+<p>where:</p>
+<div class="formula-math">\[
+J(w,b)
+=
+\frac1n
+\sum_i
+(wx_i+b-y_i)^2.
+\]</div>
+<p>This is the learning problem.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Deriving the Gradient — Scalar Form</h2>
+      </div>
+      <div class="section-body">
+        <p>For one feature:</p>
+<div class="formula-math">\[
+\hat y_i=wx_i+b.
+\]</div>
+<p>Define:</p>
+<div class="formula-math">\[
+e_i=wx_i+b-y_i.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+J(w,b)=
+\frac1n\sum_ie_i^2.
+\]</div>
+<p>Differentiate with respect to \(w\):</p>
+<div class="formula-math">\[
+\boxed{
+\frac{\partial J}{\partial w}
+=
+\frac2n
+\sum_i e_i x_i
+}
+\]</div>
+<p>and with respect to \(b\):</p>
+<div class="formula-math">\[
+\boxed{
+\frac{\partial J}{\partial b}
+=
+\frac2n
+\sum_i e_i.
+}
+\]</div>
+<p>The factor 2 comes from differentiating the square.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Gradient Derivation Step by Step</h2>
+      </div>
+      <div class="section-body">
+        <p>Start:</p>
+<div class="formula-math">\[
+J=
+\frac1n
+\sum_i(wx_i+b-y_i)^2.
+\]</div>
+<p>For \(w\):</p>
+<div class="formula-math">\[
+\frac{\partial J}{\partial w}
+=
+\frac1n
+\sum_i
+2(wx_i+b-y_i)
+\frac{\partial}{\partial w}
+(wx_i+b-y_i).
+\]</div>
+<p>Since:</p>
+<div class="formula-math">\[
+\frac{\partial}{\partial w}
+(wx_i+b-y_i)
+=
+x_i,
+\]</div>
+<p>we get:</p>
+<div class="formula-math">\[
+\boxed{
+\frac{\partial J}{\partial w}
+=
+\frac2n
+\sum_i
+(wx_i+b-y_i)x_i.
+}
+\]</div>
+<p>Similarly:</p>
+<div class="formula-math">\[
+\frac{\partial}{\partial b}
+(wx_i+b-y_i)=1,
+\]</div>
+<p>so:</p>
+<div class="formula-math">\[
+\boxed{
+\frac{\partial J}{\partial b}
+=
+\frac2n
+\sum_i
+(wx_i+b-y_i).
+}
+\]</div>
+<p>This is exactly the kind of scalar-to-vector calculus progression emphasized by Lecture 9.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Gradient Descent</h2>
+      </div>
+      <div class="section-body">
+        <p>Use:</p>
+<div class="formula-math">\[
+\boxed{
+w_{t+1}
+=
+w_t-\eta
+\frac{\partial J}{\partial w}
+}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\boxed{
+b_{t+1}
+=
+b_t-\eta
+\frac{\partial J}{\partial b}.
+}
+\]</div>
+<p>Here:</p>
+<div class="formula-math">\[
+\eta\gt 0
+\]</div>
+<p>is the learning rate.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">From-Scratch Gradient-Descent Implementation</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def fit_linear_regression_gd(
+    x,
+    y,
+    learning_rate=0.01,
+    epochs=1000,
+):
+    w = 0.0
+    b = 0.0
+
+    loss_history = []
+
+    n = len(x)
+
+    for _ in range(epochs):
+        predictions = w * x + b
+        errors = predictions - y
+
+        loss = np.mean(errors ** 2)
+        loss_history.append(loss)
+
+        grad_w = (2 / n) * np.sum(
+            errors * x
+        )
+
+        grad_b = (2 / n) * np.sum(
+            errors
+        )
+
+        w -= learning_rate * grad_w
+        b -= learning_rate * grad_b
+
+    return w, b, loss_history</code></pre></div>
+<p>This is the core implementation.</p>
+<p>Do not treat the code as magic.</p>
+<p>Every line corresponds to a mathematical step.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Code-to-Math Map</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>predictions = w*x + b</pre></div>
+<p>means:</p>
+<div class="formula-math">\[
+\hat y_i=wx_i+b.
+\]</div>
+<div class="ascii-box"><pre>errors = predictions - y</pre></div>
+<p>means:</p>
+<div class="formula-math">\[
+e_i=\hat y_i-y_i.
+\]</div>
+<div class="ascii-box"><pre>np.mean(errors ** 2)</pre></div>
+<p>means:</p>
+<div class="formula-math">\[
+\frac1n\sum_ie_i^2.
+\]</div>
+<div class="ascii-box"><pre>grad_w</pre></div>
+<p>means:</p>
+<div class="formula-math">\[
+\frac{\partial J}{\partial w}.
+\]</div>
+<div class="ascii-box"><pre>grad_b</pre></div>
+<p>means:</p>
+<div class="formula-math">\[
+\frac{\partial J}{\partial b}.
+\]</div>
+<div class="ascii-box"><pre>w -= learning_rate * grad_w</pre></div>
+<p>means:</p>
+<div class="formula-math">\[
+w\leftarrow
+w-\eta\frac{\partial J}{\partial w}.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Run the Optimizer</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">w, b, loss_history = fit_linear_regression_gd(
+    x,
+    y,
+    learning_rate=0.01,
+    epochs=1000,
+)
+
+print(&quot;w:&quot;, w)
+print(&quot;b:&quot;, b)</code></pre></div>
+<p>For the noiseless:</p>
+<div class="formula-math">\[
+y=3x+2
+\]</div>
+<p>dataset, the learned values should approach:</p>
+<div class="formula-math">\[
+\boxed{
+w\approx3,\qquad b\approx2.
+}
+\]</div>
+<p>The exact numerical result depends on learning rate, iteration count and stopping behaviour.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">Plot the Loss</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import matplotlib.pyplot as plt
+
+plt.plot(loss_history)
+plt.xlabel(&quot;Epoch&quot;)
+plt.ylabel(&quot;MSE&quot;)
+plt.title(&quot;Linear Regression — Gradient Descent Loss&quot;)
+plt.show()</code></pre></div>
+<p>You are looking for:</p>
+<div class="ascii-box"><pre>loss
+ ↓
+high
+ |\
+ | \
+ |  \
+ |   \____
+ +------------→ epochs</pre></div>
+<p>This is not a requirement that every run look perfectly smooth.</p>
+<p>Noise, step size and implementation details can affect the shape.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">Learning Rate Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Run with:</p>
+<div class="ascii-box"><pre>η = 0.001
+η = 0.01
+η = 0.1</pre></div>
+<p>Keep everything else fixed.</p>
+<p>Record:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th style="text-align: right;">Learning rate</th>
+<th style="text-align: right;">Final loss</th>
+<th>Converged?</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0.001</td>
+<td style="text-align: right;"></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align: right;">0.01</td>
+<td style="text-align: right;"></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align: right;">0.1</td>
+<td style="text-align: right;"></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>Observe:</p>
+<div class="ascii-box"><pre>too small
+→ slow
+
+reasonable
+→ efficient convergence
+
+too large
+→ possible oscillation/divergence</pre></div>
+<p>Do not assume one learning rate is universally best.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">Gradient Sanity Check</h2>
+      </div>
+      <div class="section-body">
+        <p>At a parameter setting:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">w = 0.5
+b = 0.5</code></pre></div>
+<p>calculate the analytical gradient.</p>
+<p>Then approximate the derivative numerically using finite differences.</p>
+<p>For \(w\):</p>
+<div class="formula-math">\[
+\boxed{
+\frac{\partial J}{\partial w}
+\approx
+\frac{
+J(w+\epsilon,b)-J(w-\epsilon,b)
+}{
+2\epsilon
+}
+}
+\]</div>
+<p>This is one of the best debugging techniques for gradient implementations.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Numerical Gradient Implementation</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def numerical_gradient_w(
+    x,
+    y,
+    w,
+    b,
+    eps=1e-6,
+):
+    plus = mse(
+        y,
+        w * (x) + eps * x + b,
+    )
+
+    minus = mse(
+        y,
+        w * (x) - eps * x + b,
+    )
+
+    return (plus - minus) / (2 * eps)</code></pre></div>
+<p>A cleaner implementation is to define a scalar objective function first:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def objective(x, y, w, b):
+    return mse(
+        y,
+        w * x + b,
+    )</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def numerical_gradient_w(
+    x,
+    y,
+    w,
+    b,
+    eps=1e-6,
+):
+    plus = objective(
+        x,
+        y,
+        w + eps,
+        b,
+    )
+
+    minus = objective(
+        x,
+        y,
+        w - eps,
+        b,
+    )
+
+    return (plus - minus) / (2 * eps)</code></pre></div>
+<p>Compare with:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def analytic_grad_w(
+    x,
+    y,
+    w,
+    b,
+):
+    predictions = w * x + b
+    errors = predictions - y
+    n = len(x)
+
+    return (2 / n) * np.sum(
+        errors * x
+    )</code></pre></div>
+<p>Test:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">np.testing.assert_allclose(
+    analytic_grad_w(
+        x, y, 0.5, 0.5
+    ),
+    numerical_gradient_w(
+        x, y, 0.5, 0.5
+    ),
+    rtol=1e-5,
+    atol=1e-7,
+)</code></pre></div>
+<p>This catches many subtle calculus/coding errors.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">Why Gradient Checking Matters</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose your code runs:</p>
+<div class="ascii-box"><pre>no syntax error
+no exception</pre></div>
+<p>but your gradient has the wrong sign.</p>
+<p>Then:</p>
+<div class="ascii-box"><pre>gradient descent
+↓
+moves uphill
+↓
+loss increases</pre></div>
+<p>Gradient checking can reveal that the implementation does not match the mathematical derivative.</p>
+<p>This is especially valuable later for:</p>
+<ul>
+<li>logistic regression;</li>
+<li>neural networks;</li>
+<li>backpropagation.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Matrix Form</h2>
+      </div>
+      <div class="section-body">
+        <p>Now move to multiple features.</p>
+<p>Let:</p>
+<div class="formula-math">\[
+X\in\mathbb R^{n\times d}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+w\in\mathbb R^d.
+\]</div>
+<p>Predictions:</p>
+<div class="formula-math">\[
+\boxed{
+\hat y=Xw
+}
+\]</div>
+<p>under the convention where the intercept has already been included or is handled separately.</p>
+<p>Residual:</p>
+<div class="formula-math">\[
+\boxed{
+r=Xw-y
+}
+\]</div>
+<p>Least squares:</p>
+<div class="formula-math">\[
+\boxed{
+J(w)=\|Xw-y\|_2^2.
+}
+\]</div>
+<p>This is the exact matrix-norm form shown in the supplied Lecture 9.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">Intercept via an Augmented Matrix</h2>
+      </div>
+      <div class="section-body">
+        <p>To include an intercept in the same matrix expression, create:</p>
+<div class="formula-math">\[
+X'=
+\begin{bmatrix}
+1 & x_{11} & \cdots & x_{1d}\\
+1 & x_{21} & \cdots & x_{2d}\\
+\vdots & \vdots & & \vdots\\
+1 & x_{n1} & \cdots & x_{nd}
+\end{bmatrix}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+w'=
+\begin{bmatrix}
+b\\
+w_1\\
+\vdots\\
+w_d
+\end{bmatrix}.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\boxed{
+\hat y=X'w'.
+}
+\]</div>
+<p>This is the <strong>dummy-feature/intercept trick</strong> used in linear models.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">Matrix Implementation</h2>
+      </div>
+      <div class="section-body">
+        <p>Create:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X = np.array([
+    [1.0, 0.0],
+    [1.0, 1.0],
+    [1.0, 2.0],
+    [1.0, 3.0],
+    [1.0, 4.0],
+])
+
+y = np.array([
+    2.0,
+    5.0,
+    8.0,
+    11.0,
+    14.0,
+])</code></pre></div>
+<p>The first column is the intercept feature.</p>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">w_aug = np.zeros(
+    X.shape[1]
+)
+
+predictions = X @ w_aug</code></pre></div>
+<p>The shape is:</p>
+<div class="ascii-box"><pre>X      → (5, 2)
+w_aug  → (2,)
+prediction → (5,)</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">Matrix Gradient</h2>
+      </div>
+      <div class="section-body">
+        <p>For:</p>
+<div class="formula-math">\[
+J(w)
+=
+\|Xw-y\|_2^2,
+\]</div>
+<p>the gradient is:</p>
+<div class="formula-math">\[
+\boxed{
+\nabla J(w)
+=
+2X^T(Xw-y).
+}
+\]</div>
+<p>This follows from the vector calculus developed in Lecture 9 and the Math Companion.</p>
+<p>Gradient descent:</p>
+<div class="formula-math">\[
+\boxed{
+w_{t+1}
+=
+w_t
+-
+2\eta X^T(Xw_t-y).
+}
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">Matrix Gradient-Descent Implementation</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def fit_linear_regression_matrix_gd(
+    X,
+    y,
+    learning_rate=0.01,
+    epochs=1000,
+):
+    w = np.zeros(X.shape[1])
+    loss_history = []
+
+    n = len(X)
+
+    for _ in range(epochs):
+        predictions = X @ w
+        errors = predictions - y
+
+        loss = np.mean(errors ** 2)
+        loss_history.append(loss)
+
+        gradient = (
+            2 / n
+        ) * X.T @ errors
+
+        w -= learning_rate * gradient
+
+    return w, loss_history</code></pre></div>
+<p>Notice the direct correspondence:</p>
+<div class="formula-math">\[
+\frac{2}{n}X^T(Xw-y)
+\]</div>
+<p>to:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">(2 / n) * X.T @ errors</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">Test the Matrix Implementation</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">w_hat, history = (
+    fit_linear_regression_matrix_gd(
+        X,
+        y,
+        learning_rate=0.01,
+        epochs=2000,
+    )
+)
+
+print(w_hat)</code></pre></div>
+<p>Expected approximate solution:</p>
+<div class="formula-math">\[
+\boxed{
+b\approx2,\qquad
+w\approx3.
+}
+\]</div>
+<p>Again, exact numerical precision depends on the optimization settings.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">Closed-Form Least Squares</h2>
+      </div>
+      <div class="section-body">
+        <p>The supplied Lecture 9 gives:</p>
+<div class="formula-math">\[
+\boxed{
+w^*=(X^TX)^{-1}X^Ty
+}
+\]</div>
+<p>when \(X^TX\) is invertible.</p>
+<p>This is the normal-equation solution.</p>
+<p>From the gradient:</p>
+<div class="formula-math">\[
+2X^T(Xw-y)=0.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+X^TXw=X^Ty.
+\]</div>
+<p>If invertible:</p>
+<div class="formula-math">\[
+w=(X^TX)^{-1}X^Ty.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">Never Explicitly Invert Unless Needed</h2>
+      </div>
+      <div class="section-body">
+        <p>Although the formula contains:</p>
+<div class="formula-math">\[
+(X^TX)^{-1},
+\]</div>
+<p>a numerical implementation should generally avoid explicitly computing an inverse just to solve a linear system.</p>
+<p>Instead, use:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">np.linalg.solve(
+    X.T @ X,
+    X.T @ y,
+)</code></pre></div>
+<p>This is usually a better numerical practice.</p>
+<p>A pseudoinverse can be used when the straightforward inverse does not exist:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">np.linalg.pinv(X) @ y</code></pre></div>
+<p>The exact numerical method depends on matrix conditioning and the problem.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">Closed-Form Implementation</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def linear_regression_closed_form(
+    X,
+    y,
+):
+    return np.linalg.solve(
+        X.T @ X,
+        X.T @ y,
+    )</code></pre></div>
+<p>Run:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">w_closed = linear_regression_closed_form(
+    X,
+    y,
+)
+
+print(w_closed)</code></pre></div>
+<p>For the exact toy data, expect approximately:</p>
+<div class="ascii-box"><pre>[2.0, 3.0]</pre></div>
+<p>where the first parameter is the intercept due to the augmented column.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">Gradient Descent vs Closed Form</h2>
+      </div>
+      <div class="section-body">
+        <p>Both target the same least-squares objective in the standard setup.</p>
+<h3>Closed form</h3>
+<div class="formula-math">\[
+w^*=(X^TX)^{-1}X^Ty
+\]</div>
+<p>or an equivalent linear-system solution.</p>
+<h3>Gradient descent</h3>
+<div class="formula-math">\[
+w_{t+1}
+=
+w_t-\eta\nabla J(w_t).
+\]</div>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>Closed form
+→ solve directly
+
+Gradient descent
+→ approach iteratively</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">Why Gradient Descent Still Matters</h2>
+      </div>
+      <div class="section-body">
+        <p>The existence of a closed-form linear-regression solution does not make gradient descent unimportant.</p>
+<p>The gradient-based approach connects directly to:</p>
+<div class="ascii-box"><pre>linear regression
+↓
+logistic regression
+↓
+neural networks
+↓
+deep learning</pre></div>
+<p>Your Lecture 9 explicitly notes gradient descent as a backbone of deep-learning optimization.</p>
+<p>So this lab is teaching both:</p>
+<div class="ascii-box"><pre>one model</pre></div>
+<p>and:</p>
+<div class="ascii-box"><pre>a reusable optimization pattern.</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">Compare Solutions</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">w_gd, _ = (
+    fit_linear_regression_matrix_gd(
+        X,
+        y,
+        learning_rate=0.01,
+        epochs=5000,
+    )
+)
+
+w_closed = linear_regression_closed_form(
+    X,
+    y,
+)
+
+np.testing.assert_allclose(
+    w_gd,
+    w_closed,
+    rtol=1e-3,
+    atol=1e-3,
+)</code></pre></div>
+<p>The tolerance depends on how completely gradient descent converges.</p>
+<p>Do not require exact equality between an iterative numerical solution and a closed-form solution.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">Why They May Differ</h2>
+      </div>
+      <div class="section-body">
+        <p>Possible reasons:</p>
+<ul>
+<li>too few epochs;</li>
+<li>learning rate too small;</li>
+<li>learning rate too large;</li>
+<li>numerical precision;</li>
+<li>poorly scaled features;</li>
+<li>ill-conditioned matrix.</li>
+</ul>
+<p>This is why the comparison should be:</p>
+<blockquote>
+<p>approximately equal under a sufficiently converged stable optimization setup.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Feature Scaling Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Create two features with very different scales:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">rng = np.random.default_rng(42)
+
+x1 = rng.uniform(
+    0,
+    10,
+    size=200,
+)
+
+x2 = rng.uniform(
+    0,
+    100000,
+    size=200,
+)
+
+y = (
+    3 * x1
+    + 0.00002 * x2
+    + rng.normal(
+        0,
+        1,
+        size=200,
+    )
+)
+
+X = np.column_stack([x1, x2])</code></pre></div>
+<p>Run gradient descent before and after standardization.</p>
+<p>Observe:</p>
+<div class="ascii-box"><pre>loss curve
+convergence speed
+parameter updates</pre></div>
+<p>The supplied Lecture 9 specifically connects feature scaling with convergence speed and stability.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Why Scaling Changes the Optimization Geometry</h2>
+      </div>
+      <div class="section-body">
+        <p>Imagine a loss surface that is:</p>
+<div class="ascii-box"><pre>very wide in one direction
+very narrow in another</pre></div>
+<p>Gradient descent can bounce across the narrow direction while making slow progress along the wide direction.</p>
+<p>Scaling can make the geometry more balanced.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>poorly scaled
+    ↓
+elongated contours
+    ↓
+awkward steps
+
+better scaled
+    ↓
+more balanced contours
+    ↓
+better convergence</pre></div>
+<p>This is optimization intuition, not merely a data-cleaning trick.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-35" class="section-block">
+      <div class="section-header">
+        <span class="section-num">35</span>
+        <h2 class="section-heading">Closed Form and Scaling</h2>
+      </div>
+      <div class="section-body">
+        <p>A subtle point:</p>
+<p>Scaling can be less important for obtaining a direct closed-form least-squares solution than for <strong>iterative optimization behaviour</strong>.</p>
+<p>If you solve the same numerical least-squares problem accurately, the optimizer can still find the solution without standardization under suitable conditions.</p>
+<p>The supplied Lecture 9's strongest scaling claim concerns optimization speed/stability and, earlier, scale-sensitive distance calculations.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-36" class="section-block">
+      <div class="section-header">
+        <span class="section-num">36</span>
+        <h2 class="section-heading">Training a Library Model</h2>
+      </div>
+      <div class="section-body">
+        <p>Now use scikit-learn as a reference:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.linear_model import LinearRegression
+
+model = LinearRegression()
+
+model.fit(
+    X,
+    y,
+)
+
+predictions = model.predict(X)</code></pre></div>
+<p>Inspect:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(model.coef_)
+print(model.intercept_)</code></pre></div>
+<p>Compare with your from-scratch result.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-37" class="section-block">
+      <div class="section-header">
+        <span class="section-num">37</span>
+        <h2 class="section-heading">Reference Comparison Checklist</h2>
+      </div>
+      <div class="section-body">
+        <p>Check:</p>
+<div class="ascii-box"><pre>intercept
+coefficients
+predictions
+MSE</pre></div>
+<p>For example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from_scratch_pred = X @ w_closed
+library_pred = model.predict(
+    X
+)
+
+np.testing.assert_allclose(
+    from_scratch_pred,
+    library_pred,
+    rtol=1e-5,
+    atol=1e-5,
+)</code></pre></div>
+<p>Be careful if your feature representation already includes an intercept column while the library model also fits an intercept.</p>
+<p>Avoid double-counting the intercept.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-38" class="section-block">
+      <div class="section-header">
+        <span class="section-num">38</span>
+        <h2 class="section-heading">Important Intercept Trap</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Lab Viva Trap & Runtime Gotcha</div>
+
+**Dummy Bias Column Trap:**
+In matrix form $\hat{y} = X w$, $w$ has shape `(d+1, 1)` including the bias $b = w_0$.
+If you forget to prepend a column of ones (`np.hstack([np.ones((n, 1)), X])`), your regression line is forced to pass through the origin $(0, 0)$, causing severe underfitting!
+
+</div>
+
+<p>If:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X</code></pre></div>
+<p>already has a column of ones and:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">LinearRegression(
+    fit_intercept=True
+)</code></pre></div>
+<p>is used, the model has two intercept mechanisms.</p>
+<p>Better options:</p>
+<h3>Option A</h3>
+<p>Keep the column of ones and use:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">LinearRegression(
+    fit_intercept=False
+)</code></pre></div>
+<h3>Option B</h3>
+<p>Do not manually add the column of ones and use:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">fit_intercept=True</code></pre></div>
+<p>Choose one representation and stay consistent.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-39" class="section-block">
+      <div class="section-header">
+        <span class="section-num">39</span>
+        <h2 class="section-heading">Testing the Model</h2>
+      </div>
+      <div class="section-body">
+        <p>Create:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def test_zero_error_on_exact_line():
+    x = np.array([
+        0.0,
+        1.0,
+        2.0,
+    ])
+
+    y = 4.0 * x + 1.0
+
+    predictions = predict(
+        x,
+        4.0,
+        1.0,
+    )
+
+    assert mse(
+        y,
+        predictions,
+    ) == 0.0</code></pre></div>
+<p>This verifies the forward model and loss.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-40" class="section-block">
+      <div class="section-header">
+        <span class="section-num">40</span>
+        <h2 class="section-heading">Test Gradient Descent</h2>
+      </div>
+      <div class="section-body">
+        <p>Use known noiseless data.</p>
+<p>Check:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">w, b, history = fit_linear_regression_gd(
+    x,
+    y,
+    learning_rate=0.01,
+    epochs=5000,
+)</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert abs(w - 4.0) &lt; tolerance
+assert abs(b - 1.0) &lt; tolerance</code></pre></div>
+<p>The tolerance should reflect the optimization settings.</p>
+<p>Do not use:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert w == 4.0</code></pre></div>
+<p>for an iterative numerical method.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-41" class="section-block">
+      <div class="section-header">
+        <span class="section-num">41</span>
+        <h2 class="section-heading">Test Loss Monotonicity Carefully</h2>
+      </div>
+      <div class="section-body">
+        <p>In full-batch gradient descent on a convex quadratic with a sufficiently small fixed learning rate, the loss may decrease monotonically.</p>
+<p>But do not make:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert every(loss[i+1] &lt; loss[i])</code></pre></div>
+<p>a universal test for every implementation.</p>
+<p>Depending on:</p>
+<ul>
+<li>learning rate;</li>
+<li>batch strategy;</li>
+<li>numerical precision;</li>
+<li>stopping;</li>
+<li>objective scaling;</li>
+</ul>
+<p>temporary increases can occur.</p>
+<p>A better basic test is:</p>
+<div class="ascii-box"><pre>final loss &lt; initial loss</pre></div>
+<p>under a stable configuration.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-42" class="section-block">
+      <div class="section-header">
+        <span class="section-num">42</span>
+        <h2 class="section-heading">Error Analysis</h2>
+      </div>
+      <div class="section-body">
+        <p>After training:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">predictions = X @ w_closed
+errors = predictions - y</code></pre></div>
+<p>Inspect:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(errors[:10])
+print(errors.mean())
+print(np.abs(errors).mean())</code></pre></div>
+<p>Plot residuals:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">plt.scatter(
+    predictions,
+    errors,
+)
+
+plt.axhline(
+    0,
+    linestyle=&quot;--&quot;,
+)
+
+plt.xlabel(&quot;Predicted&quot;)
+plt.ylabel(&quot;Residual&quot;)
+plt.title(&quot;Residual plot&quot;)
+plt.show()</code></pre></div>
+<p>A residual plot can reveal patterns that a single MSE cannot.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-43" class="section-block">
+      <div class="section-header">
+        <span class="section-num">43</span>
+        <h2 class="section-heading">Visualizing a One-Feature Fit</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">plt.scatter(
+    x,
+    y,
+    label=&quot;data&quot;,
+)
+
+x_line = np.linspace(
+    x.min(),
+    x.max(),
+    200,
+)
+
+y_line = predict(
+    x_line,
+    w,
+    b,
+)
+
+plt.plot(
+    x_line,
+    y_line,
+    label=&quot;fitted line&quot;,
+)
+
+plt.xlabel(&quot;x&quot;)
+plt.ylabel(&quot;y&quot;)
+plt.title(&quot;Linear Regression&quot;)
+plt.legend()
+plt.show()</code></pre></div>
+<p>This visual directly connects:</p>
+<div class="ascii-box"><pre>data
++
+parameters
++
+prediction</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-44" class="section-block">
+      <div class="section-header">
+        <span class="section-num">44</span>
+        <h2 class="section-heading">Overfitting Connection</h2>
+      </div>
+      <div class="section-body">
+        <p>Linear regression itself may be too simple for some relationships.</p>
+<p>Add polynomial features:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.preprocessing import PolynomialFeatures</code></pre></div>
+<p>Degree:</p>
+<div class="ascii-box"><pre>1 → linear
+3 → more flexible
+10 → very flexible</pre></div>
+<p>Compare training and test error.</p>
+<p>This connects directly to:</p>
+<div class="ascii-box"><pre>CODE-U2-01</pre></div>
+<p>and the supplied <code>pract_6_bias_and_hypothesis_class.ipynb</code>.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-45" class="section-block">
+      <div class="section-header">
+        <span class="section-num">45</span>
+        <h2 class="section-heading">Why Polynomial Regression Is Still “Linear” in Parameters</h2>
+      </div>
+      <div class="section-body">
+        <p>For:</p>
+<div class="formula-math">\[
+\hat y
+=
+w_0+w_1x+w_2x^2,
+\]</div>
+<p>the function is nonlinear in \(x\).</p>
+<p>But it is linear in the parameters:</p>
+<div class="formula-math">\[
+w_0,w_1,w_2.
+\]</div>
+<p>Therefore we can create features:</p>
+<div class="formula-math">\[
+[1,x,x^2]
+\]</div>
+<p>and apply linear regression to the transformed representation.</p>
+<p>This is a powerful example of:</p>
+<div class="ascii-box"><pre>feature representation
+       ↓
+hypothesis flexibility</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-46" class="section-block">
+      <div class="section-header">
+        <span class="section-num">46</span>
+        <h2 class="section-heading">Practical Experiment — Degree vs Generalization</h2>
+      </div>
+      <div class="section-body">
+        <p>Use:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">degrees = [
+    1,
+    2,
+    5,
+    10,
+    15,
+]</code></pre></div>
+<p>For each:</p>
+<div class="ascii-box"><pre>transform
+↓
+fit
+↓
+training MSE
+↓
+test MSE</pre></div>
+<p>Store:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">results = []</code></pre></div>
+<p>Then plot:</p>
+<div class="ascii-box"><pre>degree
+vs
+training MSE
+
+degree
+vs
+test MSE</pre></div>
+<p>The goal is to observe the generalization story, not to discover a universal best polynomial degree.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-47" class="section-block">
+      <div class="section-header">
+        <span class="section-num">47</span>
+        <h2 class="section-heading">Common Coding Mistakes</h2>
+      </div>
+      <div class="section-body">
+        <h2>Mistake 1</h2>
+<p>Forgetting the intercept.</p>
+<h2>Mistake 2</h2>
+<p>Using the wrong gradient sign.</p>
+<h2>Mistake 3</h2>
+<p>Using:</p>
+<div class="formula-math">\[
+\sum
+\]</div>
+<p>when the implemented loss is:</p>
+<div class="formula-math">\[
+\frac1n\sum.
+\]</div>
+<p>This changes gradient scale.</p>
+<h2>Mistake 4</h2>
+<p>Wrong matrix dimensions.</p>
+<h2>Mistake 5</h2>
+<p>Double-counting the intercept.</p>
+<h2>Mistake 6</h2>
+<p>Expecting GD and closed-form values to match exactly after a few iterations.</p>
+<h2>Mistake 7</h2>
+<p>Using a learning rate that is too large.</p>
+<h2>Mistake 8</h2>
+<p>Comparing models on different train/test splits.</p>
+<h2>Mistake 9</h2>
+<p>Scaling test data independently.</p>
+<h2>Mistake 10</h2>
+<p>Declaring victory because training loss is tiny.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-48" class="section-block">
+      <div class="section-header">
+        <span class="section-num">48</span>
+        <h2 class="section-heading">Gradient Debugging Checklist</h2>
+      </div>
+      <div class="section-body">
+        <p>If loss increases:</p>
+<div class="ascii-box"><pre>1. Check gradient sign
+2. Check learning rate
+3. Check loss formula
+4. Check prediction formula
+5. Check target shape
+6. Check feature scales
+7. Compare gradient with finite difference</pre></div>
+<p>If loss becomes NaN:</p>
+<div class="ascii-box"><pre>1. Check learning rate
+2. Check input magnitude
+3. Check overflow
+4. Check NaN/Inf in data
+5. Check gradient magnitude</pre></div>
+<p>If loss barely changes:</p>
+<div class="ascii-box"><pre>1. Check learning rate
+2. Check gradient
+3. Check initialization
+4. Check feature scaling
+5. Check whether data contains signal</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-49" class="section-block">
+      <div class="section-header">
+        <span class="section-num">49</span>
+        <h2 class="section-heading">Experiment — Initialization</h2>
+      </div>
+      <div class="section-body">
+        <p>Compare:</p>
+<div class="ascii-box"><pre>w = 0
+b = 0</pre></div>
+<p>with random small initialization.</p>
+<p>For convex linear least squares, both can converge under suitable optimization settings.</p>
+<p>The practical question is:</p>
+<blockquote>
+<p>How does initialization affect the path and convergence speed under the chosen algorithm?</p>
+</blockquote>
+<p>This is a bridge to neural networks, where initialization becomes more consequential.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-50" class="section-block">
+      <div class="section-header">
+        <span class="section-num">50</span>
+        <h2 class="section-heading">Experiment — Batch vs Full Dataset</h2>
+      </div>
+      <div class="section-body">
+        <p>The current linear-regression implementation uses the entire dataset for each update.</p>
+<p>This is:</p>
+<div class="formula-math">\[
+\boxed{\text{full-batch gradient descent}}
+\]</div>
+<p>Later:</p>
+<div class="ascii-box"><pre>SGD
+mini-batch</pre></div>
+<p>will use subsets of data.</p>
+<p>That connects directly to:</p>
+<ul>
+<li><code>MATH-M23</code>;</li>
+<li>future neural-network training.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-51" class="section-block">
+      <div class="section-header">
+        <span class="section-num">51</span>
+        <h2 class="section-heading">Experiment — Add an Outlier</h2>
+      </div>
+      <div class="section-body">
+        <p>Start with:</p>
+<div class="formula-math">\[
+y=3x+2+\epsilon.
+\]</div>
+<p>Then add one extreme observation.</p>
+<p>Compare:</p>
+<div class="ascii-box"><pre>slope before
+intercept before
+MSE
+residuals</pre></div>
+<p>Then explain why MSE is sensitive to large errors.</p>
+<p>This connects to the supplied Lecture 7 discussion of MSE versus MAE.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-52" class="section-block">
+      <div class="section-header">
+        <span class="section-num">52</span>
+        <h2 class="section-heading">Why This Matters Beyond Regression</h2>
+      </div>
+      <div class="section-body">
+        <p>The code structure:</p>
+<div class="ascii-box"><pre>forward prediction
+↓
+loss
+↓
+gradient
+↓
+update</pre></div>
+<p>reappears in neural networks.</p>
+<p>Linear regression is therefore an excellent first “learning algorithm” for understanding the computational loop of optimization.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-53" class="section-block">
+      <div class="section-header">
+        <span class="section-num">53</span>
+        <h2 class="section-heading">Unit II Integration</h2>
+      </div>
+      <div class="section-body">
+        <p>The current progression is:</p>
+<div class="ascii-box"><pre>CODE-U2-01
+Workflow + preprocessing
+        ↓
+CODE-U2-02
+Linear regression
+        ↓
+CODE-U2-03
+Logistic regression</pre></div>
+<p>The conceptual connection:</p>
+<div class="ascii-box"><pre>linear prediction
+   ↓
+change output interpretation / loss
+   ↓
+classification
+   ↓
+logistic regression</pre></div>
+<p>So do not think of these as unrelated code files.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-54" class="section-block">
+      <div class="section-header">
+        <span class="section-num">54</span>
+        <h2 class="section-heading">Exam Bridge</h2>
+      </div>
+      <div class="section-body">
+        <p>Be ready to connect code to equations.</p>
+<h3>Model</h3>
+<div class="formula-math">\[
+\boxed{
+\hat y=Xw
+}
+\]</div>
+<h3>Residual</h3>
+<div class="formula-math">\[
+\boxed{
+r=Xw-y
+}
+\]</div>
+<h3>Loss</h3>
+<div class="formula-math">\[
+\boxed{
+J=\|Xw-y\|_2^2
+}
+\]</div>
+<h3>Gradient</h3>
+<div class="formula-math">\[
+\boxed{
+\nabla J=2X^T(Xw-y)
+}
+\]</div>
+<p>under this exact unnormalized objective.</p>
+<h3>Update</h3>
+<div class="formula-math">\[
+\boxed{
+w\leftarrow
+w-\eta\nabla J
+}
+\]</div>
+<h3>Closed form</h3>
+<div class="formula-math">\[
+\boxed{
+w^*=(X^TX)^{-1}X^Ty
+}
+\]</div>
+<p>when the inverse exists.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-55" class="section-block">
+      <div class="section-header">
+        <span class="section-num">55</span>
+        <h2 class="section-heading">Active Recall — Coding Edition</h2>
+      </div>
+      <div class="section-body">
+        <p>Close the file.</p>
+<p>Answer:</p>
+<ol>
+<li>What is the linear-regression prediction equation?</li>
+<li>What is a residual?</li>
+<li>What does MSE measure?</li>
+<li>Why does the gradient contain a factor 2?</li>
+<li>Derive the gradient with respect to \(w\) for one feature.</li>
+<li>Derive the gradient with respect to \(b\).</li>
+<li>Why does gradient descent subtract the gradient?</li>
+<li>What is the matrix residual?</li>
+<li>What is the matrix least-squares objective?</li>
+<li>What is the closed-form least-squares solution?</li>
+<li>Why should we generally avoid explicitly computing a matrix inverse for numerical solving?</li>
+<li>Why can gradient descent still be useful when a closed form exists?</li>
+<li>Why can feature scaling improve GD?</li>
+<li>Why might GD and closed-form answers differ slightly?</li>
+<li>Why must intercept handling be consistent?</li>
+<li>How would you gradient-check your implementation?</li>
+<li>What does a residual plot show?</li>
+<li>How can polynomial features increase flexibility?</li>
+<li>Why is a tiny training MSE not enough to prove good generalization?</li>
+<li>How does this training loop prepare you for neural networks?</li>
+</ol>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-56" class="section-block">
+      <div class="section-header">
+        <span class="section-num">56</span>
+        <h2 class="section-heading">Final Practical Test</h2>
+      </div>
+      <div class="section-body">
+        <p>Build one clean notebook containing:</p>
+<div class="ascii-box"><pre>1. Known noiseless line
+2. Noisy line
+3. prediction function
+4. MSE
+5. scalar gradient derivation
+6. gradient-descent implementation
+7. loss plot
+8. finite-difference gradient check
+9. matrix-form implementation
+10. closed-form solution
+11. GD vs closed-form comparison
+12. scikit-learn comparison
+13. residual plot
+14. learning-rate experiment
+15. one outlier experiment
+16. polynomial-flexibility experiment</pre></div>
+<p>At the end, write:</p>
+<div class="ascii-box"><pre>What I implemented
+What I verified
+What changed with learning rate
+What changed with scaling
+What changed with an outlier
+What changed with polynomial degree</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-57" class="section-block">
+      <div class="section-header">
+        <span class="section-num">57</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <h3>C3 — Rebuild</h3>
+<p>From a blank file, implement:</p>
+<div class="ascii-box"><pre>predict
+mse
+gradient
+gradient descent
+closed form</pre></div>
+<h3>C4 — Test</h3>
+<p>You can:</p>
+<ul>
+<li>test predictions;</li>
+<li>test MSE;</li>
+<li>gradient-check;</li>
+<li>compare against closed form;</li>
+<li>compare against scikit-learn.</li>
+</ul>
+<h3>C5 — Modify</h3>
+<p>You can add:</p>
+<ul>
+<li>statistics;</li>
+<li>residual plots;</li>
+<li>scaling;</li>
+<li>stopping criteria;</li>
+<li>polynomial features.</li>
+</ul>
+<h3>C6 — Explain</h3>
+<p>You can map every important code line to a mathematical expression.</p>
+<h3>C7 — Transfer</h3>
+<p>Given a new regression problem, you can design:</p>
+<div class="ascii-box"><pre>representation
+loss
+optimization strategy
+evaluation
+debugging plan</pre></div>
+<p>before writing implementation code.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-58" class="section-block">
+      <div class="section-header">
+        <span class="section-num">58</span>
+        <h2 class="section-heading">Final Memory Sheet</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>MODEL
+ŷ = Xw
+
+RESIDUAL
+r = Xw - y
+
+LOSS
+J = ||Xw-y||²
+
+GRADIENT
+∇J = 2Xᵀ(Xw-y)
+
+GRADIENT DESCENT
+w ← w - η∇J
+
+NORMAL EQUATION
+XᵀXw = Xᵀy
+
+CLOSED FORM
+w* = (XᵀX)⁻¹Xᵀy</pre></div>
+<p>And the implementation loop:</p>
+<div class="ascii-box"><pre>initialize
+   ↓
+predict
+   ↓
+loss
+   ↓
+gradient
+   ↓
+update
+   ↓
+repeat</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-59" class="section-block">
+      <div class="section-header">
+        <span class="section-num">59</span>
+        <h2 class="section-heading">Source Notes</h2>
+      </div>
+      <div class="section-body">
+        <h2>Primary source — <code>Lecture09.pdf</code></h2>
+<p>Used for:</p>
+<ul>
+<li>linear-regression model;</li>
+<li>vector notation;</li>
+<li>prediction error;</li>
+<li>residual vector;</li>
+<li>least-squares objective;</li>
+<li>convexity;</li>
+<li>gradient;</li>
+<li>gradient of \(w^Tx\);</li>
+<li>chain-rule calculation;</li>
+<li>stationary point;</li>
+<li>matrix least-squares form;</li>
+<li>projection view;</li>
+<li>closed-form solution;</li>
+<li>feature scaling and optimization.</li>
+</ul>
+<h2>Supporting source — <code>Lecture07.pdf</code></h2>
+<p>Used for:</p>
+<ul>
+<li>regression framing;</li>
+<li>MSE/MAE discussion;</li>
+<li>supervised-learning objective.</li>
+</ul>
+<h2>Supporting source — <code>Lecture08.pdf</code></h2>
+<p>Used for:</p>
+<ul>
+<li>generalization;</li>
+<li>flexibility;</li>
+<li>polynomial-model connection;</li>
+<li>training vs held-out behaviour.</li>
+</ul>
+<h2>Practical connection</h2>
+<p><code>pract_6_bias_and_hypothesis_class.ipynb</code> is the supplied practical companion for flexibility/overfitting exploration.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-60" class="section-block">
+      <div class="section-header">
+        <span class="section-num">60</span>
+        <h2 class="section-heading">Cross-Book Links</h2>
+      </div>
+      <div class="section-body">
+        <ul>
+<li><code>CODE-U2-01_ML_Workflow...</code></li>
+<li><code>MAIN-U2-C18_Linear_Regression.md</code></li>
+<li><code>MAIN-U2-C19_Linear_Regression_Mathematics_and_Least_Squares.md</code></li>
+<li><code>MATH-M09_Linear_Systems_Inverses_and_Least_Squares.md</code></li>
+<li><code>MATH-M18_Derivatives...</code></li>
+<li><code>MATH-M21_Gradients...</code></li>
+<li><code>MATH-M22_Optimization...</code></li>
+<li><code>EXAM-U2_Machine_Learning_and_Evaluation.md</code></li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-61" class="section-block">
+      <div class="section-header">
+        <span class="section-num">61</span>
+        <h2 class="section-heading">Status</h2>
+      </div>
+      <div class="section-body">
+        <p><strong><code>CODE-U2-02</code> — COMPLETE</strong></p>
+<p>Next:</p>
+<p><strong><code>CODE-U2-03 — Logistic Regression From Scratch, Sigmoid, Log Loss, Gradient Descent, and Library Comparison</code></strong></p>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="code-u2-01-ml-workflow.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← Unit 2 Lab 01 — ML Workflow</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">💻 Coding Index</span>
+      </a>
+      <a href="code-u2-03-logistic-regression.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: Unit 2 Lab 03 — Logistic Regression →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search lab implementations, functions, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">💻</span>Lab Hub</a>
+  <a href="code-u2-02-linear-regression.html" class="mobile-nav-btn active"><span class="icon">📖</span>CODE-U2-02</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

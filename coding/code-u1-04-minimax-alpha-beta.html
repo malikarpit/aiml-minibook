@@ -1,0 +1,2296 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch — AI & Machine Learning Coding Lab. Adversarial Game Search, Terminal State Evaluation, Minimax Recursion, Alpha-Beta Cutoffs, and Move Ordering">
+<title>CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch | Coding Lab 💻 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/coding.css">
+</head>
+<body class="coding-module track-c1">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">💻</div>
+      <div class="brand-text"><span class="main">Coding Lab</span><span class="sub">AI &amp; ML From Scratch</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">💻</span>Coding Lab Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../math/index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 0: Environment & System</div>
+  <a href="code-00-coding-foundation.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-00: Coding Lab Foundation &amp; Implementation System</a>
+  <a href="code-01-python-numpy-workflow.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-01: Python, NumPy, Matplotlib &amp; Lab Workflow</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Classical AI & Search Labs</div>
+  <a href="code-u1-01-bfs-dfs.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-01: BFS and DFS From Scratch</a>
+  <a href="code-u1-02-greedy-a-star.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-02: Greedy Best-First &amp; A* Search From Scratch</a>
+  <a href="code-u1-03-csp-backtracking.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-03: CSPs and Backtracking Search</a>
+  <a href="code-u1-04-minimax-alpha-beta.html" class="sidebar-link active"><span class="link-icon">🔍</span>CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Supervised ML Labs</div>
+  <a href="code-u2-01-ml-workflow.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-01: ML Workflow: Preprocessing, Splitting &amp; Evaluation</a>
+  <a href="code-u2-02-linear-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-02: Linear Regression From Scratch</a>
+  <a href="code-u2-03-logistic-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-03: Logistic Regression From Scratch</a>
+  <a href="code-u2-04-decision-trees.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-04: Decision Trees From Scratch</a>
+  <a href="code-u2-05-classification-metrics-roc.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC &amp; Thresholds</a>
+  <a href="code-u2-06-ridge-lasso-regularization.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-06: Ridge &amp; Lasso From Scratch: Regularization &amp; Optimization</a>
+  <a href="code-u2-07-ml-evaluation-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-07: ML Evaluation &amp; Model Comparison Lab</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Deep Learning Labs</div>
+  <a href="code-u3-01-neuron-perceptron.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-01: Neuron and Perceptron From Scratch</a>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>MLP, Backpropagation & Convolutions</span>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Advanced AI Labs (Upcoming)</div>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>Q-Learning, NLP & Generative Adversarial Loops</span>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">CODE-U1-04 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. What You Will Build</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Why Game Search Is Different</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. The Smallest Useful Game Representation</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Game Tree Visual</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Minimax Rules</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Minimax Pseudocode</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Minimax Implementation</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Choosing the Actual Move</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Why MAX Chooses A</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Why Minimax Is Not “Choose the Highest Leaf”</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Minimax Trace</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Recursive Value Flow</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Minimax Complexity</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Why Real Games Are Hard</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Alpha-Beta Pruning</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Alpha and Beta</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Alpha-Beta Intuition</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Alpha-Beta Pseudocode</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Alpha-Beta Implementation</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Test Alpha-Beta</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Count Evaluated Leaves</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Instrumented Minimax</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Instrumented Alpha-Beta</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Why Move Ordering Matters</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Best-Case Idea</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Move-Ordering Experiment</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Alpha-Beta Trace</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Why Can We Prune Without Knowing Exact Value?</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Alpha-Beta Is Not an Approximation</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Comparison — Minimax vs Alpha-Beta</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Applying to Tic-Tac-Toe</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Tic-Tac-Toe Utility</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Why Small Games Are Excellent Learning Labs</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Testing Winner Detection</a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Testing Minimax in Tic-Tac-Toe</a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Search Statistics in Tic-Tac-Toe</a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Resource-Limited Extension</a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Evaluation Functions</a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Simple Evaluation Function Example</a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Horizon Effect</a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Quiescence as an Extension</a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Common Coding Mistakes</a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Debugging Checklist</a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Property Test — Alpha-Beta Equality</a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. Property Test — Move Selection</a>
+      <a href="#s-46" class="sidebar-link"><span class="link-icon">📌</span>46. Experimental Question</a>
+      <a href="#s-47" class="sidebar-link"><span class="link-icon">📌</span>47. Why “Often” Matters</a>
+      <a href="#s-48" class="sidebar-link"><span class="link-icon">📌</span>48. From Toy Tree to Real Game</a>
+      <a href="#s-49" class="sidebar-link"><span class="link-icon">📌</span>49. Reusable Game-State Interface</a>
+      <a href="#s-50" class="sidebar-link"><span class="link-icon">📌</span>50. Search/Rules Separation</a>
+      <a href="#s-51" class="sidebar-link"><span class="link-icon">📌</span>51. Applied Coding Challenge — Tic-Tac-Toe</a>
+      <a href="#s-52" class="sidebar-link"><span class="link-icon">📌</span>52. Applied Challenge — Move Ordering</a>
+      <a href="#s-53" class="sidebar-link"><span class="link-icon">📌</span>53. Applied Challenge — Depth-Limited AI</a>
+      <a href="#s-54" class="sidebar-link"><span class="link-icon">📌</span>54. Exam Bridge</a>
+      <a href="#s-55" class="sidebar-link"><span class="link-icon">📌</span>55. Active Recall</a>
+      <a href="#s-56" class="sidebar-link"><span class="link-icon">📌</span>56. Final Implementation Test</a>
+      <a href="#s-57" class="sidebar-link"><span class="link-icon">📌</span>57. Mastery Gate</a>
+      <a href="#s-58" class="sidebar-link"><span class="link-icon">📌</span>58. Final Memory Sheet</a>
+      <a href="#s-59" class="sidebar-link"><span class="link-icon">📌</span>59. Source Notes</a>
+      <a href="#s-60" class="sidebar-link"><span class="link-icon">📌</span>60. Status</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Coding Lab</a>
+        <span>/</span>
+        <span>CODE-U1-04</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-c1">Track 1: Classical AI & Search Labs</span></div>
+      <h1 class="chapter-title">Minimax and Alpha-Beta Pruning From Scratch</h1>
+      <p class="chapter-desc">Adversarial Game Search, Terminal State Evaluation, Minimax Recursion, Alpha-Beta Cutoffs, and Move Ordering</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~45 min lab</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">GAME-TREES</span> <span class="chapter-meta-item uni-badge">MINIMAX</span> <span class="chapter-meta-item uni-badge">ALPHA-BETA</span> <span class="chapter-meta-item uni-badge">PRUNING</span>
+      </div>
+
+      <div class="lab-meta-grid">
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Prerequisites</div>
+          <div class="lab-meta-value">CODE-U1-01 Search, Main Book Ch 10–12 Game Playing & Minimax</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Main Book Concept</div>
+          <div class="lab-meta-value">Ch 10 Game Playing, Ch 11 Minimax & Alpha-Beta, Ch 12 Resource-Limited Search</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Math Companion Layer</div>
+          <div class="lab-meta-value">Zero-sum matrix games, Minimax theorem, Tree branching O(b^m)</div>
+        </div>
+        <div class="lab-meta-box" style="grid-column: 1 / -1;">
+          <div class="lab-meta-label">AI / Machine Learning Connections</div>
+          <div class="lab-meta-value">Chess & Checkers engines, Tic-Tac-Toe AI, Adversarial decision-making, Reinforcement Learning self-play</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-meta-card"><h1>CODE-U1-04 — Minimax and Alpha-Beta Pruning From Scratch</h1>
+<blockquote>
+<p><strong>Coding Book — Unit I: Game Playing / Adversarial Search</strong></p>
+<p><strong>Topic ID:</strong> <code>CODE-U1-04</code></p>
+<p><strong>Main Book links:</strong> <code>MAIN-U1-C10 — Game Playing</code>, <code>MAIN-U1-C11 — Minimax and Alpha-Beta Pruning</code></p>
+<p><strong>Exam Book link:</strong> <code>EXAM-U1_Artificial_Intelligence_and_Search.md</code></p>
+<p><strong>Primary supplied source:</strong> <code>lecture-game-playing.pdf</code> — Philipp Koehn, <em>Artificial Intelligence: Game Playing</em>, 17 February 2026.</p>
+<p><strong>Source-grounded points used here:</strong> The lecture frames games as search problems with an unpredictable opponent, introduces minimax for perfect play, alpha-beta pruning, and then resource-limited search. It states that alpha-beta pruning is safe, is affected by move ordering, and has idealized \(O(b^{m/2})\) time with perfect ordering.</p>
+</blockquote>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in CODE-U1-04 (60 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">What You Will Build</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Why Game Search Is Different</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">The Smallest Useful Game Representation</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Game Tree Visual</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Minimax Rules</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Minimax Pseudocode</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Minimax Implementation</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Choosing the Actual Move</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Why MAX Chooses A</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Why Minimax Is Not “Choose the Highest Leaf”</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Minimax Trace</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Recursive Value Flow</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Minimax Complexity</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Why Real Games Are Hard</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Alpha-Beta Pruning</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Alpha and Beta</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Alpha-Beta Intuition</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Alpha-Beta Pseudocode</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Alpha-Beta Implementation</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Test Alpha-Beta</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Count Evaluated Leaves</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Instrumented Minimax</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Instrumented Alpha-Beta</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Why Move Ordering Matters</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Best-Case Idea</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Move-Ordering Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Alpha-Beta Trace</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Why Can We Prune Without Knowing Exact Value?</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Alpha-Beta Is Not an Approximation</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Comparison — Minimax vs Alpha-Beta</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Applying to Tic-Tac-Toe</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Tic-Tac-Toe Utility</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Why Small Games Are Excellent Learning Labs</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Testing Winner Detection</span></a></li>
+        <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Testing Minimax in Tic-Tac-Toe</span></a></li>
+        <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Search Statistics in Tic-Tac-Toe</span></a></li>
+        <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Resource-Limited Extension</span></a></li>
+        <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Evaluation Functions</span></a></li>
+        <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Simple Evaluation Function Example</span></a></li>
+        <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Horizon Effect</span></a></li>
+        <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Quiescence as an Extension</span></a></li>
+        <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Common Coding Mistakes</span></a></li>
+        <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Debugging Checklist</span></a></li>
+        <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Property Test — Alpha-Beta Equality</span></a></li>
+        <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">Property Test — Move Selection</span></a></li>
+        <li class="toc-item"><a href="#s-46"><span class="toc-num">46</span><span class="toc-name">Experimental Question</span></a></li>
+        <li class="toc-item"><a href="#s-47"><span class="toc-num">47</span><span class="toc-name">Why “Often” Matters</span></a></li>
+        <li class="toc-item"><a href="#s-48"><span class="toc-num">48</span><span class="toc-name">From Toy Tree to Real Game</span></a></li>
+        <li class="toc-item"><a href="#s-49"><span class="toc-num">49</span><span class="toc-name">Reusable Game-State Interface</span></a></li>
+        <li class="toc-item"><a href="#s-50"><span class="toc-num">50</span><span class="toc-name">Search/Rules Separation</span></a></li>
+        <li class="toc-item"><a href="#s-51"><span class="toc-num">51</span><span class="toc-name">Applied Coding Challenge — Tic-Tac-Toe</span></a></li>
+        <li class="toc-item"><a href="#s-52"><span class="toc-num">52</span><span class="toc-name">Applied Challenge — Move Ordering</span></a></li>
+        <li class="toc-item"><a href="#s-53"><span class="toc-num">53</span><span class="toc-name">Applied Challenge — Depth-Limited AI</span></a></li>
+        <li class="toc-item"><a href="#s-54"><span class="toc-num">54</span><span class="toc-name">Exam Bridge</span></a></li>
+        <li class="toc-item"><a href="#s-55"><span class="toc-num">55</span><span class="toc-name">Active Recall</span></a></li>
+        <li class="toc-item"><a href="#s-56"><span class="toc-num">56</span><span class="toc-name">Final Implementation Test</span></a></li>
+        <li class="toc-item"><a href="#s-57"><span class="toc-num">57</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-58"><span class="toc-num">58</span><span class="toc-name">Final Memory Sheet</span></a></li>
+        <li class="toc-item"><a href="#s-59"><span class="toc-num">59</span><span class="toc-name">Source Notes</span></a></li>
+        <li class="toc-item"><a href="#s-60"><span class="toc-num">60</span><span class="toc-name">Status</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">What You Will Build</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph TD
+    MAX1["MAX Node: Aim to maximize utility (alpha)"] --> MIN1["MIN Node: Aim to minimize utility (beta)"]
+    MIN1 --> C1["Branch 1: Value = 3"]
+    MIN1 --> C2["Branch 2: Value = 2"]
+    MIN1 --> Cut{"Condition: beta <= alpha?"}
+    Cut -- Yes --> Prune["PRUNE REMAINING SUBTREE! (Alpha Cutoff)"]
+    style MAX1 fill:#1e293b,stroke:#38bdf8,color:#f8fafc
+    style MIN1 fill:#1e293b,stroke:#f59e0b,color:#f8fafc
+    style Prune fill:#7f1d1d,stroke:#ef4444,color:#ffffff,stroke-width:2px
+</pre></div>
+<p>This lab implements:</p>
+<div class="ascii-box"><pre>game-state representation
+↓
+terminal utility
+↓
+minimax
+↓
+move selection
+↓
+alpha-beta pruning
+↓
+trace
+↓
+node-count comparison
+↓
+move-ordering experiment</pre></div>
+<p>The key transformation is:</p>
+<div class="ascii-box"><pre>ordinary search
+        ↓
+opponent also chooses actions
+        ↓
+MAX tries to maximize outcome
+MIN tries to minimize outcome
+        ↓
+MINIMAX</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">Why Game Search Is Different</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Implementation Model</div>
+
+Minimax ka seedha funda hai: "Main apna best karunga, par ye maante hue ki mera opponent bhi sabse bada master hai aur mera sabse bura chahega."
+Alpha-Beta Pruning ka magic ye hai ki ye decision ki quality mein 1% bhi compromise kiye bina aadhi branches ko delete kar deta hai.
+Agar opponent ke paas pehle se ek aisi move hai jo tumhe kam score degi, toh vo is naye raste par kabhi aane hi nahi dega—isiliye aage check karna time waste hai!
+
+</div>
+
+<p>A normal route search can ask:</p>
+<blockquote>
+<p>“What path should I take?”</p>
+</blockquote>
+<p>A game involves an opponent.</p>
+<p>If you choose:</p>
+<div class="ascii-box"><pre>Move A</pre></div>
+<p>the opponent may choose the response that is worst for you.</p>
+<p>The supplied lecture therefore states:</p>
+<blockquote>
+<p>An unpredictable opponent means the solution is a <strong>strategy</strong> specifying a move for every possible opponent reply.</p>
+</blockquote>
+<p>This is why game search is adversarial.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">The Smallest Useful Game Representation</h2>
+      </div>
+      <div class="section-body">
+        <p>Before chess, use a tiny deterministic game tree.</p>
+<p>A state contains possible child states.</p>
+<p>For example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">game_tree = {
+    &quot;root&quot;: [&quot;A&quot;, &quot;B&quot;],
+    &quot;A&quot;: [&quot;A1&quot;, &quot;A2&quot;],
+    &quot;B&quot;: [&quot;B1&quot;, &quot;B2&quot;],
+    &quot;A1&quot;: [],
+    &quot;A2&quot;: [],
+    &quot;B1&quot;: [],
+    &quot;B2&quot;: [],
+}</code></pre></div>
+<p>Terminal utilities:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">utility = {
+    &quot;A1&quot;: 3,
+    &quot;A2&quot;: 5,
+    &quot;B1&quot;: 2,
+    &quot;B2&quot;: 9,
+}</code></pre></div>
+<p>Interpretation:</p>
+<div class="ascii-box"><pre>MAX chooses at root
+MIN chooses after that
+leaf values are final outcomes</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Game Tree Visual</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>ROOT (MAX)
+                 /           \
+              A (MIN)       B (MIN)
+              /    \         /    \
+            A1      A2      B1      B2
+             3       5       2       9</pre></div>
+<p>MIN chooses the lower child.</p>
+<p>Therefore:</p>
+<div class="formula-math">\[
+V(A)=\min(3,5)=3
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+V(B)=\min(2,9)=2.
+\]</div>
+<p>MAX then chooses:</p>
+<div class="formula-math">\[
+\max(3,2)=3.
+\]</div>
+<p>So the root's optimal value is:</p>
+<div class="formula-math">\[
+\boxed{3}.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Minimax Rules</h2>
+      </div>
+      <div class="section-body">
+        <p>At a terminal state:</p>
+<div class="formula-math">\[
+\boxed{
+V(s)=U(s)
+}
+\]</div>
+<p>For a MAX state:</p>
+<div class="formula-math">\[
+\boxed{
+V(s)=
+\max_{a}V(Result(s,a))
+}
+\]</div>
+<p>For a MIN state:</p>
+<div class="formula-math">\[
+\boxed{
+V(s)=
+\min_{a}V(Result(s,a))
+}
+\]</div>
+<p>These equations are the computational core.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Minimax Pseudocode</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>MINIMAX(state, player):
+
+    if terminal(state):
+        return utility(state)
+
+    if player == MAX:
+        value = -∞
+
+        for child in successors(state):
+            value = max(
+                value,
+                MINIMAX(child, MIN)
+            )
+
+        return value
+
+    else:
+        value = +∞
+
+        for child in successors(state):
+            value = min(
+                value,
+                MINIMAX(child, MAX)
+            )
+
+        return value</pre></div>
+<p>The recursion alternates:</p>
+<div class="ascii-box"><pre>MAX
+ ↓
+MIN
+ ↓
+MAX
+ ↓
+MIN</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Minimax Implementation</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def minimax(tree, utility, state, maximizing_player):
+    children = tree.get(state, [])
+
+    if not children:
+        return utility[state]
+
+    if maximizing_player:
+        return max(
+            minimax(
+                tree,
+                utility,
+                child,
+                False,
+            )
+            for child in children
+        )
+
+    return min(
+        minimax(
+            tree,
+            utility,
+            child,
+            True,
+        )
+        for child in children
+    )</code></pre></div>
+<p>Run:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">value = minimax(
+    game_tree,
+    utility,
+    &quot;root&quot;,
+    True,
+)
+
+print(value)</code></pre></div>
+<p>Expected:</p>
+<div class="ascii-box"><pre>3</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">Choosing the Actual Move</h2>
+      </div>
+      <div class="section-body">
+        <p>Minimax value alone is not enough.</p>
+<p>A game-playing agent needs:</p>
+<blockquote>
+<p>Which child should I choose?</p>
+</blockquote>
+<p>Implement:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def minimax_move(
+    tree,
+    utility,
+    state,
+):
+    best_move = None
+    best_value = float(&quot;-inf&quot;)
+
+    for child in tree.get(state, []):
+        value = minimax(
+            tree,
+            utility,
+            child,
+            False,
+        )
+
+        if value &gt; best_value:
+            best_value = value
+            best_move = child
+
+    return best_move, best_value</code></pre></div>
+<p>Run:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">move, value = minimax_move(
+    game_tree,
+    utility,
+    &quot;root&quot;,
+)
+
+print(move, value)</code></pre></div>
+<p>Expected:</p>
+<div class="ascii-box"><pre>A 3</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Why MAX Chooses A</h2>
+      </div>
+      <div class="section-body">
+        <p>For:</p>
+<div class="ascii-box"><pre>A → {3,5}</pre></div>
+<p>MIN chooses 3.</p>
+<p>For:</p>
+<div class="ascii-box"><pre>B → {2,9}</pre></div>
+<p>MIN chooses 2.</p>
+<p>So MAX compares:</p>
+<div class="ascii-box"><pre>A → 3
+B → 2</pre></div>
+<p>and chooses A.</p>
+<p>This is the essence of adversarial reasoning:</p>
+<div class="ascii-box"><pre>MAX assumes MIN will respond intelligently.</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Why Minimax Is Not “Choose the Highest Leaf”</h2>
+      </div>
+      <div class="section-body">
+        <p>A common beginner mistake:</p>
+<div class="ascii-box"><pre>Leaves:
+3,5,2,9</pre></div>
+<p>and then:</p>
+<blockquote>
+<p>“9 is the best, so choose B.”</p>
+</blockquote>
+<p>Wrong.</p>
+<p>MAX does not control both levels.</p>
+<p>After MAX chooses B, MIN chooses the worse outcome for MAX:</p>
+<div class="formula-math">\[
+\min(2,9)=2.
+\]</div>
+<p>This is why the intermediate player labels matter.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Minimax Trace</h2>
+      </div>
+      <div class="section-body">
+        <p>Build a tracing version:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def minimax_trace(
+    tree,
+    utility,
+    state,
+    maximizing_player,
+    trace=None,
+):
+    if trace is None:
+        trace = []
+
+    children = tree.get(state, [])
+
+    if not children:
+        value = utility[state]
+
+        trace.append({
+            &quot;state&quot;: state,
+            &quot;player&quot;: &quot;terminal&quot;,
+            &quot;value&quot;: value,
+        })
+
+        return value, trace
+
+    player = &quot;MAX&quot; if maximizing_player else &quot;MIN&quot;
+
+    values = []
+
+    for child in children:
+        child_value, trace = minimax_trace(
+            tree,
+            utility,
+            child,
+            not maximizing_player,
+            trace,
+        )
+
+        values.append(
+            (child, child_value)
+        )
+
+    if maximizing_player:
+        best_child, value = max(
+            values,
+            key=lambda item: item[1],
+        )
+    else:
+        best_child, value = min(
+            values,
+            key=lambda item: item[1],
+        )
+
+    trace.append({
+        &quot;state&quot;: state,
+        &quot;player&quot;: player,
+        &quot;children&quot;: values,
+        &quot;chosen&quot;: best_child,
+        &quot;value&quot;: value,
+    })
+
+    return value, trace</code></pre></div>
+<p>Inspect the trace to see values propagate upward.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Recursive Value Flow</h2>
+      </div>
+      <div class="section-body">
+        <p>Think bottom-up:</p>
+<div class="ascii-box"><pre>Leaves
+  ↓
+MIN evaluates leaves
+  ↓
+MAX evaluates MIN values
+  ↓
+MIN evaluates MAX values
+  ↓
+...
+  ↓
+root value</pre></div>
+<p>The algorithm is recursive in code but conceptually performs a bottom-up value computation over the game tree.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Minimax Complexity</h2>
+      </div>
+      <div class="section-body">
+        <p>The supplied lecture gives:</p>
+<div class="formula-math">\[
+\boxed{
+O(b^m)
+}
+\]</div>
+<p>time for minimax and:</p>
+<div class="formula-math">\[
+\boxed{
+O(bm)
+}
+\]</div>
+<p>space in its depth-first formulation.</p>
+<p>Here:</p>
+<ul>
+<li>\(b\) = branching factor;</li>
+<li>\(m\) = search depth.</li>
+</ul>
+<p>The problem is the exponential growth of possible game sequences.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Why Real Games Are Hard</h2>
+      </div>
+      <div class="section-body">
+        <p>The lecture points out that practical games such as chess have a large branching factor and depth.</p>
+<p>So:</p>
+<div class="ascii-box"><pre>one position
+↓
+many moves
+↓
+each move has many replies
+↓
+each reply has many replies
+↓
+explosion</pre></div>
+<p>Even a modest-looking depth becomes computationally enormous.</p>
+<p>This motivates pruning and later resource-limited evaluation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">Alpha-Beta Pruning</h2>
+      </div>
+      <div class="section-body">
+        <p>Alpha-beta does <strong>not</strong> change the minimax result under its standard safe-pruning assumptions.</p>
+<p>It changes:</p>
+<blockquote>
+<p>how much of the tree must actually be evaluated.</p>
+</blockquote>
+<p>The lecture states:</p>
+<blockquote>
+<p><strong>Safe:</strong> pruning does not affect the final result.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">Alpha and Beta</h2>
+      </div>
+      <div class="section-body">
+        <p>The supplied lecture's explanation:</p>
+<h3>Alpha</h3>
+<div class="formula-math">\[
+\boxed{
+\alpha
+=
+\text{best value found so far for MAX along the current path}
+}
+\]</div>
+<h3>Beta</h3>
+<div class="formula-math">\[
+\boxed{
+\beta
+=
+\text{best bound found so far for MIN along the current path}
+}
+\]</div>
+<p>The pruning condition is:</p>
+<div class="formula-math">\[
+\boxed{
+\alpha\ge\beta
+\Rightarrow
+\text{prune}
+}
+\]</div>
+<p>This is the critical formula.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">Alpha-Beta Intuition</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose MAX already has a guaranteed option worth:</p>
+<div class="formula-math">\[
+5.
+\]</div>
+<p>So:</p>
+<div class="formula-math">\[
+\alpha=5.
+\]</div>
+<p>Now MAX explores another branch.</p>
+<p>At a MIN node, one child produces:</p>
+<div class="formula-math">\[
+3.
+\]</div>
+<p>MIN can already force this branch down to 3.</p>
+<p>Since:</p>
+<div class="formula-math">\[
+3\lt 5,
+\]</div>
+<p>MAX would never choose this branch over the existing option worth 5.</p>
+<p>Therefore the remaining children of that MIN node cannot change MAX's final decision.</p>
+<p>They can be pruned.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Alpha-Beta Pseudocode</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>ALPHABETA(state, depth, α, β, maximizing):
+
+    if terminal:
+        return utility(state)
+
+    if MAX:
+        value = -∞
+
+        for child:
+            value = max(
+                value,
+                ALPHABETA(
+                    child,
+                    α,
+                    β,
+                    MIN
+                )
+            )
+
+            α = max(α, value)
+
+            if α &gt;= β:
+                break
+
+        return value
+
+    else:
+        value = +∞
+
+        for child:
+            value = min(
+                value,
+                ALPHABETA(
+                    child,
+                    α,
+                    β,
+                    MAX
+                )
+            )
+
+            β = min(β, value)
+
+            if α &gt;= β:
+                break
+
+        return value</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">Alpha-Beta Implementation</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def alpha_beta(
+    tree,
+    utility,
+    state,
+    maximizing_player,
+    alpha=float(&quot;-inf&quot;),
+    beta=float(&quot;inf&quot;),
+):
+    children = tree.get(state, [])
+
+    if not children:
+        return utility[state]
+
+    if maximizing_player:
+        value = float(&quot;-inf&quot;)
+
+        for child in children:
+            value = max(
+                value,
+                alpha_beta(
+                    tree,
+                    utility,
+                    child,
+                    False,
+                    alpha,
+                    beta,
+                ),
+            )
+
+            alpha = max(alpha, value)
+
+            if alpha &gt;= beta:
+                break
+
+        return value
+
+    value = float(&quot;inf&quot;)
+
+    for child in children:
+        value = min(
+            value,
+            alpha_beta(
+                tree,
+                utility,
+                child,
+                True,
+                alpha,
+                beta,
+            ),
+        )
+
+        beta = min(beta, value)
+
+        if alpha &gt;= beta:
+            break
+
+    return value</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Test Alpha-Beta</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">value = alpha_beta(
+    game_tree,
+    utility,
+    &quot;root&quot;,
+    True,
+)
+
+assert value == 3</code></pre></div>
+<p>The critical property is:</p>
+<div class="formula-math">\[
+\boxed{
+V_{\alpha\beta}=V_{\text{minimax}}
+}
+\]</div>
+<p>for the same deterministic game tree under the algorithm's assumptions.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">Count Evaluated Leaves</h2>
+      </div>
+      <div class="section-body">
+        <p>To demonstrate pruning, add a counter.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">stats = {
+    &quot;leaf_evaluations&quot;: 0,
+}</code></pre></div>
+<p>Whenever a terminal state is reached:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">stats[&quot;leaf_evaluations&quot;] += 1</code></pre></div>
+<p>Then compare:</p>
+<div class="ascii-box"><pre>minimax leaf evaluations
+vs
+alpha-beta leaf evaluations</pre></div>
+<p>The values should match.</p>
+<p>The counts can differ dramatically.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">Instrumented Minimax</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def minimax_count(
+    tree,
+    utility,
+    state,
+    maximizing_player,
+    stats,
+):
+    children = tree.get(state, [])
+
+    if not children:
+        stats[&quot;leaf_evaluations&quot;] += 1
+        return utility[state]
+
+    values = [
+        minimax_count(
+            tree,
+            utility,
+            child,
+            not maximizing_player,
+            stats,
+        )
+        for child in children
+    ]
+
+    if maximizing_player:
+        return max(values)
+
+    return min(values)</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">Instrumented Alpha-Beta</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def alpha_beta_count(
+    tree,
+    utility,
+    state,
+    maximizing_player,
+    alpha,
+    beta,
+    stats,
+):
+    children = tree.get(state, [])
+
+    if not children:
+        stats[&quot;leaf_evaluations&quot;] += 1
+        return utility[state]
+
+    if maximizing_player:
+        value = float(&quot;-inf&quot;)
+
+        for child in children:
+            value = max(
+                value,
+                alpha_beta_count(
+                    tree,
+                    utility,
+                    child,
+                    False,
+                    alpha,
+                    beta,
+                    stats,
+                ),
+            )
+
+            alpha = max(alpha, value)
+
+            if alpha &gt;= beta:
+                stats[&quot;prunes&quot;] += 1
+                break
+
+        return value
+
+    value = float(&quot;inf&quot;)
+
+    for child in children:
+        value = min(
+            value,
+            alpha_beta_count(
+                tree,
+                utility,
+                child,
+                True,
+                alpha,
+                beta,
+                stats,
+            ),
+        )
+
+        beta = min(beta, value)
+
+        if alpha &gt;= beta:
+            stats[&quot;prunes&quot;] += 1
+            break
+
+    return value</code></pre></div>
+<p>Initialize:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">stats = {
+    &quot;leaf_evaluations&quot;: 0,
+    &quot;prunes&quot;: 0,
+}</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">Why Move Ordering Matters</h2>
+      </div>
+      <div class="section-body">
+        <p>The supplied lecture explicitly states:</p>
+<blockquote>
+<p>Good move ordering improves the effectiveness of pruning.</p>
+</blockquote>
+<p>This is extremely important.</p>
+<p>Alpha-beta can only prune a branch after sufficient bounds have already been established.</p>
+<p>If good moves are examined early:</p>
+<div class="ascii-box"><pre>strong bound early
+↓
+more α/β cutoffs
+↓
+more pruning</pre></div>
+<p>Poor ordering can produce much less pruning.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">Best-Case Idea</h2>
+      </div>
+      <div class="section-body">
+        <p>The lecture gives the idealized perfect-ordering complexity:</p>
+<div class="formula-math">\[
+\boxed{
+O(b^{m/2})
+}
+\]</div>
+<p>This is dramatically better than:</p>
+<div class="formula-math">\[
+O(b^m).
+\]</div>
+<p>The interpretation is not:</p>
+<blockquote>
+<p>“Alpha-beta always runs in \(b^{m/2}\).”</p>
+</blockquote>
+<p>It is:</p>
+<blockquote>
+<p>Under ideal move ordering, the amount of search can be reduced to that order in the standard analysis.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">Move-Ordering Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Take the same tree.</p>
+<p>Run:</p>
+<div class="ascii-box"><pre>ordering A
+ordering B</pre></div>
+<p>where the child order differs.</p>
+<p>Measure:</p>
+<div class="ascii-box"><pre>leaf evaluations
+prunes</pre></div>
+<p>The minimax result should remain the same.</p>
+<p>But alpha-beta's search effort can change.</p>
+<p>This turns an abstract lecture statement into a measurable experiment.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">Alpha-Beta Trace</h2>
+      </div>
+      <div class="section-body">
+        <p>Track:</p>
+<div class="ascii-box"><pre>state
+player
+alpha before
+beta before
+child
+returned value
+alpha after
+beta after
+pruned?</pre></div>
+<p>Example:</p>
+<div class="ascii-box"><pre>State: X
+Player: MIN
+α = 5
+β = ∞
+
+child1 → 3
+
+β = 3
+
+Since:
+α ≥ β
+5 ≥ 3
+
+PRUNE remaining children</pre></div>
+<p>That is the most useful trace to understand alpha-beta.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">Why Can We Prune Without Knowing Exact Value?</h2>
+      </div>
+      <div class="section-body">
+        <p>This is a crucial reasoning skill.</p>
+<p>Suppose MIN has already found:</p>
+<div class="formula-math">\[
+3.
+\]</div>
+<p>So MIN can guarantee:</p>
+<div class="formula-math">\[
+V\le3.
+\]</div>
+<p>MAX already has another route worth:</p>
+<div class="formula-math">\[
+5.
+\]</div>
+<p>MAX therefore will never choose the branch whose best possible value is at most 3.</p>
+<p>We do not need the branch's exact final value.</p>
+<p>A bound is sufficient.</p>
+<p>This is the deeper idea behind alpha-beta.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">Alpha-Beta Is Not an Approximation</h2>
+      </div>
+      <div class="section-body">
+        <p>A common misunderstanding:</p>
+<blockquote>
+<p>“Alpha-beta gets a rough answer faster.”</p>
+</blockquote>
+<p>Wrong.</p>
+<p>Under the standard deterministic perfect-play assumptions, alpha-beta returns the <strong>same minimax value</strong>.</p>
+<p>It is a computational optimization.</p>
+<div class="ascii-box"><pre>Minimax:
+evaluate relevant tree
+
+Alpha-beta:
+prove some branches irrelevant
++
+evaluate the rest</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">Comparison — Minimax vs Alpha-Beta</h2>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Property</th>
+<th>Minimax</th>
+<th>Alpha-Beta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Final value</td>
+<td>optimal minimax value</td>
+<td>same value</td>
+</tr>
+<tr>
+<td>Pruning</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Needs alpha/beta</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Sensitive to move ordering</td>
+<td>indirectly</td>
+<td>strongly</td>
+</tr>
+<tr>
+<td>Basic time</td>
+<td>\(O(b^m)\)</td>
+<td>worst case can remain \(O(b^m)\)</td>
+</tr>
+<tr>
+<td>Ideal ordering</td>
+<td>—</td>
+<td>\(O(b^{m/2})\)</td>
+</tr>
+<tr>
+<td>Main purpose</td>
+<td>correctness</td>
+<td>reduce unnecessary computation</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">Applying to Tic-Tac-Toe</h2>
+      </div>
+      <div class="section-body">
+        <p>Tic-tac-toe is small enough for complete search.</p>
+<p>A state can be:</p>
+<div class="ascii-box"><pre>(
+    cell0,
+    cell1,
+    ...
+    cell8,
+)</pre></div>
+<p>Example:</p>
+<div class="ascii-box"><pre>(
+    &quot;X&quot;, &quot;O&quot;, None,
+    None, &quot;X&quot;, None,
+    None, None, &quot;O&quot;,
+)</pre></div>
+<p>Legal actions:</p>
+<div class="ascii-box"><pre>all empty cells</pre></div>
+<p>Terminal conditions:</p>
+<div class="ascii-box"><pre>X wins
+O wins
+board full</pre></div>
+<p>Utility from X's perspective:</p>
+<div class="ascii-box"><pre>X wins → +1
+draw   → 0
+O wins → -1</pre></div>
+<p>Then minimax can choose the optimal move.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">Tic-Tac-Toe Utility</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def utility_from_x(state):
+    if winner(state, &quot;X&quot;):
+        return 1
+
+    if winner(state, &quot;O&quot;):
+        return -1
+
+    return 0</code></pre></div>
+<p>The exact winner detection should be implemented separately and tested independently.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Why Small Games Are Excellent Learning Labs</h2>
+      </div>
+      <div class="section-body">
+        <p>A real chess engine requires:</p>
+<div class="ascii-box"><pre>move generation
+board representation
+evaluation
+search
+time management
+transposition tables
+opening/endgame knowledge</pre></div>
+<p>That is too much for the first implementation.</p>
+<p>Tic-tac-toe isolates:</p>
+<div class="ascii-box"><pre>state
+action
+terminal test
+utility
+minimax
+alpha-beta</pre></div>
+<p>This is exactly what a learning experiment should do.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Testing Winner Detection</h2>
+      </div>
+      <div class="section-body">
+        <p>For tic-tac-toe, test:</p>
+<div class="ascii-box"><pre>row win
+column win
+diagonal win
+no win</pre></div>
+<p>Example conceptual board:</p>
+<div class="ascii-box"><pre>X X X
+O O .
+. . .</pre></div>
+<p>Expected:</p>
+<div class="ascii-box"><pre>winner = X</pre></div>
+<p>Also test:</p>
+<div class="ascii-box"><pre>. . .
+. . .
+. . .</pre></div>
+<p>Expected:</p>
+<div class="ascii-box"><pre>no winner</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-35" class="section-block">
+      <div class="section-header">
+        <span class="section-num">35</span>
+        <h2 class="section-heading">Testing Minimax in Tic-Tac-Toe</h2>
+      </div>
+      <div class="section-body">
+        <p>Construct positions where the correct move is obvious.</p>
+<h3>Case 1 — immediate win</h3>
+<div class="ascii-box"><pre>X X .
+O O .
+. . .</pre></div>
+<p>X should choose the empty cell completing the row.</p>
+<h3>Case 2 — forced block</h3>
+<div class="ascii-box"><pre>O O .
+X . .
+. X .</pre></div>
+<p>If X cannot win immediately, it should block O.</p>
+<h3>Case 3 — draw</h3>
+<p>A fully explored optimal game should produce the appropriate minimax result.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-36" class="section-block">
+      <div class="section-header">
+        <span class="section-num">36</span>
+        <h2 class="section-heading">Search Statistics in Tic-Tac-Toe</h2>
+      </div>
+      <div class="section-body">
+        <p>Record:</p>
+<div class="ascii-box"><pre>nodes visited
+leaf evaluations
+prunes</pre></div>
+<p>Compare:</p>
+<div class="ascii-box"><pre>minimax
+alpha-beta</pre></div>
+<p>Then change move ordering and repeat.</p>
+<p>This gives a complete practical demonstration of the lecture's move-ordering claim.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-37" class="section-block">
+      <div class="section-header">
+        <span class="section-num">37</span>
+        <h2 class="section-heading">Resource-Limited Extension</h2>
+      </div>
+      <div class="section-body">
+        <p>The supplied lecture then introduces resource limits:</p>
+<div class="ascii-box"><pre>TERMINAL-TEST
+      ↓
+CUTOFF-TEST
+
+UTILITY
+      ↓
+EVAL</pre></div>
+<p>This is the next practical coding step after exact minimax.</p>
+<p>For example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">if depth == max_depth:
+    return evaluate(state)</code></pre></div>
+<p>This creates a <strong>depth-limited approximate game search</strong>.</p>
+<p>That is not the same algorithm as exact minimax over the full game tree.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-38" class="section-block">
+      <div class="section-header">
+        <span class="section-num">38</span>
+        <h2 class="section-heading">Evaluation Functions</h2>
+      </div>
+      <div class="section-body">
+        <p>The lecture gives a common structure:</p>
+<div class="formula-math">\[
+\boxed{
+Eval(s)=
+w_1f_1(s)+\cdots+w_nf_n(s)
+}
+\]</div>
+<p>Example features might describe:</p>
+<div class="ascii-box"><pre>material
+king safety
+mobility
+position</pre></div>
+<p>For chess, the supplied lecture gives examples of weighted pieces/features.</p>
+<p>This is also a useful conceptual bridge to machine learning:</p>
+<div class="ascii-box"><pre>features
+↓
+weights
+↓
+weighted score
+↓
+decision</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-39" class="section-block">
+      <div class="section-header">
+        <span class="section-num">39</span>
+        <h2 class="section-heading">Simple Evaluation Function Example</h2>
+      </div>
+      <div class="section-body">
+        <p>For a toy game, define:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def evaluate(state):
+    score = 0
+
+    score += 3 * state[&quot;material_advantage&quot;]
+    score += 1 * state[&quot;mobility_advantage&quot;]
+
+    return score</code></pre></div>
+<p>The exact features depend on the game.</p>
+<p>The important idea is:</p>
+<blockquote>
+<p>A non-terminal position needs an estimated desirability score when search is cut off.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-40" class="section-block">
+      <div class="section-header">
+        <span class="section-num">40</span>
+        <h2 class="section-heading">Horizon Effect</h2>
+      </div>
+      <div class="section-body">
+        <p>The supplied lecture discusses the <strong>horizon effect</strong>:</p>
+<blockquote>
+<p>An undesirable event can be delayed just beyond the search horizon instead of truly avoided.</p>
+</blockquote>
+<p>Coding experiment:</p>
+<div class="ascii-box"><pre>max_depth = 2</pre></div>
+<p>may make a move look good.</p>
+<p>Increase:</p>
+<div class="ascii-box"><pre>max_depth = 4</pre></div>
+<p>and the preferred move may change.</p>
+<p>This is why resource-limited search is approximate.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-41" class="section-block">
+      <div class="section-header">
+        <span class="section-num">41</span>
+        <h2 class="section-heading">Quiescence as an Extension</h2>
+      </div>
+      <div class="section-body">
+        <p>The lecture introduces <strong>quiescence</strong> for unstable positions.</p>
+<p>The basic idea:</p>
+<div class="ascii-box"><pre>reached cutoff
+    ↓
+position is unstable
+    ↓
+search a little deeper through critical moves
+    ↓
+evaluate only when position is quieter</pre></div>
+<p>Do not implement a full chess quiescence engine in this basic lab.</p>
+<p>Instead, understand the pattern and optionally build a toy demonstration.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-42" class="section-block">
+      <div class="section-header">
+        <span class="section-num">42</span>
+        <h2 class="section-heading">Common Coding Mistakes</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Lab Viva Trap & Runtime Gotcha</div>
+
+**Alpha-Beta Condition & Role Confusion:**
+In code, MAX updates `alpha = max(alpha, eval)`, while MIN updates `beta = min(beta, eval)`.
+The cutoff condition is `if beta <= alpha: break`.
+Swapping `alpha` and `beta` updates, or using `<` instead of `<=`, destroys pruning efficiency or causes incorrect moves!
+
+</div>
+
+<h2>Mistake 1</h2>
+<p>Using MAX at every level.</p>
+<p>Then you no longer have minimax.</p>
+<h2>Mistake 2</h2>
+<p>Returning the highest leaf value.</p>
+<p>Intermediate MIN nodes matter.</p>
+<h2>Mistake 3</h2>
+<p>Changing alpha-beta's output due to pruning.</p>
+<p>Pruning should preserve the minimax result.</p>
+<h2>Mistake 4</h2>
+<p>Initializing alpha/beta incorrectly.</p>
+<p>Standard initialization:</p>
+<div class="formula-math">\[
+\alpha=-\infty,
+\qquad
+\beta=+\infty.
+\]</div>
+<h2>Mistake 5</h2>
+<p>Mixing up alpha and beta.</p>
+<p>Remember:</p>
+<div class="ascii-box"><pre>α → MAX&#x27;s best known lower bound
+β → MIN&#x27;s best known upper bound</pre></div>
+<h2>Mistake 6</h2>
+<p>Forgetting the cutoff condition:</p>
+<div class="formula-math">\[
+\alpha\ge\beta.
+\]</div>
+<h2>Mistake 7</h2>
+<p>Assuming move ordering cannot affect performance.</p>
+<p>It can affect pruning substantially.</p>
+<h2>Mistake 8</h2>
+<p>Assuming alpha-beta approximates minimax.</p>
+<p>It is exact under the standard assumptions.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-43" class="section-block">
+      <div class="section-header">
+        <span class="section-num">43</span>
+        <h2 class="section-heading">Debugging Checklist</h2>
+      </div>
+      <div class="section-body">
+        <p>If minimax and alpha-beta disagree:</p>
+<div class="ascii-box"><pre>1. Check terminal utilities
+2. Check whose turn each node represents
+3. Check max/min switch
+4. Check alpha initialization
+5. Check beta initialization
+6. Check update order
+7. Check prune condition
+8. Check child ordering
+9. Compare on a tiny hand-solved tree
+10. Count visited leaves</pre></div>
+<p>Start with a 6-leaf tree, not a large game.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-44" class="section-block">
+      <div class="section-header">
+        <span class="section-num">44</span>
+        <h2 class="section-heading">Property Test — Alpha-Beta Equality</h2>
+      </div>
+      <div class="section-body">
+        <p>Generate several small deterministic game trees with fixed utilities.</p>
+<p>For every tree:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">v1 = minimax(...)
+v2 = alpha_beta(...)
+
+assert v1 == v2</code></pre></div>
+<p>This is one of the best tests you can write.</p>
+<p>It checks the theorem-like property that matters.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-45" class="section-block">
+      <div class="section-header">
+        <span class="section-num">45</span>
+        <h2 class="section-heading">Property Test — Move Selection</h2>
+      </div>
+      <div class="section-body">
+        <p>For every root:</p>
+<div class="ascii-box"><pre>minimax value of selected move
+=
+root minimax value</pre></div>
+<p>The chosen move should achieve the computed optimal value.</p>
+<p>This separates:</p>
+<div class="ascii-box"><pre>value computation</pre></div>
+<p>from:</p>
+<div class="ascii-box"><pre>move selection.</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-46" class="section-block">
+      <div class="section-header">
+        <span class="section-num">46</span>
+        <h2 class="section-heading">Experimental Question</h2>
+      </div>
+      <div class="section-body">
+        <p>Build a balanced tree of depth 4 or 5.</p>
+<p>Run:</p>
+<div class="ascii-box"><pre>Minimax
+Alpha-beta with poor ordering
+Alpha-beta with good ordering</pre></div>
+<p>Record:</p>
+<div class="ascii-box"><pre>leaf evaluations
+total recursive calls
+prunes</pre></div>
+<p>Expected conceptual pattern:</p>
+<div class="ascii-box"><pre>Minimax
+→ all leaves
+
+Alpha-beta
+→ subset of leaves
+
+Better move ordering
+→ often more pruning</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-47" class="section-block">
+      <div class="section-header">
+        <span class="section-num">47</span>
+        <h2 class="section-heading">Why “Often” Matters</h2>
+      </div>
+      <div class="section-body">
+        <p>Do not write:</p>
+<blockquote>
+<p>“Better move ordering always makes alpha-beta exactly X times faster.”</p>
+</blockquote>
+<p>The lecture's perfect-ordering complexity is an idealized analysis.</p>
+<p>Real performance depends on:</p>
+<ul>
+<li>tree structure;</li>
+<li>ordering quality;</li>
+<li>alpha/beta values;</li>
+<li>depth;</li>
+<li>branching factor;</li>
+<li>implementation overhead.</li>
+</ul>
+<p>Always distinguish:</p>
+<div class="ascii-box"><pre>theoretical best-case</pre></div>
+<p>from:</p>
+<div class="ascii-box"><pre>observed benchmark</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-48" class="section-block">
+      <div class="section-header">
+        <span class="section-num">48</span>
+        <h2 class="section-heading">From Toy Tree to Real Game</h2>
+      </div>
+      <div class="section-body">
+        <p>The same functions conceptually become:</p>
+<div class="ascii-box"><pre>children(state)
+terminal(state)
+utility(state)</pre></div>
+<p>For a real board game:</p>
+<div class="ascii-box"><pre>children(state)
+→ legal moves</pre></div>
+<p>So a game engine can separate:</p>
+<div class="ascii-box"><pre>game rules
++
+search algorithm</pre></div>
+<p>This is another important engineering principle.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-49" class="section-block">
+      <div class="section-header">
+        <span class="section-num">49</span>
+        <h2 class="section-heading">Reusable Game-State Interface</h2>
+      </div>
+      <div class="section-body">
+        <p>A useful interface is:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def actions(state):
+    ...
+
+def result(state, action):
+    ...
+
+def terminal(state):
+    ...
+
+def utility(state):
+    ...</code></pre></div>
+<p>Then minimax only needs these operations.</p>
+<p>This abstraction allows the same search code to work with different games.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-50" class="section-block">
+      <div class="section-header">
+        <span class="section-num">50</span>
+        <h2 class="section-heading">Search/Rules Separation</h2>
+      </div>
+      <div class="section-body">
+        <p>Good design:</p>
+<div class="ascii-box"><pre>Game Rules
+│
+├── legal moves
+├── state transition
+├── terminal test
+└── utility
+
+Search Engine
+│
+├── minimax
+└── alpha-beta</pre></div>
+<p>Bad design:</p>
+<div class="ascii-box"><pre>minimax function
++
+hard-coded tic-tac-toe rules
++
+hard-coded board
++
+hard-coded utility</pre></div>
+<p>The second is harder to reuse and test.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-51" class="section-block">
+      <div class="section-header">
+        <span class="section-num">51</span>
+        <h2 class="section-heading">Applied Coding Challenge — Tic-Tac-Toe</h2>
+      </div>
+      <div class="section-body">
+        <p>Build:</p>
+<div class="ascii-box"><pre>Board representation
++
+legal moves
++
+result(state, action)
++
+winner detection
++
+terminal test
++
+utility
++
+minimax
++
+alpha-beta</pre></div>
+<p>Then create:</p>
+<div class="ascii-box"><pre>Human vs AI</pre></div>
+<p>as a thin interface layer.</p>
+<p>The game UI should not contain the search logic.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-52" class="section-block">
+      <div class="section-header">
+        <span class="section-num">52</span>
+        <h2 class="section-heading">Applied Challenge — Move Ordering</h2>
+      </div>
+      <div class="section-body">
+        <p>For tic-tac-toe, try ordering moves:</p>
+<div class="ascii-box"><pre>center
+corners
+edges</pre></div>
+<p>or another explicit order.</p>
+<p>Then count alpha-beta evaluations.</p>
+<p>Does the search effort change?</p>
+<p>This gives a small experimental demonstration of the lecture's move-ordering point.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-53" class="section-block">
+      <div class="section-header">
+        <span class="section-num">53</span>
+        <h2 class="section-heading">Applied Challenge — Depth-Limited AI</h2>
+      </div>
+      <div class="section-body">
+        <p>Add:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">max_depth</code></pre></div>
+<p>to alpha-beta.</p>
+<p>At cutoff:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">return evaluate(state)</code></pre></div>
+<p>Then compare:</p>
+<div class="ascii-box"><pre>depth 1
+depth 2
+depth 3
+...</pre></div>
+<p>Observe:</p>
+<div class="ascii-box"><pre>move choice
+nodes searched</pre></div>
+<p>This provides the bridge to the supplied lecture's resource-limited game search.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-54" class="section-block">
+      <div class="section-header">
+        <span class="section-num">54</span>
+        <h2 class="section-heading">Exam Bridge</h2>
+      </div>
+      <div class="section-body">
+        <h3>2 marks</h3>
+<blockquote>
+<p>Define minimax.</p>
+<p>What are MAX and MIN?</p>
+<p>What is alpha-beta pruning?</p>
+<p>What are alpha and beta?</p>
+</blockquote>
+<h3>5 marks</h3>
+<blockquote>
+<p>Explain minimax with a game tree.</p>
+</blockquote>
+<p>Include:</p>
+<ol>
+<li>terminal values;</li>
+<li>MAX;</li>
+<li>MIN;</li>
+<li>bottom-up propagation;</li>
+<li>selected move.</li>
+</ol>
+<h3>10 marks</h3>
+<blockquote>
+<p>Explain minimax and alpha-beta pruning with a worked example.</p>
+</blockquote>
+<p>Include:</p>
+<ol>
+<li>adversarial search;</li>
+<li>minimax recurrence;</li>
+<li>game tree;</li>
+<li>alpha/beta definitions;</li>
+<li>pruning condition;</li>
+<li>worked trace;</li>
+<li>safety;</li>
+<li>move-ordering effect;</li>
+<li>complexity.</li>
+</ol>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-55" class="section-block">
+      <div class="section-header">
+        <span class="section-num">55</span>
+        <h2 class="section-heading">Active Recall</h2>
+      </div>
+      <div class="section-body">
+        <p>Close the file.</p>
+<p>Answer:</p>
+<ol>
+<li>Why is game search adversarial?</li>
+<li>Why is a solution a strategy?</li>
+<li>What does MAX do?</li>
+<li>What does MIN do?</li>
+<li>What is terminal utility?</li>
+<li>Write the MAX recurrence.</li>
+<li>Write the MIN recurrence.</li>
+<li>Why can't MAX simply choose the largest leaf?</li>
+<li>What is alpha?</li>
+<li>What is beta?</li>
+<li>What is the pruning condition?</li>
+<li>Why is alpha-beta safe?</li>
+<li>Why does move ordering matter?</li>
+<li>What is the idealized complexity under perfect ordering from the lecture?</li>
+<li>What is the difference between exact minimax and resource-limited search?</li>
+<li>What is an evaluation function?</li>
+<li>What is the horizon effect?</li>
+<li>Why should game rules and search logic be separated?</li>
+</ol>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-56" class="section-block">
+      <div class="section-header">
+        <span class="section-num">56</span>
+        <h2 class="section-heading">Final Implementation Test</h2>
+      </div>
+      <div class="section-body">
+        <p>Build a small deterministic game framework with:</p>
+<div class="ascii-box"><pre>actions
+result
+terminal
+utility
+minimax
+alpha_beta</pre></div>
+<p>Then test:</p>
+<div class="ascii-box"><pre>1. one-level tree
+2. two-level tree
+3. known MAX/MIN example
+4. alpha-beta equality
+5. pruning occurs
+6. different move ordering
+7. depth-limited search
+8. terminal utility correctness</pre></div>
+<p>Measure:</p>
+<div class="ascii-box"><pre>minimax calls
+alpha-beta calls
+leaf evaluations
+prunes</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-57" class="section-block">
+      <div class="section-header">
+        <span class="section-num">57</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <h3>C3 — Rebuild</h3>
+<p>You can implement minimax from the recurrence.</p>
+<h3>C4 — Test</h3>
+<p>You can verify:</p>
+<div class="formula-math">\[
+V_{\text{minimax}}
+=
+V_{\alpha\beta}.
+\]</div>
+<h3>C5 — Modify</h3>
+<p>You can add:</p>
+<ul>
+<li>node counters;</li>
+<li>traces;</li>
+<li>move ordering;</li>
+<li>depth cutoffs.</li>
+</ul>
+<h3>C6 — Explain</h3>
+<p>You can explain every prune in terms of alpha/beta bounds.</p>
+<h3>C7 — Transfer</h3>
+<p>You can take a new deterministic game and design:</p>
+<div class="ascii-box"><pre>state representation
+legal action generator
+transition function
+terminal test
+utility
+search method</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-58" class="section-block">
+      <div class="section-header">
+        <span class="section-num">58</span>
+        <h2 class="section-heading">Final Memory Sheet</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>MINIMAX
+
+MAX → maximize
+MIN → minimize
+
+terminal → utility
+MAX → max(children)
+MIN → min(children)</pre></div>
+<p>Alpha-beta:</p>
+<div class="ascii-box"><pre>α = MAX&#x27;s current best bound
+β = MIN&#x27;s current best bound
+
+α ≥ β
+   ↓
+prune</pre></div>
+<p>Complexity:</p>
+<div class="formula-math">\[
+\boxed{
+\text{Minimax }O(b^m)
+}
+\]</div>
+<p>Idealized perfect ordering:</p>
+<div class="formula-math">\[
+\boxed{
+\alpha\text{-}\beta\ O(b^{m/2})
+}
+\]</div>
+<p>The central principle:</p>
+<blockquote>
+<p><strong>Alpha-beta does not change the answer. It avoids computations that cannot change the answer.</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-59" class="section-block">
+      <div class="section-header">
+        <span class="section-num">59</span>
+        <h2 class="section-heading">Source Notes</h2>
+      </div>
+      <div class="section-body">
+        <h2>Primary source</h2>
+<p><code>lecture-game-playing.pdf</code> — Philipp Koehn, <em>Artificial Intelligence: Game Playing</em>, 17 February 2026.</p>
+<p>The lecture explicitly covers:</p>
+<ul>
+<li>games vs search problems;</li>
+<li>perfect play;</li>
+<li>minimax decisions;</li>
+<li>alpha-beta pruning;</li>
+<li>alpha/beta meaning;</li>
+<li>safety of pruning;</li>
+<li>move-ordering impact;</li>
+<li>idealized \(O(b^{m/2})\) alpha-beta time with perfect ordering;</li>
+<li>resource limits;</li>
+<li>cutoff tests;</li>
+<li>evaluation functions;</li>
+<li>learned evaluation;</li>
+<li>horizon effect;</li>
+<li>quiescence.</li>
+</ul>
+<h2>Companion resources</h2>
+<ul>
+<li><code>MAIN-U1-C10_Game_Playing</code></li>
+<li><code>MAIN-U1-C11_Minimax_and_Alpha_Beta_Pruning</code></li>
+<li><code>MAIN-U1-C12_Resource_Limited_Game_Search_and_Evaluation</code></li>
+<li><code>EXAM-U1_Artificial_Intelligence_and_Search</code></li>
+<li><code>CODE-00_AI_ML_Coding_Book_Foundation_and_Implementation_System</code></li>
+<li><code>CODE-U1-01_BFS_and_DFS_From_Scratch</code></li>
+<li><code>CODE-U1-02_Greedy_Best_First_Search_and_A_Star_From_Scratch</code></li>
+<li><code>CODE-U1-03_Constraint_Satisfaction_Problems_and_Backtracking</code></li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-60" class="section-block">
+      <div class="section-header">
+        <span class="section-num">60</span>
+        <h2 class="section-heading">Status</h2>
+      </div>
+      <div class="section-body">
+        <p><strong><code>CODE-U1-04</code> — COMPLETE</strong></p>
+<p>The Unit I core coding block is now:</p>
+<div class="ascii-box"><pre>BFS / DFS
+    ↓
+Greedy / A*
+    ↓
+CSP / Backtracking
+    ↓
+Minimax / Alpha-Beta</pre></div>
+<p>Next major section:</p>
+<p><strong><code>CODE-U2-01 — ML Workflow, Data Loading, Preprocessing, and Evaluation Setup</code></strong></p>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="code-u1-03-csp-backtracking.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← Unit 1 Lab 03 — CSP & Backtracking</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">💻 Coding Index</span>
+      </a>
+      <a href="code-u2-01-ml-workflow.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: Unit 2 Lab 01 — ML Workflow →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search lab implementations, functions, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">💻</span>Lab Hub</a>
+  <a href="code-u1-04-minimax-alpha-beta.html" class="mobile-nav-btn active"><span class="icon">📖</span>CODE-U1-04</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

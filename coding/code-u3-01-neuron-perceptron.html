@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="CODE-U3-01: Neuron and Perceptron From Scratch — AI & Machine Learning Coding Lab. Artificial Neuron Architecture, Forward Pass Vectorization, Step vs Sigmoid Activations, Perceptron Learning Rule, and the XOR Non-Separability Proof">
+<title>CODE-U3-01: Neuron and Perceptron From Scratch | Coding Lab 💻 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/coding.css">
+</head>
+<body class="coding-module track-c3">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">💻</div>
+      <div class="brand-text"><span class="main">Coding Lab</span><span class="sub">AI &amp; ML From Scratch</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">CODE-U3-01: Neuron and Perceptron From Scratch</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">💻</span>Coding Lab Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../math/index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 0: Environment & System</div>
+  <a href="code-00-coding-foundation.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-00: Coding Lab Foundation &amp; Implementation System</a>
+  <a href="code-01-python-numpy-workflow.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-01: Python, NumPy, Matplotlib &amp; Lab Workflow</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Classical AI & Search Labs</div>
+  <a href="code-u1-01-bfs-dfs.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-01: BFS and DFS From Scratch</a>
+  <a href="code-u1-02-greedy-a-star.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-02: Greedy Best-First &amp; A* Search From Scratch</a>
+  <a href="code-u1-03-csp-backtracking.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-03: CSPs and Backtracking Search</a>
+  <a href="code-u1-04-minimax-alpha-beta.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Supervised ML Labs</div>
+  <a href="code-u2-01-ml-workflow.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-01: ML Workflow: Preprocessing, Splitting &amp; Evaluation</a>
+  <a href="code-u2-02-linear-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-02: Linear Regression From Scratch</a>
+  <a href="code-u2-03-logistic-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-03: Logistic Regression From Scratch</a>
+  <a href="code-u2-04-decision-trees.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-04: Decision Trees From Scratch</a>
+  <a href="code-u2-05-classification-metrics-roc.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC &amp; Thresholds</a>
+  <a href="code-u2-06-ridge-lasso-regularization.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-06: Ridge &amp; Lasso From Scratch: Regularization &amp; Optimization</a>
+  <a href="code-u2-07-ml-evaluation-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-07: ML Evaluation &amp; Model Comparison Lab</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Deep Learning Labs</div>
+  <a href="code-u3-01-neuron-perceptron.html" class="sidebar-link active"><span class="link-icon">🧠</span>CODE-U3-01: Neuron and Perceptron From Scratch</a>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>MLP, Backpropagation & Convolutions</span>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Advanced AI Labs (Upcoming)</div>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>Q-Learning, NLP & Generative Adversarial Loops</span>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">CODE-U3-01 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Course Position</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Coding Objective</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. The Artificial Neuron</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Minimal Vector Implementation</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Shape Discipline</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Turn It Into a Reusable Neuron Function</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Why the Bias Exists</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Threshold Activation</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Perceptron Prediction</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. From One Example to a Dataset</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Vectorized Perceptron Scores</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Why Matrix Multiplication Matters</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Perceptron Learning Rule</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Single-Step Update From Scratch</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Manual Trace</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Full Perceptron Training Loop</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Train on AND</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Prediction Function for Signed Labels</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Why We Keep Both Score and Prediction</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Decision Boundary</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Linearly Separable Data</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. XOR — The Essential Limitation Experiment</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Visualize XOR</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Unit Test the Neuron</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Unit Test the Step Function</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Unit Test the Perceptron on AND</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Important Implementation Detail — Update Convention</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Common Bugs</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Experiment — Learning Rate</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Experiment — Data Order</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. From Perceptron to MLP</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Why Nonlinearity Will Matter</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Practical Challenge</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Master Challenge — Generalized Binary Dataset</a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Viva Questions</a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Debugging Checklist</a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Shape Map</a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. What This Chapter Teaches Beyond the Code</a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Source Notes</a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Mastery Gate</a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Connection Forward</a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Status</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Coding Lab</a>
+        <span>/</span>
+        <span>CODE-U3-01</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-c3">Track 3: Deep Learning & Neural Networks Labs</span></div>
+      <h1 class="chapter-title">Neuron and Perceptron From Scratch</h1>
+      <p class="chapter-desc">Artificial Neuron Architecture, Forward Pass Vectorization, Step vs Sigmoid Activations, Perceptron Learning Rule, and the XOR Non-Separability Proof</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~50 min lab</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">DEEP-LEARNING</span> <span class="chapter-meta-item uni-badge">NEURON</span> <span class="chapter-meta-item uni-badge">PERCEPTRON</span> <span class="chapter-meta-item uni-badge">HEBBIAN-UPDATE</span> <span class="chapter-meta-item uni-badge">XOR-PROBLEM</span>
+      </div>
+
+      <div class="lab-meta-grid">
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Prerequisites</div>
+          <div class="lab-meta-value">CODE-01 NumPy Workflow, CODE-U2-03 Logistic Regression</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Main Book Concept</div>
+          <div class="lab-meta-value">Ch 27 Neural Networks, Ch 28 Perceptron & Linear Separability, Ch 29 Multilayer Perceptron</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Math Companion Layer</div>
+          <div class="lab-meta-value">M04 Vectors, M08 Matrix Multiplication, M20 Calculus & Activation Derivations</div>
+        </div>
+        <div class="lab-meta-box" style="grid-column: 1 / -1;">
+          <div class="lab-meta-label">AI / Machine Learning Connections</div>
+          <div class="lab-meta-value">Fundamental building block of all deep neural networks (Transformers, CNNs, MLPs), Decision boundary geometry, Historical AI winter of 1969</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-meta-card"><h1>CODE-U3-01 — Neuron and Perceptron From Scratch</h1>
+<blockquote>
+<p><strong>Purpose:</strong> Build the smallest useful neural computation yourself before using a deep-learning framework.</p>
+</blockquote>
+<p>The goal is not to write a huge neural-network library.</p>
+<p>The goal is to understand, by executable construction:</p>
+<div class="ascii-box"><pre>inputs
+  ↓
+weights
+  ↓
+weighted sum
+  ↓
+bias
+  ↓
+activation
+  ↓
+prediction
+  ↓
+error
+  ↓
+parameter update</pre></div>
+<p>This creates the conceptual foundation for MLPs, gradient descent and backpropagation.</p>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in CODE-U3-01 (42 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Course Position</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Coding Objective</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">The Artificial Neuron</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Minimal Vector Implementation</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Shape Discipline</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Turn It Into a Reusable Neuron Function</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Why the Bias Exists</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Threshold Activation</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Perceptron Prediction</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">From One Example to a Dataset</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Vectorized Perceptron Scores</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Why Matrix Multiplication Matters</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Perceptron Learning Rule</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Single-Step Update From Scratch</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Manual Trace</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Full Perceptron Training Loop</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Train on AND</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Prediction Function for Signed Labels</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Why We Keep Both Score and Prediction</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Decision Boundary</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Linearly Separable Data</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">XOR — The Essential Limitation Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Visualize XOR</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Unit Test the Neuron</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Unit Test the Step Function</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Unit Test the Perceptron on AND</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Important Implementation Detail — Update Convention</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Common Bugs</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Experiment — Learning Rate</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Experiment — Data Order</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">From Perceptron to MLP</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Why Nonlinearity Will Matter</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Practical Challenge</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Master Challenge — Generalized Binary Dataset</span></a></li>
+        <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Viva Questions</span></a></li>
+        <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Debugging Checklist</span></a></li>
+        <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Shape Map</span></a></li>
+        <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">What This Chapter Teaches Beyond the Code</span></a></li>
+        <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Source Notes</span></a></li>
+        <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Connection Forward</span></a></li>
+        <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Status</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">Course Position</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph LR
+    subgraph Inputs ["Inputs x ∈ ℝᵈ"]
+        X1["x₁"]
+        X2["x₂"]
+        Xb["1 (bias)"]
+    end
+    subgraph Neuron ["Artificial Neuron"]
+        Sum["Weighted Sum: z = wᵀx + b = ∑ wᵢxᵢ + b"]
+        Act["Activation Function: a = g(z)"]
+    end
+    subgraph Output ["Prediction & Update"]
+        Yhat["Output ŷ"]
+        Err["Error: e = y - ŷ"]
+        Update["Perceptron Rule: w ← w + η · e · x"]
+    end
+    X1 & X2 & Xb --> Sum
+    Sum --> Act
+    Act --> Yhat
+    Yhat --> Err
+    Err --> Update
+    style Sum fill:#1e293b,stroke:#a855f7,color:#f8fafc
+    style Act fill:#0f172a,stroke:#38bdf8,color:#38bdf8,stroke-width:2px
+    style Update fill:#065f46,stroke:#34d399,color:#ffffff
+</pre></div>
+<p>The official DSC-14 Unit III scope includes:</p>
+<ul>
+<li>neural-network foundations;</li>
+<li>perceptrons;</li>
+<li>multilayer perceptrons;</li>
+<li>backpropagation;</li>
+<li>gradient descent;</li>
+<li>CNN;</li>
+<li>RNN/LSTM.</li>
+</ul>
+<p>The supplied resource guide identifies:</p>
+<ul>
+<li><code>prac_7_neural_network.ipynb</code> for neuron, weights/bias, activations, losses and gradient-descent concepts;</li>
+<li><code>CS6910 Lecture 2</code> for biological/artificial neurons, threshold logic, perceptron, learning algorithm, MLP and representation power.</li>
+</ul>
+<p><strong>Source boundary:</strong> this chapter uses those supplied resources as the conceptual anchor and adds executable Python implementations and test cases as coding-book expansion.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">Coding Objective</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Implementation Model</div>
+
+Deep Learning koi jaadu nahi hai—ye arbon chote-chote Perceptrons ka ek bada jaal (network) hai.
+Ek single neuron ka kaam simple hai: inputs ko unke importance (weights) se multiply karo, bias add karo, aur activation function ke through decide karo ki neuron 'fire' karega ya nahi.
+Perceptron learning rule ek self-correcting machine hai: agar model galat predict kare, toh weights ko us direction mein push karo jahan error kam ho jaye.
+Lekin yaad rakhna: ek akela Perceptron sirf seedhi line (hyperplane) khinch sakta hai, isiliye vo XOR problem ko solve nahi kar sakta!
+
+</div>
+
+<p>By the end of this chapter you should be able to:</p>
+<ul>
+<li>represent a neuron using vectors;</li>
+<li>calculate a weighted sum;</li>
+<li>include a bias;</li>
+<li>apply an activation function;</li>
+<li>implement a threshold perceptron;</li>
+<li>classify a tiny dataset;</li>
+<li>implement the perceptron learning rule;</li>
+<li>trace parameter updates by hand and in code;</li>
+<li>test the implementation;</li>
+<li>visualize a 2D decision boundary;</li>
+<li>demonstrate linear separability;</li>
+<li>demonstrate the XOR limitation;</li>
+<li>explain why MLPs are the next step.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">The Artificial Neuron</h2>
+      </div>
+      <div class="section-body">
+        <p>Start with:</p>
+<div class="formula-math">\[
+z = w^T x + b
+\]</div>
+<p>where:</p>
+<ul>
+<li>\(x\) = input vector;</li>
+<li>\(w\) = weight vector;</li>
+<li>\(b\) = bias;</li>
+<li>\(z\) = pre-activation score.</li>
+</ul>
+<p>Then:</p>
+<div class="formula-math">\[
+a=\phi(z)
+\]</div>
+<p>where \(\phi\) is the activation function.</p>
+<p>So the computational pattern is:</p>
+<div class="ascii-box"><pre>x
+│
+├── x₁ ──× w₁ ──┐
+├── x₂ ──× w₂ ──┤
+├── x₃ ──× w₃ ──┤
+│               ├── Σ + b ──→ φ ──→ a
+└───────────────┘</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Minimal Vector Implementation</h2>
+      </div>
+      <div class="section-body">
+        <p>Do the smallest possible thing first.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np</code></pre></div>
+<p>Define:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">x = np.array([2.0, 1.0])
+w = np.array([3.0, -2.0])
+b = 1.0</code></pre></div>
+<p>Compute:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">z = np.dot(w, x) + b
+print(z)</code></pre></div>
+<p>Manually:</p>
+<div class="formula-math">\[
+z=(3)(2)+(-2)(1)+1
+\]</div>
+<div class="formula-math">\[
+z=6-2+1=5
+\]</div>
+<p>So:</p>
+<div class="ascii-box"><pre>z = 5</pre></div>
+<p>This is the first neural-network computation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Shape Discipline</h2>
+      </div>
+      <div class="section-body">
+        <p>Before adding complexity, inspect dimensions.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(x.shape)
+print(w.shape)</code></pre></div>
+<p>Both should be:</p>
+<div class="ascii-box"><pre>(2,)</pre></div>
+<p>The dot product is valid because:</p>
+<div class="ascii-box"><pre>w: (2,)
+x: (2,)</pre></div>
+<p>and produces one scalar.</p>
+<p>A useful assertion:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert x.shape == w.shape</code></pre></div>
+<p>Shape errors are among the most common practical neural-network bugs.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Turn It Into a Reusable Neuron Function</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def neuron(
+    x: np.ndarray,
+    w: np.ndarray,
+    b: float,
+) -&gt; float:
+    x = np.asarray(x, dtype=float)
+    w = np.asarray(w, dtype=float)
+
+    if x.ndim != 1 or w.ndim != 1:
+        raise ValueError(&quot;x and w must be 1D vectors.&quot;)
+
+    if x.shape != w.shape:
+        raise ValueError(&quot;x and w must have the same shape.&quot;)
+
+    return float(np.dot(w, x) + b)</code></pre></div>
+<p>Test:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">value = neuron(
+    np.array([2.0, 1.0]),
+    np.array([3.0, -2.0]),
+    1.0,
+)
+
+print(value)</code></pre></div>
+<p>Expected:</p>
+<div class="ascii-box"><pre>5.0</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Why the Bias Exists</h2>
+      </div>
+      <div class="section-body">
+        <p>Compare:</p>
+<div class="formula-math">\[
+z=w^Tx
+\]</div>
+<p>with:</p>
+<div class="formula-math">\[
+z=w^Tx+b.
+\]</div>
+<p>Without bias, the decision boundary is constrained by:</p>
+<div class="formula-math">\[
+w^Tx=0.
+\]</div>
+<p>With bias:</p>
+<div class="formula-math">\[
+w^Tx+b=0.
+\]</div>
+<p>The bias shifts the boundary.</p>
+<p>Coding demonstration:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">x = np.array([2.0, 1.0])
+w = np.array([1.0, 1.0])
+
+print(neuron(x, w, 0.0))
+print(neuron(x, w, -2.0))</code></pre></div>
+<p>The input stays the same.</p>
+<p>Only the bias changes.</p>
+<p>That changes the pre-activation score.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">Threshold Activation</h2>
+      </div>
+      <div class="section-body">
+        <p>For a simple perceptron, use a threshold.</p>
+<p>One convention is:</p>
+<div class="formula-math">\[
+\phi(z)=
+\begin{cases}
+1,&z\ge 0\\
+0,&z\lt 0
+\end{cases}
+\]</div>
+<p>Implementation:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def step_activation(z: float) -&gt; int:
+    return int(z &gt;= 0)</code></pre></div>
+<p>Test:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(step_activation(4.2))
+print(step_activation(-0.7))</code></pre></div>
+<p>Output:</p>
+<div class="ascii-box"><pre>1
+0</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Perceptron Prediction</h2>
+      </div>
+      <div class="section-body">
+        <p>Combine the weighted sum and threshold.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def perceptron_predict(
+    x: np.ndarray,
+    w: np.ndarray,
+    b: float,
+) -&gt; int:
+    z = neuron(x, w, b)
+    return step_activation(z)</code></pre></div>
+<p>Example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">x = np.array([2.0, 1.0])
+w = np.array([3.0, -2.0])
+b = 1.0
+
+prediction = perceptron_predict(x, w, b)
+print(prediction)</code></pre></div>
+<p>Since \(z=5\):</p>
+<div class="ascii-box"><pre>prediction = 1</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">From One Example to a Dataset</h2>
+      </div>
+      <div class="section-body">
+        <p>Represent a dataset as a matrix:</p>
+<div class="formula-math">\[
+X \in \mathbb{R}^{n\times d}
+\]</div>
+<p>where:</p>
+<ul>
+<li>\(n\) = number of examples;</li>
+<li>\(d\) = number of features.</li>
+</ul>
+<p>Example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X = np.array([
+    [0.0, 0.0],
+    [0.0, 1.0],
+    [1.0, 0.0],
+    [1.0, 1.0],
+])
+
+y = np.array([0, 0, 0, 1])</code></pre></div>
+<p>This represents AND:</p>
+<div class="ascii-box"><pre>0 AND 0 → 0
+0 AND 1 → 0
+1 AND 0 → 0
+1 AND 1 → 1</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Vectorized Perceptron Scores</h2>
+      </div>
+      <div class="section-body">
+        <p>Instead of calling the neuron function four times, calculate all scores:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">w = np.array([1.0, 1.0])
+b = -1.5
+
+z = X @ w + b
+print(z)</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">predictions = (z &gt;= 0).astype(int)
+print(predictions)</code></pre></div>
+<p>Expected prediction:</p>
+<div class="ascii-box"><pre>[0 0 0 1]</pre></div>
+<p>The matrix expression:</p>
+<div class="formula-math">\[
+Xw+b
+\]</div>
+<p>is the bridge from one neuron to neural-network layers.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Why Matrix Multiplication Matters</h2>
+      </div>
+      <div class="section-body">
+        <p>For \(n\) examples and \(d\) features:</p>
+<div class="formula-math">\[
+Xw
+\]</div>
+<p>computes all weighted sums in one vectorized operation.</p>
+<p>This is much more important than merely making code shorter.</p>
+<p>It establishes the computational pattern later used by dense neural-network layers:</p>
+<div class="formula-math">\[
+Z = XW + b
+\]</div>
+<p>The same idea scales from:</p>
+<div class="ascii-box"><pre>one neuron</pre></div>
+<p>to:</p>
+<div class="ascii-box"><pre>many neurons</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Perceptron Learning Rule</h2>
+      </div>
+      <div class="section-body">
+        <p>Now the neuron must learn.</p>
+<p>For labels:</p>
+<div class="formula-math">\[
+y\in\{-1,+1\}
+\]</div>
+<p>the classic perceptron rule can be written:</p>
+<div class="formula-math">\[
+w\leftarrow w+\eta yx
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+b\leftarrow b+\eta y
+\]</div>
+<p>when the example is misclassified.</p>
+<p>A convenient implementation convention is:</p>
+<div class="ascii-box"><pre>prediction = sign(wᵀx + b)</pre></div>
+<p>with targets in:</p>
+<div class="ascii-box"><pre>{-1, +1}</pre></div>
+<p>The key expression is:</p>
+<div class="formula-math">\[
+y(w^Tx+b)
+\]</div>
+<p>If this quantity is positive, the example is on the correct side of the boundary.</p>
+<p>If it is non-positive, update.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Single-Step Update From Scratch</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def perceptron_update(
+    x: np.ndarray,
+    y: int,
+    w: np.ndarray,
+    b: float,
+    learning_rate: float,
+):
+    x = np.asarray(x, dtype=float)
+    w = np.asarray(w, dtype=float)
+
+    score = float(np.dot(w, x) + b)
+
+    if y * score &lt;= 0:
+        w = w + learning_rate * y * x
+        b = b + learning_rate * y
+
+    return w, b</code></pre></div>
+<p>Important:</p>
+<ul>
+<li>\(x\) is the current example;</li>
+<li>\(y\) is the signed target;</li>
+<li>\(\eta\) controls update size;</li>
+<li>the update happens only on a mistake under this convention.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">Manual Trace</h2>
+      </div>
+      <div class="section-body">
+        <p>Start:</p>
+<div class="formula-math">\[
+w=(0,0)
+\]</div>
+<div class="formula-math">\[
+b=0
+\]</div>
+<p>Suppose:</p>
+<div class="formula-math">\[
+x=(1,0),\quad y=-1,\quad \eta=1.
+\]</div>
+<p>Score:</p>
+<div class="formula-math">\[
+w^Tx+b=0.
+\]</div>
+<p>Since:</p>
+<div class="formula-math">\[
+y\cdot score=(-1)(0)=0
+\]</div>
+<p>the example is treated as misclassified/borderline under the <code>&lt;= 0</code> rule.</p>
+<p>Update:</p>
+<div class="formula-math">\[
+w=(0,0)+1(-1)(1,0)
+\]</div>
+<div class="formula-math">\[
+w=(-1,0)
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+b=0+1(-1)=-1.
+\]</div>
+<p>So one mistake changes the decision boundary.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">Full Perceptron Training Loop</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def train_perceptron(
+    X: np.ndarray,
+    y: np.ndarray,
+    learning_rate: float = 1.0,
+    epochs: int = 20,
+):
+    X = np.asarray(X, dtype=float)
+    y = np.asarray(y, dtype=float)
+
+    if X.ndim != 2:
+        raise ValueError(&quot;X must be a 2D matrix.&quot;)
+
+    if y.ndim != 1:
+        raise ValueError(&quot;y must be a 1D vector.&quot;)
+
+    if len(X) != len(y):
+        raise ValueError(&quot;X and y must contain the same number of samples.&quot;)
+
+    if not np.all(np.isin(y, [-1, 1])):
+        raise ValueError(&quot;Targets must be -1 or +1.&quot;)
+
+    n_features = X.shape[1]
+
+    w = np.zeros(n_features, dtype=float)
+    b = 0.0
+
+    history = []
+
+    for epoch in range(epochs):
+        mistakes = 0
+
+        for x_i, y_i in zip(X, y):
+            score = np.dot(w, x_i) + b
+
+            if y_i * score &lt;= 0:
+                w += learning_rate * y_i * x_i
+                b += learning_rate * y_i
+                mistakes += 1
+
+        history.append(mistakes)
+
+        if mistakes == 0:
+            break
+
+    return w, b, history</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">Train on AND</h2>
+      </div>
+      <div class="section-body">
+        <p>Convert labels from \(\{0,1\}\) to \(\{-1,+1\}\).</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X_and = np.array([
+    [0.0, 0.0],
+    [0.0, 1.0],
+    [1.0, 0.0],
+    [1.0, 1.0],
+])
+
+y_and = np.array([-1, -1, -1, 1])</code></pre></div>
+<p>Train:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">w, b, history = train_perceptron(
+    X_and,
+    y_and,
+    learning_rate=1.0,
+    epochs=20,
+)
+
+print(&quot;weights:&quot;, w)
+print(&quot;bias:&quot;, b)
+print(&quot;mistakes per epoch:&quot;, history)</code></pre></div>
+<p>The exact final parameters need not be unique.</p>
+<p>What matters is whether the learned boundary correctly separates the training points.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Prediction Function for Signed Labels</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def perceptron_predict_signed(
+    X: np.ndarray,
+    w: np.ndarray,
+    b: float,
+) -&gt; np.ndarray:
+    X = np.asarray(X, dtype=float)
+
+    scores = X @ w + b
+
+    return np.where(scores &gt;= 0, 1, -1)</code></pre></div>
+<p>Evaluate:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">pred = perceptron_predict_signed(X_and, w, b)
+
+print(pred)
+print(y_and)
+print(&quot;accuracy:&quot;, np.mean(pred == y_and))</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">Why We Keep Both Score and Prediction</h2>
+      </div>
+      <div class="section-body">
+        <p>A useful debugging habit:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">scores = X_and @ w + b
+pred = np.where(scores &gt;= 0, 1, -1)</code></pre></div>
+<p>Think:</p>
+<div class="ascii-box"><pre>score
+  ↓
+decision rule
+  ↓
+class</pre></div>
+<p>Do not collapse these concepts.</p>
+<p>The score contains more information than the hard class label.</p>
+<p>This becomes especially important later when using:</p>
+<ul>
+<li>logistic regression;</li>
+<li>ROC curves;</li>
+<li>thresholds;</li>
+<li>neural-network output probabilities.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Decision Boundary</h2>
+      </div>
+      <div class="section-body">
+        <p>A perceptron classifies according to:</p>
+<div class="formula-math">\[
+w^Tx+b=0.
+\]</div>
+<p>For two dimensions:</p>
+<div class="formula-math">\[
+w_1x_1+w_2x_2+b=0.
+\]</div>
+<p>If:</p>
+<div class="formula-math">\[
+w_2\ne0
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+x_2=-\frac{w_1x_1+b}{w_2}.
+\]</div>
+<p>Code:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def plot_perceptron_boundary(
+    X,
+    y,
+    w,
+    b,
+):
+    plt.figure()
+
+    for label in [-1, 1]:
+        mask = y == label
+        plt.scatter(
+            X[mask, 0],
+            X[mask, 1],
+            label=f&quot;class {label}&quot;,
+        )
+
+    x_min = X[:, 0].min() - 0.5
+    x_max = X[:, 0].max() + 0.5
+
+    x_values = np.linspace(x_min, x_max, 200)
+
+    if abs(w[1]) &gt; 1e-12:
+        y_values = -(w[0] * x_values + b) / w[1]
+        plt.plot(x_values, y_values)
+
+    plt.xlabel(&quot;x₁&quot;)
+    plt.ylabel(&quot;x₂&quot;)
+    plt.title(&quot;Perceptron Decision Boundary&quot;)
+    plt.legend()
+    plt.show()</code></pre></div>
+<p>Run:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">plot_perceptron_boundary(
+    X_and,
+    y_and,
+    w,
+    b,
+)</code></pre></div>
+<p>The mathematics becomes visible:</p>
+<div class="ascii-box"><pre>w and b
+   ↓
+hyperplane
+   ↓
+two regions
+   ↓
+class decision</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">Linearly Separable Data</h2>
+      </div>
+      <div class="section-body">
+        <p>A dataset is linearly separable if one hyperplane can separate the classes.</p>
+<p>In 2D:</p>
+<div class="ascii-box"><pre>one straight line</pre></div>
+<p>In 3D:</p>
+<div class="ascii-box"><pre>one plane</pre></div>
+<p>In higher dimensions:</p>
+<div class="ascii-box"><pre>one hyperplane</pre></div>
+<p>The perceptron is designed for this type of separation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">XOR — The Essential Limitation Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>XOR:</p>
+<div class="ascii-box"><pre>(0,0) → -1
+(0,1) → +1
+(1,0) → +1
+(1,1) → -1</pre></div>
+<p>Code:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X_xor = np.array([
+    [0.0, 0.0],
+    [0.0, 1.0],
+    [1.0, 0.0],
+    [1.0, 1.0],
+])
+
+y_xor = np.array([
+    -1,
+    1,
+    1,
+    -1,
+])</code></pre></div>
+<p>Try training:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">w_xor, b_xor, history_xor = train_perceptron(
+    X_xor,
+    y_xor,
+    learning_rate=1.0,
+    epochs=50,
+)
+
+pred_xor = perceptron_predict_signed(
+    X_xor,
+    w_xor,
+    b_xor,
+)
+
+print(&quot;predictions:&quot;, pred_xor)
+print(&quot;targets:&quot;, y_xor)
+print(&quot;accuracy:&quot;, np.mean(pred_xor == y_xor))
+print(&quot;mistakes per epoch:&quot;, history_xor)</code></pre></div>
+<p>You should not expect perfect separation.</p>
+<p>The reason is not:</p>
+<div class="ascii-box"><pre>&quot;the learning rate was unlucky&quot;</pre></div>
+<p>The deeper issue is:</p>
+<blockquote>
+<p>XOR is not linearly separable in the original two-dimensional input space.</p>
+</blockquote>
+<p>This limitation motivates hidden layers and learned intermediate representations.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">Visualize XOR</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">plt.figure()
+
+for label in [-1, 1]:
+    mask = y_xor == label
+    plt.scatter(
+        X_xor[mask, 0],
+        X_xor[mask, 1],
+        label=f&quot;class {label}&quot;,
+    )
+
+plt.xlabel(&quot;x₁&quot;)
+plt.ylabel(&quot;x₂&quot;)
+plt.title(&quot;XOR Dataset&quot;)
+plt.legend()
+plt.show()</code></pre></div>
+<p>Look at the geometry.</p>
+<p>Ask:</p>
+<blockquote>
+<p>Can one straight line separate the two classes?</p>
+</blockquote>
+<p>No.</p>
+<p>That observation is more valuable than memorizing the phrase “perceptron cannot solve XOR.”</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">Unit Test the Neuron</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def test_neuron():
+    x = np.array([2.0, 1.0])
+    w = np.array([3.0, -2.0])
+    b = 1.0
+
+    result = neuron(x, w, b)
+
+    assert np.isclose(result, 5.0)</code></pre></div>
+<p>Run:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">test_neuron()
+print(&quot;Neuron test passed.&quot;)</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">Unit Test the Step Function</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def test_step_activation():
+    assert step_activation(2.0) == 1
+    assert step_activation(-2.0) == 0
+    assert step_activation(0.0) == 1</code></pre></div>
+<p>Run:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">test_step_activation()
+print(&quot;Activation test passed.&quot;)</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">Unit Test the Perceptron on AND</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def test_and_learning():
+    X = np.array([
+        [0.0, 0.0],
+        [0.0, 1.0],
+        [1.0, 0.0],
+        [1.0, 1.0],
+    ])
+
+    y = np.array([-1, -1, -1, 1])
+
+    w, b, _ = train_perceptron(
+        X,
+        y,
+        learning_rate=1.0,
+        epochs=50,
+    )
+
+    pred = perceptron_predict_signed(X, w, b)
+
+    assert np.array_equal(pred, y)</code></pre></div>
+<p>Run:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">test_and_learning()
+print(&quot;AND test passed.&quot;)</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">Important Implementation Detail — Update Convention</h2>
+      </div>
+      <div class="section-body">
+        <p>You will find perceptron formulas written in different ways.</p>
+<p>For example, one source may use:</p>
+<div class="formula-math">\[
+y\in\{-1,+1\}
+\]</div>
+<p>while another uses:</p>
+<div class="formula-math">\[
+y\in\{0,1\}.
+\]</div>
+<p>Do not mix the equations blindly.</p>
+<p>The implementation in this chapter uses:</p>
+<div class="ascii-box"><pre>target labels → {-1, +1}
+prediction    → {-1, +1}
+update        → η y x
+bias update   → η y</pre></div>
+<p>under the misclassification rule:</p>
+<div class="formula-math">\[
+y(w^Tx+b)\le0.
+\]</div>
+<p>The same underlying idea can be encoded with other label conventions, but the code and mathematics must agree.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">Common Bugs</h2>
+      </div>
+      <div class="section-body">
+        <h2>Bug 1 — Shape mismatch</h2>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X.shape
+w.shape</code></pre></div>
+<p>Check them.</p>
+<hr />
+<h2>Bug 2 — Forgetting the bias</h2>
+<p>You accidentally implement:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X @ w</code></pre></div>
+<p>instead of:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X @ w + b</code></pre></div>
+<hr />
+<h2>Bug 3 — Mixing 0/1 labels with ±1 update equations</h2>
+<p>This can silently produce incorrect learning behaviour.</p>
+<hr />
+<h2>Bug 4 — Updating on every example</h2>
+<p>The classic perceptron update here occurs only when the example is misclassified/borderline according to the selected rule.</p>
+<hr />
+<h2>Bug 5 — Expecting XOR to converge</h2>
+<p>The algorithm is not the problem.</p>
+<p>The representation is insufficient.</p>
+<hr />
+<h2>Bug 6 — Assuming final weights are unique</h2>
+<p>Different update orders or settings can produce different valid separating solutions.</p>
+<p>What matters is functional correctness for the separable training data.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">Experiment — Learning Rate</h2>
+      </div>
+      <div class="section-body">
+        <p>Run:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">for eta in [0.1, 0.5, 1.0, 2.0]:
+    w, b, history = train_perceptron(
+        X_and,
+        y_and,
+        learning_rate=eta,
+        epochs=50,
+    )
+
+    print(
+        &quot;eta =&quot;, eta,
+        &quot;epochs used =&quot;, len(history),
+        &quot;final mistakes =&quot;, history[-1],
+    )</code></pre></div>
+<p>The perceptron does not behave exactly like gradient descent on a smooth loss.</p>
+<p>So do not automatically interpret every learning-rate effect using the same mental model you use for neural-network gradient descent.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">Experiment — Data Order</h2>
+      </div>
+      <div class="section-body">
+        <p>Try different sample orders.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">order = np.array([2, 0, 3, 1])
+
+X_shuffled = X_and[order]
+y_shuffled = y_and[order]
+
+w1, b1, _ = train_perceptron(X_and, y_and)
+w2, b2, _ = train_perceptron(X_shuffled, y_shuffled)
+
+print(&quot;solution 1:&quot;, w1, b1)
+print(&quot;solution 2:&quot;, w2, b2)</code></pre></div>
+<p>You may get different parameters while both solutions classify the training data correctly.</p>
+<p>Important lesson:</p>
+<blockquote>
+<p><strong>Parameter values are not always the only thing that matters; the function implemented by the parameters matters.</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">From Perceptron to MLP</h2>
+      </div>
+      <div class="section-body">
+        <p>A single perceptron computes roughly:</p>
+<div class="ascii-box"><pre>x → weighted sum → threshold → class</pre></div>
+<p>An MLP introduces intermediate layers:</p>
+<div class="ascii-box"><pre>inputs
+   ↓
+hidden neurons
+   ↓
+nonlinear representation
+   ↓
+output neuron(s)</pre></div>
+<p>Why does this matter?</p>
+<p>Because a single linear decision boundary cannot represent every classification pattern.</p>
+<p>A hidden layer can transform the representation so that a problem that is difficult in the original space becomes easier in a learned feature space.</p>
+<p>This is the conceptual bridge:</p>
+<div class="ascii-box"><pre>perceptron limitation
+        ↓
+need richer representation
+        ↓
+hidden layers
+        ↓
+MLP</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">Why Nonlinearity Will Matter</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose two layers contain only linear transformations:</p>
+<div class="formula-math">\[
+a_1=W_1x+b_1
+\]</div>
+<div class="formula-math">\[
+a_2=W_2a_1+b_2.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+a_2=W_2W_1x+W_2b_1+b_2.
+\]</div>
+<p>This is still one affine transformation.</p>
+<p>Therefore:</p>
+<blockquote>
+<p>Stacking linear layers without nonlinear activation does not give the expressive benefit normally associated with deep networks.</p>
+</blockquote>
+<p>The next chapters will build the nonlinear multilayer computation carefully.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Practical Challenge</h2>
+      </div>
+      <div class="section-body">
+        <p>Implement:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">class Perceptron:
+    def __init__(self, learning_rate=1.0, epochs=20):
+        ...
+
+    def fit(self, X, y):
+        ...
+
+    def decision_function(self, X):
+        ...
+
+    def predict(self, X):
+        ...</code></pre></div>
+<p>Requirements:</p>
+<ul>
+<li>validate shapes;</li>
+<li>validate target labels;</li>
+<li>store learned weights;</li>
+<li>store learned bias;</li>
+<li>store training history;</li>
+<li>support arbitrary feature dimension;</li>
+<li>return predictions as an array.</li>
+</ul>
+<p>Do not copy a library estimator.</p>
+<p>Build your own educational implementation from the mathematics in this chapter.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Master Challenge — Generalized Binary Dataset</h2>
+      </div>
+      <div class="section-body">
+        <p>Create a small 2D dataset with two linearly separable classes.</p>
+<p>Requirements:</p>
+<ol>
+<li>generate at least 20 points;</li>
+<li>choose a known separating line;</li>
+<li>generate labels;</li>
+<li>train the perceptron;</li>
+<li>visualize the points;</li>
+<li>plot the learned boundary;</li>
+<li>report training accuracy;</li>
+<li>report number of epochs;</li>
+<li>repeat with shuffled order;</li>
+<li>compare the learned parameter vectors.</li>
+</ol>
+<p>Then explain:</p>
+<blockquote>
+<p>Why can two different weight/bias values define effectively equivalent separating boundaries?</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-35" class="section-block">
+      <div class="section-header">
+        <span class="section-num">35</span>
+        <h2 class="section-heading">Viva Questions</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Lab Viva Trap & Runtime Gotcha</div>
+
+**Perceptron Convergence Theorem & XOR Limitation:**
+1. Perceptron Convergence Theorem states that IF data is linearly separable, Perceptron is GUARANTEED to find a separating hyperplane in finite steps!
+2. If data is NOT linearly separable (e.g. XOR gate), the learning loop will oscillate indefinitely and NEVER terminate!
+Always set `max_epochs` or check for linear separability to avoid infinite loops!
+
+</div>
+
+<h3>Q1. What does a neuron compute?</h3>
+<p>A weighted combination of inputs plus a bias, followed by an activation function.</p>
+<h3>Q2. What is the role of a weight?</h3>
+<p>It controls how strongly a particular input contributes to the pre-activation score.</p>
+<h3>Q3. What is the role of bias?</h3>
+<p>It shifts the affine computation and therefore can shift the decision boundary.</p>
+<h3>Q4. What is a perceptron?</h3>
+<p>A simple threshold-based artificial neuron/classifier.</p>
+<h3>Q5. What is linear separability?</h3>
+<p>The existence of a linear decision boundary that separates the classes.</p>
+<h3>Q6. Why does XOR matter?</h3>
+<p>It is a compact demonstration that a single linear threshold unit cannot represent every useful classification pattern.</p>
+<h3>Q7. Why use ±1 labels in the update rule?</h3>
+<p>They let the signed quantity \(y(w^Tx+b)\) directly encode whether the example is on the correct side of the boundary.</p>
+<h3>Q8. Is perceptron training identical to gradient descent on logistic loss?</h3>
+<p>No. The classical perceptron update is a mistake-driven rule and uses a different objective/derivation from logistic regression.</p>
+<h3>Q9. What does the matrix expression \(Xw+b\) represent?</h3>
+<p>The pre-activation scores of one neuron for many examples.</p>
+<h3>Q10. Why do we need nonlinear activation in multilayer networks?</h3>
+<p>Without nonlinearities, stacked affine layers collapse algebraically to one affine transformation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-36" class="section-block">
+      <div class="section-header">
+        <span class="section-num">36</span>
+        <h2 class="section-heading">Debugging Checklist</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>[ ] X is 2D
+[ ] y is 1D
+[ ] number of rows in X equals len(y)
+[ ] w has one value per feature
+[ ] labels match the chosen update convention
+[ ] bias is included
+[ ] prediction threshold is defined clearly
+[ ] updates happen according to the intended rule
+[ ] AND converges
+[ ] XOR is correctly recognized as non-linearly separable
+[ ] decision boundary plot matches predictions
+[ ] unit tests pass</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-37" class="section-block">
+      <div class="section-header">
+        <span class="section-num">37</span>
+        <h2 class="section-heading">Shape Map</h2>
+      </div>
+      <div class="section-body">
+        <p>Keep this mental map:</p>
+<div class="ascii-box"><pre>Single example:
+x      → (d,)
+w      → (d,)
+wᵀx    → scalar
+
+Dataset:
+X      → (n, d)
+w      → (d,)
+Xw     → (n,)</pre></div>
+<p>Later, with multiple neurons:</p>
+<div class="ascii-box"><pre>X      → (n, d)
+W      → (d, h)
+XW     → (n, h)</pre></div>
+<p>That final pattern is the doorway to dense neural-network layers.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-38" class="section-block">
+      <div class="section-header">
+        <span class="section-num">38</span>
+        <h2 class="section-heading">What This Chapter Teaches Beyond the Code</h2>
+      </div>
+      <div class="section-body">
+        <p>The most important outcomes are conceptual:</p>
+<div class="ascii-box"><pre>Neuron
+  ↓
+affine computation
+
+Perceptron
+  ↓
+affine computation + hard threshold
+
+Learning
+  ↓
+parameter updates
+
+Geometry
+  ↓
+decision hyperplane
+
+Limitation
+  ↓
+linear separability
+
+Next step
+  ↓
+hidden layers + nonlinear representation</pre></div>
+<p>The code is a way to make those relationships executable.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-39" class="section-block">
+      <div class="section-header">
+        <span class="section-num">39</span>
+        <h2 class="section-heading">Source Notes</h2>
+      </div>
+      <div class="section-body">
+        <h2>Supplied course-specific sources</h2>
+<h3><code>AI_ML_Master_Learning_Resource_Guide.pdf</code></h3>
+<p>The guide identifies <code>prac_7_neural_network.ipynb</code> as covering:</p>
+<ul>
+<li>neuron;</li>
+<li>weights/bias;</li>
+<li>activations;</li>
+<li>losses;</li>
+<li>gradient-descent concept.</li>
+</ul>
+<p>It identifies <code>CS6910 Lecture 2</code> as covering:</p>
+<ul>
+<li>biological/artificial neurons;</li>
+<li>threshold logic;</li>
+<li>perceptron;</li>
+<li>learning algorithm;</li>
+<li>MLP;</li>
+<li>representation power.</li>
+</ul>
+<h3>Official DSC-14 syllabus</h3>
+<p>Unit III explicitly includes:</p>
+<ul>
+<li>neural networks;</li>
+<li>perceptrons;</li>
+<li>MLP;</li>
+<li>backpropagation;</li>
+<li>gradient descent;</li>
+<li>CNN;</li>
+<li>RNN/LSTM.</li>
+</ul>
+<h2>Expansion boundary</h2>
+<p>The exact Python implementations, unit tests, plotting utilities, shape checks, custom class challenge and experimental workflow are <strong>coding-book expansion</strong>. They are designed to operationalize the concepts supported by the supplied resources, not to reproduce their code verbatim.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-40" class="section-block">
+      <div class="section-header">
+        <span class="section-num">40</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <p>Do not move forward until you can:</p>
+<ul>
+<li>[ ] compute \(w^Tx+b\) manually;</li>
+<li>[ ] implement a neuron;</li>
+<li>[ ] implement threshold activation;</li>
+<li>[ ] implement a perceptron;</li>
+<li>[ ] train it with the perceptron learning rule;</li>
+<li>[ ] trace one complete update;</li>
+<li>[ ] verify AND;</li>
+<li>[ ] explain XOR;</li>
+<li>[ ] visualize a decision boundary;</li>
+<li>[ ] debug shape/label/update errors;</li>
+<li>[ ] explain why MLPs are needed.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-41" class="section-block">
+      <div class="section-header">
+        <span class="section-num">41</span>
+        <h2 class="section-heading">Connection Forward</h2>
+      </div>
+      <div class="section-body">
+        <p>The perceptron has given us the basic computation.</p>
+<p>The next major step is to combine neurons into layers.</p>
+<p>The conceptual progression is:</p>
+<div class="ascii-box"><pre>one neuron
+   ↓
+one perceptron
+   ↓
+many neurons
+   ↓
+hidden layer
+   ↓
+MLP
+   ↓
+forward propagation
+   ↓
+loss
+   ↓
+gradient-based learning</pre></div>
+<p>That is the next coding block:</p>
+<p><strong><code>CODE-U3-02 — MLP and Forward Propagation From Scratch</code></strong></p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-42" class="section-block">
+      <div class="section-header">
+        <span class="section-num">42</span>
+        <h2 class="section-heading">Status</h2>
+      </div>
+      <div class="section-body">
+        <p><strong><code>CODE-U3-01</code> — COMPLETE</strong></p>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="code-u2-07-ml-evaluation-comparison.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← Unit 2 Lab 07 — ML Evaluation Lab</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">💻 Coding Index</span>
+      </a>
+      <a href="index.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Return to Coding Lab Hub 💻</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search lab implementations, functions, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">💻</span>Lab Hub</a>
+  <a href="code-u3-01-neuron-perceptron.html" class="mobile-nav-btn active"><span class="icon">📖</span>CODE-U3-01</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

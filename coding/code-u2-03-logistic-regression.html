@@ -1,0 +1,2364 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="CODE-U2-03: Logistic Regression From Scratch — AI & Machine Learning Coding Lab. Vectorized Sigmoid, Binary Cross-Entropy (Log-Loss), Gradient Descent Optimization, Decision Boundaries, and Scikit-Learn Benchmark">
+<title>CODE-U2-03: Logistic Regression From Scratch | Coding Lab 💻 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/coding.css">
+</head>
+<body class="coding-module track-c2">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">💻</div>
+      <div class="brand-text"><span class="main">Coding Lab</span><span class="sub">AI &amp; ML From Scratch</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">CODE-U2-03: Logistic Regression From Scratch</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">💻</span>Coding Lab Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../math/index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 0: Environment & System</div>
+  <a href="code-00-coding-foundation.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-00: Coding Lab Foundation &amp; Implementation System</a>
+  <a href="code-01-python-numpy-workflow.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-01: Python, NumPy, Matplotlib &amp; Lab Workflow</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Classical AI & Search Labs</div>
+  <a href="code-u1-01-bfs-dfs.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-01: BFS and DFS From Scratch</a>
+  <a href="code-u1-02-greedy-a-star.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-02: Greedy Best-First &amp; A* Search From Scratch</a>
+  <a href="code-u1-03-csp-backtracking.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-03: CSPs and Backtracking Search</a>
+  <a href="code-u1-04-minimax-alpha-beta.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Supervised ML Labs</div>
+  <a href="code-u2-01-ml-workflow.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-01: ML Workflow: Preprocessing, Splitting &amp; Evaluation</a>
+  <a href="code-u2-02-linear-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-02: Linear Regression From Scratch</a>
+  <a href="code-u2-03-logistic-regression.html" class="sidebar-link active"><span class="link-icon">📊</span>CODE-U2-03: Logistic Regression From Scratch</a>
+  <a href="code-u2-04-decision-trees.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-04: Decision Trees From Scratch</a>
+  <a href="code-u2-05-classification-metrics-roc.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC &amp; Thresholds</a>
+  <a href="code-u2-06-ridge-lasso-regularization.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-06: Ridge &amp; Lasso From Scratch: Regularization &amp; Optimization</a>
+  <a href="code-u2-07-ml-evaluation-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-07: ML Evaluation &amp; Model Comparison Lab</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Deep Learning Labs</div>
+  <a href="code-u3-01-neuron-perceptron.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-01: Neuron and Perceptron From Scratch</a>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>MLP, Backpropagation & Convolutions</span>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Advanced AI Labs (Upcoming)</div>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>Q-Learning, NLP & Generative Adversarial Loops</span>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">CODE-U2-03 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. What You Will Build</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Learning Objectives</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Why Not Just Use Linear Regression for Classes?</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. One-Minute Intuition</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Real-World Analogy</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Model Definition</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Coding Representation</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. First Controlled Binary Dataset</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Implement the Sigmoid</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Sigmoid Sanity Tests</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Numerical Stability of the Sigmoid</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Probability Is Not Yet a Class</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Why the Log Loss Exists</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Loss Intuition</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Stable Binary Log Loss</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. The Gradient We Need</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Why the Gradient Has This Form — Derivation Roadmap</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Gradient Descent Update</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. First From-Scratch Class</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Fit the Controlled Dataset</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Inspect the Loss Curve</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Manual Trace of One Gradient Step</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Decision Boundary</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Visualize a Two-Feature Decision Boundary</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Train/Test Split</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Evaluate the Scratch Model</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Probability Output for ROC-AUC</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Threshold Experiment</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Why Feature Scaling Can Matter</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Experiment: Learning Rate</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Experiment: Number of Epochs</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Finite-Difference Gradient Check</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Gradient-Descent Debugging Checklist</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Library Verification</a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Important Library Difference: Regularization</a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. What Logistic Regression Learns</a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Log-Odds Interpretation</a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Binary Labels Must Be Encoded Consistently</a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Edge Case: Perfect Separation</a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Edge Case: Class Imbalance</a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. What the Model Can and Cannot Represent</a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Optional Extension: Polynomial Features</a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Practical Lab — Implement Without Looking</a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Practical Lab — Required Assertions</a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. Practical Lab — Required Experiments</a>
+      <a href="#s-46" class="sidebar-link"><span class="link-icon">📌</span>46. Manual Questions</a>
+      <a href="#s-47" class="sidebar-link"><span class="link-icon">📌</span>47. Coding Challenge — Numerical Gradient</a>
+      <a href="#s-48" class="sidebar-link"><span class="link-icon">📌</span>48. Coding Challenge — Rebuild the Metric Loop</a>
+      <a href="#s-49" class="sidebar-link"><span class="link-icon">📌</span>49. Coding Challenge — Compare Two Models Fairly</a>
+      <a href="#s-50" class="sidebar-link"><span class="link-icon">📌</span>50. Common Bugs</a>
+      <a href="#s-51" class="sidebar-link"><span class="link-icon">📌</span>51. Complexity</a>
+      <a href="#s-52" class="sidebar-link"><span class="link-icon">📌</span>52. Comparison — Linear vs Logistic Regression</a>
+      <a href="#s-53" class="sidebar-link"><span class="link-icon">📌</span>53. Library API Pattern</a>
+      <a href="#s-54" class="sidebar-link"><span class="link-icon">📌</span>54. Master Workflow Card</a>
+      <a href="#s-55" class="sidebar-link"><span class="link-icon">📌</span>55. Memory Anchors</a>
+      <a href="#s-56" class="sidebar-link"><span class="link-icon">📌</span>56. Mastery Gate</a>
+      <a href="#s-57" class="sidebar-link"><span class="link-icon">📌</span>57. Source Boundary and Notes</a>
+      <a href="#s-58" class="sidebar-link"><span class="link-icon">📌</span>58. Cross-Book Links</a>
+      <a href="#s-59" class="sidebar-link"><span class="link-icon">📌</span>59. Status</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Coding Lab</a>
+        <span>/</span>
+        <span>CODE-U2-03</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-c2">Track 2: Supervised Machine Learning Labs</span></div>
+      <h1 class="chapter-title">Logistic Regression From Scratch</h1>
+      <p class="chapter-desc">Vectorized Sigmoid, Binary Cross-Entropy (Log-Loss), Gradient Descent Optimization, Decision Boundaries, and Scikit-Learn Benchmark</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~50 min lab</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">LOGISTIC-REGRESSION</span> <span class="chapter-meta-item uni-badge">SIGMOID</span> <span class="chapter-meta-item uni-badge">CROSS-ENTROPY</span> <span class="chapter-meta-item uni-badge">DECISION-BOUNDARY</span>
+      </div>
+
+      <div class="lab-meta-grid">
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Prerequisites</div>
+          <div class="lab-meta-value">CODE-U2-02 Linear Regression, Math Companion M03, M20 & M22</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Main Book Concept</div>
+          <div class="lab-meta-value">Ch 20 Logistic Regression, Ch 21 Logistic Regression Math</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Math Companion Layer</div>
+          <div class="lab-meta-value">M03 Sigmoid & Logs, M20 Chain Rule, M21 Gradients, M22 Optimization</div>
+        </div>
+        <div class="lab-meta-box" style="grid-column: 1 / -1;">
+          <div class="lab-meta-label">AI / Machine Learning Connections</div>
+          <div class="lab-meta-value">Spam classification, Medical diagnosis, Credit default prediction, Single-neuron perceptron activation</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-meta-card"><h1>CODE-U2-03 — Logistic Regression From Scratch: Sigmoid, Log Loss, Gradient Descent, and Library Comparison</h1>
+<blockquote>
+<p><strong>Coding Book — Unit II: Machine Learning</strong></p>
+<p><strong>Topic ID:</strong> <code>CODE-U2-03</code></p>
+<p><strong>Main Book links:</strong> <code>MAIN-U2-C20 — Logistic Regression</code>, <code>MAIN-U2-C21 — Logistic Regression Mathematics</code></p>
+<p><strong>Math links:</strong> <code>MATH-M03</code>, <code>MATH-M04</code>, <code>MATH-M06</code>, <code>MATH-M15</code>–<code>MATH-M17</code>, <code>MATH-M20</code>–<code>MATH-M23</code></p>
+<p><strong>Exam link:</strong> <code>EXAM-U2_Machine_Learning_and_Evaluation.md</code></p>
+<p><strong>Primary course boundary:</strong> The official DSC-14 syllabus explicitly includes <strong>Logistic Regression</strong> in Unit II. The supplied resource guide lists Logistic Regression as a Unit II core topic and identifies sigmoid/classification fundamentals as a gap-filled learning area rather than claiming a complete supplied lecture derivation. The implementation and derivation details in this file are therefore a <strong>coding/standard-ML expansion</strong>, not a claim that every line appears in the provided course notes.</p>
+<p><strong>Purpose:</strong> Build binary logistic regression from the mathematical definition upward, train it with gradient descent, test the implementation, understand probability-vs-class prediction, and then verify the result with a library implementation.</p>
+</blockquote>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in CODE-U2-03 (59 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">What You Will Build</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Learning Objectives</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Why Not Just Use Linear Regression for Classes?</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">One-Minute Intuition</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Real-World Analogy</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Model Definition</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Coding Representation</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">First Controlled Binary Dataset</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Implement the Sigmoid</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Sigmoid Sanity Tests</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Numerical Stability of the Sigmoid</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Probability Is Not Yet a Class</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Why the Log Loss Exists</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Loss Intuition</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Stable Binary Log Loss</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">The Gradient We Need</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Why the Gradient Has This Form — Derivation Roadmap</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Gradient Descent Update</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">First From-Scratch Class</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Fit the Controlled Dataset</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Inspect the Loss Curve</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Manual Trace of One Gradient Step</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Decision Boundary</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Visualize a Two-Feature Decision Boundary</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Train/Test Split</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Evaluate the Scratch Model</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Probability Output for ROC-AUC</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Threshold Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Why Feature Scaling Can Matter</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Experiment: Learning Rate</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Experiment: Number of Epochs</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Finite-Difference Gradient Check</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Gradient-Descent Debugging Checklist</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Library Verification</span></a></li>
+        <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Important Library Difference: Regularization</span></a></li>
+        <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">What Logistic Regression Learns</span></a></li>
+        <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Log-Odds Interpretation</span></a></li>
+        <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Binary Labels Must Be Encoded Consistently</span></a></li>
+        <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Edge Case: Perfect Separation</span></a></li>
+        <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Edge Case: Class Imbalance</span></a></li>
+        <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">What the Model Can and Cannot Represent</span></a></li>
+        <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Optional Extension: Polynomial Features</span></a></li>
+        <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Practical Lab — Implement Without Looking</span></a></li>
+        <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Practical Lab — Required Assertions</span></a></li>
+        <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">Practical Lab — Required Experiments</span></a></li>
+        <li class="toc-item"><a href="#s-46"><span class="toc-num">46</span><span class="toc-name">Manual Questions</span></a></li>
+        <li class="toc-item"><a href="#s-47"><span class="toc-num">47</span><span class="toc-name">Coding Challenge — Numerical Gradient</span></a></li>
+        <li class="toc-item"><a href="#s-48"><span class="toc-num">48</span><span class="toc-name">Coding Challenge — Rebuild the Metric Loop</span></a></li>
+        <li class="toc-item"><a href="#s-49"><span class="toc-num">49</span><span class="toc-name">Coding Challenge — Compare Two Models Fairly</span></a></li>
+        <li class="toc-item"><a href="#s-50"><span class="toc-num">50</span><span class="toc-name">Common Bugs</span></a></li>
+        <li class="toc-item"><a href="#s-51"><span class="toc-num">51</span><span class="toc-name">Complexity</span></a></li>
+        <li class="toc-item"><a href="#s-52"><span class="toc-num">52</span><span class="toc-name">Comparison — Linear vs Logistic Regression</span></a></li>
+        <li class="toc-item"><a href="#s-53"><span class="toc-num">53</span><span class="toc-name">Library API Pattern</span></a></li>
+        <li class="toc-item"><a href="#s-54"><span class="toc-num">54</span><span class="toc-name">Master Workflow Card</span></a></li>
+        <li class="toc-item"><a href="#s-55"><span class="toc-num">55</span><span class="toc-name">Memory Anchors</span></a></li>
+        <li class="toc-item"><a href="#s-56"><span class="toc-num">56</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-57"><span class="toc-num">57</span><span class="toc-name">Source Boundary and Notes</span></a></li>
+        <li class="toc-item"><a href="#s-58"><span class="toc-num">58</span><span class="toc-name">Cross-Book Links</span></a></li>
+        <li class="toc-item"><a href="#s-59"><span class="toc-num">59</span><span class="toc-name">Status</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">What You Will Build</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph LR
+    X["Features X"] --> Dot["Linear Score: z = Xw + b"]
+    Dot --> Sig["Sigmoid: σ(z) = 1 / (1 + e⁻ᶻ)"]
+    Sig --> Prob["Probability: p̂ ∈ (0, 1)"]
+    Prob --> BCE["Binary Cross-Entropy Loss: -[y log p̂ + (1-y) log(1-p̂)]"]
+    BCE --> Grad["Gradient: ∇J = (1/n) Xᵀ(p̂ - y)"]
+    Grad --> Update["Weight Update: w ← w - η ∇J"]
+    style Sig fill:#0f172a,stroke:#38bdf8,color:#38bdf8,stroke-width:2px
+    style BCE fill:#1e293b,stroke:#ef4444,color:#f8fafc
+</pre></div>
+<p>This chapter implements the complete binary classification pipeline:</p>
+<div class="ascii-box"><pre>features X
+   ↓
+linear score z = Xw + b
+   ↓
+sigmoid p = σ(z)
+   ↓
+predicted probability
+   ↓
+threshold
+   ↓
+class 0 / class 1
+   ↓
+confusion matrix + precision/recall/F1/ROC-AUC</pre></div>
+<p>Training follows a separate path:</p>
+<div class="ascii-box"><pre>(X, y)
+  ↓
+linear score
+  ↓
+sigmoid probability
+  ↓
+binary log loss
+  ↓
+gradient
+  ↓
+parameter update
+  ↓
+repeat</pre></div>
+<p>The important conceptual split is:</p>
+<blockquote>
+<p><strong>The model produces a score/probability; the threshold converts that probability into a class label.</strong></p>
+</blockquote>
+<p>That distinction becomes extremely important when you later study precision, recall, ROC and AUC.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">Learning Objectives</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Implementation Model</div>
+
+Linear Regression continuous number nikalta hai ($-\infty$ to $+\infty$). Par classification mein hume probability chahiye jo 0 se 1 ke beech ho.
+Sigmoid function ek curved rubber band ki tarah kaam karta hai—kitne bhi bade number ko 0 aur 1 ke beech squeeze kar deta hai.
+Aur sabse khoobsurat baat: Logistic Regression ka gradient formula exactly Linear Regression jaisa hi dikhta hai: $\nabla J = \frac{1}{n} X^T (\hat{p} - y)$!
+
+</div>
+
+<p>By the end of this file, you should be able to:</p>
+<ul>
+<li>explain why linear regression is not the right default model for binary labels;</li>
+<li>represent binary classification with a linear score;</li>
+<li>compute the sigmoid function;</li>
+<li>interpret a sigmoid output as a probability-like quantity under the logistic model;</li>
+<li>derive binary cross-entropy/log loss at the level required for implementation;</li>
+<li>derive the logistic-regression gradient;</li>
+<li>implement binary logistic regression with gradient descent using NumPy;</li>
+<li>protect the implementation against numerical overflow and <code>log(0)</code>;</li>
+<li>distinguish probability prediction from hard classification;</li>
+<li>evaluate the model with a confusion matrix and related metrics;</li>
+<li>test the implementation on controlled datasets;</li>
+<li>perform a finite-difference gradient check;</li>
+<li>visualize the learned decision boundary for two features;</li>
+<li>compare the from-scratch model with <code>sklearn.linear_model.LogisticRegression</code>;</li>
+<li>reason about learning rate, scaling, regularization, thresholding and class imbalance.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">Why Not Just Use Linear Regression for Classes?</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose the target is:</p>
+<div class="ascii-box"><pre>y = 0 → not spam
+y = 1 → spam</pre></div>
+<p>A linear regression model produces:</p>
+<div class="formula-math">\[
+\hat y = w^Tx+b.
+\]</div>
+<p>There is no guarantee that:</p>
+<div class="formula-math">\[
+0 \le \hat y \le 1.
+\]</div>
+<p>A linear model might predict:</p>
+<div class="ascii-box"><pre>-0.7
+0.21
+0.81
+1.34</pre></div>
+<p>The values <code>-0.7</code> and <code>1.34</code> are awkward if we want to interpret output as a probability.</p>
+<p>Logistic regression keeps the <strong>linear structure</strong> but passes the score through a function that maps the real line into <code>(0, 1)</code>.</p>
+<div class="ascii-box"><pre>linear score
+z ∈ (-∞, +∞)
+      │
+      ▼
+ sigmoid
+      │
+      ▼
+ p ∈ (0, 1)</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">One-Minute Intuition</h2>
+      </div>
+      <div class="section-body">
+        <p>Think of logistic regression as a two-stage machine.</p>
+<h3>Stage A — evidence score</h3>
+<p>The model combines features:</p>
+<div class="formula-math">\[
+z = w_1x_1 + w_2x_2 + \cdots + w_dx_d+b.
+\]</div>
+<p>A large positive value means evidence toward class 1.</p>
+<p>A large negative value means evidence toward class 0.</p>
+<p>A value near zero means the model is uncertain.</p>
+<h3>Stage B — squash the score</h3>
+<p>The sigmoid converts that score into a bounded value:</p>
+<div class="formula-math">\[
+p = \sigma(z).
+\]</div>
+<p>Example:</p>
+<div class="ascii-box"><pre>z = -4  →  p ≈ 0.018
+z = -1  →  p ≈ 0.269
+z =  0  →  p = 0.500
+z = +1  →  p ≈ 0.731
+z = +4  →  p ≈ 0.982</pre></div>
+<h3>Hinglish</h3>
+<blockquote>
+<p>Pehle model features ko combine karke ek raw score banata hai. Phir sigmoid us score ko 0 aur 1 ke beech laata hai. Positive score class 1 ki taraf signal deta hai, negative score class 0 ki taraf.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Real-World Analogy</h2>
+      </div>
+      <div class="section-body">
+        <p>Imagine a bank trying to predict whether an application should be labelled:</p>
+<div class="ascii-box"><pre>0 = low-risk according to the trained target definition
+1 = high-risk according to the trained target definition</pre></div>
+<p>The model might use:</p>
+<div class="ascii-box"><pre>income
+existing debt
+credit history length
+number of late payments</pre></div>
+<p>It does not jump directly from these numbers to the final class.</p>
+<p>It first computes an evidence score:</p>
+<div class="ascii-box"><pre>positive evidence
+      +
+      -
+negative evidence
+      ↓
+   score z
+      ↓
+ sigmoid
+      ↓
+ probability p</pre></div>
+<p>The final decision is a separate policy choice, such as:</p>
+<div class="formula-math">\[
+\hat y = 1 \quad \text{if } p \ge 0.5.
+\]</div>
+<p>The threshold need not always be <code>0.5</code>; later we will see why changing the threshold changes precision and recall.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Model Definition</h2>
+      </div>
+      <div class="section-body">
+        <p>For sample \(x_i\), logistic regression defines:</p>
+<div class="formula-math">\[
+z_i=w^Tx_i+b.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\boxed{p_i=P(y_i=1\mid x_i)=\sigma(z_i)}
+\]</div>
+<p>where:</p>
+<div class="formula-math">\[
+\boxed{
+\sigma(z)=\frac{1}{1+e^{-z}}
+}
+\]</div>
+<p>The model is still linear in the features <strong>before</strong> the sigmoid.</p>
+<p>This is why logistic regression remains a linear classifier in feature space.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Coding Representation</h2>
+      </div>
+      <div class="section-body">
+        <p>Use the following shape convention.</p>
+<div class="ascii-box"><pre>X : (n_samples, n_features)
+y : (n_samples,)
+w : (n_features,)
+b : scalar
+p : (n_samples,)</pre></div>
+<p>The central computation is:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">z = X @ w + b</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">p = sigmoid(z)</code></pre></div>
+<h3>Shape check</h3>
+<p>If:</p>
+<div class="ascii-box"><pre>X = (100, 2)
+w = (2,)</pre></div>
+<p>then:</p>
+<div class="ascii-box"><pre>X @ w = (100,)</pre></div>
+<p>which can be added to scalar <code>b</code>.</p>
+<p>A large proportion of ML implementation bugs are actually shape bugs. Make shape inspection routine.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">First Controlled Binary Dataset</h2>
+      </div>
+      <div class="section-body">
+        <p>Start with one feature whose classes are almost perfectly separated.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+X = np.array([
+    [1.0],
+    [2.0],
+    [3.0],
+    [4.0],
+    [5.0],
+    [6.0],
+])
+
+y = np.array([
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+], dtype=float)</code></pre></div>
+<p>The data pattern is:</p>
+<div class="ascii-box"><pre>x: 1  2  3  |  4  5  6
+               ↑
+          rough boundary</pre></div>
+<p>This is intentionally simple. A controlled dataset helps you separate model bugs from data complexity.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Implement the Sigmoid</h2>
+      </div>
+      <div class="section-body">
+        <p>The first implementation is:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def sigmoid(z):
+    return 1.0 / (1.0 + np.exp(-z))</code></pre></div>
+<p>Test it:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">values = np.array([-2.0, 0.0, 2.0])
+print(sigmoid(values))</code></pre></div>
+<p>Expected approximate values:</p>
+<div class="ascii-box"><pre>[0.1192, 0.5000, 0.8808]</pre></div>
+<p>Check the symmetry:</p>
+<div class="formula-math">\[
+\sigma(-z)=1-
+\sigma(z).
+\]</div>
+<p>For example:</p>
+<div class="formula-math">\[
+\sigma(2)\approx0.8808
+\]</div>
+<p>and</p>
+<div class="formula-math">\[
+1-\sigma(2)\approx0.1192=\sigma(-2).
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Sigmoid Sanity Tests</h2>
+      </div>
+      <div class="section-body">
+        <p>Add assertions.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">a = sigmoid(np.array([-100.0, 0.0, 100.0]))
+
+assert np.all(a &gt;= 0.0)
+assert np.all(a &lt;= 1.0)
+assert np.isclose(sigmoid(np.array([0.0]))[0], 0.5)</code></pre></div>
+<p>Also test monotonicity:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">z = np.array([-2.0, -1.0, 0.0, 1.0, 2.0])
+p = sigmoid(z)
+
+assert np.all(np.diff(p) &gt; 0)</code></pre></div>
+<p>The sigmoid should preserve ordering while compressing the scale.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Numerical Stability of the Sigmoid</h2>
+      </div>
+      <div class="section-body">
+        <p>The simple implementation is mathematically correct, but extreme values deserve attention.</p>
+<p>For a very negative <code>z</code>, <code>-z</code> is very large and:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">np.exp(-z)</code></pre></div>
+<p>can overflow in floating-point arithmetic.</p>
+<p>A more stable implementation can split positive and negative values:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def sigmoid_stable(z):
+    z = np.asarray(z, dtype=float)
+    out = np.empty_like(z)
+
+    positive = z &gt;= 0
+    negative = ~positive
+
+    out[positive] = 1.0 / (1.0 + np.exp(-z[positive]))
+
+    exp_z = np.exp(z[negative])
+    out[negative] = exp_z / (1.0 + exp_z)
+
+    return out</code></pre></div>
+<p>Now test:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">z = np.array([-1000.0, -10.0, 0.0, 10.0, 1000.0])
+p = sigmoid_stable(z)
+
+print(p)
+assert np.all(np.isfinite(p))</code></pre></div>
+<h3>Engineering lesson</h3>
+<blockquote>
+<p>A formula can be mathematically correct and still require numerical engineering before it is safe to use in software.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Probability Is Not Yet a Class</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="ascii-box"><pre>p = 0.18
+p = 0.51
+p = 0.92</pre></div>
+<p>These are probability outputs in the model's classification framework.</p>
+<p>A hard classifier could use:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def predict_class(p, threshold=0.5):
+    return (p &gt;= threshold).astype(int)</code></pre></div>
+<p>Then:</p>
+<div class="ascii-box"><pre>0.18 → 0
+0.51 → 1
+0.92 → 1</pre></div>
+<p>Notice that changing the threshold changes the labels <strong>without retraining the model</strong>.</p>
+<p>This is one reason probability outputs are useful.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Why the Log Loss Exists</h2>
+      </div>
+      <div class="section-body">
+        <p>The model should not simply learn whether its hard prediction is correct.</p>
+<p>During training we need a differentiable objective.</p>
+<p>For binary classification, a standard objective is binary cross-entropy, also called binary log loss:</p>
+<div class="formula-math">\[
+\boxed{
+J(w,b)=
+-
+\frac1n\sum_{i=1}^{n}
+\left[
+y_i\log p_i+(1-y_i)\log(1-p_i)
+\right]
+}
+\]</div>
+<p>where:</p>
+<div class="formula-math">\[
+p_i=\sigma(x_i^Tw+b).
+\]</div>
+<p>The loss strongly penalizes confident wrong predictions.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Loss Intuition</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose the true class is:</p>
+<div class="formula-math">\[
+y=1.
+\]</div>
+<p>Then the contribution is:</p>
+<div class="formula-math">\[
+-
+log(p).
+\]</div>
+<p>Examples:</p>
+<div class="ascii-box"><pre>p = 0.90 → small loss
+p = 0.60 → moderate loss
+p = 0.10 → large loss
+p = 0.01 → very large loss</pre></div>
+<p>For a true class <code>0</code>, the relevant term becomes:</p>
+<div class="formula-math">\[
+-
+log(1-p).
+\]</div>
+<h3>Hinglish</h3>
+<blockquote>
+<p>Agar reality 1 hai aur model 0.99 bolta hai, to model ko reward-type small loss milega. Agar reality 1 hai aur model 0.01 confidence se bolta hai, to loss bahut bada hoga. Matlab <strong>wrong + confident = very costly</strong>.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">Stable Binary Log Loss</h2>
+      </div>
+      <div class="section-body">
+        <p>A direct implementation is:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def log_loss(y, p, eps=1e-12):
+    p = np.clip(p, eps, 1.0 - eps)
+    return -np.mean(
+        y * np.log(p) +
+        (1.0 - y) * np.log(1.0 - p)
+    )</code></pre></div>
+<p>The clipping prevents:</p>
+<div class="ascii-box"><pre>log(0)</pre></div>
+<p>which is undefined.</p>
+<p>A useful identity for logistic regression is the stable per-example expression:</p>
+<div class="formula-math">\[
+\ell_i=\log(1+e^{z_i})-y_i z_i.
+\]</div>
+<p>In NumPy this can be implemented using <code>np.logaddexp</code>:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def logistic_log_loss_from_logits(y, z):
+    return np.mean(
+        np.logaddexp(0.0, z) - y * z
+    )</code></pre></div>
+<p>This avoids explicitly creating probabilities before evaluating the loss.</p>
+<p>For teaching, know both forms:</p>
+<div class="ascii-box"><pre>probability form → easy to understand
+logit form       → numerically safer</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">The Gradient We Need</h2>
+      </div>
+      <div class="section-body">
+        <p>For the parameter vector \(w\), the logistic-regression gradient is:</p>
+<div class="formula-math">\[
+\boxed{
+\nabla_w J
+=
+\frac1n X^T(p-y)
+}
+\]</div>
+<p>and for the bias:</p>
+<div class="formula-math">\[
+\boxed{
+\frac{\partial J}{\partial b}
+=
+\frac1n\sum_{i=1}^{n}(p_i-y_i)
+}
+\]</div>
+<p>The elegant result is:</p>
+<div class="ascii-box"><pre>prediction error = p - y
+
+feature gradient = Xᵀ(error) / n
+bias gradient    = mean(error)</pre></div>
+<p>This same error pattern will reappear throughout neural networks.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">Why the Gradient Has This Form — Derivation Roadmap</h2>
+      </div>
+      <div class="section-body">
+        <p>For one sample:</p>
+<div class="formula-math">\[
+z=w^Tx+b
+\]</div>
+<div class="formula-math">\[
+p=\sigma(z)
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\ell=-[y\log p+(1-y)\log(1-p)].
+\]</div>
+<p>The chain rule gives:</p>
+<div class="formula-math">\[
+\frac{\partial \ell}{\partial z}
+=
+\frac{\partial \ell}{\partial p}
+\frac{\partial p}{\partial z}.
+\]</div>
+<p>The sigmoid derivative is:</p>
+<div class="formula-math">\[
+\boxed{
+\sigma'(z)=\sigma(z)(1-\sigma(z))
+}
+\]</div>
+<p>so:</p>
+<div class="formula-math">\[
+\frac{\partial \ell}{\partial z}=p-y.
+\]</div>
+<p>Then because:</p>
+<div class="formula-math">\[
+z=w^Tx+b,
+\]</div>
+<p>we have:</p>
+<div class="formula-math">\[
+\frac{\partial z}{\partial w}=x
+\]</div>
+<p>and therefore:</p>
+<div class="formula-math">\[
+\boxed{
+\nabla_w \ell=(p-y)x
+}
+\]</div>
+<p>Averaging over samples yields:</p>
+<div class="formula-math">\[
+\boxed{
+\nabla_wJ=\frac1nX^T(p-y)
+}
+\]</div>
+<p>This cancellation is one of the most useful derivations to understand rather than memorize blindly.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Gradient Descent Update</h2>
+      </div>
+      <div class="section-body">
+        <p>Once the gradient is available:</p>
+<div class="formula-math">\[
+\boxed{
+w\leftarrow w-\eta\nabla_wJ
+}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\boxed{
+b\leftarrow b-\eta\frac{\partial J}{\partial b}
+}
+\]</div>
+<p>where \(\eta\) is the learning rate.</p>
+<p>The complete loop becomes:</p>
+<div class="ascii-box"><pre>initialize w, b
+      ↓
+compute z
+      ↓
+compute p
+      ↓
+compute loss
+      ↓
+compute gradients
+      ↓
+update w, b
+      ↓
+repeat</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">First From-Scratch Class</h2>
+      </div>
+      <div class="section-body">
+        <p>Implement a minimal estimator.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+class LogisticRegressionScratch:
+    def __init__(self, learning_rate=0.1, epochs=1000):
+        self.learning_rate = learning_rate
+        self.epochs = epochs
+        self.w = None
+        self.b = None
+        self.loss_history = []
+
+    def _sigmoid(self, z):
+        z = np.asarray(z, dtype=float)
+        out = np.empty_like(z)
+
+        positive = z &gt;= 0
+        negative = ~positive
+
+        out[positive] = 1.0 / (1.0 + np.exp(-z[positive]))
+        ez = np.exp(z[negative])
+        out[negative] = ez / (1.0 + ez)
+        return out
+
+    def fit(self, X, y):
+        X = np.asarray(X, dtype=float)
+        y = np.asarray(y, dtype=float)
+
+        n_samples, n_features = X.shape
+        self.w = np.zeros(n_features)
+        self.b = 0.0
+        self.loss_history = []
+
+        for _ in range(self.epochs):
+            z = X @ self.w + self.b
+            p = self._sigmoid(z)
+
+            loss = -np.mean(
+                y * np.log(np.clip(p, 1e-12, 1.0)) +
+                (1.0 - y) * np.log(np.clip(1.0 - p, 1e-12, 1.0))
+            )
+
+            error = p - y
+            dw = (X.T @ error) / n_samples
+            db = np.mean(error)
+
+            self.w -= self.learning_rate * dw
+            self.b -= self.learning_rate * db
+
+            self.loss_history.append(loss)
+
+        return self
+
+    def predict_proba(self, X):
+        X = np.asarray(X, dtype=float)
+        z = X @ self.w + self.b
+        p1 = self._sigmoid(z)
+        return np.column_stack([1.0 - p1, p1])
+
+    def predict(self, X, threshold=0.5):
+        p1 = self.predict_proba(X)[:, 1]
+        return (p1 &gt;= threshold).astype(int)</code></pre></div>
+<p>This is intentionally small. The objective is to expose the learning mechanism instead of hiding it behind an API.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Fit the Controlled Dataset</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">model = LogisticRegressionScratch(
+    learning_rate=0.1,
+    epochs=2000,
+)
+
+model.fit(X, y)
+
+print(&quot;weights:&quot;, model.w)
+print(&quot;bias:&quot;, model.b)
+print(&quot;probabilities:&quot;)
+print(model.predict_proba(X)[:, 1])
+print(&quot;classes:&quot;)
+print(model.predict(X))</code></pre></div>
+<p>Because the tiny dataset is strongly ordered, you should see low predicted probabilities for the early examples and high probabilities for the later examples.</p>
+<p>Do <strong>not</strong> require a perfect boundary from the model merely because the training dataset is simple. The fitted line is probabilistic, not a hand-coded threshold rule.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">Inspect the Loss Curve</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import matplotlib.pyplot as plt
+
+plt.plot(model.loss_history)
+plt.xlabel(&quot;Epoch&quot;)
+plt.ylabel(&quot;Log loss&quot;)
+plt.title(&quot;Logistic Regression Training Loss&quot;)
+plt.show()</code></pre></div>
+<p>Expected qualitative pattern:</p>
+<div class="ascii-box"><pre>loss
+│\\
+│ \\
+│  \\
+│   \\____
+│
+└──────────── epochs</pre></div>
+<p>The exact curve depends on the data, learning rate and initialization.</p>
+<p>The engineering question is not:</p>
+<blockquote>
+<p>“Does every curve look identical?”</p>
+</blockquote>
+<p>It is:</p>
+<blockquote>
+<p>“Does the loss generally move toward a stable low region without numerical explosion?”</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">Manual Trace of One Gradient Step</h2>
+      </div>
+      <div class="section-body">
+        <p>Use a single sample to understand the update.</p>
+<p>Let:</p>
+<div class="formula-math">\[
+x=2,
+\quad y=1,
+\quad w=0,
+\quad b=0.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+z=wx+b=0.
+\]</div>
+<p>Sigmoid:</p>
+<div class="formula-math">\[
+p=\sigma(0)=0.5.
+\]</div>
+<p>Error:</p>
+<div class="formula-math">\[
+p-y=0.5-1=-0.5.
+\]</div>
+<p>For one sample:</p>
+<div class="formula-math">\[
+\frac{\partial \ell}{\partial w}=(p-y)x.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\frac{\partial \ell}{\partial w}=(-0.5)(2)=-1.
+\]</div>
+<p>With learning rate:</p>
+<div class="formula-math">\[
+\eta=0.1,
+\]</div>
+<p>the update is:</p>
+<div class="formula-math">\[
+w_{new}=0-0.1(-1)=0.1.
+\]</div>
+<p>For the bias:</p>
+<div class="formula-math">\[
+\frac{\partial \ell}{\partial b}=-0.5
+\]</div>
+<p>so:</p>
+<div class="formula-math">\[
+b_{new}=0-0.1(-0.5)=0.05.
+\]</div>
+<h3>Interpretation</h3>
+<p>The example had target <code>1</code>, while the initial model was neutral (<code>p=0.5</code>). The update moves parameters so that this feature value is more likely to produce class <code>1</code> next time.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">Decision Boundary</h2>
+      </div>
+      <div class="section-body">
+        <p>For threshold <code>0.5</code>, logistic regression predicts class 1 when:</p>
+<div class="formula-math">\[
+\sigma(z)\ge0.5.
+\]</div>
+<p>Because:</p>
+<div class="formula-math">\[
+\sigma(0)=0.5,
+\]</div>
+<p>the boundary is:</p>
+<div class="formula-math">\[
+z=0.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+w^Tx+b=0
+}
+\]</div>
+<p>This is a line in 2D, a plane in 3D, and a hyperplane in higher dimensions.</p>
+<h3>Important connection</h3>
+<p>The sigmoid creates nonlinear output probabilities, but the <strong>default decision boundary in feature space remains linear</strong>.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">Visualize a Two-Feature Decision Boundary</h2>
+      </div>
+      <div class="section-body">
+        <p>Create a small 2D dataset.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.datasets import make_classification
+
+X2, y2 = make_classification(
+    n_samples=120,
+    n_features=2,
+    n_redundant=0,
+    n_informative=2,
+    n_clusters_per_class=1,
+    class_sep=2.0,
+    random_state=42,
+)</code></pre></div>
+<p>Train:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">model2 = LogisticRegressionScratch(
+    learning_rate=0.1,
+    epochs=3000,
+)
+model2.fit(X2, y2)</code></pre></div>
+<p>For the boundary:</p>
+<div class="formula-math">\[
+w_1x_1+w_2x_2+b=0.
+\]</div>
+<p>Solve for \(x_2\):</p>
+<div class="formula-math">\[
+\boxed{
+x_2=-\frac{w_1x_1+b}{w_2}
+}
+\]</div>
+<p>Plot the points and the line.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">plt.scatter(
+    X2[:, 0],
+    X2[:, 1],
+    c=y2,
+    alpha=0.8,
+)
+
+x1_grid = np.linspace(
+    X2[:, 0].min(),
+    X2[:, 0].max(),
+    200,
+)
+
+x2_grid = -(
+    model2.w[0] * x1_grid + model2.b
+) / model2.w[1]
+
+plt.plot(x1_grid, x2_grid)
+plt.xlabel(&quot;Feature 1&quot;)
+plt.ylabel(&quot;Feature 2&quot;)
+plt.title(&quot;Logistic Regression Decision Boundary&quot;)
+plt.show()</code></pre></div>
+<h3>Visualization question</h3>
+<p>Look at any points on the “wrong” side of the line.</p>
+<p>Do not immediately conclude the implementation is broken.</p>
+<p>Ask:</p>
+<ul>
+<li>Is the data perfectly linearly separable?</li>
+<li>Is there noise?</li>
+<li>Are we evaluating on training or held-out data?</li>
+<li>Did the optimizer converge?</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">Train/Test Split</h2>
+      </div>
+      <div class="section-body">
+        <p>Use the workflow established in <code>CODE-U2-01</code>.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X2,
+    y2,
+    test_size=0.25,
+    random_state=42,
+    stratify=y2,
+)</code></pre></div>
+<p>Why <code>stratify</code> for this binary classification example?</p>
+<p>It helps preserve approximately the same class proportions between the split partitions.</p>
+<p>The test set is held back so that it can act as unseen data.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">Evaluate the Scratch Model</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">model = LogisticRegressionScratch(
+    learning_rate=0.1,
+    epochs=3000,
+)
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)</code></pre></div>
+<p>Then use the evaluation tools already developed in <code>CODE-U2-01</code>.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.metrics import (
+    confusion_matrix,
+    precision_score,
+    recall_score,
+    f1_score,
+)
+
+print(confusion_matrix(y_test, y_pred))
+print(&quot;precision:&quot;, precision_score(y_test, y_pred))
+print(&quot;recall:&quot;, recall_score(y_test, y_pred))
+print(&quot;f1:&quot;, f1_score(y_test, y_pred))</code></pre></div>
+<p>This connects the algorithm chapter directly to the evaluation chapter.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">Probability Output for ROC-AUC</h2>
+      </div>
+      <div class="section-body">
+        <p>ROC-AUC requires a ranking/score signal, not only hard class labels.</p>
+<p>Use the class-1 probability:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">p_test = model.predict_proba(X_test)[:, 1]</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.metrics import roc_auc_score
+
+auc = roc_auc_score(y_test, p_test)
+print(&quot;ROC-AUC:&quot;, auc)</code></pre></div>
+<p>Do <strong>not</strong> substitute:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">roc_auc_score(y_test, y_pred)</code></pre></div>
+<p>just because <code>y_pred</code> is available.</p>
+<p>The hard thresholded labels throw away ranking information.</p>
+<h3>Connection</h3>
+<div class="ascii-box"><pre>probability/score
+      ↓
+threshold varies
+      ↓
+TPR and FPR trace a curve
+      ↓
+ROC curve
+      ↓
+AUC</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">Threshold Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Train once. Change the threshold many times.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">thresholds = [0.2, 0.3, 0.5, 0.7, 0.8]
+
+for threshold in thresholds:
+    pred = (p_test &gt;= threshold).astype(int)
+    precision = precision_score(y_test, pred, zero_division=0)
+    recall = recall_score(y_test, pred, zero_division=0)
+    f1 = f1_score(y_test, pred, zero_division=0)
+
+    print(
+        threshold,
+        precision,
+        recall,
+        f1,
+    )</code></pre></div>
+<p>Do not memorize that lowering the threshold always “improves everything.”</p>
+<p>The real effect is:</p>
+<div class="ascii-box"><pre>lower threshold
+    ↓
+more predictions become positive
+    ↓
+usually more true positives
+BUT
+    ↓
+also more false positives may appear</pre></div>
+<p>The exact metric movement depends on the dataset and score distribution.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">Why Feature Scaling Can Matter</h2>
+      </div>
+      <div class="section-body">
+        <p>Gradient descent reacts to feature scales.</p>
+<p>Suppose:</p>
+<div class="ascii-box"><pre>age:        18–60
+annual_inc: 20,000–2,000,000</pre></div>
+<p>One feature operates on a scale thousands of times larger than another.</p>
+<p>The optimization landscape can become poorly conditioned.</p>
+<p>Use the preprocessing structure from <code>CODE-U2-01</code>:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)</code></pre></div>
+<p>Then train:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">scaled_model = LogisticRegressionScratch(
+    learning_rate=0.1,
+    epochs=3000,
+)
+scaled_model.fit(X_train_scaled, y_train)</code></pre></div>
+<h3>Rule</h3>
+<blockquote>
+<p>Fit the scaler on the training data. Apply that fitted transformation to validation/test data. Never learn preprocessing statistics from the test set.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">Experiment: Learning Rate</h2>
+      </div>
+      <div class="section-body">
+        <p>Try several values:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">learning_rates = [0.001, 0.01, 0.1, 1.0]</code></pre></div>
+<p>Train a separate model for each.</p>
+<p>Record:</p>
+<div class="ascii-box"><pre>learning rate
+final loss
+number of epochs
+train metric
+validation/test metric
+notes about convergence</pre></div>
+<p>Possible qualitative outcomes:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Learning rate</th>
+<th>Possible behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Very small</td>
+<td>Slow progress</td>
+</tr>
+<tr>
+<td>Reasonable</td>
+<td>Smooth convergence</td>
+</tr>
+<tr>
+<td>Larger</td>
+<td>Faster but potentially unstable</td>
+</tr>
+<tr>
+<td>Too large</td>
+<td>Oscillation/divergence or poor numerical behaviour</td>
+</tr>
+</tbody>
+</table></div>
+<p>Do not treat these as universal numerical ranges. They depend on feature scaling, loss, dataset and implementation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">Experiment: Number of Epochs</h2>
+      </div>
+      <div class="section-body">
+        <p>Fix the learning rate and compare:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">epochs = [10, 50, 200, 1000, 3000]</code></pre></div>
+<p>Plot each loss history or record final performance.</p>
+<p>The question is:</p>
+<blockquote>
+<p>At what point does additional optimization stop giving meaningful validation improvement?</p>
+</blockquote>
+<p>That connects optimization to generalization.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">Finite-Difference Gradient Check</h2>
+      </div>
+      <div class="section-body">
+        <p>A correct symbolic gradient is easier to trust when compared against a numerical approximation.</p>
+<p>For parameter \(w_j\):</p>
+<div class="formula-math">\[
+\boxed{
+\frac{\partial J}{\partial w_j}
+\approx
+\frac{J(w_j+\epsilon)-J(w_j-\epsilon)}{2\epsilon}
+}
+\]</div>
+<p>Implement a small helper:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def loss_for_params(X, y, w, b):
+    z = X @ w + b
+    p = sigmoid_stable(z)
+    p = np.clip(p, 1e-12, 1.0 - 1e-12)
+    return -np.mean(
+        y * np.log(p) +
+        (1.0 - y) * np.log(1.0 - p)
+    )</code></pre></div>
+<p>Then compare an analytical gradient to the finite-difference gradient.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">Xg = np.array([
+    [1.0, 2.0],
+    [2.0, -1.0],
+    [-1.0, 1.5],
+])
+
+yg = np.array([1.0, 0.0, 1.0])
+wg = np.array([0.2, -0.4])
+bg = 0.1
+
+z = Xg @ wg + bg
+pg = sigmoid_stable(z)
+error = pg - yg
+analytical = (Xg.T @ error) / len(yg)
+
+epsilon = 1e-6
+numeric = np.zeros_like(wg)
+
+for j in range(len(wg)):
+    w_plus = wg.copy()
+    w_minus = wg.copy()
+    w_plus[j] += epsilon
+    w_minus[j] -= epsilon
+
+    numeric[j] = (
+        loss_for_params(Xg, yg, w_plus, bg)
+        - loss_for_params(Xg, yg, w_minus, bg)
+    ) / (2 * epsilon)
+
+print(&quot;analytical:&quot;, analytical)
+print(&quot;numeric:   &quot;, numeric)
+assert np.allclose(
+    analytical,
+    numeric,
+    rtol=1e-5,
+    atol=1e-6,
+)</code></pre></div>
+<h3>Why this matters</h3>
+<p>This is not “extra math for no reason.” A gradient bug can make every later experiment meaningless.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Gradient-Descent Debugging Checklist</h2>
+      </div>
+      <div class="section-body">
+        <p>If the loss increases instead of decreasing, inspect in this order:</p>
+<div class="ascii-box"><pre>1. Is the update direction correct?
+2. Did you accidentally use + η gradient?
+3. Are labels actually 0/1?
+4. Are X and y aligned?
+5. Did you divide by n?
+6. Is the learning rate too large?
+7. Are features badly scaled?
+8. Is a NaN or inf appearing?</pre></div>
+<p>Print:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(&quot;loss:&quot;, loss)
+print(&quot;dw:&quot;, dw)
+print(&quot;db:&quot;, db)
+print(&quot;w:&quot;, self.w)
+print(&quot;b:&quot;, self.b)</code></pre></div>
+<p>Then use:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert np.all(np.isfinite(self.w))
+assert np.isfinite(self.b)</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Library Verification</h2>
+      </div>
+      <div class="section-body">
+        <p>Once the scratch version is understood, compare it with a standard library estimator.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.linear_model import LogisticRegression
+
+library_model = LogisticRegression(
+    max_iter=5000,
+)
+
+library_model.fit(X_train_scaled, y_train)
+
+library_pred = library_model.predict(X_test_scaled)
+library_prob = library_model.predict_proba(X_test_scaled)[:, 1]</code></pre></div>
+<p>Evaluate both models with the same held-out data and metrics.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
+
+print(&quot;scratch accuracy:&quot;, accuracy_score(y_test, scaled_model.predict(X_test_scaled)))
+print(&quot;library accuracy:&quot;, accuracy_score(y_test, library_pred))
+
+print(&quot;scratch F1:&quot;, f1_score(y_test, scaled_model.predict(X_test_scaled)))
+print(&quot;library F1:&quot;, f1_score(y_test, library_pred))
+
+print(&quot;scratch AUC:&quot;, roc_auc_score(y_test, scaled_model.predict_proba(X_test_scaled)[:, 1]))
+print(&quot;library AUC:&quot;, roc_auc_score(y_test, library_prob))</code></pre></div>
+<p>Do not expect bit-for-bit equality.</p>
+<p>Reasons can include differences in:</p>
+<ul>
+<li>optimization procedure;</li>
+<li>stopping criteria;</li>
+<li>regularization defaults;</li>
+<li>numerical tolerances;</li>
+<li>initialization;</li>
+<li>solver implementation;</li>
+<li>preprocessing.</li>
+</ul>
+<p>The correct engineering question is:</p>
+<blockquote>
+<p>Are the results qualitatively and quantitatively consistent enough to support confidence in the scratch implementation?</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-35" class="section-block">
+      <div class="section-header">
+        <span class="section-num">35</span>
+        <h2 class="section-heading">Important Library Difference: Regularization</h2>
+      </div>
+      <div class="section-body">
+        <p>A common source of confusion is comparing a scratch implementation with a library model while silently using different objectives.</p>
+<p>Your scratch model above minimizes the unregularized binary log loss.</p>
+<p>A library estimator may include regularization by default.</p>
+<p>That changes the optimization objective.</p>
+<p>Therefore, when comparing implementations, explicitly record:</p>
+<div class="ascii-box"><pre>model objective
+regularization type
+regularization strength
+solver
+maximum iterations
+preprocessing
+random seed, when relevant</pre></div>
+<p>Do not call two models “equivalent” merely because both are named logistic regression.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-36" class="section-block">
+      <div class="section-header">
+        <span class="section-num">36</span>
+        <h2 class="section-heading">What Logistic Regression Learns</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+w=[2,-1].
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+z=2x_1-x_2+b.
+\]</div>
+<p>Feature interpretation is conditional on the rest of the model:</p>
+<ul>
+<li>positive coefficient pushes the score upward as the feature increases, holding other model inputs fixed;</li>
+<li>negative coefficient pushes the score downward, holding other inputs fixed;</li>
+<li>coefficient magnitude depends strongly on feature scaling.</li>
+</ul>
+<p>Avoid the beginner mistake:</p>
+<blockquote>
+<p>“A bigger coefficient always means a more important feature.”</p>
+</blockquote>
+<p>That is not valid when feature scales differ.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-37" class="section-block">
+      <div class="section-header">
+        <span class="section-num">37</span>
+        <h2 class="section-heading">Log-Odds Interpretation</h2>
+      </div>
+      <div class="section-body">
+        <p>The logistic model has an elegant interpretation.</p>
+<p>Starting from:</p>
+<div class="formula-math">\[
+p=\frac{1}{1+e^{-z}},
+\]</div>
+<p>we obtain:</p>
+<div class="formula-math">\[
+\frac{p}{1-p}=e^z.
+\]</div>
+<p>Taking logarithms:</p>
+<div class="formula-math">\[
+\boxed{
+\log\frac{p}{1-p}=z=w^Tx+b
+}
+\]</div>
+<p>So logistic regression is linear in the <strong>log-odds</strong>.</p>
+<p>Increasing feature \(x_j\) by one unit changes the log-odds by \(w_j\), holding other features fixed.</p>
+<p>A coefficient of zero means that feature has no effect on the log-odds in this fitted linear expression. More generally, it changes the odds multiplicatively by:</p>
+<div class="formula-math">\[
+\boxed{e^{w_j}}
+\]</div>
+<p>for a one-unit increase, subject to the model assumptions and other features being held fixed.</p>
+<p>This is useful conceptually even when your practical implementation only needs the sigmoid and gradient descent.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-38" class="section-block">
+      <div class="section-header">
+        <span class="section-num">38</span>
+        <h2 class="section-heading">Binary Labels Must Be Encoded Consistently</h2>
+      </div>
+      <div class="section-body">
+        <p>For this implementation, use:</p>
+<div class="ascii-box"><pre>0
+1</pre></div>
+<p>Do not accidentally pass:</p>
+<div class="ascii-box"><pre>-1
++1</pre></div>
+<p>into a loss coded for <code>0/1</code> labels.</p>
+<p>Likewise, check that:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">np.unique(y)</code></pre></div>
+<p>contains only the expected classes.</p>
+<p>Example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">classes = np.unique(y)
+assert np.array_equal(classes, np.array([0.0, 1.0]))</code></pre></div>
+<p>For general production code, label encoding should be intentional rather than assumed.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-39" class="section-block">
+      <div class="section-header">
+        <span class="section-num">39</span>
+        <h2 class="section-heading">Edge Case: Perfect Separation</h2>
+      </div>
+      <div class="section-body">
+        <p>A dataset may be perfectly linearly separable.</p>
+<p>Then the training objective can keep improving as the coefficient magnitudes become very large, while the hard classifications remain unchanged.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>separation already correct
+        ↓
+confidence can keep increasing
+        ↓
+weights can grow</pre></div>
+<p>This is one reason regularization and stopping criteria matter in real implementations.</p>
+<p>Do not interpret “loss is getting lower” as automatically meaning “the model is becoming more useful.”</p>
+<p>Always inspect validation behaviour too.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-40" class="section-block">
+      <div class="section-header">
+        <span class="section-num">40</span>
+        <h2 class="section-heading">Edge Case: Class Imbalance</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="ascii-box"><pre>980 class 0
+20 class 1</pre></div>
+<p>A classifier can achieve high accuracy while performing poorly on the minority class.</p>
+<p>That is why the course places the confusion matrix, precision, recall and F1 immediately beside classification.</p>
+<p>Logistic regression is not immune to imbalance merely because it outputs probabilities.</p>
+<p>Practical responses may include:</p>
+<ul>
+<li>better evaluation metrics;</li>
+<li>threshold analysis;</li>
+<li>class weighting;</li>
+<li>resampling strategies;</li>
+<li>collecting better data.</li>
+</ul>
+<p>The correct choice depends on the actual application.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-41" class="section-block">
+      <div class="section-header">
+        <span class="section-num">41</span>
+        <h2 class="section-heading">What the Model Can and Cannot Represent</h2>
+      </div>
+      <div class="section-body">
+        <p>Default logistic regression produces a linear decision boundary:</p>
+<div class="formula-math">\[
+w^Tx+b=0.
+\]</div>
+<p>Therefore it may struggle with patterns such as XOR without feature engineering.</p>
+<p>Example concept:</p>
+<div class="ascii-box"><pre>class 1   class 0
+class 0   class 1</pre></div>
+<p>No single straight line can separate those points in the original 2D coordinates.</p>
+<p>Possible responses include:</p>
+<div class="ascii-box"><pre>feature engineering
+       ↓
+nonlinear features
+       ↓
+linear model in expanded feature space</pre></div>
+<p>or a model family capable of nonlinear boundaries, such as trees or neural networks.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-42" class="section-block">
+      <div class="section-header">
+        <span class="section-num">42</span>
+        <h2 class="section-heading">Optional Extension: Polynomial Features</h2>
+      </div>
+      <div class="section-body">
+        <p>A feature transformation can let logistic regression model nonlinear boundaries in the <strong>original variables</strong> while remaining linear in transformed features.</p>
+<p>Example:</p>
+<div class="formula-math">\[
+\phi(x_1,x_2)=
+[x_1,x_2,x_1^2,x_2^2,x_1x_2].
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+z=w^T\phi(x)+b.
+\]</div>
+<p>The classifier is still linear in \(\phi(x)\), but not necessarily linear in the original \((x_1,x_2)\).</p>
+<div class="ascii-box"><pre>input features
+      ↓
+feature map
+      ↓
+linear logistic model
+      ↓
+nonlinear boundary in original space</pre></div>
+<p>This connects directly with the feature-expansion idea later discussed in the supplied Unit II material.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-43" class="section-block">
+      <div class="section-header">
+        <span class="section-num">43</span>
+        <h2 class="section-heading">Practical Lab — Implement Without Looking</h2>
+      </div>
+      <div class="section-body">
+        <p>Create a fresh file and rebuild the model from memory.</p>
+<p>Minimum requirements:</p>
+<div class="ascii-box"><pre>[ ] sigmoid
+[ ] prediction score
+[ ] probability output
+[ ] log loss
+[ ] gradient
+[ ] gradient-descent update
+[ ] fit
+[ ] predict_proba
+[ ] predict</pre></div>
+<p>Do not copy the class from this chapter on the first attempt.</p>
+<p>Use the formulas as your specification.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-44" class="section-block">
+      <div class="section-header">
+        <span class="section-num">44</span>
+        <h2 class="section-heading">Practical Lab — Required Assertions</h2>
+      </div>
+      <div class="section-body">
+        <p>Your implementation should include at least:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert X.ndim == 2
+assert y.ndim == 1
+assert X.shape[0] == y.shape[0]
+assert set(np.unique(y)).issubset({0, 1})</code></pre></div>
+<p>After training:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert np.all(np.isfinite(model.w))
+assert np.isfinite(model.b)
+assert np.all(np.isfinite(model.loss_history))</code></pre></div>
+<p>For the probability output:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">p = model.predict_proba(X)[:, 1]
+assert np.all((p &gt;= 0) &amp; (p &lt;= 1))</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-45" class="section-block">
+      <div class="section-header">
+        <span class="section-num">45</span>
+        <h2 class="section-heading">Practical Lab — Required Experiments</h2>
+      </div>
+      <div class="section-body">
+        <p>Run all five.</p>
+<h3>Experiment A — Learning rate</h3>
+<p>Compare small, medium and large learning rates.</p>
+<p>Record convergence behaviour.</p>
+<h3>Experiment B — Scaling</h3>
+<p>Train with raw and standardized features.</p>
+<p>Compare speed and stability.</p>
+<h3>Experiment C — Threshold</h3>
+<p>Evaluate several thresholds.</p>
+<p>Compare precision, recall and F1.</p>
+<h3>Experiment D — Noise</h3>
+<p>Add label or feature noise.</p>
+<p>Observe how the boundary and probabilities change.</p>
+<h3>Experiment E — Gradient check</h3>
+<p>Verify the analytical gradient against finite differences.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-46" class="section-block">
+      <div class="section-header">
+        <span class="section-num">46</span>
+        <h2 class="section-heading">Manual Questions</h2>
+      </div>
+      <div class="section-body">
+        <p>Answer before checking your notes.</p>
+<h3>Q1</h3>
+<p>Why is sigmoid needed in logistic regression?</p>
+<h3>Q2</h3>
+<p>What range does sigmoid produce?</p>
+<h3>Q3</h3>
+<p>What happens at <code>z = 0</code>?</p>
+<h3>Q4</h3>
+<p>Why is binary log loss preferable to directly optimizing hard 0/1 classification error with gradient descent?</p>
+<h3>Q5</h3>
+<p>What is the logistic-regression gradient?</p>
+<h3>Q6</h3>
+<p>Why does the probability threshold not need retraining?</p>
+<h3>Q7</h3>
+<p>Why can a high accuracy score be misleading on imbalanced data?</p>
+<h3>Q8</h3>
+<p>Why should preprocessing be fitted on training data only?</p>
+<h3>Q9</h3>
+<p>What is the decision boundary when the threshold is <code>0.5</code>?</p>
+<h3>Q10</h3>
+<p>Why might a scratch implementation disagree slightly with a library implementation?</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-47" class="section-block">
+      <div class="section-header">
+        <span class="section-num">47</span>
+        <h2 class="section-heading">Coding Challenge — Numerical Gradient</h2>
+      </div>
+      <div class="section-body">
+        <p>Given:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X = np.array([
+    [1.0, 0.0],
+    [0.0, 1.0],
+    [1.0, 1.0],
+])
+
+y = np.array([1.0, 0.0, 1.0])
+
+w = np.array([0.2, -0.1])
+b = 0.05</code></pre></div>
+<p>Write code that returns:</p>
+<div class="ascii-box"><pre>analytical gradient w.r.t. w
+analytical gradient w.r.t. b
+numerical gradient w.r.t. w
+numerical gradient w.r.t. b
+maximum absolute difference</pre></div>
+<p>Mastery condition:</p>
+<blockquote>
+<p>The analytical and numerical gradients should agree within a small tolerance appropriate to the finite-difference step.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-48" class="section-block">
+      <div class="section-header">
+        <span class="section-num">48</span>
+        <h2 class="section-heading">Coding Challenge — Rebuild the Metric Loop</h2>
+      </div>
+      <div class="section-body">
+        <p>Without using <code>predict</code> from a library model, write:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def metrics_at_threshold(y_true, probabilities, threshold):
+    ...</code></pre></div>
+<p>Return:</p>
+<div class="ascii-box"><pre>TP
+FP
+FN
+TN
+precision
+recall
+F1</pre></div>
+<p>This forces you to understand how logistic probabilities become the confusion matrix.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-49" class="section-block">
+      <div class="section-header">
+        <span class="section-num">49</span>
+        <h2 class="section-heading">Coding Challenge — Compare Two Models Fairly</h2>
+      </div>
+      <div class="section-body">
+        <p>Compare:</p>
+<div class="ascii-box"><pre>Scratch Logistic Regression
+vs
+Library Logistic Regression</pre></div>
+<p>Keep constant:</p>
+<div class="ascii-box"><pre>dataset
+train/test split
+feature preprocessing
+evaluation metrics
+threshold</pre></div>
+<p>Record the experimental configuration.</p>
+<p>A fair experiment changes <strong>one important factor at a time</strong>.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-50" class="section-block">
+      <div class="section-header">
+        <span class="section-num">50</span>
+        <h2 class="section-heading">Common Bugs</h2>
+      </div>
+      <div class="section-body">
+        <h2>Bug 1 — Wrong sign in the update</h2>
+<p>Wrong:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">w += learning_rate * dw</code></pre></div>
+<p>Correct gradient-descent direction:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">w -= learning_rate * dw</code></pre></div>
+<h2>Bug 2 — Wrong label encoding</h2>
+<p>The loss assumes <code>0/1</code>, but the data contains <code>-1/+1</code>.</p>
+<h2>Bug 3 — <code>log(0)</code></h2>
+<p>Clip probabilities or use a stable logit-based loss.</p>
+<h2>Bug 4 — Overflow in <code>exp</code></h2>
+<p>Use a stable sigmoid implementation.</p>
+<h2>Bug 5 — Test leakage</h2>
+<p>Do not fit a scaler on the entire dataset before the split.</p>
+<h2>Bug 6 — Wrong ROC-AUC input</h2>
+<p>Use a probability/score, not only hard predictions.</p>
+<h2>Bug 7 — Comparing unlike objectives</h2>
+<p>A regularized library model is not exactly the same objective as an unregularized scratch model.</p>
+<h2>Bug 8 — Confusing coefficient sign with causality</h2>
+<p>A learned coefficient is a model parameter, not automatically a causal conclusion.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-51" class="section-block">
+      <div class="section-header">
+        <span class="section-num">51</span>
+        <h2 class="section-heading">Complexity</h2>
+      </div>
+      <div class="section-body">
+        <p>For one full-batch gradient step with:</p>
+<ul>
+<li>\(n\) samples;</li>
+<li>\(d\) features;</li>
+</ul>
+<p>matrix multiplication and gradient computation are approximately:</p>
+<div class="formula-math">\[
+\boxed{O(nd)}
+\]</div>
+<p>per epoch.</p>
+<p>If you run \(T\) epochs:</p>
+<div class="formula-math">\[
+\boxed{O(Tnd)}
+\]</div>
+<p>for the core dense computations.</p>
+<p>Memory for the dense feature matrix is approximately:</p>
+<div class="formula-math">\[
+\boxed{O(nd)}
+\]</div>
+<p>plus parameter and temporary arrays.</p>
+<p>The exact runtime depends on vectorization, data layout and hardware.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-52" class="section-block">
+      <div class="section-header">
+        <span class="section-num">52</span>
+        <h2 class="section-heading">Comparison — Linear vs Logistic Regression</h2>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Property</th>
+<th>Linear Regression</th>
+<th>Logistic Regression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Main target type</td>
+<td>continuous</td>
+<td>binary classification</td>
+</tr>
+<tr>
+<td>Raw score</td>
+<td>linear</td>
+<td>linear</td>
+</tr>
+<tr>
+<td>Output transform</td>
+<td>none</td>
+<td>sigmoid</td>
+</tr>
+<tr>
+<td>Typical loss</td>
+<td>squared error</td>
+<td>binary log loss</td>
+</tr>
+<tr>
+<td>Output range</td>
+<td>unrestricted</td>
+<td><code>(0, 1)</code> for sigmoid probability</td>
+</tr>
+<tr>
+<td>Default decision boundary</td>
+<td>not a classifier by itself</td>
+<td><code>w^Tx+b=0</code> at threshold 0.5</td>
+</tr>
+<tr>
+<td>Typical evaluation</td>
+<td>MSE, MAE, R²</td>
+<td>confusion matrix, precision, recall, F1, ROC-AUC</td>
+</tr>
+<tr>
+<td>Core optimization idea</td>
+<td>minimize loss</td>
+<td>minimize loss</td>
+</tr>
+<tr>
+<td>Gradient descent</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+</tbody>
+</table></div>
+<p>The shared backbone is important:</p>
+<div class="ascii-box"><pre>data
+ ↓
+parameterized model
+ ↓
+loss
+ ↓
+gradient
+ ↓
+optimizer</pre></div>
+<p>Different models differ in representation and objective, not in the entire learning philosophy.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-53" class="section-block">
+      <div class="section-header">
+        <span class="section-num">53</span>
+        <h2 class="section-heading">Library API Pattern</h2>
+      </div>
+      <div class="section-body">
+        <p>A standard workflow is:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.linear_model import LogisticRegression
+
+model = LogisticRegression(max_iter=5000)
+model.fit(X_train, y_train)
+
+pred = model.predict(X_test)
+prob = model.predict_proba(X_test)[:, 1]</code></pre></div>
+<p>Remember the API split:</p>
+<div class="ascii-box"><pre>fit            → learn parameters
+predict_proba  → probability outputs
+predict         → hard labels</pre></div>
+<p>That three-part pattern appears repeatedly in practical ML.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-54" class="section-block">
+      <div class="section-header">
+        <span class="section-num">54</span>
+        <h2 class="section-heading">Master Workflow Card</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>1. define X and y
+2. verify shapes
+3. verify labels
+4. split train/test
+5. fit preprocessing on train only
+6. transform train/test
+7. initialize w and b
+8. compute z = Xw + b
+9. compute p = sigmoid(z)
+10. compute log loss
+11. compute gradient
+12. update parameters
+13. repeat
+14. inspect loss
+15. predict probabilities
+16. threshold probabilities
+17. evaluate confusion matrix
+18. evaluate precision/recall/F1
+19. evaluate ROC-AUC from scores
+20. compare against library
+21. document experiment</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-55" class="section-block">
+      <div class="section-header">
+        <span class="section-num">55</span>
+        <h2 class="section-heading">Memory Anchors</h2>
+      </div>
+      <div class="section-body">
+        <h3>Anchor 1</h3>
+<div class="formula-math">\[
+\boxed{z=Xw+b}
+\]</div>
+<p><strong>Linear evidence score.</strong></p>
+<h3>Anchor 2</h3>
+<div class="formula-math">\[
+\boxed{p=\sigma(z)}
+\]</div>
+<p><strong>Score → probability.</strong></p>
+<h3>Anchor 3</h3>
+<div class="formula-math">\[
+\boxed{\sigma(z)=\frac1{1+e^{-z}}}
+\]</div>
+<h3>Anchor 4</h3>
+<div class="formula-math">\[
+\boxed{\nabla_wJ=\frac1nX^T(p-y)}
+\]</div>
+<h3>Anchor 5</h3>
+<div class="formula-math">\[
+\boxed{w\leftarrow w-\eta\nabla_wJ}
+\]</div>
+<h3>Anchor 6</h3>
+<p>At threshold <code>0.5</code>:</p>
+<div class="formula-math">\[
+\boxed{w^Tx+b=0}
+\]</div>
+<p>is the decision boundary.</p>
+<h3>Hinglish memory line</h3>
+<blockquote>
+<p><strong>Score banao → sigmoid lagao → probability nikalo → loss dekho → gradient nikalo → weights update karo → threshold se class nikalo → metrics se evaluate karo.</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-56" class="section-block">
+      <div class="section-header">
+        <span class="section-num">56</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <p>You are ready to move on when you can do all of the following without copying implementation code:</p>
+<div class="ascii-box"><pre>[ ] Explain why linear regression is not a complete binary classifier
+[ ] Write sigmoid from memory
+[ ] Explain sigmoid behaviour at negative, zero, positive z
+[ ] Write binary log-loss formula
+[ ] Explain why confident wrong predictions are costly
+[ ] Write logistic-regression gradient
+[ ] Implement full-batch GD
+[ ] Explain p-y
+[ ] Explain probability vs thresholded class
+[ ] Plot a 2D decision boundary
+[ ] Perform a train/test split correctly
+[ ] Use probability scores for ROC-AUC
+[ ] Run a finite-difference gradient check
+[ ] Explain regularization mismatch in library comparison
+[ ] Diagnose common numerical failures</pre></div>
+<p>If you cannot derive or debug the gradient, revisit the math layers before moving to decision trees.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-57" class="section-block">
+      <div class="section-header">
+        <span class="section-num">57</span>
+        <h2 class="section-heading">Source Boundary and Notes</h2>
+      </div>
+      <div class="section-body">
+        <h3>Course-grounded</h3>
+<p>The official DSC-14 syllabus places Logistic Regression in Unit II and expects students to implement and evaluate machine-learning algorithms. The supplied resource guide gives Logistic Regression a dedicated Unit II learning path and lists sigmoid/logistic classification as a core video topic.</p>
+<h3>Expansion in this coding file</h3>
+<p>The following are included as implementation depth beyond the explicit supplied lecture text:</p>
+<ul>
+<li>full scratch logistic-regression class;</li>
+<li>stable sigmoid implementation;</li>
+<li>logit-form log loss;</li>
+<li>detailed gradient derivation;</li>
+<li>finite-difference gradient checking;</li>
+<li>threshold experiments;</li>
+<li>explicit library comparison;</li>
+<li>coefficient/log-odds interpretation;</li>
+<li>perfect-separation discussion.</li>
+</ul>
+<p>These additions are included to make the Coding Book executable and conceptually complete; they should not be mistaken for verbatim material from the supplied lectures.</p>
+<h3>Related supplied materials</h3>
+<ul>
+<li><code>cse syllabus.pdf</code> / <code>sem5core.md</code> — official DSC-14 Unit II scope.</li>
+<li><code>AI_ML_Master_Learning_Resource_Guide.pdf</code> — resource status, learning order and practical strategy.</li>
+<li><code>Lecture07.pdf</code> — machine-learning paradigms and classification evaluation context.</li>
+<li><code>Lecture08.pdf</code> — hypothesis classes, generalization, overfitting/underfitting, validation and bias-variance context.</li>
+<li><code>Lecture09.pdf</code> — preprocessing, scaling and optimization foundations.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-58" class="section-block">
+      <div class="section-header">
+        <span class="section-num">58</span>
+        <h2 class="section-heading">Cross-Book Links</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Lab Viva Trap & Runtime Gotcha</div>
+
+**Log of Zero / Numerical Overflow Trap:**
+In Cross-Entropy $-\log(\hat{p})$, if $\hat{p} = 0$, $\log(0) = -\infty$, resulting in `NaN` losses!
+Always clip probabilities before taking logarithms: `p = np.clip(p, 1e-15, 1 - 1e-15)`.
+Also, in `1 / (1 + np.exp(-z))`, large negative $z$ causes overflow. Use the numerically stable sigmoid!
+
+</div>
+
+<div class="ascii-box"><pre>MAIN-U2-C20 Logistic Regression
+        │
+        ├── MATH-M03 Functions / Exponents / Logs
+        ├── MATH-M20 Chain Rule
+        ├── MATH-M21 Gradients
+        ├── MATH-M22 Optimization / Gradient Descent
+        └── CODE-U2-03  ← this file
+                    │
+                    ├── CODE-U2-05 Classification Metrics
+                    └── CODE-U2-06 Ridge/Lasso</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-59" class="section-block">
+      <div class="section-header">
+        <span class="section-num">59</span>
+        <h2 class="section-heading">Status</h2>
+      </div>
+      <div class="section-body">
+        <p><strong>Status:</strong> Complete coding chapter for Unit II.</p>
+<p><strong>Next chapter:</strong> <code>CODE-U2-04 — Decision Trees From Scratch, Splitting Criteria, Recursion, and Library Comparison</code></p>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="code-u2-02-linear-regression.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← Unit 2 Lab 02 — Linear Regression</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">💻 Coding Index</span>
+      </a>
+      <a href="code-u2-04-decision-trees.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: Unit 2 Lab 04 — Decision Trees →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search lab implementations, functions, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">💻</span>Lab Hub</a>
+  <a href="code-u2-03-logistic-regression.html" class="mobile-nav-btn active"><span class="icon">📖</span>CODE-U2-03</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

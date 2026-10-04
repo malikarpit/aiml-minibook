@@ -1,0 +1,2246 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="CODE-01: Python, NumPy, Matplotlib & Lab Workflow — AI & Machine Learning Coding Lab. Vectorization vs Looping, Array Shapes, Broadcasting Rules, Matrix Slicing, and Loss Visualizations">
+<title>CODE-01: Python, NumPy, Matplotlib & Lab Workflow | Coding Lab 💻 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/coding.css">
+</head>
+<body class="coding-module track-c0">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">💻</div>
+      <div class="brand-text"><span class="main">Coding Lab</span><span class="sub">AI &amp; ML From Scratch</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">CODE-01: Python, NumPy, Matplotlib &amp; Lab Workflow</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">💻</span>Coding Lab Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../math/index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 0: Environment & System</div>
+  <a href="code-00-coding-foundation.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-00: Coding Lab Foundation &amp; Implementation System</a>
+  <a href="code-01-python-numpy-workflow.html" class="sidebar-link active"><span class="link-icon">⚙️</span>CODE-01: Python, NumPy, Matplotlib &amp; Lab Workflow</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Classical AI & Search Labs</div>
+  <a href="code-u1-01-bfs-dfs.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-01: BFS and DFS From Scratch</a>
+  <a href="code-u1-02-greedy-a-star.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-02: Greedy Best-First &amp; A* Search From Scratch</a>
+  <a href="code-u1-03-csp-backtracking.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-03: CSPs and Backtracking Search</a>
+  <a href="code-u1-04-minimax-alpha-beta.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Supervised ML Labs</div>
+  <a href="code-u2-01-ml-workflow.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-01: ML Workflow: Preprocessing, Splitting &amp; Evaluation</a>
+  <a href="code-u2-02-linear-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-02: Linear Regression From Scratch</a>
+  <a href="code-u2-03-logistic-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-03: Logistic Regression From Scratch</a>
+  <a href="code-u2-04-decision-trees.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-04: Decision Trees From Scratch</a>
+  <a href="code-u2-05-classification-metrics-roc.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC &amp; Thresholds</a>
+  <a href="code-u2-06-ridge-lasso-regularization.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-06: Ridge &amp; Lasso From Scratch: Regularization &amp; Optimization</a>
+  <a href="code-u2-07-ml-evaluation-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-07: ML Evaluation &amp; Model Comparison Lab</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Deep Learning Labs</div>
+  <a href="code-u3-01-neuron-perceptron.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-01: Neuron and Perceptron From Scratch</a>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>MLP, Backpropagation & Convolutions</span>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Advanced AI Labs (Upcoming)</div>
+  <span class="sidebar-link" style="opacity:0.6; cursor:default;"><span class="link-icon">⏳</span>Q-Learning, NLP & Generative Adversarial Loops</span>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">CODE-01 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. What You Actually Need</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. The Most Important Skill: Shapes</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Vector Representation</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Matrix Representation</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Targets</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Elementwise Operations</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Dot Product</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Matrix-Vector Multiplication</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Why `@` Matters</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Transpose</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Norms in NumPy</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. First Numerical Lab</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Means and Standardization</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Do Not Fit Test Preprocessing Separately</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Reproducible Randomness</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Synthetic Data</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Why Synthetic Data Comes Before Real Data</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Matplotlib Basics</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Scatter vs Line</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Loss Curves</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. What Loss Curves Can Tell You</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Assertions and Shape Checks</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Basic Debug Print Pattern</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Numerical Safety</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Stable Computation Is Better Than Naive Computation</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. pandas — When Tables Are Useful</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Train/Test Split</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. A Reusable ML Lab Skeleton</a>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Imports</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Reproducibility</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Load / create data</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Inspect</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Split</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Preprocess</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Define model</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Train</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Track metrics/loss</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Evaluate</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Visualize</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Test assumptions</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Interpret</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. From-Scratch ML Skeleton</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Testing a Numerical Implementation</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Testing Matrix Operations</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Floating-Point Thinking</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Visual Test: Regression Ground Truth</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Experiment Discipline</a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Configuration Separation</a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Never Hide the Important Mathematics</a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Library Version as a Reference Oracle</a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Comparison Checklist</a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. A Reusable Experiment Record</a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Recommended Folder Structure</a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Notebook vs `.py` File</a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. First Foundation Exercise — Shapes</a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. First Foundation Exercise — Dot Product</a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Second Foundation Exercise — Norms</a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. Third Foundation Exercise — Known Regression Data</a>
+      <a href="#s-46" class="sidebar-link"><span class="link-icon">📌</span>46. Fourth Foundation Exercise — Loss Curve</a>
+      <a href="#s-47" class="sidebar-link"><span class="link-icon">📌</span>47. Debugging Exercise</a>
+      <a href="#s-48" class="sidebar-link"><span class="link-icon">📌</span>48. Reproducibility Exercise</a>
+      <a href="#s-49" class="sidebar-link"><span class="link-icon">📌</span>49. Minimal Package Philosophy</a>
+      <a href="#s-50" class="sidebar-link"><span class="link-icon">📌</span>50. Coding Book Standard for Future Chapters</a>
+      <a href="#s-51" class="sidebar-link"><span class="link-icon">📌</span>51. Mini Reference — Essential NumPy Commands</a>
+      <a href="#s-52" class="sidebar-link"><span class="link-icon">📌</span>52. Mini Reference — Essential Matplotlib Commands</a>
+      <a href="#s-53" class="sidebar-link"><span class="link-icon">📌</span>53. Mini Reference — Essential pandas Commands</a>
+      <a href="#s-54" class="sidebar-link"><span class="link-icon">📌</span>54. Foundation Coding Checklist</a>
+      <a href="#s-55" class="sidebar-link"><span class="link-icon">📌</span>55. Active Recall</a>
+      <a href="#s-56" class="sidebar-link"><span class="link-icon">📌</span>56. Coding Exercise — Build the Lab Utilities</a>
+      <a href="#s-57" class="sidebar-link"><span class="link-icon">📌</span>57. Next Step</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Coding Lab</a>
+        <span>/</span>
+        <span>CODE-01</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-c0">Track 0: Environment & System</span></div>
+      <h1 class="chapter-title">Python, NumPy, Matplotlib &amp; Lab Workflow</h1>
+      <p class="chapter-desc">Vectorization vs Looping, Array Shapes, Broadcasting Rules, Matrix Slicing, and Loss Visualizations</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~45 min lab</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">NUMPY</span> <span class="chapter-meta-item uni-badge">BROADCASTING</span> <span class="chapter-meta-item uni-badge">VECTORIZATION</span> <span class="chapter-meta-item uni-badge">MATPLOTLIB</span>
+      </div>
+
+      <div class="lab-meta-grid">
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Prerequisites</div>
+          <div class="lab-meta-value">CODE-00 Foundation, Python 3.8+</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Main Book Concept</div>
+          <div class="lab-meta-value">Part 0 Orientation & Prerequisite Refreshers</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Math Companion Layer</div>
+          <div class="lab-meta-value">M04 Vectors, M07 Matrices, M08 Matrix Multiplication</div>
+        </div>
+        <div class="lab-meta-box" style="grid-column: 1 / -1;">
+          <div class="lab-meta-label">AI / Machine Learning Connections</div>
+          <div class="lab-meta-value">Design matrix shapes (n, d), Batch slicing, Vectorized MSE calculation, Contour plots, Loss curve tracking</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-meta-card"><h1>CODE-01 — Python, NumPy, Matplotlib, and the AI/ML Lab Workflow</h1>
+<blockquote>
+<p><strong>Coding Book — Foundation Lab</strong></p>
+<p><strong>Prerequisite:</strong> <code>CODE-00</code></p>
+<p><strong>Purpose:</strong> Establish the small Python/scientific-computing toolkit used repeatedly throughout the AI/ML Coding Book.</p>
+<p><strong>Important:</strong> This is not a generic Python course. It focuses only on the programming patterns required to implement, inspect, test, and visualize the algorithms in DSC-14.</p>
+</blockquote>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in CODE-01 (70 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">What You Actually Need</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">The Most Important Skill: Shapes</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Vector Representation</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Matrix Representation</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Targets</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Elementwise Operations</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Dot Product</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Matrix-Vector Multiplication</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Why `@` Matters</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Transpose</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Norms in NumPy</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">First Numerical Lab</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Means and Standardization</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Do Not Fit Test Preprocessing Separately</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Reproducible Randomness</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Synthetic Data</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Why Synthetic Data Comes Before Real Data</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Matplotlib Basics</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Scatter vs Line</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Loss Curves</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">What Loss Curves Can Tell You</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Assertions and Shape Checks</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Basic Debug Print Pattern</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Numerical Safety</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Stable Computation Is Better Than Naive Computation</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">pandas — When Tables Are Useful</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Train/Test Split</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">A Reusable ML Lab Skeleton</span></a></li>
+        <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Imports</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Reproducibility</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Load / create data</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Inspect</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Split</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Preprocess</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Define model</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Train</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Track metrics/loss</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Evaluate</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Visualize</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Test assumptions</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Interpret</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">From-Scratch ML Skeleton</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Testing a Numerical Implementation</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Testing Matrix Operations</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Floating-Point Thinking</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Visual Test: Regression Ground Truth</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Experiment Discipline</span></a></li>
+        <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Configuration Separation</span></a></li>
+        <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Never Hide the Important Mathematics</span></a></li>
+        <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Library Version as a Reference Oracle</span></a></li>
+        <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Comparison Checklist</span></a></li>
+        <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">A Reusable Experiment Record</span></a></li>
+        <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Recommended Folder Structure</span></a></li>
+        <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Notebook vs `.py` File</span></a></li>
+        <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">First Foundation Exercise — Shapes</span></a></li>
+        <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">First Foundation Exercise — Dot Product</span></a></li>
+        <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Second Foundation Exercise — Norms</span></a></li>
+        <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">Third Foundation Exercise — Known Regression Data</span></a></li>
+        <li class="toc-item"><a href="#s-46"><span class="toc-num">46</span><span class="toc-name">Fourth Foundation Exercise — Loss Curve</span></a></li>
+        <li class="toc-item"><a href="#s-47"><span class="toc-num">47</span><span class="toc-name">Debugging Exercise</span></a></li>
+        <li class="toc-item"><a href="#s-48"><span class="toc-num">48</span><span class="toc-name">Reproducibility Exercise</span></a></li>
+        <li class="toc-item"><a href="#s-49"><span class="toc-num">49</span><span class="toc-name">Minimal Package Philosophy</span></a></li>
+        <li class="toc-item"><a href="#s-50"><span class="toc-num">50</span><span class="toc-name">Coding Book Standard for Future Chapters</span></a></li>
+        <li class="toc-item"><a href="#s-51"><span class="toc-num">51</span><span class="toc-name">Mini Reference — Essential NumPy Commands</span></a></li>
+        <li class="toc-item"><a href="#s-52"><span class="toc-num">52</span><span class="toc-name">Mini Reference — Essential Matplotlib Commands</span></a></li>
+        <li class="toc-item"><a href="#s-53"><span class="toc-num">53</span><span class="toc-name">Mini Reference — Essential pandas Commands</span></a></li>
+        <li class="toc-item"><a href="#s-54"><span class="toc-num">54</span><span class="toc-name">Foundation Coding Checklist</span></a></li>
+        <li class="toc-item"><a href="#s-55"><span class="toc-num">55</span><span class="toc-name">Active Recall</span></a></li>
+        <li class="toc-item"><a href="#s-56"><span class="toc-num">56</span><span class="toc-name">Coding Exercise — Build the Lab Utilities</span></a></li>
+        <li class="toc-item"><a href="#s-57"><span class="toc-num">57</span><span class="toc-name">Next Step</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">What You Actually Need</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph LR
+    subgraph Looping ["Python For-Loop (Slow, Interpreted)"]
+        L1["Iterate element by element"] --> L2["Type check on every step"]
+        L2 --> L3["O(n) Python bytecode overhead"]
+    end
+    subgraph Vectorized ["NumPy Vectorized (Fast, C-Level)"]
+        V1["Contiguous C-array in RAM"] --> V2["Single SIMD CPU instruction"]
+        V2 --> V3["50x - 100x Speedup across millions of points"]
+    end
+    style Looping fill:#1e293b,stroke:#ef4444,color:#f8fafc
+    style Vectorized fill:#065f46,stroke:#34d399,color:#ffffff
+</pre></div>
+<p>For this Coding Book, the core environment is intentionally small:</p>
+<div class="ascii-box"><pre>Python
+ │
+ ├── NumPy       → arrays + vectorized numerical computation
+ ├── Matplotlib  → visualization
+ ├── pandas      → tabular data
+ ├── scikit-learn→ standard ML reference implementations
+ └── PyTorch     → deep-learning implementations</pre></div>
+<p>Not every chapter needs every library.</p>
+<p>The principle is:</p>
+<blockquote>
+<p>Install what a chapter needs, not everything that exists in AI/ML.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">The Most Important Skill: Shapes</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Implementation Model</div>
+
+Python ke for-loops AI ke liye slow poison hain.
+Jab tum 1,000,000 numbers ko Python loop mein multiply karte ho, interpreter har step par type-check karta hai.
+NumPy ek C-level memory buffer banata hai jahan CPU ek hi clock cycle mein SIMD instructions chala kar pure vector ko multiply kar deta hai.
+Is lab ko master karo—yahi tumhare har AI model ki speed ka secret hai!
+
+</div>
+
+<p>Before sophisticated ML, you need to be comfortable with:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X.shape</code></pre></div>
+<p>A large amount of AI/ML code is essentially:</p>
+<div class="ascii-box"><pre>choose the right array shape
+        ↓
+perform the right operation
+        ↓
+check the resulting shape</pre></div>
+<p>Example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+X = np.array([
+    [1.0, 2.0],
+    [3.0, 4.0],
+    [5.0, 6.0],
+])
+
+print(X.shape)</code></pre></div>
+<p>Output:</p>
+<div class="ascii-box"><pre>(3, 2)</pre></div>
+<p>Interpretation:</p>
+<div class="ascii-box"><pre>3 samples
+2 features</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">Vector Representation</h2>
+      </div>
+      <div class="section-body">
+        <p>A single feature vector can be represented as:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">x = np.array([1.0, 2.0, 3.0])</code></pre></div>
+<p>Its shape is:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">x.shape</code></pre></div>
+<p>which is:</p>
+<div class="ascii-box"><pre>(3,)</pre></div>
+<p>It is a one-dimensional NumPy array.</p>
+<p>For matrix-style reasoning, you may also encounter a column vector:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">x_col = np.array([
+    [1.0],
+    [2.0],
+    [3.0],
+])</code></pre></div>
+<p>whose shape is:</p>
+<div class="ascii-box"><pre>(3, 1)</pre></div>
+<p>These are mathematically related objects but not identical Python array shapes.</p>
+<h3>Important habit</h3>
+<p>Never assume:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">(3,)</code></pre></div>
+<p>and</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">(3, 1)</code></pre></div>
+<p>will behave identically under every operation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Matrix Representation</h2>
+      </div>
+      <div class="section-body">
+        <p>A design matrix is commonly written as:</p>
+<div class="formula-math">\[
+X\in\mathbb R^{n\times d}.
+\]</div>
+<p>In NumPy:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X = np.array([
+    [1, 10],
+    [2, 20],
+    [3, 30],
+    [4, 40],
+])</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(X.shape)</code></pre></div>
+<p>gives:</p>
+<div class="ascii-box"><pre>(4, 2)</pre></div>
+<p>Interpretation:</p>
+<div class="ascii-box"><pre>4 samples
+2 features</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Targets</h2>
+      </div>
+      <div class="section-body">
+        <p>Regression targets:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">y = np.array([12.0, 24.0, 36.0, 48.0])</code></pre></div>
+<p>Classification targets:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">y = np.array([0, 1, 1, 0])</code></pre></div>
+<p>The same NumPy array structure can hold different semantic meanings.</p>
+<p>The meaning comes from the problem definition.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Elementwise Operations</h2>
+      </div>
+      <div class="section-body">
+        <p>NumPy arrays support elementwise operations.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">x = np.array([1, 2, 3])
+
+print(x + 2)
+print(x * 3)
+print(x ** 2)</code></pre></div>
+<p>Conceptually:</p>
+<div class="formula-math">\[
+x+2
+\]</div>
+<p>means:</p>
+<div class="formula-math">\[
+(x_1+2,\ x_2+2,\ x_3+2).
+\]</div>
+<p>This is extremely useful for ML.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Dot Product</h2>
+      </div>
+      <div class="section-body">
+        <p>The mathematical operation:</p>
+<div class="formula-math">\[
+w^Tx
+\]</div>
+<p>can be written:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">w = np.array([2.0, 3.0])
+x = np.array([4.0, 5.0])
+
+score = w @ x
+
+print(score)</code></pre></div>
+<p>Result:</p>
+<div class="formula-math">\[
+2(4)+3(5)=8+15=23.
+\]</div>
+<p>So:</p>
+<div class="ascii-box"><pre>w @ x</pre></div>
+<p>is the NumPy expression for this vector dot product.</p>
+<p>You may also see:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">np.dot(w, x)</code></pre></div>
+<p>Both express the same basic dot-product idea for ordinary one-dimensional vectors.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">Matrix-Vector Multiplication</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">W = np.array([
+    [1.0, 2.0],
+    [3.0, 4.0],
+    [5.0, 6.0],
+])
+
+x = np.array([10.0, 20.0])</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">z = W @ x
+
+print(z)
+print(z.shape)</code></pre></div>
+<p>Mathematically:</p>
+<div class="formula-math">\[
+W x
+\]</div>
+<p>has shape:</p>
+<div class="formula-math">\[
+(3,2)(2,)\rightarrow(3,).
+\]</div>
+<p>This is the same operation that appears in dense neural-network layers.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Why `@` Matters</h2>
+      </div>
+      <div class="section-body">
+        <p>Do not confuse:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">W @ x</code></pre></div>
+<p>with:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">W * x</code></pre></div>
+<h3><code>@</code></h3>
+<p>Matrix multiplication / matrix product.</p>
+<h3><code>*</code></h3>
+<p>Elementwise multiplication, subject to NumPy broadcasting rules.</p>
+<p>For example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">W * W</code></pre></div>
+<p>squares each entry against the corresponding entry.</p>
+<p>But:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">W @ x</code></pre></div>
+<p>performs the linear transformation.</p>
+<h3>Mental rule</h3>
+<div class="ascii-box"><pre>*  → elementwise
+@  → matrix multiplication</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Transpose</h2>
+      </div>
+      <div class="section-body">
+        <p>For:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X = np.array([
+    [1, 2, 3],
+    [4, 5, 6],
+])</code></pre></div>
+<p>we have:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X.T</code></pre></div>
+<p>which changes:</p>
+<div class="ascii-box"><pre>(2, 3)</pre></div>
+<p>to:</p>
+<div class="ascii-box"><pre>(3, 2)</pre></div>
+<p>Mathematically:</p>
+<div class="formula-math">\[
+X^T.
+\]</div>
+<p>Transpose becomes important in:</p>
+<ul>
+<li>least squares;</li>
+<li>covariance calculations;</li>
+<li>neural-network matrix notation;</li>
+<li>gradient expressions.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Norms in NumPy</h2>
+      </div>
+      <div class="section-body">
+        <p>For:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">w = np.array([3.0, -4.0])</code></pre></div>
+<p>L2 norm:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">np.linalg.norm(w)</code></pre></div>
+<p>returns:</p>
+<div class="formula-math">\[
+5.
+\]</div>
+<p>L1 norm:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">np.linalg.norm(w, ord=1)</code></pre></div>
+<p>returns:</p>
+<div class="formula-math">\[
+7.
+\]</div>
+<p>Squared L2:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">np.linalg.norm(w) ** 2</code></pre></div>
+<p>returns:</p>
+<div class="formula-math">\[
+25.
+\]</div>
+<p>You can also write the squared L2 directly:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">w @ w</code></pre></div>
+<p>for an ordinary real vector.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">First Numerical Lab</h2>
+      </div>
+      <div class="section-body">
+        <p>Create:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+w = np.array([3.0, -4.0])
+
+l1 = np.linalg.norm(w, ord=1)
+l2 = np.linalg.norm(w)
+l2_sq = l2 ** 2
+
+print(&quot;L1:&quot;, l1)
+print(&quot;L2:&quot;, l2)
+print(&quot;L2 squared:&quot;, l2_sq)</code></pre></div>
+<p>Expected:</p>
+<div class="ascii-box"><pre>L1: 7.0
+L2: 5.0
+L2 squared: 25.0</pre></div>
+<h3>Why this matters</h3>
+<p>The exact same calculations will reappear in Ridge/Lasso implementations.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Means and Standardization</h2>
+      </div>
+      <div class="section-body">
+        <p>For a feature vector:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">x = np.array([10.0, 20.0, 30.0, 40.0])</code></pre></div>
+<p>mean:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">mu = x.mean()</code></pre></div>
+<p>standard deviation:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">sigma = x.std()</code></pre></div>
+<p>A basic standardized form is:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">x_scaled = (x - mu) / sigma</code></pre></div>
+<p>matching:</p>
+<div class="formula-math">\[
+\boxed{
+x'=\frac{x-\mu}{\sigma}
+}
+\]</div>
+<p>The exact standard-deviation convention can differ between sample-statistics and population-style calculations, so always know what your implementation uses.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Do Not Fit Test Preprocessing Separately</h2>
+      </div>
+      <div class="section-body">
+        <p>For ML workflows, preprocessing parameters are learned from training data.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>training feature values
+        ↓
+calculate μ, σ
+        ↓
+store μ, σ
+        ↓
+transform training data
+        ↓
+use same μ, σ on validation/test data</pre></div>
+<p>Do not compute test-set statistics and then use them to transform the training pipeline.</p>
+<p>That leaks information across the split.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">Reproducible Randomness</h2>
+      </div>
+      <div class="section-body">
+        <p>Use an explicit random generator when possible:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">rng = np.random.default_rng(42)</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">x = rng.normal(size=10)</code></pre></div>
+<p>Running the same code with the same seed should reproduce the same generated sequence for that generator.</p>
+<p>The seed is not magic.</p>
+<p>It simply gives you a reproducible random sequence.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">Synthetic Data</h2>
+      </div>
+      <div class="section-body">
+        <p>Synthetic data is extremely useful for learning because you know the expected structure.</p>
+<p>Example:</p>
+<div class="formula-math">\[
+y=2x+3+\epsilon.
+\]</div>
+<p>Python:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+rng = np.random.default_rng(42)
+
+x = np.linspace(0, 10, 50)
+noise = rng.normal(0, 1, size=x.shape)
+y = 2 * x + 3 + noise</code></pre></div>
+<p>Now you know:</p>
+<div class="ascii-box"><pre>true slope ≈ 2
+true intercept ≈ 3</pre></div>
+<p>A linear-regression experiment can therefore be checked against a known ground truth.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">Why Synthetic Data Comes Before Real Data</h2>
+      </div>
+      <div class="section-body">
+        <p>Real datasets can contain:</p>
+<ul>
+<li>missing values;</li>
+<li>strange units;</li>
+<li>corrupted rows;</li>
+<li>label issues;</li>
+<li>class imbalance;</li>
+<li>data leakage;</li>
+<li>distribution shift.</li>
+</ul>
+<p>A synthetic dataset isolates the algorithm.</p>
+<p>Learning order:</p>
+<div class="ascii-box"><pre>known synthetic structure
+        ↓
+algorithm behaviour
+        ↓
+small real dataset
+        ↓
+larger dataset</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Matplotlib Basics</h2>
+      </div>
+      <div class="section-body">
+        <p>Start with a simple plot:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import matplotlib.pyplot as plt
+
+plt.plot(x, y)
+plt.xlabel(&quot;x&quot;)
+plt.ylabel(&quot;y&quot;)
+plt.title(&quot;Synthetic regression data&quot;)
+plt.show()</code></pre></div>
+<p>A useful visualization has:</p>
+<ul>
+<li>meaningful labels;</li>
+<li>readable title;</li>
+<li>appropriate scale;</li>
+<li>only the information needed for the question.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">Scatter vs Line</h2>
+      </div>
+      <div class="section-body">
+        <p>For raw observations:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">plt.scatter(x, y)</code></pre></div>
+<p>is usually appropriate.</p>
+<p>For a predicted continuous curve:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">plt.plot(x, y_pred)</code></pre></div>
+<p>is often appropriate.</p>
+<p>A useful regression visualization may use both:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">plt.scatter(x, y, label=&quot;data&quot;)
+plt.plot(x, y_pred, label=&quot;model&quot;)
+plt.legend()
+plt.show()</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Loss Curves</h2>
+      </div>
+      <div class="section-body">
+        <p>Training often produces a sequence:</p>
+<div class="formula-math">\[
+J_1,J_2,\ldots,J_T.
+\]</div>
+<p>Store the values:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">loss_history = []</code></pre></div>
+<p>and after each iteration:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">loss_history.append(loss)</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">plt.plot(loss_history)
+plt.xlabel(&quot;Iteration&quot;)
+plt.ylabel(&quot;Loss&quot;)
+plt.title(&quot;Training loss&quot;)
+plt.show()</code></pre></div>
+<p>This simple plot is one of the most useful debugging tools in ML.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">What Loss Curves Can Tell You</h2>
+      </div>
+      <div class="section-body">
+        <h3>Healthy downward trend</h3>
+<div class="ascii-box"><pre>\ 
+ \__
+    \___</pre></div>
+<p>Possible sign of successful optimization.</p>
+<h3>Almost flat</h3>
+<div class="ascii-box"><pre>────────</pre></div>
+<p>Possible causes:</p>
+<ul>
+<li>learning rate too small;</li>
+<li>bad initialization;</li>
+<li>gradient close to zero;</li>
+<li>implementation error;</li>
+<li>poor scaling.</li>
+</ul>
+<h3>Oscillation</h3>
+<div class="ascii-box"><pre>\/\/\/\/</pre></div>
+<p>Possible causes:</p>
+<ul>
+<li>learning rate too large;</li>
+<li>noisy optimization;</li>
+<li>unstable scaling.</li>
+</ul>
+<h3>NaN</h3>
+<div class="ascii-box"><pre>finite → finite → NaN</pre></div>
+<p>Investigate:</p>
+<ul>
+<li>division by zero;</li>
+<li>log of invalid values;</li>
+<li>overflow;</li>
+<li>exploding values;</li>
+<li>invalid gradients.</li>
+</ul>
+<p>Never interpret a curve without diagnosing the underlying behaviour.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">Assertions and Shape Checks</h2>
+      </div>
+      <div class="section-body">
+        <p>Before running ML operations:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert X.ndim == 2
+assert y.ndim == 1
+assert len(X) == len(y)</code></pre></div>
+<p>If:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X.shape == (100, 5)</code></pre></div>
+<p>you know:</p>
+<div class="ascii-box"><pre>100 samples
+5 features</pre></div>
+<p>This is much safer than discovering the meaning after a mysterious matrix error.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">Basic Debug Print Pattern</h2>
+      </div>
+      <div class="section-body">
+        <p>While learning, it is useful to inspect:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(&quot;X shape:&quot;, X.shape)
+print(&quot;y shape:&quot;, y.shape)
+print(&quot;weights shape:&quot;, w.shape)
+print(&quot;prediction shape:&quot;, y_hat.shape)
+print(&quot;loss:&quot;, loss)</code></pre></div>
+<p>Later, replace noisy prints with structured logging or tests.</p>
+<p>During learning, visibility is more important than elegance.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">Numerical Safety</h2>
+      </div>
+      <div class="section-body">
+        <p>When implementing ML equations, inspect:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">np.isnan(value)
+np.isinf(value)</code></pre></div>
+<p>For arrays:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">np.isnan(X).any()
+np.isinf(X).any()</code></pre></div>
+<p>This matters for models involving:</p>
+<ul>
+<li>exponential functions;</li>
+<li>logarithms;</li>
+<li>division;</li>
+<li>very large gradients.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">Stable Computation Is Better Than Naive Computation</h2>
+      </div>
+      <div class="section-body">
+        <p>A mathematically equivalent expression can be numerically safer.</p>
+<p>For example, direct exponentiation may overflow for large inputs.</p>
+<p>The principle is:</p>
+<div class="formula-math">\[
+\boxed{
+\text{Mathematical equivalence}
+\neq
+\text{numerical equivalence in finite precision}
+}
+\]</div>
+<p>Later Coding Book chapters will show concrete cases such as sigmoid/logistic computation and softmax-like operations.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">pandas — When Tables Are Useful</h2>
+      </div>
+      <div class="section-body">
+        <p>For tabular datasets:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import pandas as pd
+
+df = pd.DataFrame({
+    &quot;age&quot;: [20, 21, 22],
+    &quot;score&quot;: [70, 81, 77],
+})</code></pre></div>
+<p>Useful operations:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">df.head()
+df.info()
+df.describe()
+df.isna().sum()</code></pre></div>
+<p>The purpose is not to memorize every pandas method.</p>
+<p>The purpose is to answer basic questions:</p>
+<div class="ascii-box"><pre>What columns exist?
+What are their types?
+Are there missing values?
+What are the scales?</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">Train/Test Split</h2>
+      </div>
+      <div class="section-body">
+        <p>A standard scikit-learn split:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,
+    random_state=42,
+)</code></pre></div>
+<p>The exact split ratio depends on the experiment.</p>
+<p>The important concepts are:</p>
+<div class="ascii-box"><pre>training data
+→ fit model
+
+test data
+→ final evaluation</pre></div>
+<p>For model selection, use a validation strategy rather than repeatedly optimizing against the test set.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">A Reusable ML Lab Skeleton</h2>
+      </div>
+      <div class="section-body">
+        <p>```python</p>
+      </div>
+    </section>
+
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">Imports</h2>
+      </div>
+      <div class="section-body">
+        <p>import numpy as np
+import matplotlib.pyplot as plt</p>
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">Reproducibility</h2>
+      </div>
+      <div class="section-body">
+        <p>rng = np.random.default_rng(42)</p>
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">Load / create data</h2>
+      </div>
+      <div class="section-body">
+        
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Inspect</h2>
+      </div>
+      <div class="section-body">
+        
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Split</h2>
+      </div>
+      <div class="section-body">
+        
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Preprocess</h2>
+      </div>
+      <div class="section-body">
+        
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Define model</h2>
+      </div>
+      <div class="section-body">
+        
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">Train</h2>
+      </div>
+      <div class="section-body">
+        
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Track metrics/loss</h2>
+      </div>
+      <div class="section-body">
+        
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Evaluate</h2>
+      </div>
+      <div class="section-body">
+        
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Visualize</h2>
+      </div>
+      <div class="section-body">
+        
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Test assumptions</h2>
+      </div>
+      <div class="section-body">
+        
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Interpret</h2>
+      </div>
+      <div class="section-body">
+        <p>```</p>
+<p>Do not copy this blindly into every notebook.</p>
+<p>Use it as a checklist.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">From-Scratch ML Skeleton</h2>
+      </div>
+      <div class="section-body">
+        <p>For a simple gradient-based model:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python"># Initialize parameters
+
+weights = ...
+bias = ...
+
+for step in range(num_steps):
+    # Forward pass
+    predictions = ...
+
+    # Compute loss
+    loss = ...
+
+    # Compute gradient
+    grad_w = ...
+    grad_b = ...
+
+    # Update
+    weights -= learning_rate * grad_w
+    bias -= learning_rate * grad_b
+
+    # Record
+    loss_history.append(loss)</code></pre></div>
+<p>This pattern will reappear in:</p>
+<ul>
+<li>linear regression;</li>
+<li>logistic regression;</li>
+<li>perceptron-like training;</li>
+<li>neural networks;</li>
+<li>regularized models.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">Testing a Numerical Implementation</h2>
+      </div>
+      <div class="section-body">
+        <p>A numerical implementation should be checked against a case where you know the answer.</p>
+<p>Example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def squared_error(y_true, y_pred):
+    return np.mean((y_true - y_pred) ** 2)</code></pre></div>
+<p>Test:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">y_true = np.array([1.0, 2.0, 3.0])
+y_pred = np.array([1.0, 2.0, 3.0])
+
+assert squared_error(y_true, y_pred) == 0.0</code></pre></div>
+<p>Then test a nonzero case:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">y_true = np.array([1.0, 2.0])
+y_pred = np.array([2.0, 4.0])
+
+assert squared_error(y_true, y_pred) == 2.5</code></pre></div>
+<p>A test should state a mathematical expectation, not merely execute code.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">Testing Matrix Operations</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">w = np.array([2.0, 3.0])
+x = np.array([4.0, 5.0])</code></pre></div>
+<p>Then:</p>
+<div class="formula-math">\[
+w^Tx=23.
+\]</div>
+<p>Test:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert w @ x == 23.0</code></pre></div>
+<p>For more realistic floating-point computations, use:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">np.testing.assert_allclose(actual, expected)</code></pre></div>
+<p>instead of exact equality when tiny floating-point differences are expected.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">Floating-Point Thinking</h2>
+      </div>
+      <div class="section-body">
+        <p>Computers do not generally represent real numbers exactly.</p>
+<p>Therefore:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">0.1 + 0.2</code></pre></div>
+<p>may not be represented as exactly:</p>
+<div class="ascii-box"><pre>0.3</pre></div>
+<p>For numerical ML:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">np.testing.assert_allclose(
+    actual,
+    expected,
+    rtol=1e-6,
+    atol=1e-8,
+)</code></pre></div>
+<p>is often more appropriate than:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">actual == expected</code></pre></div>
+<p>The tolerances should match the problem.</p>
+<p>Do not choose arbitrary huge tolerances just to make a test pass.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Visual Test: Regression Ground Truth</h2>
+      </div>
+      <div class="section-body">
+        <p>Create a known line:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">x = np.linspace(0, 10, 100)
+y_true = 2 * x + 3
+
+plt.scatter(x, y_true)
+plt.xlabel(&quot;x&quot;)
+plt.ylabel(&quot;y&quot;)
+plt.title(&quot;Known linear relationship&quot;)
+plt.show()</code></pre></div>
+<p>Now imagine your model learns:</p>
+<div class="formula-math">\[
+\hat y=wx+b.
+\]</div>
+<p>You should expect approximately:</p>
+<div class="formula-math">\[
+w\approx2,\qquad b\approx3
+\]</div>
+<p>when fitting sufficiently clean observations.</p>
+<p>This is a sanity check.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Experiment Discipline</h2>
+      </div>
+      <div class="section-body">
+        <p>Change only one meaningful variable at a time.</p>
+<p>Bad experiment:</p>
+<div class="ascii-box"><pre>change learning rate
++ batch size
++ initialization
++ preprocessing
++ architecture</pre></div>
+<p>Then observe a different result.</p>
+<p>You do not know what caused the change.</p>
+<p>Better:</p>
+<div class="ascii-box"><pre>Experiment A:
+η = 0.001
+
+Experiment B:
+η = 0.01</pre></div>
+<p>Everything else fixed.</p>
+<p>Then compare.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-35" class="section-block">
+      <div class="section-header">
+        <span class="section-num">35</span>
+        <h2 class="section-heading">Configuration Separation</h2>
+      </div>
+      <div class="section-body">
+        <p>As experiments grow, keep configuration separate.</p>
+<p>Conceptually:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">config = {
+    &quot;learning_rate&quot;: 0.01,
+    &quot;epochs&quot;: 100,
+    &quot;batch_size&quot;: 32,
+}</code></pre></div>
+<p>Then use those values in the experiment.</p>
+<p>This makes comparisons easier and reduces hidden changes.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-36" class="section-block">
+      <div class="section-header">
+        <span class="section-num">36</span>
+        <h2 class="section-heading">Never Hide the Important Mathematics</h2>
+      </div>
+      <div class="section-body">
+        <p>If implementing linear regression, the learner should see the connection:</p>
+<div class="formula-math">\[
+\hat y=Xw
+\]</div>
+<div class="formula-math">\[
+e=\hat y-y
+\]</div>
+<div class="formula-math">\[
+L=\frac1n\sum_ie_i^2
+\]</div>
+<p>and then the gradient/update logic.</p>
+<p>Do not replace all of this with:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">model.fit(X, y)</code></pre></div>
+<p>in the teaching implementation.</p>
+<p>The high-level API belongs later.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-37" class="section-block">
+      <div class="section-header">
+        <span class="section-num">37</span>
+        <h2 class="section-heading">Library Version as a Reference Oracle</h2>
+      </div>
+      <div class="section-body">
+        <p>Once the from-scratch implementation works, a library can be used as a comparison point.</p>
+<p>For example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.linear_model import LinearRegression
+
+model = LinearRegression()
+model.fit(X, y)
+
+pred = model.predict(X)</code></pre></div>
+<p>The question becomes:</p>
+<div class="ascii-box"><pre>Does my implementation behave consistently with the reference implementation?</pre></div>
+<p>Not:</p>
+<blockquote>
+<p>“Can I make the library solve the entire assignment?”</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-38" class="section-block">
+      <div class="section-header">
+        <span class="section-num">38</span>
+        <h2 class="section-heading">Comparison Checklist</h2>
+      </div>
+      <div class="section-body">
+        <p>For every library comparison, inspect:</p>
+<h3>Parameters</h3>
+<p>Do both methods produce similar fitted values?</p>
+<h3>Predictions</h3>
+<p>Do predictions approximately agree?</p>
+<h3>Loss</h3>
+<p>Is the loss in the expected range?</p>
+<h3>Edge cases</h3>
+<p>Do both fail or behave sensibly in unusual inputs?</p>
+<h3>Performance</h3>
+<p>Which is faster on larger data?</p>
+<h3>API</h3>
+<p>Which is easier to use?</p>
+<h3>Flexibility</h3>
+<p>Which lets you inspect or modify the algorithm more easily?</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-39" class="section-block">
+      <div class="section-header">
+        <span class="section-num">39</span>
+        <h2 class="section-heading">A Reusable Experiment Record</h2>
+      </div>
+      <div class="section-body">
+        <p>At the end of a practical, record:</p>
+<div class="ascii-box"><pre>Experiment:
+Date:
+Dataset:
+Seed:
+Preprocessing:
+Model:
+Hyperparameters:
+Metric:
+Best result:
+Important observation:
+Unexpected behaviour:
+Bug encountered:
+Fix:
+What changed?
+Next experiment:</pre></div>
+<p>This turns random notebook activity into an engineering log.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-40" class="section-block">
+      <div class="section-header">
+        <span class="section-num">40</span>
+        <h2 class="section-heading">Recommended Folder Structure</h2>
+      </div>
+      <div class="section-body">
+        <p>A practical local project can use:</p>
+<div class="ascii-box"><pre>ai-ml/
+│
+├── notebooks/
+│   ├── u1_search/
+│   ├── u2_ml/
+│   ├── u3_deep_learning/
+│   └── u4_advanced/
+│
+├── src/
+│   ├── search/
+│   ├── ml/
+│   ├── deep_learning/
+│   └── rl/
+│
+├── tests/
+│
+├── data/
+│
+├── outputs/
+│   ├── figures/
+│   └── logs/
+│
+└── README.md</pre></div>
+<p>For small university practicals, a simpler structure is fine.</p>
+<p>The key idea is:</p>
+<div class="ascii-box"><pre>code
+≠
+generated output
+≠
+raw data
+≠
+tests</pre></div>
+<p>Keep them understandable.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-41" class="section-block">
+      <div class="section-header">
+        <span class="section-num">41</span>
+        <h2 class="section-heading">Notebook vs `.py` File</h2>
+      </div>
+      <div class="section-body">
+        <p>Use notebooks when:</p>
+<ul>
+<li>experimenting;</li>
+<li>visualizing;</li>
+<li>tracing;</li>
+<li>explaining results.</li>
+</ul>
+<p>Use <code>.py</code> files when:</p>
+<ul>
+<li>building reusable implementations;</li>
+<li>writing tests;</li>
+<li>organizing modules;</li>
+<li>preparing a project.</li>
+</ul>
+<p>A strong workflow is:</p>
+<div class="ascii-box"><pre>Notebook
+  ↓
+understand + experiment
+  ↓
+stable code
+  ↓
+src/
+  ↓
+tests/</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-42" class="section-block">
+      <div class="section-header">
+        <span class="section-num">42</span>
+        <h2 class="section-heading">First Foundation Exercise — Shapes</h2>
+      </div>
+      <div class="section-body">
+        <p>Without looking up the answer, create:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X.shape
+y.shape
+W.shape
+b.shape</code></pre></div>
+<p>for:</p>
+<div class="ascii-box"><pre>100 samples
+5 input features
+3 neurons</pre></div>
+<p>Expected reasoning:</p>
+<div class="formula-math">\[
+X:(100,5)
+\]</div>
+<div class="formula-math">\[
+W:(3,5)
+\]</div>
+<div class="formula-math">\[
+b:(3,)
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+WX^T
+\]</div>
+<p>or another equivalent orientation depending on your convention.</p>
+<p>The important thing is consistency.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-43" class="section-block">
+      <div class="section-header">
+        <span class="section-num">43</span>
+        <h2 class="section-heading">First Foundation Exercise — Dot Product</h2>
+      </div>
+      <div class="section-body">
+        <p>Take:</p>
+<div class="formula-math">\[
+w=(2,-1,4)
+\]</div>
+<p>and</p>
+<div class="formula-math">\[
+x=(3,5,2).
+\]</div>
+<p>Compute manually:</p>
+<div class="formula-math">\[
+w^Tx
+=
+2(3)+(-1)(5)+4(2)
+\]</div>
+<div class="formula-math">\[
+=6-5+8
+\]</div>
+<div class="formula-math">\[
+\boxed{9}.
+\]</div>
+<p>Then verify with NumPy:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">w = np.array([2.0, -1.0, 4.0])
+x = np.array([3.0, 5.0, 2.0])
+
+assert w @ x == 9.0</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-44" class="section-block">
+      <div class="section-header">
+        <span class="section-num">44</span>
+        <h2 class="section-heading">Second Foundation Exercise — Norms</h2>
+      </div>
+      <div class="section-body">
+        <p>For:</p>
+<div class="formula-math">\[
+w=(3,-4),
+\]</div>
+<p>calculate:</p>
+<div class="formula-math">\[
+\|w\|_1=7
+\]</div>
+<div class="formula-math">\[
+\|w\|_2=5
+\]</div>
+<div class="formula-math">\[
+\|w\|_2^2=25.
+\]</div>
+<p>Then verify with NumPy.</p>
+<p>This becomes directly useful when you reach Ridge/Lasso.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-45" class="section-block">
+      <div class="section-header">
+        <span class="section-num">45</span>
+        <h2 class="section-heading">Third Foundation Exercise — Known Regression Data</h2>
+      </div>
+      <div class="section-body">
+        <p>Create:</p>
+<div class="formula-math">\[
+y=4x-1
+\]</div>
+<p>for:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">x = np.array([0., 1., 2., 3., 4.])
+y = 4 * x - 1</code></pre></div>
+<p>Plot the points.</p>
+<p>Questions:</p>
+<ol>
+<li>What should the true slope be?</li>
+<li>What should the true intercept be?</li>
+<li>What happens if you add small noise?</li>
+<li>Can a linear-regression implementation recover values near the ground truth?</li>
+</ol>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-46" class="section-block">
+      <div class="section-header">
+        <span class="section-num">46</span>
+        <h2 class="section-heading">Fourth Foundation Exercise — Loss Curve</h2>
+      </div>
+      <div class="section-body">
+        <p>Create a fake decreasing loss history:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">loss_history = [
+    10.0,
+    7.5,
+    5.8,
+    4.2,
+    3.1,
+    2.4,
+    2.0,
+]</code></pre></div>
+<p>Plot it.</p>
+<p>Then create an oscillating loss history.</p>
+<p>Compare the shapes.</p>
+<p>The objective is not to memorize “good-looking curves.”</p>
+<p>The objective is to learn that visualization is a diagnostic tool.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-47" class="section-block">
+      <div class="section-header">
+        <span class="section-num">47</span>
+        <h2 class="section-heading">Debugging Exercise</h2>
+      </div>
+      <div class="section-body">
+        <p>Introduce a mistake:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">W = np.ones((3, 5))
+x = np.ones(4)
+
+z = W @ x</code></pre></div>
+<p>This should fail because:</p>
+<div class="formula-math">\[
+(3,5)(4,)
+\]</div>
+<p>has incompatible inner dimensions.</p>
+<p>Correct the input to length 5.</p>
+<h3>Lesson</h3>
+<p>Before blaming NumPy:</p>
+<div class="ascii-box"><pre>read the error
+↓
+inspect shapes
+↓
+match dimensions</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-48" class="section-block">
+      <div class="section-header">
+        <span class="section-num">48</span>
+        <h2 class="section-heading">Reproducibility Exercise</h2>
+      </div>
+      <div class="section-body">
+        <p>Run:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">rng = np.random.default_rng(42)
+a = rng.normal(size=5)</code></pre></div>
+<p>Then run the same seed again and compare.</p>
+<p>Then change the seed.</p>
+<p>Observe the difference.</p>
+<h3>Lesson</h3>
+<p>A controlled seed lets you distinguish:</p>
+<div class="ascii-box"><pre>real algorithm change</pre></div>
+<p>from:</p>
+<div class="ascii-box"><pre>random variation</pre></div>
+<p>during debugging.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-49" class="section-block">
+      <div class="section-header">
+        <span class="section-num">49</span>
+        <h2 class="section-heading">Minimal Package Philosophy</h2>
+      </div>
+      <div class="section-body">
+        <p>Do not use a library merely because a tutorial uses it.</p>
+<p>For the core coding track, ask:</p>
+<blockquote>
+<p>“What problem does this dependency solve?”</p>
+</blockquote>
+<p>A smaller environment is:</p>
+<ul>
+<li>easier to debug;</li>
+<li>easier to reproduce;</li>
+<li>easier to understand;</li>
+<li>less likely to produce dependency conflicts.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-50" class="section-block">
+      <div class="section-header">
+        <span class="section-num">50</span>
+        <h2 class="section-heading">Coding Book Standard for Future Chapters</h2>
+      </div>
+      <div class="section-body">
+        <p>Every implementation chapter should make the following relationship visible:</p>
+<div class="formula-math">\[
+\boxed{
+\text{Math}
+\rightarrow
+\text{Algorithm}
+\rightarrow
+\text{Data Structure}
+\rightarrow
+\text{Code}
+\rightarrow
+\text{Output}
+\rightarrow
+\text{Interpretation}
+}
+\]</div>
+<p>For example:</p>
+<h3>Linear regression</h3>
+<div class="formula-math">\[
+\hat y=Xw
+\]</div>
+<p>↓</p>
+<div class="ascii-box"><pre>matrix multiplication</pre></div>
+<p>↓</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">y_pred = X @ w</code></pre></div>
+<p>↓</p>
+<p>predictions</p>
+<p>↓</p>
+<p>loss</p>
+<p>↓</p>
+<p>gradient</p>
+<p>↓</p>
+<p>parameter update.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-51" class="section-block">
+      <div class="section-header">
+        <span class="section-num">51</span>
+        <h2 class="section-heading">Mini Reference — Essential NumPy Commands</h2>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Task</th>
+<th>Typical expression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Create array</td>
+<td><code>np.array(...)</code></td>
+</tr>
+<tr>
+<td>Create zeros</td>
+<td><code>np.zeros(...)</code></td>
+</tr>
+<tr>
+<td>Create ones</td>
+<td><code>np.ones(...)</code></td>
+</tr>
+<tr>
+<td>Range</td>
+<td><code>np.arange(...)</code></td>
+</tr>
+<tr>
+<td>Evenly spaced</td>
+<td><code>np.linspace(...)</code></td>
+</tr>
+<tr>
+<td>Shape</td>
+<td><code>x.shape</code></td>
+</tr>
+<tr>
+<td>Reshape</td>
+<td><code>x.reshape(...)</code></td>
+</tr>
+<tr>
+<td>Mean</td>
+<td><code>x.mean()</code></td>
+</tr>
+<tr>
+<td>Standard deviation</td>
+<td><code>x.std()</code></td>
+</tr>
+<tr>
+<td>Sum</td>
+<td><code>x.sum()</code></td>
+</tr>
+<tr>
+<td>Min/Max</td>
+<td><code>x.min()</code> / <code>x.max()</code></td>
+</tr>
+<tr>
+<td>Absolute value</td>
+<td><code>np.abs(x)</code></td>
+</tr>
+<tr>
+<td>Square</td>
+<td><code>x ** 2</code></td>
+</tr>
+<tr>
+<td>Dot product</td>
+<td><code>x @ y</code></td>
+</tr>
+<tr>
+<td>Matrix multiplication</td>
+<td><code>A @ B</code></td>
+</tr>
+<tr>
+<td>Transpose</td>
+<td><code>A.T</code></td>
+</tr>
+<tr>
+<td>L2 norm</td>
+<td><code>np.linalg.norm(x)</code></td>
+</tr>
+<tr>
+<td>L1 norm</td>
+<td><code>np.linalg.norm(x, ord=1)</code></td>
+</tr>
+<tr>
+<td>Random generator</td>
+<td><code>np.random.default_rng(seed)</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>You do not need to memorize every NumPy function.</p>
+<p>You need to recognize these common building blocks.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-52" class="section-block">
+      <div class="section-header">
+        <span class="section-num">52</span>
+        <h2 class="section-heading">Mini Reference — Essential Matplotlib Commands</h2>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Task</th>
+<th>Typical expression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Line plot</td>
+<td><code>plt.plot(...)</code></td>
+</tr>
+<tr>
+<td>Scatter</td>
+<td><code>plt.scatter(...)</code></td>
+</tr>
+<tr>
+<td>Histogram</td>
+<td><code>plt.hist(...)</code></td>
+</tr>
+<tr>
+<td>Axis label</td>
+<td><code>plt.xlabel(...)</code></td>
+</tr>
+<tr>
+<td>Y label</td>
+<td><code>plt.ylabel(...)</code></td>
+</tr>
+<tr>
+<td>Title</td>
+<td><code>plt.title(...)</code></td>
+</tr>
+<tr>
+<td>Legend</td>
+<td><code>plt.legend()</code></td>
+</tr>
+<tr>
+<td>Show</td>
+<td><code>plt.show()</code></td>
+</tr>
+<tr>
+<td>Figure</td>
+<td><code>plt.figure()</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Again, the goal is not syntax memorization.</p>
+<p>Use documentation when needed.</p>
+<p>The goal is knowing <strong>what you want to visualize</strong>.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-53" class="section-block">
+      <div class="section-header">
+        <span class="section-num">53</span>
+        <h2 class="section-heading">Mini Reference — Essential pandas Commands</h2>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Task</th>
+<th>Typical expression</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Create/read table</td>
+<td><code>pd.DataFrame(...)</code> / <code>pd.read_csv(...)</code></td>
+</tr>
+<tr>
+<td>First rows</td>
+<td><code>df.head()</code></td>
+</tr>
+<tr>
+<td>Shape</td>
+<td><code>df.shape</code></td>
+</tr>
+<tr>
+<td>Columns</td>
+<td><code>df.columns</code></td>
+</tr>
+<tr>
+<td>Types</td>
+<td><code>df.dtypes</code></td>
+</tr>
+<tr>
+<td>Summary</td>
+<td><code>df.describe()</code></td>
+</tr>
+<tr>
+<td>Missing values</td>
+<td><code>df.isna().sum()</code></td>
+</tr>
+<tr>
+<td>Unique values</td>
+<td><code>df[col].unique()</code></td>
+</tr>
+<tr>
+<td>Value counts</td>
+<td><code>df[col].value_counts()</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>The important ML habit is:</p>
+<div class="ascii-box"><pre>inspect first
+model later</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-54" class="section-block">
+      <div class="section-header">
+        <span class="section-num">54</span>
+        <h2 class="section-heading">Foundation Coding Checklist</h2>
+      </div>
+      <div class="section-body">
+        <p>Before moving to Unit I:</p>
+<ul>
+<li>[ ] I can create and inspect NumPy arrays.</li>
+<li>[ ] I understand shape \((n,d)\).</li>
+<li>[ ] I know <code>@</code> vs <code>*</code>.</li>
+<li>[ ] I can compute dot products.</li>
+<li>[ ] I can multiply matrices and vectors.</li>
+<li>[ ] I can transpose a matrix.</li>
+<li>[ ] I can compute L1/L2 quantities.</li>
+<li>[ ] I can standardize a simple feature vector.</li>
+<li>[ ] I understand train/test preprocessing separation.</li>
+<li>[ ] I can generate reproducible synthetic data.</li>
+<li>[ ] I can make basic Matplotlib plots.</li>
+<li>[ ] I can plot a loss curve.</li>
+<li>[ ] I can use assertions.</li>
+<li>[ ] I can inspect NaN/Inf.</li>
+<li>[ ] I understand floating-point comparison.</li>
+<li>[ ] I can write a simple numerical unit test.</li>
+<li>[ ] I can explain a shape mismatch.</li>
+<li>[ ] I can separate notebook experimentation from reusable source code.</li>
+<li>[ ] I understand why pseudocode comes before implementation.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-55" class="section-block">
+      <div class="section-header">
+        <span class="section-num">55</span>
+        <h2 class="section-heading">Active Recall</h2>
+      </div>
+      <div class="section-body">
+        <p>Close the file and answer:</p>
+<ol>
+<li>What is the usual shape of a tabular ML dataset \(X\)?</li>
+<li>Why is <code>X @ w</code> different from <code>X * w</code>?</li>
+<li>What does <code>.T</code> do?</li>
+<li>How do you compute an L1 norm with NumPy?</li>
+<li>Why are shape checks so important?</li>
+<li>What is a reproducible random generator?</li>
+<li>Why use synthetic data?</li>
+<li>Why should preprocessing be fitted on training data?</li>
+<li>What does a loss curve tell you?</li>
+<li>What are three common causes of a NaN loss?</li>
+<li>Why use <code>assert</code>?</li>
+<li>When is <code>np.testing.assert_allclose</code> preferable to <code>==</code>?</li>
+<li>When should a notebook become a Python module?</li>
+<li>Why should library implementations come after the from-scratch version?</li>
+<li>What should you inspect when a matrix multiplication fails?</li>
+</ol>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-56" class="section-block">
+      <div class="section-header">
+        <span class="section-num">56</span>
+        <h2 class="section-heading">Coding Exercise — Build the Lab Utilities</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Lab Viva Trap & Runtime Gotcha</div>
+
+**The 1D Rank-1 Array Trap:**
+A shape `(n,)` array is NOT a row vector `(1, n)` or column vector `(n, 1)`!
+If you add an `(n, 1)` column to an `(n,)` array, NumPy broadcasts it to an `(n, n)` matrix without throwing an error!
+Always check `a.shape` and use `a.reshape(-1, 1)` when matrix multiplication or dot product is intended.
+
+</div>
+
+<p>Create a small utility module containing functions for:</p>
+<div class="ascii-box"><pre>describe_array(...)
+check_same_length(...)
+l1_norm(...)
+l2_norm(...)
+squared_l2(...)
+mse(...)
+standardize(...)</pre></div>
+<p>For every function:</p>
+<ul>
+<li>document inputs;</li>
+<li>document output;</li>
+<li>add at least one test;</li>
+<li>test one edge case;</li>
+<li>avoid hidden global state.</li>
+</ul>
+<p>Do not copy a completed solution.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-57" class="section-block">
+      <div class="section-header">
+        <span class="section-num">57</span>
+        <h2 class="section-heading">Next Step</h2>
+      </div>
+      <div class="section-body">
+        <p>Once this file is comfortable, begin:</p>
+<div class="formula-math">\[
+\boxed{\texttt{CODE-U1-01 — BFS and DFS}}
+\]</div>
+<p>The first actual algorithm implementation should follow:</p>
+<div class="ascii-box"><pre>graph representation
+↓
+BFS idea
+↓
+BFS pseudocode
+↓
+BFS from scratch
+↓
+trace
+↓
+tests
+↓
+complexity
+↓
+DFS
+↓
+comparison
+↓
+visualization
+↓
+library/reference discussion</pre></div>
+<p>That is where the Coding Book moves from <strong>environment setup</strong> to actual AI implementation.</p>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="code-00-coding-foundation.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← CODE-00 — Coding Foundation</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">💻 Coding Index</span>
+      </a>
+      <a href="code-u1-01-bfs-dfs.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: Unit 1 Lab 01 — BFS & DFS →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search lab implementations, functions, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">💻</span>Lab Hub</a>
+  <a href="code-01-python-numpy-workflow.html" class="mobile-nav-btn active"><span class="icon">📖</span>CODE-01</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>
