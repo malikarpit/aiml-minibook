@@ -92,7 +92,7 @@ const SidebarManager = (() => {
     const sidebar = document.getElementById('sidebar');
     const content = document.getElementById('main-content');
     const overlay = document.getElementById('sidebar-overlay');
-    const isMobile = window.innerWidth <= 768;
+    const isMobile = window.innerWidth <= 1024;
     
     if (!sidebar) return;
     sidebar.setAttribute('aria-expanded', isOpen);
@@ -119,7 +119,7 @@ const SidebarManager = (() => {
     
     // Debounced Resize
     window.addEventListener('resize', Utils.debounce(() => {
-      if (window.innerWidth > 768 && StateManager.get('sidebarOpen') === false) {
+      if (window.innerWidth > 1024 && StateManager.get('sidebarOpen') === false) {
         StateManager.set('sidebarOpen', true);
       }
       apply();

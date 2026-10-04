@@ -155,21 +155,26 @@ graph TD
     classDef c5 fill:#1e1b4b,stroke:#818cf8,stroke-width:2px,color:#e0e7ff;
     classDef hub fill:#111827,stroke:#6366f1,stroke-width:3px,color:#ffffff;
 
-    HUB["Master Coding Lab Hub"]:::hub
+    HUB["💻 Master Coding Lab Architecture (26 Labs)"]:::hub
 
-    subgraph Track0 ["Track 0: Environment & Foundations"]
+    subgraph Track0 ["Track 0: Environment & System Foundations"]
+        direction TB
         C00["CODE-00: Lab Protocols & Testing System"]:::c0
         C01["CODE-01: NumPy & Matplotlib Vectorization"]:::c0
+        C00 --> C01
     end
 
-    subgraph Track1 ["Track 1: Classical AI & Search (Unit I)"]
+    subgraph Track1 ["Track 1: Classical AI & Search Labs (Unit I)"]
+        direction TB
         U101["CODE-U1-01: BFS & DFS (Queues vs Stacks)"]:::c1
         U102["CODE-U1-02: Greedy & A* (Priority Heuristics)"]:::c1
         U103["CODE-U1-03: CSP & Backtracking (MRV / AC-3)"]:::c1
         U104["CODE-U1-04: Minimax & Alpha-Beta (Game Search)"]:::c1
+        U101 --> U102 --> U103 --> U104
     end
 
     subgraph Track2 ["Track 2: Supervised Machine Learning (Unit II)"]
+        direction TB
         U201["CODE-U2-01: ML Pipeline & Preprocessing"]:::c2
         U202["CODE-U2-02: Linear Regression (GD vs OLS)"]:::c2
         U203["CODE-U2-03: Logistic Regression (Sigmoid / BCE)"]:::c2
@@ -178,44 +183,44 @@ graph TD
         U206["CODE-U2-06: Ridge & Lasso (L1/L2 Regularization)"]:::c2
         U207["CODE-U2-07: Model Comparison & Benchmark Lab"]:::c2
         U208["CODE-U2-08: KNN & SVM Practical Comparison"]:::c2
+        U201 --> U202 --> U203 --> U204 --> U205 --> U206 --> U207 --> U208
     end
 
     subgraph Track3 ["Track 3: Deep Learning & Neural Networks (Unit III)"]
+        direction TB
         U301["CODE-U3-01: Neuron & Perceptron (XOR Proof)"]:::c3
         U302["CODE-U3-02: MLP & Forward Propagation"]:::c3
         U303["CODE-U3-03: Backpropagation & Chain Rule"]:::c3
         U304["CODE-U3-04: CNNs & Image Classification"]:::c3
         U305["CODE-U3-05: RNNs & LSTMs Sequence Modelling"]:::c3
+        U301 --> U302 --> U303 --> U304 --> U305
     end
 
     subgraph Track4 ["Track 4: Advanced AI, RL & Generative Models (Unit IV)"]
+        direction TB
         U401["CODE-U4-01: MDP & Q-Learning (FrozenLake)"]:::c4
         U402["CODE-U4-02: Policy Gradients & REINFORCE"]:::c4
         U403["CODE-U4-03: NLP Pipeline & Naive Bayes"]:::c4
         U404["CODE-U4-04: Autoencoders & Latent Compression"]:::c4
         U405["CODE-U4-05: GANs (Minimax Game to PyTorch)"]:::c4
+        U401 --> U402
+        U403 --> U404 --> U405
     end
 
     subgraph Track5 ["Track 5: Engineering Mastery & Capstone"]
+        direction TB
         C23["CODE-23: Debugging, Testing & Reproducibility"]:::c5
         C24["CODE-24: AI/ML Capstone & Master Checklist"]:::c5
+        C23 --> C24
     end
 
     HUB --> Track0
-    HUB --> Track1
-    HUB --> Track2
-    HUB --> Track3
-    HUB --> Track4
-    HUB --> Track5
-
-    C00 --> C01
-    C01 --> U101 --> U102 --> U103 --> U104
-    C01 --> U201 --> U202 --> U203 --> U204 --> U205 --> U206 --> U207 --> U208
-    U208 --> U301 --> U302 --> U303 --> U304 --> U305
-    U101 --> U401 --> U402
-    U305 --> U403
-    U302 --> U404 --> U405
-    U405 --> C23 --> C24
+    Track0 --> Track1
+    Track0 --> Track2
+    Track2 --> Track3
+    Track1 --> Track4
+    Track3 --> Track4
+    Track4 --> Track5
       </pre>
     </div>
 

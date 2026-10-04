@@ -264,26 +264,36 @@
 /* ─────────────────────────────────────────────────────────────────────
    05 · CONTENT SECTIONS & HEADINGS
    ───────────────────────────────────────────────────────────────────── */
-.content-section {
+.content-section,
+.section-block {
   margin-bottom: var(--em-space-12);
-  scroll-margin-top: calc(var(--header-h) + 20px);
+  scroll-margin-top: calc(var(--header-h) + 24px);
+  position: relative;
 }
 
-.section-heading {
+.section-header,
+div.section-heading {
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 2px solid var(--em-border);
   padding-bottom: var(--em-space-3);
   margin-bottom: var(--em-space-5);
+  gap: var(--em-space-3);
+  flex-wrap: wrap;
 }
 
-.section-heading h2 {
+.section-header h2,
+h2.section-heading {
   font-family: var(--font-sans);
   font-size: 1.55rem;
   font-weight: 700;
   color: var(--em-text);
   letter-spacing: -0.01em;
+  margin: 0;
+  padding: 0;
+  border-bottom: none;
+  flex: 1 1 auto;
 }
 
 .bookmark-btn {

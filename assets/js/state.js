@@ -6,7 +6,7 @@
   const NUDGE_KEY= 'aiml-minibook-backup-nudge';
   const DEFAULT_STATE = {
     theme: 'auto',
-    sidebarOpen: typeof window !== 'undefined' ? window.innerWidth > 768 : true,
+    sidebarOpen: typeof window !== 'undefined' ? window.innerWidth > 1024 : true,
     checklist: {},
     bookmarks: [],
     highlights: [],
