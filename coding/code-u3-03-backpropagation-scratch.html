@@ -1,0 +1,2399 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="CODE-U3-03: Gradient Descent & Backpropagation From Scratch — AI & Machine Learning Coding Lab. Computational Graph Chain Rule, Output Delta, Backward Pass Recurrence, Weight Gradients dW and db, and Numerical Gradient Checking">
+<title>CODE-U3-03: Gradient Descent & Backpropagation From Scratch | Coding Lab 💻 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/coding.css">
+</head>
+<body class="coding-module track-c3">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">💻</div>
+      <div class="brand-text"><span class="main">Coding Lab</span><span class="sub">AI &amp; ML From Scratch</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">CODE-U3-03: Gradient Descent &amp; Backpropagation From Scratch</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">💻</span>Coding Lab Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../math/index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 0: Environment & System</div>
+  <a href="code-00-coding-foundation.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-00: Coding Lab Foundation &amp; Implementation System</a>
+  <a href="code-01-python-numpy-workflow.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-01: Python, NumPy, Matplotlib &amp; Lab Workflow</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Classical AI & Search Labs</div>
+  <a href="code-u1-01-bfs-dfs.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-01: BFS and DFS From Scratch</a>
+  <a href="code-u1-02-greedy-a-star.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-02: Greedy Best-First &amp; A* Search From Scratch</a>
+  <a href="code-u1-03-csp-backtracking.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-03: CSPs and Backtracking Search</a>
+  <a href="code-u1-04-minimax-alpha-beta.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Supervised ML Labs</div>
+  <a href="code-u2-01-ml-workflow.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-01: ML Workflow: Preprocessing, Splitting &amp; Evaluation</a>
+  <a href="code-u2-02-linear-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-02: Linear Regression From Scratch</a>
+  <a href="code-u2-03-logistic-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-03: Logistic Regression From Scratch</a>
+  <a href="code-u2-04-decision-trees.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-04: Decision Trees From Scratch</a>
+  <a href="code-u2-05-classification-metrics-roc.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC &amp; Thresholds</a>
+  <a href="code-u2-06-ridge-lasso-regularization.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-06: Ridge &amp; Lasso From Scratch: Regularization &amp; Optimization</a>
+  <a href="code-u2-07-ml-evaluation-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-07: ML Evaluation &amp; Model Comparison Lab</a>
+  <a href="code-u2-08-knn-svm-practical-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-08: KNN and SVM Practical Comparison Lab</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Deep Learning Labs</div>
+  <a href="code-u3-01-neuron-perceptron.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-01: Neuron and Perceptron From Scratch</a>
+  <a href="code-u3-02-mlp-forward-propagation.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-02: MLP and Forward Propagation From Scratch</a>
+  <a href="code-u3-03-backpropagation-scratch.html" class="sidebar-link active"><span class="link-icon">🧠</span>CODE-U3-03: Gradient Descent &amp; Backpropagation From Scratch</a>
+  <a href="code-u3-04-cnn-image-classification.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-04: CNNs: From Scratch to PyTorch Image Classification</a>
+  <a href="code-u3-05-rnn-lstm-sequence-modelling.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-05: RNN &amp; LSTM: From Scratch to PyTorch Sequence Modelling</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Advanced AI & RL Labs</div>
+  <a href="code-u4-01-mdp-q-learning.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-01: MDPs and Q-Learning From Scratch</a>
+  <a href="code-u4-02-policy-gradients-reinforce.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-02: Policy Gradients &amp; REINFORCE Algorithm</a>
+  <a href="code-u4-03-nlp-text-classification.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-03: NLP Preprocessing &amp; Text Classification Pipeline</a>
+  <a href="code-u4-04-autoencoders-pytorch.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-04: Autoencoders: From Scratch &amp; PyTorch Representation Learning</a>
+  <a href="code-u4-05-gans-pytorch.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-05: Generative Adversarial Networks: Core Mechanics to PyTorch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 5: Engineering & Capstone</div>
+  <a href="code-23-debugging-testing-reproducibility.html" class="sidebar-link"><span class="link-icon">🏆</span>CODE-23: Debugging, Testing, Visualization &amp; Reproducibility</a>
+  <a href="code-24-coding-capstone-checklist.html" class="sidebar-link"><span class="link-icon">🏆</span>CODE-24: AI/ML Coding Capstone &amp; Master Practical Checklist</a>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">CODE-U3-03 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Course Position</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Coding Objective</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. The Full Training Loop</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Why We Need Backpropagation</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. A Minimal Trainable Network</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. NumPy Setup</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Binary Cross-Entropy</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Why We Clip Probabilities</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. First Derivative — Sigmoid</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. ReLU Derivative</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. The Key Derivative Shortcut for Binary Cross-Entropy + Sigmoid</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Computational Graph</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Chain Rule Intuition</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Backpropagation Derivation — Output Layer</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Hidden Layer Gradient</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. First Layer Gradients</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Backward Function From Scratch</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Forward Function for Training</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Gradient Descent Update</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Full Training Loop</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Plot Training Loss</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Make Predictions</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Inspect Intermediate Representations</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Why Backpropagation Is More Than “Going Backwards”</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Computational Graph Example</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Numerical Gradient Checking</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Implement Finite-Difference Check</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Relative Gradient Error</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. What Gradient Checking Can Catch</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Gradient Checking Should Use Tiny Problems</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Gradient Descent From First Principles</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Learning Rate Experiment</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Loss Monitoring</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Overfitting and Training Curves</a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Batch Gradient Descent in the Example</a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Mini-Batch Extension</a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Distinguish Three Terms</a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Common Backpropagation Errors</a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Numerical Stability and Saturation</a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Debugging Protocol</a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Tiny-Dataset Overfitting Test</a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Gradient Magnitude Inspection</a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Training-Class Design</a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Why Framework Autograd Is Useful</a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. Framework Comparison</a>
+      <a href="#s-46" class="sidebar-link"><span class="link-icon">📌</span>46. Why `BCEWithLogitsLoss` Is a Useful Practical Pattern</a>
+      <a href="#s-47" class="sidebar-link"><span class="link-icon">📌</span>47. Experiment — Learning Rate Sweep</a>
+      <a href="#s-48" class="sidebar-link"><span class="link-icon">📌</span>48. Experiment — Initialization Sensitivity</a>
+      <a href="#s-49" class="sidebar-link"><span class="link-icon">📌</span>49. Experiment — Hidden Width</a>
+      <a href="#s-50" class="sidebar-link"><span class="link-icon">📌</span>50. Master Gradient-Check Exercise</a>
+      <a href="#s-51" class="sidebar-link"><span class="link-icon">📌</span>51. Viva Questions</a>
+      <a href="#s-52" class="sidebar-link"><span class="link-icon">📌</span>52. Debugging Checklist</a>
+      <a href="#s-53" class="sidebar-link"><span class="link-icon">📌</span>53. Master Training Pipeline</a>
+      <a href="#s-54" class="sidebar-link"><span class="link-icon">📌</span>54. Connection to Earlier Units</a>
+      <a href="#s-55" class="sidebar-link"><span class="link-icon">📌</span>55. Practical Challenge</a>
+      <a href="#s-56" class="sidebar-link"><span class="link-icon">📌</span>56. Master Challenge — Reproduce the Entire Derivation</a>
+      <a href="#s-57" class="sidebar-link"><span class="link-icon">📌</span>57. One-Screen Formula Map</a>
+      <a href="#s-58" class="sidebar-link"><span class="link-icon">📌</span>58. Connection Forward</a>
+      <a href="#s-59" class="sidebar-link"><span class="link-icon">📌</span>59. Source Notes</a>
+      <a href="#s-60" class="sidebar-link"><span class="link-icon">📌</span>60. Mastery Gate</a>
+      <a href="#s-61" class="sidebar-link"><span class="link-icon">📌</span>61. Status</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Coding Lab</a>
+        <span>/</span>
+        <span>CODE-U3-03</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-c3">Track 3: Deep Learning & Neural Networks Labs</span></div>
+      <h1 class="chapter-title">Gradient Descent &amp; Backpropagation From Scratch</h1>
+      <p class="chapter-desc">Computational Graph Chain Rule, Output Delta, Backward Pass Recurrence, Weight Gradients dW and db, and Numerical Gradient Checking</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~60 min lab</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">BACKPROPAGATION</span> <span class="chapter-meta-item uni-badge">CHAIN-RULE</span> <span class="chapter-meta-item uni-badge">GRADIENTS</span> <span class="chapter-meta-item uni-badge">COMPUTATIONAL-GRAPH</span> <span class="chapter-meta-item uni-badge">GRAD-CHECK</span>
+      </div>
+
+      <div class="lab-meta-grid">
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Prerequisites</div>
+          <div class="lab-meta-value">CODE-U3-02 MLP Forward Pass, Math Companion M20 & M21</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Main Book Concept</div>
+          <div class="lab-meta-value">Ch 34 Gradient Descent Optimization, Ch 35 Backpropagation Algorithm</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Math Companion Layer</div>
+          <div class="lab-meta-value">M20 Calculus Chain Rule on Graphs, M21 Gradients & Jacobians</div>
+        </div>
+        <div class="lab-meta-box" style="grid-column: 1 / -1;">
+          <div class="lab-meta-label">AI / Machine Learning Connections</div>
+          <div class="lab-meta-value">Engine behind all deep learning, Reverse-mode automatic differentiation, Vanishing/exploding gradient diagnostics</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-meta-card"><h1>CODE-U3-03 — Gradient Descent and Backpropagation From Scratch</h1>
+<blockquote>
+<p><strong>Purpose:</strong> Turn the MLP forward pass into a trainable model by deriving and implementing gradients with backpropagation, then using gradient descent to update the parameters.</p>
+</blockquote>
+<p>This chapter contains one of the most important computational ideas in modern machine learning:</p>
+<div class="ascii-box"><pre>forward pass
+    ↓
+prediction
+    ↓
+loss
+    ↓
+backpropagation
+    ↓
+gradients
+    ↓
+gradient descent
+    ↓
+updated parameters
+    ↓
+repeat</pre></div>
+<p>Two ideas must remain distinct:</p>
+<blockquote>
+<p><strong>Backpropagation computes gradients efficiently.</strong></p>
+<p><strong>Gradient descent uses those gradients to update parameters.</strong></p>
+</blockquote>
+<p>They work together, but they are not the same operation.</p>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in CODE-U3-03 (61 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Course Position</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Coding Objective</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">The Full Training Loop</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Why We Need Backpropagation</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">A Minimal Trainable Network</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">NumPy Setup</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Binary Cross-Entropy</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Why We Clip Probabilities</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">First Derivative — Sigmoid</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">ReLU Derivative</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">The Key Derivative Shortcut for Binary Cross-Entropy + Sigmoid</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Computational Graph</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Chain Rule Intuition</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Backpropagation Derivation — Output Layer</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Hidden Layer Gradient</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">First Layer Gradients</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Backward Function From Scratch</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Forward Function for Training</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Gradient Descent Update</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Full Training Loop</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Plot Training Loss</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Make Predictions</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Inspect Intermediate Representations</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Why Backpropagation Is More Than “Going Backwards”</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Computational Graph Example</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Numerical Gradient Checking</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Implement Finite-Difference Check</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Relative Gradient Error</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">What Gradient Checking Can Catch</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Gradient Checking Should Use Tiny Problems</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Gradient Descent From First Principles</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Learning Rate Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Loss Monitoring</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Overfitting and Training Curves</span></a></li>
+        <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Batch Gradient Descent in the Example</span></a></li>
+        <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Mini-Batch Extension</span></a></li>
+        <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Distinguish Three Terms</span></a></li>
+        <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Common Backpropagation Errors</span></a></li>
+        <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Numerical Stability and Saturation</span></a></li>
+        <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Debugging Protocol</span></a></li>
+        <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Tiny-Dataset Overfitting Test</span></a></li>
+        <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Gradient Magnitude Inspection</span></a></li>
+        <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Training-Class Design</span></a></li>
+        <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Why Framework Autograd Is Useful</span></a></li>
+        <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">Framework Comparison</span></a></li>
+        <li class="toc-item"><a href="#s-46"><span class="toc-num">46</span><span class="toc-name">Why `BCEWithLogitsLoss` Is a Useful Practical Pattern</span></a></li>
+        <li class="toc-item"><a href="#s-47"><span class="toc-num">47</span><span class="toc-name">Experiment — Learning Rate Sweep</span></a></li>
+        <li class="toc-item"><a href="#s-48"><span class="toc-num">48</span><span class="toc-name">Experiment — Initialization Sensitivity</span></a></li>
+        <li class="toc-item"><a href="#s-49"><span class="toc-num">49</span><span class="toc-name">Experiment — Hidden Width</span></a></li>
+        <li class="toc-item"><a href="#s-50"><span class="toc-num">50</span><span class="toc-name">Master Gradient-Check Exercise</span></a></li>
+        <li class="toc-item"><a href="#s-51"><span class="toc-num">51</span><span class="toc-name">Viva Questions</span></a></li>
+        <li class="toc-item"><a href="#s-52"><span class="toc-num">52</span><span class="toc-name">Debugging Checklist</span></a></li>
+        <li class="toc-item"><a href="#s-53"><span class="toc-num">53</span><span class="toc-name">Master Training Pipeline</span></a></li>
+        <li class="toc-item"><a href="#s-54"><span class="toc-num">54</span><span class="toc-name">Connection to Earlier Units</span></a></li>
+        <li class="toc-item"><a href="#s-55"><span class="toc-num">55</span><span class="toc-name">Practical Challenge</span></a></li>
+        <li class="toc-item"><a href="#s-56"><span class="toc-num">56</span><span class="toc-name">Master Challenge — Reproduce the Entire Derivation</span></a></li>
+        <li class="toc-item"><a href="#s-57"><span class="toc-num">57</span><span class="toc-name">One-Screen Formula Map</span></a></li>
+        <li class="toc-item"><a href="#s-58"><span class="toc-num">58</span><span class="toc-name">Connection Forward</span></a></li>
+        <li class="toc-item"><a href="#s-59"><span class="toc-num">59</span><span class="toc-name">Source Notes</span></a></li>
+        <li class="toc-item"><a href="#s-60"><span class="toc-num">60</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-61"><span class="toc-num">61</span><span class="toc-name">Status</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">Course Position</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph RL
+    Loss["Scalar Loss ℒ"] --> dZ2["Output Error: δ₂ = A₂ - Y"]
+    dZ2 --> dW2["Weight Gradient: dW₂ = (1/B) A₁ᵀ δ₂"]
+    dZ2 --> db2["Bias Gradient: db₂ = (1/B) ∑ δ₂"]
+    dZ2 --> dA1["Backprop to Hidden: dA₁ = δ₂ W₂ᵀ"]
+    dA1 --> dZ1["Hidden Error: δ₁ = dA₁ ⊙ ReLU'(Z₁)"]
+    dZ1 --> dW1["Weight Gradient: dW₁ = (1/B) Xᵀ δ₁"]
+    dW1 & dW2 --> Update["SGD Update: W ← W - η dW"]
+    style Loss fill:#7f1d1d,stroke:#ef4444,color:#ffffff
+    style dZ1 fill:#1e293b,stroke:#a855f7,color:#f8fafc
+    style Update fill:#065f46,stroke:#34d399,color:#ffffff,stroke-width:2px
+</pre></div>
+<p>The official DSC-14 Unit III syllabus includes:</p>
+<ul>
+<li>backpropagation;</li>
+<li>gradient descent optimization;</li>
+<li>neural networks and MLPs.</li>
+</ul>
+<p>The supplied course resources identify:</p>
+<ul>
+<li><code>prac_7_neural_network.ipynb</code> as a practical companion for neurons, activations, losses and gradient-descent concepts;</li>
+<li><code>Lecture10 copy.pdf</code> as a supporting source for learned feature representations and regularization motivation;</li>
+<li>the Math Companion as the deeper mathematics layer for gradients, chain rule, computational graphs and optimization;</li>
+<li>the completed Main Book chapters on MLP and gradient descent as the conceptual theory layer.</li>
+</ul>
+<p><strong>Source boundary:</strong> the complete hand derivation and NumPy implementation in this chapter are a self-contained coding expansion designed to operationalize the syllabus concepts. They are not claimed to reproduce the exact code of the supplied notebook.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">Coding Objective</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Implementation Model</div>
+
+Backpropagation basically responsibility distribute karta hai: 'Prediction galat aayi, toh kis weight ki kitni galti thi?'
+Chain rule se hum end (loss) se shuru karke ulte pairo peeche aate hain.
+Output layer par error delta $\delta_2 = A_2 - Y$ hota hai.
+Ye delta peeche propagate hota hai $W_2^T$ ke raste, aur activation ke derivative se multiply hota hai.
+Har layer par gradient formula ka pattern identical hai: $dW = \frac{1}{B} A_{prev}^T \delta$!
+
+</div>
+
+<p>By the end of this chapter you should be able to:</p>
+<ul>
+<li>define a trainable neural-network objective;</li>
+<li>implement a loss function;</li>
+<li>understand derivatives through a computational graph;</li>
+<li>derive output-layer gradients for a simple binary classifier;</li>
+<li>propagate gradients backward through a ReLU hidden layer;</li>
+<li>implement parameter updates;</li>
+<li>train a tiny MLP from scratch;</li>
+<li>monitor loss;</li>
+<li>perform numerical gradient checking;</li>
+<li>diagnose exploding or unstable training;</li>
+<li>distinguish forward pass, backpropagation and gradient descent.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">The Full Training Loop</h2>
+      </div>
+      <div class="section-body">
+        <p>A trainable network repeatedly performs:</p>
+<div class="ascii-box"><pre>1. Forward pass
+2. Compute loss
+3. Backward pass / backpropagation
+4. Update parameters
+5. Repeat</pre></div>
+<p>Mathematically:</p>
+<div class="formula-math">\[
+\theta
+=
+\{W^{(1)},b^{(1)},W^{(2)},b^{(2)},\ldots\}.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\hat y=f_\theta(x)
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+J(\theta)=\text{loss}(\hat y,y).
+\]</div>
+<p>Backpropagation calculates:</p>
+<div class="formula-math">\[
+\nabla_\theta J.
+\]</div>
+<p>Gradient descent updates:</p>
+<div class="formula-math">\[
+\boxed{
+\theta
+\leftarrow
+\theta-\eta\nabla_\theta J
+}
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Why We Need Backpropagation</h2>
+      </div>
+      <div class="section-body">
+        <p>Imagine a network with thousands or millions of parameters.</p>
+<p>For every parameter \(\theta_j\), we need:</p>
+<div class="formula-math">\[
+\frac{\partial J}{\partial\theta_j}.
+\]</div>
+<p>Computing every derivative independently from scratch would repeat enormous amounts of work.</p>
+<p>The chain rule lets us reuse intermediate derivatives.</p>
+<p>The result is an efficient backward computation through the same graph used during the forward pass.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>Forward:
+input → layer 1 → layer 2 → loss
+
+Backward:
+loss → layer 2 → layer 1 → input</pre></div>
+<p>The backward direction is where the name <strong>backpropagation</strong> comes from.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">A Minimal Trainable Network</h2>
+      </div>
+      <div class="section-body">
+        <p>Use:</p>
+<div class="ascii-box"><pre>2 inputs
+ ↓
+2 hidden neurons
+ ↓
+1 sigmoid output</pre></div>
+<p>Mathematically:</p>
+<div class="formula-math">\[
+Z_1=XW_1+b_1
+\]</div>
+<div class="formula-math">\[
+A_1=ReLU(Z_1)
+\]</div>
+<div class="formula-math">\[
+Z_2=A_1W_2+b_2
+\]</div>
+<div class="formula-math">\[
+\hat Y=\sigma(Z_2).
+\]</div>
+<p>Use binary cross-entropy:</p>
+<div class="formula-math">\[
+\boxed{
+J=
+-\frac1n
+\sum_{i=1}^n
+\left[
+y_i\log(\hat y_i)
++
+(1-y_i)\log(1-\hat y_i)
+\right]
+}
+\]</div>
+<p>For numerical safety, predictions should be clipped slightly before taking logarithms if using the probability form directly.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">NumPy Setup</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np</code></pre></div>
+<p>Set reproducibility:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">rng = np.random.default_rng(42)</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Binary Cross-Entropy</h2>
+      </div>
+      <div class="section-body">
+        <p>Implementation:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def binary_cross_entropy(
+    y_true: np.ndarray,
+    y_pred: np.ndarray,
+    eps: float = 1e-12,
+) -&gt; float:
+    y_true = np.asarray(y_true, dtype=float)
+    y_pred = np.asarray(y_pred, dtype=float)
+
+    if y_true.shape != y_pred.shape:
+        raise ValueError(&quot;y_true and y_pred must have the same shape.&quot;)
+
+    y_pred = np.clip(y_pred, eps, 1.0 - eps)
+
+    loss = -np.mean(
+        y_true * np.log(y_pred)
+        + (1.0 - y_true) * np.log(1.0 - y_pred)
+    )
+
+    return float(loss)</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">Why We Clip Probabilities</h2>
+      </div>
+      <div class="section-body">
+        <p>The logarithm becomes problematic at:</p>
+<div class="formula-math">\[
+\log(0).
+\]</div>
+<p>A prediction numerically equal to exactly 0 or 1 can therefore cause unstable loss calculations.</p>
+<p>Clipping:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">y_pred = np.clip(
+    y_pred,
+    eps,
+    1.0 - eps,
+)</code></pre></div>
+<p>keeps the calculation finite.</p>
+<p>For production numerical implementations, one can also compute the binary cross-entropy directly from logits using stable identities. That approach avoids explicitly forming problematic logarithms of probabilities and is preferred in many frameworks.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">First Derivative — Sigmoid</h2>
+      </div>
+      <div class="section-body">
+        <p>The sigmoid is:</p>
+<div class="formula-math">\[
+\sigma(z)=\frac{1}{1+e^{-z}}.
+\]</div>
+<p>Its derivative has a useful form:</p>
+<div class="formula-math">\[
+\boxed{
+\sigma'(z)
+=
+\sigma(z)(1-\sigma(z))
+}
+\]</div>
+<p>Implementation:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def sigmoid_derivative_from_output(a):
+    return a * (1.0 - a)</code></pre></div>
+<p>Notice that this function expects the sigmoid output \(a=\sigma(z)\), so we do not have to recompute the exponential.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">ReLU Derivative</h2>
+      </div>
+      <div class="section-body">
+        <p>ReLU:</p>
+<div class="formula-math">\[
+ReLU(z)=\max(0,z).
+\]</div>
+<p>For nonzero \(z\):</p>
+<div class="formula-math">\[
+\boxed{
+ReLU'(z)=
+\begin{cases}
+1,&z\gt 0\\
+0,&z\lt 0
+\end{cases}
+}
+\]</div>
+<p>Implementation:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def relu_derivative(z):
+    return (z &gt; 0).astype(float)</code></pre></div>
+<p>At \(z=0\), ReLU is not classically differentiable. In practical implementations a subgradient/convention is chosen; this implementation returns 0 at zero.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">The Key Derivative Shortcut for Binary Cross-Entropy + Sigmoid</h2>
+      </div>
+      <div class="section-body">
+        <p>This combination is especially useful.</p>
+<p>Let:</p>
+<div class="formula-math">\[
+\hat y=\sigma(z)
+\]</div>
+<p>and binary cross-entropy:</p>
+<div class="formula-math">\[
+L=
+-\left[
+y\log\hat y+(1-y)\log(1-\hat y)
+\right].
+\]</div>
+<p>Applying the chain rule gives:</p>
+<div class="formula-math">\[
+\boxed{
+\frac{\partial L}{\partial z}
+=
+\hat y-y
+}
+\]</div>
+<p>for one example.</p>
+<p>For the mean batch loss:</p>
+<div class="formula-math">\[
+\boxed{
+dZ_2=
+\frac{1}{n}
+(\hat Y-Y)
+}
+\]</div>
+<p>where the division by \(n\) reflects the mean loss convention.</p>
+<p>This simplification is extremely important in practical neural-network derivations.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Computational Graph</h2>
+      </div>
+      <div class="section-body">
+        <p>For one sample:</p>
+<div class="ascii-box"><pre>x
+ ↓
+Z1 = XW1 + b1
+ ↓
+A1 = ReLU(Z1)
+ ↓
+Z2 = A1W2 + b2
+ ↓
+Yhat = sigmoid(Z2)
+ ↓
+L = BCE(Y, Yhat)</pre></div>
+<p>Backpropagation walks backward:</p>
+<div class="ascii-box"><pre>L
+↓
+Z2
+↓
+A1
+↓
+Z1
+↓
+W1 / b1</pre></div>
+<p>Each arrow contributes one factor from the chain rule.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Chain Rule Intuition</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+u=f(x)
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+v=g(u).
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\frac{dv}{dx}
+=
+\frac{dv}{du}
+\frac{du}{dx}.
+\]</div>
+<p>In a neural network, the same idea is applied repeatedly.</p>
+<p>You can think:</p>
+<div class="ascii-box"><pre>final effect
+×
+local effect
+×
+earlier local effect
+×
+...</pre></div>
+<p>So a parameter's gradient answers:</p>
+<blockquote>
+<p>“If I change this parameter slightly, how much does the final loss change?”</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Backpropagation Derivation — Output Layer</h2>
+      </div>
+      <div class="section-body">
+        <p>Start with:</p>
+<div class="formula-math">\[
+Z_2=A_1W_2+b_2
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+L=L(Z_2).
+\]</div>
+<p>Define:</p>
+<div class="formula-math">\[
+dZ_2=\frac{\partial L}{\partial Z_2}.
+\]</div>
+<p>For sigmoid + binary cross-entropy:</p>
+<div class="formula-math">\[
+\boxed{
+dZ_2=\frac{1}{n}(\hat Y-Y)
+}
+\]</div>
+<p>Now derive \(W_2\).</p>
+<p>Since:</p>
+<div class="formula-math">\[
+Z_2=A_1W_2+b_2
+\]</div>
+<p>the gradient is:</p>
+<div class="formula-math">\[
+\boxed{
+dW_2=A_1^TdZ_2
+}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\boxed{
+db_2=\sum_{\text{batch}}dZ_2
+}
+\]</div>
+<p>for the mean-loss convention.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">Hidden Layer Gradient</h2>
+      </div>
+      <div class="section-body">
+        <p>The hidden activation is:</p>
+<div class="formula-math">\[
+A_1=ReLU(Z_1).
+\]</div>
+<p>First move backward through the matrix multiplication:</p>
+<div class="formula-math">\[
+Z_2=A_1W_2+b_2.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\boxed{
+dA_1=dZ_2W_2^T
+}
+\]</div>
+<p>Now move through ReLU:</p>
+<div class="formula-math">\[
+\boxed{
+dZ_1=dA_1\odot ReLU'(Z_1)
+}
+\]</div>
+<p>where \(\odot\) means element-wise multiplication.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">First Layer Gradients</h2>
+      </div>
+      <div class="section-body">
+        <p>Since:</p>
+<div class="formula-math">\[
+Z_1=XW_1+b_1,
+\]</div>
+<p>we obtain:</p>
+<div class="formula-math">\[
+\boxed{
+dW_1=X^TdZ_1
+}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\boxed{
+db_1=\sum_{\text{batch}}dZ_1
+}
+\]</div>
+<p>The complete gradient flow is therefore:</p>
+<div class="ascii-box"><pre>dZ2
+ ↓
+dW2, db2
+ ↓
+dA1
+ ↓
+dZ1
+ ↓
+dW1, db1</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">Backward Function From Scratch</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def mlp_backward(
+    X,
+    Y,
+    cache,
+    W2,
+):
+    Z1 = cache[&quot;Z1&quot;]
+    A1 = cache[&quot;A1&quot;]
+    Y_hat = cache[&quot;Y_hat&quot;]
+
+    n = X.shape[0]
+
+    # Output layer: sigmoid + binary cross-entropy
+    dZ2 = (Y_hat - Y) / n
+
+    dW2 = A1.T @ dZ2
+    db2 = np.sum(dZ2, axis=0)
+
+    # Hidden layer
+    dA1 = dZ2 @ W2.T
+    dZ1 = dA1 * relu_derivative(Z1)
+
+    dW1 = X.T @ dZ1
+    db1 = np.sum(dZ1, axis=0)
+
+    return {
+        &quot;dW1&quot;: dW1,
+        &quot;db1&quot;: db1,
+        &quot;dW2&quot;: dW2,
+        &quot;db2&quot;: db2,
+    }</code></pre></div>
+<p>The code should now look almost identical to the mathematical derivation.</p>
+<p>That is the target.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Forward Function for Training</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def mlp_forward_train(
+    X,
+    W1,
+    b1,
+    W2,
+    b2,
+):
+    Z1 = X @ W1 + b1
+    A1 = np.maximum(0.0, Z1)
+
+    Z2 = A1 @ W2 + b2
+    Y_hat = 1.0 / (1.0 + np.exp(-Z2))
+
+    cache = {
+        &quot;Z1&quot;: Z1,
+        &quot;A1&quot;: A1,
+        &quot;Z2&quot;: Z2,
+        &quot;Y_hat&quot;: Y_hat,
+    }
+
+    return Y_hat, cache</code></pre></div>
+<p>For highly extreme logits, use the numerically safer sigmoid implementation from the previous chapter.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">Gradient Descent Update</h2>
+      </div>
+      <div class="section-body">
+        <p>Once we have gradients:</p>
+<div class="formula-math">\[
+W_1
+\leftarrow
+W_1-\eta dW_1
+\]</div>
+<div class="formula-math">\[
+b_1
+\leftarrow
+b_1-\eta db_1
+\]</div>
+<div class="formula-math">\[
+W_2
+\leftarrow
+W_2-\eta dW_2
+\]</div>
+<div class="formula-math">\[
+b_2
+\leftarrow
+b_2-\eta db_2.
+\]</div>
+<p>Implementation:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def update_parameters(
+    params,
+    grads,
+    learning_rate,
+):
+    params[&quot;W1&quot;] -= learning_rate * grads[&quot;dW1&quot;]
+    params[&quot;b1&quot;] -= learning_rate * grads[&quot;db1&quot;]
+    params[&quot;W2&quot;] -= learning_rate * grads[&quot;dW2&quot;]
+    params[&quot;b2&quot;] -= learning_rate * grads[&quot;db2&quot;]
+
+    return params</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Full Training Loop</h2>
+      </div>
+      <div class="section-body">
+        <p>Use a simple XOR-like binary task to make the representation problem visible.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X = np.array([
+    [0.0, 0.0],
+    [0.0, 1.0],
+    [1.0, 0.0],
+    [1.0, 1.0],
+])
+
+Y = np.array([
+    [0.0],
+    [1.0],
+    [1.0],
+    [0.0],
+])</code></pre></div>
+<p>Initialize:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">rng = np.random.default_rng(42)
+
+params = {
+    &quot;W1&quot;: rng.normal(0.0, 0.5, size=(2, 4)),
+    &quot;b1&quot;: np.zeros(4),
+    &quot;W2&quot;: rng.normal(0.0, 0.5, size=(4, 1)),
+    &quot;b2&quot;: np.zeros(1),
+}</code></pre></div>
+<p>Train:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">history = []
+
+learning_rate = 0.1
+epochs = 5000
+
+for epoch in range(epochs):
+    Y_hat, cache = mlp_forward_train(
+        X,
+        params[&quot;W1&quot;],
+        params[&quot;b1&quot;],
+        params[&quot;W2&quot;],
+        params[&quot;b2&quot;],
+    )
+
+    loss = binary_cross_entropy(Y, Y_hat)
+    history.append(loss)
+
+    grads = mlp_backward(
+        X,
+        Y,
+        cache,
+        params[&quot;W2&quot;],
+    )
+
+    params = update_parameters(
+        params,
+        grads,
+        learning_rate,
+    )
+
+    if epoch % 500 == 0:
+        print(epoch, loss)</code></pre></div>
+<p>The exact numerical trajectory depends on initialization, activation, learning rate and implementation choices.</p>
+<p>The expected conceptual result is that the network can learn a nonlinear mapping that a single perceptron cannot represent.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">Plot Training Loss</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import matplotlib.pyplot as plt
+
+plt.figure()
+plt.plot(history)
+plt.xlabel(&quot;Epoch&quot;)
+plt.ylabel(&quot;Binary cross-entropy&quot;)
+plt.title(&quot;Training Loss&quot;)
+plt.show()</code></pre></div>
+<p>The important shape is generally:</p>
+<div class="ascii-box"><pre>loss
+│\
+│ \
+│  \
+│   \____
+│        \__
+└───────────── epoch</pre></div>
+<p>It does not have to decrease perfectly every individual step in every training setting.</p>
+<p>What you want to know is whether the training process is moving toward a lower-loss region.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">Make Predictions</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">Y_hat, _ = mlp_forward_train(
+    X,
+    params[&quot;W1&quot;],
+    params[&quot;b1&quot;],
+    params[&quot;W2&quot;],
+    params[&quot;b2&quot;],
+)
+
+predictions = (Y_hat &gt;= 0.5).astype(int)
+
+print(&quot;probabilities:&quot;)
+print(Y_hat)
+
+print(&quot;predictions:&quot;)
+print(predictions)</code></pre></div>
+<p>Evaluate:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">accuracy = np.mean(predictions == Y)
+print(&quot;accuracy:&quot;, accuracy)</code></pre></div>
+<p>Do not judge a real application from accuracy alone.</p>
+<p>This tiny dataset exists to test the mechanics of learning.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">Inspect Intermediate Representations</h2>
+      </div>
+      <div class="section-body">
+        <p>Run:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">Y_hat, cache = mlp_forward_train(
+    X,
+    params[&quot;W1&quot;],
+    params[&quot;b1&quot;],
+    params[&quot;W2&quot;],
+    params[&quot;b2&quot;],
+)
+
+print(&quot;Z1:&quot;)
+print(cache[&quot;Z1&quot;])
+
+print(&quot;A1:&quot;)
+print(cache[&quot;A1&quot;])
+
+print(&quot;Yhat:&quot;)
+print(cache[&quot;Y_hat&quot;])</code></pre></div>
+<p>This is useful for understanding representation learning.</p>
+<p>The hidden activations are not the original features.</p>
+<p>They are a learned transformation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">Why Backpropagation Is More Than “Going Backwards”</h2>
+      </div>
+      <div class="section-body">
+        <p>Backpropagation does not simply reverse the network.</p>
+<p>It performs a structured application of the chain rule.</p>
+<p>For each operation:</p>
+<div class="ascii-box"><pre>forward operation
+    ↓
+local derivative
+    ↓
+multiply by upstream gradient
+    ↓
+gradient for previous node</pre></div>
+<p>So:</p>
+<div class="formula-math">\[
+\text{gradient at current node}
+=
+\text{upstream gradient}
+\times
+\text{local derivative}.
+\]</div>
+<p>This is the same idea repeated throughout the computational graph.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">Computational Graph Example</h2>
+      </div>
+      <div class="section-body">
+        <p>Consider:</p>
+<div class="formula-math">\[
+z=w x+b
+\]</div>
+<div class="formula-math">\[
+a=ReLU(z)
+\]</div>
+<div class="formula-math">\[
+\hat y=\sigma(a).
+\]</div>
+<p>Then:</p>
+<div class="ascii-box"><pre>x, w, b
+   ↓
+   z
+   ↓
+ ReLU
+   ↓
+   a
+   ↓
+sigmoid
+   ↓
+ yhat
+   ↓
+ loss</pre></div>
+<p>Suppose you want:</p>
+<div class="formula-math">\[
+\frac{\partial L}{\partial w}.
+\]</div>
+<p>The chain is:</p>
+<div class="formula-math">\[
+\boxed{
+\frac{\partial L}{\partial w}
+=
+\frac{\partial L}{\partial \hat y}
+\frac{\partial \hat y}{\partial a}
+\frac{\partial a}{\partial z}
+\frac{\partial z}{\partial w}
+}
+\]</div>
+<p>This is backpropagation in its simplest form.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">Numerical Gradient Checking</h2>
+      </div>
+      <div class="section-body">
+        <p>A hand-derived gradient should be tested.</p>
+<p>Use central finite differences:</p>
+<div class="formula-math">\[
+\boxed{
+\frac{\partial J}{\partial\theta}
+\approx
+\frac{
+J(\theta+\epsilon)-J(\theta-\epsilon)
+}
+{2\epsilon}
+}
+\]</div>
+<p>The method gives a numerical approximation to the derivative.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">Implement Finite-Difference Check</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def finite_difference_gradient(
+    loss_function,
+    parameter,
+    epsilon=1e-5,
+):
+    numerical = np.zeros_like(parameter, dtype=float)
+
+    iterator = np.nditer(
+        parameter,
+        flags=[&quot;multi_index&quot;],
+        op_flags=[&quot;readwrite&quot;],
+    )
+
+    while not iterator.finished:
+        idx = iterator.multi_index
+        original = parameter[idx]
+
+        parameter[idx] = original + epsilon
+        loss_plus = loss_function()
+
+        parameter[idx] = original - epsilon
+        loss_minus = loss_function()
+
+        parameter[idx] = original
+
+        numerical[idx] = (
+            loss_plus - loss_minus
+        ) / (2.0 * epsilon)
+
+        iterator.iternext()
+
+    return numerical</code></pre></div>
+<p>For a complete implementation, be careful that the loss function references the same parameter array and restores its original value after every perturbation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">Relative Gradient Error</h2>
+      </div>
+      <div class="section-body">
+        <p>A useful comparison is:</p>
+<div class="formula-math">\[
+\boxed{
+error=
+\frac{
+\|\nabla_{analytic}-\nabla_{numeric}\|_2
+}{
+\|\nabla_{analytic}\|_2+
+\|\nabla_{numeric}\|_2+
+\epsilon
+}
+}
+\]</div>
+<p>Interpretation:</p>
+<div class="ascii-box"><pre>very small
+   ↓
+good agreement
+
+large
+   ↓
+likely derivative or implementation bug</pre></div>
+<p>Implementation:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def relative_error(a, b, eps=1e-12):
+    numerator = np.linalg.norm(a - b)
+    denominator = (
+        np.linalg.norm(a)
+        + np.linalg.norm(b)
+        + eps
+    )
+
+    return numerator / denominator</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">What Gradient Checking Can Catch</h2>
+      </div>
+      <div class="section-body">
+        <p>It can expose:</p>
+<ul>
+<li>wrong transpose;</li>
+<li>missing bias gradient;</li>
+<li>missing batch normalization factor;</li>
+<li>wrong activation derivative;</li>
+<li>sign errors;</li>
+<li>parameter-update mistakes;</li>
+<li>accidentally modifying the wrong tensor;</li>
+<li>incorrect loss derivatives.</li>
+</ul>
+<p>Gradient checking is one of the strongest debugging techniques for a hand-written neural-network implementation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">Gradient Checking Should Use Tiny Problems</h2>
+      </div>
+      <div class="section-body">
+        <p>Do not finite-difference a million-parameter model.</p>
+<p>It requires many forward evaluations and becomes expensive.</p>
+<p>Use:</p>
+<div class="ascii-box"><pre>small dataset
+small network
+few parameters</pre></div>
+<p>Then trust the tested derivation before scaling up.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">Gradient Descent From First Principles</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+J(w)=w^2.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+\frac{dJ}{dw}=2w.
+\]</div>
+<p>Update:</p>
+<div class="formula-math">\[
+w_{t+1}=w_t-\eta(2w_t)
+\]</div>
+<p>so:</p>
+<div class="formula-math">\[
+\boxed{
+w_{t+1}=(1-2\eta)w_t
+}
+\]</div>
+<p>For stable convergence toward zero:</p>
+<div class="formula-math">\[
+|1-2\eta|\lt 1.
+\]</div>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+0\lt \eta\lt 1
+}
+\]</div>
+<p>for this specific one-dimensional example.</p>
+<p>This is not a universal neural-network learning-rate rule.</p>
+<p>It is a mathematical demonstration of why step size affects stability.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">Learning Rate Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Try:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def optimize_quadratic(
+    w0,
+    learning_rate,
+    steps,
+):
+    w = float(w0)
+    history = [w]
+
+    for _ in range(steps):
+        grad = 2.0 * w
+        w = w - learning_rate * grad
+        history.append(w)
+
+    return np.array(history)</code></pre></div>
+<p>Compare:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">for eta in [0.1, 0.4, 0.9, 1.1]:
+    history = optimize_quadratic(
+        w0=5.0,
+        learning_rate=eta,
+        steps=20,
+    )
+
+    print(
+        eta,
+        history[:6],
+        &quot;final:&quot;, history[-1],
+    )</code></pre></div>
+<p>You should see qualitatively different behaviours:</p>
+<div class="ascii-box"><pre>small enough η
+→ converges
+
+near stability boundary
+→ oscillatory/slow behaviour
+
+too large η
+→ diverges or becomes unstable</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Loss Monitoring</h2>
+      </div>
+      <div class="section-body">
+        <p>During neural-network training, record more than the final result.</p>
+<p>At minimum:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">history = {
+    &quot;loss&quot;: [],
+}</code></pre></div>
+<p>Potentially later:</p>
+<div class="ascii-box"><pre>training loss
+validation loss
+training accuracy
+validation accuracy
+learning rate</pre></div>
+<p>This makes training behaviour visible.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Overfitting and Training Curves</h2>
+      </div>
+      <div class="section-body">
+        <p>A network can continue reducing training loss while validation performance worsens.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>training loss
+     ↓
+keeps decreasing
+
+validation loss
+     ↓
+decreases
+     ↓
+minimum
+     ↓
+starts increasing</pre></div>
+<p>This is an important connection between Unit II and Unit III:</p>
+<div class="ascii-box"><pre>more model capacity
+       ↓
+fitting power
+       ↓
+possible overfitting</pre></div>
+<p>The optimizer is not automatically responsible for generalization.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-35" class="section-block">
+      <div class="section-header">
+        <span class="section-num">35</span>
+        <h2 class="section-heading">Batch Gradient Descent in the Example</h2>
+      </div>
+      <div class="section-body">
+        <p>Our XOR example uses all four examples in every gradient calculation.</p>
+<p>That is full-batch gradient descent.</p>
+<p>For:</p>
+<div class="formula-math">\[
+J=
+\frac1n\sum_i\ell_i
+\]</div>
+<p>we compute:</p>
+<div class="formula-math">\[
+\nabla J
+=
+\frac1n
+\sum_i\nabla\ell_i.
+\]</div>
+<p>The code therefore performs:</p>
+<div class="ascii-box"><pre>forward on all samples
+ ↓
+one average loss
+ ↓
+one gradient
+ ↓
+one update</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-36" class="section-block">
+      <div class="section-header">
+        <span class="section-num">36</span>
+        <h2 class="section-heading">Mini-Batch Extension</h2>
+      </div>
+      <div class="section-body">
+        <p>With a mini-batch \(B\):</p>
+<div class="formula-math">\[
+\boxed{
+\theta
+\leftarrow
+\theta
+-
+\eta
+\frac1{|B|}
+\sum_{i\in B}
+\nabla_\theta\ell_i
+}
+\]</div>
+<p>The practical structure becomes:</p>
+<div class="ascii-box"><pre>for epoch:
+    shuffle data
+
+    for each mini-batch:
+        forward
+        loss
+        backprop
+        update</pre></div>
+<p>This is the foundation of the training loops used by modern deep-learning frameworks.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-37" class="section-block">
+      <div class="section-header">
+        <span class="section-num">37</span>
+        <h2 class="section-heading">Distinguish Three Terms</h2>
+      </div>
+      <div class="section-body">
+        <h3>Forward propagation</h3>
+<p>Computes:</p>
+<div class="ascii-box"><pre>input → output</pre></div>
+<h3>Backpropagation</h3>
+<p>Computes:</p>
+<div class="ascii-box"><pre>loss → gradients</pre></div>
+<h3>Gradient descent</h3>
+<p>Computes:</p>
+<div class="ascii-box"><pre>parameters + gradients → new parameters</pre></div>
+<p>Memory anchor:</p>
+<blockquote>
+<p><strong>Forward computes. Backprop differentiates. Gradient descent updates.</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-38" class="section-block">
+      <div class="section-header">
+        <span class="section-num">38</span>
+        <h2 class="section-heading">Common Backpropagation Errors</h2>
+      </div>
+      <div class="section-body">
+        <h2>Error 1 — Missing transpose</h2>
+<p>For:</p>
+<div class="formula-math">\[
+dW_2=A_1^TdZ_2
+\]</div>
+<p>the transpose is essential under the row-batch convention.</p>
+<hr />
+<h2>Error 2 — Wrong batch scaling</h2>
+<p>If your loss is a mean over \(n\) examples, gradients must reflect that averaging convention.</p>
+<hr />
+<h2>Error 3 — ReLU derivative applied to \(A\) instead of \(Z\)</h2>
+<p>The derivative depends on whether the pre-activation \(Z\) was positive.</p>
+<hr />
+<h2>Error 4 — Updating before all gradients are computed</h2>
+<p>Compute gradients from the same parameter state first.</p>
+<p>Then update the parameters.</p>
+<p>A safe pattern is:</p>
+<div class="ascii-box"><pre>forward
+↓
+backward
+↓
+all gradients available
+↓
+update all parameters</pre></div>
+<hr />
+<h2>Error 5 — Mixing old and new parameters</h2>
+<p>Do not update \(W_1\) and then compute \(dW_2\) using a different parameter state unless your algorithm explicitly requires it.</p>
+<hr />
+<h2>Error 6 — Wrong loss/output pairing</h2>
+<p>A common educational pairing is:</p>
+<div class="ascii-box"><pre>sigmoid + binary cross-entropy</pre></div>
+<p>Another is:</p>
+<div class="ascii-box"><pre>softmax + multi-class cross-entropy</pre></div>
+<p>The derivative formulas depend on the chosen combination.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-39" class="section-block">
+      <div class="section-header">
+        <span class="section-num">39</span>
+        <h2 class="section-heading">Numerical Stability and Saturation</h2>
+      </div>
+      <div class="section-body">
+        <p>Sigmoid values near 0 or 1 have derivative:</p>
+<div class="formula-math">\[
+\sigma'(z)=\sigma(z)(1-\sigma(z))
+\]</div>
+<p>which becomes small when the output saturates.</p>
+<p>This means:</p>
+<div class="ascii-box"><pre>very negative z → sigmoid near 0 → small derivative
+
+very positive z → sigmoid near 1 → small derivative</pre></div>
+<p>This contributes to weak gradient signals in saturated regions.</p>
+<p>This is one reason activation functions and initialization matter.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-40" class="section-block">
+      <div class="section-header">
+        <span class="section-num">40</span>
+        <h2 class="section-heading">Debugging Protocol</h2>
+      </div>
+      <div class="section-body">
+        <p>When loss does not decrease:</p>
+<div class="ascii-box"><pre>1. Check shapes.
+2. Check target labels.
+3. Check forward outputs.
+4. Check loss value.
+5. Check gradient magnitudes.
+6. Gradient-check a tiny model.
+7. Try a smaller learning rate.
+8. Check activation derivatives.
+9. Check parameter update signs.
+10. Overfit a tiny dataset intentionally.</pre></div>
+<p>The “overfit a tiny dataset” test is particularly powerful.</p>
+<p>If a sufficiently small network cannot fit a tiny training set in an educational experiment, suspect the implementation before blaming the dataset.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-41" class="section-block">
+      <div class="section-header">
+        <span class="section-num">41</span>
+        <h2 class="section-heading">Tiny-Dataset Overfitting Test</h2>
+      </div>
+      <div class="section-body">
+        <p>Use four XOR examples.</p>
+<p>Your objective is not generalization.</p>
+<p>Your objective is:</p>
+<blockquote>
+<p><strong>Can the implementation learn the tiny training set at all?</strong></p>
+</blockquote>
+<p>A successful implementation should eventually drive the loss down substantially and produce the expected binary pattern for many sensible initializations/settings.</p>
+<p>This is a debugging experiment, not a deployment claim.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-42" class="section-block">
+      <div class="section-header">
+        <span class="section-num">42</span>
+        <h2 class="section-heading">Gradient Magnitude Inspection</h2>
+      </div>
+      <div class="section-body">
+        <p>Add:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">for name, grad in grads.items():
+    print(
+        name,
+        &quot;shape =&quot;, grad.shape,
+        &quot;norm =&quot;, np.linalg.norm(grad),
+        &quot;max =&quot;, np.max(np.abs(grad)),
+    )</code></pre></div>
+<p>This can reveal:</p>
+<div class="ascii-box"><pre>all gradients ≈ 0</pre></div>
+<p>or:</p>
+<div class="ascii-box"><pre>extremely large gradients</pre></div>
+<p>Both can indicate a problem, though zero gradients can also be mathematically appropriate at particular points.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-43" class="section-block">
+      <div class="section-header">
+        <span class="section-num">43</span>
+        <h2 class="section-heading">Training-Class Design</h2>
+      </div>
+      <div class="section-body">
+        <p>A more structured implementation can store parameters and gradients together.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">class ScratchMLP:
+    def __init__(
+        self,
+        input_dim,
+        hidden_dim,
+        output_dim=1,
+        seed=42,
+    ):
+        rng = np.random.default_rng(seed)
+
+        self.W1 = rng.normal(
+            0.0,
+            0.5,
+            size=(input_dim, hidden_dim),
+        )
+        self.b1 = np.zeros(hidden_dim)
+
+        self.W2 = rng.normal(
+            0.0,
+            0.5,
+            size=(hidden_dim, output_dim),
+        )
+        self.b2 = np.zeros(output_dim)
+
+    def forward(self, X):
+        Z1 = X @ self.W1 + self.b1
+        A1 = np.maximum(0.0, Z1)
+
+        Z2 = A1 @ self.W2 + self.b2
+        Y_hat = 1.0 / (1.0 + np.exp(-Z2))
+
+        return Y_hat, {
+            &quot;Z1&quot;: Z1,
+            &quot;A1&quot;: A1,
+            &quot;Z2&quot;: Z2,
+            &quot;Y_hat&quot;: Y_hat,
+        }</code></pre></div>
+<p>Then add:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def step(self, X, Y, learning_rate):
+    ...</code></pre></div>
+<p>and:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def fit(self, X, Y, epochs, learning_rate):
+    ...</code></pre></div>
+<p>The class is an organizational tool. The mathematics should remain explicit.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-44" class="section-block">
+      <div class="section-header">
+        <span class="section-num">44</span>
+        <h2 class="section-heading">Why Framework Autograd Is Useful</h2>
+      </div>
+      <div class="section-body">
+        <p>After you understand manual derivatives, automatic differentiation becomes extremely valuable.</p>
+<p>A framework can construct the computational graph and calculate derivatives for you.</p>
+<p>The conceptual operation remains:</p>
+<div class="ascii-box"><pre>forward
+ ↓
+loss
+ ↓
+autograd/backprop
+ ↓
+gradients
+ ↓
+optimizer</pre></div>
+<p>The difference is that the framework handles derivative bookkeeping.</p>
+<p>This is why understanding backpropagation manually is valuable even when you rarely implement it manually in production.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-45" class="section-block">
+      <div class="section-header">
+        <span class="section-num">45</span>
+        <h2 class="section-heading">Framework Comparison</h2>
+      </div>
+      <div class="section-body">
+        <p>A PyTorch-style training outline:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import torch
+import torch.nn as nn
+
+model = nn.Sequential(
+    nn.Linear(2, 4),
+    nn.ReLU(),
+    nn.Linear(4, 1),
+)
+
+loss_fn = nn.BCEWithLogitsLoss()
+optimizer = torch.optim.SGD(
+    model.parameters(),
+    lr=0.1,
+)
+
+for _ in range(1000):
+    logits = model(X_tensor)
+    loss = loss_fn(logits, Y_tensor)
+
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()</code></pre></div>
+<p>Map each line to the concepts you implemented:</p>
+<div class="ascii-box"><pre>model(...)           → forward pass
+loss_fn(...)         → objective
+loss.backward()      → backpropagation
+optimizer.step()     → gradient-based update</pre></div>
+<p>This is the abstraction layer you should use after understanding the underlying operations.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-46" class="section-block">
+      <div class="section-header">
+        <span class="section-num">46</span>
+        <h2 class="section-heading">Why `BCEWithLogitsLoss` Is a Useful Practical Pattern</h2>
+      </div>
+      <div class="section-body">
+        <p>When the model outputs logits rather than sigmoid probabilities, frameworks often provide a fused binary cross-entropy-with-logits loss.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>raw logits
+   ↓
+stable BCE computation</pre></div>
+<p>This can be numerically more stable than:</p>
+<div class="ascii-box"><pre>logits
+ ↓ sigmoid
+probabilities
+ ↓ log-based BCE</pre></div>
+<p>For the from-scratch chapter, keep the mathematical decomposition visible. For framework code, a stable fused loss is often preferable.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-47" class="section-block">
+      <div class="section-header">
+        <span class="section-num">47</span>
+        <h2 class="section-heading">Experiment — Learning Rate Sweep</h2>
+      </div>
+      <div class="section-body">
+        <p>Train the same tiny network with:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">learning_rates = [
+    0.001,
+    0.01,
+    0.1,
+    0.5,
+]</code></pre></div>
+<p>For each:</p>
+<ul>
+<li>reset the parameters;</li>
+<li>train for the same number of epochs;</li>
+<li>record final loss;</li>
+<li>plot the loss curve.</li>
+</ul>
+<p>Important:</p>
+<blockquote>
+<p>Reset the parameters for each learning rate.</p>
+</blockquote>
+<p>Otherwise the experiments are not independent.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-48" class="section-block">
+      <div class="section-header">
+        <span class="section-num">48</span>
+        <h2 class="section-heading">Experiment — Initialization Sensitivity</h2>
+      </div>
+      <div class="section-body">
+        <p>Run the same architecture with seeds:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">[1, 2, 3, 4, 5]</code></pre></div>
+<p>Record:</p>
+<div class="ascii-box"><pre>seed
+final loss
+accuracy
+epochs</pre></div>
+<p>Then compare.</p>
+<p>This introduces the practical reality that optimization is influenced by initialization.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-49" class="section-block">
+      <div class="section-header">
+        <span class="section-num">49</span>
+        <h2 class="section-heading">Experiment — Hidden Width</h2>
+      </div>
+      <div class="section-body">
+        <p>Try:</p>
+<div class="ascii-box"><pre>hidden_dim = 1
+hidden_dim = 2
+hidden_dim = 4
+hidden_dim = 8</pre></div>
+<p>For the XOR debugging task, ask:</p>
+<blockquote>
+<p>What is the smallest hidden representation that appears sufficient under the chosen architecture and optimization setup?</p>
+</blockquote>
+<p>Do not treat one observed run as a universal theorem about all network designs.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-50" class="section-block">
+      <div class="section-header">
+        <span class="section-num">50</span>
+        <h2 class="section-heading">Master Gradient-Check Exercise</h2>
+      </div>
+      <div class="section-body">
+        <p>For a tiny network:</p>
+<div class="ascii-box"><pre>input = 2
+hidden = 2
+output = 1</pre></div>
+<p>do the following:</p>
+<ol>
+<li>initialize deterministic parameters;</li>
+<li>calculate analytic <code>dW1</code>;</li>
+<li>calculate numerical <code>dW1</code>;</li>
+<li>compare them;</li>
+<li>report relative error;</li>
+<li>repeat for <code>db1</code>;</li>
+<li>repeat for <code>dW2</code>;</li>
+<li>repeat for <code>db2</code>.</li>
+</ol>
+<p>The experiment should become part of your reusable debugging toolkit.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-51" class="section-block">
+      <div class="section-header">
+        <span class="section-num">51</span>
+        <h2 class="section-heading">Viva Questions</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Lab Viva Trap & Runtime Gotcha</div>
+
+**Hadamard Elementwise vs Matrix Product in Backprop:**
+When calculating $\delta_1 = (\delta_2 W_2^T) \odot g'(Z_1)$, the activation derivative must be multiplied ELEMENTWISE ($\odot$), NOT matrix multiplied!
+Also, always implement a numerical gradient check $(f(\theta + \epsilon) - f(\theta - \epsilon)) / (2\epsilon)$ to verify that analytical derivatives have zero typos before training!
+
+</div>
+
+<h3>Q1. What is backpropagation?</h3>
+<p>An efficient chain-rule procedure for computing gradients of the loss with respect to network parameters.</p>
+<h3>Q2. What does gradient descent do?</h3>
+<p>It updates parameters in the direction opposite the gradient.</p>
+<h3>Q3. Are backpropagation and gradient descent the same?</h3>
+<p>No.</p>
+<p>Backpropagation computes gradients; gradient descent uses them for updates.</p>
+<h3>Q4. What is a computational graph?</h3>
+<p>A representation of computations as nodes and dependencies, which makes forward evaluation and reverse-mode differentiation systematic.</p>
+<h3>Q5. Why is the chain rule important?</h3>
+<p>It lets us compute how a final loss changes with respect to an earlier parameter by multiplying local derivatives along a dependency path.</p>
+<h3>Q6. Why is gradient checking useful?</h3>
+<p>It compares analytic gradients with a numerical approximation and can reveal implementation errors.</p>
+<h3>Q7. Why can the learning rate be too large?</h3>
+<p>Updates can overshoot useful regions and make the optimization unstable.</p>
+<h3>Q8. Why can the learning rate be too small?</h3>
+<p>Training can become unnecessarily slow.</p>
+<h3>Q9. What is an epoch?</h3>
+<p>One complete pass through the training dataset.</p>
+<h3>Q10. Why store forward activations?</h3>
+<p>Backpropagation needs intermediate values to compute local derivatives and parameter gradients efficiently.</p>
+<h3>Q11. Why can a sigmoid saturate?</h3>
+<p>Its output approaches 0 or 1 for large-magnitude inputs, making its derivative small.</p>
+<h3>Q12. What is a mini-batch?</h3>
+<p>A subset of the training data used to estimate a gradient and perform one parameter update.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-52" class="section-block">
+      <div class="section-header">
+        <span class="section-num">52</span>
+        <h2 class="section-heading">Debugging Checklist</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>[ ] forward pass shapes are correct
+[ ] loss is finite
+[ ] labels are in the intended range
+[ ] gradients have expected shapes
+[ ] gradients are not accidentally detached or overwritten
+[ ] update uses negative gradient
+[ ] mean-loss scaling is consistent
+[ ] ReLU derivative uses Z
+[ ] gradient check passes on a tiny model
+[ ] loss decreases on a tiny learnable task
+[ ] parameters are reset between experiments
+[ ] seed is recorded</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-53" class="section-block">
+      <div class="section-header">
+        <span class="section-num">53</span>
+        <h2 class="section-heading">Master Training Pipeline</h2>
+      </div>
+      <div class="section-body">
+        <p>You should now be able to describe training as:</p>
+<div class="ascii-box"><pre>DATA
+ ↓
+Forward pass
+ ↓
+LOGITS / PREDICTIONS
+ ↓
+LOSS
+ ↓
+BACKPROPAGATION
+ ↓
+GRADIENTS
+ ↓
+GRADIENT DESCENT
+ ↓
+UPDATED PARAMETERS
+ ↓
+NEXT ITERATION</pre></div>
+<p>This is the computational backbone of neural-network training.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-54" class="section-block">
+      <div class="section-header">
+        <span class="section-num">54</span>
+        <h2 class="section-heading">Connection to Earlier Units</h2>
+      </div>
+      <div class="section-body">
+        <p>Unit II taught:</p>
+<div class="ascii-box"><pre>loss
+ ↓
+gradient
+ ↓
+optimization</pre></div>
+<p>Unit III now applies that logic to a multilayer function.</p>
+<p>The connection is:</p>
+<div class="ascii-box"><pre>Linear Regression
+      ↓
+Gradient-based optimization
+      ↓
+Neural-network parameters
+      ↓
+Composed nonlinear function
+      ↓
+Backpropagation
+      ↓
+Gradient descent</pre></div>
+<p>Regularization also remains compatible:</p>
+<div class="formula-math">\[
+J_{total}
+=
+J_{data}
++
+\lambda\Omega(\theta).
+\]</div>
+<p>The optimizer then updates parameters using the gradient of the full objective.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-55" class="section-block">
+      <div class="section-header">
+        <span class="section-num">55</span>
+        <h2 class="section-heading">Practical Challenge</h2>
+      </div>
+      <div class="section-body">
+        <p>Implement the complete API:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">class ScratchMLP:
+    def __init__(...):
+        ...
+
+    def forward(...):
+        ...
+
+    def compute_loss(...):
+        ...
+
+    def backward(...):
+        ...
+
+    def update(...):
+        ...
+
+    def fit(...):
+        ...
+
+    def predict_proba(...):
+        ...
+
+    def predict(...):
+        ...</code></pre></div>
+<p>Requirements:</p>
+<ul>
+<li>NumPy only;</li>
+<li>binary classification;</li>
+<li>one hidden ReLU layer;</li>
+<li>sigmoid output;</li>
+<li>binary cross-entropy;</li>
+<li>full-batch gradient descent;</li>
+<li>loss history;</li>
+<li>deterministic initialization;</li>
+<li>shape validation;</li>
+<li>no automatic differentiation.</li>
+</ul>
+<p>Then test it on the XOR dataset.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-56" class="section-block">
+      <div class="section-header">
+        <span class="section-num">56</span>
+        <h2 class="section-heading">Master Challenge — Reproduce the Entire Derivation</h2>
+      </div>
+      <div class="section-body">
+        <p>Without looking at notes, derive:</p>
+<div class="formula-math">\[
+Z_1=XW_1+b_1
+\]</div>
+<div class="formula-math">\[
+A_1=ReLU(Z_1)
+\]</div>
+<div class="formula-math">\[
+Z_2=A_1W_2+b_2
+\]</div>
+<div class="formula-math">\[
+\hat Y=\sigma(Z_2)
+\]</div>
+<p>and then:</p>
+<div class="formula-math">\[
+dZ_2
+\rightarrow
+dW_2,db_2
+\rightarrow
+dA_1
+\rightarrow
+dZ_1
+\rightarrow
+dW_1,db_1.
+\]</div>
+<p>Finally write the parameter update equations.</p>
+<p>This is an important mastery gate because it forces you to understand the computational graph rather than memorize isolated formulas.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-57" class="section-block">
+      <div class="section-header">
+        <span class="section-num">57</span>
+        <h2 class="section-heading">One-Screen Formula Map</h2>
+      </div>
+      <div class="section-body">
+        <h3>Forward</h3>
+<div class="formula-math">\[
+Z_1=XW_1+b_1
+\]</div>
+<div class="formula-math">\[
+A_1=ReLU(Z_1)
+\]</div>
+<div class="formula-math">\[
+Z_2=A_1W_2+b_2
+\]</div>
+<div class="formula-math">\[
+\hat Y=\sigma(Z_2)
+\]</div>
+<h3>Loss</h3>
+<div class="formula-math">\[
+J=
+-\frac1n
+\sum
+[
+Y\log\hat Y
++
+(1-Y)\log(1-\hat Y)
+]
+\]</div>
+<h3>Backprop</h3>
+<div class="formula-math">\[
+dZ_2=\frac1n(\hat Y-Y)
+\]</div>
+<div class="formula-math">\[
+dW_2=A_1^TdZ_2
+\]</div>
+<div class="formula-math">\[
+db_2=\sum dZ_2
+\]</div>
+<div class="formula-math">\[
+dA_1=dZ_2W_2^T
+\]</div>
+<div class="formula-math">\[
+dZ_1=dA_1\odot ReLU'(Z_1)
+\]</div>
+<div class="formula-math">\[
+dW_1=X^TdZ_1
+\]</div>
+<div class="formula-math">\[
+db_1=\sum dZ_1
+\]</div>
+<h3>Update</h3>
+<div class="formula-math">\[
+W\leftarrow W-\eta dW
+\]</div>
+<div class="formula-math">\[
+b\leftarrow b-\eta db
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-58" class="section-block">
+      <div class="section-header">
+        <span class="section-num">58</span>
+        <h2 class="section-heading">Connection Forward</h2>
+      </div>
+      <div class="section-body">
+        <p>You now have the core training engine:</p>
+<div class="ascii-box"><pre>neuron
+ ↓
+perceptron
+ ↓
+MLP
+ ↓
+forward propagation
+ ↓
+loss
+ ↓
+backpropagation
+ ↓
+gradient descent</pre></div>
+<p>The next neural-network coding block moves from generic dense networks to image structure:</p>
+<p><strong><code>CODE-U3-04 — CNN From Scratch Concepts and PyTorch Image Classification</code></strong></p>
+<p>The goal there will be to preserve the same workflow while introducing convolution, kernels, feature maps, pooling and image-specific architecture.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-59" class="section-block">
+      <div class="section-header">
+        <span class="section-num">59</span>
+        <h2 class="section-heading">Source Notes</h2>
+      </div>
+      <div class="section-body">
+        <h2>Supplied course-specific sources</h2>
+<h3>Official DSC-14 syllabus</h3>
+<p>Unit III explicitly includes:</p>
+<ul>
+<li>backpropagation;</li>
+<li>gradient descent optimization;</li>
+<li>neural networks;</li>
+<li>MLP.</li>
+</ul>
+<h3><code>AI_ML_Master_Learning_Resource_Guide.pdf</code></h3>
+<p>The guide identifies <code>prac_7_neural_network.ipynb</code> as the practical companion for neuron, activations, losses and gradient-descent concepts.</p>
+<p>It also identifies the need to gap-fill the mathematical depth of backpropagation.</p>
+<h3><code>Lecture10 copy.pdf</code></h3>
+<p>The lecture connects neural networks to learned feature representations and discusses model flexibility/regularization motivation.</p>
+<h3>Math Companion</h3>
+<p>Use the corresponding chapters on:</p>
+<ul>
+<li>derivatives;</li>
+<li>partial derivatives;</li>
+<li>chain rule;</li>
+<li>gradients;</li>
+<li>computational graphs;</li>
+<li>gradient descent;</li>
+<li>SGD/mini-batches.</li>
+</ul>
+<h2>Expansion boundary</h2>
+<p>The complete backpropagation derivation, finite-difference gradient checking, numerical stability utilities, training class, experiments and PyTorch comparison are <strong>coding-book expansion</strong>. They make the course concepts executable and debuggable without claiming that the supplied notebook contains the full implementation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-60" class="section-block">
+      <div class="section-header">
+        <span class="section-num">60</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <p>Do not move forward until you can:</p>
+<ul>
+<li>[ ] define the full forward pass;</li>
+<li>[ ] derive binary cross-entropy + sigmoid output gradient;</li>
+<li>[ ] derive the hidden-layer gradient through ReLU;</li>
+<li>[ ] write \(dW\) and \(db\) equations;</li>
+<li>[ ] implement backpropagation;</li>
+<li>[ ] implement gradient descent;</li>
+<li>[ ] train a tiny MLP;</li>
+<li>[ ] plot the loss curve;</li>
+<li>[ ] inspect gradient magnitudes;</li>
+<li>[ ] perform a numerical gradient check;</li>
+<li>[ ] explain learning-rate behaviour;</li>
+<li>[ ] distinguish forward, backpropagation and optimization.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-61" class="section-block">
+      <div class="section-header">
+        <span class="section-num">61</span>
+        <h2 class="section-heading">Status</h2>
+      </div>
+      <div class="section-body">
+        <p><strong><code>CODE-U3-03</code> — COMPLETE</strong></p>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="code-u3-02-mlp-forward-propagation.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← Unit 3 Lab 02 — MLP Forward Pass</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">💻 Coding Index</span>
+      </a>
+      <a href="code-u3-04-cnn-image-classification.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: Unit 3 Lab 04 — CNNs & Image Classification →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search lab implementations, functions, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">💻</span>Lab Hub</a>
+  <a href="code-u3-03-backpropagation-scratch.html" class="mobile-nav-btn active"><span class="icon">📖</span>CODE-U3-03</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

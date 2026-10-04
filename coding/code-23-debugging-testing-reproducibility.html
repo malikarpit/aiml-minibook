@@ -1,0 +1,2229 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="CODE-23: Debugging, Testing, Visualization & Reproducibility — AI & Machine Learning Coding Lab. Numerical Instabilities, NaN/Inf Tracing, Random Seed Locking, Automated Shape Assertion Pipelines, Loss Curve Sanity Checks, and Production Unit Tests">
+<title>CODE-23: Debugging, Testing, Visualization & Reproducibility | Coding Lab 💻 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/coding.css">
+</head>
+<body class="coding-module track-c5">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">💻</div>
+      <div class="brand-text"><span class="main">Coding Lab</span><span class="sub">AI &amp; ML From Scratch</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">CODE-23: Debugging, Testing, Visualization &amp; Reproducibility</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">💻</span>Coding Lab Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../math/index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 0: Environment & System</div>
+  <a href="code-00-coding-foundation.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-00: Coding Lab Foundation &amp; Implementation System</a>
+  <a href="code-01-python-numpy-workflow.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-01: Python, NumPy, Matplotlib &amp; Lab Workflow</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Classical AI & Search Labs</div>
+  <a href="code-u1-01-bfs-dfs.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-01: BFS and DFS From Scratch</a>
+  <a href="code-u1-02-greedy-a-star.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-02: Greedy Best-First &amp; A* Search From Scratch</a>
+  <a href="code-u1-03-csp-backtracking.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-03: CSPs and Backtracking Search</a>
+  <a href="code-u1-04-minimax-alpha-beta.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Supervised ML Labs</div>
+  <a href="code-u2-01-ml-workflow.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-01: ML Workflow: Preprocessing, Splitting &amp; Evaluation</a>
+  <a href="code-u2-02-linear-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-02: Linear Regression From Scratch</a>
+  <a href="code-u2-03-logistic-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-03: Logistic Regression From Scratch</a>
+  <a href="code-u2-04-decision-trees.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-04: Decision Trees From Scratch</a>
+  <a href="code-u2-05-classification-metrics-roc.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC &amp; Thresholds</a>
+  <a href="code-u2-06-ridge-lasso-regularization.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-06: Ridge &amp; Lasso From Scratch: Regularization &amp; Optimization</a>
+  <a href="code-u2-07-ml-evaluation-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-07: ML Evaluation &amp; Model Comparison Lab</a>
+  <a href="code-u2-08-knn-svm-practical-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-08: KNN and SVM Practical Comparison Lab</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Deep Learning Labs</div>
+  <a href="code-u3-01-neuron-perceptron.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-01: Neuron and Perceptron From Scratch</a>
+  <a href="code-u3-02-mlp-forward-propagation.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-02: MLP and Forward Propagation From Scratch</a>
+  <a href="code-u3-03-backpropagation-scratch.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-03: Gradient Descent &amp; Backpropagation From Scratch</a>
+  <a href="code-u3-04-cnn-image-classification.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-04: CNNs: From Scratch to PyTorch Image Classification</a>
+  <a href="code-u3-05-rnn-lstm-sequence-modelling.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-05: RNN &amp; LSTM: From Scratch to PyTorch Sequence Modelling</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Advanced AI & RL Labs</div>
+  <a href="code-u4-01-mdp-q-learning.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-01: MDPs and Q-Learning From Scratch</a>
+  <a href="code-u4-02-policy-gradients-reinforce.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-02: Policy Gradients &amp; REINFORCE Algorithm</a>
+  <a href="code-u4-03-nlp-text-classification.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-03: NLP Preprocessing &amp; Text Classification Pipeline</a>
+  <a href="code-u4-04-autoencoders-pytorch.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-04: Autoencoders: From Scratch &amp; PyTorch Representation Learning</a>
+  <a href="code-u4-05-gans-pytorch.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-05: Generative Adversarial Networks: Core Mechanics to PyTorch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 5: Engineering & Capstone</div>
+  <a href="code-23-debugging-testing-reproducibility.html" class="sidebar-link active"><span class="link-icon">🏆</span>CODE-23: Debugging, Testing, Visualization &amp; Reproducibility</a>
+  <a href="code-24-coding-capstone-checklist.html" class="sidebar-link"><span class="link-icon">🏆</span>CODE-24: AI/ML Coding Capstone &amp; Master Practical Checklist</a>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">CODE-23 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. The AI/ML Engineering Loop</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Debugging Layers</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. First Test — Does the Input Look Right?</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Assert Invariants</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Shape Discipline</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Data-Type Discipline</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Tiny-Example First Principle</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Manual Trace Table</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Numerical Stability Checks</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. NaN Debugging Protocol</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Gradient Debugging</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Gradient Checking</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Test Hierarchy</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Example Unit-Test Pattern</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Property-Based Thinking</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Test Known Mathematical Values</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Overfit a Tiny Dataset</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Train/Test Leakage Checks</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Time-Series Leakage</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Label Leakage</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Evaluation Protocol</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Metrics Must Match the Question</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Confusion-Matrix Sanity Check</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Threshold Debugging</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Visualize Training Behaviour</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. One Plot Per Question</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Reproducibility Levels</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Reproducibility Record</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Configuration Over Hard-Coded Values</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Separate Data, Model and Training</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Avoid Hidden Notebook State</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Avoid Accidental Data Mutation</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Experiment Independence</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Model Checkpointing</a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Prediction Artifact</a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Search Debugging</a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. A* Debugging</a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Decision-Tree Debugging</a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Logistic Regression Debugging</a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Linear Regression Debugging</a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. CNN Debugging</a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. RNN/LSTM Debugging</a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Q-Learning Debugging</a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Policy-Gradient Debugging</a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. Autoencoder Debugging</a>
+      <a href="#s-46" class="sidebar-link"><span class="link-icon">📌</span>46. GAN Debugging</a>
+      <a href="#s-47" class="sidebar-link"><span class="link-icon">📌</span>47. Test Error, Not Just Test Score</a>
+      <a href="#s-48" class="sidebar-link"><span class="link-icon">📌</span>48. Residual Analysis</a>
+      <a href="#s-49" class="sidebar-link"><span class="link-icon">📌</span>49. Compare Against Baselines</a>
+      <a href="#s-50" class="sidebar-link"><span class="link-icon">📌</span>50. Sanity Checks Before Trusting a Result</a>
+      <a href="#s-51" class="sidebar-link"><span class="link-icon">📌</span>51. Experiment Naming</a>
+      <a href="#s-52" class="sidebar-link"><span class="link-icon">📌</span>52. Artifact Folder Structure</a>
+      <a href="#s-53" class="sidebar-link"><span class="link-icon">📌</span>53. Minimal Reproducible Experiment</a>
+      <a href="#s-54" class="sidebar-link"><span class="link-icon">📌</span>54. Practical Debugging Protocol</a>
+      <a href="#s-55" class="sidebar-link"><span class="link-icon">📌</span>55. Never Debug by Randomly Changing Everything</a>
+      <a href="#s-56" class="sidebar-link"><span class="link-icon">📌</span>56. Engineering Checklist Before Submission</a>
+      <a href="#s-57" class="sidebar-link"><span class="link-icon">📌</span>57. Code Review Checklist</a>
+      <a href="#s-58" class="sidebar-link"><span class="link-icon">📌</span>58. Master Integration Challenge</a>
+      <a href="#s-59" class="sidebar-link"><span class="link-icon">📌</span>59. Master Checklist by Unit</a>
+      <a href="#s-60" class="sidebar-link"><span class="link-icon">📌</span>60. Master Reproducibility Checklist</a>
+      <a href="#s-61" class="sidebar-link"><span class="link-icon">📌</span>61. Final Mental Model</a>
+      <a href="#s-62" class="sidebar-link"><span class="link-icon">📌</span>62. Mastery Gate</a>
+      <a href="#s-63" class="sidebar-link"><span class="link-icon">📌</span>63. Connection to Final Capstone</a>
+      <a href="#s-64" class="sidebar-link"><span class="link-icon">📌</span>64. Status</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Coding Lab</a>
+        <span>/</span>
+        <span>CODE-23</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-c5">Track 5: Engineering Mastery & Capstone</span></div>
+      <h1 class="chapter-title">Debugging, Testing, Visualization &amp; Reproducibility</h1>
+      <p class="chapter-desc">Numerical Instabilities, NaN/Inf Tracing, Random Seed Locking, Automated Shape Assertion Pipelines, Loss Curve Sanity Checks, and Production Unit Tests</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~55 min lab</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">DEBUGGING</span> <span class="chapter-meta-item uni-badge">TESTING</span> <span class="chapter-meta-item uni-badge">REPRODUCIBILITY</span> <span class="chapter-meta-item uni-badge">NAN-TRACING</span> <span class="chapter-meta-item uni-badge">ASSERTIONS</span> <span class="chapter-meta-item uni-badge">BEST-PRACTICES</span>
+      </div>
+
+      <div class="lab-meta-grid">
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Prerequisites</div>
+          <div class="lab-meta-value">All Tracks 0 through 4</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Main Book Concept</div>
+          <div class="lab-meta-value">Ch 50 Grand AI/ML Capstone, Enterprise MLOps Lifecycle</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Math Companion Layer</div>
+          <div class="lab-meta-value">Floating-point IEEE 754 precision, Machine epsilon, Numerical overflow/underflow control</div>
+        </div>
+        <div class="lab-meta-box" style="grid-column: 1 / -1;">
+          <div class="lab-meta-label">AI / Machine Learning Connections</div>
+          <div class="lab-meta-value">Defensive programming, Production ML testing, CI/CD regression verification, Deterministic experiment replay</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-meta-card"><h1>CODE-23 — Debugging, Testing, Visualization and Reproducibility</h1>
+<blockquote>
+<p><strong>Purpose:</strong> Build the engineering discipline required to make AI/ML code trustworthy, debuggable, interpretable and repeatable.</p>
+</blockquote>
+<p>At this point the Coding Book has implemented:</p>
+<div class="ascii-box"><pre>search
+ML
+neural networks
+CNN
+RNN/LSTM
+Q-learning
+policy gradients
+NLP
+autoencoders
+GANs</pre></div>
+<p>The algorithms are not the end.</p>
+<p>A working AI/ML engineer must also answer:</p>
+<div class="ascii-box"><pre>Did the code do what I intended?
+Did the mathematics map correctly to the implementation?
+Can I reproduce the result?
+Can I detect leakage?
+Can I explain unexpected behaviour?
+Can I trust the experiment?</pre></div>
+<p>This chapter provides the cross-cutting answer.</p>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in CODE-23 (64 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">The AI/ML Engineering Loop</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Debugging Layers</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">First Test — Does the Input Look Right?</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Assert Invariants</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Shape Discipline</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Data-Type Discipline</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Tiny-Example First Principle</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Manual Trace Table</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Numerical Stability Checks</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">NaN Debugging Protocol</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Gradient Debugging</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Gradient Checking</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Test Hierarchy</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Example Unit-Test Pattern</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Property-Based Thinking</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Test Known Mathematical Values</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Overfit a Tiny Dataset</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Train/Test Leakage Checks</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Time-Series Leakage</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Label Leakage</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Evaluation Protocol</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Metrics Must Match the Question</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Confusion-Matrix Sanity Check</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Threshold Debugging</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Visualize Training Behaviour</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">One Plot Per Question</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Reproducibility Levels</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Reproducibility Record</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Configuration Over Hard-Coded Values</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Separate Data, Model and Training</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Avoid Hidden Notebook State</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Avoid Accidental Data Mutation</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Experiment Independence</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Model Checkpointing</span></a></li>
+        <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Prediction Artifact</span></a></li>
+        <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Search Debugging</span></a></li>
+        <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">A* Debugging</span></a></li>
+        <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Decision-Tree Debugging</span></a></li>
+        <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Logistic Regression Debugging</span></a></li>
+        <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Linear Regression Debugging</span></a></li>
+        <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">CNN Debugging</span></a></li>
+        <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">RNN/LSTM Debugging</span></a></li>
+        <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Q-Learning Debugging</span></a></li>
+        <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Policy-Gradient Debugging</span></a></li>
+        <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">Autoencoder Debugging</span></a></li>
+        <li class="toc-item"><a href="#s-46"><span class="toc-num">46</span><span class="toc-name">GAN Debugging</span></a></li>
+        <li class="toc-item"><a href="#s-47"><span class="toc-num">47</span><span class="toc-name">Test Error, Not Just Test Score</span></a></li>
+        <li class="toc-item"><a href="#s-48"><span class="toc-num">48</span><span class="toc-name">Residual Analysis</span></a></li>
+        <li class="toc-item"><a href="#s-49"><span class="toc-num">49</span><span class="toc-name">Compare Against Baselines</span></a></li>
+        <li class="toc-item"><a href="#s-50"><span class="toc-num">50</span><span class="toc-name">Sanity Checks Before Trusting a Result</span></a></li>
+        <li class="toc-item"><a href="#s-51"><span class="toc-num">51</span><span class="toc-name">Experiment Naming</span></a></li>
+        <li class="toc-item"><a href="#s-52"><span class="toc-num">52</span><span class="toc-name">Artifact Folder Structure</span></a></li>
+        <li class="toc-item"><a href="#s-53"><span class="toc-num">53</span><span class="toc-name">Minimal Reproducible Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-54"><span class="toc-num">54</span><span class="toc-name">Practical Debugging Protocol</span></a></li>
+        <li class="toc-item"><a href="#s-55"><span class="toc-num">55</span><span class="toc-name">Never Debug by Randomly Changing Everything</span></a></li>
+        <li class="toc-item"><a href="#s-56"><span class="toc-num">56</span><span class="toc-name">Engineering Checklist Before Submission</span></a></li>
+        <li class="toc-item"><a href="#s-57"><span class="toc-num">57</span><span class="toc-name">Code Review Checklist</span></a></li>
+        <li class="toc-item"><a href="#s-58"><span class="toc-num">58</span><span class="toc-name">Master Integration Challenge</span></a></li>
+        <li class="toc-item"><a href="#s-59"><span class="toc-num">59</span><span class="toc-name">Master Checklist by Unit</span></a></li>
+        <li class="toc-item"><a href="#s-60"><span class="toc-num">60</span><span class="toc-name">Master Reproducibility Checklist</span></a></li>
+        <li class="toc-item"><a href="#s-61"><span class="toc-num">61</span><span class="toc-name">Final Mental Model</span></a></li>
+        <li class="toc-item"><a href="#s-62"><span class="toc-num">62</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-63"><span class="toc-num">63</span><span class="toc-name">Connection to Final Capstone</span></a></li>
+        <li class="toc-item"><a href="#s-64"><span class="toc-num">64</span><span class="toc-name">Status</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">The AI/ML Engineering Loop</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph TD
+    Bug["Model Failure: NaN Loss / Low Accuracy / Non-Convergence"] --> Check1{"Check 1: Random Seed Locked?"}
+    Check1 -- No --> FixSeed["Lock np.random.seed(42) & torch.manual_seed(42)"]
+    Check1 -- Yes --> Check2{"Check 2: Data Leakage in Preprocessing?"}
+    Check2 -- Yes --> FixLeak["Fit Scaler on Train ONLY, not Whole Dataset!"]
+    Check2 -- No --> Check3{"Check 3: Tensor Shape Alignment?"}
+    Check3 -- Failed --> FixShape["Add assert X.shape == (B, d) before every matmul"]
+    Check3 -- Passed --> Check4{"Check 4: Numerical Overflow in Logs/Exps?"}
+    Check4 -- Yes --> FixNum["Add np.clip(p, 1e-15, 1 - 1e-15) and log-sum-exp trick"]
+    Check4 -- No --> TrainVerify["Verified Reproducible Pipeline!"]
+    style Bug fill:#7f1d1d,stroke:#ef4444,color:#ffffff
+    style TrainVerify fill:#065f46,stroke:#34d399,color:#ffffff,stroke-width:2px
+</pre></div>
+<p>Use this for every practical:</p>
+<div class="ascii-box"><pre>DEFINE
+  ↓
+IMPLEMENT
+  ↓
+TEST
+  ↓
+TRACE
+  ↓
+VISUALIZE
+  ↓
+EXPERIMENT
+  ↓
+EVALUATE
+  ↓
+REPRODUCE
+  ↓
+DOCUMENT</pre></div>
+<p>Do not jump directly from:</p>
+<div class="ascii-box"><pre>code</pre></div>
+<p>to:</p>
+<div class="ascii-box"><pre>final accuracy</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">Debugging Layers</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Implementation Model</div>
+
+Machine Learning mein debugging normal software se 10 guna mushkil hoti hai, kyunki model bina kisi syntax error ke crash hue bina chal sakta hai aur bilkul galat results de sakta hai (silent failure)!
+Agar loss ekdum se `NaN` ho jaye, toh 99% cases mein ya toh learning rate bohot bada hai, ya `log(0)` hua hai, ya `exp(z)` overflow ho gaya hai.
+Ek accha engineer defensive code likhta hai: har critical function ke aage `assert` lagao, random seed freeze karo, aur unit tests chalao!
+
+</div>
+
+<p>When something is wrong, inspect in this order:</p>
+<div class="ascii-box"><pre>Layer 1 — syntax / runtime
+Layer 2 — shapes / data types
+Layer 3 — data / labels
+Layer 4 — mathematical implementation
+Layer 5 — optimization
+Layer 6 — evaluation protocol
+Layer 7 — experiment design</pre></div>
+<p>Example:</p>
+<div class="ascii-box"><pre>&quot;Model accuracy is 50%&quot;</pre></div>
+<p>Do not immediately change the model.</p>
+<p>First ask:</p>
+<div class="ascii-box"><pre>Are the labels correct?
+Are the predictions aligned?
+Is the loss correct?
+Is the split correct?
+Is preprocessing leaking information?</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">First Test — Does the Input Look Right?</h2>
+      </div>
+      <div class="section-body">
+        <p>Before fitting anything:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(X.shape)
+print(X.dtype)
+print(X[:5])
+
+print(y.shape)
+print(y.dtype)
+print(y[:10])</code></pre></div>
+<p>For text:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(texts[:5])
+print(labels[:5])</code></pre></div>
+<p>For images:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(images.shape)
+print(images.dtype)
+print(images.min())
+print(images.max())</code></pre></div>
+<p>For sequences:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(
+    sequence_batch.shape
+)</code></pre></div>
+<p>The most common ML bugs often begin before the model.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Assert Invariants</h2>
+      </div>
+      <div class="section-body">
+        <p>Assertions turn silent errors into immediate failures.</p>
+<p>Example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert X.ndim == 2
+assert len(X) == len(y)</code></pre></div>
+<p>For binary labels:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert set(
+    np.unique(y)
+).issubset({0, 1})</code></pre></div>
+<p>For CNN tensors:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert images.ndim == 4</code></pre></div>
+<p>For PyTorch outputs:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert logits.shape[0] == labels.shape[0]</code></pre></div>
+<p>Use assertions for properties that must always be true.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Shape Discipline</h2>
+      </div>
+      <div class="section-body">
+        <p>Maintain a shape map in every notebook.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>X        → (n, d)
+W1       → (d, h)
+b1       → (h,)
+Z1       → (n, h)
+A1       → (n, h)
+W2       → (h, k)
+b2       → (k,)
+logits   → (n, k)</pre></div>
+<p>For CNN:</p>
+<div class="ascii-box"><pre>image
+→ (N, C, H, W)</pre></div>
+<p>For sequence models:</p>
+<div class="ascii-box"><pre>sequence
+→ (N, T, D)</pre></div>
+<p>Shape documentation is not cosmetic.</p>
+<p>It is executable reasoning.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Data-Type Discipline</h2>
+      </div>
+      <div class="section-body">
+        <p>Check:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(X.dtype)
+print(y.dtype)</code></pre></div>
+<p>Typical issues:</p>
+<div class="ascii-box"><pre>integer data fed where floats are expected
+float labels used where class indices are required
+object dtype created by mixed Python data</pre></div>
+<p>Explicitly convert where appropriate:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X = np.asarray(
+    X,
+    dtype=np.float32,
+)</code></pre></div>
+<p>For PyTorch:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X_tensor = torch.tensor(
+    X,
+    dtype=torch.float32,
+)</code></pre></div>
+<p>Labels for multi-class <code>CrossEntropyLoss</code> are typically integer class indices.</p>
+<p>Do not blindly cast every tensor to float.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Tiny-Example First Principle</h2>
+      </div>
+      <div class="section-body">
+        <p>Before using:</p>
+<div class="ascii-box"><pre>60,000 images
+1 million rows
+large text dataset</pre></div>
+<p>test the algorithm on:</p>
+<div class="ascii-box"><pre>3–10 examples</pre></div>
+<p>Why?</p>
+<p>Because a tiny example allows full manual tracing.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>2 features
+2 hidden neurons
+1 output</pre></div>
+<p>You can calculate:</p>
+<div class="ascii-box"><pre>forward
+loss
+gradient
+update</pre></div>
+<p>by hand.</p>
+<p>If the tiny case fails, the large case is not worth debugging yet.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">Manual Trace Table</h2>
+      </div>
+      <div class="section-body">
+        <p>For iterative algorithms, create a table.</p>
+<p>Example for Q-learning:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th style="text-align: right;">step</th>
+<th>state</th>
+<th style="text-align: right;">action</th>
+<th style="text-align: right;">reward</th>
+<th>next state</th>
+<th style="text-align: right;">old Q</th>
+<th style="text-align: right;">target</th>
+<th style="text-align: right;">TD error</th>
+<th style="text-align: right;">new Q</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td>\(s_0\)</td>
+<td style="text-align: right;">R</td>
+<td style="text-align: right;">0</td>
+<td>\(s_1\)</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0.9</td>
+<td style="text-align: right;">0.9</td>
+<td style="text-align: right;">0.72</td>
+</tr>
+</tbody>
+</table></div>
+<p>This is far more useful than staring at a Q-table after 5,000 episodes.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Numerical Stability Checks</h2>
+      </div>
+      <div class="section-body">
+        <p>Common danger zones:</p>
+<div class="ascii-box"><pre>log(0)
+exp(large number)
+division by tiny values
+overflow
+underflow
+NaN
+Inf</pre></div>
+<p>Check explicitly:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert np.all(
+    np.isfinite(array)
+)</code></pre></div>
+<p>For PyTorch:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert torch.isfinite(
+    tensor
+).all()</code></pre></div>
+<p>During training:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">if not torch.isfinite(loss):
+    raise RuntimeError(
+        &quot;Non-finite loss detected.&quot;
+    )</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">NaN Debugging Protocol</h2>
+      </div>
+      <div class="section-body">
+        <p>When you see:</p>
+<div class="ascii-box"><pre>NaN</pre></div>
+<p>immediately inspect:</p>
+<div class="ascii-box"><pre>input
+loss
+learning rate
+gradients
+activations
+normalization
+logs/exponentials</pre></div>
+<p>Check:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(
+    torch.isnan(tensor).any()
+)
+
+print(
+    torch.isinf(tensor).any()
+)</code></pre></div>
+<p>The question is:</p>
+<blockquote>
+<p><strong>Where did the first non-finite number appear?</strong></p>
+</blockquote>
+<p>Find that point rather than reacting to the final NaN.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Gradient Debugging</h2>
+      </div>
+      <div class="section-body">
+        <p>For neural networks:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">loss.backward()</code></pre></div>
+<p>then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">for name, param in model.named_parameters():
+    if param.grad is not None:
+        print(
+            name,
+            param.grad.norm().item(),
+        )</code></pre></div>
+<p>Look for:</p>
+<div class="ascii-box"><pre>all zeros
+extremely large values
+NaN
+unexpected missing gradients</pre></div>
+<p>Do not assume any one pattern automatically identifies the cause.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Gradient Checking</h2>
+      </div>
+      <div class="section-body">
+        <p>For a small hand-written network, compare analytic gradients with finite differences:</p>
+<div class="formula-math">\[
+\boxed{
+\frac{\partial J}{\partial\theta}
+\approx
+\frac{
+J(\theta+\epsilon)
+-
+J(\theta-\epsilon)
+}
+{2\epsilon}
+}
+\]</div>
+<p>Use a tiny model.</p>
+<p>Then compare with:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">relative_error(
+    analytic,
+    numerical,
+)</code></pre></div>
+<p>This is especially useful for:</p>
+<div class="ascii-box"><pre>backpropagation
+custom layers
+custom loss functions
+custom RL objectives</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Test Hierarchy</h2>
+      </div>
+      <div class="section-body">
+        <p>Use four levels.</p>
+<h3>Unit test</h3>
+<p>Tests one function.</p>
+<p>Example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">test_sigmoid()</code></pre></div>
+<h3>Component test</h3>
+<p>Tests one model block.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>dense layer
+CNN block
+RNN cell</pre></div>
+<h3>Integration test</h3>
+<p>Tests:</p>
+<div class="ascii-box"><pre>data
+→ model
+→ loss
+→ update</pre></div>
+<h3>End-to-end test</h3>
+<p>Tests the whole practical.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>dataset
+→ preprocessing
+→ training
+→ evaluation
+→ report</pre></div>
+<p>Do not rely only on end-to-end tests.</p>
+<p>They are harder to diagnose.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Example Unit-Test Pattern</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def test_output_shape():
+    output = model(
+        dummy_input
+    )
+
+    assert output.shape == (
+        4,
+        10,
+    )</code></pre></div>
+<p>The exact expected shape should come from the architecture.</p>
+<p>Shape tests are cheap and powerful.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">Property-Based Thinking</h2>
+      </div>
+      <div class="section-body">
+        <p>Ask what must always be true.</p>
+<p>Examples:</p>
+<h3>Softmax</h3>
+<p>Each row sums to approximately 1:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert torch.allclose(
+    probs.sum(dim=-1),
+    torch.ones(
+        probs.shape[0]
+    ),
+)</code></pre></div>
+<h3>Probabilities</h3>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert torch.all(
+    probs &gt;= 0
+)
+
+assert torch.all(
+    probs &lt;= 1
+)</code></pre></div>
+<h3>Q-table</h3>
+<div class="ascii-box"><pre>Q shape = states × actions</pre></div>
+<h3>Autoencoder</h3>
+<div class="ascii-box"><pre>reconstruction shape = input shape</pre></div>
+<h3>Classification</h3>
+<div class="ascii-box"><pre>number of predictions = number of labels</pre></div>
+<p>These are invariants.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">Test Known Mathematical Values</h2>
+      </div>
+      <div class="section-body">
+        <p>Examples:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert np.isclose(
+    sigmoid(0),
+    0.5,
+)</code></pre></div>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert np.array_equal(
+    relu(
+        np.array([-2, 0, 3])
+    ),
+    np.array([0, 0, 3]),
+)</code></pre></div>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert np.isclose(
+    mse_reconstruction_loss(
+        np.array([1, 2]),
+        np.array([1, 4]),
+    ),
+    2.0,
+)</code></pre></div>
+<p>Known-value tests establish confidence in foundational functions.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">Overfit a Tiny Dataset</h2>
+      </div>
+      <div class="section-body">
+        <p>One of the strongest debugging tests:</p>
+<blockquote>
+<p>Can the model memorize a tiny training dataset?</p>
+</blockquote>
+<p>For example:</p>
+<div class="ascii-box"><pre>8 samples</pre></div>
+<p>with enough capacity.</p>
+<p>Temporarily ignore generalization.</p>
+<p>If the loss cannot become small at all, investigate:</p>
+<div class="ascii-box"><pre>data
+labels
+architecture
+loss
+gradient
+optimizer
+learning rate</pre></div>
+<p>A model that cannot fit a trivially small dataset may have an implementation problem.</p>
+<p>This is a debugging strategy, not a statement that overfitting is desirable in production.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Train/Test Leakage Checks</h2>
+      </div>
+      <div class="section-body">
+        <p>For every preprocessing step ask:</p>
+<blockquote>
+<p>Was this fitted using information from the test set?</p>
+</blockquote>
+<p>Examples:</p>
+<div class="ascii-box"><pre>scaler
+TF-IDF vocabulary
+TF-IDF IDF values
+feature selection
+imputation statistics
+threshold selection
+hyperparameters</pre></div>
+<p>Correct:</p>
+<div class="ascii-box"><pre>train
+ ↓
+fit preprocessing
+ ↓
+transform train/test</pre></div>
+<p>Incorrect:</p>
+<div class="ascii-box"><pre>all data
+ ↓
+fit preprocessing
+ ↓
+split</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">Time-Series Leakage</h2>
+      </div>
+      <div class="section-body">
+        <p>For sequential or temporal data:</p>
+<div class="ascii-box"><pre>past → training
+future → test</pre></div>
+<p>Do not allow future information to enter feature construction.</p>
+<p>For example:</p>
+<div class="ascii-box"><pre>future rolling average
+future target-derived feature
+future normalization statistics</pre></div>
+<p>can create leakage.</p>
+<p>The split strategy must reflect how the model will be used.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Label Leakage</h2>
+      </div>
+      <div class="section-body">
+        <p>A feature can accidentally encode the target.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>post-outcome status</pre></div>
+<p>used to predict:</p>
+<div class="ascii-box"><pre>the outcome itself</pre></div>
+<p>The model may achieve excellent metrics while solving the wrong problem.</p>
+<p>Always ask:</p>
+<blockquote>
+<p>Would this feature genuinely be available at prediction time?</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">Evaluation Protocol</h2>
+      </div>
+      <div class="section-body">
+        <p>Never report:</p>
+<div class="ascii-box"><pre>&quot;accuracy = 97%&quot;</pre></div>
+<p>alone.</p>
+<p>Record:</p>
+<div class="ascii-box"><pre>dataset
+split
+seed
+preprocessing
+model
+hyperparameters
+metric
+test-set protocol</pre></div>
+<p>For classification, where relevant:</p>
+<div class="ascii-box"><pre>accuracy
+precision
+recall
+F1
+ROC-AUC
+confusion matrix</pre></div>
+<p>For regression:</p>
+<div class="ascii-box"><pre>MSE
+MAE
+R²</pre></div>
+<p>For RL:</p>
+<div class="ascii-box"><pre>mean return
+success rate
+episode length
+seed variability</pre></div>
+<p>For autoencoders:</p>
+<div class="ascii-box"><pre>reconstruction loss
+held-out reconstruction quality</pre></div>
+<p>For GANs:</p>
+<div class="ascii-box"><pre>training diagnostics
+sample quality
+diversity
+visual inspection</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">Metrics Must Match the Question</h2>
+      </div>
+      <div class="section-body">
+        <p>Do not choose a metric because it produced the nicest number.</p>
+<p>Start with:</p>
+<div class="ascii-box"><pre>What is the cost of errors?</pre></div>
+<p>Examples:</p>
+<div class="ascii-box"><pre>medical screening
+→ recall may matter strongly
+
+spam filtering
+→ precision may matter strongly
+
+balanced binary classification
+→ accuracy may be useful
+
+imbalanced classification
+→ F1 / PR-oriented analysis may matter
+
+regression
+→ MAE vs MSE depends on error sensitivity</pre></div>
+<p>Metric choice is part of problem formulation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">Confusion-Matrix Sanity Check</h2>
+      </div>
+      <div class="section-body">
+        <p>Given:</p>
+<div class="ascii-box"><pre>TP
+FP
+TN
+FN</pre></div>
+<p>verify:</p>
+<div class="formula-math">\[
+N=TP+FP+TN+FN.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+Precision=
+\frac{TP}{TP+FP}
+\]</div>
+<div class="formula-math">\[
+Recall=
+\frac{TP}{TP+FN}.
+\]</div>
+<p>If a metric looks surprising, go back to the counts.</p>
+<p>The confusion matrix is the ground-level representation from which many classification metrics are derived.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">Threshold Debugging</h2>
+      </div>
+      <div class="section-body">
+        <p>Separate:</p>
+<div class="ascii-box"><pre>model score</pre></div>
+<p>from:</p>
+<div class="ascii-box"><pre>decision threshold</pre></div>
+<p>For example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">scores = model.predict_proba(
+    X_test
+)[:, 1]
+
+for threshold in [
+    0.3,
+    0.5,
+    0.7,
+]:
+    pred = (
+        scores &gt;= threshold
+    ).astype(int)</code></pre></div>
+<p>If precision/recall changes dramatically, that may be entirely expected.</p>
+<p>Do not blame the model until you separate:</p>
+<div class="ascii-box"><pre>ranking quality</pre></div>
+<p>from:</p>
+<div class="ascii-box"><pre>decision policy</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">Visualize Training Behaviour</h2>
+      </div>
+      <div class="section-body">
+        <p>For supervised/deep models:</p>
+<div class="ascii-box"><pre>training loss
+validation loss</pre></div>
+<p>For RL:</p>
+<div class="ascii-box"><pre>episode return
+moving-average return</pre></div>
+<p>For GANs:</p>
+<div class="ascii-box"><pre>G loss
+D loss
+fixed-noise samples</pre></div>
+<p>For autoencoders:</p>
+<div class="ascii-box"><pre>input
+reconstruction
+reconstruction error</pre></div>
+<p>For CNNs:</p>
+<div class="ascii-box"><pre>sample image
+feature map
+confusion matrix</pre></div>
+<p>Visualization converts hidden behaviour into observable evidence.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">One Plot Per Question</h2>
+      </div>
+      <div class="section-body">
+        <p>Do not create a giant dashboard merely because it looks impressive.</p>
+<p>Ask:</p>
+<blockquote>
+<p>What am I trying to learn?</p>
+</blockquote>
+<p>Examples:</p>
+<div class="ascii-box"><pre>Question:
+Is training converging?
+
+Plot:
+loss vs epoch</pre></div>
+<div class="ascii-box"><pre>Question:
+Is the classifier confusing two classes?
+
+Plot:
+confusion matrix</pre></div>
+<div class="ascii-box"><pre>Question:
+How does threshold affect recall?
+
+Plot:
+threshold vs recall</pre></div>
+<div class="ascii-box"><pre>Question:
+Is the generator changing?
+
+Plot:
+fixed-noise generated samples</pre></div>
+<p>A visualization should answer a question.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">Reproducibility Levels</h2>
+      </div>
+      <div class="section-body">
+        <p>Think of reproducibility as layers.</p>
+<h3>Level 1 — documented code</h3>
+<p>Someone can read the notebook.</p>
+<h3>Level 2 — fixed seed</h3>
+<p>Random initialization and sampling are controlled where practical.</p>
+<h3>Level 3 — recorded environment</h3>
+<p>Document:</p>
+<div class="ascii-box"><pre>Python version
+library versions
+OS
+hardware</pre></div>
+<h3>Level 4 — saved configuration</h3>
+<p>Record:</p>
+<div class="ascii-box"><pre>hyperparameters
+dataset version
+preprocessing
+model architecture
+seed</pre></div>
+<h3>Level 5 — saved artifacts</h3>
+<p>Store:</p>
+<div class="ascii-box"><pre>checkpoint
+metrics
+plots
+configuration
+predictions</pre></div>
+<p>The stronger the experiment claim, the stronger the reproducibility layer should be.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">Reproducibility Record</h2>
+      </div>
+      <div class="section-body">
+        <p>Use this template:</p>
+<div class="ascii-box"><pre>Experiment ID:
+Date:
+
+Python:
+NumPy:
+pandas:
+scikit-learn:
+PyTorch:
+
+OS:
+Hardware:
+
+Dataset:
+Dataset version/source:
+
+Train/validation/test split:
+Random seed:
+
+Preprocessing:
+
+Model:
+
+Loss:
+Optimizer:
+Learning rate:
+Batch size:
+Epochs:
+
+Metrics:
+
+Final result:
+
+Checkpoint:
+Plots:
+Notes:</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">Configuration Over Hard-Coded Values</h2>
+      </div>
+      <div class="section-body">
+        <p>Instead of scattering:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">64
+0.001
+5
+42</code></pre></div>
+<p>throughout the notebook, define:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">CONFIG = {
+    &quot;seed&quot;: 42,
+    &quot;batch_size&quot;: 64,
+    &quot;learning_rate&quot;: 1e-3,
+    &quot;epochs&quot;: 5,
+}</code></pre></div>
+<p>Then use:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">CONFIG[&quot;learning_rate&quot;]</code></pre></div>
+<p>This makes experiments easier to compare and reproduce.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">Separate Data, Model and Training</h2>
+      </div>
+      <div class="section-body">
+        <p>A clean notebook structure:</p>
+<div class="ascii-box"><pre>01_imports
+02_config
+03_seed
+04_data
+05_preprocessing
+06_model
+07_loss
+08_optimizer
+09_train
+10_evaluate
+11_visualize
+12_save_artifacts</pre></div>
+<p>This makes debugging and rerunning easier.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">Avoid Hidden Notebook State</h2>
+      </div>
+      <div class="section-body">
+        <p>A classic notebook problem:</p>
+<div class="ascii-box"><pre>Cell 20 depends on Cell 7
+Cell 7 was modified
+but not rerun</pre></div>
+<p>Then the notebook displays stale results.</p>
+<p>Better:</p>
+<div class="ascii-box"><pre>Restart kernel
+Run all</pre></div>
+<p>before considering an experiment final.</p>
+<p>For important experiments, execute the pipeline from a clean state.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">Avoid Accidental Data Mutation</h2>
+      </div>
+      <div class="section-body">
+        <p>Be careful with in-place operations:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X -= mean</code></pre></div>
+<p>This modifies <code>X</code>.</p>
+<p>If another experiment expects the original values, the second experiment silently changes.</p>
+<p>Prefer explicit copies when needed:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X_scaled = X.copy()</code></pre></div>
+<p>This is particularly important when comparing preprocessing methods.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Experiment Independence</h2>
+      </div>
+      <div class="section-body">
+        <p>When comparing learning rates:</p>
+<div class="ascii-box"><pre>reset model
+reset optimizer
+reset seed</pre></div>
+<p>as appropriate.</p>
+<p>Do not train for:</p>
+<div class="ascii-box"><pre>100 epochs with η=0.1</pre></div>
+<p>and then continue the same weights with:</p>
+<div class="ascii-box"><pre>η=0.01</pre></div>
+<p>and claim they are independent experiments.</p>
+<p>They are not.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Model Checkpointing</h2>
+      </div>
+      <div class="section-body">
+        <p>For PyTorch:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">torch.save(
+    {
+        &quot;model_state&quot;: model.state_dict(),
+        &quot;optimizer_state&quot;: optimizer.state_dict(),
+        &quot;epoch&quot;: epoch,
+        &quot;config&quot;: CONFIG,
+        &quot;history&quot;: history,
+    },
+    &quot;checkpoint.pt&quot;,
+)</code></pre></div>
+<p>This is much more useful than saving model weights alone.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-35" class="section-block">
+      <div class="section-header">
+        <span class="section-num">35</span>
+        <h2 class="section-heading">Prediction Artifact</h2>
+      </div>
+      <div class="section-body">
+        <p>When evaluating a classifier, save:</p>
+<div class="ascii-box"><pre>sample ID
+true label
+predicted label
+score/probability</pre></div>
+<p>For error analysis:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">results = pd.DataFrame({
+    &quot;true&quot;: y_test,
+    &quot;pred&quot;: predictions,
+})</code></pre></div>
+<p>Add scores where available.</p>
+<p>This allows you to return to specific errors later.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-36" class="section-block">
+      <div class="section-header">
+        <span class="section-num">36</span>
+        <h2 class="section-heading">Search Debugging</h2>
+      </div>
+      <div class="section-body">
+        <p>For BFS/DFS/A*:</p>
+<p>record:</p>
+<div class="ascii-box"><pre>current node
+frontier
+visited/closed set
+parent
+path cost
+heuristic
+f(n)</pre></div>
+<p>For example:</p>
+<div class="ascii-box"><pre>Expand B
+Frontier = [C, D]
+g(B) = 2
+h(B) = 5
+f(B) = 7</pre></div>
+<p>A search trace often reveals an ordering bug immediately.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-37" class="section-block">
+      <div class="section-header">
+        <span class="section-num">37</span>
+        <h2 class="section-heading">A* Debugging</h2>
+      </div>
+      <div class="section-body">
+        <p>Check:</p>
+<div class="formula-math">\[
+f(n)=g(n)+h(n).
+\]</div>
+<p>Verify independently:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert np.isclose(
+    f,
+    g + h,
+)</code></pre></div>
+<p>If optimality behaviour looks wrong, inspect:</p>
+<div class="ascii-box"><pre>heuristic
+duplicate-state handling
+path-cost updates
+priority queue logic
+goal test timing</pre></div>
+<p>Do not assume the heuristic is responsible.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-38" class="section-block">
+      <div class="section-header">
+        <span class="section-num">38</span>
+        <h2 class="section-heading">Decision-Tree Debugging</h2>
+      </div>
+      <div class="section-body">
+        <p>For a from-scratch tree:</p>
+<p>record each split:</p>
+<div class="ascii-box"><pre>feature
+threshold
+parent impurity
+left impurity
+right impurity
+weighted child impurity
+gain</pre></div>
+<p>Then manually verify one split.</p>
+<p>A tree that chooses an unexpected split becomes much easier to debug when the full calculation is visible.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-39" class="section-block">
+      <div class="section-header">
+        <span class="section-num">39</span>
+        <h2 class="section-heading">Logistic Regression Debugging</h2>
+      </div>
+      <div class="section-body">
+        <p>Check:</p>
+<div class="ascii-box"><pre>logit
+sigmoid
+loss
+gradient
+parameter update</pre></div>
+<p>For a binary classifier:</p>
+<div class="formula-math">\[
+\nabla J=
+\frac1nX^T(p-y).
+\]</div>
+<p>Use finite differences on a tiny dataset before trusting a hand-written implementation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-40" class="section-block">
+      <div class="section-header">
+        <span class="section-num">40</span>
+        <h2 class="section-heading">Linear Regression Debugging</h2>
+      </div>
+      <div class="section-body">
+        <p>Compare:</p>
+<div class="ascii-box"><pre>gradient descent solution</pre></div>
+<p>against:</p>
+<div class="ascii-box"><pre>closed-form least-squares solution</pre></div>
+<p>on a small dataset.</p>
+<p>If both implementations are correct, the results should agree closely under appropriate conditions.</p>
+<p>This is one of the best self-checks in the Unit II codebase.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-41" class="section-block">
+      <div class="section-header">
+        <span class="section-num">41</span>
+        <h2 class="section-heading">CNN Debugging</h2>
+      </div>
+      <div class="section-body">
+        <p>Check the full shape chain:</p>
+<div class="ascii-box"><pre>N × C × H × W
+      ↓
+Conv
+      ↓
+N × C&#x27; × H&#x27; × W&#x27;
+      ↓
+Pool
+      ↓
+N × C&#x27; × H&#x27;&#x27; × W&#x27;&#x27;
+      ↓
+Flatten
+      ↓
+N × features
+      ↓
+Linear</pre></div>
+<p>Then calculate \(H'\) and \(W'\) manually.</p>
+<p>Never guess the flatten dimension.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-42" class="section-block">
+      <div class="section-header">
+        <span class="section-num">42</span>
+        <h2 class="section-heading">RNN/LSTM Debugging</h2>
+      </div>
+      <div class="section-body">
+        <p>Check:</p>
+<div class="ascii-box"><pre>batch
+sequence length
+feature dimension
+hidden dimension
+num_layers
+directions</pre></div>
+<p>Then inspect:</p>
+<div class="ascii-box"><pre>output
+h_n
+c_n</pre></div>
+<p>For sequence-state bugs, print:</p>
+<div class="ascii-box"><pre>t
+x_t
+h_t</pre></div>
+<p>for a tiny sequence.</p>
+<p>This turns recurrence into an observable trace.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-43" class="section-block">
+      <div class="section-header">
+        <span class="section-num">43</span>
+        <h2 class="section-heading">Q-Learning Debugging</h2>
+      </div>
+      <div class="section-body">
+        <p>For one transition:</p>
+<div class="ascii-box"><pre>s
+a
+r
+s&#x27;
+Q(s,a)
+max Q(s&#x27;,a&#x27;)
+target
+TD error
+new Q(s,a)</pre></div>
+<p>Verify:</p>
+<div class="formula-math">\[
+target=
+r+\gamma\max_{a'}Q(s',a')
+\]</div>
+<p>for non-terminal transitions.</p>
+<p>For terminal transitions:</p>
+<div class="ascii-box"><pre>future value contribution
+→ excluded</pre></div>
+<p>Then compare the code against the manual calculation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-44" class="section-block">
+      <div class="section-header">
+        <span class="section-num">44</span>
+        <h2 class="section-heading">Policy-Gradient Debugging</h2>
+      </div>
+      <div class="section-body">
+        <p>Check:</p>
+<div class="ascii-box"><pre>state
+→ logits
+→ action probabilities
+→ sampled action
+→ log_prob
+→ reward
+→ return
+→ policy loss
+→ gradient</pre></div>
+<p>Common questions:</p>
+<div class="ascii-box"><pre>Does log_prob require gradient?
+Are returns aligned with actions?
+Is the loss sign correct?
+Did I accidentally detach the policy graph?</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-45" class="section-block">
+      <div class="section-header">
+        <span class="section-num">45</span>
+        <h2 class="section-heading">Autoencoder Debugging</h2>
+      </div>
+      <div class="section-body">
+        <p>Check:</p>
+<div class="ascii-box"><pre>x.shape
+z.shape
+x_hat.shape
+loss</pre></div>
+<p>and:</p>
+<div class="ascii-box"><pre>target == clean input</pre></div>
+<p>for denoising autoencoders.</p>
+<p>For reconstruction:</p>
+<div class="ascii-box"><pre>input range
+=
+expected decoder output range</pre></div>
+<p>should be compatible.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-46" class="section-block">
+      <div class="section-header">
+        <span class="section-num">46</span>
+        <h2 class="section-heading">GAN Debugging</h2>
+      </div>
+      <div class="section-body">
+        <p>Check separately:</p>
+<div class="ascii-box"><pre>G shape
+D(real) shape
+D(fake) shape
+D loss
+G loss
+gradients G
+gradients D</pre></div>
+<p>During D training:</p>
+<div class="ascii-box"><pre>fake.detach()</pre></div>
+<p>During G training:</p>
+<div class="ascii-box"><pre>fake not detached</pre></div>
+<p>Then inspect fixed-noise outputs.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-47" class="section-block">
+      <div class="section-header">
+        <span class="section-num">47</span>
+        <h2 class="section-heading">Test Error, Not Just Test Score</h2>
+      </div>
+      <div class="section-body">
+        <p>For every classifier:</p>
+<div class="ascii-box"><pre>find wrong predictions</pre></div>
+<p>For every regression:</p>
+<div class="ascii-box"><pre>find largest residuals</pre></div>
+<p>For CNN:</p>
+<div class="ascii-box"><pre>display misclassified images</pre></div>
+<p>For NLP:</p>
+<div class="ascii-box"><pre>display misclassified texts</pre></div>
+<p>For autoencoder:</p>
+<div class="ascii-box"><pre>display highest reconstruction errors</pre></div>
+<p>For GAN:</p>
+<div class="ascii-box"><pre>inspect low-diversity / unstable generations</pre></div>
+<p>The error cases often teach more than the aggregate metric.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-48" class="section-block">
+      <div class="section-header">
+        <span class="section-num">48</span>
+        <h2 class="section-heading">Residual Analysis</h2>
+      </div>
+      <div class="section-body">
+        <p>For regression:</p>
+<div class="formula-math">\[
+e_i=y_i-\hat y_i.
+\]</div>
+<p>Plot:</p>
+<div class="ascii-box"><pre>prediction vs residual</pre></div>
+<p>Look for:</p>
+<div class="ascii-box"><pre>systematic curvature
+changing spread
+outliers</pre></div>
+<p>A pattern can reveal model inadequacy that a single MSE number hides.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-49" class="section-block">
+      <div class="section-header">
+        <span class="section-num">49</span>
+        <h2 class="section-heading">Compare Against Baselines</h2>
+      </div>
+      <div class="section-body">
+        <p>Every serious experiment should have a baseline when practical.</p>
+<p>Examples:</p>
+<div class="ascii-box"><pre>classification
+→ majority-class baseline
+
+regression
+→ mean-target predictor
+
+RL
+→ random policy
+
+GAN
+→ untrained generator / fixed simple baseline
+
+autoencoder
+→ trivial baseline reconstruction where meaningful</pre></div>
+<p>A model score without a baseline is difficult to interpret.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-50" class="section-block">
+      <div class="section-header">
+        <span class="section-num">50</span>
+        <h2 class="section-heading">Sanity Checks Before Trusting a Result</h2>
+      </div>
+      <div class="section-body">
+        <p>Ask:</p>
+<div class="ascii-box"><pre>1. Does the model beat a simple baseline?
+2. Does it behave correctly on tiny examples?
+3. Is the evaluation leakage-free?
+4. Is the result stable across seeds?
+5. Do visual/error diagnostics agree with the metric?
+6. Does the result survive a clean rerun?</pre></div>
+<p>If any answer is “no,” investigate before making strong conclusions.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-51" class="section-block">
+      <div class="section-header">
+        <span class="section-num">51</span>
+        <h2 class="section-heading">Experiment Naming</h2>
+      </div>
+      <div class="section-body">
+        <p>Use structured names:</p>
+<div class="ascii-box"><pre>U2_LOGREG_BASELINE_SEED42
+U2_TREE_DEPTH_SWEEP_SEED42
+U3_MLP_XOR_LR0.1
+U3_CNN_MNIST_LATENT...
+U4_QLEARN_GRID_GAMMA95
+U4_REINFORCE_GRID_BASELINE
+U4_AE_MNIST_LATENT32
+U4_GAN_MNIST_SEED42</pre></div>
+<p>This makes saved artifacts understandable later.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-52" class="section-block">
+      <div class="section-header">
+        <span class="section-num">52</span>
+        <h2 class="section-heading">Artifact Folder Structure</h2>
+      </div>
+      <div class="section-body">
+        <p>A useful pattern:</p>
+<div class="ascii-box"><pre>experiment/
+├── README.md
+├── config.json
+├── train.py
+├── evaluate.py
+├── metrics.csv
+├── predictions.csv
+├── checkpoints/
+├── plots/
+├── samples/
+└── logs/</pre></div>
+<p>For university notebooks, you do not need the full structure every time.</p>
+<p>But the conceptual separation is valuable.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-53" class="section-block">
+      <div class="section-header">
+        <span class="section-num">53</span>
+        <h2 class="section-heading">Minimal Reproducible Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>At minimum, include:</p>
+<div class="ascii-box"><pre>problem statement
+dataset
+preprocessing
+model
+loss
+optimizer
+hyperparameters
+seed
+training protocol
+evaluation metric
+result
+limitations</pre></div>
+<p>This should be your default standard.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-54" class="section-block">
+      <div class="section-header">
+        <span class="section-num">54</span>
+        <h2 class="section-heading">Practical Debugging Protocol</h2>
+      </div>
+      <div class="section-body">
+        <p>When a model “doesn't work,” follow:</p>
+<div class="ascii-box"><pre>STOP
+ ↓
+reproduce the bug
+ ↓
+create the smallest failing case
+ ↓
+inspect inputs
+ ↓
+inspect shapes
+ ↓
+inspect outputs
+ ↓
+inspect loss
+ ↓
+inspect gradients/updates
+ ↓
+compare with hand calculation
+ ↓
+fix one variable
+ ↓
+rerun tests
+ ↓
+rerun full experiment</pre></div>
+<p>The key phrase:</p>
+<blockquote>
+<p><strong>Fix one variable at a time.</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-55" class="section-block">
+      <div class="section-header">
+        <span class="section-num">55</span>
+        <h2 class="section-heading">Never Debug by Randomly Changing Everything</h2>
+      </div>
+      <div class="section-body">
+        <p>Bad:</p>
+<div class="ascii-box"><pre>increase learning rate
+change optimizer
+change network
+change batch size
+change preprocessing
+change epochs</pre></div>
+<p>all at once.</p>
+<p>Then even if the result improves, you do not know why.</p>
+<p>Better:</p>
+<div class="ascii-box"><pre>hypothesis
+ ↓
+one targeted change
+ ↓
+experiment
+ ↓
+observe
+ ↓
+keep/reject</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-56" class="section-block">
+      <div class="section-header">
+        <span class="section-num">56</span>
+        <h2 class="section-heading">Engineering Checklist Before Submission</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>CODE
+[ ] functions are named clearly
+[ ] no accidental hard-coded paths
+[ ] no dead code
+[ ] shape checks exist where useful
+[ ] random seed is recorded
+
+DATA
+[ ] dataset source recorded
+[ ] labels verified
+[ ] preprocessing documented
+[ ] leakage checked
+
+MODEL
+[ ] architecture documented
+[ ] parameter count known
+[ ] loss explained
+[ ] optimizer documented
+
+EVALUATION
+[ ] held-out evaluation
+[ ] appropriate metrics
+[ ] baseline
+[ ] error analysis
+
+REPRODUCIBILITY
+[ ] config saved
+[ ] seed saved
+[ ] versions saved
+[ ] checkpoint/artifacts saved
+
+REPORT
+[ ] result
+[ ] interpretation
+[ ] limitation</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-57" class="section-block">
+      <div class="section-header">
+        <span class="section-num">57</span>
+        <h2 class="section-heading">Code Review Checklist</h2>
+      </div>
+      <div class="section-body">
+        <p>Before calling an implementation complete, ask:</p>
+<h3>Correctness</h3>
+<blockquote>
+<p>Does the implementation match the equations?</p>
+</blockquote>
+<h3>Robustness</h3>
+<blockquote>
+<p>Does it fail clearly on invalid input?</p>
+</blockquote>
+<h3>Testability</h3>
+<blockquote>
+<p>Can the core behaviour be tested independently?</p>
+</blockquote>
+<h3>Observability</h3>
+<blockquote>
+<p>Can I inspect intermediate values?</p>
+</blockquote>
+<h3>Reproducibility</h3>
+<blockquote>
+<p>Can someone rerun the experiment with the same configuration?</p>
+</blockquote>
+<h3>Interpretability</h3>
+<blockquote>
+<p>Can I explain why the model produced the observed result?</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-58" class="section-block">
+      <div class="section-header">
+        <span class="section-num">58</span>
+        <h2 class="section-heading">Master Integration Challenge</h2>
+      </div>
+      <div class="section-body">
+        <p>Take one completed Coding Book practical.</p>
+<p>Do all of the following:</p>
+<div class="ascii-box"><pre>1. Write the problem statement.
+2. Define the representation.
+3. Implement the model.
+4. Add at least 5 unit tests.
+5. Add shape assertions.
+6. Create one hand-worked example.
+7. Add one visualization.
+8. Establish a baseline.
+9. Train/evaluate.
+10. Perform error analysis.
+11. Run at least 3 seeds.
+12. Save configuration.
+13. Save the final checkpoint.
+14. Record results.
+15. Write limitations.</pre></div>
+<p>This is the standard to aim for across the entire Coding Book.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-59" class="section-block">
+      <div class="section-header">
+        <span class="section-num">59</span>
+        <h2 class="section-heading">Master Checklist by Unit</h2>
+      </div>
+      <div class="section-body">
+        <h2>Unit I — Classical AI</h2>
+<div class="ascii-box"><pre>[ ] BFS/DFS trace
+[ ] frontier debugging
+[ ] A* g/h/f verification
+[ ] CSP backtracking trace
+[ ] minimax utility trace
+[ ] alpha-beta pruning trace
+[ ] complexity check</pre></div>
+<h2>Unit II — Classical ML</h2>
+<div class="ascii-box"><pre>[ ] split without leakage
+[ ] preprocessing pipeline
+[ ] linear regression gradient/closed form
+[ ] logistic regression gradient
+[ ] tree split calculation
+[ ] confusion matrix
+[ ] threshold analysis
+[ ] Ridge/Lasso objective
+[ ] model comparison</pre></div>
+<h2>Unit III — Deep Learning</h2>
+<div class="ascii-box"><pre>[ ] neuron
+[ ] perceptron
+[ ] MLP shapes
+[ ] forward pass
+[ ] activation tests
+[ ] backprop
+[ ] gradient checking
+[ ] CNN dimensions
+[ ] RNN state trace
+[ ] LSTM gate trace</pre></div>
+<h2>Unit IV — Advanced AI</h2>
+<div class="ascii-box"><pre>[ ] Q-learning transition trace
+[ ] epsilon-greedy
+[ ] REINFORCE return trace
+[ ] policy log-probabilities
+[ ] NLP vectorization leakage
+[ ] autoencoder reconstruction
+[ ] anomaly threshold
+[ ] GAN G/D update separation
+[ ] mode-collapse diagnosis
+[ ] application risk analysis</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-60" class="section-block">
+      <div class="section-header">
+        <span class="section-num">60</span>
+        <h2 class="section-heading">Master Reproducibility Checklist</h2>
+      </div>
+      <div class="section-body">
+        <p>Every serious experiment should answer:</p>
+<div class="ascii-box"><pre>What data?
+What representation?
+What algorithm?
+What parameters?
+What hyperparameters?
+What objective?
+What split?
+What seed?
+What metric?
+What baseline?
+What result?
+How variable?
+What failed?
+What limitation?</pre></div>
+<p>That is the AI/ML experiment record.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-61" class="section-block">
+      <div class="section-header">
+        <span class="section-num">61</span>
+        <h2 class="section-heading">Final Mental Model</h2>
+      </div>
+      <div class="section-body">
+        <p>The entire Coding Book can be reduced to:</p>
+<div class="ascii-box"><pre>REPRESENT
+    ↓
+COMPUTE
+    ↓
+MEASURE
+    ↓
+UPDATE
+    ↓
+TEST
+    ↓
+VISUALIZE
+    ↓
+EVALUATE
+    ↓
+REPRODUCE</pre></div>
+<p>The model is only one component.</p>
+<p>A trustworthy engineering workflow surrounds it.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-62" class="section-block">
+      <div class="section-header">
+        <span class="section-num">62</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <p>You are ready to treat the Coding Book as a complete engineering system when you can:</p>
+<ul>
+<li>[ ] debug a shape error systematically;</li>
+<li>[ ] create useful assertions;</li>
+<li>[ ] write unit tests;</li>
+<li>[ ] create a hand-worked reference example;</li>
+<li>[ ] perform gradient checking;</li>
+<li>[ ] detect NaN/Inf problems;</li>
+<li>[ ] identify data leakage;</li>
+<li>[ ] distinguish training and evaluation;</li>
+<li>[ ] establish a baseline;</li>
+<li>[ ] analyze errors;</li>
+<li>[ ] visualize training behaviour;</li>
+<li>[ ] record seeds/configurations;</li>
+<li>[ ] save checkpoints and metrics;</li>
+<li>[ ] reproduce an experiment from a clean run;</li>
+<li>[ ] explain why a model result should or should not be trusted.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-63" class="section-block">
+      <div class="section-header">
+        <span class="section-num">63</span>
+        <h2 class="section-heading">Connection to Final Capstone</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Lab Viva Trap & Runtime Gotcha</div>
+
+**Silent Shape Broadcasting & Floating Point Invariance:**
+1. In NumPy, `(n,)` minus `(n, 1)` broadcasts to `(n, n)` without throwing any error, silently multiplying RAM usage by $n$ and breaking gradient math! Always assert exact shapes!
+2. Comparing floating point values with `==` (e.g. `loss == 0.0`) fails due to IEEE 754 precision; always use `np.isclose(a, b, atol=1e-5)` or `np.allclose()`!
+
+</div>
+
+<p>The final Coding Book file combines everything into one disciplined AI/ML practical:</p>
+<div class="ascii-box"><pre>CODE-24
+AI/ML Coding Capstone and Master Checklist</pre></div>
+<p>It will require you to demonstrate the full workflow:</p>
+<div class="ascii-box"><pre>problem
+→ data
+→ representation
+→ model
+→ training
+→ evaluation
+→ debugging
+→ visualization
+→ reproducibility
+→ engineering report</pre></div>
+<p>The final chapter is therefore not another algorithm.</p>
+<p>It is the <strong>integration and mastery layer</strong>.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-64" class="section-block">
+      <div class="section-header">
+        <span class="section-num">64</span>
+        <h2 class="section-heading">Status</h2>
+      </div>
+      <div class="section-body">
+        <p><strong><code>CODE-23</code> — COMPLETE</strong></p>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="code-u4-05-gans-pytorch.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← Unit 4 Lab 05 — GANs</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">💻 Coding Index</span>
+      </a>
+      <a href="code-24-coding-capstone-checklist.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: Module 24 — Grand Capstone & Master Checklist →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search lab implementations, functions, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">💻</span>Lab Hub</a>
+  <a href="code-23-debugging-testing-reproducibility.html" class="mobile-nav-btn active"><span class="icon">📖</span>CODE-23</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

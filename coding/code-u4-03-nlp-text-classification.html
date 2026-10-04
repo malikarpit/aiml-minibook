@@ -1,0 +1,2154 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="CODE-U4-03: NLP Preprocessing & Text Classification Pipeline — AI & Machine Learning Coding Lab. Regex Tokenization, Stopwords, Porter Stemming, Bag-of-Words Vectorizer, TF-IDF Weighting From Scratch, and Multinomial Naive Bayes Classifier">
+<title>CODE-U4-03: NLP Preprocessing & Text Classification Pipeline | Coding Lab 💻 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/coding.css">
+</head>
+<body class="coding-module track-c4">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">💻</div>
+      <div class="brand-text"><span class="main">Coding Lab</span><span class="sub">AI &amp; ML From Scratch</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">CODE-U4-03: NLP Preprocessing &amp; Text Classification Pipeline</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">💻</span>Coding Lab Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../math/index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 0: Environment & System</div>
+  <a href="code-00-coding-foundation.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-00: Coding Lab Foundation &amp; Implementation System</a>
+  <a href="code-01-python-numpy-workflow.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-01: Python, NumPy, Matplotlib &amp; Lab Workflow</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Classical AI & Search Labs</div>
+  <a href="code-u1-01-bfs-dfs.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-01: BFS and DFS From Scratch</a>
+  <a href="code-u1-02-greedy-a-star.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-02: Greedy Best-First &amp; A* Search From Scratch</a>
+  <a href="code-u1-03-csp-backtracking.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-03: CSPs and Backtracking Search</a>
+  <a href="code-u1-04-minimax-alpha-beta.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Supervised ML Labs</div>
+  <a href="code-u2-01-ml-workflow.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-01: ML Workflow: Preprocessing, Splitting &amp; Evaluation</a>
+  <a href="code-u2-02-linear-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-02: Linear Regression From Scratch</a>
+  <a href="code-u2-03-logistic-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-03: Logistic Regression From Scratch</a>
+  <a href="code-u2-04-decision-trees.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-04: Decision Trees From Scratch</a>
+  <a href="code-u2-05-classification-metrics-roc.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC &amp; Thresholds</a>
+  <a href="code-u2-06-ridge-lasso-regularization.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-06: Ridge &amp; Lasso From Scratch: Regularization &amp; Optimization</a>
+  <a href="code-u2-07-ml-evaluation-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-07: ML Evaluation &amp; Model Comparison Lab</a>
+  <a href="code-u2-08-knn-svm-practical-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-08: KNN and SVM Practical Comparison Lab</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Deep Learning Labs</div>
+  <a href="code-u3-01-neuron-perceptron.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-01: Neuron and Perceptron From Scratch</a>
+  <a href="code-u3-02-mlp-forward-propagation.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-02: MLP and Forward Propagation From Scratch</a>
+  <a href="code-u3-03-backpropagation-scratch.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-03: Gradient Descent &amp; Backpropagation From Scratch</a>
+  <a href="code-u3-04-cnn-image-classification.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-04: CNNs: From Scratch to PyTorch Image Classification</a>
+  <a href="code-u3-05-rnn-lstm-sequence-modelling.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-05: RNN &amp; LSTM: From Scratch to PyTorch Sequence Modelling</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Advanced AI & RL Labs</div>
+  <a href="code-u4-01-mdp-q-learning.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-01: MDPs and Q-Learning From Scratch</a>
+  <a href="code-u4-02-policy-gradients-reinforce.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-02: Policy Gradients &amp; REINFORCE Algorithm</a>
+  <a href="code-u4-03-nlp-text-classification.html" class="sidebar-link active"><span class="link-icon">🎲</span>CODE-U4-03: NLP Preprocessing &amp; Text Classification Pipeline</a>
+  <a href="code-u4-04-autoencoders-pytorch.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-04: Autoencoders: From Scratch &amp; PyTorch Representation Learning</a>
+  <a href="code-u4-05-gans-pytorch.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-05: Generative Adversarial Networks: Core Mechanics to PyTorch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 5: Engineering & Capstone</div>
+  <a href="code-23-debugging-testing-reproducibility.html" class="sidebar-link"><span class="link-icon">🏆</span>CODE-23: Debugging, Testing, Visualization &amp; Reproducibility</a>
+  <a href="code-24-coding-capstone-checklist.html" class="sidebar-link"><span class="link-icon">🏆</span>CODE-24: AI/ML Coding Capstone &amp; Master Practical Checklist</a>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">CODE-U4-03 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Course Position</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Coding Objective</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Start With the Task</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Why Raw Text Cannot Be Passed Directly to a Classical Classifier</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Minimal Text Dataset</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Tokenization</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Why `.split()` Is Not a Complete NLP Tokenizer</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Lowercasing</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Basic Punctuation Normalization</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Stopwords — Use With Caution</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Stemming</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Stemming With NLTK</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Lemmatization</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Stemming vs Lemmatization</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. A Small Preprocessing Function</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Vocabulary</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Bag of Words</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Build Bag-of-Words From Scratch</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Vectorize One Document</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Bag-of-Words Limitation</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. N-Grams</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. TF-IDF</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. TF-IDF Numerical</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. TF-IDF With scikit-learn</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Why Sparse Matrices Matter</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Train/Test Split Before Fitting the Vocabulary</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. sklearn Pipeline Prevents This Error</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Evaluate the Classifier</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Larger Practical Dataset</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Text Classification Pipeline</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Compare Classical Classifiers</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Why Linear Models Often Fit Sparse Text Features Naturally</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Inspect Feature Names</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Text Classification Error Analysis</a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Unknown Vocabulary</a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Negation Experiment</a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Stemming Experiment</a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Lemmatization Experiment</a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Sparse Matrix Inspection</a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Text Classification With an Explicit Pipeline</a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Multi-Class Text Classification</a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Text Classification with an Embedding Model — Preview</a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Practical Debugging Checklist</a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Common NLP Coding Mistakes</a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. Practical Lab</a>
+      <a href="#s-46" class="sidebar-link"><span class="link-icon">📌</span>46. Master Comparison Experiment</a>
+      <a href="#s-47" class="sidebar-link"><span class="link-icon">📌</span>47. Advanced Experiment — Vocabulary Size</a>
+      <a href="#s-48" class="sidebar-link"><span class="link-icon">📌</span>48. Advanced Experiment — N-Gram Range</a>
+      <a href="#s-49" class="sidebar-link"><span class="link-icon">📌</span>49. Viva Questions</a>
+      <a href="#s-50" class="sidebar-link"><span class="link-icon">📌</span>50. Exam Connection</a>
+      <a href="#s-51" class="sidebar-link"><span class="link-icon">📌</span>51. One-Screen Summary</a>
+      <a href="#s-52" class="sidebar-link"><span class="link-icon">📌</span>52. Connection to Earlier Chapters</a>
+      <a href="#s-53" class="sidebar-link"><span class="link-icon">📌</span>53. Source Notes</a>
+      <a href="#s-54" class="sidebar-link"><span class="link-icon">📌</span>54. Mastery Gate</a>
+      <a href="#s-55" class="sidebar-link"><span class="link-icon">📌</span>55. Status</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Coding Lab</a>
+        <span>/</span>
+        <span>CODE-U4-03</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-c4">Track 4: Advanced AI & Reinforcement Learning</span></div>
+      <h1 class="chapter-title">NLP Preprocessing &amp; Text Classification Pipeline</h1>
+      <p class="chapter-desc">Regex Tokenization, Stopwords, Porter Stemming, Bag-of-Words Vectorizer, TF-IDF Weighting From Scratch, and Multinomial Naive Bayes Classifier</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~50 min lab</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">NLP</span> <span class="chapter-meta-item uni-badge">TOKENIZATION</span> <span class="chapter-meta-item uni-badge">TF-IDF</span> <span class="chapter-meta-item uni-badge">NAIVE-BAYES</span> <span class="chapter-meta-item uni-badge">TEXT-CLASSIFICATION</span>
+      </div>
+
+      <div class="lab-meta-grid">
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Prerequisites</div>
+          <div class="lab-meta-value">CODE-01 NumPy Workflow, Math Companion M03 Logarithms & M10 Probability</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Main Book Concept</div>
+          <div class="lab-meta-value">Ch 43 NLP Preprocessing & Text Classification</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Math Companion Layer</div>
+          <div class="lab-meta-value">Term Frequency TF, Inverse Document Frequency IDF = log(N / (1 + DF)), Bayes posterior odds</div>
+        </div>
+        <div class="lab-meta-box" style="grid-column: 1 / -1;">
+          <div class="lab-meta-label">AI / Machine Learning Connections</div>
+          <div class="lab-meta-value">Spam filtering, Sentiment analysis, Search engine relevance indexing, Document topic categorization</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-meta-card"><h1>CODE-U4-03 — NLP Preprocessing and Text Classification Pipeline</h1>
+<blockquote>
+<p><strong>Purpose:</strong> Build an end-to-end text-classification pipeline, beginning with raw language and moving through tokenization, normalization, stemming/lemmatization, vector representation, TF-IDF and supervised classification.</p>
+</blockquote>
+<p>The central pipeline is:</p>
+<div class="ascii-box"><pre>RAW TEXT
+   ↓
+TOKENIZATION
+   ↓
+NORMALIZATION
+   ↓
+OPTIONAL STEMMING / LEMMATIZATION
+   ↓
+NUMERICAL REPRESENTATION
+   ↓
+CLASSIFIER
+   ↓
+PREDICTION
+   ↓
+EVALUATION</pre></div>
+<p>The important engineering lesson is:</p>
+<blockquote>
+<p><strong>A text classifier is not just a classifier. It is a complete representation + learning + evaluation pipeline.</strong></p>
+</blockquote>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in CODE-U4-03 (55 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Course Position</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Coding Objective</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Start With the Task</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Why Raw Text Cannot Be Passed Directly to a Classical Classifier</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Minimal Text Dataset</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Tokenization</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Why `.split()` Is Not a Complete NLP Tokenizer</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Lowercasing</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Basic Punctuation Normalization</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Stopwords — Use With Caution</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Stemming</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Stemming With NLTK</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Lemmatization</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Stemming vs Lemmatization</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">A Small Preprocessing Function</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Vocabulary</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Bag of Words</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Build Bag-of-Words From Scratch</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Vectorize One Document</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Bag-of-Words Limitation</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">N-Grams</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">TF-IDF</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">TF-IDF Numerical</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">TF-IDF With scikit-learn</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Why Sparse Matrices Matter</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Train/Test Split Before Fitting the Vocabulary</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">sklearn Pipeline Prevents This Error</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Evaluate the Classifier</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Larger Practical Dataset</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Text Classification Pipeline</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Compare Classical Classifiers</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Why Linear Models Often Fit Sparse Text Features Naturally</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Inspect Feature Names</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Text Classification Error Analysis</span></a></li>
+        <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Unknown Vocabulary</span></a></li>
+        <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Negation Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Stemming Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Lemmatization Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Sparse Matrix Inspection</span></a></li>
+        <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Text Classification With an Explicit Pipeline</span></a></li>
+        <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Multi-Class Text Classification</span></a></li>
+        <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Text Classification with an Embedding Model — Preview</span></a></li>
+        <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Practical Debugging Checklist</span></a></li>
+        <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Common NLP Coding Mistakes</span></a></li>
+        <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">Practical Lab</span></a></li>
+        <li class="toc-item"><a href="#s-46"><span class="toc-num">46</span><span class="toc-name">Master Comparison Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-47"><span class="toc-num">47</span><span class="toc-name">Advanced Experiment — Vocabulary Size</span></a></li>
+        <li class="toc-item"><a href="#s-48"><span class="toc-num">48</span><span class="toc-name">Advanced Experiment — N-Gram Range</span></a></li>
+        <li class="toc-item"><a href="#s-49"><span class="toc-num">49</span><span class="toc-name">Viva Questions</span></a></li>
+        <li class="toc-item"><a href="#s-50"><span class="toc-num">50</span><span class="toc-name">Exam Connection</span></a></li>
+        <li class="toc-item"><a href="#s-51"><span class="toc-num">51</span><span class="toc-name">One-Screen Summary</span></a></li>
+        <li class="toc-item"><a href="#s-52"><span class="toc-num">52</span><span class="toc-name">Connection to Earlier Chapters</span></a></li>
+        <li class="toc-item"><a href="#s-53"><span class="toc-num">53</span><span class="toc-name">Source Notes</span></a></li>
+        <li class="toc-item"><a href="#s-54"><span class="toc-num">54</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-55"><span class="toc-num">55</span><span class="toc-name">Status</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">Course Position</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph LR
+    Raw["Raw Text Document"] --> Clean["Lowercase & Regex Punctuation Strip"]
+    Clean --> Token["Whitespace Tokenization"]
+    Token --> Stop["Filter Stopwords ('the', 'is')"]
+    Stop --> Stem["Porter Stemming ('running' → 'run')"]
+    Stem --> Vocab["Build Fixed Vocabulary Dictionary"]
+    Vocab --> TFIDF["Compute TF-IDF Matrix X ∈ ℝ^(N × V)"]
+    TFIDF --> NB["Multinomial Naive Bayes Classifier"]
+    style Clean fill:#1e293b,stroke:#38bdf8,color:#f8fafc
+    style TFIDF fill:#0f172a,stroke:#ec4899,color:#ec4899,stroke-width:2px
+    style NB fill:#065f46,stroke:#34d399,color:#ffffff
+</pre></div>
+<p>The official DSC-14 Unit IV syllabus includes:</p>
+<ul>
+<li>NLP;</li>
+<li>tokenization;</li>
+<li>stemming;</li>
+<li>lemmatization;</li>
+<li>text classification.</li>
+</ul>
+<p>The stored exam material also expects:</p>
+<ul>
+<li>TF-IDF;</li>
+<li>text-classification pipeline;</li>
+<li>comparison of stemming and lemmatization.</li>
+</ul>
+<p>The master resource guide identifies Stanford CS224N as a structured external source for NLP because the supplied University of Delhi lecture-note set does not fully cover this Unit IV block.</p>
+<p><strong>Source boundary:</strong> the syllabus determines the required scope; the preprocessing implementations, TF-IDF calculations, feature-vector inspection and classifier pipeline are standard coding expansion aligned to that scope.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">Coding Objective</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Implementation Model</div>
+
+Computer text ko samajh nahi sakta—use sirf numbers samajh aate hain.
+NLP ka pehla step hai bhasha ko saaf karna: faltu words ('the', 'is', 'at') hatana, aur words ko unki mool root par lana (stemming).
+TF-IDF ka logic bohot pyara hai:
+TF (Term Frequency): Jo word is document mein baar-baar aaye, vo iske liye zaroori hai.
+IDF (Inverse Document Frequency): Lekin jo word har document mein aa raha hai, vo aam (common) hai, use penalize karo!
+Result: Har document ka ek mathematical vector ban jata hai!
+
+</div>
+
+<p>By the end of this chapter you should be able to:</p>
+<ul>
+<li>represent documents as Python strings;</li>
+<li>tokenize text;</li>
+<li>normalize text without blindly destroying useful information;</li>
+<li>explain stemming vs lemmatization;</li>
+<li>create a vocabulary;</li>
+<li>build bag-of-words vectors;</li>
+<li>build TF-IDF features;</li>
+<li>train a classical text classifier;</li>
+<li>evaluate with precision, recall, F1 and confusion matrix;</li>
+<li>use an sklearn pipeline without leakage;</li>
+<li>compare preprocessing choices;</li>
+<li>inspect important features;</li>
+<li>debug vocabulary and vectorization errors;</li>
+<li>understand the bridge from classical NLP to embeddings and neural sequence models.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">Start With the Task</h2>
+      </div>
+      <div class="section-body">
+        <p>Example:</p>
+<blockquote>
+<p><strong>Classify a message as spam or not spam.</strong></p>
+</blockquote>
+<p>Data:</p>
+<div class="ascii-box"><pre>message                                label
+------------------------------------------------
+&quot;Win a free phone today!&quot;              spam
+&quot;Meeting moved to 4 PM.&quot;               ham
+&quot;Claim your prize now.&quot;                spam
+&quot;Please submit the assignment.&quot;        ham</pre></div>
+<p>This is a supervised learning problem.</p>
+<p>Formally:</p>
+<div class="formula-math">\[
+D=
+\{(x_i,y_i)\}_{i=1}^{n}
+\]</div>
+<p>where:</p>
+<ul>
+<li>\(x_i\) = text document;</li>
+<li>\(y_i\) = class label.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Why Raw Text Cannot Be Passed Directly to a Classical Classifier</h2>
+      </div>
+      <div class="section-body">
+        <p>A classical ML classifier expects numerical features.</p>
+<p>The string:</p>
+<div class="ascii-box"><pre>&quot;machine learning is useful&quot;</pre></div>
+<p>must become some numerical representation such as:</p>
+<div class="ascii-box"><pre>[1, 1, 1, 1, ...]</pre></div>
+<p>or:</p>
+<div class="ascii-box"><pre>[0.18, 0.74, ...]</pre></div>
+<p>or an embedding vector.</p>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\boxed{
+\text{text}
+\rightarrow
+\text{representation}
+\rightarrow
+\text{classifier}
+}
+\]</div>
+<p>This representation step is one of the most important parts of NLP engineering.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Minimal Text Dataset</h2>
+      </div>
+      <div class="section-body">
+        <p>For controlled experimentation:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">texts = [
+    &quot;Win a free phone today&quot;,
+    &quot;Claim your prize now&quot;,
+    &quot;Meeting moved to 4 PM&quot;,
+    &quot;Please submit the assignment&quot;,
+    &quot;Free gift waiting for you&quot;,
+    &quot;Project meeting is tomorrow&quot;,
+]
+
+labels = [
+    &quot;spam&quot;,
+    &quot;spam&quot;,
+    &quot;ham&quot;,
+    &quot;ham&quot;,
+    &quot;spam&quot;,
+    &quot;ham&quot;,
+]</code></pre></div>
+<p>Convert labels:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.preprocessing import LabelEncoder
+
+encoder = LabelEncoder()
+
+y = encoder.fit_transform(
+    labels
+)
+
+print(y)</code></pre></div>
+<p>For larger projects, explicitly define the class mapping rather than relying on memory.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Tokenization</h2>
+      </div>
+      <div class="section-body">
+        <p>Tokenization breaks text into processing units.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>&quot;Natural language processing&quot;</pre></div>
+<p>can become:</p>
+<div class="ascii-box"><pre>[&quot;Natural&quot;, &quot;language&quot;, &quot;processing&quot;]</pre></div>
+<p>Implementation:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def simple_tokenize(text):
+    return text.split()</code></pre></div>
+<p>Test:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(
+    simple_tokenize(
+        &quot;Natural language processing&quot;
+    )
+)</code></pre></div>
+<p>Expected:</p>
+<div class="ascii-box"><pre>[&#x27;Natural&#x27;, &#x27;language&#x27;, &#x27;processing&#x27;]</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Why `.split()` Is Not a Complete NLP Tokenizer</h2>
+      </div>
+      <div class="section-body">
+        <p>Consider:</p>
+<div class="ascii-box"><pre>&quot;Hello, world!&quot;</pre></div>
+<p>Simple splitting gives:</p>
+<div class="ascii-box"><pre>[&quot;Hello,&quot;, &quot;world!&quot;]</pre></div>
+<p>Punctuation is attached to words.</p>
+<p>Consider:</p>
+<div class="ascii-box"><pre>&quot;can&#x27;t&quot;</pre></div>
+<p>A simplistic tokenizer may not represent the linguistic units you actually need.</p>
+<p>Real tokenization can involve:</p>
+<div class="ascii-box"><pre>word tokens
+subword tokens
+character tokens
+special tokens
+punctuation handling</pre></div>
+<p>For this course coding layer, start with a simple tokenizer so the mechanics remain visible.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">Lowercasing</h2>
+      </div>
+      <div class="section-body">
+        <p>A common normalization:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def normalize_lowercase(text):
+    return text.lower()</code></pre></div>
+<p>Example:</p>
+<div class="ascii-box"><pre>&quot;Machine Learning&quot;</pre></div>
+<p>becomes:</p>
+<div class="ascii-box"><pre>&quot;machine learning&quot;</pre></div>
+<p>Why?</p>
+<p>It can reduce duplicate vocabulary entries:</p>
+<div class="ascii-box"><pre>Machine
+machine
+MACHINE</pre></div>
+<p>However, lowercasing is not always correct.</p>
+<p>Case can carry information in some applications:</p>
+<div class="ascii-box"><pre>US
+vs
+us</pre></div>
+<p>So:</p>
+<blockquote>
+<p><strong>Preprocessing must be task-aware.</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Basic Punctuation Normalization</h2>
+      </div>
+      <div class="section-body">
+        <p>A simple demonstration:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import re
+
+def normalize_text(text):
+    text = text.lower()
+
+    text = re.sub(
+        r&quot;[^a-z0-9\s]&quot;,
+        &quot; &quot;,
+        text,
+    )
+
+    text = re.sub(
+        r&quot;\s+&quot;,
+        &quot; &quot;,
+        text,
+    )
+
+    return text.strip()</code></pre></div>
+<p>Test:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(
+    normalize_text(
+        &quot;Hello, WORLD!! NLP.&quot;
+    )
+)</code></pre></div>
+<p>Possible result:</p>
+<div class="ascii-box"><pre>hello world nlp</pre></div>
+<p>Do not automatically remove punctuation in every NLP application.</p>
+<p>For sentiment, social media, code, legal text or stylistic analysis, punctuation may contain useful information.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Stopwords — Use With Caution</h2>
+      </div>
+      <div class="section-body">
+        <p>Stopwords are common words such as:</p>
+<div class="ascii-box"><pre>the
+is
+of
+and</pre></div>
+<p>Removing them can reduce vocabulary size.</p>
+<p>But blindly removing them can damage meaning.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>&quot;This is not good.&quot;</pre></div>
+<p>If preprocessing accidentally removes:</p>
+<div class="ascii-box"><pre>not</pre></div>
+<p>the semantic meaning can be severely changed.</p>
+<p>Therefore:</p>
+<blockquote>
+<p><strong>Never use stopword removal as a reflex. Validate whether it helps the task.</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Stemming</h2>
+      </div>
+      <div class="section-body">
+        <p>Stemming uses a heuristic procedure to reduce related word forms.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>connected
+connecting
+connection</pre></div>
+<p>may be reduced to stem-like forms depending on the algorithm.</p>
+<p>The result may not be a valid dictionary word.</p>
+<p>This is acceptable in some information-retrieval/classification settings because the goal is often feature normalization rather than linguistic elegance.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Stemming With NLTK</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from nltk.stem import PorterStemmer
+
+stemmer = PorterStemmer()
+
+words = [
+    &quot;connect&quot;,
+    &quot;connected&quot;,
+    &quot;connecting&quot;,
+    &quot;connection&quot;,
+]
+
+stems = [
+    stemmer.stem(word)
+    for word in words
+]
+
+print(stems)</code></pre></div>
+<p>The exact outputs depend on the stemmer.</p>
+<p>The important concept is:</p>
+<div class="ascii-box"><pre>surface forms
+   ↓
+heuristic reduction
+   ↓
+stem</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Lemmatization</h2>
+      </div>
+      <div class="section-body">
+        <p>Lemmatization aims to map a word to a linguistically meaningful base form, taking more linguistic information into account.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>running
+   ↓
+run</pre></div>
+<div class="ascii-box"><pre>better
+   ↓
+good</pre></div>
+<p>depending on the linguistic resources and settings.</p>
+<p>The result is generally intended to be a valid lexical form.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Stemming vs Lemmatization</h2>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Property</th>
+<th>Stemming</th>
+<th>Lemmatization</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>reduction method</td>
+<td>heuristic</td>
+<td>linguistic/base-form analysis</td>
+</tr>
+<tr>
+<td>output</td>
+<td>may not be a real word</td>
+<td>generally lexical base form</td>
+</tr>
+<tr>
+<td>complexity</td>
+<td>usually lower</td>
+<td>usually higher</td>
+</tr>
+<tr>
+<td>linguistic awareness</td>
+<td>limited</td>
+<td>greater</td>
+</tr>
+<tr>
+<td>coding goal</td>
+<td>feature reduction</td>
+<td>linguistic normalization</td>
+</tr>
+</tbody>
+</table></div>
+<p>Exam memory:</p>
+<blockquote>
+<p><strong>Stemming cuts heuristically; lemmatization reasons toward a meaningful lemma.</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">A Small Preprocessing Function</h2>
+      </div>
+      <div class="section-body">
+        <p>Keep preprocessing modular.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def preprocess(
+    text,
+    lowercase=True,
+    remove_punctuation=True,
+):
+    if lowercase:
+        text = text.lower()
+
+    if remove_punctuation:
+        text = re.sub(
+            r&quot;[^a-z0-9\s]&quot;,
+            &quot; &quot;,
+            text,
+        )
+
+    text = re.sub(
+        r&quot;\s+&quot;,
+        &quot; &quot;,
+        text,
+    )
+
+    return text.strip()</code></pre></div>
+<p>Test:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">for text in texts:
+    print(preprocess(text))</code></pre></div>
+<p>This makes the transformation visible before vectorization.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">Vocabulary</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="ascii-box"><pre>documents:
+&quot;cat dog&quot;
+&quot;dog fish&quot;</pre></div>
+<p>Vocabulary:</p>
+<div class="ascii-box"><pre>[&quot;cat&quot;, &quot;dog&quot;, &quot;fish&quot;]</pre></div>
+<p>A vocabulary maps tokens to numerical positions.</p>
+<p>Example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">vocabulary = {
+    &quot;cat&quot;: 0,
+    &quot;dog&quot;: 1,
+    &quot;fish&quot;: 2,
+}</code></pre></div>
+<p>Then:</p>
+<div class="ascii-box"><pre>&quot;cat dog&quot;</pre></div>
+<p>can be represented over this vocabulary.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">Bag of Words</h2>
+      </div>
+      <div class="section-body">
+        <p>Bag of Words ignores most word order and counts token occurrences.</p>
+<p>Vocabulary:</p>
+<div class="formula-math">\[
+V=[cat,dog,fish]
+\]</div>
+<p>Document:</p>
+<div class="ascii-box"><pre>cat dog cat</pre></div>
+<p>vector:</p>
+<div class="formula-math">\[
+\boxed{
+[2,1,0]
+}
+\]</div>
+<p>This is a count representation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Build Bag-of-Words From Scratch</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from collections import Counter</code></pre></div>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def build_vocabulary(
+    documents,
+):
+    vocab = {}
+
+    for document in documents:
+        for token in document:
+            if token not in vocab:
+                vocab[token] = len(vocab)
+
+    return vocab</code></pre></div>
+<p>Convert token lists:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">tokenized = [
+    simple_tokenize(
+        preprocess(text)
+    )
+    for text in texts
+]</code></pre></div>
+<p>Build:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">vocab = build_vocabulary(
+    tokenized
+)
+
+print(vocab)</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">Vectorize One Document</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def bow_vector(
+    tokens,
+    vocabulary,
+):
+    vector = np.zeros(
+        len(vocabulary),
+        dtype=float,
+    )
+
+    for token in tokens:
+        if token in vocabulary:
+            vector[
+                vocabulary[token]
+            ] += 1
+
+    return vector</code></pre></div>
+<p>Build matrix:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+X_bow = np.vstack([
+    bow_vector(
+        tokens,
+        vocab,
+    )
+    for tokens in tokenized
+])
+
+print(X_bow.shape)</code></pre></div>
+<p>Now the text is numerical.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Bag-of-Words Limitation</h2>
+      </div>
+      <div class="section-body">
+        <p>Compare:</p>
+<div class="ascii-box"><pre>dog bites man</pre></div>
+<p>and:</p>
+<div class="ascii-box"><pre>man bites dog</pre></div>
+<p>A pure unigram count representation can be identical.</p>
+<p>Therefore:</p>
+<div class="ascii-box"><pre>same counts
+≠
+same meaning</pre></div>
+<p>This is why n-grams and learned sequence representations are useful.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">N-Grams</h2>
+      </div>
+      <div class="section-body">
+        <p>A bigram contains two consecutive tokens.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>&quot;machine learning is useful&quot;</pre></div>
+<p>bigrams:</p>
+<div class="ascii-box"><pre>machine learning
+learning is
+is useful</pre></div>
+<p>Python:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def make_ngrams(
+    tokens,
+    n,
+):
+    return [
+        tuple(tokens[i:i+n])
+        for i in range(
+            len(tokens) - n + 1
+        )
+    ]</code></pre></div>
+<p>For bigrams:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(
+    make_ngrams(
+        [
+            &quot;machine&quot;,
+            &quot;learning&quot;,
+            &quot;is&quot;,
+            &quot;useful&quot;,
+        ],
+        2,
+    )
+)</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">TF-IDF</h2>
+      </div>
+      <div class="section-body">
+        <p>TF-IDF combines:</p>
+<div class="ascii-box"><pre>TF</pre></div>
+<p>how common a term is within a document</p>
+<p>with:</p>
+<div class="ascii-box"><pre>IDF</pre></div>
+<p>how discriminative that term is across the collection.</p>
+<p>A basic formulation:</p>
+<div class="formula-math">\[
+\boxed{
+TFIDF(t,d)
+=
+TF(t,d)\times IDF(t)
+}
+\]</div>
+<p>and commonly:</p>
+<div class="formula-math">\[
+\boxed{
+IDF(t)=
+\log\frac{N}{df(t)}
+}
+\]</div>
+<p>where:</p>
+<ul>
+<li>\(N\) = number of documents;</li>
+<li>\(df(t)\) = number of documents containing term \(t\).</li>
+</ul>
+<p>Different implementations can use smoothed or normalized variants.</p>
+<p>Always state the convention being used.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">TF-IDF Numerical</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+N=100
+\]</div>
+<p>documents exist.</p>
+<p>A term occurs in:</p>
+<div class="formula-math">\[
+df=10
+\]</div>
+<p>documents.</p>
+<p>Then using natural logarithm:</p>
+<div class="formula-math">\[
+IDF
+=
+\log\frac{100}{10}
+=
+\log(10)
+\]</div>
+<div class="formula-math">\[
+\approx2.303.
+\]</div>
+<p>If:</p>
+<div class="formula-math">\[
+TF=0.2
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+TFIDF
+=
+0.2(2.303)
+\]</div>
+<div class="formula-math">\[
+\approx0.461.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">TF-IDF With scikit-learn</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.feature_extraction.text import TfidfVectorizer
+
+vectorizer = TfidfVectorizer()
+
+X_tfidf = vectorizer.fit_transform(
+    texts
+)
+
+print(
+    X_tfidf.shape
+)</code></pre></div>
+<p>Vocabulary:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(
+    vectorizer.get_feature_names_out()
+)</code></pre></div>
+<p>The matrix is usually sparse.</p>
+<p>That is important because text vocabularies can be large while each individual document contains only a small fraction of all possible terms.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">Why Sparse Matrices Matter</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="ascii-box"><pre>50,000 vocabulary terms</pre></div>
+<p>A document may contain only:</p>
+<div class="ascii-box"><pre>100 terms</pre></div>
+<p>A dense vector stores all 50,000 positions.</p>
+<p>A sparse representation stores mainly the nonzero entries.</p>
+<p>This is computationally important for classical NLP.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">Train/Test Split Before Fitting the Vocabulary</h2>
+      </div>
+      <div class="section-body">
+        <p>This is a critical leakage rule.</p>
+<p>Bad:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">vectorizer.fit_transform(
+    all_texts
+)</code></pre></div>
+<p>then split into train/test.</p>
+<p>The vocabulary and IDF statistics have now been learned from the test data.</p>
+<p>Correct:</p>
+<div class="ascii-box"><pre>split
+ ↓
+fit vectorizer on training text
+ ↓
+transform training text
+ ↓
+transform test text using same fitted vectorizer</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">sklearn Pipeline Prevents This Error</h2>
+      </div>
+      <div class="section-body">
+        <p>Use:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
+from sklearn.linear_model import LogisticRegression</code></pre></div>
+<p>Example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X_train, X_test, y_train, y_test = (
+    train_test_split(
+        texts,
+        y,
+        test_size=0.25,
+        stratify=y,
+        random_state=42,
+    )
+)</code></pre></div>
+<p>Pipeline:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">text_model = Pipeline([
+    (
+        &quot;tfidf&quot;,
+        TfidfVectorizer(
+            lowercase=True,
+            ngram_range=(1, 2),
+        ),
+    ),
+    (
+        &quot;classifier&quot;,
+        LogisticRegression(
+            max_iter=1000,
+        ),
+    ),
+])</code></pre></div>
+<p>Train:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">text_model.fit(
+    X_train,
+    y_train,
+)</code></pre></div>
+<p>Evaluate:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">predictions = text_model.predict(
+    X_test
+)</code></pre></div>
+<p>The vectorizer is fitted within the training process.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">Evaluate the Classifier</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.metrics import (
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
+    confusion_matrix,
+    classification_report,
+)
+
+print(
+    &quot;accuracy:&quot;,
+    accuracy_score(
+        y_test,
+        predictions,
+    )
+)
+
+print(
+    &quot;precision:&quot;,
+    precision_score(
+        y_test,
+        predictions,
+        zero_division=0,
+    )
+)
+
+print(
+    &quot;recall:&quot;,
+    recall_score(
+        y_test,
+        predictions,
+        zero_division=0,
+    )
+)
+
+print(
+    &quot;f1:&quot;,
+    f1_score(
+        y_test,
+        predictions,
+        zero_division=0,
+    )
+)
+
+print(
+    confusion_matrix(
+        y_test,
+        predictions,
+    )
+)</code></pre></div>
+<p>On a tiny teaching dataset, metrics can be unstable.</p>
+<p>Treat the example as a pipeline demonstration rather than a meaningful benchmark.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">Larger Practical Dataset</h2>
+      </div>
+      <div class="section-body">
+        <p>For an actual experiment, use a proper dataset split.</p>
+<p>Example structure:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.datasets import fetch_20newsgroups</code></pre></div>
+<p>or a spam/sentiment dataset from a documented source.</p>
+<p>Before using any dataset:</p>
+<div class="ascii-box"><pre>document count
+class distribution
+duplicates
+missing text
+label quality
+language
+time structure</pre></div>
+<p>must be checked.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">Text Classification Pipeline</h2>
+      </div>
+      <div class="section-body">
+        <p>The complete classical pipeline:</p>
+<div class="ascii-box"><pre>raw message
+    ↓
+split train/test
+    ↓
+tokenization/vectorization
+    ↓
+TF-IDF
+    ↓
+classifier
+    ↓
+score / class
+    ↓
+confusion matrix
+    ↓
+precision / recall / F1</pre></div>
+<p>This is the Unit IV practical mental model.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">Compare Classical Classifiers</h2>
+      </div>
+      <div class="section-body">
+        <p>The official practical scope includes classification methods such as Decision Trees, k-NN and SVM in the broader ML practical block.</p>
+<p>For sparse TF-IDF text features, not every algorithm is equally convenient.</p>
+<p>Useful educational comparisons include:</p>
+<div class="ascii-box"><pre>Logistic Regression
+Linear SVM
+Naive Bayes</pre></div>
+<p>Example SVM pipeline:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.svm import LinearSVC
+
+svm_model = Pipeline([
+    (
+        &quot;tfidf&quot;,
+        TfidfVectorizer(
+            lowercase=True,
+            ngram_range=(1, 2),
+        ),
+    ),
+    (
+        &quot;classifier&quot;,
+        LinearSVC(),
+    ),
+])</code></pre></div>
+<p>Train:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">svm_model.fit(
+    X_train,
+    y_train,
+)</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">svm_pred = svm_model.predict(
+    X_test
+)</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">Why Linear Models Often Fit Sparse Text Features Naturally</h2>
+      </div>
+      <div class="section-body">
+        <p>TF-IDF produces a high-dimensional sparse vector.</p>
+<p>A linear classifier can assign one weight per vocabulary feature:</p>
+<div class="formula-math">\[
+z=w^Tx+b.
+\]</div>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>word / n-gram
+   ↓
+feature value
+   ↓
+weight
+   ↓
+contribution to class score</pre></div>
+<p>This is one reason linear models are such a useful classical NLP baseline.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Inspect Feature Names</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">tfidf = text_model.named_steps[
+    &quot;tfidf&quot;
+]
+
+classifier = text_model.named_steps[
+    &quot;classifier&quot;
+]
+
+feature_names = (
+    tfidf.get_feature_names_out()
+)
+
+print(
+    len(feature_names)
+)</code></pre></div>
+<p>For binary logistic regression:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">weights = classifier.coef_[0]</code></pre></div>
+<p>Inspect largest positive weights:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">top_positive = np.argsort(
+    weights
+)[-10:][::-1]
+
+for index in top_positive:
+    print(
+        feature_names[index],
+        weights[index],
+    )</code></pre></div>
+<p>This can provide useful interpretability for a linear baseline.</p>
+<p>Be careful:</p>
+<blockquote>
+<p>A large coefficient is an association within the trained model, not proof that the term causes the class.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Text Classification Error Analysis</h2>
+      </div>
+      <div class="section-body">
+        <p>Find wrong predictions:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">for text, true, pred in zip(
+    X_test,
+    y_test,
+    predictions,
+):
+    if true != pred:
+        print(
+            &quot;TEXT:&quot;,
+            text,
+        )
+        print(
+            &quot;TRUE:&quot;,
+            true,
+            &quot;PRED:&quot;,
+            pred,
+        )</code></pre></div>
+<p>Ask:</p>
+<ul>
+<li>Is the text ambiguous?</li>
+<li>Is the vocabulary unseen?</li>
+<li>Is the label noisy?</li>
+<li>Is the example unusually short?</li>
+<li>Did preprocessing remove a crucial word?</li>
+<li>Does the error involve negation?</li>
+</ul>
+<p>This is more informative than simply printing F1.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-35" class="section-block">
+      <div class="section-header">
+        <span class="section-num">35</span>
+        <h2 class="section-heading">Unknown Vocabulary</h2>
+      </div>
+      <div class="section-body">
+        <p>At test time, new words may appear that were absent from training.</p>
+<p>A fitted TF-IDF vectorizer handles unknown vocabulary terms by not giving them learned feature positions.</p>
+<p>This is expected.</p>
+<p>The important rule is:</p>
+<blockquote>
+<p><strong>Never refit the vectorizer on the test set just to include its words.</strong></p>
+</blockquote>
+<p>Doing so changes the feature space using test information.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-36" class="section-block">
+      <div class="section-header">
+        <span class="section-num">36</span>
+        <h2 class="section-heading">Negation Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Compare:</p>
+<div class="ascii-box"><pre>good</pre></div>
+<p>with:</p>
+<div class="ascii-box"><pre>not good</pre></div>
+<p>Pure unigram features may represent:</p>
+<div class="ascii-box"><pre>not
+good</pre></div>
+<p>but a simple classifier may not fully encode the phrase relation.</p>
+<p>Adding bigrams:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">ngram_range=(1, 2)</code></pre></div>
+<p>allows features such as:</p>
+<div class="ascii-box"><pre>not good</pre></div>
+<p>to appear.</p>
+<p>This demonstrates why representation design matters.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-37" class="section-block">
+      <div class="section-header">
+        <span class="section-num">37</span>
+        <h2 class="section-heading">Stemming Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Build two pipelines:</p>
+<div class="ascii-box"><pre>Pipeline A
+raw → TF-IDF → classifier
+
+Pipeline B
+raw → stemming → TF-IDF → classifier</pre></div>
+<p>Keep all other conditions fixed.</p>
+<p>Compare:</p>
+<div class="ascii-box"><pre>vocabulary size
+accuracy
+precision
+recall
+F1</pre></div>
+<p>Do not assume stemming improves performance.</p>
+<p>It is an empirical preprocessing choice.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-38" class="section-block">
+      <div class="section-header">
+        <span class="section-num">38</span>
+        <h2 class="section-heading">Lemmatization Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Repeat:</p>
+<div class="ascii-box"><pre>raw
+ ↓
+lemmatization
+ ↓
+TF-IDF
+ ↓
+classifier</pre></div>
+<p>Compare against the non-lemmatized baseline.</p>
+<p>The question is:</p>
+<blockquote>
+<p>Does linguistic normalization improve the downstream task under the chosen dataset/model?</p>
+</blockquote>
+<p>That is the correct ML mindset.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-39" class="section-block">
+      <div class="section-header">
+        <span class="section-num">39</span>
+        <h2 class="section-heading">Sparse Matrix Inspection</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X_train_tfidf = (
+    text_model
+    .named_steps[&quot;tfidf&quot;]
+    .transform(X_train)
+)
+
+print(
+    &quot;shape:&quot;,
+    X_train_tfidf.shape,
+)
+
+print(
+    &quot;nonzero:&quot;,
+    X_train_tfidf.nnz,
+)</code></pre></div>
+<p>Sparsity ratio:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">total_entries = (
+    X_train_tfidf.shape[0]
+    * X_train_tfidf.shape[1]
+)
+
+sparsity = (
+    1.0
+    - X_train_tfidf.nnz
+    / total_entries
+)
+
+print(
+    &quot;sparsity:&quot;,
+    sparsity,
+)</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-40" class="section-block">
+      <div class="section-header">
+        <span class="section-num">40</span>
+        <h2 class="section-heading">Text Classification With an Explicit Pipeline</h2>
+      </div>
+      <div class="section-body">
+        <p>For reproducibility:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def build_text_pipeline():
+    return Pipeline([
+        (
+            &quot;tfidf&quot;,
+            TfidfVectorizer(
+                lowercase=True,
+                ngram_range=(1, 2),
+                min_df=1,
+            ),
+        ),
+        (
+            &quot;classifier&quot;,
+            LogisticRegression(
+                max_iter=1000,
+                random_state=42,
+            ),
+        ),
+    ])</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">model = build_text_pipeline()
+
+model.fit(
+    X_train,
+    y_train,
+)
+
+pred = model.predict(
+    X_test
+)</code></pre></div>
+<p>Record:</p>
+<div class="ascii-box"><pre>lowercase
+ngram range
+min_df
+classifier
+regularization
+random seed
+max iterations</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-41" class="section-block">
+      <div class="section-header">
+        <span class="section-num">41</span>
+        <h2 class="section-heading">Multi-Class Text Classification</h2>
+      </div>
+      <div class="section-body">
+        <p>The same pipeline can handle more than two classes.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>sports
+technology
+finance
+politics</pre></div>
+<p>The classifier produces one score per class.</p>
+<p>Metrics should then be reported with an explicit averaging strategy.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.metrics import f1_score
+
+f1_macro = f1_score(
+    y_test,
+    pred,
+    average=&quot;macro&quot;,
+)</code></pre></div>
+<p>The meaning of “F1” changes depending on:</p>
+<div class="ascii-box"><pre>binary
+macro
+micro
+weighted</pre></div>
+<p>Do not report a multi-class F1 value without stating the averaging convention.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-42" class="section-block">
+      <div class="section-header">
+        <span class="section-num">42</span>
+        <h2 class="section-heading">Text Classification with an Embedding Model — Preview</h2>
+      </div>
+      <div class="section-body">
+        <p>Classical:</p>
+<div class="ascii-box"><pre>text
+ ↓
+TF-IDF
+ ↓
+linear classifier</pre></div>
+<p>Neural:</p>
+<div class="ascii-box"><pre>text
+ ↓
+tokens
+ ↓
+embeddings
+ ↓
+sequence model / transformer
+ ↓
+classifier</pre></div>
+<p>The earlier RNN/LSTM coding chapter provides the sequence-model foundation.</p>
+<p>This is the bridge from classical NLP to modern neural NLP.</p>
+<p>The syllabus only requires the preprocessing and text-classification foundation here.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-43" class="section-block">
+      <div class="section-header">
+        <span class="section-num">43</span>
+        <h2 class="section-heading">Practical Debugging Checklist</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>[ ] train/test split happens before fitting vectorizer
+[ ] vocabulary is fit only on training data
+[ ] test text is transformed, not refit
+[ ] class labels are correct
+[ ] text is not accidentally empty
+[ ] punctuation policy is intentional
+[ ] case policy is intentional
+[ ] stopword policy is intentional
+[ ] stemming/lemmatization choice is justified
+[ ] n-gram range is recorded
+[ ] sparse matrix shape is correct
+[ ] classifier matches feature representation
+[ ] evaluation metrics match class structure
+[ ] errors are manually inspected</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-44" class="section-block">
+      <div class="section-header">
+        <span class="section-num">44</span>
+        <h2 class="section-heading">Common NLP Coding Mistakes</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Lab Viva Trap & Runtime Gotcha</div>
+
+**Laplace Add-1 Smoothing in Naive Bayes:**
+If a word in the test document never appeared in class $c$ in the training data, its conditional probability $P(w|c) = 0$.
+Since probabilities are multiplied: $P(c) \prod P(w_i|c)$, a single zero wipes out the entire score to 0!
+Always add Laplace smoothing $\frac{count + 1}{\sum count + V}$ to ensure zero probability trap never happens!
+
+</div>
+
+<h2>Mistake 1 — Treating tokenization as “just splitting”</h2>
+<p>Tokenization is a representation decision.</p>
+<h2>Mistake 2 — Removing all punctuation automatically</h2>
+<p>Some punctuation can carry meaning.</p>
+<h2>Mistake 3 — Removing stopwords blindly</h2>
+<p>Words such as “not” can matter substantially.</p>
+<h2>Mistake 4 — Fitting TF-IDF before the split</h2>
+<p>This leaks test information.</p>
+<h2>Mistake 5 — Using only accuracy</h2>
+<p>Classification errors may be asymmetric.</p>
+<h2>Mistake 6 — Assuming stemming is always better</h2>
+<p>The downstream task decides.</p>
+<h2>Mistake 7 — Dense conversion of huge sparse matrices</h2>
+<p>This can consume large amounts of memory.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-45" class="section-block">
+      <div class="section-header">
+        <span class="section-num">45</span>
+        <h2 class="section-heading">Practical Lab</h2>
+      </div>
+      <div class="section-body">
+        <h2>Task A — Tokenization</h2>
+<p>Tokenize:</p>
+<div class="ascii-box"><pre>&quot;Artificial intelligence is changing engineering.&quot;</pre></div>
+<p>Record tokens.</p>
+<h2>Task B — Normalization</h2>
+<p>Compare:</p>
+<div class="ascii-box"><pre>raw
+lowercase
+punctuation-cleaned</pre></div>
+<h2>Task C — Stemming</h2>
+<p>Apply a stemmer to:</p>
+<div class="ascii-box"><pre>connect
+connected
+connecting
+connection</pre></div>
+<h2>Task D — Lemmatization</h2>
+<p>Compare the results with a lemmatizer.</p>
+<h2>Task E — Bag of Words</h2>
+<p>Build a vocabulary and vectorize three documents.</p>
+<h2>Task F — N-Grams</h2>
+<p>Generate unigrams and bigrams.</p>
+<h2>Task G — TF-IDF</h2>
+<p>Construct TF-IDF manually for a three-document example and verify with a library.</p>
+<h2>Task H — Classification</h2>
+<p>Build:</p>
+<div class="ascii-box"><pre>TF-IDF + Logistic Regression</pre></div>
+<h2>Task I — Evaluation</h2>
+<p>Calculate:</p>
+<div class="ascii-box"><pre>confusion matrix
+precision
+recall
+F1</pre></div>
+<h2>Task J — Error Analysis</h2>
+<p>Print five misclassified examples and explain likely causes.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-46" class="section-block">
+      <div class="section-header">
+        <span class="section-num">46</span>
+        <h2 class="section-heading">Master Comparison Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Compare:</p>
+<div class="ascii-box"><pre>A: unigram TF-IDF + Logistic Regression
+B: unigram+bigram TF-IDF + Logistic Regression
+C: unigram+bigram TF-IDF + Linear SVM</pre></div>
+<p>Keep:</p>
+<div class="ascii-box"><pre>split
+seed
+dataset
+evaluation</pre></div>
+<p>consistent.</p>
+<p>Record:</p>
+<div class="ascii-box"><pre>vocabulary size
+number of nonzero features
+training time
+accuracy
+precision
+recall
+F1</pre></div>
+<p>Then write:</p>
+<blockquote>
+<p>Model ___ is preferred under the chosen metric because ___.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-47" class="section-block">
+      <div class="section-header">
+        <span class="section-num">47</span>
+        <h2 class="section-heading">Advanced Experiment — Vocabulary Size</h2>
+      </div>
+      <div class="section-body">
+        <p>Change:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">min_df</code></pre></div>
+<p>or:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">max_features</code></pre></div>
+<p>and observe:</p>
+<div class="ascii-box"><pre>vocabulary size
+sparsity
+training time
+performance</pre></div>
+<p>This demonstrates the trade-off:</p>
+<div class="ascii-box"><pre>more vocabulary
+→ more representation capacity
+
+but also:
+→ more computation
+→ possible noise
+→ possible overfitting</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-48" class="section-block">
+      <div class="section-header">
+        <span class="section-num">48</span>
+        <h2 class="section-heading">Advanced Experiment — N-Gram Range</h2>
+      </div>
+      <div class="section-body">
+        <p>Compare:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">ngram_range=(1, 1)</code></pre></div>
+<p>vs:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">ngram_range=(1, 2)</code></pre></div>
+<p>Then:</p>
+<div class="ascii-box"><pre>unigrams</pre></div>
+<p>vs:</p>
+<div class="ascii-box"><pre>unigrams + bigrams</pre></div>
+<p>Ask:</p>
+<blockquote>
+<p>Does adding local word-order information improve classification?</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-49" class="section-block">
+      <div class="section-header">
+        <span class="section-num">49</span>
+        <h2 class="section-heading">Viva Questions</h2>
+      </div>
+      <div class="section-body">
+        <h3>Q1. What is NLP?</h3>
+<p>The field concerned with computational processing of human language.</p>
+<h3>Q2. What is tokenization?</h3>
+<p>Breaking text into chosen computational units such as words, subwords or characters.</p>
+<h3>Q3. What is stemming?</h3>
+<p>Heuristic reduction of word forms toward a common stem.</p>
+<h3>Q4. What is lemmatization?</h3>
+<p>Mapping word forms toward linguistically meaningful base forms.</p>
+<h3>Q5. What is Bag of Words?</h3>
+<p>A representation based primarily on token occurrence/counts while largely ignoring order.</p>
+<h3>Q6. What is TF-IDF?</h3>
+<p>A weighting scheme combining term frequency with inverse document frequency.</p>
+<h3>Q7. Why is IDF useful?</h3>
+<p>It downweights terms occurring in many documents and increases the relative importance of terms that are more document-specific.</p>
+<h3>Q8. Why use n-grams?</h3>
+<p>To capture local token-order information absent from simple unigram bag-of-words.</p>
+<h3>Q9. Why must TF-IDF be fitted only on training data?</h3>
+<p>Because vocabulary and IDF statistics learned from test data would leak information into the training pipeline.</p>
+<h3>Q10. Why is sparse representation useful?</h3>
+<p>Text-feature matrices can have very high dimensionality with most entries zero.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-50" class="section-block">
+      <div class="section-header">
+        <span class="section-num">50</span>
+        <h2 class="section-heading">Exam Connection</h2>
+      </div>
+      <div class="section-body">
+        <p>Typical 2-mark questions:</p>
+<ul>
+<li>Define NLP.</li>
+<li>Define tokenization.</li>
+<li>Define stemming.</li>
+<li>Define lemmatization.</li>
+<li>Define TF-IDF.</li>
+<li>Define text classification.</li>
+</ul>
+<p>Typical 5-mark:</p>
+<blockquote>
+<p>Explain NLP preprocessing.</p>
+</blockquote>
+<p>Recommended order:</p>
+<div class="ascii-box"><pre>raw text
+→ normalization
+→ tokenization
+→ stemming / lemmatization
+→ representation
+→ classification
+→ evaluation</pre></div>
+<p>Typical 10-mark:</p>
+<blockquote>
+<p>Explain an end-to-end text-classification pipeline.</p>
+</blockquote>
+<p>Include:</p>
+<ol>
+<li>raw text;</li>
+<li>preprocessing;</li>
+<li>tokenization;</li>
+<li>stemming/lemmatization;</li>
+<li>numerical representation;</li>
+<li>TF-IDF/embeddings;</li>
+<li>classifier;</li>
+<li>prediction;</li>
+<li>evaluation;</li>
+<li>limitations.</li>
+</ol>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-51" class="section-block">
+      <div class="section-header">
+        <span class="section-num">51</span>
+        <h2 class="section-heading">One-Screen Summary</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>RAW TEXT
+   ↓
+PREPROCESS
+   ↓
+TOKENS
+   ↓
+NORMALIZE
+   ↓
+TF-IDF / BoW / EMBEDDING
+   ↓
+CLASSIFIER
+   ↓
+PREDICTION
+   ↓
+CONFUSION MATRIX
+   ↓
+PRECISION / RECALL / F1</pre></div>
+<p>Memory anchor:</p>
+<blockquote>
+<p><strong>Text must become a representation before a conventional classifier can learn from it.</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-52" class="section-block">
+      <div class="section-header">
+        <span class="section-num">52</span>
+        <h2 class="section-heading">Connection to Earlier Chapters</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>CODE-U3-05
+RNN / LSTM
+      ↓
+sequence modelling
+
+CODE-U4-03
+NLP preprocessing
+      ↓
+tokens
+      ↓
+TF-IDF / representations
+      ↓
+text classification</pre></div>
+<p>Classical and neural approaches share the same broader ML pipeline:</p>
+<div class="ascii-box"><pre>data
+→ representation
+→ model
+→ objective
+→ training
+→ evaluation</pre></div>
+<p>Only the representation/model family changes.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-53" class="section-block">
+      <div class="section-header">
+        <span class="section-num">53</span>
+        <h2 class="section-heading">Source Notes</h2>
+      </div>
+      <div class="section-body">
+        <h2>Official course boundary</h2>
+<p>The DSC-14 Unit IV syllabus includes NLP preprocessing topics and text classification.</p>
+<h2>Stored course/resource material</h2>
+<p>The learning resource guide identifies the Unit IV NLP block as:</p>
+<div class="ascii-box"><pre>tokenization
+stemming
+lemmatization
+text classification</pre></div>
+<p>and identifies Stanford CS224N as the primary structured external source for the NLP gap-fill.</p>
+<p>The Exam Book additionally expects:</p>
+<ul>
+<li>TF-IDF;</li>
+<li>text-classification pipeline;</li>
+<li>stemming vs lemmatization.</li>
+</ul>
+<h2>Expansion boundary</h2>
+<p>The following are coding-book expansion:</p>
+<ul>
+<li>handcrafted tokenization;</li>
+<li>normalization function;</li>
+<li>vocabulary construction;</li>
+<li>Bag-of-Words implementation;</li>
+<li>n-gram utility;</li>
+<li>TF-IDF explanation and numerical;</li>
+<li>sklearn pipelines;</li>
+<li>leakage-safe vectorization workflow;</li>
+<li>feature inspection;</li>
+<li>preprocessing comparison experiments.</li>
+</ul>
+<p>These make the syllabus topic executable without claiming the supplied course notes contain the exact implementations.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-54" class="section-block">
+      <div class="section-header">
+        <span class="section-num">54</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <p>Do not move forward until you can:</p>
+<ul>
+<li>[ ] tokenize text;</li>
+<li>[ ] explain normalization decisions;</li>
+<li>[ ] explain stemming;</li>
+<li>[ ] explain lemmatization;</li>
+<li>[ ] compare them;</li>
+<li>[ ] build a vocabulary;</li>
+<li>[ ] implement Bag of Words;</li>
+<li>[ ] generate n-grams;</li>
+<li>[ ] explain TF-IDF;</li>
+<li>[ ] calculate a TF-IDF example;</li>
+<li>[ ] build a TF-IDF classifier pipeline;</li>
+<li>[ ] avoid vectorization leakage;</li>
+<li>[ ] evaluate text classification;</li>
+<li>[ ] inspect errors and important features;</li>
+<li>[ ] explain the bridge to embeddings and sequence models.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-55" class="section-block">
+      <div class="section-header">
+        <span class="section-num">55</span>
+        <h2 class="section-heading">Status</h2>
+      </div>
+      <div class="section-body">
+        <p><strong><code>CODE-U4-03</code> — COMPLETE</strong></p>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="code-u4-02-policy-gradients-reinforce.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← Unit 4 Lab 02 — Policy Gradients</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">💻 Coding Index</span>
+      </a>
+      <a href="code-u4-04-autoencoders-pytorch.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: Unit 4 Lab 04 — Autoencoders →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search lab implementations, functions, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">💻</span>Lab Hub</a>
+  <a href="code-u4-03-nlp-text-classification.html" class="mobile-nav-btn active"><span class="icon">📖</span>CODE-U4-03</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

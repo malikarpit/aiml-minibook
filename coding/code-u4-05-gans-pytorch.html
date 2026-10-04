@@ -1,0 +1,2185 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="CODE-U4-05: Generative Adversarial Networks: Core Mechanics to PyTorch — AI & Machine Learning Coding Lab. Two-Player Zero-Sum Game, Generator vs Discriminator, Binary Cross-Entropy Adversarial Objectives, Alternating Optimization, and Mode Collapse Diagnostics">
+<title>CODE-U4-05: Generative Adversarial Networks: Core Mechanics to PyTorch | Coding Lab 💻 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/coding.css">
+</head>
+<body class="coding-module track-c4">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">💻</div>
+      <div class="brand-text"><span class="main">Coding Lab</span><span class="sub">AI &amp; ML From Scratch</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">CODE-U4-05: Generative Adversarial Networks: Core Mechanics to PyTorch</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">💻</span>Coding Lab Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../math/index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 0: Environment & System</div>
+  <a href="code-00-coding-foundation.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-00: Coding Lab Foundation &amp; Implementation System</a>
+  <a href="code-01-python-numpy-workflow.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-01: Python, NumPy, Matplotlib &amp; Lab Workflow</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Classical AI & Search Labs</div>
+  <a href="code-u1-01-bfs-dfs.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-01: BFS and DFS From Scratch</a>
+  <a href="code-u1-02-greedy-a-star.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-02: Greedy Best-First &amp; A* Search From Scratch</a>
+  <a href="code-u1-03-csp-backtracking.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-03: CSPs and Backtracking Search</a>
+  <a href="code-u1-04-minimax-alpha-beta.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Supervised ML Labs</div>
+  <a href="code-u2-01-ml-workflow.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-01: ML Workflow: Preprocessing, Splitting &amp; Evaluation</a>
+  <a href="code-u2-02-linear-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-02: Linear Regression From Scratch</a>
+  <a href="code-u2-03-logistic-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-03: Logistic Regression From Scratch</a>
+  <a href="code-u2-04-decision-trees.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-04: Decision Trees From Scratch</a>
+  <a href="code-u2-05-classification-metrics-roc.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC &amp; Thresholds</a>
+  <a href="code-u2-06-ridge-lasso-regularization.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-06: Ridge &amp; Lasso From Scratch: Regularization &amp; Optimization</a>
+  <a href="code-u2-07-ml-evaluation-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-07: ML Evaluation &amp; Model Comparison Lab</a>
+  <a href="code-u2-08-knn-svm-practical-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-08: KNN and SVM Practical Comparison Lab</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Deep Learning Labs</div>
+  <a href="code-u3-01-neuron-perceptron.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-01: Neuron and Perceptron From Scratch</a>
+  <a href="code-u3-02-mlp-forward-propagation.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-02: MLP and Forward Propagation From Scratch</a>
+  <a href="code-u3-03-backpropagation-scratch.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-03: Gradient Descent &amp; Backpropagation From Scratch</a>
+  <a href="code-u3-04-cnn-image-classification.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-04: CNNs: From Scratch to PyTorch Image Classification</a>
+  <a href="code-u3-05-rnn-lstm-sequence-modelling.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-05: RNN &amp; LSTM: From Scratch to PyTorch Sequence Modelling</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Advanced AI & RL Labs</div>
+  <a href="code-u4-01-mdp-q-learning.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-01: MDPs and Q-Learning From Scratch</a>
+  <a href="code-u4-02-policy-gradients-reinforce.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-02: Policy Gradients &amp; REINFORCE Algorithm</a>
+  <a href="code-u4-03-nlp-text-classification.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-03: NLP Preprocessing &amp; Text Classification Pipeline</a>
+  <a href="code-u4-04-autoencoders-pytorch.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-04: Autoencoders: From Scratch &amp; PyTorch Representation Learning</a>
+  <a href="code-u4-05-gans-pytorch.html" class="sidebar-link active"><span class="link-icon">🎲</span>CODE-U4-05: Generative Adversarial Networks: Core Mechanics to PyTorch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 5: Engineering & Capstone</div>
+  <a href="code-23-debugging-testing-reproducibility.html" class="sidebar-link"><span class="link-icon">🏆</span>CODE-23: Debugging, Testing, Visualization &amp; Reproducibility</a>
+  <a href="code-24-coding-capstone-checklist.html" class="sidebar-link"><span class="link-icon">🏆</span>CODE-24: AI/ML Coding Capstone &amp; Master Practical Checklist</a>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">CODE-U4-05 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Course Position</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Coding Objective</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Why GANs Exist</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Generator</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Discriminator</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Classical GAN Objective</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Practical Generator Objective</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Discriminator Loss</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Adversarial Training</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Toy One-Dimensional GAN Intuition</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Latent Noise</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Why Latent Space Is Useful</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Simple Generator for 28×28 Images</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Why `Tanh` Here?</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Simple Discriminator</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Why Logits Instead of Sigmoid?</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Data Loading</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Create Models</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Discriminator Training Step</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Discriminator Update</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Generator Update</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Why the Generator Can Learn Through the Discriminator</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Full GAN Training Loop</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Save a Fixed Latent Batch</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Visualize Generated Images</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Why Loss Curves Alone Are Not Enough</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Mode Collapse</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Detecting Mode Collapse</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Latent Interpolation</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Fixed-Noise Evaluation Protocol</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Discriminator Output Inspection</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. GAN Training Diagnostics</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Common GAN Training Failure</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Another Failure — Generator Repeats One Pattern</a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Another Failure — Both Losses Oscillate</a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Conditional GAN — Conceptual Extension</a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. GAN and CNN Connection</a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Autoencoder vs GAN</a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. GAN vs Supervised Classification</a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Save Generated Samples</a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Practical Lab</a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. GAN Experiment Log</a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Multi-Seed Experiment</a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Reproducibility Setup</a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. Debugging Checklist</a>
+      <a href="#s-46" class="sidebar-link"><span class="link-icon">📌</span>46. Common Coding Bugs</a>
+      <a href="#s-47" class="sidebar-link"><span class="link-icon">📌</span>47. Viva Questions</a>
+      <a href="#s-48" class="sidebar-link"><span class="link-icon">📌</span>48. Exam Connection</a>
+      <a href="#s-49" class="sidebar-link"><span class="link-icon">📌</span>49. One-Screen Formula Map</a>
+      <a href="#s-50" class="sidebar-link"><span class="link-icon">📌</span>50. Connection to the Complete Unit IV</a>
+      <a href="#s-51" class="sidebar-link"><span class="link-icon">📌</span>51. Mastery Gate</a>
+      <a href="#s-52" class="sidebar-link"><span class="link-icon">📌</span>52. Source Notes</a>
+      <a href="#s-53" class="sidebar-link"><span class="link-icon">📌</span>53. Status</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Coding Lab</a>
+        <span>/</span>
+        <span>CODE-U4-05</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-c4">Track 4: Advanced AI & Reinforcement Learning</span></div>
+      <h1 class="chapter-title">Generative Adversarial Networks: Core Mechanics to PyTorch</h1>
+      <p class="chapter-desc">Two-Player Zero-Sum Game, Generator vs Discriminator, Binary Cross-Entropy Adversarial Objectives, Alternating Optimization, and Mode Collapse Diagnostics</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~55 min lab</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">GANS</span> <span class="chapter-meta-item uni-badge">GENERATIVE-AI</span> <span class="chapter-meta-item uni-badge">ADVERSARIAL-TRAINING</span> <span class="chapter-meta-item uni-badge">MINIMAX-GAME</span> <span class="chapter-meta-item uni-badge">PYTORCH</span>
+      </div>
+
+      <div class="lab-meta-grid">
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Prerequisites</div>
+          <div class="lab-meta-value">CODE-U3-02 MLP, CODE-U3-03 Backpropagation, CODE-U4-04 Autoencoders</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Main Book Concept</div>
+          <div class="lab-meta-value">Ch 45 Generative Adversarial Networks (GANs)</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Math Companion Layer</div>
+          <div class="lab-meta-value">Minimax game min_G max_D V(D, G), Jensen-Shannon divergence</div>
+        </div>
+        <div class="lab-meta-box" style="grid-column: 1 / -1;">
+          <div class="lab-meta-label">AI / Machine Learning Connections</div>
+          <div class="lab-meta-value">Photorealistic synthetic image generation, Deepfake forensics, Data augmentation, Super-resolution</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-meta-card"><h1>CODE-U4-05 — Generative Adversarial Networks</h1>
+<blockquote>
+<p><strong>Purpose:</strong> Understand GANs as an adversarial optimization system, implement the core generator/discriminator logic, build a simple image GAN in PyTorch, visualize generated samples, and diagnose common failure modes such as mode collapse and unstable training.</p>
+</blockquote>
+<p>The conceptual pipeline is:</p>
+<div class="ascii-box"><pre>random noise z
+      ↓
+  GENERATOR
+      ↓
+fake sample
+      ↓
+┌──────────────────────┐
+│ discriminator         │
+│ real? / fake?         │
+└──────────────────────┘
+      ↑
+real sample</pre></div>
+<p>The two networks have competing objectives:</p>
+<div class="ascii-box"><pre>Generator
+→ produce samples that look real
+
+Discriminator
+→ distinguish real samples from generated samples</pre></div>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in CODE-U4-05 (53 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Course Position</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Coding Objective</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Why GANs Exist</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Generator</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Discriminator</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Classical GAN Objective</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Practical Generator Objective</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Discriminator Loss</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Adversarial Training</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Toy One-Dimensional GAN Intuition</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Latent Noise</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Why Latent Space Is Useful</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Simple Generator for 28×28 Images</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Why `Tanh` Here?</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Simple Discriminator</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Why Logits Instead of Sigmoid?</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Data Loading</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Create Models</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Discriminator Training Step</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Discriminator Update</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Generator Update</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Why the Generator Can Learn Through the Discriminator</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Full GAN Training Loop</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Save a Fixed Latent Batch</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Visualize Generated Images</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Why Loss Curves Alone Are Not Enough</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Mode Collapse</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Detecting Mode Collapse</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Latent Interpolation</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Fixed-Noise Evaluation Protocol</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Discriminator Output Inspection</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">GAN Training Diagnostics</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Common GAN Training Failure</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Another Failure — Generator Repeats One Pattern</span></a></li>
+        <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Another Failure — Both Losses Oscillate</span></a></li>
+        <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Conditional GAN — Conceptual Extension</span></a></li>
+        <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">GAN and CNN Connection</span></a></li>
+        <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Autoencoder vs GAN</span></a></li>
+        <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">GAN vs Supervised Classification</span></a></li>
+        <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Save Generated Samples</span></a></li>
+        <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Practical Lab</span></a></li>
+        <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">GAN Experiment Log</span></a></li>
+        <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Multi-Seed Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Reproducibility Setup</span></a></li>
+        <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">Debugging Checklist</span></a></li>
+        <li class="toc-item"><a href="#s-46"><span class="toc-num">46</span><span class="toc-name">Common Coding Bugs</span></a></li>
+        <li class="toc-item"><a href="#s-47"><span class="toc-num">47</span><span class="toc-name">Viva Questions</span></a></li>
+        <li class="toc-item"><a href="#s-48"><span class="toc-num">48</span><span class="toc-name">Exam Connection</span></a></li>
+        <li class="toc-item"><a href="#s-49"><span class="toc-num">49</span><span class="toc-name">One-Screen Formula Map</span></a></li>
+        <li class="toc-item"><a href="#s-50"><span class="toc-num">50</span><span class="toc-name">Connection to the Complete Unit IV</span></a></li>
+        <li class="toc-item"><a href="#s-51"><span class="toc-num">51</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-52"><span class="toc-num">52</span><span class="toc-name">Source Notes</span></a></li>
+        <li class="toc-item"><a href="#s-53"><span class="toc-num">53</span><span class="toc-name">Status</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">Course Position</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph TD
+    Noise["Random Latent Noise z ~ N(0, 1)"] --> Gen["Generator G(z)"]
+    Gen --> Fake["Synthetic Fake Samples G(z)"]
+    RealData["Real Training Dataset x"] --> Disc["Discriminator D(x)"]
+    Fake --> Disc
+    Disc --> Out["Binary Probability: Real (1) vs Fake (0)"]
+    Out --> D_Loss["Discriminator Loss: Classify Real as 1, Fake as 0"]
+    Out --> G_Loss["Generator Loss: Trick Discriminator to Classify Fake as 1!"]
+    style Gen fill:#065f46,stroke:#34d399,color:#ffffff
+    style Disc fill:#7f1d1d,stroke:#ef4444,color:#ffffff
+    style Out fill:#0f172a,stroke:#38bdf8,color:#38bdf8,stroke-width:2px
+</pre></div>
+<p>The official DSC-14 Unit IV syllabus includes <strong>Generative Models: Autoencoders and Generative Adversarial Networks (GANs)</strong>.</p>
+<p>The stored Main Book defines the central GAN components:</p>
+<ul>
+<li>generator;</li>
+<li>discriminator;</li>
+<li>latent/noise input;</li>
+<li>classical adversarial objective;</li>
+<li>alternating optimization;</li>
+<li>mode collapse;</li>
+<li>training instability.</li>
+</ul>
+<p>The master resource guide identifies NPTEL Deep Learning / generative-AI material as the structured learning route for this topic.</p>
+<p>The preceding Coding Book chapter covered autoencoders.</p>
+<p><strong>Source boundary:</strong> the syllabus establishes the required GAN topic; the detailed PyTorch implementation, training loop, visualization and debugging workflow here are coding-book expansion.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">Coding Objective</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Implementation Model</div>
+
+GAN ek chor (Generator) aur sipahi (Discriminator) ki kahani hai.
+Chor nakli note (fake images) chhaapta hai. Sipahi asli aur nakli note mein farq pehchanta hai.
+Shuru mein chor bohot ghatiya note banata hai, sipahi foran pakad leta hai.
+Dono ek dusre ke khilaf ladte-ladte itne expert ho jate hain ki aakhir mein chor ke banaye note asli note se bilkul alag nahi lagte!
+Alternating training mein yaad rakhna: jab Discriminator train ho raha ho, Generator ke weights freeze hote hain!
+
+</div>
+
+<p>By the end of this chapter you should be able to:</p>
+<ul>
+<li>explain the generator/discriminator game;</li>
+<li>distinguish the GAN objective from autoencoder reconstruction;</li>
+<li>sample latent noise;</li>
+<li>implement a small generator;</li>
+<li>implement a discriminator;</li>
+<li>calculate discriminator losses;</li>
+<li>calculate generator losses;</li>
+<li>perform alternating optimization;</li>
+<li>train a small GAN on a simple image dataset;</li>
+<li>visualize generated samples;</li>
+<li>track generator/discriminator losses;</li>
+<li>recognize mode collapse;</li>
+<li>understand why GAN losses alone are difficult to interpret;</li>
+<li>add reproducibility controls;</li>
+<li>build a basic conditional-GAN mental model.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">Why GANs Exist</h2>
+      </div>
+      <div class="section-body">
+        <p>An autoencoder is centered around:</p>
+<div class="ascii-box"><pre>input
+ ↓
+encode
+ ↓
+latent
+ ↓
+decode
+ ↓
+reconstruction</pre></div>
+<p>A GAN instead learns through competition:</p>
+<div class="ascii-box"><pre>noise
+ ↓
+generator
+ ↓
+fake sample
+       ↘
+         discriminator
+       ↗
+real sample</pre></div>
+<p>The generator does not need a target image corresponding to each latent vector.</p>
+<p>Instead, it learns from the discriminator's feedback.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Generator</h2>
+      </div>
+      <div class="section-body">
+        <p>Let:</p>
+<div class="formula-math">\[
+z\sim p_z(z)
+\]</div>
+<p>be a random latent vector.</p>
+<p>The generator maps:</p>
+<div class="formula-math">\[
+\boxed{
+x_f=G_\theta(z)
+}
+\]</div>
+<p>from the latent space to the data space.</p>
+<p>For an image generator:</p>
+<div class="ascii-box"><pre>random vector
+     ↓
+dense / upsampling layers
+     ↓
+feature representation
+     ↓
+image</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Discriminator</h2>
+      </div>
+      <div class="section-body">
+        <p>The discriminator receives either:</p>
+<div class="ascii-box"><pre>real sample x</pre></div>
+<p>or:</p>
+<div class="ascii-box"><pre>generated sample G(z)</pre></div>
+<p>and produces a real/fake score:</p>
+<div class="formula-math">\[
+\boxed{
+D_\phi(x)\in(0,1)
+}
+\]</div>
+<p>under the standard sigmoid interpretation.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>real image
+    ↓
+D
+    ↓
+high real score
+
+fake image
+    ↓
+D
+    ↓
+low real score</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Classical GAN Objective</h2>
+      </div>
+      <div class="section-body">
+        <p>The classical minimax value function is:</p>
+<div class="formula-math">\[
+\boxed{
+V(D,G)
+=
+\mathbb{E}_{x\sim p_{data}}
+[\log D(x)]
++
+\mathbb{E}_{z\sim p_z}
+[\log(1-D(G(z)))]
+}
+\]</div>
+<p>with the game:</p>
+<div class="formula-math">\[
+\boxed{
+\min_G\max_D V(D,G)
+}
+\]</div>
+<p>Read the two terms separately.</p>
+<h3>Real-data term</h3>
+<div class="formula-math">\[
+\mathbb E[\log D(x)]
+\]</div>
+<p>encourages the discriminator to assign high scores to real samples.</p>
+<h3>Fake-data term</h3>
+<div class="formula-math">\[
+\mathbb E[\log(1-D(G(z)))]
+\]</div>
+<p>encourages the discriminator to assign low real scores to generated samples.</p>
+<p>The generator tries to make generated samples increasingly difficult for the discriminator to distinguish from real data.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Practical Generator Objective</h2>
+      </div>
+      <div class="section-body">
+        <p>The original minimax generator term can provide weak gradients in some regimes.</p>
+<p>A common practical non-saturating generator loss is:</p>
+<div class="formula-math">\[
+\boxed{
+L_G
+=
+-\mathbb E_z
+[\log D(G(z))]
+}
+\]</div>
+<p>Interpretation:</p>
+<div class="ascii-box"><pre>generator wants:
+D(G(z)) → 1</pre></div>
+<p>This is a standard implementation expansion.</p>
+<p>For core syllabus understanding, know:</p>
+<div class="ascii-box"><pre>G → fool D
+D → distinguish real/fake</pre></div>
+<p>and the classical minimax objective.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">Discriminator Loss</h2>
+      </div>
+      <div class="section-body">
+        <p>A practical binary-cross-entropy formulation is:</p>
+<div class="formula-math">\[
+\boxed{
+L_D
+=
+-\mathbb E_x[\log D(x)]
+-
+\mathbb E_z[\log(1-D(G(z)))]
+}
+\]</div>
+<p>Interpretation:</p>
+<div class="ascii-box"><pre>real → target 1
+fake → target 0</pre></div>
+<p>So the discriminator is effectively solving a binary classification problem whose training data consist of:</p>
+<div class="ascii-box"><pre>real examples
++
+generated examples</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Adversarial Training</h2>
+      </div>
+      <div class="section-body">
+        <p>GAN training alternates between the two players.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>Step A
+Train discriminator
+       ↓
+make D better at real/fake separation
+
+Step B
+Train generator
+       ↓
+make G better at fooling D
+
+Step C
+repeat</pre></div>
+<p>The crucial implementation detail is:</p>
+<blockquote>
+<p>When training one network, avoid accidentally updating the other network's parameters through the same loss.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Toy One-Dimensional GAN Intuition</h2>
+      </div>
+      <div class="section-body">
+        <p>Before images, imagine real data concentrated near:</p>
+<div class="formula-math">\[
+x\approx2.
+\]</div>
+<p>The generator initially produces:</p>
+<div class="ascii-box"><pre>x_fake ≈ -3</pre></div>
+<p>The discriminator can easily separate them.</p>
+<p>After training:</p>
+<div class="ascii-box"><pre>generator output
+≈ 0
+
+then
+≈ 1
+
+then
+≈ 2</pre></div>
+<p>The generator distribution moves toward the real distribution.</p>
+<p>This simple one-dimensional picture is often easier to understand than starting with images.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Latent Noise</h2>
+      </div>
+      <div class="section-body">
+        <p>A generator needs an input source.</p>
+<p>A common choice:</p>
+<div class="formula-math">\[
+z\sim\mathcal N(0,I)
+\]</div>
+<p>or a simple uniform distribution.</p>
+<p>Example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import torch
+
+z = torch.randn(
+    16,
+    64,
+)</code></pre></div>
+<p>Interpretation:</p>
+<div class="ascii-box"><pre>16 samples
+64 latent dimensions each</pre></div>
+<p>Different latent vectors should ideally produce different generated samples.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Why Latent Space Is Useful</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="ascii-box"><pre>z₁
+z₂
+z₃
+...</pre></div>
+<p>are different points in latent space.</p>
+<p>The generator learns:</p>
+<div class="formula-math">\[
+G(z_i)
+\]</div>
+<p>that should resemble samples from the target data distribution.</p>
+<p>This gives a generative mapping:</p>
+<div class="ascii-box"><pre>latent space
+    ↓
+generator
+    ↓
+data space</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Simple Generator for 28×28 Images</h2>
+      </div>
+      <div class="section-body">
+        <p>Use a dense educational architecture.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import torch
+import torch.nn as nn</code></pre></div>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">class Generator(nn.Module):
+    def __init__(
+        self,
+        latent_dim=64,
+    ):
+        super().__init__()
+
+        self.net = nn.Sequential(
+            nn.Linear(
+                latent_dim,
+                128,
+            ),
+            nn.ReLU(),
+
+            nn.Linear(
+                128,
+                256,
+            ),
+            nn.ReLU(),
+
+            nn.Linear(
+                256,
+                784,
+            ),
+            nn.Tanh(),
+        )
+
+    def forward(self, z):
+        x = self.net(z)
+
+        return x.view(
+            -1,
+            1,
+            28,
+            28,
+        )</code></pre></div>
+<p>This is intentionally simple.</p>
+<p>For serious image generation, convolutional architectures are generally much more appropriate.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Why `Tanh` Here?</h2>
+      </div>
+      <div class="section-body">
+        <p>The generator ends with:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">nn.Tanh()</code></pre></div>
+<p>which produces values approximately in:</p>
+<div class="formula-math">\[
+[-1,1].
+\]</div>
+<p>Therefore the image preprocessing should use the matching range.</p>
+<p>Example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize(
+        (0.5,),
+        (0.5,),
+    ),
+])</code></pre></div>
+<p>Now the data are mapped approximately into:</p>
+<div class="ascii-box"><pre>[-1, 1]</pre></div>
+<p>The output/data ranges are deliberately aligned.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">Simple Discriminator</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">class Discriminator(nn.Module):
+    def __init__(self):
+        super().__init__()
+
+        self.net = nn.Sequential(
+            nn.Flatten(),
+
+            nn.Linear(
+                784,
+                256,
+            ),
+            nn.LeakyReLU(
+                0.2,
+            ),
+
+            nn.Linear(
+                256,
+                128,
+            ),
+            nn.LeakyReLU(
+                0.2,
+            ),
+
+            nn.Linear(
+                128,
+                1,
+        )
+        )
+
+    def forward(self, x):
+        return self.net(x)</code></pre></div>
+<p>Notice:</p>
+<blockquote>
+<p>There is no sigmoid at the output.</p>
+</blockquote>
+<p>The discriminator returns a <strong>logit</strong>.</p>
+<p>A numerically stable BCE-with-logits loss can then be used during training.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">Why Logits Instead of Sigmoid?</h2>
+      </div>
+      <div class="section-body">
+        <p>Use:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">nn.BCEWithLogitsLoss()</code></pre></div>
+<p>rather than:</p>
+<div class="ascii-box"><pre>sigmoid
++
+BCELoss</pre></div>
+<p>as a practical framework pattern.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>discriminator
+ ↓
+logit
+ ↓
+BCE-with-logits loss</pre></div>
+<p>The fused loss is designed to handle the sigmoid/BCE combination more stably.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">Data Loading</h2>
+      </div>
+      <div class="section-body">
+        <p>Use MNIST:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from torchvision import datasets, transforms
+from torch.utils.data import DataLoader</code></pre></div>
+<p>Transform:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize(
+        (0.5,),
+        (0.5,),
+    ),
+])</code></pre></div>
+<p>Dataset:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">train_data = datasets.MNIST(
+    root=&quot;./data&quot;,
+    train=True,
+    download=True,
+    transform=transform,
+)</code></pre></div>
+<p>Loader:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">loader = DataLoader(
+    train_data,
+    batch_size=64,
+    shuffle=True,
+    drop_last=True,
+)</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Create Models</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">device = torch.device(
+    &quot;cuda&quot;
+    if torch.cuda.is_available()
+    else &quot;cpu&quot;
+)
+
+G = Generator(
+    latent_dim=64,
+).to(device)
+
+D = Discriminator().to(device)</code></pre></div>
+<p>Loss:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">loss_fn = nn.BCEWithLogitsLoss()</code></pre></div>
+<p>Optimizers:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">g_optimizer = torch.optim.Adam(
+    G.parameters(),
+    lr=2e-4,
+    betas=(0.5, 0.999),
+)
+
+d_optimizer = torch.optim.Adam(
+    D.parameters(),
+    lr=2e-4,
+    betas=(0.5, 0.999),
+)</code></pre></div>
+<p>These settings are a practical educational starting point, not universal GAN hyperparameters.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">Discriminator Training Step</h2>
+      </div>
+      <div class="section-body">
+        <p>Take a real batch:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">real, _ = next(
+    iter(loader)
+)
+
+real = real.to(device)
+
+batch_size = real.size(0)</code></pre></div>
+<p>Create real labels:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">real_targets = torch.ones(
+    batch_size,
+    1,
+    device=device,
+)</code></pre></div>
+<p>Generate fake images:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">z = torch.randn(
+    batch_size,
+    64,
+    device=device,
+)
+
+fake = G(z)</code></pre></div>
+<p>Fake labels:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">fake_targets = torch.zeros(
+    batch_size,
+    1,
+    device=device,
+)</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Discriminator Update</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">d_optimizer.zero_grad()
+
+real_logits = D(real)
+
+fake_logits = D(
+    fake.detach()
+)
+
+real_loss = loss_fn(
+    real_logits,
+    real_targets,
+)
+
+fake_loss = loss_fn(
+    fake_logits,
+    fake_targets,
+)
+
+d_loss = (
+    real_loss
+    + fake_loss
+) / 2.0
+
+d_loss.backward()
+
+d_optimizer.step()</code></pre></div>
+<p>Why:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">fake.detach()</code></pre></div>
+<p>?</p>
+<p>Because during the discriminator update we want gradients to update \(D\), not \(G\).</p>
+<p>This is one of the most important GAN coding details.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">Generator Update</h2>
+      </div>
+      <div class="section-body">
+        <p>Now train \(G\).</p>
+<p>We want the discriminator to classify generated samples as real.</p>
+<p>So use:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">generator_targets = torch.ones(
+    batch_size,
+    1,
+    device=device,
+)</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">g_optimizer.zero_grad()
+
+fake = G(z)
+
+fake_logits = D(
+    fake
+)
+
+g_loss = loss_fn(
+    fake_logits,
+    generator_targets,
+)
+
+g_loss.backward()
+
+g_optimizer.step()</code></pre></div>
+<p>Notice:</p>
+<div class="ascii-box"><pre>fake.detach()</pre></div>
+<p>was used during discriminator training but is <strong>not</strong> used during generator training.</p>
+<p>The generator needs the gradient path through the discriminator.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">Why the Generator Can Learn Through the Discriminator</h2>
+      </div>
+      <div class="section-body">
+        <p>The path is:</p>
+<div class="formula-math">\[
+z
+\rightarrow
+G(z)
+\rightarrow
+D(G(z))
+\rightarrow
+L_G.
+\]</div>
+<p>The gradient is:</p>
+<div class="formula-math">\[
+L_G
+\rightarrow
+D
+\rightarrow
+G
+\rightarrow
+\theta_G.
+\]</div>
+<p>So the discriminator acts as a differentiable critic whose feedback reaches the generator.</p>
+<p>This is a direct application of the backpropagation concepts from Unit III.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">Full GAN Training Loop</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">epochs = 5
+
+g_history = []
+d_history = []
+
+for epoch in range(epochs):
+    for real, _ in loader:
+        real = real.to(device)
+
+        batch_size = real.size(0)
+
+        # -------------------------
+        # 1. Train discriminator
+        # -------------------------
+        z = torch.randn(
+            batch_size,
+            64,
+            device=device,
+        )
+
+        fake = G(z)
+
+        real_targets = torch.ones(
+            batch_size,
+            1,
+            device=device,
+        )
+
+        fake_targets = torch.zeros(
+            batch_size,
+            1,
+            device=device,
+        )
+
+        d_optimizer.zero_grad()
+
+        real_logits = D(real)
+
+        fake_logits = D(
+            fake.detach()
+        )
+
+        d_loss = (
+            loss_fn(
+                real_logits,
+                real_targets,
+            )
+            +
+            loss_fn(
+                fake_logits,
+                fake_targets,
+            )
+        ) / 2.0
+
+        d_loss.backward()
+        d_optimizer.step()
+
+        # -------------------------
+        # 2. Train generator
+        # -------------------------
+        z = torch.randn(
+            batch_size,
+            64,
+            device=device,
+        )
+
+        fake = G(z)
+
+        generator_targets = torch.ones(
+            batch_size,
+            1,
+            device=device,
+        )
+
+        g_optimizer.zero_grad()
+
+        fake_logits = D(fake)
+
+        g_loss = loss_fn(
+            fake_logits,
+            generator_targets,
+        )
+
+        g_loss.backward()
+        g_optimizer.step()
+
+        g_history.append(
+            g_loss.item()
+        )
+
+        d_history.append(
+            d_loss.item()
+        )
+
+    print(
+        f&quot;epoch={epoch + 1} &quot;
+        f&quot;G={g_history[-1]:.4f} &quot;
+        f&quot;D={d_history[-1]:.4f}&quot;
+    )</code></pre></div>
+<p>The exact training dynamics can vary substantially across environments.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">Save a Fixed Latent Batch</h2>
+      </div>
+      <div class="section-body">
+        <p>For visualization, use the same latent vectors throughout training.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">fixed_z = torch.randn(
+    16,
+    64,
+    device=device,
+)</code></pre></div>
+<p>Then after each epoch:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">with torch.no_grad():
+    samples = G(
+        fixed_z
+    ).cpu()</code></pre></div>
+<p>This allows:</p>
+<div class="ascii-box"><pre>same latent inputs
++
+different training checkpoints</pre></div>
+<p>to be compared.</p>
+<p>Otherwise changing the latent samples makes it harder to tell whether images improved.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">Visualize Generated Images</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">fig = plt.figure(
+    figsize=(8, 8),
+)
+
+for i in range(16):
+    plt.subplot(4, 4, i + 1)
+
+    image = (
+        samples[i]
+        .squeeze(0)
+        + 1.0
+    ) / 2.0
+
+    plt.imshow(
+        image.clamp(0, 1),
+        cmap=&quot;gray&quot;,
+    )
+
+    plt.axis(&quot;off&quot;)
+
+plt.suptitle(
+    &quot;Generated Samples&quot;
+)
+
+plt.show()</code></pre></div>
+<p>The denormalization:</p>
+<div class="formula-math">\[
+x_{display}
+=
+\frac{x+1}{2}
+\]</div>
+<p>maps approximately:</p>
+<div class="ascii-box"><pre>[-1, 1]
+→
+[0, 1]</pre></div>
+<p>for visualization.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">Why Loss Curves Alone Are Not Enough</h2>
+      </div>
+      <div class="section-body">
+        <p>GAN losses are unusual because:</p>
+<div class="ascii-box"><pre>G and D are optimizing against each other</pre></div>
+<p>A generator loss increasing does not automatically mean:</p>
+<div class="ascii-box"><pre>generation quality got worse</pre></div>
+<p>Similarly:</p>
+<div class="ascii-box"><pre>D loss ≈ some &quot;nice&quot; number</pre></div>
+<p>does not certify a good generator.</p>
+<p>Use:</p>
+<div class="ascii-box"><pre>losses
++
+visual samples
++
+diversity
++
+training stability
++
+application-specific evaluation</pre></div>
+<p>where appropriate.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">Mode Collapse</h2>
+      </div>
+      <div class="section-body">
+        <p>Mode collapse occurs when the generator produces insufficiently diverse samples.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>desired:
+A B C D E F G H
+
+collapsed:
+A A A A A A A A</pre></div>
+<p>The generated samples may individually look plausible while representing only a narrow part of the target distribution.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">Detecting Mode Collapse</h2>
+      </div>
+      <div class="section-body">
+        <p>Warning signs:</p>
+<div class="ascii-box"><pre>different z values
+       ↓
+almost identical outputs</pre></div>
+<p>Test:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">z_a = torch.randn(
+    32,
+    64,
+    device=device,
+)
+
+with torch.no_grad():
+    generated = G(z_a)</code></pre></div>
+<p>Flatten:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">flat = generated.view(
+    generated.size(0),
+    -1,
+)</code></pre></div>
+<p>Pairwise distances:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">distances = torch.cdist(
+    flat,
+    flat,
+)</code></pre></div>
+<p>If many different latent inputs produce extremely similar outputs, investigate possible diversity problems.</p>
+<p>This is a diagnostic, not a complete mode-collapse metric.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">Latent Interpolation</h2>
+      </div>
+      <div class="section-body">
+        <p>A powerful visualization experiment:</p>
+<p>Take:</p>
+<div class="formula-math">\[
+z_0
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+z_1.
+\]</div>
+<p>Interpolate:</p>
+<div class="formula-math">\[
+z(\lambda)
+=
+(1-\lambda)z_0
++
+\lambda z_1.
+\]</div>
+<p>Code:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">z0 = torch.randn(
+    1,
+    64,
+    device=device,
+)
+
+z1 = torch.randn(
+    1,
+    64,
+    device=device,
+)
+
+alphas = torch.linspace(
+    0,
+    1,
+    8,
+    device=device,
+)
+
+interpolated = torch.cat([
+    (1 - a) * z0 + a * z1
+    for a in alphas
+])</code></pre></div>
+<p>Generate:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">with torch.no_grad():
+    images = G(
+        interpolated
+    ).cpu()</code></pre></div>
+<p>If the learned latent mapping is useful, neighbouring latent points may produce smoothly changing samples.</p>
+<p>This is an observational experiment, not a universal guarantee.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">Fixed-Noise Evaluation Protocol</h2>
+      </div>
+      <div class="section-body">
+        <p>At checkpoints:</p>
+<div class="ascii-box"><pre>epoch 1
+epoch 2
+epoch 3
+...</pre></div>
+<p>always generate from:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">fixed_z</code></pre></div>
+<p>Then compare the same latent positions.</p>
+<p>This gives a cleaner visualization of how training changes the generator.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">Discriminator Output Inspection</h2>
+      </div>
+      <div class="section-body">
+        <p>For real samples:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">with torch.no_grad():
+    real_scores = torch.sigmoid(
+        D(real)
+    )</code></pre></div>
+<p>For fake samples:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">with torch.no_grad():
+    fake_scores = torch.sigmoid(
+        D(fake)
+    )</code></pre></div>
+<p>Interpret under the standard sigmoid convention:</p>
+<div class="ascii-box"><pre>near 1 → discriminator sees real-like
+near 0 → discriminator sees fake-like</pre></div>
+<p>Do not confuse these with calibrated probabilities in every possible discriminator setting.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">GAN Training Diagnostics</h2>
+      </div>
+      <div class="section-body">
+        <p>Record:</p>
+<div class="ascii-box"><pre>G loss
+D loss
+D(real) mean
+D(fake) mean
+sample images
+sample diversity</pre></div>
+<p>These provide more information than one loss value.</p>
+<p>Example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(
+    &quot;D(real):&quot;,
+    torch.sigmoid(
+        real_logits
+    ).mean().item(),
+)
+
+print(
+    &quot;D(fake):&quot;,
+    torch.sigmoid(
+        fake_logits
+    ).mean().item(),
+)</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Common GAN Training Failure</h2>
+      </div>
+      <div class="section-body">
+        <h3>Failure pattern</h3>
+<div class="ascii-box"><pre>D becomes extremely confident
+G receives weak/usefully poor learning signal</pre></div>
+<p>Possible causes include:</p>
+<ul>
+<li>learning-rate imbalance;</li>
+<li>architecture mismatch;</li>
+<li>insufficient generator capacity;</li>
+<li>insufficient discriminator capacity;</li>
+<li>training instability;</li>
+<li>poor objective choice.</li>
+</ul>
+<p>Do not diagnose the exact cause from one scalar loss.</p>
+<p>Inspect the complete training state.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Another Failure — Generator Repeats One Pattern</h2>
+      </div>
+      <div class="section-body">
+        <p>Likely concern:</p>
+<div class="ascii-box"><pre>mode collapse</pre></div>
+<p>Investigate:</p>
+<div class="ascii-box"><pre>latent diversity
+sample diversity
+D/G balance
+learning rates
+architecture
+training schedule</pre></div>
+<p>Do not immediately assume that every repeated-looking output means mode collapse; visual inspection should cover a meaningful sample set.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-35" class="section-block">
+      <div class="section-header">
+        <span class="section-num">35</span>
+        <h2 class="section-heading">Another Failure — Both Losses Oscillate</h2>
+      </div>
+      <div class="section-body">
+        <p>GAN training is an adversarial game.</p>
+<p>Oscillation can occur because:</p>
+<div class="ascii-box"><pre>G changes
+ ↓
+D changes
+ ↓
+G reacts
+ ↓
+D reacts</pre></div>
+<p>So the optimization landscape is coupled.</p>
+<p>This is fundamentally different from a simple single-objective supervised problem.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-36" class="section-block">
+      <div class="section-header">
+        <span class="section-num">36</span>
+        <h2 class="section-heading">Conditional GAN — Conceptual Extension</h2>
+      </div>
+      <div class="section-body">
+        <p>A conditional generator can receive a class condition \(y\):</p>
+<div class="formula-math">\[
+\boxed{
+G(z,y)
+}
+\]</div>
+<p>Diagram:</p>
+<div class="ascii-box"><pre>noise z ──────┐
+              ├──► G ───► generated image
+class y ──────┘</pre></div>
+<p>The discriminator can also receive the condition.</p>
+<p>Now the generator attempts:</p>
+<div class="ascii-box"><pre>&quot;generate a sample of this class&quot;</pre></div>
+<p>rather than:</p>
+<div class="ascii-box"><pre>&quot;generate any realistic sample&quot;</pre></div>
+<p>This is an architecture-level extension.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-37" class="section-block">
+      <div class="section-header">
+        <span class="section-num">37</span>
+        <h2 class="section-heading">GAN and CNN Connection</h2>
+      </div>
+      <div class="section-body">
+        <p>For images, GANs often use CNN-based architectures.</p>
+<p>The connection to your previous chapter:</p>
+<div class="ascii-box"><pre>CODE-U3-04
+CNN
+ ↓
+local feature extraction
+ ↓
+image representation
+
+CODE-U4-05
+GAN
+ ↓
+generator + discriminator
+ ↓
+adversarial image generation</pre></div>
+<p>A convolutional generator can progressively construct larger spatial representations, while the discriminator can progressively compress spatial information into a real/fake judgement.</p>
+<p>Detailed DCGAN architecture rules are supplementary unless specifically required by your instructor.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-38" class="section-block">
+      <div class="section-header">
+        <span class="section-num">38</span>
+        <h2 class="section-heading">Autoencoder vs GAN</h2>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Property</th>
+<th>Autoencoder</th>
+<th>GAN</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>central components</td>
+<td>encoder + decoder</td>
+<td>generator + discriminator</td>
+</tr>
+<tr>
+<td>main signal</td>
+<td>reconstruction</td>
+<td>adversarial feedback</td>
+</tr>
+<tr>
+<td>input to model</td>
+<td>data sample</td>
+<td>data for training; noise for generation</td>
+</tr>
+<tr>
+<td>explicit reconstruction</td>
+<td>yes in basic AE</td>
+<td>no</td>
+</tr>
+<tr>
+<td>latent role</td>
+<td>representation</td>
+<td>generation source</td>
+</tr>
+<tr>
+<td>main application</td>
+<td>representation/reconstruction</td>
+<td>realistic sample generation</td>
+</tr>
+<tr>
+<td>characteristic difficulty</td>
+<td>trivial/identity solutions without constraints</td>
+<td>unstable adversarial optimization</td>
+</tr>
+<tr>
+<td>common failure</td>
+<td>weak representation</td>
+<td>mode collapse</td>
+</tr>
+</tbody>
+</table></div>
+<p>Memory:</p>
+<blockquote>
+<p><strong>Autoencoder reconstructs. GAN competes.</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-39" class="section-block">
+      <div class="section-header">
+        <span class="section-num">39</span>
+        <h2 class="section-heading">GAN vs Supervised Classification</h2>
+      </div>
+      <div class="section-body">
+        <p>Discriminator training looks like classification:</p>
+<div class="ascii-box"><pre>real → 1
+fake → 0</pre></div>
+<p>But the overall GAN is not simply a static binary classifier.</p>
+<p>The fake examples are produced by a generator that is simultaneously learning from discriminator feedback.</p>
+<p>The two models therefore form a coupled system.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-40" class="section-block">
+      <div class="section-header">
+        <span class="section-num">40</span>
+        <h2 class="section-heading">Save Generated Samples</h2>
+      </div>
+      <div class="section-body">
+        <p>For reproducibility:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">torch.save(
+    G.state_dict(),
+    &quot;generator.pt&quot;,
+)
+
+torch.save(
+    D.state_dict(),
+    &quot;discriminator.pt&quot;,
+)</code></pre></div>
+<p>Also save:</p>
+<div class="ascii-box"><pre>latent dimension
+model architecture
+optimizer
+learning rates
+batch size
+epochs
+dataset
+data transform
+random seed</pre></div>
+<p>A model checkpoint without its experiment configuration can be difficult to reproduce.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-41" class="section-block">
+      <div class="section-header">
+        <span class="section-num">41</span>
+        <h2 class="section-heading">Practical Lab</h2>
+      </div>
+      <div class="section-body">
+        <h2>Task A — Objective</h2>
+<p>Write the classical GAN objective from memory.</p>
+<h2>Task B — Toy distribution</h2>
+<p>Implement a one-dimensional generator/discriminator experiment conceptually.</p>
+<h2>Task C — Architecture</h2>
+<p>Build <code>Generator</code> and <code>Discriminator</code>.</p>
+<h2>Task D — Shape trace</h2>
+<p>Verify:</p>
+<div class="ascii-box"><pre>z
+→ G(z)
+→ D(G(z))</pre></div>
+<p>shapes.</p>
+<h2>Task E — Training</h2>
+<p>Train the simple MNIST GAN.</p>
+<h2>Task F — Fixed noise</h2>
+<p>Generate a fixed latent batch after every epoch.</p>
+<h2>Task G — Visual inspection</h2>
+<p>Compare generated samples.</p>
+<h2>Task H — Diversity</h2>
+<p>Test whether different \(z\) values produce distinct samples.</p>
+<h2>Task I — Interpolation</h2>
+<p>Perform latent interpolation.</p>
+<h2>Task J — Diagnosis</h2>
+<p>Intentionally disturb one hyperparameter and inspect the training effect.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-42" class="section-block">
+      <div class="section-header">
+        <span class="section-num">42</span>
+        <h2 class="section-heading">GAN Experiment Log</h2>
+      </div>
+      <div class="section-body">
+        <p>Record:</p>
+<div class="ascii-box"><pre>Dataset:
+Image size:
+Channels:
+
+Latent dimension:
+
+Generator architecture:
+Discriminator architecture:
+
+Generator optimizer:
+Discriminator optimizer:
+
+Learning rates:
+Betas:
+Batch size:
+Epochs:
+
+Normalization:
+Output activation:
+
+G loss:
+D loss:
+D(real):
+D(fake):
+
+Visual quality:
+Diversity:
+Failure symptoms:</pre></div>
+<p>This is especially important for GANs because numerical results can be misleading without visual inspection.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-43" class="section-block">
+      <div class="section-header">
+        <span class="section-num">43</span>
+        <h2 class="section-heading">Multi-Seed Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Run:</p>
+<div class="ascii-box"><pre>seed = 1
+seed = 2
+seed = 3
+seed = 4
+seed = 5</pre></div>
+<p>For each run:</p>
+<ul>
+<li>initialize both networks from scratch;</li>
+<li>train independently;</li>
+<li>save fixed-noise generations;</li>
+<li>compare final diversity and sample quality;</li>
+<li>record losses.</li>
+</ul>
+<p>A single GAN training run is weak evidence because adversarial training can be sensitive to initialization and stochasticity.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-44" class="section-block">
+      <div class="section-header">
+        <span class="section-num">44</span>
+        <h2 class="section-heading">Reproducibility Setup</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import random
+import numpy as np
+import torch
+
+seed = 42
+
+random.seed(seed)
+np.random.seed(seed)
+torch.manual_seed(seed)</code></pre></div>
+<p>Depending on the hardware and operations used, strict bit-for-bit determinism can require additional framework/backend controls and can reduce performance.</p>
+<p>The important principle is:</p>
+<blockquote>
+<p>Record the seed and environment, and distinguish reproducibility from guaranteed exact determinism.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-45" class="section-block">
+      <div class="section-header">
+        <span class="section-num">45</span>
+        <h2 class="section-heading">Debugging Checklist</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>[ ] real images and generated images use compatible ranges
+[ ] G output shape matches real-image shape
+[ ] D accepts both real and fake images
+[ ] D returns the expected shape
+[ ] BCE-with-logits receives logits
+[ ] fake.detach() is used during D update
+[ ] generator update uses non-detached fake images
+[ ] optimizers are separate
+[ ] gradients are zeroed correctly
+[ ] fixed latent vectors are reused for visualization
+[ ] losses are recorded
+[ ] sample diversity is inspected
+[ ] seeds/configuration are recorded</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-46" class="section-block">
+      <div class="section-header">
+        <span class="section-num">46</span>
+        <h2 class="section-heading">Common Coding Bugs</h2>
+      </div>
+      <div class="section-body">
+        <h2>Bug 1 — Forgetting <code>detach()</code> during D update</h2>
+<p>The discriminator update may then backpropagate into the generator.</p>
+<h2>Bug 2 — Detaching during G update</h2>
+<p>Then the generator receives no useful gradient path through the discriminator.</p>
+<h2>Bug 3 — Double sigmoid</h2>
+<p>Using:</p>
+<div class="ascii-box"><pre>sigmoid output
++
+BCEWithLogitsLoss</pre></div>
+<p>is incorrect.</p>
+<p>Use either:</p>
+<div class="ascii-box"><pre>logit + BCEWithLogitsLoss</pre></div>
+<p>or:</p>
+<div class="ascii-box"><pre>sigmoid + BCELoss</pre></div>
+<p>with the corresponding numerical considerations.</p>
+<h2>Bug 4 — Data/output scale mismatch</h2>
+<p>For example:</p>
+<div class="ascii-box"><pre>real images ∈ [-1,1]
+generator output ∈ [0,1]</pre></div>
+<p>creates an avoidable mismatch.</p>
+<h2>Bug 5 — Reusing stale noise</h2>
+<p>Always regenerate training noise unless intentionally running a fixed-noise evaluation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-47" class="section-block">
+      <div class="section-header">
+        <span class="section-num">47</span>
+        <h2 class="section-heading">Viva Questions</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Lab Viva Trap & Runtime Gotcha</div>
+
+**Vanishing Gradients for Generator & Saturated Loss:**
+Minimizing $\log(1 - D(G(z)))$ causes severe vanishing gradients early in training because $D$ easily rejects early fakes ($D(G(z)) \approx 0$).
+In practice, we train the Generator to MAXIMIZE $\log D(G(z))$ (non-saturating heuristic) instead!
+Also, if the Discriminator becomes too powerful too quickly, gradients vanish completely and training collapses.
+
+</div>
+
+<h3>Q1. What is a GAN?</h3>
+<p>A generative framework containing a generator and discriminator trained through an adversarial objective.</p>
+<h3>Q2. What does the generator do?</h3>
+<p>Maps latent noise to generated samples.</p>
+<h3>Q3. What does the discriminator do?</h3>
+<p>Distinguishes real training samples from generated samples.</p>
+<h3>Q4. What is adversarial training?</h3>
+<p>Alternating optimization in which the generator and discriminator have competing objectives.</p>
+<h3>Q5. What is mode collapse?</h3>
+<p>A failure in which generated outputs lack sufficient diversity and may repeatedly represent only a narrow set of patterns.</p>
+<h3>Q6. Why does the generator receive a gradient through the discriminator?</h3>
+<p>Because the generator loss depends on the discriminator's output for generated samples, creating a differentiable path from loss through discriminator to generator.</p>
+<h3>Q7. What is the role of latent noise?</h3>
+<p>It provides a source of variation from which the generator constructs different samples.</p>
+<h3>Q8. Why use fixed latent vectors for visualization?</h3>
+<p>To compare generator changes across training checkpoints without changing the input noise.</p>
+<h3>Q9. Why are GAN losses hard to interpret alone?</h3>
+<p>Because the two losses belong to competing objectives and their magnitudes depend on the coupled training dynamics.</p>
+<h3>Q10. How does a conditional GAN differ?</h3>
+<p>It incorporates additional conditioning information such as a class label.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-48" class="section-block">
+      <div class="section-header">
+        <span class="section-num">48</span>
+        <h2 class="section-heading">Exam Connection</h2>
+      </div>
+      <div class="section-body">
+        <h3>2-mark</h3>
+<ul>
+<li>Define GAN.</li>
+<li>Define generator.</li>
+<li>Define discriminator.</li>
+<li>What is mode collapse?</li>
+<li>What is adversarial training?</li>
+</ul>
+<h3>5-mark</h3>
+<blockquote>
+<p>Explain GAN architecture and working.</p>
+</blockquote>
+<p>Answer structure:</p>
+<div class="ascii-box"><pre>definition
+↓
+generator
+↓
+latent input
+↓
+discriminator
+↓
+real/fake classification
+↓
+adversarial objective
+↓
+alternating training</pre></div>
+<h3>10-mark</h3>
+<blockquote>
+<p>Explain GANs in detail with mathematical objective and training process.</p>
+</blockquote>
+<p>Include:</p>
+<ol>
+<li>definition;</li>
+<li>architecture;</li>
+<li>generator;</li>
+<li>discriminator;</li>
+<li>latent input;</li>
+<li>classical minimax objective;</li>
+<li>generator/discriminator losses;</li>
+<li>alternating optimization;</li>
+<li>mode collapse;</li>
+<li>training instability;</li>
+<li>applications;</li>
+<li>comparison with autoencoders.</li>
+</ol>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-49" class="section-block">
+      <div class="section-header">
+        <span class="section-num">49</span>
+        <h2 class="section-heading">One-Screen Formula Map</h2>
+      </div>
+      <div class="section-body">
+        <h3>Generator</h3>
+<div class="formula-math">\[
+\boxed{
+x_f=G_\theta(z)
+}
+\]</div>
+<h3>Discriminator</h3>
+<div class="formula-math">\[
+\boxed{
+D_\phi(x)
+}
+\]</div>
+<h3>Classical value function</h3>
+<div class="formula-math">\[
+\boxed{
+V(D,G)
+=
+E_x[\log D(x)]
++
+E_z[\log(1-D(G(z)))]
+}
+\]</div>
+<h3>Game</h3>
+<div class="formula-math">\[
+\boxed{
+\min_G\max_DV(D,G)
+}
+\]</div>
+<h3>Discriminator loss</h3>
+<div class="formula-math">\[
+\boxed{
+L_D
+=
+-
+E_x[\log D(x)]
+-
+E_z[\log(1-D(G(z)))]
+}
+\]</div>
+<h3>Non-saturating generator loss</h3>
+<div class="formula-math">\[
+\boxed{
+L_G
+=
+-
+E_z[\log D(G(z))]
+}
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-50" class="section-block">
+      <div class="section-header">
+        <span class="section-num">50</span>
+        <h2 class="section-heading">Connection to the Complete Unit IV</h2>
+      </div>
+      <div class="section-body">
+        <p>The generative-model path is now:</p>
+<div class="ascii-box"><pre>CODE-U4-04
+Autoencoder
+    ↓
+representation + reconstruction
+
+CODE-U4-05
+GAN
+    ↓
+generation + adversarial feedback</pre></div>
+<p>Both reuse:</p>
+<div class="ascii-box"><pre>neural networks
+↓
+loss
+↓
+backpropagation
+↓
+gradient-based optimization</pre></div>
+<p>but the learning signals differ.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-51" class="section-block">
+      <div class="section-header">
+        <span class="section-num">51</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <p>Do not move forward until you can:</p>
+<ul>
+<li>[ ] define generator and discriminator;</li>
+<li>[ ] explain latent noise;</li>
+<li>[ ] write the classical GAN objective;</li>
+<li>[ ] write discriminator loss;</li>
+<li>[ ] write non-saturating generator loss;</li>
+<li>[ ] explain alternating training;</li>
+<li>[ ] implement a generator;</li>
+<li>[ ] implement a discriminator;</li>
+<li>[ ] train them separately;</li>
+<li>[ ] understand <code>detach()</code>;</li>
+<li>[ ] visualize generated samples;</li>
+<li>[ ] use fixed latent vectors;</li>
+<li>[ ] diagnose mode collapse;</li>
+<li>[ ] perform latent interpolation;</li>
+<li>[ ] explain GAN vs autoencoder;</li>
+<li>[ ] record a reproducible GAN experiment.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-52" class="section-block">
+      <div class="section-header">
+        <span class="section-num">52</span>
+        <h2 class="section-heading">Source Notes</h2>
+      </div>
+      <div class="section-body">
+        <h2>Official course boundary</h2>
+<p>The DSC-14 syllabus includes GANs under Unit IV generative models and includes practical work involving generative models/image generation.</p>
+<h2>Stored Main Book</h2>
+<p>The canonical Main Book chapter <code>MAIN-U4-C45</code> covers:</p>
+<ul>
+<li>generator;</li>
+<li>discriminator;</li>
+<li>classical minimax objective;</li>
+<li>non-saturating generator objective;</li>
+<li>mode collapse;</li>
+<li>training instability;</li>
+<li>conditional GAN intuition;</li>
+<li>CNN/GAN connection.</li>
+</ul>
+<p>The coding implementation here follows that conceptual structure.</p>
+<h2>Master resource guide</h2>
+<p>The stored master guide identifies NPTEL Deep Learning / generative-AI material as the primary structured source family for GANs.</p>
+<h2>Expansion boundary</h2>
+<p>The PyTorch architectures, loss implementation, <code>detach()</code> workflow, fixed-noise evaluation, latent interpolation, multi-seed protocol and debugging checklist are coding-book expansion.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-53" class="section-block">
+      <div class="section-header">
+        <span class="section-num">53</span>
+        <h2 class="section-heading">Status</h2>
+      </div>
+      <div class="section-body">
+        <p><strong><code>CODE-U4-05</code> — COMPLETE</strong></p>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="code-u4-04-autoencoders-pytorch.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← Unit 4 Lab 04 — Autoencoders</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">💻 Coding Index</span>
+      </a>
+      <a href="code-23-debugging-testing-reproducibility.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: Module 23 — Debugging, Testing & Reproducibility →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search lab implementations, functions, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">💻</span>Lab Hub</a>
+  <a href="code-u4-05-gans-pytorch.html" class="mobile-nav-btn active"><span class="icon">📖</span>CODE-U4-05</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

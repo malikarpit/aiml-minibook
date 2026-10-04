@@ -164,22 +164,34 @@ A self-contained mathematical depth layer that deepens derivations, vector geome
 
 ---
 
-## 💻 Coding Lab Layer (14 Modules Live · 767 Sections · 533 Code Blocks)
+## ⚖️ Integrated System Index & Gap Audit (MASTER-00)
+
+The MiniBook includes a dedicated system control center: **[MASTER-00 — AI/ML Integrated System Index & Gap Audit](master-audit.html)**:
+- **100% Curriculum Completeness Audit:** 50 Main Book chapters, 25 Math modules, 26 Coding modules, and 7 Exam decks verified with 0 content gaps.
+- **Syllabus-to-Practical Coverage Matrix:** BFS/DFS, Decision Tree, k-NN, SVM, Confusion Matrix, Model Comparison, Neural Networks, CNN, Q-Learning, NLP, and GANs verified against DU DSC-14 requirements.
+- **Universal 8-Step Practical Explanation Chain:** Input → Representation → Algorithm → Parameters → Loss/Reward → Training/Update → Output → Evaluation.
+- **Master Knowledge Graph & Prerequisite Spine:** Visual dependency graph spanning Classical AI, Supervised Learning, Deep Learning, and Reinforcement Learning.
+- **Interactive Global QA Checklists:** Content, Mathematics, Coding, Examination, and Web Application checklists persisted in local browser storage.
+- **Canonical ID Architecture:** Structured ID scheme (`K-`, `M-`, `CL-`, `E-`, `F-`, `D-`, `RS-`) unifying all layers into a single stable graph.
+
+---
+
+## 💻 Coding Lab Layer (26 Modules Complete · 1,428 Sections · 892 Code Blocks)
 
 The Coding Lab answers: *"Help me build it from scratch, test its state transitions, and verify against standard production libraries."*
-Zero black boxes. Pure Python & NumPy implementations of classical search, heuristics, game trees, data pipelines, regression, regularizers, decision trees, evaluation suites, and artificial neurons with scikit-learn benchmarks and test assertions:
+Zero black boxes. Pure Python & NumPy implementations of classical search, heuristics, game trees, data pipelines, regression, regularizers, decision trees, k-NN, SVM, neural networks, backpropagation, CNNs, LSTMs, Q-Learning, policy gradients, NLP, autoencoders, GANs, debugging, and end-to-end capstone checklists:
 
-### Track 0: Lab Environment & System Foundations
+### Track 0: Lab Environment & System Foundations (2 Modules)
 - **[CODE-00: Coding Lab Foundation & Implementation System](coding/code-00-coding-foundation.html):** Zero-black-box philosophy, PEP-8 standards, state trajectory traces, reproducible seed discipline, and Delhi University lab guidelines.
 - **[CODE-01: Python, NumPy, Matplotlib & Lab Workflow](coding/code-01-python-numpy-workflow.html):** SIMD vectorization vs looping benchmarks (50x–100x speedup), array shapes, broadcasting rules, matrix slicing, and loss visualization.
 
-### Track 1: Classical AI & Search Algorithms (Unit I Complete)
+### Track 1: Classical AI & Search Algorithms (Unit I Complete · 4 Modules)
 - **[CODE-U1-01: BFS and DFS From Scratch](coding/code-u1-01-bfs-dfs.html):** FIFO Queue (`collections.deque`) vs LIFO Stack (`list.pop()`), state exploration, cycle prevention with `explored` sets, frontier tracking, and path reconstruction.
 - **[CODE-U1-02: Greedy Best-First & A* Search From Scratch](coding/code-u1-02-greedy-a-star.html):** Priority Queues via `heapq`, Manhattan ($L_1$) vs Euclidean ($L_2$) heuristics, path cost tracking $f(n) = g(n) + h(n)$, and admissibility tests.
 - **[CODE-U1-03: CSPs and Backtracking Search](coding/code-u1-03-csp-backtracking.html):** Constraint Satisfaction formulation, MRV (Minimum Remaining Values) and Degree heuristics, Forward Checking, and AC-3 Arc Consistency.
 - **[CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch](coding/code-u1-04-minimax-alpha-beta.html):** Adversarial game search, terminal evaluation, Minimax recursion, Alpha-Beta cutoffs ($\beta \le \alpha$), move ordering, and Tic-Tac-Toe AI engine.
 
-### Track 2: Supervised Machine Learning Algorithms (Unit II Complete Suite)
+### Track 2: Supervised Machine Learning Algorithms (Unit II Complete · 8 Modules)
 - **[CODE-U2-01: ML Workflow: Preprocessing, Splitting & Evaluation](coding/code-u2-01-ml-workflow.html):** Data cleaning, StandardScaler with zero leakage (fit on train ONLY), stratified splits, and baseline evaluation.
 - **[CODE-U2-02: Linear Regression From Scratch](coding/code-u2-02-linear-regression.html):** Batch Gradient Descent vs Normal Equations $(X^TX)^{-1}X^Ty$, loss surface trajectory, learning rate selection, and scikit-learn benchmark.
 - **[CODE-U2-03: Logistic Regression From Scratch](coding/code-u2-03-logistic-regression.html):** Vectorized Sigmoid $\sigma(z)$, Binary Cross-Entropy (Log-Loss), Gradient Descent updates, decision boundaries, and scikit-learn benchmark.
@@ -187,10 +199,25 @@ Zero black boxes. Pure Python & NumPy implementations of classical search, heuri
 - **[CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC & Thresholds](coding/code-u2-05-classification-metrics-roc.html):** From-scratch confusion matrix, Precision, Recall, F1, threshold sweeping ($\tau \in [0, 1]$), manual ROC curve construction, and trapezoidal numerical AUC integration.
 - **[CODE-U2-06: Ridge & Lasso From Scratch: Regularization & Optimization](coding/code-u2-06-ridge-lasso-regularization.html):** $L_2$ Ridge closed-form $(X^TX + \lambda I)^{-1}X^Ty$, $L_1$ Lasso Coordinate Descent with soft-thresholding operator $S(\rho, \lambda)$, collinearity control, and coefficient path tracing.
 - **[CODE-U2-07: ML Evaluation & Model Comparison Lab](coding/code-u2-07-ml-evaluation-comparison.html):** Controlled experiment protocol, identical frozen train/test partitions, Decision Tree vs Logistic vs k-NN/Ridge, imbalance resilience, and final model selection trade-off matrix.
+- **[CODE-U2-08: KNN & SVM Practical Comparison Lab](coding/code-u2-08-knn-svm-practical-comparison.html):** From-scratch k-NN Euclidean distance vectorization, scaling sensitivity ablation, Linear & RBF SVM via Scikit-Learn, support vector inspection, and controlled tri-model benchmark with Decision Trees.
 
-### Track 3: Deep Learning & Neural Networks (Unit III Live Kickoff)
+### Track 3: Deep Learning & Neural Networks (Unit III Complete · 5 Modules)
 - **[CODE-U3-01: Neuron and Perceptron From Scratch](coding/code-u3-01-neuron-perceptron.html):** Artificial neuron architecture, vectorized forward pass $z = \mathbf{w}^T\mathbf{x} + b$, Step vs Sigmoid activations, Perceptron Learning Rule, Hebbian weight updates, and mathematical proof of XOR non-separability.
-- *(Upcoming in Next Drop: Multi-Layer Perceptron (MLP) & Backpropagation, CNN Convolutions, and RNN/LSTM Sequence Rollouts).*
+- **[CODE-U3-02: Multi-Layer Perceptron (MLP) & Forward Propagation](coding/code-u3-02-mlp-forward-propagation.html):** Dense hidden layers, weight matrices $W^{[l]}$, bias vectors $b^{[l]}$, non-linear activations (ReLU, Sigmoid), batch matrix multiplication, and forward cache management.
+- **[CODE-U3-03: Gradient Descent & Backpropagation From Scratch](coding/code-u3-03-backpropagation-scratch.html):** Computational graph backward pass, output delta $\delta^{[L]} = \hat{y} - y$, hidden layer delta recurrence, parameter gradients $\frac{\partial \mathcal{L}}{\partial W}$, and numerical gradient checking ($\epsilon = 10^{-7}$).
+- **[CODE-U3-04: Convolutional Neural Networks (CNNs) & Computer Vision](coding/code-u3-04-cnn-image-classification.html):** 2D Cross-Correlation from scratch, Stride & Padding geometry, MaxPool2D downsampling, PyTorch `nn.Conv2d` training loop on image data, and feature map visualization.
+- **[CODE-U3-05: Recurrent Neural Networks (RNNs) & LSTMs](coding/code-u3-05-rnn-lstm-sequence-modelling.html):** Vanilla RNN time-step unrolling, hidden recurrence $h_t = \tanh(W_{hh}h_{t-1} + W_{xh}x_t)$, LSTM 3-gate constant error carousel (Forget, Input, Output gates), and sequence forecasting.
+
+### Track 4: Advanced AI, Reinforcement Learning & Generative Models (Unit IV Complete · 5 Modules)
+- **[CODE-U4-01: Markov Decision Processes & Q-Learning From Scratch](coding/code-u4-01-mdp-q-learning.html):** Tabular Q-Table, Bellman optimality update $Q(s,a) \leftarrow Q + \alpha[R + \gamma \max Q - Q]$, $\epsilon$-greedy exploration decay, and Gymnasium `FrozenLake-v1` gridworld navigation.
+- **[CODE-U4-02: Policy Gradients & REINFORCE Algorithm](coding/code-u4-02-policy-gradients-reinforce.html):** Stochastic policy network $\pi_\theta(a|s)$, trajectory Monte Carlo sampling, discounted returns $G_t$, return standardization, and Gymnasium `CartPole-v1` pole-balancing.
+- **[CODE-U4-03: NLP Preprocessing & Text Classification Pipeline](coding/code-u4-03-nlp-text-classification.html):** Text normalization, tokenization, stopword removal, vocabulary building, TF-IDF calculation from scratch, and Multinomial Naive Bayes classifier.
+- **[CODE-U4-04: Autoencoders & Latent Compression](coding/code-u4-04-autoencoders-pytorch.html):** Encoder bottleneck compression, decoder reconstruction loss, latent feature visualization, denoising autoencoder noise rejection, and PyTorch training.
+- **[CODE-U4-05: Generative Adversarial Networks (GANs)](coding/code-u4-05-gans-pytorch.html):** Two-player minimax game, Generator $G(z)$ vs Discriminator $D(x)$, synchronized alternating optimization loops, Binary Cross-Entropy loss duality, and PyTorch synthetic distribution synthesis.
+
+### Track 5: Engineering Mastery & Capstone (2 Modules)
+- **[CODE-23: Debugging, Testing, Visualization & Reproducibility](coding/code-23-debugging-testing-reproducibility.html):** Deterministic random seeds (`np.random.seed(42)`), shape assertions, NaN/Inf gradient traps, numerical gradient validation, data leakage prevention, and clean test harnesses.
+- **[CODE-24: AI/ML Coding Capstone & Master Checklist](coding/code-24-coding-capstone-checklist.html):** End-to-end pipeline integration, model selection leaderboard, cross-validation protocols, university viva defense questions, and the Master Engineering Checklist.
 
 ---
 

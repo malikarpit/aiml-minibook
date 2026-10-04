@@ -1,0 +1,2520 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="CODE-U3-05: RNN & LSTM: From Scratch to PyTorch Sequence Modelling — AI & Machine Learning Coding Lab. Recurrent Hidden State Transitions, Unrolling in Time, Vanishing Gradients, LSTM Gating Mechanics (Forget, Input, Output), and Sequence Forecasting">
+<title>CODE-U3-05: RNN & LSTM: From Scratch to PyTorch Sequence Modelling | Coding Lab 💻 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/coding.css">
+</head>
+<body class="coding-module track-c3">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">💻</div>
+      <div class="brand-text"><span class="main">Coding Lab</span><span class="sub">AI &amp; ML From Scratch</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">CODE-U3-05: RNN &amp; LSTM: From Scratch to PyTorch Sequence Modelling</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">💻</span>Coding Lab Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../math/index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 0: Environment & System</div>
+  <a href="code-00-coding-foundation.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-00: Coding Lab Foundation &amp; Implementation System</a>
+  <a href="code-01-python-numpy-workflow.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-01: Python, NumPy, Matplotlib &amp; Lab Workflow</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Classical AI & Search Labs</div>
+  <a href="code-u1-01-bfs-dfs.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-01: BFS and DFS From Scratch</a>
+  <a href="code-u1-02-greedy-a-star.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-02: Greedy Best-First &amp; A* Search From Scratch</a>
+  <a href="code-u1-03-csp-backtracking.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-03: CSPs and Backtracking Search</a>
+  <a href="code-u1-04-minimax-alpha-beta.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Supervised ML Labs</div>
+  <a href="code-u2-01-ml-workflow.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-01: ML Workflow: Preprocessing, Splitting &amp; Evaluation</a>
+  <a href="code-u2-02-linear-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-02: Linear Regression From Scratch</a>
+  <a href="code-u2-03-logistic-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-03: Logistic Regression From Scratch</a>
+  <a href="code-u2-04-decision-trees.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-04: Decision Trees From Scratch</a>
+  <a href="code-u2-05-classification-metrics-roc.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC &amp; Thresholds</a>
+  <a href="code-u2-06-ridge-lasso-regularization.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-06: Ridge &amp; Lasso From Scratch: Regularization &amp; Optimization</a>
+  <a href="code-u2-07-ml-evaluation-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-07: ML Evaluation &amp; Model Comparison Lab</a>
+  <a href="code-u2-08-knn-svm-practical-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-08: KNN and SVM Practical Comparison Lab</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Deep Learning Labs</div>
+  <a href="code-u3-01-neuron-perceptron.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-01: Neuron and Perceptron From Scratch</a>
+  <a href="code-u3-02-mlp-forward-propagation.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-02: MLP and Forward Propagation From Scratch</a>
+  <a href="code-u3-03-backpropagation-scratch.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-03: Gradient Descent &amp; Backpropagation From Scratch</a>
+  <a href="code-u3-04-cnn-image-classification.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-04: CNNs: From Scratch to PyTorch Image Classification</a>
+  <a href="code-u3-05-rnn-lstm-sequence-modelling.html" class="sidebar-link active"><span class="link-icon">🧠</span>CODE-U3-05: RNN &amp; LSTM: From Scratch to PyTorch Sequence Modelling</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Advanced AI & RL Labs</div>
+  <a href="code-u4-01-mdp-q-learning.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-01: MDPs and Q-Learning From Scratch</a>
+  <a href="code-u4-02-policy-gradients-reinforce.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-02: Policy Gradients &amp; REINFORCE Algorithm</a>
+  <a href="code-u4-03-nlp-text-classification.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-03: NLP Preprocessing &amp; Text Classification Pipeline</a>
+  <a href="code-u4-04-autoencoders-pytorch.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-04: Autoencoders: From Scratch &amp; PyTorch Representation Learning</a>
+  <a href="code-u4-05-gans-pytorch.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-05: Generative Adversarial Networks: Core Mechanics to PyTorch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 5: Engineering & Capstone</div>
+  <a href="code-23-debugging-testing-reproducibility.html" class="sidebar-link"><span class="link-icon">🏆</span>CODE-23: Debugging, Testing, Visualization &amp; Reproducibility</a>
+  <a href="code-24-coding-capstone-checklist.html" class="sidebar-link"><span class="link-icon">🏆</span>CODE-24: AI/ML Coding Capstone &amp; Master Practical Checklist</a>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">CODE-U3-05 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Course Position</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Why Sequential Data Is Different</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Core RNN Idea</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. RNN Computational Graph</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Important Terms</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Sequence Tensor Shape</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Hidden State Shape</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. From-Scratch Single RNN Cell</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Manual RNN Step</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Process a Whole Sequence</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Why Store Every Hidden State?</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Unrolling the RNN</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. The BPTT Idea</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Why Vanishing Gradients Can Occur</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Exploding Gradients</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Why LSTM Exists</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. LSTM Equations</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Gate Intuition</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. LSTM Cell From Scratch</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. LSTM Sequence Forward Pass</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. LSTM Parameter Dimensions</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. RNN vs LSTM</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. PyTorch Vanilla RNN</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Sequence Classification Model</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Why `h_n[-1]`?</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Sequence-to-Sequence vs Sequence Classification</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Tiny Synthetic Sequence Dataset</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Generic Sequence Dataset Construction</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Training the Sequence Classifier</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. RNN State Experiment</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Resetting State Matters</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Variable-Length Sequences</a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. BPTT Practical Intuition</a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Truncated BPTT Preview</a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Gradient Clipping Experiment</a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. RNN/LSTM Output Inspection</a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Common RNN Errors</a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Common LSTM Errors</a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. RNN vs CNN</a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. RNN vs MLP</a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. LSTM Parameter Count Exercise</a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. PyTorch Parameter Inspection</a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. Sequence Model Training Protocol</a>
+      <a href="#s-46" class="sidebar-link"><span class="link-icon">📌</span>46. Practical Lab</a>
+      <a href="#s-47" class="sidebar-link"><span class="link-icon">📌</span>47. Manual Scalar Gradient-Flow Exercise</a>
+      <a href="#s-48" class="sidebar-link"><span class="link-icon">📌</span>48. Why LSTM&#x27;s Cell State Is Important</a>
+      <a href="#s-49" class="sidebar-link"><span class="link-icon">📌</span>49. Text Modeling Connection</a>
+      <a href="#s-50" class="sidebar-link"><span class="link-icon">📌</span>50. PyTorch Sequence Text Architecture Preview</a>
+      <a href="#s-51" class="sidebar-link"><span class="link-icon">📌</span>51. Framework Documentation Check</a>
+      <a href="#s-52" class="sidebar-link"><span class="link-icon">📌</span>52. Viva Questions</a>
+      <a href="#s-53" class="sidebar-link"><span class="link-icon">📌</span>53. Exam Connection</a>
+      <a href="#s-54" class="sidebar-link"><span class="link-icon">📌</span>54. Math You Need Now</a>
+      <a href="#s-55" class="sidebar-link"><span class="link-icon">📌</span>55. Debugging Checklist</a>
+      <a href="#s-56" class="sidebar-link"><span class="link-icon">📌</span>56. RNN/LSTM Master Challenge</a>
+      <a href="#s-57" class="sidebar-link"><span class="link-icon">📌</span>57. Master Comparison Experiment</a>
+      <a href="#s-58" class="sidebar-link"><span class="link-icon">📌</span>58. CNN vs RNN/LSTM Architecture Map</a>
+      <a href="#s-59" class="sidebar-link"><span class="link-icon">📌</span>59. Connection to Unit IV</a>
+      <a href="#s-60" class="sidebar-link"><span class="link-icon">📌</span>60. Source Notes</a>
+      <a href="#s-61" class="sidebar-link"><span class="link-icon">📌</span>61. Mastery Gate</a>
+      <a href="#s-62" class="sidebar-link"><span class="link-icon">📌</span>62. One-Screen Formula Map</a>
+      <a href="#s-63" class="sidebar-link"><span class="link-icon">📌</span>63. Connection Forward</a>
+      <a href="#s-64" class="sidebar-link"><span class="link-icon">📌</span>64. Status</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Coding Lab</a>
+        <span>/</span>
+        <span>CODE-U3-05</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-c3">Track 3: Deep Learning & Neural Networks Labs</span></div>
+      <h1 class="chapter-title">RNN &amp; LSTM: From Scratch to PyTorch Sequence Modelling</h1>
+      <p class="chapter-desc">Recurrent Hidden State Transitions, Unrolling in Time, Vanishing Gradients, LSTM Gating Mechanics (Forget, Input, Output), and Sequence Forecasting</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~60 min lab</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">RNN</span> <span class="chapter-meta-item uni-badge">LSTM</span> <span class="chapter-meta-item uni-badge">GATING</span> <span class="chapter-meta-item uni-badge">BPTT</span> <span class="chapter-meta-item uni-badge">SEQUENCE-MODELLING</span> <span class="chapter-meta-item uni-badge">PYTORCH</span>
+      </div>
+
+      <div class="lab-meta-grid">
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Prerequisites</div>
+          <div class="lab-meta-value">CODE-U3-03 Backpropagation, CODE-01 NumPy Workflow</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Main Book Concept</div>
+          <div class="lab-meta-value">Ch 37 Recurrent Neural Networks, Ch 38 LSTM Architectures</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Math Companion Layer</div>
+          <div class="lab-meta-value">Recurrent state updates h_t = tanh(W_hh h + W_xh x + b), Gate sigmoid products</div>
+        </div>
+        <div class="lab-meta-box" style="grid-column: 1 / -1;">
+          <div class="lab-meta-label">AI / Machine Learning Connections</div>
+          <div class="lab-meta-value">Time-series stock forecasting, Natural language generation, Audio sequence processing, Vanishing gradient resolution</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-meta-card"><h1>CODE-U3-05 — RNN and LSTM</h1>
+<blockquote>
+<p><strong>Purpose:</strong> Extend neural networks from independent examples to ordered sequences by implementing a simple recurrent neural network (RNN), understanding hidden-state recurrence and backpropagation-through-time intuition, then building an LSTM sequence model in PyTorch.</p>
+</blockquote>
+<p>The architectural story is:</p>
+<div class="ascii-box"><pre>MLP
+ ↓
+input at one moment is enough
+
+RNN
+ ↓
+current input + previous hidden state
+
+LSTM
+ ↓
+gated memory for longer dependencies</pre></div>
+<p>The key idea is that a sequence model carries information forward through time.</p>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in CODE-U3-05 (62 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Course Position</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Why Sequential Data Is Different</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Core RNN Idea</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">RNN Computational Graph</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Important Terms</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Sequence Tensor Shape</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Hidden State Shape</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">From-Scratch Single RNN Cell</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Manual RNN Step</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Process a Whole Sequence</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Why Store Every Hidden State?</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Unrolling the RNN</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">The BPTT Idea</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Why Vanishing Gradients Can Occur</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Exploding Gradients</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Why LSTM Exists</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">LSTM Equations</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Gate Intuition</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">LSTM Cell From Scratch</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">LSTM Sequence Forward Pass</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">LSTM Parameter Dimensions</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">RNN vs LSTM</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">PyTorch Vanilla RNN</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Sequence Classification Model</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Why `h_n[-1]`?</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Sequence-to-Sequence vs Sequence Classification</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Tiny Synthetic Sequence Dataset</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Generic Sequence Dataset Construction</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Training the Sequence Classifier</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">RNN State Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Resetting State Matters</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Variable-Length Sequences</span></a></li>
+        <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">BPTT Practical Intuition</span></a></li>
+        <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Truncated BPTT Preview</span></a></li>
+        <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Gradient Clipping Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">RNN/LSTM Output Inspection</span></a></li>
+        <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Common RNN Errors</span></a></li>
+        <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Common LSTM Errors</span></a></li>
+        <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">RNN vs CNN</span></a></li>
+        <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">RNN vs MLP</span></a></li>
+        <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">LSTM Parameter Count Exercise</span></a></li>
+        <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">PyTorch Parameter Inspection</span></a></li>
+        <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">Sequence Model Training Protocol</span></a></li>
+        <li class="toc-item"><a href="#s-46"><span class="toc-num">46</span><span class="toc-name">Practical Lab</span></a></li>
+        <li class="toc-item"><a href="#s-47"><span class="toc-num">47</span><span class="toc-name">Manual Scalar Gradient-Flow Exercise</span></a></li>
+        <li class="toc-item"><a href="#s-48"><span class="toc-num">48</span><span class="toc-name">Why LSTM&#x27;s Cell State Is Important</span></a></li>
+        <li class="toc-item"><a href="#s-49"><span class="toc-num">49</span><span class="toc-name">Text Modeling Connection</span></a></li>
+        <li class="toc-item"><a href="#s-50"><span class="toc-num">50</span><span class="toc-name">PyTorch Sequence Text Architecture Preview</span></a></li>
+        <li class="toc-item"><a href="#s-51"><span class="toc-num">51</span><span class="toc-name">Framework Documentation Check</span></a></li>
+        <li class="toc-item"><a href="#s-52"><span class="toc-num">52</span><span class="toc-name">Viva Questions</span></a></li>
+        <li class="toc-item"><a href="#s-53"><span class="toc-num">53</span><span class="toc-name">Exam Connection</span></a></li>
+        <li class="toc-item"><a href="#s-54"><span class="toc-num">54</span><span class="toc-name">Math You Need Now</span></a></li>
+        <li class="toc-item"><a href="#s-55"><span class="toc-num">55</span><span class="toc-name">Debugging Checklist</span></a></li>
+        <li class="toc-item"><a href="#s-56"><span class="toc-num">56</span><span class="toc-name">RNN/LSTM Master Challenge</span></a></li>
+        <li class="toc-item"><a href="#s-57"><span class="toc-num">57</span><span class="toc-name">Master Comparison Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-58"><span class="toc-num">58</span><span class="toc-name">CNN vs RNN/LSTM Architecture Map</span></a></li>
+        <li class="toc-item"><a href="#s-59"><span class="toc-num">59</span><span class="toc-name">Connection to Unit IV</span></a></li>
+        <li class="toc-item"><a href="#s-60"><span class="toc-num">60</span><span class="toc-name">Source Notes</span></a></li>
+        <li class="toc-item"><a href="#s-61"><span class="toc-num">61</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-62"><span class="toc-num">62</span><span class="toc-name">One-Screen Formula Map</span></a></li>
+        <li class="toc-item"><a href="#s-63"><span class="toc-num">63</span><span class="toc-name">Connection Forward</span></a></li>
+        <li class="toc-item"><a href="#s-64"><span class="toc-num">64</span><span class="toc-name">Status</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">Course Position</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph LR
+    subgraph VanillaRNN ["Vanilla RNN Cell"]
+        R_prev["h_(t-1)"] & R_x["x_t"] --> R_comb["W_hh h + W_xh x"]
+        R_comb --> R_act["tanh"] --> R_curr["h_t (Exploding/Vanishing Gradients)"]
+    end
+    subgraph LSTMCell ["LSTM Cell with Memory Highway"]
+        C_prev["Cell State C_(t-1)"] --> F_gate["Forget Gate: f_t = σ(...)"]
+        F_gate --> C_mult["C_(t-1) ⊙ f_t"]
+        C_mult --> C_add["+ (i_t ⊙ c̃_t)"] --> C_curr["Cell State C_t (Unbroken Highway)"]
+        C_curr --> O_act["tanh(C_t) ⊙ o_t"] --> H_curr["Hidden State h_t"]
+    end
+    style VanillaRNN fill:#1e293b,stroke:#ef4444,color:#f8fafc
+    style LSTMCell fill:#065f46,stroke:#34d399,color:#ffffff,stroke-width:2px
+</pre></div>
+<p>The official DSC-14 Unit III syllabus includes:</p>
+<ul>
+<li>Recurrent Neural Networks (RNN);</li>
+<li>Long Short-Term Memory (LSTM);</li>
+<li>applications in sequential data and text processing.</li>
+</ul>
+<p>The supplied resource guide identifies RNN/LSTM as important Unit III gap-filling topics beyond the supplied core notes.</p>
+<p>The completed preceding coding chapters established:</p>
+<div class="ascii-box"><pre>neuron
+ ↓
+MLP
+ ↓
+forward propagation
+ ↓
+backpropagation
+ ↓
+gradient descent
+ ↓
+CNN for spatial structure</pre></div>
+<p>This chapter changes the architectural structure again:</p>
+<div class="ascii-box"><pre>sequence
+ ↓
+repeated transformation through time
+ ↓
+hidden state / memory</pre></div>
+<p><strong>Source boundary:</strong> the official syllabus establishes the required topic; the complete RNN/LSTM mathematics, NumPy implementation, BPTT discussion and PyTorch implementation below are coding-book expansion.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">Why Sequential Data Is Different</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Implementation Model</div>
+
+Standard neural network maanta hai ki har input independent hai. Lekin bhasha aur samay (time-series) mein agla lafz pichle lafzon par nirbhar karta hai.
+RNN ke paas ek memory state $h_t$ hoti hai jo har step par aage pass hoti hai.
+Lekin lambe sentence mein purana context gayab ho jata hai (vanishing gradient).
+LSTM (Long Short-Term Memory) ek express conveyor belt (Cell State $C_t$) banata hai jahan information bina kisi destructive non-linearity ke sedha aage badhti hai!
+
+</div>
+
+<p>Suppose the input is:</p>
+<div class="ascii-box"><pre>&quot;The movie was not good&quot;</pre></div>
+<p>A model should not interpret each word as completely independent.</p>
+<p>Order matters.</p>
+<p>Compare:</p>
+<div class="ascii-box"><pre>&quot;not good&quot;</pre></div>
+<p>with:</p>
+<div class="ascii-box"><pre>&quot;good, not ...&quot;</pre></div>
+<p>The surrounding sequence can change interpretation.</p>
+<p>The same principle appears in:</p>
+<ul>
+<li>time-series signals;</li>
+<li>stock-price sequences;</li>
+<li>sensor measurements;</li>
+<li>speech;</li>
+<li>text;</li>
+<li>event logs.</li>
+</ul>
+<p>A sequential model therefore needs some mechanism for carrying context.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">Core RNN Idea</h2>
+      </div>
+      <div class="section-body">
+        <p>At time \(t\), an RNN receives:</p>
+<ul>
+<li>current input \(x_t\);</li>
+<li>previous hidden state \(h_{t-1}\).</li>
+</ul>
+<p>It computes:</p>
+<div class="formula-math">\[
+\boxed{
+h_t=
+\phi(
+W_{xh}x_t+
+W_{hh}h_{t-1}+
+b_h
+)
+}
+\]</div>
+<p>Then an output can be computed:</p>
+<div class="formula-math">\[
+\boxed{
+y_t=W_{hy}h_t+b_y
+}
+\]</div>
+<p>or:</p>
+<div class="formula-math">\[
+y_t=\psi(W_{hy}h_t+b_y)
+\]</div>
+<p>depending on the task.</p>
+<p>The hidden state is therefore a learned recurrent summary.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">RNN Computational Graph</h2>
+      </div>
+      <div class="section-body">
+        <p>For a sequence:</p>
+<div class="ascii-box"><pre>x₁ → [RNN cell] → h₁
+                ↓
+x₂ → [RNN cell] → h₂
+                ↓
+x₃ → [RNN cell] → h₃
+                ↓
+...</pre></div>
+<p>A clearer view:</p>
+<div class="ascii-box"><pre>┌─────────────┐
+x₁ ────→│             │──→ h₁
+        │   RNN cell  │
+h₀ ────→│             │
+        └─────────────┘
+               │
+               ▼
+        ┌─────────────┐
+x₂ ────→│   same      │──→ h₂
+h₁ ────→│ parameters   │
+        └─────────────┘
+               │
+               ▼
+        ┌─────────────┐
+x₃ ────→│   same      │──→ h₃
+h₂ ────→│ parameters   │
+        └─────────────┘</pre></div>
+<p>The same recurrent parameters are reused at every time step.</p>
+<p>That is another form of parameter sharing.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Important Terms</h2>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sequence</td>
+<td>ordered collection of observations</td>
+</tr>
+<tr>
+<td>time step</td>
+<td>one position in the sequence</td>
+</tr>
+<tr>
+<td>hidden state</td>
+<td>recurrent internal representation</td>
+</tr>
+<tr>
+<td>recurrence</td>
+<td>dependence on the previous hidden state</td>
+</tr>
+<tr>
+<td>unrolling</td>
+<td>drawing the same recurrent cell across time</td>
+</tr>
+<tr>
+<td>parameter sharing</td>
+<td>same recurrent weights at each time step</td>
+</tr>
+<tr>
+<td>BPTT</td>
+<td>backpropagation through time</td>
+</tr>
+<tr>
+<td>long-term dependency</td>
+<td>relation between observations far apart in the sequence</td>
+</tr>
+<tr>
+<td>cell state</td>
+<td>explicit memory path in an LSTM</td>
+</tr>
+<tr>
+<td>gate</td>
+<td>learned control mechanism regulating information flow</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Sequence Tensor Shape</h2>
+      </div>
+      <div class="section-body">
+        <p>With batch-first convention:</p>
+<div class="ascii-box"><pre>(batch, sequence_length, input_features)</pre></div>
+<p>Example:</p>
+<div class="ascii-box"><pre>32 sequences
+10 time steps
+8 features per time step</pre></div>
+<p>Shape:</p>
+<div class="ascii-box"><pre>(32, 10, 8)</pre></div>
+<p>This convention is convenient in PyTorch when:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">batch_first=True</code></pre></div>
+<p>Do not confuse it with libraries/settings using:</p>
+<div class="ascii-box"><pre>(sequence_length, batch, features)</pre></div>
+<p>Always inspect the API.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Hidden State Shape</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="ascii-box"><pre>batch = 32
+hidden_size = 16</pre></div>
+<p>For a single RNN layer and one direction, the final hidden-state batch is conceptually:</p>
+<div class="ascii-box"><pre>32 × 16</pre></div>
+<p>For a PyTorch <code>nn.RNN</code>, the full hidden-state tensor also includes dimensions for layers and directions.</p>
+<p>The exact tensor shapes depend on:</p>
+<div class="ascii-box"><pre>num_layers
+bidirectional
+batch_first</pre></div>
+<p>Therefore use the framework documentation when debugging shape details.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">From-Scratch Single RNN Cell</h2>
+      </div>
+      <div class="section-body">
+        <p>Start with one step.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np</code></pre></div>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def tanh(x):
+    return np.tanh(x)</code></pre></div>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def rnn_cell(
+    x_t,
+    h_prev,
+    W_xh,
+    W_hh,
+    b_h,
+):
+    return np.tanh(
+        x_t @ W_xh
+        + h_prev @ W_hh
+        + b_h
+    )</code></pre></div>
+<p>This uses row-vector convention.</p>
+<p>Dimensions:</p>
+<div class="ascii-box"><pre>x_t    → (input_dim,)
+h_prev → (hidden_dim,)
+W_xh   → (input_dim, hidden_dim)
+W_hh   → (hidden_dim, hidden_dim)
+b_h    → (hidden_dim,)</pre></div>
+<p>Output:</p>
+<div class="ascii-box"><pre>h_t → (hidden_dim,)</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Manual RNN Step</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+x_t=
+\begin{bmatrix}
+1\\
+2
+\end{bmatrix}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+h_{t-1}=
+\begin{bmatrix}
+0.5\\
+-0.5
+\end{bmatrix}.
+\]</div>
+<p>The cell first computes:</p>
+<div class="formula-math">\[
+z_t=x_tW_{xh}+h_{t-1}W_{hh}+b_h.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+h_t=\tanh(z_t).
+\]</div>
+<p>The important difference from an MLP is:</p>
+<div class="ascii-box"><pre>current input
++
+previous hidden state</pre></div>
+<p>not just:</p>
+<div class="ascii-box"><pre>current input</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Process a Whole Sequence</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def rnn_forward(
+    X,
+    W_xh,
+    W_hh,
+    b_h,
+    h0=None,
+):
+    X = np.asarray(X, dtype=float)
+
+    if X.ndim != 2:
+        raise ValueError(
+            &quot;X must have shape (sequence_length, input_dim).&quot;
+        )
+
+    seq_len, input_dim = X.shape
+    hidden_dim = W_hh.shape[0]
+
+    if W_xh.shape != (
+        input_dim,
+        hidden_dim,
+    ):
+        raise ValueError(&quot;W_xh has incorrect shape.&quot;)
+
+    if W_hh.shape != (
+        hidden_dim,
+        hidden_dim,
+    ):
+        raise ValueError(&quot;W_hh has incorrect shape.&quot;)
+
+    if b_h.shape != (hidden_dim,):
+        raise ValueError(&quot;b_h has incorrect shape.&quot;)
+
+    if h0 is None:
+        h = np.zeros(hidden_dim)
+    else:
+        h = np.asarray(h0, dtype=float).copy()
+
+    hidden_states = []
+
+    for t in range(seq_len):
+        h = rnn_cell(
+            X[t],
+            h,
+            W_xh,
+            W_hh,
+            b_h,
+        )
+
+        hidden_states.append(h.copy())
+
+    return np.stack(hidden_states)</code></pre></div>
+<p>Output shape:</p>
+<div class="ascii-box"><pre>(sequence_length, hidden_dim)</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Why Store Every Hidden State?</h2>
+      </div>
+      <div class="section-body">
+        <p>At inference time, sometimes only the final state is needed.</p>
+<p>During training, however, BPTT needs the intermediate states.</p>
+<p>For:</p>
+<div class="ascii-box"><pre>x₁ → h₁
+x₂ → h₂
+x₃ → h₃</pre></div>
+<p>the gradient through time depends on:</p>
+<div class="ascii-box"><pre>h₁
+h₂
+h₃</pre></div>
+<p>So a practical implementation caches the sequence of hidden states and other intermediates.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Unrolling the RNN</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose sequence length is 4.</p>
+<p>The recurrent computation becomes:</p>
+<div class="ascii-box"><pre>shared W
+x₁ → h₁ ─────────────→
+          shared W
+x₂ → h₂ ─────────────→
+          shared W
+x₃ → h₃ ─────────────→
+          shared W
+x₄ → h₄</pre></div>
+<p>When drawn this way, the graph looks deep.</p>
+<p>That is why training can be interpreted as applying ordinary backpropagation to the <strong>unrolled</strong> network.</p>
+<p>This is BPTT:</p>
+<blockquote>
+<p><strong>Backpropagation Through Time.</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">The BPTT Idea</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose the total loss is:</p>
+<div class="formula-math">\[
+L=L_1+L_2+\cdots+L_T.
+\]</div>
+<p>The final hidden state can depend on all previous states.</p>
+<p>Therefore:</p>
+<div class="formula-math">\[
+\frac{\partial L}{\partial h_t}
+\]</div>
+<p>can contain contributions from later time steps.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>loss at t=4
+   ↓
+h₄
+↑
+h₃
+↑
+h₂
+↑
+h₁</pre></div>
+<p>and:</p>
+<div class="ascii-box"><pre>loss at t=3
+   ↓
+h₃
+↑
+h₂
+↑
+h₁</pre></div>
+<p>The gradient can therefore travel backward through many recurrent transitions.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Why Vanishing Gradients Can Occur</h2>
+      </div>
+      <div class="section-body">
+        <p>Repeated chain-rule multiplication can produce very small gradient factors.</p>
+<p>A simplified intuition:</p>
+<div class="ascii-box"><pre>gradient
+ × local derivative
+ × recurrent weight effect
+ × local derivative
+ × ...</pre></div>
+<p>If the magnitudes repeatedly contract:</p>
+<div class="formula-math">\[
+|factor|\lt 1
+\]</div>
+<p>then long products can become very small.</p>
+<p>This is the <strong>vanishing-gradient problem</strong>.</p>
+<p>It can make learning long-range dependencies difficult for simple RNNs.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">Exploding Gradients</h2>
+      </div>
+      <div class="section-body">
+        <p>The opposite can happen.</p>
+<p>If repeated multiplications effectively amplify the gradient:</p>
+<div class="formula-math">\[
+|factor|\gt 1
+\]</div>
+<p>then the gradient can grow rapidly.</p>
+<p>This is the <strong>exploding-gradient problem</strong>.</p>
+<p>A practical mitigation sometimes used is gradient clipping.</p>
+<p>Example in PyTorch:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">torch.nn.utils.clip_grad_norm_(
+    model.parameters(),
+    max_norm=1.0,
+)</code></pre></div>
+<p>Clipping does not solve every optimization problem. It is a mechanism for limiting extreme gradient magnitudes.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">Why LSTM Exists</h2>
+      </div>
+      <div class="section-body">
+        <p>LSTM introduces an explicit cell state and gates designed to regulate information flow.</p>
+<p>The high-level goal is:</p>
+<div class="ascii-box"><pre>what should be forgotten?
+what should be written?
+what should be exposed?</pre></div>
+<p>The cell has:</p>
+<ul>
+<li>forget gate;</li>
+<li>input gate;</li>
+<li>candidate state;</li>
+<li>output gate;</li>
+<li>cell state;</li>
+<li>hidden state.</li>
+</ul>
+<p>This provides a richer mechanism for preserving and modifying information across time.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">LSTM Equations</h2>
+      </div>
+      <div class="section-body">
+        <p>A common notation is:</p>
+<div class="formula-math">\[
+f_t=
+\sigma(
+W_f x_t+
+U_f h_{t-1}+
+b_f
+)
+\]</div>
+<p>Forget gate.</p>
+<div class="formula-math">\[
+i_t=
+\sigma(
+W_i x_t+
+U_i h_{t-1}+
+b_i
+)
+\]</div>
+<p>Input gate.</p>
+<p>Candidate:</p>
+<div class="formula-math">\[
+\tilde c_t=
+\tanh(
+W_c x_t+
+U_c h_{t-1}+
+b_c
+)
+\]</div>
+<p>Cell update:</p>
+<div class="formula-math">\[
+\boxed{
+c_t=
+f_t\odot c_{t-1}
++
+i_t\odot\tilde c_t
+}
+\]</div>
+<p>Output gate:</p>
+<div class="formula-math">\[
+o_t=
+\sigma(
+W_o x_t+
+U_o h_{t-1}+
+b_o
+)
+\]</div>
+<p>Hidden state:</p>
+<div class="formula-math">\[
+\boxed{
+h_t=
+o_t\odot\tanh(c_t)
+}
+\]</div>
+<p>where:</p>
+<div class="formula-math">\[
+\odot
+\]</div>
+<p>means element-wise multiplication.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Gate Intuition</h2>
+      </div>
+      <div class="section-body">
+        <p>Use this mental model:</p>
+<div class="ascii-box"><pre>FORGET GATE
+&quot;What old memory should remain?&quot;
+
+        ↓
+
+INPUT GATE
+&quot;What new information should be written?&quot;
+
+        ↓
+
+CELL STATE
+&quot;Longer-lived memory pathway&quot;
+
+        ↓
+
+OUTPUT GATE
+&quot;What should be exposed as the hidden state?&quot;</pre></div>
+<h3>Hinglish</h3>
+<blockquote>
+<p>LSTM basically har time-step par decide karta hai: purani memory mein se kya rakhna hai, nayi information mein se kya add karna hai, aur current hidden output mein kya dikhana hai.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">LSTM Cell From Scratch</h2>
+      </div>
+      <div class="section-body">
+        <p>Implement one cell.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def sigmoid(x):
+    return 1.0 / (
+        1.0 + np.exp(-x)
+    )</code></pre></div>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def lstm_cell(
+    x_t,
+    h_prev,
+    c_prev,
+    W_f,
+    U_f,
+    b_f,
+    W_i,
+    U_i,
+    b_i,
+    W_c,
+    U_c,
+    b_c,
+    W_o,
+    U_o,
+    b_o,
+):
+    f = sigmoid(
+        x_t @ W_f
+        + h_prev @ U_f
+        + b_f
+    )
+
+    i = sigmoid(
+        x_t @ W_i
+        + h_prev @ U_i
+        + b_i
+    )
+
+    c_candidate = np.tanh(
+        x_t @ W_c
+        + h_prev @ U_c
+        + b_c
+    )
+
+    c = (
+        f * c_prev
+        + i * c_candidate
+    )
+
+    o = sigmoid(
+        x_t @ W_o
+        + h_prev @ U_o
+        + b_o
+    )
+
+    h = o * np.tanh(c)
+
+    return (
+        h,
+        c,
+        {
+            &quot;f&quot;: f,
+            &quot;i&quot;: i,
+            &quot;c_candidate&quot;: c_candidate,
+            &quot;c&quot;: c,
+            &quot;o&quot;: o,
+        },
+    )</code></pre></div>
+<p>This is intentionally explicit.</p>
+<p>The point is to see every gate.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">LSTM Sequence Forward Pass</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def lstm_forward(
+    X,
+    parameters,
+    h0=None,
+    c0=None,
+):
+    X = np.asarray(X, dtype=float)
+
+    seq_len, input_dim = X.shape
+    hidden_dim = parameters[&quot;U_f&quot;].shape[0]
+
+    if h0 is None:
+        h = np.zeros(hidden_dim)
+    else:
+        h = np.asarray(h0, dtype=float).copy()
+
+    if c0 is None:
+        c = np.zeros(hidden_dim)
+    else:
+        c = np.asarray(c0, dtype=float).copy()
+
+    hidden_states = []
+    cell_states = []
+    caches = []
+
+    for t in range(seq_len):
+        (
+            h,
+            c,
+            cache,
+        ) = lstm_cell(
+            X[t],
+            h,
+            c,
+            parameters[&quot;W_f&quot;],
+            parameters[&quot;U_f&quot;],
+            parameters[&quot;b_f&quot;],
+            parameters[&quot;W_i&quot;],
+            parameters[&quot;U_i&quot;],
+            parameters[&quot;b_i&quot;],
+            parameters[&quot;W_c&quot;],
+            parameters[&quot;U_c&quot;],
+            parameters[&quot;b_c&quot;],
+            parameters[&quot;W_o&quot;],
+            parameters[&quot;U_o&quot;],
+            parameters[&quot;b_o&quot;],
+        )
+
+        hidden_states.append(h.copy())
+        cell_states.append(c.copy())
+        caches.append(cache)
+
+    return (
+        np.stack(hidden_states),
+        np.stack(cell_states),
+        caches,
+    )</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">LSTM Parameter Dimensions</h2>
+      </div>
+      <div class="section-body">
+        <p>Let:</p>
+<div class="ascii-box"><pre>input dimension  = d
+hidden dimension = h</pre></div>
+<p>For each of the four transformations:</p>
+<div class="ascii-box"><pre>input → hidden</pre></div>
+<p>the matrix is roughly:</p>
+<div class="formula-math">\[
+d\times h.
+\]</div>
+<p>For each recurrent transformation:</p>
+<div class="formula-math">\[
+h\times h.
+\]</div>
+<p>There are four gate/candidate groups.</p>
+<p>So the recurrent weights scale approximately with:</p>
+<div class="formula-math">\[
+4(dh+h^2)
+\]</div>
+<p>plus biases.</p>
+<p>This is why LSTM has substantially more parameters than a basic RNN of the same hidden size.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">RNN vs LSTM</h2>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Property</th>
+<th>Vanilla RNN</th>
+<th>LSTM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>recurrent hidden state</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>explicit cell state</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>gates</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>architecture complexity</td>
+<td>Lower</td>
+<td>Higher</td>
+</tr>
+<tr>
+<td>parameter count</td>
+<td>Lower</td>
+<td>Higher</td>
+</tr>
+<tr>
+<td>long-dependency handling</td>
+<td>Can be difficult</td>
+<td>Designed to improve memory handling</td>
+</tr>
+<tr>
+<td>implementation</td>
+<td>simpler</td>
+<td>more involved</td>
+</tr>
+</tbody>
+</table></div>
+<p>Do not memorize:</p>
+<blockquote>
+<p>“RNN bad, LSTM good.”</p>
+</blockquote>
+<p>The correct lesson is:</p>
+<blockquote>
+<p>LSTM adds a more sophisticated memory mechanism, at the cost of additional parameters and computation.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">PyTorch Vanilla RNN</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import torch
+import torch.nn as nn</code></pre></div>
+<p>Example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">rnn = nn.RNN(
+    input_size=8,
+    hidden_size=16,
+    num_layers=1,
+    batch_first=True,
+)</code></pre></div>
+<p>For:</p>
+<div class="ascii-box"><pre>batch = 32
+sequence length = 10
+features = 8</pre></div>
+<p>input:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">x = torch.randn(
+    32,
+    10,
+    8,
+)</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">output, h_n = rnn(x)</code></pre></div>
+<p>The current PyTorch API supports <code>batch_first=True</code>, making the input convention:</p>
+<div class="ascii-box"><pre>(batch, sequence, feature)</pre></div>
+<p>while hidden-state tensors retain their own layer/direction ordering. turn710408search0cite</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">Sequence Classification Model</h2>
+      </div>
+      <div class="section-body">
+        <p>A common classification architecture is:</p>
+<div class="ascii-box"><pre>sequence
+ ↓
+embedding / feature representation
+ ↓
+LSTM
+ ↓
+final hidden representation
+ ↓
+linear classifier
+ ↓
+class logits</pre></div>
+<p>Example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">class SequenceClassifier(nn.Module):
+    def __init__(
+        self,
+        input_size,
+        hidden_size,
+        num_classes,
+    ):
+        super().__init__()
+
+        self.lstm = nn.LSTM(
+            input_size=input_size,
+            hidden_size=hidden_size,
+            batch_first=True,
+        )
+
+        self.classifier = nn.Linear(
+            hidden_size,
+            num_classes,
+        )
+
+    def forward(self, x):
+        output, (h_n, c_n) = self.lstm(x)
+
+        final_hidden = h_n[-1]
+
+        logits = self.classifier(
+            final_hidden
+        )
+
+        return logits</code></pre></div>
+<p>This is useful when one label is associated with an entire sequence.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">Why `h_n[-1]`?</h2>
+      </div>
+      <div class="section-body">
+        <p>For a simple one-directional model:</p>
+<div class="ascii-box"><pre>h_n
+→ final hidden state for each recurrent layer</pre></div>
+<p>Taking:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">h_n[-1]</code></pre></div>
+<p>selects the final layer's hidden state.</p>
+<p>For more complicated configurations:</p>
+<div class="ascii-box"><pre>multiple layers
+bidirectional RNN/LSTM</pre></div>
+<p>shape handling becomes more involved.</p>
+<p>Always inspect dimensions.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">Sequence-to-Sequence vs Sequence Classification</h2>
+      </div>
+      <div class="section-body">
+        <p>Do not assume every sequence problem uses only the final hidden state.</p>
+<h3>Sequence classification</h3>
+<div class="ascii-box"><pre>many inputs
+ ↓
+one label</pre></div>
+<p>Example:</p>
+<div class="ascii-box"><pre>sentence → sentiment</pre></div>
+<h3>Sequence labeling</h3>
+<div class="ascii-box"><pre>many inputs
+ ↓
+one output per time step</pre></div>
+<p>Example:</p>
+<div class="ascii-box"><pre>tokens → part-of-speech tags</pre></div>
+<h3>Sequence generation</h3>
+<div class="ascii-box"><pre>previous context
+ ↓
+next-token prediction
+ ↓
+repeat</pre></div>
+<p>Architecture and output handling depend on the problem.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">Tiny Synthetic Sequence Dataset</h2>
+      </div>
+      <div class="section-body">
+        <p>For coding practice, make the problem simple.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>Input sequence:
+0 0 1 0 0
+
+Label:
+1</pre></div>
+<p>where the task is:</p>
+<blockquote>
+<p>Determine whether the sequence contains a <code>1</code>.</p>
+</blockquote>
+<p>Create many examples with variable positions.</p>
+<p>This is deliberately easy.</p>
+<p>The goal is:</p>
+<div class="ascii-box"><pre>tensor shapes
+forward pass
+loss
+gradient flow
+training loop</pre></div>
+<p>not a difficult benchmark.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">Generic Sequence Dataset Construction</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def make_binary_sequence_dataset(
+    n_samples=1000,
+    seq_len=10,
+    seed=42,
+):
+    rng = np.random.default_rng(seed)
+
+    X = rng.integers(
+        0,
+        2,
+        size=(n_samples, seq_len, 1),
+    ).astype(np.float32)
+
+    y = (
+        X.sum(axis=1).squeeze(-1) &gt; 0
+    ).astype(np.int64)
+
+    return X, y</code></pre></div>
+<p>Convert:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X_np, y_np = make_binary_sequence_dataset()
+
+X_tensor = torch.tensor(X_np)
+y_tensor = torch.tensor(y_np)</code></pre></div>
+<p>This task is intentionally simplistic.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">Training the Sequence Classifier</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">model = SequenceClassifier(
+    input_size=1,
+    hidden_size=16,
+    num_classes=2,
+)
+
+loss_fn = nn.CrossEntropyLoss()
+
+optimizer = torch.optim.Adam(
+    model.parameters(),
+    lr=1e-3,
+)</code></pre></div>
+<p>Training:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">for epoch in range(10):
+    optimizer.zero_grad()
+
+    logits = model(X_tensor)
+
+    loss = loss_fn(
+        logits,
+        y_tensor,
+    )
+
+    loss.backward()
+    optimizer.step()
+
+    predictions = logits.argmax(
+        dim=1
+    )
+
+    accuracy = (
+        predictions == y_tensor
+    ).float().mean()
+
+    print(
+        epoch,
+        loss.item(),
+        accuracy.item(),
+    )</code></pre></div>
+<p>For a real experiment, use train/validation/test partitions rather than evaluating on the same data used for fitting.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">RNN State Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Create a simple sequence where the last input is identical but the earlier context differs.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>Sequence A:
+[1, 0, 0]
+
+Sequence B:
+[0, 0, 1]</pre></div>
+<p>Compare the hidden states at the final time step.</p>
+<p>The point is:</p>
+<blockquote>
+<p>The final hidden representation depends on the sequence history, not only the latest input.</p>
+</blockquote>
+<p>This distinguishes recurrent processing from an ordinary independent-input classifier.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Resetting State Matters</h2>
+      </div>
+      <div class="section-body">
+        <p>When training independent sequences, do not accidentally carry hidden state from one unrelated sequence into another unless that is intentional.</p>
+<p>Typical batch processing handles this by starting with fresh initial states or by explicitly passing state between related chunks.</p>
+<p>The principle is:</p>
+<div class="ascii-box"><pre>independent sample
+→ appropriate state reset
+
+continuous stream
+→ state may be carried forward intentionally</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Variable-Length Sequences</h2>
+      </div>
+      <div class="section-body">
+        <p>Real sequences often have different lengths.</p>
+<p>Possible strategies include:</p>
+<div class="ascii-box"><pre>padding
+masking
+packed sequences
+bucketing</pre></div>
+<p>For a first implementation, use fixed-length synthetic sequences.</p>
+<p>Later, use PyTorch's sequence utilities when variable length becomes important.</p>
+<p>Do not bury the core recurrence under data-loading complexity too early.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-35" class="section-block">
+      <div class="section-header">
+        <span class="section-num">35</span>
+        <h2 class="section-heading">BPTT Practical Intuition</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="ascii-box"><pre>x₁ → h₁ → h₂ → h₃ → loss</pre></div>
+<p>and you want the effect of parameters used at \(t=1\).</p>
+<p>Their influence travels:</p>
+<div class="ascii-box"><pre>parameter at t=1
+   ↓
+h₁
+   ↓
+h₂
+   ↓
+h₃
+   ↓
+loss</pre></div>
+<p>So the gradient must account for that entire dependency path.</p>
+<p>This is why long sequences can create difficult gradient-flow behaviour.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-36" class="section-block">
+      <div class="section-header">
+        <span class="section-num">36</span>
+        <h2 class="section-heading">Truncated BPTT Preview</h2>
+      </div>
+      <div class="section-body">
+        <p>For very long streams, training can sometimes backpropagate through only a window of time.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>long sequence
+────────────────────────────
+
+window 1
+[───────]
+
+window 2
+        [───────]
+
+window 3
+                [───────]</pre></div>
+<p>This reduces computational/memory cost but changes the gradient horizon.</p>
+<p>For the syllabus foundation, understand the idea without treating it as a required implementation technique.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-37" class="section-block">
+      <div class="section-header">
+        <span class="section-num">37</span>
+        <h2 class="section-heading">Gradient Clipping Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>A practical PyTorch pattern:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">loss.backward()
+
+torch.nn.utils.clip_grad_norm_(
+    model.parameters(),
+    max_norm=1.0,
+)
+
+optimizer.step()</code></pre></div>
+<p>Use clipping only when justified by the training behaviour or task.</p>
+<p>Do not assume every RNN requires clipping.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-38" class="section-block">
+      <div class="section-header">
+        <span class="section-num">38</span>
+        <h2 class="section-heading">RNN/LSTM Output Inspection</h2>
+      </div>
+      <div class="section-body">
+        <p>During debugging:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(&quot;input:&quot;, x.shape)
+print(&quot;output:&quot;, output.shape)
+print(&quot;hidden:&quot;, h_n.shape)</code></pre></div>
+<p>For LSTM:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(&quot;cell:&quot;, c_n.shape)</code></pre></div>
+<p>This catches:</p>
+<ul>
+<li>wrong feature dimension;</li>
+<li>wrong sequence dimension;</li>
+<li>unexpected layer count;</li>
+<li>bidirectional shape changes.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-39" class="section-block">
+      <div class="section-header">
+        <span class="section-num">39</span>
+        <h2 class="section-heading">Common RNN Errors</h2>
+      </div>
+      <div class="section-body">
+        <h2>Error 1 — Mixing <code>(batch, sequence, feature)</code> with <code>(sequence, batch, feature)</code></h2>
+<p>Pick a convention.</p>
+<p>With PyTorch:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">batch_first=True</code></pre></div>
+<p>is convenient for:</p>
+<div class="ascii-box"><pre>batch, sequence, feature</pre></div>
+<h2>Error 2 — Forgetting that the same weights are reused through time</h2>
+<p>The recurrent cell is not a different independent layer at each time step.</p>
+<h2>Error 3 — Treating hidden state as permanent automatically</h2>
+<p>State persistence must be intentional.</p>
+<h2>Error 4 — Using final hidden state for every sequence task</h2>
+<p>Some tasks need all time-step outputs.</p>
+<h2>Error 5 — Ignoring gradient behaviour</h2>
+<p>Long recurrent computations can make gradient flow difficult.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-40" class="section-block">
+      <div class="section-header">
+        <span class="section-num">40</span>
+        <h2 class="section-heading">Common LSTM Errors</h2>
+      </div>
+      <div class="section-body">
+        <h2>Error 1 — Confusing hidden state and cell state</h2>
+<p>LSTM carries both.</p>
+<h2>Error 2 — Writing gate equations with mismatched dimensions</h2>
+<p>All gate outputs need the hidden-state dimension.</p>
+<h2>Error 3 — Forgetting element-wise multiplication</h2>
+<p>The equations use:</p>
+<div class="formula-math">\[
+\odot
+\]</div>
+<p>not matrix multiplication.</p>
+<h2>Error 4 — Assuming the gates are hand-designed</h2>
+<p>The gate weights are learned parameters.</p>
+<h2>Error 5 — Saying LSTM “stores everything”</h2>
+<p>It learns gates that regulate information; it does not guarantee perfect memory.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-41" class="section-block">
+      <div class="section-header">
+        <span class="section-num">41</span>
+        <h2 class="section-heading">RNN vs CNN</h2>
+      </div>
+      <div class="section-body">
+        <p>This is an important architectural comparison.</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Data structure</th>
+<th>Typical architecture idea</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>image / spatial grid</td>
+<td>CNN</td>
+</tr>
+<tr>
+<td>ordered sequence</td>
+<td>RNN/LSTM</td>
+</tr>
+<tr>
+<td>independent tabular vector</td>
+<td>MLP / classical ML</td>
+</tr>
+<tr>
+<td>sequence of images</td>
+<td>CNN + sequence model or other temporal architecture</td>
+</tr>
+</tbody>
+</table></div>
+<p>The deeper principle is:</p>
+<blockquote>
+<p><strong>Architecture should match important structure in the data.</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-42" class="section-block">
+      <div class="section-header">
+        <span class="section-num">42</span>
+        <h2 class="section-heading">RNN vs MLP</h2>
+      </div>
+      <div class="section-body">
+        <p>An MLP sees each input example as a fixed vector.</p>
+<p>An RNN adds:</p>
+<div class="formula-math">\[
+h_{t-1}
+\]</div>
+<p>to the current computation.</p>
+<p>So:</p>
+<div class="ascii-box"><pre>MLP:
+x → prediction
+
+RNN:
+x₁
+ ↓
+h₁
+ ↓
+x₂ + h₁ → h₂
+ ↓
+x₃ + h₂ → h₃</pre></div>
+<p>The sequence history becomes part of the representation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-43" class="section-block">
+      <div class="section-header">
+        <span class="section-num">43</span>
+        <h2 class="section-heading">LSTM Parameter Count Exercise</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="ascii-box"><pre>input_dim = 8
+hidden_dim = 16</pre></div>
+<p>A standard LSTM has four gate/candidate groups.</p>
+<p>Ignoring implementation-specific packing details, conceptually each group has:</p>
+<div class="formula-math">\[
+8\times16
+\]</div>
+<p>input weights,</p>
+<div class="formula-math">\[
+16\times16
+\]</div>
+<p>recurrent weights,</p>
+<p>and a hidden-sized bias.</p>
+<p>So the total scales roughly as:</p>
+<div class="formula-math">\[
+4(8\times16+16\times16+16)
+\]</div>
+<div class="formula-math">\[
+=4(128+256+16)
+\]</div>
+<div class="formula-math">\[
+=4(400)
+\]</div>
+<div class="formula-math">\[
+=1600.
+\]</div>
+<p>The exact framework parameter layout may store multiple bias vectors or pack matrices together, so use the actual model inspection to verify implementation details.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-44" class="section-block">
+      <div class="section-header">
+        <span class="section-num">44</span>
+        <h2 class="section-heading">PyTorch Parameter Inspection</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">for name, parameter in lstm.named_parameters():
+    print(
+        name,
+        parameter.shape,
+    )</code></pre></div>
+<p>This is a powerful habit.</p>
+<p>Do not guess what a framework stores.</p>
+<p>Inspect it.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-45" class="section-block">
+      <div class="section-header">
+        <span class="section-num">45</span>
+        <h2 class="section-heading">Sequence Model Training Protocol</h2>
+      </div>
+      <div class="section-body">
+        <p>Use the same engineering structure learned earlier:</p>
+<div class="ascii-box"><pre>1. Define sequence task
+2. Define input representation
+3. Create train/validation/test split
+4. Define sequence model
+5. Define loss
+6. Define optimizer
+7. Train
+8. Monitor loss
+9. Evaluate held-out data
+10. Inspect errors
+11. Record configuration</pre></div>
+<p>The architecture changed.</p>
+<p>The ML engineering workflow did not.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-46" class="section-block">
+      <div class="section-header">
+        <span class="section-num">46</span>
+        <h2 class="section-heading">Practical Lab</h2>
+      </div>
+      <div class="section-body">
+        <h2>Task A — Single RNN step</h2>
+<p>Given:</p>
+<div class="formula-math">\[
+x_t,\;h_{t-1},\;W_{xh},\;W_{hh},\;b
+\]</div>
+<p>calculate \(h_t\) manually.</p>
+<h2>Task B — NumPy sequence</h2>
+<p>Implement <code>rnn_forward()</code>.</p>
+<p>Print every hidden state.</p>
+<h2>Task C — BPTT diagram</h2>
+<p>Draw an RNN unrolled for 4 time steps.</p>
+<p>Label:</p>
+<div class="ascii-box"><pre>x₁ x₂ x₃ x₄
+h₀ h₁ h₂ h₃ h₄
+shared weights
+loss</pre></div>
+<h2>Task D — Vanishing gradient intuition</h2>
+<p>Use a repeated scalar recurrence and inspect how products shrink when the recurrent factor magnitude is below 1.</p>
+<h2>Task E — LSTM gates</h2>
+<p>Implement one LSTM cell.</p>
+<p>Print:</p>
+<div class="ascii-box"><pre>forget gate
+input gate
+candidate
+cell state
+output gate
+hidden state</pre></div>
+<h2>Task F — PyTorch RNN</h2>
+<p>Verify input/output/hidden shapes.</p>
+<h2>Task G — PyTorch LSTM</h2>
+<p>Verify:</p>
+<div class="ascii-box"><pre>output
+h_n
+c_n</pre></div>
+<h2>Task H — Sequence classifier</h2>
+<p>Train a synthetic binary sequence classifier.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-47" class="section-block">
+      <div class="section-header">
+        <span class="section-num">47</span>
+        <h2 class="section-heading">Manual Scalar Gradient-Flow Exercise</h2>
+      </div>
+      <div class="section-body">
+        <p>Consider:</p>
+<div class="formula-math">\[
+h_t=a h_{t-1}
+\]</div>
+<p>for a scalar \(a\).</p>
+<p>Repeatedly:</p>
+<div class="formula-math">\[
+h_t=a^t h_0.
+\]</div>
+<p>The sensitivity of \(h_t\) to \(h_0\) is:</p>
+<div class="formula-math">\[
+\frac{\partial h_t}{\partial h_0}=a^t.
+\]</div>
+<p>Now compare:</p>
+<div class="ascii-box"><pre>a = 0.5
+a = 1.0
+a = 1.5</pre></div>
+<p>After many time steps:</p>
+<div class="ascii-box"><pre>0.5^t → very small
+1.0^t → unchanged
+1.5^t → very large</pre></div>
+<p>This tiny equation captures the mathematical intuition behind vanishing and exploding gradients in repeated transformations.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-48" class="section-block">
+      <div class="section-header">
+        <span class="section-num">48</span>
+        <h2 class="section-heading">Why LSTM&#x27;s Cell State Is Important</h2>
+      </div>
+      <div class="section-body">
+        <p>The LSTM cell state provides a pathway with multiplicative gating:</p>
+<div class="formula-math">\[
+c_t=
+f_t\odot c_{t-1}
++
+i_t\odot\tilde c_t.
+\]</div>
+<p>The gates control what passes along the memory path.</p>
+<p>The architecture was designed to make useful long-term information easier to preserve than in a basic RNN.</p>
+<p>Do not describe the cell state as a magical permanent memory.</p>
+<p>It is a learned state updated at every time step.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-49" class="section-block">
+      <div class="section-header">
+        <span class="section-num">49</span>
+        <h2 class="section-heading">Text Modeling Connection</h2>
+      </div>
+      <div class="section-body">
+        <p>For text, an ordinary pipeline might be:</p>
+<div class="ascii-box"><pre>tokens
+ ↓
+integer IDs
+ ↓
+embeddings
+ ↓
+RNN/LSTM
+ ↓
+sequence representation
+ ↓
+classifier</pre></div>
+<p>An embedding maps discrete token IDs to vectors.</p>
+<p>That gives the recurrent network continuous feature representations rather than raw integer identities.</p>
+<p>This creates a bridge to the NLP coding chapter later in Unit IV.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-50" class="section-block">
+      <div class="section-header">
+        <span class="section-num">50</span>
+        <h2 class="section-heading">PyTorch Sequence Text Architecture Preview</h2>
+      </div>
+      <div class="section-body">
+        <p>A common structure is:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">class TextClassifier(nn.Module):
+    def __init__(
+        self,
+        vocab_size,
+        embedding_dim,
+        hidden_dim,
+        num_classes,
+    ):
+        super().__init__()
+
+        self.embedding = nn.Embedding(
+            vocab_size,
+            embedding_dim,
+        )
+
+        self.lstm = nn.LSTM(
+            embedding_dim,
+            hidden_dim,
+            batch_first=True,
+        )
+
+        self.classifier = nn.Linear(
+            hidden_dim,
+            num_classes,
+        )
+
+    def forward(self, token_ids):
+        x = self.embedding(token_ids)
+
+        output, (h_n, c_n) = self.lstm(x)
+
+        return self.classifier(
+            h_n[-1]
+        )</code></pre></div>
+<p>This is a useful bridge, but the full tokenization/text-classification pipeline belongs to Unit IV.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-51" class="section-block">
+      <div class="section-header">
+        <span class="section-num">51</span>
+        <h2 class="section-heading">Framework Documentation Check</h2>
+      </div>
+      <div class="section-body">
+        <p>When using recurrent layers, always verify:</p>
+<div class="ascii-box"><pre>input shape
+output shape
+hidden state shape
+cell state shape
+number of layers
+directionality
+batch convention</pre></div>
+<p>The current PyTorch documentation explicitly describes <code>nn.RNN</code> and <code>nn.LSTM</code> as recurrent layers and documents the tensor dimensions, including the <code>batch_first</code> convention. turn710408search0</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-52" class="section-block">
+      <div class="section-header">
+        <span class="section-num">52</span>
+        <h2 class="section-heading">Viva Questions</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Lab Viva Trap & Runtime Gotcha</div>
+
+**RNN Batch Shape & State Resetting Trap:**
+In PyTorch `nn.RNN`/`nn.LSTM`, default tensor shape is `(seq_len, batch_size, input_size)`, NOT `(batch_size, seq_len, input_size)` unless `batch_first=True` is explicitly specified!
+Also, when training on sequential batches, forgetting to detach hidden states between sequences via `h.detach()` attempts backpropagation through the entire dataset history, running out of CUDA memory!
+
+</div>
+
+<h3>Q1. Why do we need RNNs?</h3>
+<p>To model ordered/sequential data where previous context can influence later predictions.</p>
+<h3>Q2. What is the hidden state?</h3>
+<p>A recurrent representation that carries information from earlier time steps into later computations.</p>
+<h3>Q3. What is recurrence?</h3>
+<p>The current hidden state depends on the previous hidden state.</p>
+<h3>Q4. What is BPTT?</h3>
+<p>Backpropagation applied through the unrolled recurrent computation across time steps.</p>
+<h3>Q5. Why can vanilla RNNs suffer from vanishing gradients?</h3>
+<p>Repeated chain-rule multiplication can produce very small gradient magnitudes across long sequences.</p>
+<h3>Q6. What is exploding gradient?</h3>
+<p>Gradient magnitude becomes excessively large during backpropagation.</p>
+<h3>Q7. What problem does LSTM try to address?</h3>
+<p>It introduces gated memory mechanisms designed to improve information and gradient flow across longer dependencies.</p>
+<h3>Q8. What is the LSTM cell state?</h3>
+<p>A recurrent memory state updated through gated retention and writing.</p>
+<h3>Q9. What are the four main LSTM gate/candidate components?</h3>
+<p>Forget gate, input gate, candidate cell content and output gate.</p>
+<h3>Q10. Why are recurrent parameters shared across time?</h3>
+<p>The same transition rule is applied at every sequence position.</p>
+<h3>Q11. Why might a sequence classifier use the final hidden state?</h3>
+<p>It can serve as a learned summary of the sequence for a one-label-per-sequence task.</p>
+<h3>Q12. Does every sequence task use only the final hidden state?</h3>
+<p>No. Sequence labeling and generation often use outputs from multiple/all time steps.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-53" class="section-block">
+      <div class="section-header">
+        <span class="section-num">53</span>
+        <h2 class="section-heading">Exam Connection</h2>
+      </div>
+      <div class="section-body">
+        <p>Typical 2-mark questions:</p>
+<ul>
+<li>Define RNN.</li>
+<li>Define hidden state.</li>
+<li>What is BPTT?</li>
+<li>Define LSTM.</li>
+<li>What is cell state?</li>
+<li>Name the LSTM gates.</li>
+</ul>
+<p>Typical 5-mark questions:</p>
+<blockquote>
+<p>Explain the architecture and working of an RNN.</p>
+<p>Explain the need for LSTM.</p>
+<p>Differentiate RNN and LSTM.</p>
+</blockquote>
+<p>Typical 10-mark question:</p>
+<blockquote>
+<p>Explain LSTM with equations and labelled architecture.</p>
+</blockquote>
+<p>A strong answer should include:</p>
+<div class="ascii-box"><pre>input
+ ↓
+previous hidden state
+ ↓
+gates
+ ↓
+cell state
+ ↓
+hidden state
+ ↓
+output</pre></div>
+<p>and the four gate equations.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-54" class="section-block">
+      <div class="section-header">
+        <span class="section-num">54</span>
+        <h2 class="section-heading">Math You Need Now</h2>
+      </div>
+      <div class="section-body">
+        <h3>Vanilla RNN</h3>
+<div class="formula-math">\[
+h_t=
+\phi(
+W_{xh}x_t+
+W_{hh}h_{t-1}
++b_h
+)
+\]</div>
+<h3>Output</h3>
+<div class="formula-math">\[
+y_t=W_{hy}h_t+b_y
+\]</div>
+<h3>LSTM</h3>
+<div class="formula-math">\[
+f_t=\sigma(\cdots)
+\]</div>
+<div class="formula-math">\[
+i_t=\sigma(\cdots)
+\]</div>
+<div class="formula-math">\[
+\tilde c_t=\tanh(\cdots)
+\]</div>
+<div class="formula-math">\[
+c_t=f_t\odot c_{t-1}
++i_t\odot\tilde c_t
+\]</div>
+<div class="formula-math">\[
+o_t=\sigma(\cdots)
+\]</div>
+<div class="formula-math">\[
+h_t=o_t\odot\tanh(c_t)
+\]</div>
+<h3>Gradient-flow intuition</h3>
+<div class="formula-math">\[
+\frac{\partial h_t}{\partial h_0}
+\sim
+\prod_{\tau=1}^{t}
+\text{local transition factors}.
+\]</div>
+<p>Long products can become very small or very large.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-55" class="section-block">
+      <div class="section-header">
+        <span class="section-num">55</span>
+        <h2 class="section-heading">Debugging Checklist</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>[ ] sequence dimension is correct
+[ ] feature dimension matches input_size
+[ ] batch convention is known
+[ ] hidden_size is known
+[ ] number of recurrent layers is known
+[ ] output shape is checked
+[ ] h_n shape is checked
+[ ] c_n shape is checked for LSTM
+[ ] state reset/carry behaviour is intentional
+[ ] loss matches task
+[ ] gradient norms are inspected when training is unstable
+[ ] train/eval mode is correct
+[ ] model configuration is recorded</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-56" class="section-block">
+      <div class="section-header">
+        <span class="section-num">56</span>
+        <h2 class="section-heading">RNN/LSTM Master Challenge</h2>
+      </div>
+      <div class="section-body">
+        <p>Implement a pure-NumPy sequence classifier for a tiny binary task.</p>
+<p>Requirements:</p>
+<ul>
+<li>input shape <code>(sequence_length, input_dim)</code>;</li>
+<li>one vanilla RNN layer;</li>
+<li>tanh activation;</li>
+<li>final hidden state;</li>
+<li>sigmoid output;</li>
+<li>binary cross-entropy;</li>
+<li>parameter initialization;</li>
+<li>forward pass;</li>
+<li>numerical gradient checking for at least one parameter;</li>
+<li>gradient descent;</li>
+<li>training-loss plot;</li>
+<li>prediction function.</li>
+</ul>
+<p>Then replace the recurrent cell with your explicit LSTM cell.</p>
+<p>You do not need to implement full LSTM BPTT in the first pass.</p>
+<p>The objective is to verify that you understand the forward recurrence and state transitions before implementing a much larger backward system.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-57" class="section-block">
+      <div class="section-header">
+        <span class="section-num">57</span>
+        <h2 class="section-heading">Master Comparison Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Build three models for the same sequence task:</p>
+<div class="ascii-box"><pre>MLP
+RNN
+LSTM</pre></div>
+<p>For the MLP, flatten the sequence.</p>
+<p>For the RNN/LSTM, preserve the temporal structure.</p>
+<p>Record:</p>
+<div class="ascii-box"><pre>parameter count
+training time
+training loss
+validation loss
+accuracy</pre></div>
+<p>Then answer:</p>
+<blockquote>
+<p>What information about the sequence is preserved or discarded by each architecture?</p>
+</blockquote>
+<p>This is more important than merely reporting which model has the highest score.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-58" class="section-block">
+      <div class="section-header">
+        <span class="section-num">58</span>
+        <h2 class="section-heading">CNN vs RNN/LSTM Architecture Map</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>NEURAL NETWORKS
+                       │
+        ┌──────────────┴──────────────┐
+        │                             │
+   SPATIAL STRUCTURE             SEQUENTIAL STRUCTURE
+        │                             │
+       CNN                           RNN
+        │                             │
+ image/local patterns              hidden state
+        │                             │
+        │                           LSTM
+        │                             │
+        │                    gated memory mechanism
+        │                             │
+        └──────────────┬──────────────┘
+                       │
+               architecture matches
+                 data structure</pre></div>
+<p>This is one of the most useful conceptual maps in Unit III.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-59" class="section-block">
+      <div class="section-header">
+        <span class="section-num">59</span>
+        <h2 class="section-heading">Connection to Unit IV</h2>
+      </div>
+      <div class="section-body">
+        <p>Unit IV includes NLP tokenization, stemming, lemmatization and text classification.</p>
+<p>That work can use sequence representations.</p>
+<p>So the conceptual bridge is:</p>
+<div class="ascii-box"><pre>tokens
+ ↓
+vector representation
+ ↓
+sequence model
+ ↓
+classification</pre></div>
+<p>The Coding Book will later treat the NLP pipeline itself.</p>
+<p>RNN/LSTM is therefore not an isolated architecture.</p>
+<p>It is one possible computational component inside a larger NLP system.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-60" class="section-block">
+      <div class="section-header">
+        <span class="section-num">60</span>
+        <h2 class="section-heading">Source Notes</h2>
+      </div>
+      <div class="section-body">
+        <h2>Official course boundary</h2>
+<p>The DSC-14 syllabus explicitly includes:</p>
+<ul>
+<li>RNN;</li>
+<li>LSTM;</li>
+<li>applications in sequential data and text processing.</li>
+</ul>
+<h2>Supplied learning-resource boundary</h2>
+<p>The master resource guide identifies RNN/LSTM as an important gap-filling topic beyond the supplied core notes, while <code>prac_7_neural_network.ipynb</code> provides earlier neural-network foundations.</p>
+<p>The guide's recommended learning order places:</p>
+<div class="ascii-box"><pre>Neuron
+→ Perceptron
+→ MLP
+→ Gradient Descent
+→ Backpropagation
+→ CNN
+→ RNN
+→ LSTM</pre></div>
+<p>The chapter follows that progression.</p>
+<h2>Current framework reference</h2>
+<p>PyTorch's current documentation defines <code>nn.RNN</code> as a recurrent layer operating on sequence input and exposes <code>nn.LSTM</code> for long short-term memory sequence modelling. The documented <code>batch_first=True</code> option uses <code>(batch, sequence, feature)</code> for input/output tensors. turn710408search0</p>
+<p>The exact current API documentation should be checked when using additional options such as:</p>
+<div class="ascii-box"><pre>num_layers
+bidirectional
+dropout
+packed sequences</pre></div>
+<p>because those options change shapes and behaviour.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-61" class="section-block">
+      <div class="section-header">
+        <span class="section-num">61</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <p>Do not move forward until you can:</p>
+<ul>
+<li>[ ] explain why sequences require context;</li>
+<li>[ ] write the RNN recurrence;</li>
+<li>[ ] implement one RNN cell;</li>
+<li>[ ] process an entire sequence;</li>
+<li>[ ] explain hidden-state recurrence;</li>
+<li>[ ] explain unrolling;</li>
+<li>[ ] explain BPTT;</li>
+<li>[ ] explain vanishing/exploding gradients;</li>
+<li>[ ] write the LSTM gate equations;</li>
+<li>[ ] implement one LSTM cell;</li>
+<li>[ ] distinguish hidden state and cell state;</li>
+<li>[ ] use PyTorch <code>nn.RNN</code>;</li>
+<li>[ ] use PyTorch <code>nn.LSTM</code>;</li>
+<li>[ ] inspect sequence/hidden/cell shapes;</li>
+<li>[ ] choose final hidden vs all outputs according to task.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-62" class="section-block">
+      <div class="section-header">
+        <span class="section-num">62</span>
+        <h2 class="section-heading">One-Screen Formula Map</h2>
+      </div>
+      <div class="section-body">
+        <h3>RNN</h3>
+<div class="formula-math">\[
+\boxed{
+h_t=
+\phi(
+W_{xh}x_t+
+W_{hh}h_{t-1}
++b_h
+)
+}
+\]</div>
+<h3>LSTM</h3>
+<div class="formula-math">\[
+\boxed{
+c_t=
+f_t\odot c_{t-1}
++
+i_t\odot\tilde c_t
+}
+\]</div>
+<div class="formula-math">\[
+\boxed{
+h_t=
+o_t\odot\tanh(c_t)
+}
+\]</div>
+<h3>Training</h3>
+<div class="ascii-box"><pre>sequence
+ ↓
+forward recurrence
+ ↓
+loss
+ ↓
+BPTT / backpropagation
+ ↓
+gradients
+ ↓
+optimizer update</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-63" class="section-block">
+      <div class="section-header">
+        <span class="section-num">63</span>
+        <h2 class="section-heading">Connection Forward</h2>
+      </div>
+      <div class="section-body">
+        <p>Unit III is now computationally complete:</p>
+<div class="ascii-box"><pre>Neuron
+ ↓
+Perceptron
+ ↓
+MLP
+ ↓
+Forward propagation
+ ↓
+Backpropagation
+ ↓
+Gradient descent
+ ↓
+CNN
+ ↓
+RNN
+ ↓
+LSTM</pre></div>
+<p>The next coding block moves to Unit IV:</p>
+<div class="ascii-box"><pre>state
+→ action
+→ reward
+→ transition
+→ value
+→ policy</pre></div>
+<p>That begins with:</p>
+<p><strong><code>CODE-U4-01 — MDP and Q-Learning</code></strong></p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-64" class="section-block">
+      <div class="section-header">
+        <span class="section-num">64</span>
+        <h2 class="section-heading">Status</h2>
+      </div>
+      <div class="section-body">
+        <p><strong><code>CODE-U3-05</code> — COMPLETE</strong></p>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="code-u3-04-cnn-image-classification.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← Unit 3 Lab 04 — CNNs</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">💻 Coding Index</span>
+      </a>
+      <a href="code-u4-01-mdp-q-learning.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: Unit 4 Lab 01 — MDP & Q-Learning →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search lab implementations, functions, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">💻</span>Lab Hub</a>
+  <a href="code-u3-05-rnn-lstm-sequence-modelling.html" class="mobile-nav-btn active"><span class="icon">📖</span>CODE-U3-05</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

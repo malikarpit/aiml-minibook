@@ -1,0 +1,1925 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="CODE-U3-02: MLP and Forward Propagation From Scratch — AI & Machine Learning Coding Lab. Multi-Layer Perceptron Architecture, Layer Weight Matrices, Bias Vectors, Hidden Activations (ReLU, Sigmoid), and Vectorized Forward Pass">
+<title>CODE-U3-02: MLP and Forward Propagation From Scratch | Coding Lab 💻 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/coding.css">
+</head>
+<body class="coding-module track-c3">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">💻</div>
+      <div class="brand-text"><span class="main">Coding Lab</span><span class="sub">AI &amp; ML From Scratch</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">CODE-U3-02: MLP and Forward Propagation From Scratch</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">💻</span>Coding Lab Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../math/index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 0: Environment & System</div>
+  <a href="code-00-coding-foundation.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-00: Coding Lab Foundation &amp; Implementation System</a>
+  <a href="code-01-python-numpy-workflow.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-01: Python, NumPy, Matplotlib &amp; Lab Workflow</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Classical AI & Search Labs</div>
+  <a href="code-u1-01-bfs-dfs.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-01: BFS and DFS From Scratch</a>
+  <a href="code-u1-02-greedy-a-star.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-02: Greedy Best-First &amp; A* Search From Scratch</a>
+  <a href="code-u1-03-csp-backtracking.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-03: CSPs and Backtracking Search</a>
+  <a href="code-u1-04-minimax-alpha-beta.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Supervised ML Labs</div>
+  <a href="code-u2-01-ml-workflow.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-01: ML Workflow: Preprocessing, Splitting &amp; Evaluation</a>
+  <a href="code-u2-02-linear-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-02: Linear Regression From Scratch</a>
+  <a href="code-u2-03-logistic-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-03: Logistic Regression From Scratch</a>
+  <a href="code-u2-04-decision-trees.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-04: Decision Trees From Scratch</a>
+  <a href="code-u2-05-classification-metrics-roc.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC &amp; Thresholds</a>
+  <a href="code-u2-06-ridge-lasso-regularization.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-06: Ridge &amp; Lasso From Scratch: Regularization &amp; Optimization</a>
+  <a href="code-u2-07-ml-evaluation-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-07: ML Evaluation &amp; Model Comparison Lab</a>
+  <a href="code-u2-08-knn-svm-practical-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-08: KNN and SVM Practical Comparison Lab</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Deep Learning Labs</div>
+  <a href="code-u3-01-neuron-perceptron.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-01: Neuron and Perceptron From Scratch</a>
+  <a href="code-u3-02-mlp-forward-propagation.html" class="sidebar-link active"><span class="link-icon">🧠</span>CODE-U3-02: MLP and Forward Propagation From Scratch</a>
+  <a href="code-u3-03-backpropagation-scratch.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-03: Gradient Descent &amp; Backpropagation From Scratch</a>
+  <a href="code-u3-04-cnn-image-classification.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-04: CNNs: From Scratch to PyTorch Image Classification</a>
+  <a href="code-u3-05-rnn-lstm-sequence-modelling.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-05: RNN &amp; LSTM: From Scratch to PyTorch Sequence Modelling</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Advanced AI & RL Labs</div>
+  <a href="code-u4-01-mdp-q-learning.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-01: MDPs and Q-Learning From Scratch</a>
+  <a href="code-u4-02-policy-gradients-reinforce.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-02: Policy Gradients &amp; REINFORCE Algorithm</a>
+  <a href="code-u4-03-nlp-text-classification.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-03: NLP Preprocessing &amp; Text Classification Pipeline</a>
+  <a href="code-u4-04-autoencoders-pytorch.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-04: Autoencoders: From Scratch &amp; PyTorch Representation Learning</a>
+  <a href="code-u4-05-gans-pytorch.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-05: Generative Adversarial Networks: Core Mechanics to PyTorch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 5: Engineering & Capstone</div>
+  <a href="code-23-debugging-testing-reproducibility.html" class="sidebar-link"><span class="link-icon">🏆</span>CODE-23: Debugging, Testing, Visualization &amp; Reproducibility</a>
+  <a href="code-24-coding-capstone-checklist.html" class="sidebar-link"><span class="link-icon">🏆</span>CODE-24: AI/ML Coding Capstone &amp; Master Practical Checklist</a>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">CODE-U3-02 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Course Position</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Coding Objective</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. From One Neuron to Many Neurons</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Why Matrix Multiplication Is the Natural Representation</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Dense Layer From Scratch</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Activation Functions</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Activation Sanity Tests</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. One Hidden-Layer MLP</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Choosing Dimensions</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. A Deterministic Forward-Pass Example</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Manual Trace of the First Sample</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Build a Forward-Pass Function</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Why We Store Intermediate Values</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Binary Classification Output</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Regression Output</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Multi-Class Output</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Softmax Sanity Check</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Parameter Counting</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Shape Inspector</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Random Initialization</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Why Zero Initialization of All Weights Is a Problem for Hidden Neurons</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Learned Feature Representation</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Nonlinearity Is the Critical Ingredient</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. A Tiny ReLU MLP Class</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Verify the Class</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Forward Pass as a Computational Graph</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Common Coding Errors</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Test the Dense Layer</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Test ReLU</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Test Softmax</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Numerical Stability Lab</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Tiny Manual Parameter Count Exercise</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Experiment — Change Hidden Width</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Experiment — Remove ReLU</a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Framework Comparison Preview</a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Why We Are Not Training Yet</a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Practical Challenge</a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Master Challenge — Draw the Computation Graph</a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Viva Questions</a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Debugging Checklist</a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. One-Screen Summary</a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Connection Forward</a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Source Notes</a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Mastery Gate</a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. Status</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Coding Lab</a>
+        <span>/</span>
+        <span>CODE-U3-02</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-c3">Track 3: Deep Learning & Neural Networks Labs</span></div>
+      <h1 class="chapter-title">MLP and Forward Propagation From Scratch</h1>
+      <p class="chapter-desc">Multi-Layer Perceptron Architecture, Layer Weight Matrices, Bias Vectors, Hidden Activations (ReLU, Sigmoid), and Vectorized Forward Pass</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~50 min lab</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">DEEP-LEARNING</span> <span class="chapter-meta-item uni-badge">MLP</span> <span class="chapter-meta-item uni-badge">FORWARD-PASS</span> <span class="chapter-meta-item uni-badge">ACTIVATIONS</span> <span class="chapter-meta-item uni-badge">BATCH-MATMUL</span>
+      </div>
+
+      <div class="lab-meta-grid">
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Prerequisites</div>
+          <div class="lab-meta-value">CODE-U3-01 Neuron & Perceptron, Math Companion M08 Matrix Multiplication</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Main Book Concept</div>
+          <div class="lab-meta-value">Ch 32 Multi-Layer Perceptron, Ch 33 Activations and Loss Functions</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Math Companion Layer</div>
+          <div class="lab-meta-value">M08 Matrix Multiplication Z = XW + b, M03 Sigmoid & ReLU non-linearities</div>
+        </div>
+        <div class="lab-meta-box" style="grid-column: 1 / -1;">
+          <div class="lab-meta-label">AI / Machine Learning Connections</div>
+          <div class="lab-meta-value">Non-linear decision surfaces, Feature representation learning, Universal approximation, Fully-connected dense layers</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-meta-card"><h1>CODE-U3-02 — MLP and Forward Propagation From Scratch</h1>
+<blockquote>
+<p><strong>Purpose:</strong> Extend the single neuron into a multilayer perceptron (MLP), implement dense layers and nonlinear activations from scratch, and make the complete forward pass executable.</p>
+</blockquote>
+<p>The previous chapter built one perceptron.</p>
+<p>Now we build:</p>
+<div class="ascii-box"><pre>input vector
+    ↓
+dense layer
+    ↓
+activation
+    ↓
+hidden representation
+    ↓
+dense layer
+    ↓
+output</pre></div>
+<p>The critical idea is <strong>composition</strong>:</p>
+<div class="formula-math">\[
+x
+\rightarrow
+z^{(1)}
+\rightarrow
+a^{(1)}
+\rightarrow
+z^{(2)}
+\rightarrow
+a^{(2)}
+\]</div>
+<p>This chapter stops at the forward pass. It does <strong>not</strong> train the MLP yet.</p>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in CODE-U3-02 (45 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Course Position</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Coding Objective</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">From One Neuron to Many Neurons</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Why Matrix Multiplication Is the Natural Representation</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Dense Layer From Scratch</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Activation Functions</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Activation Sanity Tests</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">One Hidden-Layer MLP</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Choosing Dimensions</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">A Deterministic Forward-Pass Example</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Manual Trace of the First Sample</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Build a Forward-Pass Function</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Why We Store Intermediate Values</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Binary Classification Output</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Regression Output</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Multi-Class Output</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Softmax Sanity Check</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Parameter Counting</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Shape Inspector</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Random Initialization</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Why Zero Initialization of All Weights Is a Problem for Hidden Neurons</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Learned Feature Representation</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Nonlinearity Is the Critical Ingredient</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">A Tiny ReLU MLP Class</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Verify the Class</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Forward Pass as a Computational Graph</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Common Coding Errors</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Test the Dense Layer</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Test ReLU</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Test Softmax</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Numerical Stability Lab</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Tiny Manual Parameter Count Exercise</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Experiment — Change Hidden Width</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Experiment — Remove ReLU</span></a></li>
+        <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Framework Comparison Preview</span></a></li>
+        <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Why We Are Not Training Yet</span></a></li>
+        <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Practical Challenge</span></a></li>
+        <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Master Challenge — Draw the Computation Graph</span></a></li>
+        <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Viva Questions</span></a></li>
+        <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Debugging Checklist</span></a></li>
+        <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">One-Screen Summary</span></a></li>
+        <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Connection Forward</span></a></li>
+        <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Source Notes</span></a></li>
+        <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">Status</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">Course Position</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph LR
+    X["Input Batch X ∈ ℝ^(B × d)"] --> Z1["Layer 1 Linear: Z₁ = X W₁ + b₁"]
+    Z1 --> A1["Hidden Activation: A₁ = ReLU(Z₁)"]
+    A1 --> Z2["Layer 2 Linear: Z₂ = A₁ W₂ + b₂"]
+    Z2 --> A2["Output Activation: A₂ = σ(Z₂) or Softmax(Z₂)"]
+    A2 --> Loss["Loss Evaluation: ℒ(A₂, Y)"]
+    style Z1 fill:#1e293b,stroke:#a855f7,color:#f8fafc
+    style A1 fill:#0f172a,stroke:#38bdf8,color:#38bdf8,stroke-width:2px
+    style A2 fill:#065f46,stroke:#34d399,color:#ffffff
+</pre></div>
+<p>The official DSC-14 Unit III scope includes neural networks and Multilayer Perceptrons (MLPs), followed by backpropagation and gradient descent.</p>
+<p>The supplied course resource guide identifies:</p>
+<ul>
+<li><code>prac_7_neural_network.ipynb</code> for neuron, weights/bias, activations, losses and gradient-descent concepts;</li>
+<li><code>CS6910 Lecture 2</code> for artificial neurons, perceptron, learning algorithm, MLP and representation power;</li>
+<li><code>Lecture10 copy.pdf</code> for the connection between neural networks and learned feature representations.</li>
+</ul>
+<p>The guide explicitly treats these materials as the course/practical core while noting that some later neural-network topics require gap-filling.</p>
+<p><strong>Source boundary:</strong> the architecture and mathematical concepts are aligned to the supplied course resources; the Python implementation, tests, shape utilities and experiments below are coding-book expansion.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">Coding Objective</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Implementation Model</div>
+
+Single neuron sirf straight line khinch sakta hai, isiliye XOR jaise non-linear patterns par fail ho jata hai.
+MLP (Multi-Layer Perceptron) basically multiple neurons ki teams hoti hai.
+Pehle layer ke neurons space ko modte (bend) hain, aur next layer un bended representations par boundary khinchti hai.
+Matrix form mein forward pass bohot simple hai: $Z_1 = X W_1 + b_1$, $A_1 = \text{ReLU}(Z_1)$, $Z_2 = A_1 W_2 + b_2$.
+Bas dimensions yaad rakhna: $(B, d) \times (d, h) = (B, h)$!
+
+</div>
+
+<p>By the end of this chapter you should be able to:</p>
+<ul>
+<li>distinguish a perceptron from an MLP;</li>
+<li>represent a dense layer mathematically;</li>
+<li>determine weight and bias dimensions;</li>
+<li>implement affine layers with NumPy;</li>
+<li>implement ReLU, sigmoid and tanh;</li>
+<li>perform a complete forward pass;</li>
+<li>inspect intermediate activations;</li>
+<li>count trainable parameters;</li>
+<li>understand output-layer choices for common tasks;</li>
+<li>build a tiny MLP without a framework;</li>
+<li>verify it against hand calculations;</li>
+<li>understand why nonlinearity creates richer representations.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">From One Neuron to Many Neurons</h2>
+      </div>
+      <div class="section-body">
+        <p>A single neuron:</p>
+<div class="formula-math">\[
+z=w^Tx+b
+\]</div>
+<div class="formula-math">\[
+a=\phi(z)
+\]</div>
+<p>A layer with \(h\) neurons computes the same idea many times.</p>
+<p>Using row-wise batch notation:</p>
+<div class="formula-math">\[
+X\in\mathbb{R}^{n\times d}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+W\in\mathbb{R}^{d\times h}
+\]</div>
+<p>we compute:</p>
+<div class="formula-math">\[
+\boxed{
+Z=XW+b
+}
+\]</div>
+<p>where the bias vector is broadcast across the \(n\) rows.</p>
+<p>Then:</p>
+<div class="formula-math">\[
+\boxed{
+A=\phi(Z)
+}
+\]</div>
+<p>So:</p>
+<div class="ascii-box"><pre>X: n × d
+     ↓
+W: d × h
+     ↓
+Z: n × h
+     ↓
+activation
+     ↓
+A: n × h</pre></div>
+<p>This is the basic dense-layer pattern.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Why Matrix Multiplication Is the Natural Representation</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose there are:</p>
+<ul>
+<li>4 input features;</li>
+<li>3 neurons in the hidden layer.</li>
+</ul>
+<p>Then:</p>
+<div class="formula-math">\[
+X\in\mathbb{R}^{n\times4}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+W\in\mathbb{R}^{4\times3}.
+\]</div>
+<p>The product:</p>
+<div class="formula-math">\[
+XW
+\]</div>
+<p>has shape:</p>
+<div class="formula-math">\[
+(n\times4)(4\times3)=n\times3.
+\]</div>
+<p>Each of those 3 columns corresponds to one neuron.</p>
+<p>So:</p>
+<div class="ascii-box"><pre>column 1 → neuron 1 scores
+column 2 → neuron 2 scores
+column 3 → neuron 3 scores</pre></div>
+<p>The important programming habit is:</p>
+<blockquote>
+<p><strong>Do the dimension check before doing the multiplication.</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Dense Layer From Scratch</h2>
+      </div>
+      <div class="section-body">
+        <p>Start with the smallest reusable function.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np</code></pre></div>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def dense_forward(
+    X: np.ndarray,
+    W: np.ndarray,
+    b: np.ndarray,
+) -&gt; np.ndarray:
+    X = np.asarray(X, dtype=float)
+    W = np.asarray(W, dtype=float)
+    b = np.asarray(b, dtype=float)
+
+    if X.ndim != 2:
+        raise ValueError(&quot;X must be a 2D matrix.&quot;)
+
+    if W.ndim != 2:
+        raise ValueError(&quot;W must be a 2D matrix.&quot;)
+
+    if b.ndim != 1:
+        raise ValueError(&quot;b must be a 1D vector.&quot;)
+
+    if X.shape[1] != W.shape[0]:
+        raise ValueError(
+            f&quot;Feature mismatch: X has {X.shape[1]} features &quot;
+            f&quot;but W expects {W.shape[0]}.&quot;
+        )
+
+    if W.shape[1] != b.shape[0]:
+        raise ValueError(
+            f&quot;Bias mismatch: W produces {W.shape[1]} outputs &quot;
+            f&quot;but b has length {b.shape[0]}.&quot;
+        )
+
+    return X @ W + b</code></pre></div>
+<p>This function implements:</p>
+<div class="formula-math">\[
+Z=XW+b.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Activation Functions</h2>
+      </div>
+      <div class="section-body">
+        <p>A neural layer normally does not stop at the affine transformation.</p>
+<p>We apply an activation:</p>
+<div class="formula-math">\[
+A=\phi(Z).
+\]</div>
+<p>Implement several common activations.</p>
+<h2>ReLU</h2>
+<div class="formula-math">\[
+\boxed{
+ReLU(z)=\max(0,z)
+}
+\]</div>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def relu(z):
+    z = np.asarray(z, dtype=float)
+    return np.maximum(0.0, z)</code></pre></div>
+<h2>Sigmoid</h2>
+<div class="formula-math">\[
+\boxed{
+\sigma(z)=\frac{1}{1+e^{-z}}
+}
+\]</div>
+<p>A numerically safer implementation handles positive and negative inputs separately.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def sigmoid(z):
+    z = np.asarray(z, dtype=float)
+
+    out = np.empty_like(z)
+
+    positive = z &gt;= 0
+    negative = ~positive
+
+    out[positive] = 1.0 / (1.0 + np.exp(-z[positive]))
+
+    exp_z = np.exp(z[negative])
+    out[negative] = exp_z / (1.0 + exp_z)
+
+    return out</code></pre></div>
+<h2>Tanh</h2>
+<div class="formula-math">\[
+\boxed{
+\tanh(z)
+}
+\]</div>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def tanh(z):
+    return np.tanh(np.asarray(z, dtype=float))</code></pre></div>
+<p>For this chapter, ReLU is the main hidden-layer example.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Activation Sanity Tests</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">values = np.array([-2.0, -1.0, 0.0, 1.0, 2.0])
+
+print(&quot;ReLU:&quot;, relu(values))
+print(&quot;Sigmoid:&quot;, sigmoid(values))
+print(&quot;Tanh:&quot;, tanh(values))</code></pre></div>
+<p>Expected qualitative behaviour:</p>
+<div class="ascii-box"><pre>ReLU
+negative → 0
+positive → unchanged
+
+Sigmoid
+very negative → near 0
+zero          → 0.5
+very positive → near 1
+
+Tanh
+very negative → near -1
+zero          → 0
+very positive → near 1</pre></div>
+<p>The goal is not just to memorize formulas.</p>
+<p>You should be able to look at the input and predict the rough output before running the code.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">One Hidden-Layer MLP</h2>
+      </div>
+      <div class="section-body">
+        <p>A simple network can be written:</p>
+<div class="formula-math">\[
+Z^{(1)}=XW^{(1)}+b^{(1)}
+\]</div>
+<div class="formula-math">\[
+A^{(1)}=\phi(Z^{(1)})
+\]</div>
+<div class="formula-math">\[
+Z^{(2)}=A^{(1)}W^{(2)}+b^{(2)}
+\]</div>
+<div class="formula-math">\[
+\hat{Y}=\psi(Z^{(2)}).
+\]</div>
+<p>Interpretation:</p>
+<div class="ascii-box"><pre>X
+ ↓
+affine transformation
+ ↓
+hidden activation
+ ↓
+new representation
+ ↓
+affine transformation
+ ↓
+output activation
+ ↓
+prediction</pre></div>
+<p>The superscript indicates the layer, not an exponent.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Choosing Dimensions</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="ascii-box"><pre>input features = 2
+hidden neurons = 3
+output neurons = 1</pre></div>
+<p>Then:</p>
+<div class="ascii-box"><pre>X     → (n, 2)
+W1    → (2, 3)
+b1    → (3,)
+
+Z1    → (n, 3)
+A1    → (n, 3)
+
+W2    → (3, 1)
+b2    → (1,)
+
+Z2    → (n, 1)
+Y_hat → (n, 1)</pre></div>
+<p>The full shape chain is:</p>
+<div class="ascii-box"><pre>(n,2)
+  ×
+(2,3)
+  =
+(n,3)
+
+(n,3)
+  ×
+(3,1)
+  =
+(n,1)</pre></div>
+<p>This shape discipline is one of the most useful habits you can develop before moving to PyTorch.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">A Deterministic Forward-Pass Example</h2>
+      </div>
+      <div class="section-body">
+        <p>Use tiny matrices so you can verify the calculation manually.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X = np.array([
+    [1.0, 2.0],
+    [3.0, 4.0],
+])
+
+W1 = np.array([
+    [1.0, 2.0, 0.5],
+    [0.0, 1.0, 1.0],
+])
+
+b1 = np.array([0.0, 1.0, -1.0])
+
+W2 = np.array([
+    [1.0],
+    [-1.0],
+    [2.0],
+])
+
+b2 = np.array([0.5])</code></pre></div>
+<p>First layer:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">Z1 = dense_forward(X, W1, b1)
+print(Z1)</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">A1 = relu(Z1)
+print(A1)</code></pre></div>
+<p>Output layer:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">Z2 = dense_forward(A1, W2, b2)
+print(Z2)</code></pre></div>
+<p>For a binary classifier, you could then use sigmoid:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">Y_hat = sigmoid(Z2)
+print(Y_hat)</code></pre></div>
+<p>Notice that each line corresponds directly to one mathematical equation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Manual Trace of the First Sample</h2>
+      </div>
+      <div class="section-body">
+        <p>Take:</p>
+<div class="formula-math">\[
+x=
+\begin{bmatrix}
+1\\
+2
+\end{bmatrix}.
+\]</div>
+<p>For the first hidden neuron:</p>
+<div class="formula-math">\[
+w_1=
+\begin{bmatrix}
+1\\
+0
+\end{bmatrix},
+\quad b_1=0.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+z_1=1(1)+0(2)+0=1.
+\]</div>
+<p>ReLU:</p>
+<div class="formula-math">\[
+a_1=\max(0,1)=1.
+\]</div>
+<p>For the second hidden neuron:</p>
+<div class="formula-math">\[
+w_2=
+\begin{bmatrix}
+2\\
+1
+\end{bmatrix},
+\quad b_2=1.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+z_2=2(1)+1(2)+1=5.
+\]</div>
+<p>So:</p>
+<div class="formula-math">\[
+a_2=5.
+\]</div>
+<p>The third neuron can be traced in the same way.</p>
+<p>This is exactly what the matrix multiplication computes simultaneously.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Build a Forward-Pass Function</h2>
+      </div>
+      <div class="section-body">
+        <p>Now package the entire network.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def mlp_forward(
+    X,
+    W1,
+    b1,
+    W2,
+    b2,
+):
+    Z1 = dense_forward(X, W1, b1)
+    A1 = relu(Z1)
+
+    Z2 = dense_forward(A1, W2, b2)
+    Y_hat = sigmoid(Z2)
+
+    cache = {
+        &quot;Z1&quot;: Z1,
+        &quot;A1&quot;: A1,
+        &quot;Z2&quot;: Z2,
+        &quot;Y_hat&quot;: Y_hat,
+    }
+
+    return Y_hat, cache</code></pre></div>
+<p>Run:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">Y_hat, cache = mlp_forward(
+    X,
+    W1,
+    b1,
+    W2,
+    b2,
+)
+
+print(Y_hat)</code></pre></div>
+<p>The <code>cache</code> is intentional.</p>
+<p>Later, backpropagation will need intermediate values from the forward pass.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Why We Store Intermediate Values</h2>
+      </div>
+      <div class="section-body">
+        <p>Training a neural network requires derivatives.</p>
+<p>Those derivatives depend on intermediate quantities such as:</p>
+<div class="formula-math">\[
+Z^{(1)}, A^{(1)}, Z^{(2)}.
+\]</div>
+<p>So a useful forward implementation records:</p>
+<div class="ascii-box"><pre>input
+↓
+Z1
+↓
+A1
+↓
+Z2
+↓
+prediction</pre></div>
+<p>This creates a computational graph.</p>
+<p>Backpropagation will walk backward through that graph.</p>
+<p>Thus:</p>
+<div class="ascii-box"><pre>forward pass
+→ produces values
+
+backward pass
+→ uses those values to compute gradients</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Binary Classification Output</h2>
+      </div>
+      <div class="section-body">
+        <p>For binary classification, one common architecture is:</p>
+<div class="ascii-box"><pre>hidden layer → scalar output
+                  ↓
+               sigmoid
+                  ↓
+          probability-like output</pre></div>
+<p>Mathematically:</p>
+<div class="formula-math">\[
+\hat p=\sigma(z^{(2)}).
+\]</div>
+<p>Interpretation:</p>
+<div class="ascii-box"><pre>near 0 → model strongly leans toward class 0
+near 1 → model strongly leans toward class 1</pre></div>
+<p>The threshold used to convert \(\hat p\) into a class label is a separate decision step.</p>
+<p>For example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">pred = (Y_hat &gt;= 0.5).astype(int)</code></pre></div>
+<p>Do not confuse:</p>
+<div class="ascii-box"><pre>probability-like score</pre></div>
+<p>with:</p>
+<div class="ascii-box"><pre>hard class decision</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">Regression Output</h2>
+      </div>
+      <div class="section-body">
+        <p>A regression network often does not require a sigmoid output.</p>
+<p>A simple pattern is:</p>
+<div class="ascii-box"><pre>hidden ReLU
+   ↓
+linear output</pre></div>
+<p>So:</p>
+<div class="formula-math">\[
+\hat y=Z^{(2)}.
+\]</div>
+<p>The output is not restricted to \([0,1]\).</p>
+<p>Implementation variation:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def mlp_forward_regression(
+    X,
+    W1,
+    b1,
+    W2,
+    b2,
+):
+    Z1 = dense_forward(X, W1, b1)
+    A1 = relu(Z1)
+
+    Z2 = dense_forward(A1, W2, b2)
+
+    cache = {
+        &quot;Z1&quot;: Z1,
+        &quot;A1&quot;: A1,
+        &quot;Z2&quot;: Z2,
+    }
+
+    return Z2, cache</code></pre></div>
+<p>The network architecture must match the task.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">Multi-Class Output</h2>
+      </div>
+      <div class="section-body">
+        <p>For \(K\) mutually exclusive classes, a common output is:</p>
+<div class="formula-math">\[
+z\in\mathbb{R}^{K}
+\]</div>
+<p>followed by softmax:</p>
+<div class="formula-math">\[
+\boxed{
+softmax(z_i)=
+\frac{e^{z_i}}
+{\sum_{j=1}^{K}e^{z_j}}
+}
+\]</div>
+<p>A numerically stable implementation subtracts the maximum logit:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def softmax(z):
+    z = np.asarray(z, dtype=float)
+
+    shifted = z - np.max(z, axis=1, keepdims=True)
+    exp_z = np.exp(shifted)
+
+    return exp_z / np.sum(
+        exp_z,
+        axis=1,
+        keepdims=True,
+    )</code></pre></div>
+<p>Why subtract the maximum?</p>
+<p>Because adding or subtracting the same constant from every logit does not change the softmax probabilities, while subtraction can prevent extremely large exponentials.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">Softmax Sanity Check</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">logits = np.array([
+    [2.0, 1.0, 0.0],
+    [0.0, 3.0, 1.0],
+])
+
+probabilities = softmax(logits)
+
+print(probabilities)
+print(probabilities.sum(axis=1))</code></pre></div>
+<p>Each row should sum approximately to:</p>
+<div class="ascii-box"><pre>1.0</pre></div>
+<p>Test:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert np.allclose(
+    probabilities.sum(axis=1),
+    1.0,
+)</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Parameter Counting</h2>
+      </div>
+      <div class="section-body">
+        <p>For a dense layer:</p>
+<div class="ascii-box"><pre>inputs = d
+outputs = h</pre></div>
+<p>weights:</p>
+<div class="formula-math">\[
+dh
+\]</div>
+<p>biases:</p>
+<div class="formula-math">\[
+h
+\]</div>
+<p>total:</p>
+<div class="formula-math">\[
+\boxed{
+dh+h=h(d+1)
+}
+\]</div>
+<p>For a network:</p>
+<div class="ascii-box"><pre>d input features
+h hidden neurons
+k output neurons</pre></div>
+<p>total parameters:</p>
+<div class="formula-math">\[
+dh+h+hk+k.
+\]</div>
+<p>Example:</p>
+<div class="ascii-box"><pre>d = 3
+h = 4
+k = 2</pre></div>
+<p>Then:</p>
+<div class="formula-math">\[
+3(4)+4+4(2)+2
+\]</div>
+<div class="formula-math">\[
+=12+4+8+2
+\]</div>
+<div class="formula-math">\[
+=26.
+\]</div>
+<p>Code:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def dense_parameter_count(
+    input_dim: int,
+    output_dim: int,
+) -&gt; int:
+    return input_dim * output_dim + output_dim
+
+
+def mlp_parameter_count(
+    input_dim: int,
+    hidden_dim: int,
+    output_dim: int,
+) -&gt; int:
+    return (
+        dense_parameter_count(input_dim, hidden_dim)
+        + dense_parameter_count(hidden_dim, output_dim)
+    )</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">Shape Inspector</h2>
+      </div>
+      <div class="section-body">
+        <p>Add a debugging utility.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def inspect_mlp_shapes(
+    X,
+    W1,
+    b1,
+    W2,
+    b2,
+):
+    print(&quot;X  :&quot;, X.shape)
+    print(&quot;W1 :&quot;, W1.shape)
+    print(&quot;b1 :&quot;, b1.shape)
+
+    Z1 = dense_forward(X, W1, b1)
+    A1 = relu(Z1)
+
+    print(&quot;Z1 :&quot;, Z1.shape)
+    print(&quot;A1 :&quot;, A1.shape)
+
+    print(&quot;W2 :&quot;, W2.shape)
+    print(&quot;b2 :&quot;, b2.shape)
+
+    Z2 = dense_forward(A1, W2, b2)
+
+    print(&quot;Z2 :&quot;, Z2.shape)</code></pre></div>
+<p>Run it before debugging numerical values.</p>
+<p>In neural-network code:</p>
+<blockquote>
+<p><strong>Shape debugging should happen before value debugging.</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Random Initialization</h2>
+      </div>
+      <div class="section-body">
+        <p>So far we used manually chosen weights.</p>
+<p>For an actual model:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">rng = np.random.default_rng(42)
+
+W1 = rng.normal(
+    loc=0.0,
+    scale=0.1,
+    size=(2, 4),
+)
+
+b1 = np.zeros(4)
+
+W2 = rng.normal(
+    loc=0.0,
+    scale=0.1,
+    size=(4, 1),
+)
+
+b2 = np.zeros(1)</code></pre></div>
+<p>The exact initialization strategy will be studied more deeply when training and gradient behaviour become important.</p>
+<p>For now the key rule is:</p>
+<blockquote>
+<p>Different runs should be reproducible when the random generator and seed are recorded.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">Why Zero Initialization of All Weights Is a Problem for Hidden Neurons</h2>
+      </div>
+      <div class="section-body">
+        <p>If every hidden neuron starts with exactly identical parameters, they receive the same inputs and compute the same outputs.</p>
+<p>They therefore have difficulty breaking symmetry and learning distinct roles.</p>
+<p>For educational experiments:</p>
+<div class="ascii-box"><pre>weights → small random values
+biases  → often zero initially</pre></div>
+<p>This is one reason neural-network initialization is more thoughtful than simply setting every parameter to zero.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">Learned Feature Representation</h2>
+      </div>
+      <div class="section-body">
+        <p>A major idea from <code>Lecture10 copy.pdf</code> is that neural networks can be viewed as learning a feature representation.</p>
+<p>Think of:</p>
+<div class="formula-math">\[
+A^{(1)}=\phi(XW^{(1)}+b^{(1)})
+\]</div>
+<p>as a transformation from the original features into a learned representation.</p>
+<p>The original space might be difficult to separate linearly.</p>
+<p>A learned hidden representation can make the target relationship easier to express.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>raw features
+     ↓
+learned transformation
+     ↓
+new feature representation
+     ↓
+simple output model</pre></div>
+<p>This is one of the deepest reasons neural networks are useful.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">Nonlinearity Is the Critical Ingredient</h2>
+      </div>
+      <div class="section-body">
+        <p>Consider:</p>
+<div class="formula-math">\[
+A^{(1)}=XW^{(1)}+b^{(1)}
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+Z^{(2)}=A^{(1)}W^{(2)}+b^{(2)}.
+\]</div>
+<p>If the hidden activation were removed:</p>
+<div class="formula-math">\[
+Z^{(2)}
+=
+(XW^{(1)}+b^{(1)})W^{(2)}+b^{(2)}.
+\]</div>
+<p>Rearranging gives:</p>
+<div class="formula-math">\[
+Z^{(2)}
+=
+X(W^{(1)}W^{(2)})
++
+b^{(1)}W^{(2)}
++
+b^{(2)}.
+\]</div>
+<p>That is still affine.</p>
+<p>So:</p>
+<blockquote>
+<p><strong>Depth without nonlinearity does not create the usual nonlinear representation power of an MLP.</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">A Tiny ReLU MLP Class</h2>
+      </div>
+      <div class="section-body">
+        <p>Now package the network in a simple educational class.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">class TinyMLP:
+    def __init__(
+        self,
+        input_dim: int,
+        hidden_dim: int,
+        output_dim: int,
+        seed: int = 42,
+    ):
+        rng = np.random.default_rng(seed)
+
+        self.W1 = rng.normal(
+            0.0,
+            0.1,
+            size=(input_dim, hidden_dim),
+        )
+        self.b1 = np.zeros(hidden_dim)
+
+        self.W2 = rng.normal(
+            0.0,
+            0.1,
+            size=(hidden_dim, output_dim),
+        )
+        self.b2 = np.zeros(output_dim)
+
+    def forward(self, X):
+        Z1 = X @ self.W1 + self.b1
+        A1 = relu(Z1)
+        Z2 = A1 @ self.W2 + self.b2
+
+        return Z2, {
+            &quot;Z1&quot;: Z1,
+            &quot;A1&quot;: A1,
+            &quot;Z2&quot;: Z2,
+        }</code></pre></div>
+<p>For now this class only performs inference.</p>
+<p>Training comes later.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">Verify the Class</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">model = TinyMLP(
+    input_dim=2,
+    hidden_dim=4,
+    output_dim=1,
+    seed=42,
+)
+
+output, cache = model.forward(X)
+
+print(output)
+print(cache[&quot;Z1&quot;].shape)
+print(cache[&quot;A1&quot;].shape)
+print(cache[&quot;Z2&quot;].shape)</code></pre></div>
+<p>Check:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert cache[&quot;Z1&quot;].shape == (len(X), 4)
+assert cache[&quot;A1&quot;].shape == (len(X), 4)
+assert cache[&quot;Z2&quot;].shape == (len(X), 1)</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">Forward Pass as a Computational Graph</h2>
+      </div>
+      <div class="section-body">
+        <p>Represent the model as:</p>
+<div class="ascii-box"><pre>X
+│
+▼
+W1, b1
+│
+▼
+Z1
+│
+▼
+ReLU
+│
+▼
+A1
+│
+▼
+W2, b2
+│
+▼
+Z2
+│
+▼
+output activation
+│
+▼
+prediction</pre></div>
+<p>Every arrow is a computation.</p>
+<p>Every intermediate value can become relevant during training.</p>
+<p>This graph viewpoint is the bridge to backpropagation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">Common Coding Errors</h2>
+      </div>
+      <div class="section-body">
+        <h2>Error 1 — Wrong weight orientation</h2>
+<p>You write:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">W1.shape == (hidden_dim, input_dim)</code></pre></div>
+<p>but use:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X @ W1</code></pre></div>
+<p>with row-wise \(X\).</p>
+<p>The dimensions do not match.</p>
+<p>Choose one convention and stay consistent.</p>
+<hr />
+<h2>Error 2 — Wrong bias shape</h2>
+<p>For:</p>
+<div class="ascii-box"><pre>Z → (n, h)</pre></div>
+<p>the bias should represent the \(h\) output units:</p>
+<div class="ascii-box"><pre>b → (h,)</pre></div>
+<p>NumPy broadcasts it across rows.</p>
+<hr />
+<h2>Error 3 — Activating the wrong tensor</h2>
+<p>The normal order is:</p>
+<div class="ascii-box"><pre>Z → activation → A</pre></div>
+<p>not:</p>
+<div class="ascii-box"><pre>X → activation → Z</pre></div>
+<hr />
+<h2>Error 4 — Forgetting the hidden nonlinearity</h2>
+<p>Then the network can collapse into an affine mapping.</p>
+<hr />
+<h2>Error 5 — Confusing logits and probabilities</h2>
+<p>Before sigmoid/softmax:</p>
+<div class="ascii-box"><pre>logit / pre-activation</pre></div>
+<p>After:</p>
+<div class="ascii-box"><pre>probability-like output</pre></div>
+<p>They are not the same object.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">Test the Dense Layer</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def test_dense_forward():
+    X = np.array([
+        [1.0, 2.0],
+    ])
+
+    W = np.array([
+        [2.0, 1.0],
+        [3.0, 4.0],
+    ])
+
+    b = np.array([1.0, -1.0])
+
+    result = dense_forward(X, W, b)
+
+    expected = np.array([
+        [9.0, 8.0],
+    ])
+
+    assert np.allclose(result, expected)</code></pre></div>
+<p>Check manually:</p>
+<p>First output:</p>
+<div class="formula-math">\[
+1(2)+2(3)+1=9.
+\]</div>
+<p>Second output:</p>
+<div class="formula-math">\[
+1(1)+2(4)-1=8.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">Test ReLU</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def test_relu():
+    x = np.array([-2.0, -1.0, 0.0, 3.0])
+
+    expected = np.array([0.0, 0.0, 0.0, 3.0])
+
+    assert np.array_equal(relu(x), expected)</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">Test Softmax</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def test_softmax():
+    logits = np.array([
+        [1.0, 2.0, 3.0],
+        [0.0, 0.0, 0.0],
+    ])
+
+    probs = softmax(logits)
+
+    assert np.allclose(
+        probs.sum(axis=1),
+        1.0,
+    )
+
+    assert np.all(probs &gt; 0.0)</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">Numerical Stability Lab</h2>
+      </div>
+      <div class="section-body">
+        <p>A naive sigmoid:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def naive_sigmoid(z):
+    return 1.0 / (1.0 + np.exp(-z))</code></pre></div>
+<p>can generate overflow warnings for sufficiently negative values.</p>
+<p>Try:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">z = np.array([-1000.0, 0.0, 1000.0])
+
+print(naive_sigmoid(z))</code></pre></div>
+<p>Then compare with the safer implementation:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(sigmoid(z))</code></pre></div>
+<p>The lesson is broader than sigmoid.</p>
+<blockquote>
+<p>Numerical stability is part of correct scientific computing.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">Tiny Manual Parameter Count Exercise</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="ascii-box"><pre>input = 5
+hidden = 3
+output = 2</pre></div>
+<p>First layer:</p>
+<div class="formula-math">\[
+5(3)+3=18
+\]</div>
+<p>Second layer:</p>
+<div class="formula-math">\[
+3(2)+2=8
+\]</div>
+<p>Total:</p>
+<div class="formula-math">\[
+18+8=26.
+\]</div>
+<p>Write this without using code.</p>
+<p>Then verify:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">assert mlp_parameter_count(5, 3, 2) == 26</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Experiment — Change Hidden Width</h2>
+      </div>
+      <div class="section-body">
+        <p>Create networks with:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">hidden_sizes = [1, 2, 4, 8, 16]</code></pre></div>
+<p>For each model:</p>
+<ul>
+<li>initialize the weights;</li>
+<li>run the same input data;</li>
+<li>record the output shape;</li>
+<li>record parameter count.</li>
+</ul>
+<p>You should observe:</p>
+<div class="ascii-box"><pre>hidden width ↑
+      ↓
+parameter count ↑</pre></div>
+<p>This does not automatically imply:</p>
+<div class="ascii-box"><pre>performance ↑</pre></div>
+<p>More capacity is not automatically better.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Experiment — Remove ReLU</h2>
+      </div>
+      <div class="section-body">
+        <p>Create a version where:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">A1 = Z1</code></pre></div>
+<p>instead of:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">A1 = relu(Z1)</code></pre></div>
+<p>Then reason through the algebra.</p>
+<p>The purpose is not to compare accuracy yet.</p>
+<p>The purpose is to <em>see</em> that:</p>
+<div class="ascii-box"><pre>linear → linear</pre></div>
+<p>can be collapsed into:</p>
+<div class="ascii-box"><pre>single affine transformation</pre></div>
+<p>while:</p>
+<div class="ascii-box"><pre>linear → nonlinear → linear</pre></div>
+<p>cannot generally be reduced in that way.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-35" class="section-block">
+      <div class="section-header">
+        <span class="section-num">35</span>
+        <h2 class="section-heading">Framework Comparison Preview</h2>
+      </div>
+      <div class="section-body">
+        <p>Once the from-scratch logic is understood, a framework can express the same architecture more compactly.</p>
+<p>For example, PyTorch-style code:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import torch
+import torch.nn as nn
+
+model = nn.Sequential(
+    nn.Linear(2, 4),
+    nn.ReLU(),
+    nn.Linear(4, 1),
+)</code></pre></div>
+<p>This is intentionally short.</p>
+<p>Do not let the convenience hide the mathematics.</p>
+<p>The framework is implementing the same computational pattern you just built:</p>
+<div class="formula-math">\[
+Z^{(1)}=XW^{(1)}+b^{(1)}
+\]</div>
+<div class="formula-math">\[
+A^{(1)}=ReLU(Z^{(1)})
+\]</div>
+<div class="formula-math">\[
+Z^{(2)}=A^{(1)}W^{(2)}+b^{(2)}.
+\]</div>
+<p>The coding-book rule is:</p>
+<blockquote>
+<p><strong>Understand first, abstract second.</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-36" class="section-block">
+      <div class="section-header">
+        <span class="section-num">36</span>
+        <h2 class="section-heading">Why We Are Not Training Yet</h2>
+      </div>
+      <div class="section-body">
+        <p>A common beginner jump is:</p>
+<div class="ascii-box"><pre>&quot;Build network&quot;
+   ↓
+&quot;Call optimizer&quot;</pre></div>
+<p>without understanding where the gradients come from.</p>
+<p>The correct progression in this book is:</p>
+<div class="ascii-box"><pre>neuron
+ ↓
+perceptron
+ ↓
+MLP architecture
+ ↓
+forward pass
+ ↓
+loss
+ ↓
+derivatives
+ ↓
+backpropagation
+ ↓
+gradient descent
+ ↓
+training loop</pre></div>
+<p>The next chapter develops the missing middle.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-37" class="section-block">
+      <div class="section-header">
+        <span class="section-num">37</span>
+        <h2 class="section-heading">Practical Challenge</h2>
+      </div>
+      <div class="section-body">
+        <p>Implement a function:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def binary_mlp_forward(
+    X,
+    W1,
+    b1,
+    W2,
+    b2,
+):
+    ...</code></pre></div>
+<p>Requirements:</p>
+<ul>
+<li>hidden activation = ReLU;</li>
+<li>output activation = sigmoid;</li>
+<li>return prediction probabilities;</li>
+<li>return all intermediate tensors;</li>
+<li>validate matrix dimensions;</li>
+<li>use stable sigmoid;</li>
+<li>include docstring.</li>
+</ul>
+<p>Then write at least five assertions covering:</p>
+<ul>
+<li>output shape;</li>
+<li>probability range;</li>
+<li>cache shapes;</li>
+<li>deterministic output;</li>
+<li>invalid shape handling.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-38" class="section-block">
+      <div class="section-header">
+        <span class="section-num">38</span>
+        <h2 class="section-heading">Master Challenge — Draw the Computation Graph</h2>
+      </div>
+      <div class="section-body">
+        <p>For:</p>
+<div class="ascii-box"><pre>3 inputs
+   ↓
+4 hidden neurons
+   ↓
+2 output neurons</pre></div>
+<p>write:</p>
+<ol>
+<li>every tensor shape;</li>
+<li>every parameter shape;</li>
+<li>every forward equation;</li>
+<li>total parameter count;</li>
+<li>which activation you would choose for:</li>
+<li>hidden layer;</li>
+<li>binary output;</li>
+<li>two-class multi-class output.</li>
+</ol>
+<p>Then implement the forward pass.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-39" class="section-block">
+      <div class="section-header">
+        <span class="section-num">39</span>
+        <h2 class="section-heading">Viva Questions</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Lab Viva Trap & Runtime Gotcha</div>
+
+**Dimension Alignment & Missing Activation Trap:**
+1. If $W_1$ is $(d, h)$ and $X$ is $(B, d)$, multiplication MUST be `X @ W1`, NOT `W1 @ X`!
+2. If you forget non-linear activations (e.g., $A_1 = Z_1$), then two linear layers collapse into one: $W_2(W_1 X) = (W_2 W_1) X = W_{eff} X$, completely losing all deep learning expressive power!
+
+</div>
+
+<h3>Q1. What is an MLP?</h3>
+<p>A feedforward neural network containing one or more hidden layers of neurons.</p>
+<h3>Q2. What is a dense layer?</h3>
+<p>A layer in which each output unit is connected to all inputs from the preceding representation.</p>
+<h3>Q3. Why is matrix multiplication used?</h3>
+<p>It computes the weighted sums for many examples and neurons efficiently and expresses the layer compactly.</p>
+<h3>Q4. What does a hidden layer produce?</h3>
+<p>An intermediate learned representation.</p>
+<h3>Q5. Why is ReLU commonly used in hidden layers?</h3>
+<p>It introduces nonlinearity while being computationally simple.</p>
+<h3>Q6. Why can linear layers collapse?</h3>
+<p>Composition of affine transformations remains affine.</p>
+<h3>Q7. What is the difference between \(Z\) and \(A\)?</h3>
+<p>\(Z\) is the pre-activation affine output; \(A\) is the result after applying the activation.</p>
+<h3>Q8. What are logits?</h3>
+<p>The output values before a final probability-producing activation such as sigmoid or softmax.</p>
+<h3>Q9. Why store a cache?</h3>
+<p>Intermediate values are useful for later gradient computation.</p>
+<h3>Q10. Does an MLP automatically learn useful parameters when defined?</h3>
+<p>No. Definition creates an architecture; training adjusts the parameters.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-40" class="section-block">
+      <div class="section-header">
+        <span class="section-num">40</span>
+        <h2 class="section-heading">Debugging Checklist</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>[ ] input is (n, d)
+[ ] W1 is (d, h)
+[ ] b1 is (h,)
+[ ] Z1 is (n, h)
+[ ] A1 is (n, h)
+[ ] W2 is (h, k)
+[ ] b2 is (k,)
+[ ] Z2 is (n, k)
+[ ] output activation matches task
+[ ] logits and probabilities are not confused
+[ ] softmax rows sum to 1
+[ ] numerical stability is considered
+[ ] parameter count is correct
+[ ] forward pass is deterministic for a fixed seed</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-41" class="section-block">
+      <div class="section-header">
+        <span class="section-num">41</span>
+        <h2 class="section-heading">One-Screen Summary</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>DENSE LAYER
+Z = XW + b
+       ↓
+ACTIVATION
+A = φ(Z)
+       ↓
+NEXT LAYER
+Z₂ = AW₂ + b₂
+       ↓
+OUTPUT ACTIVATION
+       ↓
+PREDICTION</pre></div>
+<h3>Core shapes</h3>
+<div class="ascii-box"><pre>X  → (n, d)
+W  → (d, h)
+b  → (h,)
+Z  → (n, h)
+A  → (n, h)</pre></div>
+<h3>Core conceptual chain</h3>
+<div class="ascii-box"><pre>many neurons
+    ↓
+matrix multiplication
+    ↓
+hidden representation
+    ↓
+nonlinearity
+    ↓
+greater representation power</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-42" class="section-block">
+      <div class="section-header">
+        <span class="section-num">42</span>
+        <h2 class="section-heading">Connection Forward</h2>
+      </div>
+      <div class="section-body">
+        <p>The forward pass is now explicit.</p>
+<p>But a network with random parameters is not useful enough.</p>
+<p>We need to answer:</p>
+<blockquote>
+<p><strong>How do we change the weights and biases so that the loss gets smaller?</strong></p>
+</blockquote>
+<p>That requires:</p>
+<div class="ascii-box"><pre>loss
+ ↓
+derivatives
+ ↓
+gradients
+ ↓
+backpropagation
+ ↓
+gradient descent</pre></div>
+<p>The next chapter is:</p>
+<p><strong><code>CODE-U3-03 — Gradient Descent and Backpropagation From Scratch</code></strong></p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-43" class="section-block">
+      <div class="section-header">
+        <span class="section-num">43</span>
+        <h2 class="section-heading">Source Notes</h2>
+      </div>
+      <div class="section-body">
+        <h2>Supplied course-specific sources</h2>
+<h3>Official DSC-14 syllabus</h3>
+<p>Unit III includes neural networks, perceptrons, MLPs, backpropagation and gradient descent.</p>
+<h3><code>AI_ML_Master_Learning_Resource_Guide.pdf</code></h3>
+<p>The guide identifies:</p>
+<ul>
+<li><code>prac_7_neural_network.ipynb</code> → neuron, weights/bias, activations, losses, gradient-descent concept;</li>
+<li><code>CS6910 Lecture 2</code> → artificial neurons, perceptron, MLP and representation power;</li>
+<li><code>Lecture10 copy.pdf</code> → learned feature representations and neural-network feature mapping.</li>
+</ul>
+<h3><code>Lecture10 copy.pdf</code></h3>
+<p>The supplied lecture explicitly connects neural networks to learned feature representations and shows that a suitable feature representation can make a classification problem easier to separate.</p>
+<h2>Expansion boundary</h2>
+<p>The NumPy implementation, shape validation, stable activations, tests, parameter-count utilities, framework preview and challenges are coding-book additions. They are designed to make the source-grounded concepts executable and testable.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-44" class="section-block">
+      <div class="section-header">
+        <span class="section-num">44</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <p>Do not move forward until you can:</p>
+<ul>
+<li>[ ] write \(Z=XW+b\) from memory;</li>
+<li>[ ] determine every tensor shape in a dense layer;</li>
+<li>[ ] implement a dense layer;</li>
+<li>[ ] implement ReLU;</li>
+<li>[ ] implement sigmoid safely;</li>
+<li>[ ] implement softmax;</li>
+<li>[ ] write a one-hidden-layer forward pass;</li>
+<li>[ ] count parameters;</li>
+<li>[ ] explain logits vs probabilities;</li>
+<li>[ ] explain why nonlinearity matters;</li>
+<li>[ ] explain why caches matter for training.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-45" class="section-block">
+      <div class="section-header">
+        <span class="section-num">45</span>
+        <h2 class="section-heading">Status</h2>
+      </div>
+      <div class="section-body">
+        <p><strong><code>CODE-U3-02</code> — COMPLETE</strong></p>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="code-u3-01-neuron-perceptron.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← Unit 3 Lab 01 — Neuron & Perceptron</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">💻 Coding Index</span>
+      </a>
+      <a href="code-u3-03-backpropagation-scratch.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: Unit 3 Lab 03 — Backpropagation From Scratch →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search lab implementations, functions, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">💻</span>Lab Hub</a>
+  <a href="code-u3-02-mlp-forward-propagation.html" class="mobile-nav-btn active"><span class="icon">📖</span>CODE-U3-02</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

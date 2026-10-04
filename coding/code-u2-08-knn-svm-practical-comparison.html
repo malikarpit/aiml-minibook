@@ -1,0 +1,2041 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="CODE-U2-08: KNN and SVM Practical Comparison Lab — AI & Machine Learning Coding Lab. From-Scratch k-NN, Euclidean Distance Vectorization, Scaling Sensitivity, Linear & RBF SVM, and Tri-Model Benchmark with Decision Trees">
+<title>CODE-U2-08: KNN and SVM Practical Comparison Lab | Coding Lab 💻 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/coding.css">
+</head>
+<body class="coding-module track-c2">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">💻</div>
+      <div class="brand-text"><span class="main">Coding Lab</span><span class="sub">AI &amp; ML From Scratch</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">CODE-U2-08: KNN and SVM Practical Comparison Lab</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">💻</span>Coding Lab Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../math/index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 0: Environment & System</div>
+  <a href="code-00-coding-foundation.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-00: Coding Lab Foundation &amp; Implementation System</a>
+  <a href="code-01-python-numpy-workflow.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-01: Python, NumPy, Matplotlib &amp; Lab Workflow</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Classical AI & Search Labs</div>
+  <a href="code-u1-01-bfs-dfs.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-01: BFS and DFS From Scratch</a>
+  <a href="code-u1-02-greedy-a-star.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-02: Greedy Best-First &amp; A* Search From Scratch</a>
+  <a href="code-u1-03-csp-backtracking.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-03: CSPs and Backtracking Search</a>
+  <a href="code-u1-04-minimax-alpha-beta.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Supervised ML Labs</div>
+  <a href="code-u2-01-ml-workflow.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-01: ML Workflow: Preprocessing, Splitting &amp; Evaluation</a>
+  <a href="code-u2-02-linear-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-02: Linear Regression From Scratch</a>
+  <a href="code-u2-03-logistic-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-03: Logistic Regression From Scratch</a>
+  <a href="code-u2-04-decision-trees.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-04: Decision Trees From Scratch</a>
+  <a href="code-u2-05-classification-metrics-roc.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC &amp; Thresholds</a>
+  <a href="code-u2-06-ridge-lasso-regularization.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-06: Ridge &amp; Lasso From Scratch: Regularization &amp; Optimization</a>
+  <a href="code-u2-07-ml-evaluation-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-07: ML Evaluation &amp; Model Comparison Lab</a>
+  <a href="code-u2-08-knn-svm-practical-comparison.html" class="sidebar-link active"><span class="link-icon">📊</span>CODE-U2-08: KNN and SVM Practical Comparison Lab</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Deep Learning Labs</div>
+  <a href="code-u3-01-neuron-perceptron.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-01: Neuron and Perceptron From Scratch</a>
+  <a href="code-u3-02-mlp-forward-propagation.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-02: MLP and Forward Propagation From Scratch</a>
+  <a href="code-u3-03-backpropagation-scratch.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-03: Gradient Descent &amp; Backpropagation From Scratch</a>
+  <a href="code-u3-04-cnn-image-classification.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-04: CNNs: From Scratch to PyTorch Image Classification</a>
+  <a href="code-u3-05-rnn-lstm-sequence-modelling.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-05: RNN &amp; LSTM: From Scratch to PyTorch Sequence Modelling</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Advanced AI & RL Labs</div>
+  <a href="code-u4-01-mdp-q-learning.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-01: MDPs and Q-Learning From Scratch</a>
+  <a href="code-u4-02-policy-gradients-reinforce.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-02: Policy Gradients &amp; REINFORCE Algorithm</a>
+  <a href="code-u4-03-nlp-text-classification.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-03: NLP Preprocessing &amp; Text Classification Pipeline</a>
+  <a href="code-u4-04-autoencoders-pytorch.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-04: Autoencoders: From Scratch &amp; PyTorch Representation Learning</a>
+  <a href="code-u4-05-gans-pytorch.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-05: Generative Adversarial Networks: Core Mechanics to PyTorch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 5: Engineering & Capstone</div>
+  <a href="code-23-debugging-testing-reproducibility.html" class="sidebar-link"><span class="link-icon">🏆</span>CODE-23: Debugging, Testing, Visualization &amp; Reproducibility</a>
+  <a href="code-24-coding-capstone-checklist.html" class="sidebar-link"><span class="link-icon">🏆</span>CODE-24: AI/ML Coding Capstone &amp; Master Practical Checklist</a>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">CODE-U2-08 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Course Position</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Learning Objectives</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Practical Target</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. The Three Models</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Input Representation</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Inspect Before Modelling</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Train/Test Split</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Scaling</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. KNN From Scratch</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Minimal KNN Implementation</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. KNN Tiny Manual Test</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Why K Matters</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. KNN Complexity Intuition</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. KNN Library Version</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. KNN Scratch vs Library</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. SVM — Core Mental Model</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Support Vectors</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Linear vs Nonlinear SVM</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. SVM Hyperparameter: C</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Kernel Choice</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. SVM Library Implementation</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Optional RBF Experiment</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Decision Tree Comparison Model</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. One Dataset, One Protocol</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Evaluation</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Confusion Matrices</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. KNN Hyperparameter Experiment</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. SVM Hyperparameter Experiment</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Fair Model Selection</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Visualization</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Why 2D Is Useful</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Controlled Comparison Table</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Manual KNN Trace</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. SVM Interpretation Checklist</a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. Common Mistake — Scaling Before the Split</a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Common Mistake — Repeated Test-Tuning</a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Common Mistake — Comparing Different Splits</a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Common Mistake — Ignoring Scaling for KNN</a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Common Mistake — Calling SVM “Just a Classifier”</a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Common Mistake — Treating Tree Depth as a Universal Number</a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Error Analysis</a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Reproducibility</a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Final Experiment Template</a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Results Table</a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. Final Interpretation</a>
+      <a href="#s-46" class="sidebar-link"><span class="link-icon">📌</span>46. Extension Lab — Feature Scaling Ablation</a>
+      <a href="#s-47" class="sidebar-link"><span class="link-icon">📌</span>47. Extension Lab — K Sweep</a>
+      <a href="#s-48" class="sidebar-link"><span class="link-icon">📌</span>48. Extension Lab — SVM C Sweep</a>
+      <a href="#s-49" class="sidebar-link"><span class="link-icon">📌</span>49. Extension Lab — 2D Geometry</a>
+      <a href="#s-50" class="sidebar-link"><span class="link-icon">📌</span>50. Viva Questions</a>
+      <a href="#s-51" class="sidebar-link"><span class="link-icon">📌</span>51. Practical Mastery Gate</a>
+      <a href="#s-52" class="sidebar-link"><span class="link-icon">📌</span>52. Connection to the Existing Coding Book</a>
+      <a href="#s-53" class="sidebar-link"><span class="link-icon">📌</span>53. Source Boundary</a>
+      <a href="#s-54" class="sidebar-link"><span class="link-icon">📌</span>54. Final Status</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Coding Lab</a>
+        <span>/</span>
+        <span>CODE-U2-08</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-c2">Track 2: Supervised Machine Learning Labs</span></div>
+      <h1 class="chapter-title">KNN and SVM Practical Comparison Lab</h1>
+      <p class="chapter-desc">From-Scratch k-NN, Euclidean Distance Vectorization, Scaling Sensitivity, Linear &amp; RBF SVM, and Tri-Model Benchmark with Decision Trees</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~45 min lab</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">KNN</span> <span class="chapter-meta-item uni-badge">SVM</span> <span class="chapter-meta-item uni-badge">KERNEL-TRICK</span> <span class="chapter-meta-item uni-badge">DISTANCE-METRICS</span> <span class="chapter-meta-item uni-badge">PRACTICAL-GAP-CLOSED</span>
+      </div>
+
+      <div class="lab-meta-grid">
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Prerequisites</div>
+          <div class="lab-meta-value">CODE-U2-01 Preprocessing, CODE-U2-04 Decision Trees, CODE-U2-07 Evaluation</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Main Book Concept</div>
+          <div class="lab-meta-value">Ch 16 KNN & Inductive Bias, Ch 20 Logistic vs Max-Margin, Ch 22 Decision Trees</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Math Companion Layer</div>
+          <div class="lab-meta-value">M05 Norms & Distances (Euclidean, Manhattan), M06 Dot Products, M24 Regularization</div>
+        </div>
+        <div class="lab-meta-box" style="grid-column: 1 / -1;">
+          <div class="lab-meta-label">AI / Machine Learning Connections</div>
+          <div class="lab-meta-value">Instance-based non-parametric learning vs Maximum Margin hyperplane optimization vs Hierarchical axis-aligned recursive splitting</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-meta-card"><h1>CODE-U2-08 — KNN and SVM Practical Comparison</h1>
+<blockquote>
+<p><strong>Why this file exists</strong></p>
+<p>The supplied practical guide explicitly includes <strong>Decision Trees, k-NN and SVM</strong> as a regression/classification implementation-and-comparison practical. This chapter closes that gap without creating another large theory chapter.</p>
+<p>The goal is:</p>
+</blockquote>
+<div class="ascii-box"><pre>&gt; KNN understanding
+&gt;        ↓
+&gt; KNN from scratch
+&gt;        ↓
+&gt; KNN library version
+&gt;        ↓
+&gt; SVM understanding
+&gt;        ↓
+&gt; SVM library implementation
+&gt;        ↓
+&gt; compare with Decision Tree
+&gt;        ↓
+&gt; same dataset
+&gt; same split
+&gt; same metrics
+&gt; same evaluation protocol
+&gt;        ↓
+&gt; error analysis
+&gt;        ↓
+&gt; final model choice
+&gt;</pre></div>
+<blockquote>
+<p><strong>Course source boundary:</strong> the supplied guide establishes the practical scope; the implementation pattern, test strategy, comparison protocol, and experimental workflow below are coding-book expansions.</p>
+</blockquote>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in CODE-U2-08 (54 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Course Position</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Learning Objectives</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Practical Target</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">The Three Models</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Input Representation</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Inspect Before Modelling</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Train/Test Split</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Scaling</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">KNN From Scratch</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Minimal KNN Implementation</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">KNN Tiny Manual Test</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Why K Matters</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">KNN Complexity Intuition</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">KNN Library Version</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">KNN Scratch vs Library</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">SVM — Core Mental Model</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Support Vectors</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Linear vs Nonlinear SVM</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">SVM Hyperparameter: C</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Kernel Choice</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">SVM Library Implementation</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Optional RBF Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Decision Tree Comparison Model</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">One Dataset, One Protocol</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Evaluation</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Confusion Matrices</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">KNN Hyperparameter Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">SVM Hyperparameter Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Fair Model Selection</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Visualization</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Why 2D Is Useful</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Controlled Comparison Table</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Manual KNN Trace</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">SVM Interpretation Checklist</span></a></li>
+        <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">Common Mistake — Scaling Before the Split</span></a></li>
+        <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Common Mistake — Repeated Test-Tuning</span></a></li>
+        <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Common Mistake — Comparing Different Splits</span></a></li>
+        <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Common Mistake — Ignoring Scaling for KNN</span></a></li>
+        <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Common Mistake — Calling SVM “Just a Classifier”</span></a></li>
+        <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Common Mistake — Treating Tree Depth as a Universal Number</span></a></li>
+        <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Error Analysis</span></a></li>
+        <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Reproducibility</span></a></li>
+        <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Final Experiment Template</span></a></li>
+        <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Results Table</span></a></li>
+        <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">Final Interpretation</span></a></li>
+        <li class="toc-item"><a href="#s-46"><span class="toc-num">46</span><span class="toc-name">Extension Lab — Feature Scaling Ablation</span></a></li>
+        <li class="toc-item"><a href="#s-47"><span class="toc-num">47</span><span class="toc-name">Extension Lab — K Sweep</span></a></li>
+        <li class="toc-item"><a href="#s-48"><span class="toc-num">48</span><span class="toc-name">Extension Lab — SVM C Sweep</span></a></li>
+        <li class="toc-item"><a href="#s-49"><span class="toc-num">49</span><span class="toc-name">Extension Lab — 2D Geometry</span></a></li>
+        <li class="toc-item"><a href="#s-50"><span class="toc-num">50</span><span class="toc-name">Viva Questions</span></a></li>
+        <li class="toc-item"><a href="#s-51"><span class="toc-num">51</span><span class="toc-name">Practical Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-52"><span class="toc-num">52</span><span class="toc-name">Connection to the Existing Coding Book</span></a></li>
+        <li class="toc-item"><a href="#s-53"><span class="toc-num">53</span><span class="toc-name">Source Boundary</span></a></li>
+        <li class="toc-item"><a href="#s-54"><span class="toc-num">54</span><span class="toc-name">Final Status</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">Course Position</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph TD
+    Data["Benchmark Dataset (Features X, Labels y)"] --> Split["Controlled Frozen Train/Test Split (stratify=y)"]
+    Split --> Scale["StandardScaler: Fit on Train ONLY, Transform Train & Test"]
+    Scale --> KNN["Model A: k-NN (Instance-based, L2 Distance, k=3, 5, 7)"]
+    Scale --> SVM["Model B: SVM (Max-Margin Hyperplane, Linear vs RBF Kernel)"]
+    Split --> DT["Model C: Decision Tree (Tree Splitting, Scale-Invariant)"]
+    KNN & SVM & DT --> Eval["Identical Evaluation Protocol: Confusion Matrix, Macro F1, Accuracy"]
+    Eval --> Compare["Tri-Model Benchmark Leaderboard & Error Analysis"]
+    style Split fill:#0f172a,stroke:#38bdf8,color:#38bdf8,stroke-width:2px
+    style Compare fill:#065f46,stroke:#34d399,color:#ffffff
+</pre></div>
+<p>Unit II already contains:</p>
+<div class="ascii-box"><pre>ML workflow
+   ↓
+Linear Regression
+   ↓
+Logistic Regression
+   ↓
+Decision Trees
+   ↓
+Classification metrics
+   ↓
+Ridge / Lasso
+   ↓
+Model comparison</pre></div>
+<p>This chapter adds the practical methods explicitly named in the supplied practical component:</p>
+<div class="ascii-box"><pre>KNN
+SVM</pre></div>
+<p>and uses:</p>
+<div class="ascii-box"><pre>Decision Tree</pre></div>
+<p>as the third comparison model.</p>
+<p>The practical guide requires students to train small datasets, calculate confusion-matrix metrics, and compare models. It also requires the universal explanation chain:</p>
+<div class="ascii-box"><pre>input
+→ representation
+→ algorithm
+→ parameters
+→ loss/reward
+→ training/update
+→ output
+→ evaluation</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">Learning Objectives</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Implementation Model</div>
+
+k-NN aur SVM dono geometric models hain, lekin dono ka philosophy zameen-aasmaan ka farq rakhta hai.
+k-NN 'lazy learner' hai—ye training time par kuch nahi seekhta, bus saara data yaad rakhta hai aur test time par sabse paas ke $k$ padosi dhundhta hai. Agar scaling bhool gaye, toh jis feature ka scale bada hoga (e.g. Salary vs Age), wahi pure distance calculation ko hijack kar lega!
+SVM 'eager maximum-margin' learner hai—ye training time par do classes ke beech ki sabse chaudi sadak (margin) banata hai. Sirf wahi points matter karte hain jo boundary par khade hain (Support Vectors).
+Decision Tree in dono se alag hai—use scaling se koi farq nahi padta kyunki wo ek waqt par ek hi feature ko split karta hai!
+
+</div>
+
+<p>By the end, you should be able to:</p>
+<ul>
+<li>explain the basic idea of KNN;</li>
+<li>implement KNN classification from scratch;</li>
+<li>explain why feature scaling matters for KNN;</li>
+<li>use a library KNN classifier;</li>
+<li>explain the high-level idea of a linear and nonlinear SVM;</li>
+<li>understand the role of the margin and support vectors;</li>
+<li>use a library SVM classifier safely;</li>
+<li>compare KNN, SVM, and Decision Tree under the same protocol;</li>
+<li>compute and interpret accuracy, precision, recall and F1;</li>
+<li>inspect a confusion matrix;</li>
+<li>discuss threshold/decision behaviour where applicable;</li>
+<li>detect an unfair comparison;</li>
+<li>justify a final model choice using evidence.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">Practical Target</h2>
+      </div>
+      <div class="section-body">
+        <p>Your final experiment should answer:</p>
+<blockquote>
+<p><strong>Given the same small classification dataset, which of KNN, SVM, and Decision Tree is most appropriate under the chosen evaluation criteria, and why?</strong></p>
+</blockquote>
+<p>Do <strong>not</strong> answer this before running the experiment.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">The Three Models</h2>
+      </div>
+      <div class="section-body">
+        <h2>KNN</h2>
+<blockquote>
+<p><strong>KNN predicts using nearby training examples.</strong></p>
+</blockquote>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>new point
+   ↓
+calculate distances
+   ↓
+find K nearest points
+   ↓
+vote
+   ↓
+predicted class</pre></div>
+<p>KNN is a <strong>local</strong> method.</p>
+<hr />
+<h2>SVM</h2>
+<blockquote>
+<p><strong>SVM seeks a decision boundary with a useful margin between classes.</strong></p>
+</blockquote>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>training points
+   ↓
+find separating boundary
+   ↓
+maximize margin
+   ↓
+retain critical boundary-defining examples
+   ↓
+classify new point</pre></div>
+<p>Those critical training examples are called <strong>support vectors</strong>.</p>
+<hr />
+<h2>Decision Tree</h2>
+<blockquote>
+<p><strong>A decision tree recursively asks feature-based questions and routes an example to a leaf.</strong></p>
+</blockquote>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>feature question
+   ↓
+left/right branch
+   ↓
+another question
+   ↓
+...
+   ↓
+leaf prediction</pre></div>
+<p>The comparison is useful because the three models encode different assumptions:</p>
+<div class="ascii-box"><pre>KNN
+→ local similarity
+
+SVM
+→ margin / boundary geometry
+
+Decision Tree
+→ recursive feature-based partitioning</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Input Representation</h2>
+      </div>
+      <div class="section-body">
+        <p>Use a small supervised classification dataset.</p>
+<p>For the first experiment, prefer a dataset where:</p>
+<div class="ascii-box"><pre>X = numerical features
+y = discrete class labels</pre></div>
+<p>A simple educational dataset is appropriate because the goal is algorithm comparison, not data acquisition.</p>
+<p>Recommended first choice:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.datasets import load_breast_cancer
+
+data = load_breast_cancer()
+
+X = data.data
+y = data.target</code></pre></div>
+<p>You may substitute another small classification dataset later.</p>
+<p>For the first pass, keep the experimental environment controlled.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Inspect Before Modelling</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(&quot;X shape:&quot;, X.shape)
+print(&quot;y shape:&quot;, y.shape)
+print(&quot;X dtype:&quot;, X.dtype)
+print(&quot;classes:&quot;, np.unique(y))</code></pre></div>
+<p>Check missing values:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(&quot;NaN:&quot;, np.isnan(X).sum())</code></pre></div>
+<p>Check class counts:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">unique, counts = np.unique(
+    y,
+    return_counts=True,
+)
+
+print(dict(zip(unique, counts)))</code></pre></div>
+<p>Questions:</p>
+<div class="ascii-box"><pre>How many samples?
+How many features?
+How many classes?
+Are features numeric?
+Are values on similar scales?
+Is the dataset imbalanced?</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Train/Test Split</h2>
+      </div>
+      <div class="section-body">
+        <p>Use one controlled split for the model comparison.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,
+    random_state=42,
+    stratify=y,
+)</code></pre></div>
+<p>Why <code>stratify=y</code>?</p>
+<p>Because for classification, preserving class proportions can produce a more representative split on small datasets.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">Scaling</h2>
+      </div>
+      <div class="section-body">
+        <p>Scaling is particularly important for KNN because KNN depends directly on distances.</p>
+<p>For example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+
+X_train_s = scaler.fit_transform(X_train)
+X_test_s = scaler.transform(X_test)</code></pre></div>
+<p>The critical rule is:</p>
+<div class="ascii-box"><pre>fit on train
+transform train
+transform test</pre></div>
+<p>Do <strong>not</strong> fit a separate scaler to the test set.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">KNN From Scratch</h2>
+      </div>
+      <div class="section-body">
+        <h2>9.1 Core idea</h2>
+<p>Given a new point:</p>
+<ol>
+<li>compute its distance to each training point;</li>
+<li>select the K smallest distances;</li>
+<li>inspect their class labels;</li>
+<li>choose the majority class.</li>
+</ol>
+<p>For Euclidean distance:</p>
+<div class="formula-math">\[
+d(x,z)
+=
+\sqrt{
+\sum_j
+(x_j-z_j)^2
+}.
+\]</div>
+<p>Because the square root is monotonic, ranking by squared Euclidean distance gives the same nearest-neighbour order.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Minimal KNN Implementation</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np
+
+
+def euclidean_distance(a, b):
+    return np.sqrt(np.sum((a - b) ** 2))
+
+
+def knn_predict_one(
+    X_train,
+    y_train,
+    x_query,
+    k=5,
+):
+    distances = []
+
+    for x_train, label in zip(X_train, y_train):
+        d = euclidean_distance(
+            x_train,
+            x_query,
+        )
+        distances.append((d, label))
+
+    distances.sort(
+        key=lambda item: item[0]
+    )
+
+    nearest = distances[:k]
+
+    labels = [
+        label
+        for _, label in nearest
+    ]
+
+    values, counts = np.unique(
+        labels,
+        return_counts=True,
+    )
+
+    return values[np.argmax(counts)]
+
+
+def knn_predict(
+    X_train,
+    y_train,
+    X_query,
+    k=5,
+):
+    return np.array(
+        [
+            knn_predict_one(
+                X_train,
+                y_train,
+                x,
+                k=k,
+            )
+            for x in X_query
+        ]
+    )</code></pre></div>
+<p>This implementation deliberately uses simple loops.</p>
+<p>The purpose is transparency.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">KNN Tiny Manual Test</h2>
+      </div>
+      <div class="section-body">
+        <p>Use:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X_tiny = np.array([
+    [0.0, 0.0],
+    [0.0, 1.0],
+    [3.0, 3.0],
+    [3.0, 4.0],
+])
+
+y_tiny = np.array([
+    0,
+    0,
+    1,
+    1,
+])</code></pre></div>
+<p>Query:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">query = np.array([0.2, 0.4])</code></pre></div>
+<p>With:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">k = 3</code></pre></div>
+<p>manually inspect the distances.</p>
+<p>The closest points should predominantly come from class <code>0</code>.</p>
+<p>Then verify:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">pred = knn_predict_one(
+    X_tiny,
+    y_tiny,
+    query,
+    k=3,
+)
+
+print(pred)</code></pre></div>
+<p>The program result should match the manual reasoning.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Why K Matters</h2>
+      </div>
+      <div class="section-body">
+        <p>Imagine:</p>
+<div class="ascii-box"><pre>K = 1</pre></div>
+<p>Prediction depends on one neighbour.</p>
+<p>Very sensitive to individual examples.</p>
+<p>As K grows:</p>
+<div class="ascii-box"><pre>K small
+→ local / flexible
+→ potentially noisy
+
+K large
+→ smoother / more global
+→ potentially oversmoothed</pre></div>
+<p>There is no universally correct K.</p>
+<p>Choose it using the development protocol.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">KNN Complexity Intuition</h2>
+      </div>
+      <div class="section-body">
+        <p>Basic KNN has almost no expensive training phase.</p>
+<p>Most work happens at prediction:</p>
+<div class="ascii-box"><pre>for each query:
+    calculate distance to many training points</pre></div>
+<p>For a simple dense implementation:</p>
+<ul>
+<li>prediction cost grows with the number of stored training examples;</li>
+<li>each distance also depends on feature dimension.</li>
+</ul>
+<p>This is one reason KNN can become expensive at inference time.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">KNN Library Version</h2>
+      </div>
+      <div class="section-body">
+        <p>Use:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.neighbors import KNeighborsClassifier
+
+knn_model = KNeighborsClassifier(
+    n_neighbors=5,
+)
+
+knn_model.fit(
+    X_train_s,
+    y_train,
+)
+
+knn_pred = knn_model.predict(
+    X_test_s,
+)</code></pre></div>
+<p>Do not use the library first.</p>
+<p>The learning order is:</p>
+<div class="ascii-box"><pre>understand
+→ implement
+→ test
+→ library</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">KNN Scratch vs Library</h2>
+      </div>
+      <div class="section-body">
+        <p>Compare:</p>
+<div class="ascii-box"><pre>same training data
+same K
+same preprocessing
+same test data</pre></div>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">scratch_pred = knn_predict(
+    X_train_s,
+    y_train,
+    X_test_s,
+    k=5,
+)</code></pre></div>
+<p>Check agreement:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(
+    np.mean(
+        scratch_pred == knn_pred
+    )
+)</code></pre></div>
+<p>A high agreement is evidence that your basic implementation is behaving consistently with the library under the chosen settings.</p>
+<p>Do not assume tiny implementation differences can never produce different outputs.</p>
+<p>Tie-breaking and implementation details matter.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">SVM — Core Mental Model</h2>
+      </div>
+      <div class="section-body">
+        <p>Support Vector Machines are fundamentally about finding a useful separating boundary.</p>
+<p>For a linear separator:</p>
+<div class="formula-math">\[
+w^Tx+b=0.
+\]</div>
+<p>The classifier uses the sign of:</p>
+<div class="formula-math">\[
+w^Tx+b.
+\]</div>
+<p>The important geometric idea is the <strong>margin</strong>.</p>
+<p>Rather than choosing an arbitrary separating line, the classical SVM formulation seeks a boundary with a large margin between the classes.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">Support Vectors</h2>
+      </div>
+      <div class="section-body">
+        <p>Not every training point is equally important for determining the final boundary.</p>
+<p>The most influential boundary-defining observations are the:</p>
+<div class="ascii-box"><pre>support vectors</pre></div>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>class A      |      class B
+
+ A A A       |       B B B
+    A     SV | SV      B
+        SV   |   SV
+               ↑
+          boundary region</pre></div>
+<p>Do not interpret support vectors as “the only data the model trains on.”</p>
+<p>They are the critical examples associated with the learned margin/boundary.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Linear vs Nonlinear SVM</h2>
+      </div>
+      <div class="section-body">
+        <p>A linear SVM uses:</p>
+<div class="ascii-box"><pre>w^T x + b</pre></div>
+<p>as a linear decision function.</p>
+<p>For more complex boundaries, kernel methods can implicitly work in transformed feature spaces.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>input
+ ↓
+similarity/kernel relationship
+ ↓
+higher-dimensional representation
+ ↓
+linear separation there</pre></div>
+<p>The kernel idea is deeper than this chapter requires mathematically.</p>
+<p>For the practical, focus on:</p>
+<div class="ascii-box"><pre>margin
+support vectors
+C
+kernel
+classification
+evaluation</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">SVM Hyperparameter: C</h2>
+      </div>
+      <div class="section-body">
+        <p><code>C</code> controls the trade-off between:</p>
+<div class="ascii-box"><pre>large margin
+vs
+penalizing training violations</pre></div>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>smaller C
+→ stronger preference for wider margin
+→ allows more violations
+
+larger C
+→ stronger penalty for violations
+→ may fit training data more aggressively</pre></div>
+<p>This is a model-capacity / regularization trade-off.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Kernel Choice</h2>
+      </div>
+      <div class="section-body">
+        <p>Common kernels include:</p>
+<div class="ascii-box"><pre>linear
+rbf
+polynomial</pre></div>
+<p>For a first comparison:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">kernel=&quot;linear&quot;</code></pre></div>
+<p>Then optionally investigate:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">kernel=&quot;rbf&quot;</code></pre></div>
+<p>Do not compare five kernels before establishing a clean baseline.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">SVM Library Implementation</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.svm import SVC
+
+svm_model = SVC(
+    kernel=&quot;linear&quot;,
+    C=1.0,
+)
+
+svm_model.fit(
+    X_train_s,
+    y_train,
+)
+
+svm_pred = svm_model.predict(
+    X_test_s,
+)</code></pre></div>
+<p>For a first experiment this is enough.</p>
+<p>The point is to understand the model and run a controlled practical, not to reimplement an industrial optimization solver.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">Optional RBF Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>After the linear baseline:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">svm_rbf = SVC(
+    kernel=&quot;rbf&quot;,
+    C=1.0,
+)
+
+svm_rbf.fit(
+    X_train_s,
+    y_train,
+)
+
+svm_rbf_pred = svm_rbf.predict(
+    X_test_s,
+)</code></pre></div>
+<p>Only interpret this as evidence from your chosen dataset and split.</p>
+<p>Do not conclude:</p>
+<blockquote>
+<p>“RBF SVM is always better.”</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">Decision Tree Comparison Model</h2>
+      </div>
+      <div class="section-body">
+        <p>Use the existing Coding Book implementation from <code>CODE-U2-04</code>, or a library model for the comparison layer.</p>
+<p>Example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.tree import DecisionTreeClassifier
+
+tree_model = DecisionTreeClassifier(
+    max_depth=5,
+    random_state=42,
+)
+
+tree_model.fit(
+    X_train,
+    y_train,
+)
+
+tree_pred = tree_model.predict(
+    X_test,
+)</code></pre></div>
+<p>Notice:</p>
+<div class="ascii-box"><pre>KNN
+→ scaled features
+
+SVM
+→ usually scaled features
+
+Decision Tree
+→ scaling is generally not necessary</pre></div>
+<p>The comparison must document that preprocessing difference.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">One Dataset, One Protocol</h2>
+      </div>
+      <div class="section-body">
+        <p>For a fair comparison:</p>
+<div class="ascii-box"><pre>same dataset
+same train/test split
+same labels
+same evaluation metrics
+same reporting style</pre></div>
+<p>For KNN and SVM:</p>
+<div class="ascii-box"><pre>scaled training features
+scaled test features</pre></div>
+<p>For Tree:</p>
+<div class="ascii-box"><pre>original training features
+original test features</pre></div>
+<p>That is not unfair.</p>
+<p>It is model-appropriate preprocessing.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">Evaluation</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.metrics import (
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
+)
+
+def classification_report_row(
+    name,
+    y_true,
+    y_pred,
+):
+    return {
+        &quot;model&quot;: name,
+        &quot;accuracy&quot;: accuracy_score(
+            y_true,
+            y_pred,
+        ),
+        &quot;precision&quot;: precision_score(
+            y_true,
+            y_pred,
+            zero_division=0,
+        ),
+        &quot;recall&quot;: recall_score(
+            y_true,
+            y_pred,
+            zero_division=0,
+        ),
+        &quot;f1&quot;: f1_score(
+            y_true,
+            y_pred,
+            zero_division=0,
+        ),
+    }</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">results = [
+    classification_report_row(
+        &quot;KNN&quot;,
+        y_test,
+        knn_pred,
+    ),
+    classification_report_row(
+        &quot;SVM&quot;,
+        y_test,
+        svm_pred,
+    ),
+    classification_report_row(
+        &quot;Decision Tree&quot;,
+        y_test,
+        tree_pred,
+    ),
+]</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">Confusion Matrices</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from sklearn.metrics import confusion_matrix
+
+for name, pred in [
+    (&quot;KNN&quot;, knn_pred),
+    (&quot;SVM&quot;, svm_pred),
+    (&quot;Decision Tree&quot;, tree_pred),
+]:
+    print(name)
+    print(
+        confusion_matrix(
+            y_test,
+            pred,
+        )
+    )</code></pre></div>
+<p>For a binary classifier:</p>
+<div class="ascii-box"><pre>predicted
+          0     1
+actual 0  TN    FP
+actual 1  FN    TP</pre></div>
+<p>Then ask:</p>
+<div class="ascii-box"><pre>Which model produces more false negatives?
+Which produces more false positives?</pre></div>
+<p>Do not stop at accuracy.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">KNN Hyperparameter Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Try a small controlled set:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">k_values = [
+    1,
+    3,
+    5,
+    7,
+    11,
+]</code></pre></div>
+<p>For each K, record:</p>
+<div class="ascii-box"><pre>K
+validation score
+training score
+notes</pre></div>
+<p>Do not choose K using the test set repeatedly.</p>
+<p>Use validation or cross-validation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">SVM Hyperparameter Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>A compact first sweep:</p>
+<div class="ascii-box"><pre>C:
+0.1
+1
+10</pre></div>
+<p>Then optionally compare:</p>
+<div class="ascii-box"><pre>linear
+RBF</pre></div>
+<p>The experiment should be explicit.</p>
+<p>Example table:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Experiment</th>
+<th>Kernel</th>
+<th style="text-align: right;">C</th>
+<th style="text-align: right;">Validation F1</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S1</td>
+<td>linear</td>
+<td style="text-align: right;">0.1</td>
+<td style="text-align: right;"></td>
+<td></td>
+</tr>
+<tr>
+<td>S2</td>
+<td>linear</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;"></td>
+<td></td>
+</tr>
+<tr>
+<td>S3</td>
+<td>linear</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;"></td>
+<td></td>
+</tr>
+<tr>
+<td>S4</td>
+<td>rbf</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;"></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>Fill the metrics from real runs.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">Fair Model Selection</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="ascii-box"><pre>KNN F1 = ...
+SVM F1 = ...
+Tree F1 = ...</pre></div>
+<p>Do not simply select the largest value.</p>
+<p>Consider:</p>
+<div class="ascii-box"><pre>performance
+interpretability
+training cost
+inference cost
+sensitivity to scaling
+hyperparameter sensitivity
+data size
+feature geometry
+deployment constraints</pre></div>
+<p>The “best” model depends on the actual task.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">Visualization</h2>
+      </div>
+      <div class="section-body">
+        <h2>KNN / SVM Decision Boundary</h2>
+<p>For a simple 2D dataset, visualize:</p>
+<div class="ascii-box"><pre>training points
+test points
+decision regions
+boundary</pre></div>
+<p>This is especially useful for understanding the difference between:</p>
+<div class="ascii-box"><pre>local similarity
+vs
+global / margin-based separation</pre></div>
+<h2>Decision Tree</h2>
+<p>Visualize the tree structure.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">Why 2D Is Useful</h2>
+      </div>
+      <div class="section-body">
+        <p>A two-feature toy dataset may be less realistic, but it makes geometry visible.</p>
+<p>Use:</p>
+<div class="ascii-box"><pre>2D dataset
+→ visualize</pre></div>
+<p>then:</p>
+<div class="ascii-box"><pre>higher-dimensional dataset
+→ evaluate</pre></div>
+<p>This two-stage approach prevents the geometry from remaining abstract.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">Controlled Comparison Table</h2>
+      </div>
+      <div class="section-body">
+        <p>Use:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Property</th>
+<th>KNN</th>
+<th>SVM</th>
+<th>Decision Tree</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Core idea</td>
+<td>local neighbours</td>
+<td>margin / boundary</td>
+<td>recursive splits</td>
+</tr>
+<tr>
+<td>Training cost</td>
+<td>low/moderate</td>
+<td>moderate</td>
+<td>moderate</td>
+</tr>
+<tr>
+<td>Prediction cost</td>
+<td>can be high</td>
+<td>usually lower</td>
+<td>usually low</td>
+</tr>
+<tr>
+<td>Scaling sensitivity</td>
+<td>high</td>
+<td>commonly important</td>
+<td>usually low</td>
+</tr>
+<tr>
+<td>Interpretability</td>
+<td>intuitive locally</td>
+<td>moderate</td>
+<td>high</td>
+</tr>
+<tr>
+<td>Nonlinearity</td>
+<td>via local geometry</td>
+<td>kernels</td>
+<td>naturally</td>
+</tr>
+<tr>
+<td>Main hyperparameters</td>
+<td>K</td>
+<td>C, kernel</td>
+<td>depth, split criteria</td>
+</tr>
+<tr>
+<td>Typical failure</td>
+<td>bad distance structure</td>
+<td>poor hyperparameters/kernel</td>
+<td>overfitting</td>
+</tr>
+</tbody>
+</table></div>
+<p>This is a conceptual comparison.</p>
+<p>Actual runtime and performance must be measured for your experiment.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Manual KNN Trace</h2>
+      </div>
+      <div class="section-body">
+        <p>For one query:</p>
+<div class="ascii-box"><pre>Query:
+q = (...)
+
+Distances:
+training 1 → ...
+training 2 → ...
+training 3 → ...
+...
+
+Sorted:
+1. ...
+2. ...
+3. ...
+4. ...
+5. ...
+
+Neighbour labels:
+A A B A B
+
+Majority:
+A</pre></div>
+<p>This satisfies the practical requirement that you understand what the implementation is doing rather than only observing the final score.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">SVM Interpretation Checklist</h2>
+      </div>
+      <div class="section-body">
+        <p>After training, answer:</p>
+<div class="ascii-box"><pre>What is the decision function?
+What is the kernel?
+What is C?
+What do support vectors represent?
+Why did scaling matter?
+What changed when C changed?</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-35" class="section-block">
+      <div class="section-header">
+        <span class="section-num">35</span>
+        <h2 class="section-heading">Common Mistake — Scaling Before the Split</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Lab Viva Trap & Runtime Gotcha</div>
+
+**The Scaling Failure & Support Vector Definition Traps:**
+1. **k-NN Scaling Leakage / Omission:** Agar tum k-NN chalane se pehle `StandardScaler` nahi lagate, toh bada scale wala feature distance ko dominate karega aur test accuracy drastically drop ho jayegi. Par scaling hamesha train split par `fit` karke test par `transform` karna, poore dataset par ek saath fit mat karna!
+2. **Support Vectors Viva Question:** "Do all data points affect the SVM decision boundary?"
+Answer: NO! Only the support vectors lying on or inside the margin band define $w$ and $b$. If you move non-support vectors, the hyperplane does not change at all!
+
+</div>
+
+<p>Wrong:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X_scaled = scaler.fit_transform(X)
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X_scaled,
+    y,
+)</code></pre></div>
+<p>Why risky?</p>
+<p>Because the transformation has already seen the entire dataset.</p>
+<p>Safer:</p>
+<div class="ascii-box"><pre>split
+ ↓
+fit scaler on train
+ ↓
+transform train
+ ↓
+transform test</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-36" class="section-block">
+      <div class="section-header">
+        <span class="section-num">36</span>
+        <h2 class="section-heading">Common Mistake — Repeated Test-Tuning</h2>
+      </div>
+      <div class="section-body">
+        <p>Bad workflow:</p>
+<div class="ascii-box"><pre>try K=1
+look at test
+try K=3
+look at test
+try K=5
+look at test
+choose winner</pre></div>
+<p>The test set has now influenced the choice.</p>
+<p>Better:</p>
+<div class="ascii-box"><pre>train
+validation / cross-validation
+choose
+test once</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-37" class="section-block">
+      <div class="section-header">
+        <span class="section-num">37</span>
+        <h2 class="section-heading">Common Mistake — Comparing Different Splits</h2>
+      </div>
+      <div class="section-body">
+        <p>Bad:</p>
+<div class="ascii-box"><pre>KNN → split A
+SVM → split B
+Tree → split C</pre></div>
+<p>Better:</p>
+<div class="ascii-box"><pre>one controlled split
+        ↓
+all models</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-38" class="section-block">
+      <div class="section-header">
+        <span class="section-num">38</span>
+        <h2 class="section-heading">Common Mistake — Ignoring Scaling for KNN</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="ascii-box"><pre>feature 1: 0–1
+feature 2: 0–1,000,000</pre></div>
+<p>Distance can be dominated by feature 2.</p>
+<p>That changes what “nearest” means.</p>
+<p>So scaling is not cosmetic for KNN.</p>
+<p>It changes the geometry.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-39" class="section-block">
+      <div class="section-header">
+        <span class="section-num">39</span>
+        <h2 class="section-heading">Common Mistake — Calling SVM “Just a Classifier”</h2>
+      </div>
+      <div class="section-body">
+        <p>SVM is not best remembered as:</p>
+<blockquote>
+<p>“another classifier.”</p>
+</blockquote>
+<p>Remember:</p>
+<div class="ascii-box"><pre>classifier
++
+margin
++
+support vectors
++
+regularization / C
++
+kernel possibility</pre></div>
+<p>That mental model transfers to later ML concepts.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-40" class="section-block">
+      <div class="section-header">
+        <span class="section-num">40</span>
+        <h2 class="section-heading">Common Mistake — Treating Tree Depth as a Universal Number</h2>
+      </div>
+      <div class="section-body">
+        <p>A tree with:</p>
+<div class="ascii-box"><pre>max_depth=5</pre></div>
+<p>is not automatically good.</p>
+<p>Depth is a hyperparameter selected for the data and objective.</p>
+<p>The important lesson is:</p>
+<blockquote>
+<p><strong>Model settings are experimental choices, not magic constants.</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-41" class="section-block">
+      <div class="section-header">
+        <span class="section-num">41</span>
+        <h2 class="section-heading">Error Analysis</h2>
+      </div>
+      <div class="section-body">
+        <p>For each model, inspect false predictions.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">wrong = (
+    pred != y_test
+)
+
+print(
+    &quot;Errors:&quot;,
+    wrong.sum()
+)</code></pre></div>
+<p>Then ask:</p>
+<div class="ascii-box"><pre>Are errors concentrated in one class?
+Do KNN errors appear near class overlap?
+Does SVM struggle with nonlinear structure?
+Does Tree overfit particular feature combinations?</pre></div>
+<p>These are hypotheses.</p>
+<p>Validate them using the data.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-42" class="section-block">
+      <div class="section-header">
+        <span class="section-num">42</span>
+        <h2 class="section-heading">Reproducibility</h2>
+      </div>
+      <div class="section-body">
+        <p>Record:</p>
+<div class="ascii-box"><pre>dataset
+split random_state
+stratification
+scaler
+K
+C
+kernel
+tree depth
+metrics
+Python version
+package versions</pre></div>
+<p>Use:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">random_state=42</code></pre></div>
+<p>where the relevant library supports it.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-43" class="section-block">
+      <div class="section-header">
+        <span class="section-num">43</span>
+        <h2 class="section-heading">Final Experiment Template</h2>
+      </div>
+      <div class="section-body">
+        <h2>Experiment</h2>
+<div class="ascii-box"><pre>Dataset:
+Samples:
+Features:
+Classes:
+
+Split:
+Training:
+Test:
+
+Preprocessing:
+KNN:
+SVM:
+Tree:
+
+Metric priority:
+Primary:
+Secondary:
+
+Selected configurations:
+K =
+C =
+Kernel =
+Tree depth =</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-44" class="section-block">
+      <div class="section-header">
+        <span class="section-num">44</span>
+        <h2 class="section-heading">Results Table</h2>
+      </div>
+      <div class="section-body">
+        <p>Fill with actual measurements:</p>
+<div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Model</th>
+<th>Preprocessing</th>
+<th>Main setting</th>
+<th style="text-align: right;">Accuracy</th>
+<th style="text-align: right;">Precision</th>
+<th style="text-align: right;">Recall</th>
+<th style="text-align: right;">F1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>KNN</td>
+<td>StandardScaler</td>
+<td>K=</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr>
+<td>SVM</td>
+<td>StandardScaler</td>
+<td>C=, kernel=</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr>
+<td>Decision Tree</td>
+<td>none</td>
+<td>depth=</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-45" class="section-block">
+      <div class="section-header">
+        <span class="section-num">45</span>
+        <h2 class="section-heading">Final Interpretation</h2>
+      </div>
+      <div class="section-body">
+        <p>Write five short statements:</p>
+<div class="ascii-box"><pre>1. Best primary metric:
+2. Best secondary metric:
+3. Most interpretable:
+4. Most preprocessing-sensitive:
+5. Final selected model and why:</pre></div>
+<p>Then add:</p>
+<div class="ascii-box"><pre>What evidence would change my conclusion?</pre></div>
+<p>This keeps the comparison scientific rather than absolute.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-46" class="section-block">
+      <div class="section-header">
+        <span class="section-num">46</span>
+        <h2 class="section-heading">Extension Lab — Feature Scaling Ablation</h2>
+      </div>
+      <div class="section-body">
+        <p>Compare KNN:</p>
+<div class="ascii-box"><pre>without scaling
+vs
+with scaling</pre></div>
+<p>Keep everything else constant.</p>
+<p>This directly demonstrates the geometric importance of scaling.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-47" class="section-block">
+      <div class="section-header">
+        <span class="section-num">47</span>
+        <h2 class="section-heading">Extension Lab — K Sweep</h2>
+      </div>
+      <div class="section-body">
+        <p>Plot:</p>
+<div class="ascii-box"><pre>K
+vs
+validation F1</pre></div>
+<p>Look for:</p>
+<div class="ascii-box"><pre>too small
+→ unstable / high variance
+
+moderate
+→ useful local structure
+
+too large
+→ over-smoothed</pre></div>
+<p>The exact curve depends on the dataset.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-48" class="section-block">
+      <div class="section-header">
+        <span class="section-num">48</span>
+        <h2 class="section-heading">Extension Lab — SVM C Sweep</h2>
+      </div>
+      <div class="section-body">
+        <p>Plot:</p>
+<div class="ascii-box"><pre>C
+vs
+validation F1</pre></div>
+<p>Then explain the observed trade-off.</p>
+<p>Do not turn the result into a universal law.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-49" class="section-block">
+      <div class="section-header">
+        <span class="section-num">49</span>
+        <h2 class="section-heading">Extension Lab — 2D Geometry</h2>
+      </div>
+      <div class="section-body">
+        <p>Create a 2-feature synthetic dataset.</p>
+<p>Then train:</p>
+<div class="ascii-box"><pre>KNN
+SVM
+Decision Tree</pre></div>
+<p>and visualize the decision regions.</p>
+<p>This lets you literally see:</p>
+<div class="ascii-box"><pre>local neighbourhood
+vs
+margin-based boundary
+vs
+recursive axis-aligned partitions</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-50" class="section-block">
+      <div class="section-header">
+        <span class="section-num">50</span>
+        <h2 class="section-heading">Viva Questions</h2>
+      </div>
+      <div class="section-body">
+        <h3>KNN</h3>
+<ol>
+<li>Why is KNN called a lazy learner?</li>
+<li>Why does scaling matter?</li>
+<li>What happens when K is too small?</li>
+<li>What happens when K is too large?</li>
+<li>What is the prediction rule for classification?</li>
+</ol>
+<h3>SVM</h3>
+<ol>
+<li>What is a margin?</li>
+<li>What is a support vector?</li>
+<li>What does C control?</li>
+<li>Why use a kernel?</li>
+<li>What is the difference between linear and RBF SVM?</li>
+</ol>
+<h3>Comparison</h3>
+<ol>
+<li>Why can KNN be expensive during prediction?</li>
+<li>Why can decision trees often work without scaling?</li>
+<li>Why is the same train/test split important?</li>
+<li>Why should hyperparameters not be selected on the final test set?</li>
+<li>Which model would you choose for interpretability?</li>
+</ol>
+<h3>Engineering</h3>
+<ol>
+<li>How did you make the experiment reproducible?</li>
+<li>What did you test in the scratch KNN implementation?</li>
+<li>Which metric was primary, and why?</li>
+<li>What were the main failure cases?</li>
+<li>What evidence supports your final model choice?</li>
+</ol>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-51" class="section-block">
+      <div class="section-header">
+        <span class="section-num">51</span>
+        <h2 class="section-heading">Practical Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <p>Move forward only when you can:</p>
+<div class="ascii-box"><pre>[ ] Explain KNN without notes.
+[ ] Calculate one KNN prediction by hand.
+[ ] Implement KNN classification from scratch.
+[ ] Test the implementation on a tiny example.
+[ ] Explain why scaling changes KNN geometry.
+[ ] Use library KNN.
+[ ] Explain SVM margin.
+[ ] Explain support vectors.
+[ ] Explain the role of C.
+[ ] Use linear SVM.
+[ ] Use RBF SVM.
+[ ] Train a Decision Tree.
+[ ] Compare all three models fairly.
+[ ] Compute accuracy / precision / recall / F1.
+[ ] Inspect confusion matrices.
+[ ] Tune using validation/cross-validation.
+[ ] Keep the test set held out.
+[ ] Perform error analysis.
+[ ] Explain the final model choice.</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-52" class="section-block">
+      <div class="section-header">
+        <span class="section-num">52</span>
+        <h2 class="section-heading">Connection to the Existing Coding Book</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>CODE-U2-01
+ML workflow + preprocessing
+        ↓
+CODE-U2-04
+Decision Trees
+        ↓
+CODE-U2-08
+KNN + SVM  ← this chapter
+        ↓
+CODE-U2-05
+Classification metrics
+        ↓
+CODE-U2-07
+Model comparison + evaluation
+        ↓
+CODE-U2-06
+Ridge + Lasso</pre></div>
+<p>The ordering is slightly reorganized here for practical coherence, but the content identities of the existing files remain unchanged.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-53" class="section-block">
+      <div class="section-header">
+        <span class="section-num">53</span>
+        <h2 class="section-heading">Source Boundary</h2>
+      </div>
+      <div class="section-body">
+        <h2>Directly supported by supplied course material</h2>
+<p>The supplied <code>AI_ML_Master_Learning_Resource_Guide.pdf</code> explicitly lists:</p>
+<div class="ascii-box"><pre>Regression/classification:
+Decision Trees
+k-NN
+SVM</pre></div>
+<p>and requires:</p>
+<div class="ascii-box"><pre>small datasets
+confusion matrix
+precision
+recall
+F1
+model comparison</pre></div>
+<p>It also establishes the practical explanation chain:</p>
+<div class="ascii-box"><pre>input
+→ representation
+→ algorithm
+→ parameters
+→ loss/reward
+→ training/update
+→ output
+→ evaluation</pre></div>
+<p>The supplied <code>MAIN-U2-C16</code> provides the conceptual KNN framing, including local similarity, K, distance, classification, regression, and scaling.</p>
+<h2>Coding-book expansion</h2>
+<p>This file adds:</p>
+<div class="ascii-box"><pre>from-scratch KNN
+library KNN
+SVM practical
+controlled comparison protocol
+hyperparameter experiments
+visualization
+testing
+error analysis
+reproducibility</pre></div>
+<p>These are implementation-layer expansions, not claims of verbatim instructor material.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-54" class="section-block">
+      <div class="section-header">
+        <span class="section-num">54</span>
+        <h2 class="section-heading">Final Status</h2>
+      </div>
+      <div class="section-body">
+        <p><strong><code>CODE-U2-08</code> — COMPLETE</strong></p>
+<p>Unit II practical coverage is now aligned with the supplied practical guide:</p>
+<div class="ascii-box"><pre>Decision Tree ✅
+KNN ✅
+SVM ✅
+Metrics ✅
+Model comparison ✅</pre></div>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="code-u2-08-knn-svm-practical-comparison.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← Unit 2 Lab 08 — KNN & SVM Practical</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">💻 Coding Index</span>
+      </a>
+      <a href="code-u3-01-neuron-perceptron.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: Unit 3 Lab 01 — Neuron & Perceptron From Scratch →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search lab implementations, functions, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">💻</span>Lab Hub</a>
+  <a href="code-u2-08-knn-svm-practical-comparison.html" class="mobile-nav-btn active"><span class="icon">📖</span>CODE-U2-08</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

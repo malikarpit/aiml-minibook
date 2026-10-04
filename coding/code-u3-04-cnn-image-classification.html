@@ -1,0 +1,2086 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="CODE-U3-04: CNNs: From Scratch to PyTorch Image Classification — AI & Machine Learning Coding Lab. 2D Convolution Operations, Stride & Padding, Max Pooling Downsampling, Feature Maps, and PyTorch LeNet/ConvNet Training Pipeline">
+<title>CODE-U3-04: CNNs: From Scratch to PyTorch Image Classification | Coding Lab 💻 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/coding.css">
+</head>
+<body class="coding-module track-c3">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">💻</div>
+      <div class="brand-text"><span class="main">Coding Lab</span><span class="sub">AI &amp; ML From Scratch</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">CODE-U3-04: CNNs: From Scratch to PyTorch Image Classification</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">💻</span>Coding Lab Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../math/index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 0: Environment & System</div>
+  <a href="code-00-coding-foundation.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-00: Coding Lab Foundation &amp; Implementation System</a>
+  <a href="code-01-python-numpy-workflow.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-01: Python, NumPy, Matplotlib &amp; Lab Workflow</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Classical AI & Search Labs</div>
+  <a href="code-u1-01-bfs-dfs.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-01: BFS and DFS From Scratch</a>
+  <a href="code-u1-02-greedy-a-star.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-02: Greedy Best-First &amp; A* Search From Scratch</a>
+  <a href="code-u1-03-csp-backtracking.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-03: CSPs and Backtracking Search</a>
+  <a href="code-u1-04-minimax-alpha-beta.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Supervised ML Labs</div>
+  <a href="code-u2-01-ml-workflow.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-01: ML Workflow: Preprocessing, Splitting &amp; Evaluation</a>
+  <a href="code-u2-02-linear-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-02: Linear Regression From Scratch</a>
+  <a href="code-u2-03-logistic-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-03: Logistic Regression From Scratch</a>
+  <a href="code-u2-04-decision-trees.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-04: Decision Trees From Scratch</a>
+  <a href="code-u2-05-classification-metrics-roc.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC &amp; Thresholds</a>
+  <a href="code-u2-06-ridge-lasso-regularization.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-06: Ridge &amp; Lasso From Scratch: Regularization &amp; Optimization</a>
+  <a href="code-u2-07-ml-evaluation-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-07: ML Evaluation &amp; Model Comparison Lab</a>
+  <a href="code-u2-08-knn-svm-practical-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-08: KNN and SVM Practical Comparison Lab</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Deep Learning Labs</div>
+  <a href="code-u3-01-neuron-perceptron.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-01: Neuron and Perceptron From Scratch</a>
+  <a href="code-u3-02-mlp-forward-propagation.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-02: MLP and Forward Propagation From Scratch</a>
+  <a href="code-u3-03-backpropagation-scratch.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-03: Gradient Descent &amp; Backpropagation From Scratch</a>
+  <a href="code-u3-04-cnn-image-classification.html" class="sidebar-link active"><span class="link-icon">🧠</span>CODE-U3-04: CNNs: From Scratch to PyTorch Image Classification</a>
+  <a href="code-u3-05-rnn-lstm-sequence-modelling.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-05: RNN &amp; LSTM: From Scratch to PyTorch Sequence Modelling</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Advanced AI & RL Labs</div>
+  <a href="code-u4-01-mdp-q-learning.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-01: MDPs and Q-Learning From Scratch</a>
+  <a href="code-u4-02-policy-gradients-reinforce.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-02: Policy Gradients &amp; REINFORCE Algorithm</a>
+  <a href="code-u4-03-nlp-text-classification.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-03: NLP Preprocessing &amp; Text Classification Pipeline</a>
+  <a href="code-u4-04-autoencoders-pytorch.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-04: Autoencoders: From Scratch &amp; PyTorch Representation Learning</a>
+  <a href="code-u4-05-gans-pytorch.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-05: Generative Adversarial Networks: Core Mechanics to PyTorch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 5: Engineering & Capstone</div>
+  <a href="code-23-debugging-testing-reproducibility.html" class="sidebar-link"><span class="link-icon">🏆</span>CODE-23: Debugging, Testing, Visualization &amp; Reproducibility</a>
+  <a href="code-24-coding-capstone-checklist.html" class="sidebar-link"><span class="link-icon">🏆</span>CODE-24: AI/ML Coding Capstone &amp; Master Practical Checklist</a>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">CODE-U3-04 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Course Position</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Why CNNs Exist</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Image Representation</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Example Tensor Shapes</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. What a Convolutional Filter Does</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Important Terminology</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. One Tiny Manual Example</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. CNN Implementation Note — Convolution vs Cross-Correlation</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Grayscale 2D Convolution From Scratch</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Test the Convolution</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Output-Size Formula</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Output-Size Numerical</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Same-Padding Intuition</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Stride</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Multiple Filters</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. CNN Parameter Count</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Why Parameter Sharing Matters</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Multi-Channel Convolution From Scratch</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. ReLU After Convolution</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Pooling</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Why Pooling Exists</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Receptive Field Intuition</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. CNN Pipeline</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. PyTorch CNN</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Verify the CNN Shape</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Inspect Intermediate Shapes</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. MNIST Training Skeleton</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. Device Selection</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Loss and Optimizer</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Training Loop</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Evaluation Loop</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Complete Training Skeleton</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Visualization — Sample Images</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Visualize Feature Maps</a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. CNN Parameter Counting in PyTorch</a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Compare Dense and CNN Parameter Logic</a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. Overfitting Experiment</a>
+      <a href="#s-38" class="sidebar-link"><span class="link-icon">📌</span>38. Data Augmentation Preview</a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. CNN Debugging Checklist</a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Common CNN Mistakes</a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Practical Lab</a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Error Analysis Template</a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Viva Questions</a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Exam Connection</a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. Math You Need Now</a>
+      <a href="#s-46" class="sidebar-link"><span class="link-icon">📌</span>46. Source Notes</a>
+      <a href="#s-47" class="sidebar-link"><span class="link-icon">📌</span>47. Mastery Gate</a>
+      <a href="#s-48" class="sidebar-link"><span class="link-icon">📌</span>48. Connection Forward</a>
+      <a href="#s-49" class="sidebar-link"><span class="link-icon">📌</span>49. Status</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Coding Lab</a>
+        <span>/</span>
+        <span>CODE-U3-04</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-c3">Track 3: Deep Learning & Neural Networks Labs</span></div>
+      <h1 class="chapter-title">CNNs: From Scratch to PyTorch Image Classification</h1>
+      <p class="chapter-desc">2D Convolution Operations, Stride &amp; Padding, Max Pooling Downsampling, Feature Maps, and PyTorch LeNet/ConvNet Training Pipeline</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~55 min lab</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">CNN</span> <span class="chapter-meta-item uni-badge">CONVOLUTION-2D</span> <span class="chapter-meta-item uni-badge">MAX-POOLING</span> <span class="chapter-meta-item uni-badge">PYTORCH</span> <span class="chapter-meta-item uni-badge">COMPUTER-VISION</span>
+      </div>
+
+      <div class="lab-meta-grid">
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Prerequisites</div>
+          <div class="lab-meta-value">CODE-U3-02 MLP Forward Pass, CODE-01 NumPy Workflow</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Main Book Concept</div>
+          <div class="lab-meta-value">Ch 36 Convolutional Neural Networks (CNNs)</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Math Companion Layer</div>
+          <div class="lab-meta-value">2D Discrete Cross-Correlation, Spatial dimensions (W - K + 2P)/S + 1</div>
+        </div>
+        <div class="lab-meta-box" style="grid-column: 1 / -1;">
+          <div class="lab-meta-label">AI / Machine Learning Connections</div>
+          <div class="lab-meta-value">Translation invariance, Local receptive fields, Parameter sharing, MNIST & CIFAR-10 image recognition</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-meta-card"><h1>CODE-U3-04 — Convolutional Neural Networks</h1>
+<blockquote>
+<p><strong>Purpose:</strong> Move from generic dense networks to image-aware neural networks by implementing a small 2D convolution manually, understanding tensor shapes and parameter sharing, then building a practical CNN image-classification model with PyTorch.</p>
+</blockquote>
+<p>The central progression is:</p>
+<div class="ascii-box"><pre>image
+  ↓
+local receptive fields
+  ↓
+convolution / cross-correlation operation
+  ↓
+feature maps
+  ↓
+nonlinearity
+  ↓
+pooling / downsampling
+  ↓
+deeper features
+  ↓
+classifier</pre></div>
+<p>This chapter deliberately has two layers:</p>
+<ol>
+<li><strong>from-scratch mechanics</strong> — enough NumPy code to understand exactly what a convolutional layer does;</li>
+<li><strong>framework implementation</strong> — a practical CNN for image classification using PyTorch.</li>
+</ol>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in CODE-U3-04 (49 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Course Position</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Why CNNs Exist</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Image Representation</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Example Tensor Shapes</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">What a Convolutional Filter Does</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Important Terminology</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">One Tiny Manual Example</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">CNN Implementation Note — Convolution vs Cross-Correlation</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Grayscale 2D Convolution From Scratch</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Test the Convolution</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Output-Size Formula</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Output-Size Numerical</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Same-Padding Intuition</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Stride</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Multiple Filters</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">CNN Parameter Count</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Why Parameter Sharing Matters</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Multi-Channel Convolution From Scratch</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">ReLU After Convolution</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Pooling</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Why Pooling Exists</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Receptive Field Intuition</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">CNN Pipeline</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">PyTorch CNN</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Verify the CNN Shape</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Inspect Intermediate Shapes</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">MNIST Training Skeleton</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">Device Selection</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Loss and Optimizer</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Training Loop</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Evaluation Loop</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Complete Training Skeleton</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Visualization — Sample Images</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Visualize Feature Maps</span></a></li>
+        <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">CNN Parameter Counting in PyTorch</span></a></li>
+        <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Compare Dense and CNN Parameter Logic</span></a></li>
+        <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">Overfitting Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-38"><span class="toc-num">38</span><span class="toc-name">Data Augmentation Preview</span></a></li>
+        <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">CNN Debugging Checklist</span></a></li>
+        <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Common CNN Mistakes</span></a></li>
+        <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Practical Lab</span></a></li>
+        <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Error Analysis Template</span></a></li>
+        <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Viva Questions</span></a></li>
+        <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Exam Connection</span></a></li>
+        <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">Math You Need Now</span></a></li>
+        <li class="toc-item"><a href="#s-46"><span class="toc-num">46</span><span class="toc-name">Source Notes</span></a></li>
+        <li class="toc-item"><a href="#s-47"><span class="toc-num">47</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-48"><span class="toc-num">48</span><span class="toc-name">Connection Forward</span></a></li>
+        <li class="toc-item"><a href="#s-49"><span class="toc-num">49</span><span class="toc-name">Status</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">Course Position</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph LR
+    Img["Input Image (H × W × C)"] --> Conv["Conv2D: Filter sliding across channels"]
+    Conv --> Act["ReLU Non-linearity"]
+    Act --> Pool["MaxPool2D (2×2): Spatial Downsampling"]
+    Pool --> Flat["Flatten to 1D Feature Vector"]
+    Flat --> FC["Dense Linear Classifier"]
+    FC --> Out["Class Probabilities (Softmax)"]
+    style Conv fill:#1e293b,stroke:#a855f7,color:#f8fafc
+    style Pool fill:#0f172a,stroke:#38bdf8,color:#38bdf8,stroke-width:2px
+    style Out fill:#065f46,stroke:#34d399,color:#ffffff
+</pre></div>
+<p>The official DSC-14 Unit III syllabus includes <strong>Convolutional Neural Networks (CNN): architecture and applications in image processing</strong>.</p>
+<p>The supplied AI/ML resource guide identifies CNN as an important Unit III topic requiring deeper external study beyond the supplied core notes. It places CNN alongside RNN/LSTM in the Unit III gap-filling block.</p>
+<p>The earlier Coding Book chapters established:</p>
+<div class="ascii-box"><pre>neuron
+ ↓
+perceptron
+ ↓
+MLP
+ ↓
+forward propagation
+ ↓
+backpropagation
+ ↓
+gradient descent</pre></div>
+<p>CNNs reuse the same learning pipeline but change the architectural assumption about the structure of the input.</p>
+<p><strong>Source boundary:</strong> the official syllabus establishes the topic boundary; the complete convolution, tensor-shape, NumPy implementation and PyTorch image-classification workflow below are coding-book expansion.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">Why CNNs Exist</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Implementation Model</div>
+
+Dense MLP mein agar 1000x1000 ki image dalo, toh pehle hi layer mein lakho parameters ho jayenge aur spatial structure (aankhein, naak) gayab ho jayegi.
+CNN ek chhota sliding glass (kernel / filter) use karta hai jo image par ghoomta hai.
+Filter sharing ka matlab: wahi 3x3 filter poori image mein horizontal edge ya vertical edge dhundhta hai.
+Max Pooling resolution ko aadha kar deta hai par sabse strong features ko preserve rakhta hai!
+
+</div>
+
+<p>An image is not naturally just a long flat feature vector.</p>
+<p>Consider a grayscale image:</p>
+<div class="ascii-box"><pre>28 × 28</pre></div>
+<p>A nearby group of pixels often forms a useful local pattern:</p>
+<div class="ascii-box"><pre>edge
+corner
+stroke
+texture
+shape fragment</pre></div>
+<p>A dense layer ignores this local structure unless it learns it indirectly.</p>
+<p>A CNN builds local spatial processing directly into the architecture.</p>
+<p>The design ideas are:</p>
+<div class="ascii-box"><pre>local connectivity
++
+parameter sharing
++
+hierarchical feature extraction</pre></div>
+<p>These are the concepts to understand before memorizing <code>Conv2d</code>.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">Image Representation</h2>
+      </div>
+      <div class="section-body">
+        <p>A grayscale image can be represented as:</p>
+<div class="formula-math">\[
+H\times W
+\]</div>
+<p>or, with an explicit channel dimension:</p>
+<div class="formula-math">\[
+C\times H\times W.
+\]</div>
+<p>For a batch:</p>
+<div class="formula-math">\[
+N\times C\times H\times W.
+\]</div>
+<p>For RGB:</p>
+<div class="ascii-box"><pre>C = 3</pre></div>
+<p>A typical PyTorch image tensor uses:</p>
+<div class="ascii-box"><pre>(batch, channels, height, width)</pre></div>
+<p>for <code>Conv2d</code>.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Example Tensor Shapes</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="ascii-box"><pre>batch = 32
+channels = 3
+height = 64
+width = 64</pre></div>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">X.shape == (32, 3, 64, 64)</code></pre></div>
+<p>This means:</p>
+<div class="ascii-box"><pre>32 images
+3 channels per image
+64 rows
+64 columns</pre></div>
+<p>Do not read:</p>
+<div class="ascii-box"><pre>32 × 3 × 64 × 64</pre></div>
+<p>as one flat feature count.</p>
+<p>It is a structured tensor.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">What a Convolutional Filter Does</h2>
+      </div>
+      <div class="section-body">
+        <p>Take a small kernel:</p>
+<div class="formula-math">\[
+K\in\mathbb{R}^{k_H\times k_W}.
+\]</div>
+<p>For a grayscale image region:</p>
+<div class="formula-math">\[
+P\in\mathbb{R}^{k_H\times k_W}
+\]</div>
+<p>a simple local response is:</p>
+<div class="formula-math">\[
+s=
+\sum_i\sum_j K_{ij}P_{ij}+b.
+\]</div>
+<p>The kernel moves across the image.</p>
+<p>At each location:</p>
+<div class="ascii-box"><pre>patch
+ ↓
+element-wise multiply
+ ↓
+sum
+ ↓
+bias
+ ↓
+one output value</pre></div>
+<p>Repeating this creates a <strong>feature map</strong>.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Important Terminology</h2>
+      </div>
+      <div class="section-body">
+        <div class="table-wrap"><table class="data-table">
+<thead>
+<tr>
+<th>Term</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>kernel/filter</td>
+<td>learnable local weight pattern</td>
+</tr>
+<tr>
+<td>feature map</td>
+<td>spatial output produced by a filter</td>
+</tr>
+<tr>
+<td>channel</td>
+<td>one input/output feature plane</td>
+</tr>
+<tr>
+<td>stride</td>
+<td>step size of the kernel movement</td>
+</tr>
+<tr>
+<td>padding</td>
+<td>extra border values added around input</td>
+</tr>
+<tr>
+<td>receptive field</td>
+<td>input region influencing an output unit</td>
+</tr>
+<tr>
+<td>pooling</td>
+<td>local downsampling operation</td>
+</tr>
+<tr>
+<td>parameter sharing</td>
+<td>same filter weights reused across locations</td>
+</tr>
+</tbody>
+</table></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">One Tiny Manual Example</h2>
+      </div>
+      <div class="section-body">
+        <p>Input:</p>
+<div class="formula-math">\[
+X=
+\begin{bmatrix}
+1&2&3\\
+4&5&6\\
+7&8&9
+\end{bmatrix}
+\]</div>
+<p>Kernel:</p>
+<div class="formula-math">\[
+K=
+\begin{bmatrix}
+1&0\\
+0&-1
+\end{bmatrix}
+\]</div>
+<p>Top-left patch:</p>
+<div class="formula-math">\[
+\begin{bmatrix}
+1&2\\
+4&5
+\end{bmatrix}
+\]</div>
+<p>Response:</p>
+<div class="formula-math">\[
+1(1)+0(2)+0(4)+(-1)(5)
+\]</div>
+<div class="formula-math">\[
+=1-5=-4.
+\]</div>
+<p>Move one step right.</p>
+<p>Patch:</p>
+<div class="formula-math">\[
+\begin{bmatrix}
+2&3\\
+5&6
+\end{bmatrix}
+\]</div>
+<p>Response:</p>
+<div class="formula-math">\[
+2-6=-4.
+\]</div>
+<p>The same kernel is reused.</p>
+<p>That is parameter sharing.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">CNN Implementation Note — Convolution vs Cross-Correlation</h2>
+      </div>
+      <div class="section-body">
+        <p>Deep-learning libraries commonly implement the sliding weighted-sum operation called <code>Conv2d</code> without explicitly flipping the kernel as in the strict mathematical definition of convolution.</p>
+<p>For learning the architecture, the important mechanics are:</p>
+<div class="ascii-box"><pre>learnable kernel
+ ↓
+slide over local regions
+ ↓
+weighted sum
+ ↓
+feature map</pre></div>
+<p>Do not get stuck on terminology before understanding the computation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Grayscale 2D Convolution From Scratch</h2>
+      </div>
+      <div class="section-body">
+        <p>Start with one image and one kernel.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np</code></pre></div>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def conv2d_valid(
+    image: np.ndarray,
+    kernel: np.ndarray,
+    stride: int = 1,
+) -&gt; np.ndarray:
+    image = np.asarray(image, dtype=float)
+    kernel = np.asarray(kernel, dtype=float)
+
+    if image.ndim != 2:
+        raise ValueError(&quot;image must be 2D.&quot;)
+
+    if kernel.ndim != 2:
+        raise ValueError(&quot;kernel must be 2D.&quot;)
+
+    if stride &lt;= 0:
+        raise ValueError(&quot;stride must be positive.&quot;)
+
+    kh, kw = kernel.shape
+    h, w = image.shape
+
+    if h &lt; kh or w &lt; kw:
+        raise ValueError(&quot;Kernel must fit inside image.&quot;)
+
+    out_h = 1 + (h - kh) // stride
+    out_w = 1 + (w - kw) // stride
+
+    output = np.zeros((out_h, out_w), dtype=float)
+
+    for i in range(out_h):
+        for j in range(out_w):
+            r = i * stride
+            c = j * stride
+
+            patch = image[
+                r:r + kh,
+                c:c + kw,
+            ]
+
+            output[i, j] = np.sum(
+                patch * kernel
+            )
+
+    return output</code></pre></div>
+<p>This is deliberately explicit.</p>
+<p>Do not optimize it yet.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Test the Convolution</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">image = np.array([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+], dtype=float)
+
+kernel = np.array([
+    [1, 0],
+    [0, -1],
+], dtype=float)
+
+feature_map = conv2d_valid(
+    image,
+    kernel,
+)
+
+print(feature_map)</code></pre></div>
+<p>Expected shape:</p>
+<div class="ascii-box"><pre>(2, 2)</pre></div>
+<p>Expected values:</p>
+<div class="ascii-box"><pre>[[-4, -4],
+ [-4, -4]]</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Output-Size Formula</h2>
+      </div>
+      <div class="section-body">
+        <p>For one spatial dimension:</p>
+<div class="formula-math">\[
+\boxed{
+O=
+\left\lfloor
+\frac{I+2P-D(K-1)-1}{S}
++1
+\right\rfloor
+}
+\]</div>
+<p>where:</p>
+<ul>
+<li>\(I\) = input size;</li>
+<li>\(O\) = output size;</li>
+<li>\(K\) = kernel size;</li>
+<li>\(P\) = padding;</li>
+<li>\(S\) = stride;</li>
+<li>\(D\) = dilation.</li>
+</ul>
+<p>For the common simple case \(D=1\):</p>
+<div class="formula-math">\[
+\boxed{
+O=
+\left\lfloor
+\frac{I+2P-K}{S}
+\right\rfloor+1
+}
+\]</div>
+<p>For height and width, apply the formula separately.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Output-Size Numerical</h2>
+      </div>
+      <div class="section-body">
+        <p>Input:</p>
+<div class="ascii-box"><pre>28 × 28</pre></div>
+<p>Kernel:</p>
+<div class="ascii-box"><pre>3 × 3</pre></div>
+<p>Stride:</p>
+<div class="ascii-box"><pre>1</pre></div>
+<p>Padding:</p>
+<div class="ascii-box"><pre>0</pre></div>
+<p>Then:</p>
+<div class="formula-math">\[
+O=
+\frac{28-3}{1}+1
+=26.
+\]</div>
+<p>So:</p>
+<div class="ascii-box"><pre>28 × 28
+    ↓
+3 × 3 kernel, stride 1, no padding
+    ↓
+26 × 26</pre></div>
+<p>Exam trigger:</p>
+<blockquote>
+<p><strong>Compute the spatial output size of a CNN layer.</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Same-Padding Intuition</h2>
+      </div>
+      <div class="section-body">
+        <p>With an odd kernel such as:</p>
+<div class="ascii-box"><pre>3 × 3</pre></div>
+<p>padding can preserve spatial dimensions when stride is 1.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>input border
+   ↓
+pad around border
+   ↓
+kernel can inspect border-neighbourhoods
+   ↓
+same-sized feature map</pre></div>
+<p>Padding prevents the spatial dimensions from shrinking too quickly across many layers.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Stride</h2>
+      </div>
+      <div class="section-body">
+        <p>Stride controls how far the kernel moves.</p>
+<h3>Stride 1</h3>
+<div class="ascii-box"><pre>move one pixel</pre></div>
+<h3>Stride 2</h3>
+<div class="ascii-box"><pre>move two pixels</pre></div>
+<p>Larger stride generally reduces spatial resolution.</p>
+<p>Example:</p>
+<div class="ascii-box"><pre>28 × 28
+3 × 3
+stride 2
+padding 0</pre></div>
+<div class="formula-math">\[
+O=
+\left\lfloor
+\frac{28-3}{2}
+\right\rfloor+1
+=
+13.
+\]</div>
+<p>So:</p>
+<div class="ascii-box"><pre>28 × 28 → 13 × 13</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">Multiple Filters</h2>
+      </div>
+      <div class="section-body">
+        <p>A realistic CNN layer uses many filters.</p>
+<p>Suppose:</p>
+<div class="ascii-box"><pre>input channels = 3
+output channels = 16
+kernel = 3 × 3</pre></div>
+<p>Each output filter has weights for all three input channels.</p>
+<p>Weight shape:</p>
+<div class="formula-math">\[
+16\times3\times3\times3.
+\]</div>
+<p>Each output channel gets one feature map.</p>
+<p>Therefore:</p>
+<div class="ascii-box"><pre>3-channel image
+      ↓
+16 learned filters
+      ↓
+16 output feature maps</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">CNN Parameter Count</h2>
+      </div>
+      <div class="section-body">
+        <p>For a standard convolutional layer:</p>
+<div class="ascii-box"><pre>input channels  = C_in
+output channels = C_out
+kernel          = K_h × K_w</pre></div>
+<p>weights:</p>
+<div class="formula-math">\[
+C_{out}C_{in}K_hK_w.
+\]</div>
+<p>With one bias per output channel:</p>
+<div class="formula-math">\[
+\boxed{
+C_{out}C_{in}K_hK_w+C_{out}
+}
+\]</div>
+<p>Example:</p>
+<div class="ascii-box"><pre>Cin  = 3
+Cout = 16
+kernel = 3 × 3</pre></div>
+<p>Weights:</p>
+<div class="formula-math">\[
+16(3)(3)(3)=432.
+\]</div>
+<p>Biases:</p>
+<div class="formula-math">\[
+16.
+\]</div>
+<p>Total:</p>
+<div class="formula-math">\[
+\boxed{448}
+\]</div>
+<p>Notice what is <em>not</em> present:</p>
+<div class="ascii-box"><pre>image height
+image width</pre></div>
+<p>The same kernel parameters are reused spatially.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">Why Parameter Sharing Matters</h2>
+      </div>
+      <div class="section-body">
+        <p>A dense layer connected to every pixel would have a large number of independent weights.</p>
+<p>A CNN instead learns a local detector and reuses it across positions.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>same filter
+   ├── top-left
+   ├── top-middle
+   ├── center
+   ├── bottom-right
+   └── ...</pre></div>
+<p>The model can therefore learn:</p>
+<blockquote>
+<p>“this local pattern is useful regardless of exactly where it appears.”</p>
+</blockquote>
+<p>This creates translation-related inductive bias.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Multi-Channel Convolution From Scratch</h2>
+      </div>
+      <div class="section-body">
+        <p>For a batch-free input:</p>
+<div class="ascii-box"><pre>channels × height × width</pre></div>
+<p>and one filter:</p>
+<div class="ascii-box"><pre>channels × kernel_height × kernel_width</pre></div>
+<p>the output at each spatial location is the sum across channels.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def conv2d_multi_channel_valid(
+    image: np.ndarray,
+    kernel: np.ndarray,
+    bias: float = 0.0,
+    stride: int = 1,
+) -&gt; np.ndarray:
+    image = np.asarray(image, dtype=float)
+    kernel = np.asarray(kernel, dtype=float)
+
+    if image.ndim != 3:
+        raise ValueError(
+            &quot;image must have shape (channels, height, width).&quot;
+        )
+
+    if kernel.ndim != 3:
+        raise ValueError(
+            &quot;kernel must have shape (channels, kh, kw).&quot;
+        )
+
+    if image.shape[0] != kernel.shape[0]:
+        raise ValueError(
+            &quot;Image and kernel channel counts must match.&quot;
+        )
+
+    _, h, w = image.shape
+    _, kh, kw = kernel.shape
+
+    out_h = 1 + (h - kh) // stride
+    out_w = 1 + (w - kw) // stride
+
+    output = np.zeros((out_h, out_w))
+
+    for i in range(out_h):
+        for j in range(out_w):
+            r = i * stride
+            c = j * stride
+
+            patch = image[
+                :,
+                r:r + kh,
+                c:c + kw,
+            ]
+
+            output[i, j] = (
+                np.sum(patch * kernel)
+                + bias
+            )
+
+    return output</code></pre></div>
+<p>The operation is now:</p>
+<div class="ascii-box"><pre>channel 1 response
++
+channel 2 response
++
+...
++
+channel C response
++
+bias</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">ReLU After Convolution</h2>
+      </div>
+      <div class="section-body">
+        <p>A convolution produces:</p>
+<div class="formula-math">\[
+Z.
+\]</div>
+<p>We commonly apply a nonlinear activation:</p>
+<div class="formula-math">\[
+A=ReLU(Z).
+\]</div>
+<p>Thus:</p>
+<div class="ascii-box"><pre>image
+ ↓
+convolution
+ ↓
+feature map
+ ↓
+ReLU
+ ↓
+activated feature map</pre></div>
+<p>Implementation:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">activated = np.maximum(
+    feature_map,
+    0.0,
+)</code></pre></div>
+<p>This is the same ReLU concept learned in the MLP chapter.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Pooling</h2>
+      </div>
+      <div class="section-body">
+        <p>Pooling summarizes local regions.</p>
+<p>For max pooling:</p>
+<div class="formula-math">\[
+output_{i,j}
+=
+\max
+\left(
+\text{local window}
+\right).
+\]</div>
+<p>Example:</p>
+<div class="ascii-box"><pre>2 × 2 patch
+
+1 7
+3 2</pre></div>
+<p>max pool:</p>
+<div class="ascii-box"><pre>7</pre></div>
+<p>A simple NumPy implementation:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def max_pool2d(
+    feature_map: np.ndarray,
+    pool_size: int = 2,
+    stride: int = 2,
+) -&gt; np.ndarray:
+    feature_map = np.asarray(
+        feature_map,
+        dtype=float,
+    )
+
+    if feature_map.ndim != 2:
+        raise ValueError(&quot;feature_map must be 2D.&quot;)
+
+    h, w = feature_map.shape
+
+    if h &lt; pool_size or w &lt; pool_size:
+        raise ValueError(&quot;Pool window must fit.&quot;)
+
+    out_h = 1 + (h - pool_size) // stride
+    out_w = 1 + (w - pool_size) // stride
+
+    output = np.zeros((out_h, out_w))
+
+    for i in range(out_h):
+        for j in range(out_w):
+            r = i * stride
+            c = j * stride
+
+            patch = feature_map[
+                r:r + pool_size,
+                c:c + pool_size,
+            ]
+
+            output[i, j] = np.max(patch)
+
+    return output</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">Why Pooling Exists</h2>
+      </div>
+      <div class="section-body">
+        <p>Pooling can:</p>
+<ul>
+<li>reduce spatial resolution;</li>
+<li>lower downstream computation;</li>
+<li>summarize strong local responses;</li>
+<li>increase the effective region represented by later units.</li>
+</ul>
+<p>But remember:</p>
+<blockquote>
+<p>Pooling is not the essence of CNNs.</p>
+</blockquote>
+<p>The core architectural ideas are local connectivity, learned filters and feature maps.</p>
+<p>Modern CNN architectures can also downsample through strided convolutions rather than explicit pooling.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">Receptive Field Intuition</h2>
+      </div>
+      <div class="section-body">
+        <p>A neuron's receptive field is the region of the original input that can influence its activation.</p>
+<p>One convolution:</p>
+<div class="ascii-box"><pre>local region</pre></div>
+<p>Two stacked convolutional layers:</p>
+<div class="ascii-box"><pre>larger effective input region</pre></div>
+<p>Deeper layers can therefore respond to increasingly larger spatial structures.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>pixels
+ ↓
+edges
+ ↓
+corners/textures
+ ↓
+parts
+ ↓
+objects</pre></div>
+<p>This is an architectural intuition, not a guarantee that each neuron corresponds to a human-interpretable concept.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">CNN Pipeline</h2>
+      </div>
+      <div class="section-body">
+        <p>A basic classifier:</p>
+<div class="ascii-box"><pre>Image
+  ↓
+Conv
+  ↓
+ReLU
+  ↓
+Pool
+  ↓
+Conv
+  ↓
+ReLU
+  ↓
+Pool
+  ↓
+Flatten
+  ↓
+Dense
+  ↓
+Output</pre></div>
+<p>In more modern architectures, alternatives such as global average pooling, normalization layers and residual connections may replace or augment parts of this pattern.</p>
+<p>For the syllabus foundation, understand the basic pipeline first.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">PyTorch CNN</h2>
+      </div>
+      <div class="section-body">
+        <p>Now use the framework.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import torch
+import torch.nn as nn</code></pre></div>
+<p>Define:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">class SmallCNN(nn.Module):
+    def __init__(self, num_classes=10):
+        super().__init__()
+
+        self.features = nn.Sequential(
+            nn.Conv2d(
+                in_channels=1,
+                out_channels=16,
+                kernel_size=3,
+                padding=1,
+            ),
+            nn.ReLU(),
+
+            nn.MaxPool2d(
+                kernel_size=2,
+                stride=2,
+            ),
+
+            nn.Conv2d(
+                in_channels=16,
+                out_channels=32,
+                kernel_size=3,
+                padding=1,
+            ),
+            nn.ReLU(),
+
+            nn.MaxPool2d(
+                kernel_size=2,
+                stride=2,
+            ),
+        )
+
+        self.classifier = nn.Sequential(
+            nn.Flatten(),
+            nn.Linear(
+                32 * 7 * 7,
+                128,
+            ),
+            nn.ReLU(),
+            nn.Linear(
+                128,
+                num_classes,
+            ),
+        )
+
+    def forward(self, x):
+        x = self.features(x)
+        return self.classifier(x)</code></pre></div>
+<p>This architecture assumes:</p>
+<div class="ascii-box"><pre>input image = 1 × 28 × 28</pre></div>
+<p>because each 2×2 pooling layer halves the spatial size:</p>
+<div class="ascii-box"><pre>28 → 14 → 7</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">Verify the CNN Shape</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">model = SmallCNN()
+
+dummy = torch.randn(
+    4,
+    1,
+    28,
+    28,
+)
+
+logits = model(dummy)
+
+print(logits.shape)</code></pre></div>
+<p>Expected:</p>
+<div class="ascii-box"><pre>torch.Size([4, 10])</pre></div>
+<p>Meaning:</p>
+<div class="ascii-box"><pre>4 images
+10 class logits per image</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">Inspect Intermediate Shapes</h2>
+      </div>
+      <div class="section-body">
+        <p>Use hooks or temporarily print shapes.</p>
+<p>For learning, a manual forward trace is often easier.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">x = dummy
+
+for layer in model.features:
+    x = layer(x)
+    print(
+        type(layer).__name__,
+        &quot;→&quot;,
+        x.shape,
+    )</code></pre></div>
+<p>You should see a progression similar to:</p>
+<div class="ascii-box"><pre>Conv2d      → (4, 16, 28, 28)
+ReLU        → (4, 16, 28, 28)
+MaxPool2d   → (4, 16, 14, 14)
+Conv2d      → (4, 32, 14, 14)
+ReLU        → (4, 32, 14, 14)
+MaxPool2d   → (4, 32, 7, 7)</pre></div>
+<p>Shape tracing is an essential CNN debugging technique.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">MNIST Training Skeleton</h2>
+      </div>
+      <div class="section-body">
+        <p>A simple educational training flow:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">from torch.utils.data import DataLoader
+from torchvision import datasets, transforms</code></pre></div>
+<p>Transform:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">transform = transforms.ToTensor()</code></pre></div>
+<p>Dataset:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">train_data = datasets.MNIST(
+    root=&quot;./data&quot;,
+    train=True,
+    download=True,
+    transform=transform,
+)
+
+test_data = datasets.MNIST(
+    root=&quot;./data&quot;,
+    train=False,
+    download=True,
+    transform=transform,
+)</code></pre></div>
+<p>Loaders:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">train_loader = DataLoader(
+    train_data,
+    batch_size=64,
+    shuffle=True,
+)
+
+test_loader = DataLoader(
+    test_data,
+    batch_size=64,
+    shuffle=False,
+)</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">Device Selection</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">device = torch.device(
+    &quot;cuda&quot;
+    if torch.cuda.is_available()
+    else &quot;cpu&quot;
+)
+
+model = SmallCNN().to(device)</code></pre></div>
+<p>Do not assume GPU availability.</p>
+<p>Your code should work on CPU unless the experiment specifically requires acceleration.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">Loss and Optimizer</h2>
+      </div>
+      <div class="section-body">
+        <p>For multi-class classification:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">loss_fn = nn.CrossEntropyLoss()
+
+optimizer = torch.optim.Adam(
+    model.parameters(),
+    lr=1e-3,
+)</code></pre></div>
+<p>The network outputs logits:</p>
+<div class="ascii-box"><pre>(batch, classes)</pre></div>
+<p>The target contains integer class indices.</p>
+<p>You do not need to apply softmax before <code>CrossEntropyLoss</code>.</p>
+<p>A common beginner mistake is:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">softmax(logits)
+→ CrossEntropyLoss</code></pre></div>
+<p>for no reason.</p>
+<p>Let the loss function handle the appropriate transformation internally.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">Training Loop</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def train_one_epoch(
+    model,
+    loader,
+    optimizer,
+    loss_fn,
+    device,
+):
+    model.train()
+
+    total_loss = 0.0
+    total_correct = 0
+    total_examples = 0
+
+    for images, labels in loader:
+        images = images.to(device)
+        labels = labels.to(device)
+
+        optimizer.zero_grad()
+
+        logits = model(images)
+
+        loss = loss_fn(
+            logits,
+            labels,
+        )
+
+        loss.backward()
+        optimizer.step()
+
+        total_loss += (
+            loss.item() * images.size(0)
+        )
+
+        predictions = logits.argmax(
+            dim=1
+        )
+
+        total_correct += (
+            (predictions == labels)
+            .sum()
+            .item()
+        )
+
+        total_examples += images.size(0)
+
+    return (
+        total_loss / total_examples,
+        total_correct / total_examples,
+    )</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">Evaluation Loop</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">@torch.no_grad()
+def evaluate(
+    model,
+    loader,
+    loss_fn,
+    device,
+):
+    model.eval()
+
+    total_loss = 0.0
+    total_correct = 0
+    total_examples = 0
+
+    for images, labels in loader:
+        images = images.to(device)
+        labels = labels.to(device)
+
+        logits = model(images)
+
+        loss = loss_fn(
+            logits,
+            labels,
+        )
+
+        total_loss += (
+            loss.item() * images.size(0)
+        )
+
+        predictions = logits.argmax(
+            dim=1
+        )
+
+        total_correct += (
+            (predictions == labels)
+            .sum()
+            .item()
+        )
+
+        total_examples += images.size(0)
+
+    return (
+        total_loss / total_examples,
+        total_correct / total_examples,
+    )</code></pre></div>
+<p>The important difference:</p>
+<div class="ascii-box"><pre>training → gradient computation + update
+
+evaluation → no update</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">Complete Training Skeleton</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">epochs = 5
+
+history = {
+    &quot;train_loss&quot;: [],
+    &quot;train_accuracy&quot;: [],
+    &quot;test_loss&quot;: [],
+    &quot;test_accuracy&quot;: [],
+}
+
+for epoch in range(epochs):
+    train_loss, train_acc = train_one_epoch(
+        model,
+        train_loader,
+        optimizer,
+        loss_fn,
+        device,
+    )
+
+    test_loss, test_acc = evaluate(
+        model,
+        test_loader,
+        loss_fn,
+        device,
+    )
+
+    history[&quot;train_loss&quot;].append(train_loss)
+    history[&quot;train_accuracy&quot;].append(train_acc)
+
+    history[&quot;test_loss&quot;].append(test_loss)
+    history[&quot;test_accuracy&quot;].append(test_acc)
+
+    print(
+        f&quot;Epoch {epoch + 1}/{epochs} | &quot;
+        f&quot;train loss={train_loss:.4f} | &quot;
+        f&quot;train acc={train_acc:.4f} | &quot;
+        f&quot;test loss={test_loss:.4f} | &quot;
+        f&quot;test acc={test_acc:.4f}&quot;
+    )</code></pre></div>
+<p>The exact numerical results depend on environment and random initialization.</p>
+<p>The objective is to understand the training pipeline and inspect the behaviour rather than memorize a particular score.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Visualization — Sample Images</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import matplotlib.pyplot as plt
+
+images, labels = next(iter(train_loader))
+
+plt.figure()
+plt.imshow(
+    images[0].squeeze(0),
+    cmap=&quot;gray&quot;,
+)
+plt.title(
+    f&quot;Label: {labels[0].item()}&quot;
+)
+plt.axis(&quot;off&quot;)
+plt.show()</code></pre></div>
+<p>Before training a vision model, always inspect the input.</p>
+<p>This catches:</p>
+<ul>
+<li>wrong normalization;</li>
+<li>wrong orientation;</li>
+<li>wrong channel order;</li>
+<li>unexpected shapes;</li>
+<li>corrupt loading.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Visualize Feature Maps</h2>
+      </div>
+      <div class="section-body">
+        <p>One useful educational experiment is to inspect early convolution outputs.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">model.eval()
+
+with torch.no_grad():
+    sample = images[:1].to(device)
+
+    first_conv = model.features[0]
+
+    feature_maps = first_conv(sample)
+
+print(feature_maps.shape)</code></pre></div>
+<p>For one image:</p>
+<div class="ascii-box"><pre>1 × 16 × 28 × 28</pre></div>
+<p>Visualize one channel:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">feature_map = feature_maps[0, 0].cpu()
+
+plt.figure()
+plt.imshow(
+    feature_map,
+    cmap=&quot;viridis&quot;,
+)
+plt.title(&quot;Example CNN Feature Map&quot;)
+plt.axis(&quot;off&quot;)
+plt.show()</code></pre></div>
+<p>Do not overinterpret a single feature map as a named detector.</p>
+<p>The representation is learned and distributed across channels.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-35" class="section-block">
+      <div class="section-header">
+        <span class="section-num">35</span>
+        <h2 class="section-heading">CNN Parameter Counting in PyTorch</h2>
+      </div>
+      <div class="section-body">
+        <p>Check:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">total_params = sum(
+    p.numel()
+    for p in model.parameters()
+)
+
+trainable_params = sum(
+    p.numel()
+    for p in model.parameters()
+    if p.requires_grad
+)
+
+print(total_params)
+print(trainable_params)</code></pre></div>
+<p>This gives you an implementation-level check against your manual parameter-count calculations.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-36" class="section-block">
+      <div class="section-header">
+        <span class="section-num">36</span>
+        <h2 class="section-heading">Compare Dense and CNN Parameter Logic</h2>
+      </div>
+      <div class="section-body">
+        <p>Imagine:</p>
+<div class="ascii-box"><pre>28 × 28 grayscale image</pre></div>
+<p>A dense layer from all pixels to 128 units has approximately:</p>
+<div class="formula-math">\[
+28\times28\times128+128.
+\]</div>
+<p>A 3×3 convolution with 16 filters has:</p>
+<div class="formula-math">\[
+16\times1\times3\times3+16.
+\]</div>
+<p>The difference is large.</p>
+<p>The CNN is exploiting local connectivity and weight sharing instead of learning a completely separate weight for every image-position-to-neuron connection.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-37" class="section-block">
+      <div class="section-header">
+        <span class="section-num">37</span>
+        <h2 class="section-heading">Overfitting Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Try:</p>
+<div class="ascii-box"><pre>very small CNN
+moderate CNN
+larger CNN</pre></div>
+<p>Track:</p>
+<div class="ascii-box"><pre>train accuracy
+test accuracy
+train loss
+test loss</pre></div>
+<p>Then ask:</p>
+<blockquote>
+<p>Does more capacity always improve held-out performance?</p>
+</blockquote>
+<p>No.</p>
+<p>This connects back to Unit II:</p>
+<div class="ascii-box"><pre>model capacity
+ ↓
+fit
+ ↓
+generalization</pre></div>
+<p>A CNN is still an ML model and still has generalization concerns.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-38" class="section-block">
+      <div class="section-header">
+        <span class="section-num">38</span>
+        <h2 class="section-heading">Data Augmentation Preview</h2>
+      </div>
+      <div class="section-body">
+        <p>For image tasks, transformations can sometimes increase training diversity.</p>
+<p>Example:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">transform = transforms.Compose([
+    transforms.RandomHorizontalFlip(),
+    transforms.ToTensor(),
+])</code></pre></div>
+<p>But do not apply arbitrary transformations.</p>
+<p>A transformation is useful only if it preserves the semantic label.</p>
+<p>For handwritten digits, not every geometric transformation is label-preserving.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-39" class="section-block">
+      <div class="section-header">
+        <span class="section-num">39</span>
+        <h2 class="section-heading">CNN Debugging Checklist</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>[ ] input shape is N × C × H × W
+[ ] channel count matches Conv2d in_channels
+[ ] kernel dimensions are understood
+[ ] stride is understood
+[ ] padding is understood
+[ ] output spatial size is checked
+[ ] pooling output size is checked
+[ ] flatten dimension is correct
+[ ] final output dimension matches number of classes
+[ ] logits are passed correctly to CrossEntropyLoss
+[ ] model.train() used during training
+[ ] model.eval() used during evaluation
+[ ] torch.no_grad() used during evaluation
+[ ] training and test preprocessing are appropriate</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-40" class="section-block">
+      <div class="section-header">
+        <span class="section-num">40</span>
+        <h2 class="section-heading">Common CNN Mistakes</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Lab Viva Trap & Runtime Gotcha</div>
+
+**Output Spatial Dimension Formula Trap:**
+Output dimension is $O = \lfloor \frac{W - K + 2P}{S} \rfloor + 1$.
+In viva, examiners frequently ask: 'If input is 28x28, filter is 5x5, stride is 1, and no padding (P=0), what is output size?'
+Answer: $(28 - 5 + 0)/1 + 1 = 24 \times 24$.
+If you forget $+1$, your dimension calculation fails and PyTorch throws a runtime shape mismatch error!
+
+</div>
+
+<h2>Mistake 1 — Flattening the image immediately</h2>
+<p>This throws away the explicit spatial structure that motivates the CNN.</p>
+<h2>Mistake 2 — Wrong channel order</h2>
+<p>Do not casually move between:</p>
+<div class="ascii-box"><pre>H × W × C</pre></div>
+<p>and:</p>
+<div class="ascii-box"><pre>C × H × W</pre></div>
+<p>without checking the API.</p>
+<h2>Mistake 3 — Wrong flatten size</h2>
+<p>Calculate the final spatial dimensions instead of guessing.</p>
+<h2>Mistake 4 — Applying softmax before CrossEntropyLoss</h2>
+<p>Usually unnecessary.</p>
+<h2>Mistake 5 — Calling <code>model.train()</code> during evaluation</h2>
+<p>This changes the behaviour of training-mode layers.</p>
+<h2>Mistake 6 — Reading one feature map as one human concept</h2>
+<p>Feature representations can be distributed.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-41" class="section-block">
+      <div class="section-header">
+        <span class="section-num">41</span>
+        <h2 class="section-heading">Practical Lab</h2>
+      </div>
+      <div class="section-body">
+        <h2>Task A — Manual convolution</h2>
+<p>Use a 5×5 image and a 3×3 kernel.</p>
+<p>Calculate the first output cell by hand.</p>
+<p>Then verify with your NumPy implementation.</p>
+<h2>Task B — Stride</h2>
+<p>Run:</p>
+<div class="ascii-box"><pre>stride = 1
+stride = 2</pre></div>
+<p>Compare output dimensions.</p>
+<h2>Task C — Padding</h2>
+<p>Compare:</p>
+<div class="ascii-box"><pre>padding = 0
+padding = 1</pre></div>
+<p>and explain the dimension change.</p>
+<h2>Task D — Multiple filters</h2>
+<p>Implement three filters and stack their feature maps.</p>
+<h2>Task E — PyTorch CNN</h2>
+<p>Train the <code>SmallCNN</code> on MNIST.</p>
+<h2>Task F — Shape trace</h2>
+<p>Print every tensor shape in the forward pass.</p>
+<h2>Task G — Error inspection</h2>
+<p>Find test images the model misclassifies and display several.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-42" class="section-block">
+      <div class="section-header">
+        <span class="section-num">42</span>
+        <h2 class="section-heading">Error Analysis Template</h2>
+      </div>
+      <div class="section-body">
+        <p>For a misclassified image record:</p>
+<div class="ascii-box"><pre>Image:
+True label:
+Predicted label:
+Top predicted class probability/logit:
+Alternative high-scoring class:
+Visual observation:
+Possible reason:</pre></div>
+<p>Avoid claiming a definite cause from one image.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-43" class="section-block">
+      <div class="section-header">
+        <span class="section-num">43</span>
+        <h2 class="section-heading">Viva Questions</h2>
+      </div>
+      <div class="section-body">
+        <h3>Q1. Why are CNNs useful for images?</h3>
+<p>They explicitly exploit local spatial structure through local connectivity and shared filters.</p>
+<h3>Q2. What is a kernel?</h3>
+<p>A learnable set of local weights applied across input regions.</p>
+<h3>Q3. What is a feature map?</h3>
+<p>The spatial output generated by applying a filter across an input.</p>
+<h3>Q4. Why does parameter sharing reduce parameters?</h3>
+<p>The same filter weights are reused at multiple spatial positions.</p>
+<h3>Q5. What does stride control?</h3>
+<p>The spatial step between successive filter positions.</p>
+<h3>Q6. What does padding do?</h3>
+<p>It adds border context and can control spatial output dimensions.</p>
+<h3>Q7. What is pooling?</h3>
+<p>A local aggregation/downsampling operation such as maximum selection.</p>
+<h3>Q8. What is a receptive field?</h3>
+<p>The portion of the input that can influence a particular activation.</p>
+<h3>Q9. Why can deeper CNNs detect more complex patterns?</h3>
+<p>Stacked layers combine increasingly transformed local representations, giving later units larger effective receptive fields.</p>
+<h3>Q10. How many parameters does a standard convolutional layer have?</h3>
+<div class="formula-math">\[
+C_{out}C_{in}K_hK_w+C_{out}
+\]</div>
+<p>when one bias is used per output channel.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-44" class="section-block">
+      <div class="section-header">
+        <span class="section-num">44</span>
+        <h2 class="section-heading">Exam Connection</h2>
+      </div>
+      <div class="section-body">
+        <p>Typical computational questions:</p>
+<h3>Output dimension</h3>
+<p>Given:</p>
+<div class="ascii-box"><pre>input size
+kernel
+padding
+stride</pre></div>
+<p>calculate the output size.</p>
+<h3>Parameter count</h3>
+<p>Given:</p>
+<div class="ascii-box"><pre>Cin
+Cout
+kernel</pre></div>
+<p>calculate learnable parameters.</p>
+<h3>Architecture question</h3>
+<p>Explain:</p>
+<div class="ascii-box"><pre>input
+→ convolution
+→ activation
+→ pooling
+→ convolution
+→ activation
+→ classifier</pre></div>
+<h3>Comparison question</h3>
+<p>Explain why CNNs are generally more appropriate than a plain dense network for image data.</p>
+<p>The answer should mention:</p>
+<ul>
+<li>local connectivity;</li>
+<li>parameter sharing;</li>
+<li>feature maps;</li>
+<li>hierarchical representation.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-45" class="section-block">
+      <div class="section-header">
+        <span class="section-num">45</span>
+        <h2 class="section-heading">Math You Need Now</h2>
+      </div>
+      <div class="section-body">
+        <h3>Convolution output dimension</h3>
+<div class="formula-math">\[
+O=
+\left\lfloor
+\frac{I+2P-D(K-1)-1}{S}
++1
+\right\rfloor
+\]</div>
+<h3>Convolution parameter count</h3>
+<div class="formula-math">\[
+C_{out}C_{in}K_hK_w+C_{out}
+\]</div>
+<h3>ReLU</h3>
+<div class="formula-math">\[
+ReLU(z)=\max(0,z)
+\]</div>
+<h3>Dense output after flattening</h3>
+<p>If the final CNN representation is:</p>
+<div class="formula-math">\[
+C\times H\times W
+\]</div>
+<p>then the flattened feature dimension is:</p>
+<div class="formula-math">\[
+CHW.
+\]</div>
+<p>These are the main calculations you should be able to perform quickly.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-46" class="section-block">
+      <div class="section-header">
+        <span class="section-num">46</span>
+        <h2 class="section-heading">Source Notes</h2>
+      </div>
+      <div class="section-body">
+        <h2>Official course boundary</h2>
+<p>The official DSC-14 syllabus includes:</p>
+<blockquote>
+<p>CNN architecture and applications in image processing.</p>
+</blockquote>
+<p>The course practical component also includes designing and testing deep-learning models, including CNNs, for image classification.</p>
+<h2>Supplied resource boundary</h2>
+<p>The master learning guide identifies CNN as an important gap-filling topic beyond the supplied core notes. It recommends external reinforcement for CNN rather than claiming the supplied notes fully cover the topic.</p>
+<p><code>prac_7_neural_network.ipynb</code> provides earlier neural-network foundation material but is not treated as a complete CNN course.</p>
+<h2>Current framework reference</h2>
+<p>The framework examples use the standard PyTorch interfaces:</p>
+<ul>
+<li><code>torch.nn.Conv2d</code>;</li>
+<li><code>torch.nn.MaxPool2d</code>;</li>
+<li><code>torch.nn.CrossEntropyLoss</code>;</li>
+<li><code>torch.optim</code>;</li>
+<li><code>DataLoader</code>.</li>
+</ul>
+<p>The current PyTorch documentation is the authoritative reference for exact API behaviour and tensor conventions.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-47" class="section-block">
+      <div class="section-header">
+        <span class="section-num">47</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <p>Do not move forward until you can:</p>
+<ul>
+<li>[ ] explain why CNNs exist;</li>
+<li>[ ] describe local connectivity;</li>
+<li>[ ] describe parameter sharing;</li>
+<li>[ ] perform a 2D convolution by hand;</li>
+<li>[ ] implement valid convolution with NumPy;</li>
+<li>[ ] calculate output dimensions;</li>
+<li>[ ] calculate convolution parameters;</li>
+<li>[ ] explain stride/padding;</li>
+<li>[ ] explain feature maps;</li>
+<li>[ ] explain pooling;</li>
+<li>[ ] trace CNN tensor shapes;</li>
+<li>[ ] build a PyTorch CNN;</li>
+<li>[ ] train/evaluate an image classifier;</li>
+<li>[ ] inspect feature maps;</li>
+<li>[ ] debug channel/shape/flatten errors.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-48" class="section-block">
+      <div class="section-header">
+        <span class="section-num">48</span>
+        <h2 class="section-heading">Connection Forward</h2>
+      </div>
+      <div class="section-body">
+        <p>The CNN solved an architectural problem for <strong>spatial data</strong>.</p>
+<p>The next question is:</p>
+<blockquote>
+<p><strong>What architectural structure should we use when the order of observations matters?</strong></p>
+</blockquote>
+<p>Examples:</p>
+<div class="ascii-box"><pre>sentence
+time series
+speech
+sensor readings
+event sequence</pre></div>
+<p>That leads to:</p>
+<p><strong><code>CODE-U3-05 — RNN and LSTM From Scratch and PyTorch Sequence Modelling</code></strong></p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-49" class="section-block">
+      <div class="section-header">
+        <span class="section-num">49</span>
+        <h2 class="section-heading">Status</h2>
+      </div>
+      <div class="section-body">
+        <p><strong><code>CODE-U3-04</code> — COMPLETE</strong></p>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="code-u3-03-backpropagation-scratch.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← Unit 3 Lab 03 — Backpropagation</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">💻 Coding Index</span>
+      </a>
+      <a href="code-u3-05-rnn-lstm-sequence-modelling.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: Unit 3 Lab 05 — RNNs & LSTMs →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search lab implementations, functions, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">💻</span>Lab Hub</a>
+  <a href="code-u3-04-cnn-image-classification.html" class="mobile-nav-btn active"><span class="icon">📖</span>CODE-U3-04</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

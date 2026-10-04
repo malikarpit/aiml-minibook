@@ -1,0 +1,2144 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="CODE-U4-01: MDPs and Q-Learning From Scratch — AI & Machine Learning Coding Lab. Markov Decision Process 5-Tuple, Bellman Equations, Tabular Q-Table Updates, Epsilon-Greedy Exploration, and Gymnasium FrozenLake-v1 Navigation">
+<title>CODE-U4-01: MDPs and Q-Learning From Scratch | Coding Lab 💻 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/coding.css">
+</head>
+<body class="coding-module track-c4">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">💻</div>
+      <div class="brand-text"><span class="main">Coding Lab</span><span class="sub">AI &amp; ML From Scratch</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">CODE-U4-01: MDPs and Q-Learning From Scratch</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">💻</span>Coding Lab Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../math/index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 0: Environment & System</div>
+  <a href="code-00-coding-foundation.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-00: Coding Lab Foundation &amp; Implementation System</a>
+  <a href="code-01-python-numpy-workflow.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-01: Python, NumPy, Matplotlib &amp; Lab Workflow</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Classical AI & Search Labs</div>
+  <a href="code-u1-01-bfs-dfs.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-01: BFS and DFS From Scratch</a>
+  <a href="code-u1-02-greedy-a-star.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-02: Greedy Best-First &amp; A* Search From Scratch</a>
+  <a href="code-u1-03-csp-backtracking.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-03: CSPs and Backtracking Search</a>
+  <a href="code-u1-04-minimax-alpha-beta.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Supervised ML Labs</div>
+  <a href="code-u2-01-ml-workflow.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-01: ML Workflow: Preprocessing, Splitting &amp; Evaluation</a>
+  <a href="code-u2-02-linear-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-02: Linear Regression From Scratch</a>
+  <a href="code-u2-03-logistic-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-03: Logistic Regression From Scratch</a>
+  <a href="code-u2-04-decision-trees.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-04: Decision Trees From Scratch</a>
+  <a href="code-u2-05-classification-metrics-roc.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC &amp; Thresholds</a>
+  <a href="code-u2-06-ridge-lasso-regularization.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-06: Ridge &amp; Lasso From Scratch: Regularization &amp; Optimization</a>
+  <a href="code-u2-07-ml-evaluation-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-07: ML Evaluation &amp; Model Comparison Lab</a>
+  <a href="code-u2-08-knn-svm-practical-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-08: KNN and SVM Practical Comparison Lab</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Deep Learning Labs</div>
+  <a href="code-u3-01-neuron-perceptron.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-01: Neuron and Perceptron From Scratch</a>
+  <a href="code-u3-02-mlp-forward-propagation.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-02: MLP and Forward Propagation From Scratch</a>
+  <a href="code-u3-03-backpropagation-scratch.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-03: Gradient Descent &amp; Backpropagation From Scratch</a>
+  <a href="code-u3-04-cnn-image-classification.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-04: CNNs: From Scratch to PyTorch Image Classification</a>
+  <a href="code-u3-05-rnn-lstm-sequence-modelling.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-05: RNN &amp; LSTM: From Scratch to PyTorch Sequence Modelling</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Advanced AI & RL Labs</div>
+  <a href="code-u4-01-mdp-q-learning.html" class="sidebar-link active"><span class="link-icon">🎲</span>CODE-U4-01: MDPs and Q-Learning From Scratch</a>
+  <a href="code-u4-02-policy-gradients-reinforce.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-02: Policy Gradients &amp; REINFORCE Algorithm</a>
+  <a href="code-u4-03-nlp-text-classification.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-03: NLP Preprocessing &amp; Text Classification Pipeline</a>
+  <a href="code-u4-04-autoencoders-pytorch.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-04: Autoencoders: From Scratch &amp; PyTorch Representation Learning</a>
+  <a href="code-u4-05-gans-pytorch.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-05: Generative Adversarial Networks: Core Mechanics to PyTorch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 5: Engineering & Capstone</div>
+  <a href="code-23-debugging-testing-reproducibility.html" class="sidebar-link"><span class="link-icon">🏆</span>CODE-23: Debugging, Testing, Visualization &amp; Reproducibility</a>
+  <a href="code-24-coding-capstone-checklist.html" class="sidebar-link"><span class="link-icon">🏆</span>CODE-24: AI/ML Coding Capstone &amp; Master Practical Checklist</a>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">CODE-U4-01 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Course Position</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Coding Objective</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Reinforcement Learning Is an Interaction Problem</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. MDP Representation</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Markov Property</a>
+      <a href="#s-06" class="sidebar-link"><span class="link-icon">📌</span>6. Returns</a>
+      <a href="#s-07" class="sidebar-link"><span class="link-icon">📌</span>7. Discount Factor Intuition</a>
+      <a href="#s-08" class="sidebar-link"><span class="link-icon">📌</span>8. Worked Return Example</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. Value vs Q-Value</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Bellman Optimality Idea</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Q-Learning Update</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Why the Update Works</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Terminal-State Detail</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Build a Tiny Grid World</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. State Representation</a>
+      <a href="#s-16" class="sidebar-link"><span class="link-icon">📌</span>16. Grid-World Environment</a>
+      <a href="#s-17" class="sidebar-link"><span class="link-icon">📌</span>17. Inspect the Environment</a>
+      <a href="#s-18" class="sidebar-link"><span class="link-icon">📌</span>18. Random Policy Baseline</a>
+      <a href="#s-19" class="sidebar-link"><span class="link-icon">📌</span>19. Q-Table</a>
+      <a href="#s-20" class="sidebar-link"><span class="link-icon">📌</span>20. Epsilon-Greedy Action Selection</a>
+      <a href="#s-21" class="sidebar-link"><span class="link-icon">📌</span>21. Tie Handling</a>
+      <a href="#s-22" class="sidebar-link"><span class="link-icon">📌</span>22. Q-Learning Training Loop</a>
+      <a href="#s-23" class="sidebar-link"><span class="link-icon">📌</span>23. Train the Agent</a>
+      <a href="#s-24" class="sidebar-link"><span class="link-icon">📌</span>24. Inspect the Learned Policy</a>
+      <a href="#s-25" class="sidebar-link"><span class="link-icon">📌</span>25. Greedy Evaluation</a>
+      <a href="#s-26" class="sidebar-link"><span class="link-icon">📌</span>26. Learning Curve</a>
+      <a href="#s-27" class="sidebar-link"><span class="link-icon">📌</span>27. Moving-Average Plot</a>
+      <a href="#s-28" class="sidebar-link"><span class="link-icon">📌</span>28. TD Error Logging</a>
+      <a href="#s-29" class="sidebar-link"><span class="link-icon">📌</span>29. Epsilon Decay</a>
+      <a href="#s-30" class="sidebar-link"><span class="link-icon">📌</span>30. Compare Exploration Schedules</a>
+      <a href="#s-31" class="sidebar-link"><span class="link-icon">📌</span>31. Learning Rate Experiment</a>
+      <a href="#s-32" class="sidebar-link"><span class="link-icon">📌</span>32. Discount Factor Experiment</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Q-Learning Numerical</a>
+      <a href="#s-34" class="sidebar-link"><span class="link-icon">📌</span>34. Terminal Numerical</a>
+      <a href="#s-35" class="sidebar-link"><span class="link-icon">📌</span>35. The Q-Table as a Program State</a>
+      <a href="#s-36" class="sidebar-link"><span class="link-icon">📌</span>36. Gymnasium Integration</a>
+      <a href="#s-37" class="sidebar-link"><span class="link-icon">📌</span>37. FrozenLake State/Action Structure</a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Policy Visualization</a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Q-Learning vs Dynamic Programming</a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Off-Policy Intuition</a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Why Q-Learning Does Not Need the Transition Table</a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. Common Implementation Errors</a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. Reproducibility Record</a>
+      <a href="#s-46" class="sidebar-link"><span class="link-icon">📌</span>46. Practical Lab</a>
+      <a href="#s-47" class="sidebar-link"><span class="link-icon">📌</span>47. Master Experiment</a>
+      <a href="#s-48" class="sidebar-link"><span class="link-icon">📌</span>48. Multi-Seed Experiment</a>
+      <a href="#s-49" class="sidebar-link"><span class="link-icon">📌</span>49. Why Evaluation Must Be Separate</a>
+      <a href="#s-50" class="sidebar-link"><span class="link-icon">📌</span>50. Q-Learning Mental Model</a>
+      <a href="#s-51" class="sidebar-link"><span class="link-icon">📌</span>51. Relation to Policy Gradients</a>
+      <a href="#s-52" class="sidebar-link"><span class="link-icon">📌</span>52. Viva Questions</a>
+      <a href="#s-53" class="sidebar-link"><span class="link-icon">📌</span>53. Exam Connection</a>
+      <a href="#s-54" class="sidebar-link"><span class="link-icon">📌</span>54. Mastery Gate</a>
+      <a href="#s-55" class="sidebar-link"><span class="link-icon">📌</span>55. Source Notes</a>
+      <a href="#s-56" class="sidebar-link"><span class="link-icon">📌</span>56. Expansion Boundary</a>
+      <a href="#s-57" class="sidebar-link"><span class="link-icon">📌</span>57. Status</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Coding Lab</a>
+        <span>/</span>
+        <span>CODE-U4-01</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-c4">Track 4: Advanced AI & Reinforcement Learning</span></div>
+      <h1 class="chapter-title">MDPs and Q-Learning From Scratch</h1>
+      <p class="chapter-desc">Markov Decision Process 5-Tuple, Bellman Equations, Tabular Q-Table Updates, Epsilon-Greedy Exploration, and Gymnasium FrozenLake-v1 Navigation</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~55 min lab</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">REINFORCEMENT-LEARNING</span> <span class="chapter-meta-item uni-badge">MDP</span> <span class="chapter-meta-item uni-badge">Q-LEARNING</span> <span class="chapter-meta-item uni-badge">BELLMAN</span> <span class="chapter-meta-item uni-badge">GYMNASIUM</span> <span class="chapter-meta-item uni-badge">TABULAR-RL</span>
+      </div>
+
+      <div class="lab-meta-grid">
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Prerequisites</div>
+          <div class="lab-meta-value">CODE-01 NumPy Workflow, Main Book Ch 40 MDPs & Ch 41 Q-Learning</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Main Book Concept</div>
+          <div class="lab-meta-value">Ch 40 Markov Decision Processes, Ch 41 Q-Learning</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Math Companion Layer</div>
+          <div class="lab-meta-value">Bellman Optimality Q*(s,a) = R + γ max_a' Q*(s', a'), Discount factor γ</div>
+        </div>
+        <div class="lab-meta-box" style="grid-column: 1 / -1;">
+          <div class="lab-meta-label">AI / Machine Learning Connections</div>
+          <div class="lab-meta-value">Robotic navigation, Game agent mastery, Exploration vs Exploitation tradeoff, Temporal Difference learning</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-meta-card"><h1>CODE-U4-01 — Markov Decision Processes and Q-Learning</h1>
+<blockquote>
+<p><strong>Purpose:</strong> Turn reinforcement-learning theory into executable experiments by modelling an environment as a Markov Decision Process (MDP), implementing tabular Q-learning from scratch, adding exploration, and training an agent in a small grid-world and Gymnasium environment.</p>
+</blockquote>
+<p>The central progression is:</p>
+<div class="ascii-box"><pre>state
+  ↓
+choose action
+  ↓
+environment
+  ↓
+reward + next state
+  ↓
+update Q-value
+  ↓
+repeat</pre></div>
+<p>Unlike supervised learning, the agent is not simply given a correct label for every state.</p>
+<p>It learns from <strong>interaction and reward</strong>.</p>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in CODE-U4-01 (55 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Course Position</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Coding Objective</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Reinforcement Learning Is an Interaction Problem</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">MDP Representation</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Markov Property</span></a></li>
+        <li class="toc-item"><a href="#s-06"><span class="toc-num">06</span><span class="toc-name">Returns</span></a></li>
+        <li class="toc-item"><a href="#s-07"><span class="toc-num">07</span><span class="toc-name">Discount Factor Intuition</span></a></li>
+        <li class="toc-item"><a href="#s-08"><span class="toc-num">08</span><span class="toc-name">Worked Return Example</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">Value vs Q-Value</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Bellman Optimality Idea</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Q-Learning Update</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Why the Update Works</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Terminal-State Detail</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Build a Tiny Grid World</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">State Representation</span></a></li>
+        <li class="toc-item"><a href="#s-16"><span class="toc-num">16</span><span class="toc-name">Grid-World Environment</span></a></li>
+        <li class="toc-item"><a href="#s-17"><span class="toc-num">17</span><span class="toc-name">Inspect the Environment</span></a></li>
+        <li class="toc-item"><a href="#s-18"><span class="toc-num">18</span><span class="toc-name">Random Policy Baseline</span></a></li>
+        <li class="toc-item"><a href="#s-19"><span class="toc-num">19</span><span class="toc-name">Q-Table</span></a></li>
+        <li class="toc-item"><a href="#s-20"><span class="toc-num">20</span><span class="toc-name">Epsilon-Greedy Action Selection</span></a></li>
+        <li class="toc-item"><a href="#s-21"><span class="toc-num">21</span><span class="toc-name">Tie Handling</span></a></li>
+        <li class="toc-item"><a href="#s-22"><span class="toc-num">22</span><span class="toc-name">Q-Learning Training Loop</span></a></li>
+        <li class="toc-item"><a href="#s-23"><span class="toc-num">23</span><span class="toc-name">Train the Agent</span></a></li>
+        <li class="toc-item"><a href="#s-24"><span class="toc-num">24</span><span class="toc-name">Inspect the Learned Policy</span></a></li>
+        <li class="toc-item"><a href="#s-25"><span class="toc-num">25</span><span class="toc-name">Greedy Evaluation</span></a></li>
+        <li class="toc-item"><a href="#s-26"><span class="toc-num">26</span><span class="toc-name">Learning Curve</span></a></li>
+        <li class="toc-item"><a href="#s-27"><span class="toc-num">27</span><span class="toc-name">Moving-Average Plot</span></a></li>
+        <li class="toc-item"><a href="#s-28"><span class="toc-num">28</span><span class="toc-name">TD Error Logging</span></a></li>
+        <li class="toc-item"><a href="#s-29"><span class="toc-num">29</span><span class="toc-name">Epsilon Decay</span></a></li>
+        <li class="toc-item"><a href="#s-30"><span class="toc-num">30</span><span class="toc-name">Compare Exploration Schedules</span></a></li>
+        <li class="toc-item"><a href="#s-31"><span class="toc-num">31</span><span class="toc-name">Learning Rate Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-32"><span class="toc-num">32</span><span class="toc-name">Discount Factor Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Q-Learning Numerical</span></a></li>
+        <li class="toc-item"><a href="#s-34"><span class="toc-num">34</span><span class="toc-name">Terminal Numerical</span></a></li>
+        <li class="toc-item"><a href="#s-35"><span class="toc-num">35</span><span class="toc-name">The Q-Table as a Program State</span></a></li>
+        <li class="toc-item"><a href="#s-36"><span class="toc-num">36</span><span class="toc-name">Gymnasium Integration</span></a></li>
+        <li class="toc-item"><a href="#s-37"><span class="toc-num">37</span><span class="toc-name">FrozenLake State/Action Structure</span></a></li>
+        <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Policy Visualization</span></a></li>
+        <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Q-Learning vs Dynamic Programming</span></a></li>
+        <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Off-Policy Intuition</span></a></li>
+        <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Why Q-Learning Does Not Need the Transition Table</span></a></li>
+        <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">Common Implementation Errors</span></a></li>
+        <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">Reproducibility Record</span></a></li>
+        <li class="toc-item"><a href="#s-46"><span class="toc-num">46</span><span class="toc-name">Practical Lab</span></a></li>
+        <li class="toc-item"><a href="#s-47"><span class="toc-num">47</span><span class="toc-name">Master Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-48"><span class="toc-num">48</span><span class="toc-name">Multi-Seed Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-49"><span class="toc-num">49</span><span class="toc-name">Why Evaluation Must Be Separate</span></a></li>
+        <li class="toc-item"><a href="#s-50"><span class="toc-num">50</span><span class="toc-name">Q-Learning Mental Model</span></a></li>
+        <li class="toc-item"><a href="#s-51"><span class="toc-num">51</span><span class="toc-name">Relation to Policy Gradients</span></a></li>
+        <li class="toc-item"><a href="#s-52"><span class="toc-num">52</span><span class="toc-name">Viva Questions</span></a></li>
+        <li class="toc-item"><a href="#s-53"><span class="toc-num">53</span><span class="toc-name">Exam Connection</span></a></li>
+        <li class="toc-item"><a href="#s-54"><span class="toc-num">54</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-55"><span class="toc-num">55</span><span class="toc-name">Source Notes</span></a></li>
+        <li class="toc-item"><a href="#s-56"><span class="toc-num">56</span><span class="toc-name">Expansion Boundary</span></a></li>
+        <li class="toc-item"><a href="#s-57"><span class="toc-num">57</span><span class="toc-name">Status</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">Course Position</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph TD
+    State["Current State s"] --> ActionChoice{"ε-Greedy Choice"}
+    ActionChoice -- Exploration (prob ε) --> RandAct["Random Action a"]
+    ActionChoice -- Exploitation (prob 1-ε) --> BestAct["Argmax_a Q(s, a)"]
+    RandAct & BestAct --> Env["Environment Step: Return (s', r, done)"]
+    Env --> TD["TD Target: r + γ max_a' Q(s', a')"]
+    TD --> Update["Q(s, a) ← Q(s, a) + α [TD Target - Q(s, a)]"]
+    style ActionChoice fill:#0f172a,stroke:#38bdf8,color:#38bdf8,stroke-width:2px
+    style Update fill:#065f46,stroke:#34d399,color:#ffffff
+</pre></div>
+<p>The official DSC-14 Unit IV scope includes:</p>
+<ul>
+<li>Markov Decision Processes;</li>
+<li>Q-learning;</li>
+<li>Policy Gradients.</li>
+</ul>
+<p>The supplied exam/main-book material defines the reinforcement-learning progression as:</p>
+<div class="ascii-box"><pre>MDP
+ ↓
+return / value / Q-value
+ ↓
+Q-learning
+ ↓
+policy gradients</pre></div>
+<p>The master learning guide recommends NPTEL Reinforcement Learning as the structured source for the Unit IV reinforcement-learning block.</p>
+<p><strong>Source boundary:</strong> the university syllabus establishes the topic boundary. The complete Python implementation, grid-world environment, exploration schedule, logging and Gymnasium integration below are coding-book expansion. They are intended to operationalize the course concepts, not reproduce an instructor's exact practical sheet.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">Coding Objective</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Implementation Model</div>
+
+RL mein koi teacher nahi hota jo har step par sahi answer bataye—agent khud thokar kha kar seekhta hai.
+Q-Table ek report card hai: 'State $s$ mein khade hokar Action $a$ lene se future mein kul kitna inaam (reward) milega?'
+Bellman equation ka magic hai: 'Aaj ka reward plus kal ke sabse acche option ki discounted value'.
+Epsilon-greedy balance karta hai: naye raste explore bhi karo ($\epsilon$), aur jo rasta accha pata hai use exploit bhi karo ($1-\epsilon$)!
+
+</div>
+
+<p>By the end of this chapter you should be able to:</p>
+<ul>
+<li>represent an MDP computationally;</li>
+<li>distinguish state, action, reward and transition;</li>
+<li>explain the Markov property;</li>
+<li>calculate discounted returns;</li>
+<li>represent a finite environment with a transition/reward table;</li>
+<li>build a tabular Q-table;</li>
+<li>implement the Q-learning update from scratch;</li>
+<li>calculate TD error;</li>
+<li>implement epsilon-greedy action selection;</li>
+<li>train an agent in a small deterministic grid-world;</li>
+<li>inspect learned Q-values and policy;</li>
+<li>evaluate the learned policy without exploration;</li>
+<li>use a Gymnasium environment;</li>
+<li>understand terminal vs truncated episodes;</li>
+<li>record learning curves reproducibly.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">Reinforcement Learning Is an Interaction Problem</h2>
+      </div>
+      <div class="section-body">
+        <p>Supervised learning:</p>
+<div class="ascii-box"><pre>input → correct target
+        ↓
+      loss
+        ↓
+     update</pre></div>
+<p>Reinforcement learning:</p>
+<div class="ascii-box"><pre>state
+ ↓
+action
+ ↓
+environment
+ ↓
+reward + next state
+ ↓
+learning update</pre></div>
+<p>The agent must learn:</p>
+<blockquote>
+<p><strong>What should I do now if I want good long-term outcomes?</strong></p>
+</blockquote>
+<p>This is a sequential decision problem.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">MDP Representation</h2>
+      </div>
+      <div class="section-body">
+        <p>A finite MDP can be represented by:</p>
+<div class="formula-math">\[
+\boxed{
+(S,A,P,R,\gamma)
+}
+\]</div>
+<p>where:</p>
+<ul>
+<li>\(S\) = states;</li>
+<li>\(A\) = actions;</li>
+<li>\(P(s'|s,a)\) = transition probability;</li>
+<li>\(R(s,a,s')\) = reward;</li>
+<li>\(\gamma\) = discount factor.</li>
+</ul>
+<p>The code will represent a small finite environment explicitly.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Markov Property</h2>
+      </div>
+      <div class="section-body">
+        <p>The Markov idea is:</p>
+<blockquote>
+<p>The current state contains the information required to characterize the future transition/reward process, so the future depends on the past through the current state.</p>
+</blockquote>
+<p>Formally, the transition structure is represented as:</p>
+<div class="formula-math">\[
+P(s_{t+1}|s_t,a_t).
+\]</div>
+<p>This does <strong>not</strong> mean the whole history is irrelevant in every real problem.</p>
+<p>It means that the chosen state representation is intended to contain the information needed for the decision process.</p>
+<p>A poor state representation can make the environment appear non-Markov from the learner's perspective.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-06" class="section-block">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-heading">Returns</h2>
+      </div>
+      <div class="section-body">
+        <p>An immediate reward is not necessarily the final objective.</p>
+<p>Define the discounted return from time \(t\):</p>
+<div class="formula-math">\[
+\boxed{
+G_t=
+R_{t+1}
++\gamma R_{t+2}
++\gamma^2R_{t+3}
++\cdots
+}
+\]</div>
+<p>For a finite sequence:</p>
+<div class="ascii-box"><pre>rewards = [r1, r2, r3]</pre></div>
+<p>the return from the beginning is:</p>
+<div class="formula-math">\[
+G_0=r_1+\gamma r_2+\gamma^2r_3.
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-07" class="section-block">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-heading">Discount Factor Intuition</h2>
+      </div>
+      <div class="section-body">
+        <div class="formula-math">\[
+0\le\gamma\lt 1
+\]</div>
+<p>is common in continuing/discounted formulations.</p>
+<p>Interpretation:</p>
+<div class="ascii-box"><pre>γ near 0
+→ focus strongly on immediate reward
+
+γ near 1
+→ future rewards matter much more</pre></div>
+<p>Hinglish:</p>
+<blockquote>
+<p>Gamma decide karta hai ki future reward ko kitni importance deni hai.</p>
+</blockquote>
+<p>Do not confuse:</p>
+<div class="ascii-box"><pre>γ = discount factor</pre></div>
+<p>with:</p>
+<div class="ascii-box"><pre>α = Q-learning learning rate</pre></div>
+<p>They have different jobs.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-08" class="section-block">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-heading">Worked Return Example</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+r_1=5,\quad r_2=2,\quad r_3=10
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\gamma=0.5.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+G_0
+=
+5+0.5(2)+0.5^2(10)
+\]</div>
+<div class="formula-math">\[
+=5+1+2.5
+\]</div>
+<div class="formula-math">\[
+=8.5.
+\]</div>
+<p>The future rewards matter, but their influence is discounted.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">Value vs Q-Value</h2>
+      </div>
+      <div class="section-body">
+        <p>State value:</p>
+<div class="formula-math">\[
+\boxed{
+V^\pi(s)=
+\mathbb E_\pi[G_t\mid S_t=s]
+}
+\]</div>
+<p>It evaluates a state under a policy.</p>
+<p>Action value:</p>
+<div class="formula-math">\[
+\boxed{
+Q^\pi(s,a)=
+\mathbb E_\pi[G_t\mid S_t=s,A_t=a]
+}
+\]</div>
+<p>It evaluates a state-action pair.</p>
+<p>For action selection:</p>
+<div class="formula-math">\[
+a^*=\arg\max_a Q(s,a)
+\]</div>
+<p>is directly useful because it compares candidate actions within the current state.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Bellman Optimality Idea</h2>
+      </div>
+      <div class="section-body">
+        <p>The optimal Q-function satisfies:</p>
+<div class="formula-math">\[
+\boxed{
+Q^*(s,a)
+=
+\mathbb E
+\left[
+R_{t+1}
++
+\gamma
+\max_{a'}
+Q^*(s',a')
+\mid s,a
+\right]
+}
+\]</div>
+<p>Interpretation:</p>
+<div class="ascii-box"><pre>value of current action
+=
+immediate reward
++
+discounted value of best next action</pre></div>
+<p>Q-learning turns this recursive relation into a sample-based update.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Q-Learning Update</h2>
+      </div>
+      <div class="section-body">
+        <p>The central equation is:</p>
+<div class="formula-math">\[
+\boxed{
+Q(s,a)
+\leftarrow
+Q(s,a)
++
+\alpha
+\left[
+r+
+\gamma\max_{a'}Q(s',a')
+-
+Q(s,a)
+\right]
+}
+\]</div>
+<p>Define TD target:</p>
+<div class="formula-math">\[
+\boxed{
+target=
+r+
+\gamma\max_{a'}Q(s',a')
+}
+\]</div>
+<p>and TD error:</p>
+<div class="formula-math">\[
+\boxed{
+\delta=
+target-Q(s,a)
+}
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+Q(s,a)\leftarrow Q(s,a)+\alpha\delta.
+\]</div>
+<p>This is the single most important implementation equation in this chapter.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Why the Update Works</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose the current estimate says:</p>
+<div class="ascii-box"><pre>Q = 2</pre></div>
+<p>but the newly observed target is:</p>
+<div class="ascii-box"><pre>target = 8</pre></div>
+<p>Then:</p>
+<div class="formula-math">\[
+\delta=8-2=6.
+\]</div>
+<p>With:</p>
+<div class="formula-math">\[
+\alpha=0.5
+\]</div>
+<p>the update is:</p>
+<div class="formula-math">\[
+Q_{new}=2+0.5(6)=5.
+\]</div>
+<p>The estimate moves <strong>toward</strong> the target rather than jumping all the way to it.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Terminal-State Detail</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose a transition ends the episode.</p>
+<p>Then there may be no future action value to add.</p>
+<p>A common tabular implementation therefore uses:</p>
+<div class="formula-math">\[
+target=r
+\]</div>
+<p>for a terminal transition.</p>
+<p>For a non-terminal transition:</p>
+<div class="formula-math">\[
+target=
+r+
+\gamma\max_{a'}Q(s',a').
+\]</div>
+<p>Code must therefore distinguish terminal transitions.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Build a Tiny Grid World</h2>
+      </div>
+      <div class="section-body">
+        <p>Use a small deterministic environment:</p>
+<div class="ascii-box"><pre>S . . .
+. X . .
+. . . .
+. . . G</pre></div>
+<p>where:</p>
+<div class="ascii-box"><pre>S = start
+G = goal
+X = blocked cell</pre></div>
+<p>Actions:</p>
+<div class="ascii-box"><pre>0 = up
+1 = right
+2 = down
+3 = left</pre></div>
+<p>The agent receives:</p>
+<div class="ascii-box"><pre>step reward = -0.01
+goal reward = +1</pre></div>
+<p>A step cost gives the learner an incentive to reach the goal efficiently rather than wandering forever.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">State Representation</h2>
+      </div>
+      <div class="section-body">
+        <p>A simple grid can map:</p>
+<div class="ascii-box"><pre>(row, col)</pre></div>
+<p>to a single state ID:</p>
+<div class="formula-math">\[
+state=row\times n_{cols}+col.
+\]</div>
+<p>Example for a 4×4 grid:</p>
+<div class="ascii-box"><pre>(0,0) → 0
+(0,1) → 1
+...
+(3,3) → 15</pre></div>
+<p>This lets us store Q-values in a matrix:</p>
+<div class="ascii-box"><pre>rows = states
+columns = actions</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-16" class="section-block">
+      <div class="section-header">
+        <span class="section-num">16</span>
+        <h2 class="section-heading">Grid-World Environment</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np</code></pre></div>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">class GridWorld:
+    def __init__(self):
+        self.rows = 4
+        self.cols = 4
+
+        self.start = (0, 0)
+        self.goal = (3, 3)
+
+        self.blocked = {
+            (1, 1),
+        }
+
+        self.n_states = self.rows * self.cols
+        self.n_actions = 4
+
+        self.state = self.start
+
+    def state_id(self, position):
+        r, c = position
+        return r * self.cols + c
+
+    def reset(self):
+        self.state = self.start
+        return self.state_id(self.state)
+
+    def step(self, action):
+        r, c = self.state
+
+        moves = {
+            0: (-1, 0),  # up
+            1: (0, 1),   # right
+            2: (1, 0),   # down
+            3: (0, -1),  # left
+        }
+
+        if action not in moves:
+            raise ValueError(&quot;Invalid action.&quot;)
+
+        dr, dc = moves[action]
+
+        nr = r + dr
+        nc = c + dc
+
+        candidate = (nr, nc)
+
+        if (
+            nr &lt; 0
+            or nr &gt;= self.rows
+            or nc &lt; 0
+            or nc &gt;= self.cols
+            or candidate in self.blocked
+        ):
+            candidate = self.state
+
+        self.state = candidate
+
+        if self.state == self.goal:
+            return (
+                self.state_id(self.state),
+                1.0,
+                True,
+            )
+
+        return (
+            self.state_id(self.state),
+            -0.01,
+            False,
+        )</code></pre></div>
+<p>This environment is intentionally minimal.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-17" class="section-block">
+      <div class="section-header">
+        <span class="section-num">17</span>
+        <h2 class="section-heading">Inspect the Environment</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">env = GridWorld()
+
+state = env.reset()
+
+print(&quot;start state:&quot;, state)
+
+next_state, reward, done = env.step(1)
+
+print(
+    next_state,
+    reward,
+    done,
+)</code></pre></div>
+<p>You just performed:</p>
+<div class="ascii-box"><pre>reset
+ ↓
+state
+ ↓
+action
+ ↓
+step
+ ↓
+next_state + reward + terminal</pre></div>
+<p>This is the basic RL interaction loop.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-18" class="section-block">
+      <div class="section-header">
+        <span class="section-num">18</span>
+        <h2 class="section-heading">Random Policy Baseline</h2>
+      </div>
+      <div class="section-body">
+        <p>Before learning, establish a baseline.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def run_random_episode(
+    env,
+    max_steps=100,
+):
+    state = env.reset()
+
+    total_reward = 0.0
+
+    for _ in range(max_steps):
+        action = np.random.randint(
+            env.n_actions
+        )
+
+        next_state, reward, done = env.step(
+            action
+        )
+
+        total_reward += reward
+        state = next_state
+
+        if done:
+            return total_reward, True
+
+    return total_reward, False</code></pre></div>
+<p>Run many episodes and record:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">returns = []
+
+for _ in range(100):
+    total_reward, solved = run_random_episode(
+        env
+    )
+
+    returns.append(total_reward)
+
+print(
+    &quot;mean random return:&quot;,
+    np.mean(returns)
+)</code></pre></div>
+<p>This gives you a baseline.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-19" class="section-block">
+      <div class="section-header">
+        <span class="section-num">19</span>
+        <h2 class="section-heading">Q-Table</h2>
+      </div>
+      <div class="section-body">
+        <p>Initialize:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">Q = np.zeros(
+    (env.n_states, env.n_actions)
+)</code></pre></div>
+<p>Interpret:</p>
+<div class="ascii-box"><pre>Q[s, a]</pre></div>
+<p>as:</p>
+<blockquote>
+<p>current estimate of how good action <code>a</code> is from state <code>s</code>.</p>
+</blockquote>
+<p>Initially:</p>
+<div class="ascii-box"><pre>all values = 0</pre></div>
+<p>because the agent has not learned anything.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-20" class="section-block">
+      <div class="section-header">
+        <span class="section-num">20</span>
+        <h2 class="section-heading">Epsilon-Greedy Action Selection</h2>
+      </div>
+      <div class="section-body">
+        <p>Exploration/exploitation tension:</p>
+<div class="ascii-box"><pre>explore → try uncertain actions
+exploit → choose the best current estimate</pre></div>
+<p>Epsilon-greedy:</p>
+<div class="formula-math">\[
+\boxed{
+a=
+\begin{cases}
+\text{random action},&u\lt \epsilon\\
+\arg\max_aQ(s,a),&u\ge\epsilon
+\end{cases}
+}
+\]</div>
+<p>where:</p>
+<div class="formula-math">\[
+u\sim Uniform(0,1).
+\]</div>
+<p>Implementation:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def epsilon_greedy_action(
+    Q,
+    state,
+    epsilon,
+    rng,
+):
+    if rng.random() &lt; epsilon:
+        return int(
+            rng.integers(Q.shape[1])
+        )
+
+    return int(
+        np.argmax(Q[state])
+    )</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-21" class="section-block">
+      <div class="section-header">
+        <span class="section-num">21</span>
+        <h2 class="section-heading">Tie Handling</h2>
+      </div>
+      <div class="section-body">
+        <p>Initially all actions may have equal Q-values.</p>
+<p>Plain:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">np.argmax(Q[state])</code></pre></div>
+<p>always chooses the first maximum.</p>
+<p>That introduces a deterministic tie bias.</p>
+<p>A stronger educational implementation randomly selects among tied best actions:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def greedy_action_random_tie(
+    Q,
+    state,
+    rng,
+):
+    values = Q[state]
+
+    best = np.flatnonzero(
+        values == np.max(values)
+    )
+
+    return int(
+        rng.choice(best)
+    )</code></pre></div>
+<p>Then use this inside the exploitation branch.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-22" class="section-block">
+      <div class="section-header">
+        <span class="section-num">22</span>
+        <h2 class="section-heading">Q-Learning Training Loop</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def train_q_learning(
+    env,
+    episodes=2000,
+    alpha=0.8,
+    gamma=0.95,
+    epsilon=0.1,
+    max_steps=100,
+    seed=42,
+):
+    rng = np.random.default_rng(seed)
+
+    Q = np.zeros(
+        (env.n_states, env.n_actions),
+        dtype=float,
+    )
+
+    episode_returns = []
+    episode_lengths = []
+
+    for _ in range(episodes):
+        state = env.reset()
+
+        total_reward = 0.0
+
+        for step in range(max_steps):
+            action = epsilon_greedy_action(
+                Q,
+                state,
+                epsilon,
+                rng,
+            )
+
+            next_state, reward, done = env.step(
+                action
+            )
+
+            if done:
+                target = reward
+            else:
+                target = (
+                    reward
+                    + gamma
+                    * np.max(Q[next_state])
+                )
+
+            td_error = (
+                target
+                - Q[state, action]
+            )
+
+            Q[state, action] += (
+                alpha * td_error
+            )
+
+            total_reward += reward
+            state = next_state
+
+            if done:
+                break
+
+        episode_returns.append(
+            total_reward
+        )
+        episode_lengths.append(
+            step + 1
+        )
+
+    return (
+        Q,
+        np.array(episode_returns),
+        np.array(episode_lengths),
+    )</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-23" class="section-block">
+      <div class="section-header">
+        <span class="section-num">23</span>
+        <h2 class="section-heading">Train the Agent</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">env = GridWorld()
+
+Q, returns, lengths = train_q_learning(
+    env,
+    episodes=2000,
+    alpha=0.8,
+    gamma=0.95,
+    epsilon=0.1,
+    seed=42,
+)</code></pre></div>
+<p>Inspect:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(Q)</code></pre></div>
+<p>The values should no longer all be zero.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-24" class="section-block">
+      <div class="section-header">
+        <span class="section-num">24</span>
+        <h2 class="section-heading">Inspect the Learned Policy</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">policy = np.argmax(
+    Q,
+    axis=1,
+)
+
+print(policy)</code></pre></div>
+<p>This maps:</p>
+<div class="ascii-box"><pre>state → preferred action</pre></div>
+<p>For a tiny grid, print arrows:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">ARROWS = {
+    0: &quot;↑&quot;,
+    1: &quot;→&quot;,
+    2: &quot;↓&quot;,
+    3: &quot;←&quot;,
+}</code></pre></div>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">for r in range(env.rows):
+    row = []
+
+    for c in range(env.cols):
+        if (r, c) in env.blocked:
+            row.append(&quot;X&quot;)
+            continue
+
+        state = env.state_id((r, c))
+
+        if (r, c) == env.goal:
+            row.append(&quot;G&quot;)
+        else:
+            row.append(
+                ARROWS[int(policy[state])]
+            )
+
+    print(&quot; &quot;.join(row))</code></pre></div>
+<p>Now the learned policy becomes visual.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-25" class="section-block">
+      <div class="section-header">
+        <span class="section-num">25</span>
+        <h2 class="section-heading">Greedy Evaluation</h2>
+      </div>
+      <div class="section-body">
+        <p>Training should use exploration.</p>
+<p>Evaluation should normally turn exploration off.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def evaluate_q_policy(
+    env,
+    Q,
+    episodes=100,
+    max_steps=100,
+):
+    successes = 0
+    returns = []
+
+    for _ in range(episodes):
+        state = env.reset()
+        total_reward = 0.0
+
+        for _ in range(max_steps):
+            action = int(
+                np.argmax(Q[state])
+            )
+
+            next_state, reward, done = env.step(
+                action
+            )
+
+            total_reward += reward
+            state = next_state
+
+            if done:
+                successes += 1
+                break
+
+        returns.append(total_reward)
+
+    return (
+        successes / episodes,
+        np.array(returns),
+    )</code></pre></div>
+<p>Evaluate:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">success_rate, eval_returns = (
+    evaluate_q_policy(
+        env,
+        Q,
+    )
+)
+
+print(&quot;success rate:&quot;, success_rate)
+print(
+    &quot;mean return:&quot;,
+    eval_returns.mean(),
+)</code></pre></div>
+<p>Important distinction:</p>
+<div class="ascii-box"><pre>training policy
+→ exploration
+
+evaluation policy
+→ usually greedy</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-26" class="section-block">
+      <div class="section-header">
+        <span class="section-num">26</span>
+        <h2 class="section-heading">Learning Curve</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import matplotlib.pyplot as plt
+
+plt.figure()
+
+plt.plot(
+    returns,
+)
+
+plt.xlabel(&quot;Episode&quot;)
+plt.ylabel(&quot;Return&quot;)
+plt.title(&quot;Q-Learning Episode Returns&quot;)
+plt.show()</code></pre></div>
+<p>A noisy curve is normal.</p>
+<p>RL learning signals are not usually as smooth as a simple deterministic supervised-loss curve.</p>
+<p>A better visualization can use a moving average.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def moving_average(
+    values,
+    window=100,
+):
+    values = np.asarray(values)
+
+    if len(values) &lt; window:
+        return values
+
+    return np.convolve(
+        values,
+        np.ones(window) / window,
+        mode=&quot;valid&quot;,
+    )</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-27" class="section-block">
+      <div class="section-header">
+        <span class="section-num">27</span>
+        <h2 class="section-heading">Moving-Average Plot</h2>
+      </div>
+      <div class="section-body">
+        <div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">smoothed = moving_average(
+    returns,
+    window=100,
+)
+
+plt.figure()
+
+plt.plot(
+    smoothed,
+)
+
+plt.xlabel(&quot;Episode&quot;)
+plt.ylabel(&quot;Moving-average return&quot;)
+plt.title(&quot;Smoothed Q-Learning Performance&quot;)
+plt.show()</code></pre></div>
+<p>This can make the learning trend easier to inspect.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-28" class="section-block">
+      <div class="section-header">
+        <span class="section-num">28</span>
+        <h2 class="section-heading">TD Error Logging</h2>
+      </div>
+      <div class="section-body">
+        <p>Modify the training loop to record:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">td_errors = []</code></pre></div>
+<p>and:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">td_errors.append(
+    td_error
+)</code></pre></div>
+<p>Then inspect:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">print(
+    &quot;mean absolute TD error:&quot;,
+    np.mean(np.abs(td_errors))
+)</code></pre></div>
+<p>Remember:</p>
+<blockquote>
+<p>TD error is a learning signal, not simply an evaluation metric.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-29" class="section-block">
+      <div class="section-header">
+        <span class="section-num">29</span>
+        <h2 class="section-heading">Epsilon Decay</h2>
+      </div>
+      <div class="section-body">
+        <p>Fixed epsilon is simple.</p>
+<p>A common experiment is decay:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">epsilon_start = 1.0
+epsilon_end = 0.05
+decay_rate = 0.995</code></pre></div>
+<p>Update:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">epsilon = max(
+    epsilon_end,
+    epsilon * decay_rate,
+)</code></pre></div>
+<p>Interpretation:</p>
+<div class="ascii-box"><pre>early training
+→ explore more
+
+later training
+→ exploit learned knowledge more often</pre></div>
+<p>Do not assume one decay schedule is universally optimal.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-30" class="section-block">
+      <div class="section-header">
+        <span class="section-num">30</span>
+        <h2 class="section-heading">Compare Exploration Schedules</h2>
+      </div>
+      <div class="section-body">
+        <p>Run experiments:</p>
+<div class="ascii-box"><pre>ε = 1.0 fixed
+ε = 0.5 fixed
+ε = 0.1 fixed
+decaying ε</pre></div>
+<p>Record:</p>
+<div class="ascii-box"><pre>success rate
+mean return
+episodes to useful performance</pre></div>
+<p>Use identical seeds across the compared settings where practical.</p>
+<p>The question is:</p>
+<blockquote>
+<p>How does exploration influence learning efficiency and final behaviour?</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-31" class="section-block">
+      <div class="section-header">
+        <span class="section-num">31</span>
+        <h2 class="section-heading">Learning Rate Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Compare:</p>
+<div class="ascii-box"><pre>α = 0.1
+α = 0.5
+α = 0.8
+α = 1.0</pre></div>
+<p>Remember:</p>
+<div class="formula-math">\[
+\alpha
+\]</div>
+<p>controls how strongly new evidence changes the current Q estimate.</p>
+<p>Do not confuse it with \(\gamma\).</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-32" class="section-block">
+      <div class="section-header">
+        <span class="section-num">32</span>
+        <h2 class="section-heading">Discount Factor Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Compare:</p>
+<div class="ascii-box"><pre>γ = 0.0
+γ = 0.5
+γ = 0.95</pre></div>
+<p>Interpretation:</p>
+<div class="ascii-box"><pre>γ = 0
+→ immediate reward only
+
+larger γ
+→ stronger long-term planning</pre></div>
+<p>Your environment's reward design matters.</p>
+<p>A different reward structure can change what discount factor appears useful.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Q-Learning Numerical</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+Q(s,a)=2
+\]</div>
+<div class="formula-math">\[
+r=4
+\]</div>
+<div class="formula-math">\[
+\gamma=0.9
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\max_{a'}Q(s',a')=10.
+\]</div>
+<p>Then:</p>
+<div class="formula-math">\[
+target=4+0.9(10)=13.
+\]</div>
+<p>TD error:</p>
+<div class="formula-math">\[
+\delta=13-2=11.
+\]</div>
+<p>With:</p>
+<div class="formula-math">\[
+\alpha=0.5
+\]</div>
+<p>new Q-value:</p>
+<div class="formula-math">\[
+Q_{new}=2+0.5(11)=7.5.
+\]</div>
+<p>This should be an automatic exam calculation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-34" class="section-block">
+      <div class="section-header">
+        <span class="section-num">34</span>
+        <h2 class="section-heading">Terminal Numerical</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+Q(s,a)=3
+\]</div>
+<p>and the transition reaches the goal with:</p>
+<div class="formula-math">\[
+r=1.
+\]</div>
+<p>Because the episode terminates:</p>
+<div class="formula-math">\[
+target=1.
+\]</div>
+<p>If:</p>
+<div class="formula-math">\[
+\alpha=0.2
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+Q_{new}
+=
+3+0.2(1-3)
+\]</div>
+<div class="formula-math">\[
+=3-0.4
+\]</div>
+<div class="formula-math">\[
+=2.6.
+\]</div>
+<p>The update moves the estimate toward the terminal reward.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-35" class="section-block">
+      <div class="section-header">
+        <span class="section-num">35</span>
+        <h2 class="section-heading">The Q-Table as a Program State</h2>
+      </div>
+      <div class="section-body">
+        <p>A tabular Q-learning model can be visualized as:</p>
+<div class="ascii-box"><pre>ACTION
+       ↑  →  ↓  ←
+STATE
+  0    [ ][ ][ ][ ]
+  1    [ ][ ][ ][ ]
+  2    [ ][ ][ ][ ]
+  ...</pre></div>
+<p>Each cell stores:</p>
+<div class="formula-math">\[
+Q(s,a).
+\]</div>
+<p>For a small finite state/action space, this is easy to inspect.</p>
+<p>For a huge or continuous state space, a literal table becomes impractical.</p>
+<p>That is one motivation for function approximation and deep reinforcement learning.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-36" class="section-block">
+      <div class="section-header">
+        <span class="section-num">36</span>
+        <h2 class="section-heading">Gymnasium Integration</h2>
+      </div>
+      <div class="section-body">
+        <p>Gymnasium provides standard environments and an environment interface.</p>
+<p>A typical current API follows:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import gymnasium as gym
+
+env = gym.make(
+    &quot;FrozenLake-v1&quot;,
+    is_slippery=False,
+)
+
+observation, info = env.reset()
+
+observation, reward, terminated, truncated, info = (
+    env.step(action)
+)</code></pre></div>
+<p>The distinction matters:</p>
+<div class="ascii-box"><pre>terminated
+→ natural terminal state
+
+truncated
+→ episode ended due to a limit/external truncation</pre></div>
+<p>The current Gymnasium documentation describes FrozenLake-v1 as a discrete grid-world with discrete observations/actions and provides tabular Q-learning examples. turn114329search1</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-37" class="section-block">
+      <div class="section-header">
+        <span class="section-num">37</span>
+        <h2 class="section-heading">FrozenLake State/Action Structure</h2>
+      </div>
+      <div class="section-body">
+        <p>For the standard 4×4 FrozenLake environment:</p>
+<div class="ascii-box"><pre>observation space → 16 discrete states
+action space      → 4 discrete actions</pre></div>
+<p>The documented actions correspond to directional movement.</p>
+<p>FrozenLake can also be slippery, making transitions stochastic rather than perfectly deterministic. turn114329search1cite</p>
+<p>This creates an important experiment:</p>
+<div class="ascii-box"><pre>deterministic environment
+      ↓
+clean learning signal
+
+stochastic environment
+      ↓
+noisier outcomes
+      ↓
+harder learning problem</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-40" class="section-block">
+      <div class="section-header">
+        <span class="section-num">40</span>
+        <h2 class="section-heading">Policy Visualization</h2>
+      </div>
+      <div class="section-body">
+        <p>For FrozenLake, decode:</p>
+<div class="ascii-box"><pre>0 = left
+1 = down
+2 = right
+3 = up</pre></div>
+<p>and map:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">arrows = {
+    0: &quot;←&quot;,
+    1: &quot;↓&quot;,
+    2: &quot;→&quot;,
+    3: &quot;↑&quot;,
+}</code></pre></div>
+<p>Then reshape:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">policy = np.argmax(
+    Q,
+    axis=1,
+).reshape(4, 4)
+
+print(policy)</code></pre></div>
+<p>Use arrows to visualize the learned policy.</p>
+<p>The exact policy can depend on environment stochasticity, reward structure, random seed and training settings.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-41" class="section-block">
+      <div class="section-header">
+        <span class="section-num">41</span>
+        <h2 class="section-heading">Q-Learning vs Dynamic Programming</h2>
+      </div>
+      <div class="section-body">
+        <p>Dynamic programming methods use a known transition/reward model.</p>
+<p>Q-learning instead learns from sampled experience.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>Known model
+→ reason directly about transitions
+
+Unknown model
+→ interact with environment
+→ sample experience
+→ update Q</pre></div>
+<p>Q-learning is therefore a model-free value-learning method.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-42" class="section-block">
+      <div class="section-header">
+        <span class="section-num">42</span>
+        <h2 class="section-heading">Off-Policy Intuition</h2>
+      </div>
+      <div class="section-body">
+        <p>Q-learning updates toward:</p>
+<div class="formula-math">\[
+\max_{a'}Q(s',a').
+\]</div>
+<p>The behaviour policy may be epsilon-greedy, while the target of the update is based on the greedy best-next-action estimate.</p>
+<p>This is the key idea behind its <strong>off-policy</strong> character.</p>
+<p>For the syllabus, remember:</p>
+<blockquote>
+<p>The agent can explore using one behaviour rule while learning the value associated with a greedy target.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-43" class="section-block">
+      <div class="section-header">
+        <span class="section-num">43</span>
+        <h2 class="section-heading">Why Q-Learning Does Not Need the Transition Table</h2>
+      </div>
+      <div class="section-body">
+        <p>The update uses an observed sample:</p>
+<div class="formula-math">\[
+(s,a,r,s').
+\]</div>
+<p>It does not require you to explicitly provide:</p>
+<div class="formula-math">\[
+P(s'|s,a).
+\]</div>
+<p>The environment generates the next state.</p>
+<p>The agent learns from experience.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-44" class="section-block">
+      <div class="section-header">
+        <span class="section-num">44</span>
+        <h2 class="section-heading">Common Implementation Errors</h2>
+      </div>
+      <div class="section-body">
+        <h2>Error 1 — Bootstrapping from terminal states</h2>
+<p>Do not add a future-state value after a true terminal transition.</p>
+<h2>Error 2 — Confusing <code>terminated</code> and <code>truncated</code></h2>
+<p>Current Gymnasium APIs distinguish them.</p>
+<h2>Error 3 — Evaluating while exploring</h2>
+<p>Evaluation with random actions can underestimate the learned greedy policy.</p>
+<h2>Error 4 — Wrong action dimension</h2>
+<p>Q-table columns must equal the number of available actions.</p>
+<h2>Error 5 — Using the wrong state encoding</h2>
+<p>The Q-table row must correspond consistently to the environment's state.</p>
+<h2>Error 6 — Confusing \(\alpha\) and \(\gamma\)</h2>
+<div class="ascii-box"><pre>α → learning/update step
+γ → future-reward discount</pre></div>
+<h2>Error 7 — No exploration</h2>
+<p>A purely greedy agent can lock into poor choices before it has useful estimates.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-45" class="section-block">
+      <div class="section-header">
+        <span class="section-num">45</span>
+        <h2 class="section-heading">Reproducibility Record</h2>
+      </div>
+      <div class="section-body">
+        <p>For each RL experiment record:</p>
+<div class="ascii-box"><pre>Environment:
+Map:
+Deterministic/stochastic:
+State count:
+Action count:
+
+Seed:
+Episodes:
+Maximum steps:
+
+Learning rate α:
+Discount γ:
+Initial ε:
+Final ε:
+Decay:
+
+Reward design:
+
+Success rate:
+Mean return:
+Median return:
+
+Training curve:
+Final Q-table:
+Final policy:</pre></div>
+<p>The reward design is especially important.</p>
+<p>A reward function changes the problem the agent is solving.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-46" class="section-block">
+      <div class="section-header">
+        <span class="section-num">46</span>
+        <h2 class="section-heading">Practical Lab</h2>
+      </div>
+      <div class="section-body">
+        <h2>Task A — Return</h2>
+<p>Compute a discounted return by hand.</p>
+<h2>Task B — Q update</h2>
+<p>Perform five Q-learning numerical updates manually.</p>
+<h2>Task C — Environment</h2>
+<p>Implement the custom grid world.</p>
+<h2>Task D — Random baseline</h2>
+<p>Measure random-policy success.</p>
+<h2>Task E — Q-learning</h2>
+<p>Train the tabular learner.</p>
+<h2>Task F — Policy map</h2>
+<p>Display learned action arrows.</p>
+<h2>Task G — Evaluation</h2>
+<p>Turn exploration off.</p>
+<h2>Task H — Hyperparameters</h2>
+<p>Compare \(\alpha,\gamma,\epsilon\).</p>
+<h2>Task I — Stochasticity</h2>
+<p>Compare deterministic and slippery FrozenLake.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-47" class="section-block">
+      <div class="section-header">
+        <span class="section-num">47</span>
+        <h2 class="section-heading">Master Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Compare:</p>
+<div class="ascii-box"><pre>Random policy
+Greedy-before-learning policy
+Q-learning after 100 episodes
+Q-learning after 500 episodes
+Q-learning after 2000 episodes</pre></div>
+<p>Record:</p>
+<div class="ascii-box"><pre>success rate
+mean return
+mean episode length</pre></div>
+<p>Plot performance against training episodes.</p>
+<p>Then answer:</p>
+<blockquote>
+<p>At what point does the policy appear to become useful, and how stable is that conclusion across random seeds?</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-48" class="section-block">
+      <div class="section-header">
+        <span class="section-num">48</span>
+        <h2 class="section-heading">Multi-Seed Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Run:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">seeds = [1, 2, 3, 4, 5]</code></pre></div>
+<p>For each seed:</p>
+<ul>
+<li>initialize a fresh Q-table;</li>
+<li>train from scratch;</li>
+<li>evaluate from scratch;</li>
+<li>record success rate.</li>
+</ul>
+<p>Then report:</p>
+<div class="ascii-box"><pre>mean success rate
+standard deviation
+minimum
+maximum</pre></div>
+<p>A single successful run is weak evidence.</p>
+<p>Multiple seeds reveal sensitivity to stochasticity.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-49" class="section-block">
+      <div class="section-header">
+        <span class="section-num">49</span>
+        <h2 class="section-heading">Why Evaluation Must Be Separate</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose training uses:</p>
+<div class="formula-math">\[
+\epsilon=0.1.
+\]</div>
+<p>Then 10% of actions may be exploratory.</p>
+<p>A measured training success rate mixes:</p>
+<div class="ascii-box"><pre>learned behaviour
++
+intentional random exploration</pre></div>
+<p>Evaluation can instead use:</p>
+<div class="ascii-box"><pre>epsilon = 0</pre></div>
+<p>so that the measured behaviour reflects the learned greedy policy more directly.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-50" class="section-block">
+      <div class="section-header">
+        <span class="section-num">50</span>
+        <h2 class="section-heading">Q-Learning Mental Model</h2>
+      </div>
+      <div class="section-body">
+        <div class="ascii-box"><pre>Q(s,a)
+   ↓
+take action
+   ↓
+observe r, s&#x27;
+   ↓
+best next Q
+   ↓
+target
+   ↓
+TD error
+   ↓
+move current Q toward target</pre></div>
+<p>Memory anchor:</p>
+<blockquote>
+<p><strong>Observe → estimate target → compute TD error → update.</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-51" class="section-block">
+      <div class="section-header">
+        <span class="section-num">51</span>
+        <h2 class="section-heading">Relation to Policy Gradients</h2>
+      </div>
+      <div class="section-body">
+        <p>Q-learning learns:</p>
+<div class="ascii-box"><pre>value of actions</pre></div>
+<p>Policy gradients learn:</p>
+<div class="ascii-box"><pre>policy parameters directly</pre></div>
+<p>This creates the next conceptual branch:</p>
+<div class="ascii-box"><pre>RL
+│
+├── value-based
+│      └── Q-learning
+│
+└── policy-based
+       └── policy gradients</pre></div>
+<p>The next coding file develops the policy-based route.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-52" class="section-block">
+      <div class="section-header">
+        <span class="section-num">52</span>
+        <h2 class="section-heading">Viva Questions</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Lab Viva Trap & Runtime Gotcha</div>
+
+**Q-Learning Off-Policy vs SARSA On-Policy Trap:**
+Q-Learning uses $\max_{a'} Q(s', a')$ for the TD target (the best possible action regardless of what the agent actually does), making it OFF-POLICY.
+SARSA uses $Q(s', a')$ where $a'$ is the action actually sampled by $\epsilon$-greedy, making it ON-POLICY.
+In viva, using the chosen action $a'$ in Q-Learning's update is the classic failure trap!
+
+</div>
+
+<h3>Q1. What is an MDP?</h3>
+<p>A formal framework for sequential decision-making defined by states, actions, transition dynamics, rewards and a discount factor.</p>
+<h3>Q2. What is the Markov property?</h3>
+<p>The chosen current state contains the information needed to characterize future dynamics given the current action.</p>
+<h3>Q3. What is Q-learning?</h3>
+<p>A model-free, value-based reinforcement-learning algorithm that learns action-value estimates through sampled transitions.</p>
+<h3>Q4. Write the Q-learning update.</h3>
+<div class="formula-math">\[
+Q(s,a)
+\leftarrow
+Q(s,a)
++
+\alpha
+[
+r+\gamma\max_{a'}Q(s',a')
+-Q(s,a)
+].
+\]</div>
+<h3>Q5. What is TD error?</h3>
+<p>The difference between the learning target and the current estimate.</p>
+<h3>Q6. Why use epsilon-greedy?</h3>
+<p>To balance exploration and exploitation.</p>
+<h3>Q7. What is \(\gamma\)?</h3>
+<p>Discount factor controlling the relative importance of future rewards.</p>
+<h3>Q8. What is \(\alpha\)?</h3>
+<p>Learning rate controlling the size of the Q-value update.</p>
+<h3>Q9. Why is Q-learning called model-free?</h3>
+<p>It can learn from experienced transitions without requiring an explicit transition model.</p>
+<h3>Q10. Why should terminal states be treated specially?</h3>
+<p>There is no future action value after the episode truly terminates.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-53" class="section-block">
+      <div class="section-header">
+        <span class="section-num">53</span>
+        <h2 class="section-heading">Exam Connection</h2>
+      </div>
+      <div class="section-body">
+        <p>Typical 2-mark questions:</p>
+<ul>
+<li>Define MDP.</li>
+<li>State Markov property.</li>
+<li>Define return.</li>
+<li>Define policy.</li>
+<li>Define Q-learning.</li>
+<li>Define TD error.</li>
+<li>Define epsilon-greedy.</li>
+</ul>
+<p>Typical 5-mark questions:</p>
+<blockquote>
+<p>Explain Q-learning with its update rule.</p>
+</blockquote>
+<p>Recommended structure:</p>
+<ol>
+<li>define Q-learning;</li>
+<li>transition \((s,a,r,s')\);</li>
+<li>target;</li>
+<li>TD error;</li>
+<li>Q-value update;</li>
+<li>exploration;</li>
+<li>repeat.</li>
+</ol>
+<p>Typical numerical:</p>
+<div class="ascii-box"><pre>Q(s,a)
+r
+γ
+max Q(s&#x27;,a&#x27;)
+α</pre></div>
+<p>Calculate:</p>
+<div class="ascii-box"><pre>target
+TD error
+new Q</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-54" class="section-block">
+      <div class="section-header">
+        <span class="section-num">54</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <p>Do not move forward until you can:</p>
+<ul>
+<li>[ ] define all MDP components;</li>
+<li>[ ] explain the Markov property;</li>
+<li>[ ] calculate a return;</li>
+<li>[ ] explain \(V\) and \(Q\);</li>
+<li>[ ] write the Bellman optimality idea;</li>
+<li>[ ] write the Q-learning update;</li>
+<li>[ ] calculate a TD error;</li>
+<li>[ ] implement epsilon-greedy;</li>
+<li>[ ] build a Q-table;</li>
+<li>[ ] implement Q-learning from scratch;</li>
+<li>[ ] evaluate greedily;</li>
+<li>[ ] visualize the learned policy;</li>
+<li>[ ] compare hyperparameters;</li>
+<li>[ ] distinguish terminal and truncated episodes;</li>
+<li>[ ] explain model-free and off-policy intuition.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-55" class="section-block">
+      <div class="section-header">
+        <span class="section-num">55</span>
+        <h2 class="section-heading">Source Notes</h2>
+      </div>
+      <div class="section-body">
+        <h2>Official course source</h2>
+<p>The DSC-14 syllabus explicitly includes:</p>
+<ul>
+<li>Markov Decision Processes;</li>
+<li>Q-learning;</li>
+<li>Policy Gradients.</li>
+</ul>
+<h2>Supplied course material</h2>
+<p>The stored Exam/Main Book material provides the MDP and Q-learning mathematical progression:</p>
+<div class="ascii-box"><pre>state → action → reward + next state</pre></div>
+<p>and the Q-learning update:</p>
+<div class="formula-math">\[
+Q(s,a)\leftarrow
+Q(s,a)+\alpha
+[r+\gamma\max_{a'}Q(s',a')-Q(s,a)].
+\]</div>
+<h2>Structured external source identified by the learning guide</h2>
+<p>The master resource guide identifies <strong>NPTEL Reinforcement Learning (IIT Madras)</strong> as the main structured route for MDPs, Q-learning and policy-gradient ideas.</p>
+<h2>Current implementation reference</h2>
+<p>The current Gymnasium documentation describes <code>FrozenLake-v1</code>, its discrete state/action spaces, stochastic <code>is_slippery</code> setting and current environment interaction pattern. The current Gymnasium tabular-Q-learning tutorial also demonstrates reproducible Q-learning experimentation on FrozenLake. turn114329search1</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-56" class="section-block">
+      <div class="section-header">
+        <span class="section-num">56</span>
+        <h2 class="section-heading">Expansion Boundary</h2>
+      </div>
+      <div class="section-body">
+        <p>The following are coding-book additions:</p>
+<ul>
+<li>custom <code>GridWorld</code>;</li>
+<li>NumPy Q-learning;</li>
+<li>moving-average plots;</li>
+<li>multi-seed evaluation;</li>
+<li>hyperparameter sweeps;</li>
+<li>policy visualization;</li>
+<li>Gymnasium integration details;</li>
+<li>detailed terminal/truncation handling.</li>
+</ul>
+<p>They operationalize the syllabus rather than claiming to be copied from a supplied practical sheet.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-57" class="section-block">
+      <div class="section-header">
+        <span class="section-num">57</span>
+        <h2 class="section-heading">Status</h2>
+      </div>
+      <div class="section-body">
+        <p><strong><code>CODE-U4-01</code> — COMPLETE</strong></p>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="code-u3-05-rnn-lstm-sequence-modelling.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← Unit 3 Lab 05 — RNNs & LSTMs</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">💻 Coding Index</span>
+      </a>
+      <a href="code-u4-02-policy-gradients-reinforce.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: Unit 4 Lab 02 — Policy Gradients & REINFORCE →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search lab implementations, functions, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">💻</span>Lab Hub</a>
+  <a href="code-u4-01-mdp-q-learning.html" class="mobile-nav-btn active"><span class="icon">📖</span>CODE-U4-01</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

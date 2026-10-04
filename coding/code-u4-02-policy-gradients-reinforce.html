@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- ⚡ Arpit | AIML MiniBook 2026 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="author" content="Arpit">
+<meta name="description" content="CODE-U4-02: Policy Gradients & REINFORCE Algorithm — AI & Machine Learning Coding Lab. Parameterized Policy Networks, Trajectory Sampling, Discounted Cumulative Returns, Likelihood-Ratio Gradient Estimator, and CartPole Balancing">
+<title>CODE-U4-02: Policy Gradients & REINFORCE Algorithm | Coding Lab 💻 AIML MiniBook</title>
+<link rel="manifest" href="../manifest.json">
+<link rel="stylesheet" href="../assets/css/main.css">
+<link rel="stylesheet" href="../assets/css/components.css">
+<link rel="stylesheet" href="../assets/css/animations.css">
+<link rel="stylesheet" href="../assets/css/timer.css">
+<link rel="stylesheet" href="../assets/css/chapters.css">
+<link rel="stylesheet" href="../assets/css/coding.css">
+</head>
+<body class="coding-module track-c4">
+<div id="progress-bar"></div>
+
+<!-- HEADER -->
+<header id="main-header">
+  <div class="header-left">
+    <button id="sidebar-toggle" class="icon-btn" title="Toggle Sidebar (S)" aria-label="Toggle navigation sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <div class="brand-logo">
+      <div class="brand-icon">💻</div>
+      <div class="brand-text"><span class="main">Coding Lab</span><span class="sub">AI &amp; ML From Scratch</span></div>
+    </div>
+  </div>
+  <span class="header-chapter-title">CODE-U4-02: Policy Gradients &amp; REINFORCE Algorithm</span>
+  <div class="header-right">
+    <button id="search-btn" class="icon-btn" title="Search (Ctrl+K)" aria-label="Search content">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </button>
+    <button id="tts-toggle" class="icon-btn" title="Read Aloud" aria-label="Read text aloud">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button id="print-btn" title="Print / Save as PDF (Ctrl+P)" aria-label="Print or export PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="flex-shrink:0"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+      <span class="print-label">PDF</span>
+    </button>
+    <button id="reading-mode-btn" class="icon-btn" title="Reading Mode (F)" aria-pressed="false" aria-label="Toggle distraction-free reading mode">📖</button>
+    <button id="theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle dark/light theme"></button>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<div id="sidebar-overlay"></div>
+<aside id="sidebar">
+  <nav class="sidebar-nav">
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">Portal Navigation</div>
+      <a href="../index.html" class="sidebar-link"><span class="link-icon">🏠</span>Home Portal</a>
+      <a href="index.html" class="sidebar-link"><span class="link-icon">💻</span>Coding Lab Hub</a>
+      <a href="../chapters/ch01-what-is-ai.html" class="sidebar-link"><span class="link-icon">📘</span>Main Curriculum (Ch 1–50)</a>
+      <a href="../math/index.html" class="sidebar-link"><span class="link-icon">📐</span>Math Companion</a>
+      <a href="../exams/mock-exam.html" class="sidebar-link"><span class="link-icon">📝</span>Exam Simulator</a>
+    </div>
+
+    <div class="sidebar-section">
+  <div class="sidebar-section-label">Track 0: Environment & System</div>
+  <a href="code-00-coding-foundation.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-00: Coding Lab Foundation &amp; Implementation System</a>
+  <a href="code-01-python-numpy-workflow.html" class="sidebar-link"><span class="link-icon">⚙️</span>CODE-01: Python, NumPy, Matplotlib &amp; Lab Workflow</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 1: Classical AI & Search Labs</div>
+  <a href="code-u1-01-bfs-dfs.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-01: BFS and DFS From Scratch</a>
+  <a href="code-u1-02-greedy-a-star.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-02: Greedy Best-First &amp; A* Search From Scratch</a>
+  <a href="code-u1-03-csp-backtracking.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-03: CSPs and Backtracking Search</a>
+  <a href="code-u1-04-minimax-alpha-beta.html" class="sidebar-link"><span class="link-icon">🔍</span>CODE-U1-04: Minimax and Alpha-Beta Pruning From Scratch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 2: Supervised ML Labs</div>
+  <a href="code-u2-01-ml-workflow.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-01: ML Workflow: Preprocessing, Splitting &amp; Evaluation</a>
+  <a href="code-u2-02-linear-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-02: Linear Regression From Scratch</a>
+  <a href="code-u2-03-logistic-regression.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-03: Logistic Regression From Scratch</a>
+  <a href="code-u2-04-decision-trees.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-04: Decision Trees From Scratch</a>
+  <a href="code-u2-05-classification-metrics-roc.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-05: Classification Metrics, Confusion Matrix, ROC-AUC &amp; Thresholds</a>
+  <a href="code-u2-06-ridge-lasso-regularization.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-06: Ridge &amp; Lasso From Scratch: Regularization &amp; Optimization</a>
+  <a href="code-u2-07-ml-evaluation-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-07: ML Evaluation &amp; Model Comparison Lab</a>
+  <a href="code-u2-08-knn-svm-practical-comparison.html" class="sidebar-link"><span class="link-icon">📊</span>CODE-U2-08: KNN and SVM Practical Comparison Lab</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 3: Deep Learning Labs</div>
+  <a href="code-u3-01-neuron-perceptron.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-01: Neuron and Perceptron From Scratch</a>
+  <a href="code-u3-02-mlp-forward-propagation.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-02: MLP and Forward Propagation From Scratch</a>
+  <a href="code-u3-03-backpropagation-scratch.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-03: Gradient Descent &amp; Backpropagation From Scratch</a>
+  <a href="code-u3-04-cnn-image-classification.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-04: CNNs: From Scratch to PyTorch Image Classification</a>
+  <a href="code-u3-05-rnn-lstm-sequence-modelling.html" class="sidebar-link"><span class="link-icon">🧠</span>CODE-U3-05: RNN &amp; LSTM: From Scratch to PyTorch Sequence Modelling</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 4: Advanced AI & RL Labs</div>
+  <a href="code-u4-01-mdp-q-learning.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-01: MDPs and Q-Learning From Scratch</a>
+  <a href="code-u4-02-policy-gradients-reinforce.html" class="sidebar-link active"><span class="link-icon">🎲</span>CODE-U4-02: Policy Gradients &amp; REINFORCE Algorithm</a>
+  <a href="code-u4-03-nlp-text-classification.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-03: NLP Preprocessing &amp; Text Classification Pipeline</a>
+  <a href="code-u4-04-autoencoders-pytorch.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-04: Autoencoders: From Scratch &amp; PyTorch Representation Learning</a>
+  <a href="code-u4-05-gans-pytorch.html" class="sidebar-link"><span class="link-icon">🎲</span>CODE-U4-05: Generative Adversarial Networks: Core Mechanics to PyTorch</a>
+</div>
+<div class="sidebar-section">
+  <div class="sidebar-section-label">Track 5: Engineering & Capstone</div>
+  <a href="code-23-debugging-testing-reproducibility.html" class="sidebar-link"><span class="link-icon">🏆</span>CODE-23: Debugging, Testing, Visualization &amp; Reproducibility</a>
+  <a href="code-24-coding-capstone-checklist.html" class="sidebar-link"><span class="link-icon">🏆</span>CODE-24: AI/ML Coding Capstone &amp; Master Practical Checklist</a>
+</div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-section-label">CODE-U4-02 — Sections</div>
+      <a href="#s-01" class="sidebar-link"><span class="link-icon">📌</span>1. Course Position</a>
+      <a href="#s-02" class="sidebar-link"><span class="link-icon">📌</span>2. Coding Objective</a>
+      <a href="#s-03" class="sidebar-link"><span class="link-icon">📌</span>3. Value-Based vs Policy-Based Learning</a>
+      <a href="#s-04" class="sidebar-link"><span class="link-icon">📌</span>4. Why Use a Stochastic Policy?</a>
+      <a href="#s-05" class="sidebar-link"><span class="link-icon">📌</span>5. Parameterized Policy</a>
+      <a href="#s-09" class="sidebar-link"><span class="link-icon">📌</span>9. One-Step Intuition</a>
+      <a href="#s-10" class="sidebar-link"><span class="link-icon">📌</span>10. Discounted Returns</a>
+      <a href="#s-11" class="sidebar-link"><span class="link-icon">📌</span>11. Test Returns</a>
+      <a href="#s-12" class="sidebar-link"><span class="link-icon">📌</span>12. Normalize Returns</a>
+      <a href="#s-13" class="sidebar-link"><span class="link-icon">📌</span>13. Why Normalization Can Help</a>
+      <a href="#s-14" class="sidebar-link"><span class="link-icon">📌</span>14. Build a Tiny Policy Network</a>
+      <a href="#s-15" class="sidebar-link"><span class="link-icon">📌</span>15. Why Output Logits Instead of Softmax?</a>
+      <a href="#s-33" class="sidebar-link"><span class="link-icon">📌</span>33. Continuous-Action Preview</a>
+      <a href="#s-39" class="sidebar-link"><span class="link-icon">📌</span>39. Practical Lab</a>
+      <a href="#s-40" class="sidebar-link"><span class="link-icon">📌</span>40. Empirical Distribution Exercise</a>
+      <a href="#s-41" class="sidebar-link"><span class="link-icon">📌</span>41. Policy Gradient Numerical</a>
+      <a href="#s-42" class="sidebar-link"><span class="link-icon">📌</span>42. Policy Gradient vs Q-Learning Decision Process</a>
+      <a href="#s-43" class="sidebar-link"><span class="link-icon">📌</span>43. Why Policy Gradients Are Useful</a>
+      <a href="#s-44" class="sidebar-link"><span class="link-icon">📌</span>44. REINFORCE Limitation — High Variance</a>
+      <a href="#s-45" class="sidebar-link"><span class="link-icon">📌</span>45. REINFORCE vs TD Learning</a>
+      <a href="#s-46" class="sidebar-link"><span class="link-icon">📌</span>46. Actor-Critic Bridge</a>
+      <a href="#s-47" class="sidebar-link"><span class="link-icon">📌</span>47. Training Log</a>
+      <a href="#s-48" class="sidebar-link"><span class="link-icon">📌</span>48. RL Debugging Protocol</a>
+      <a href="#s-49" class="sidebar-link"><span class="link-icon">📌</span>49. Gradient Inspection</a>
+      <a href="#s-50" class="sidebar-link"><span class="link-icon">📌</span>50. Practical Challenge</a>
+      <a href="#s-51" class="sidebar-link"><span class="link-icon">📌</span>51. Master Comparison Experiment</a>
+      <a href="#s-52" class="sidebar-link"><span class="link-icon">📌</span>52. Exam Connection</a>
+      <a href="#s-53" class="sidebar-link"><span class="link-icon">📌</span>53. Viva Questions</a>
+      <a href="#s-54" class="sidebar-link"><span class="link-icon">📌</span>54. One-Screen Formula Map</a>
+      <a href="#s-55" class="sidebar-link"><span class="link-icon">📌</span>55. Connection to the Previous File</a>
+      <a href="#s-56" class="sidebar-link"><span class="link-icon">📌</span>56. Connection to Deep Learning</a>
+      <a href="#s-57" class="sidebar-link"><span class="link-icon">📌</span>57. Mastery Gate</a>
+      <a href="#s-58" class="sidebar-link"><span class="link-icon">📌</span>58. Source Notes</a>
+      <a href="#s-59" class="sidebar-link"><span class="link-icon">📌</span>59. Expansion Boundary</a>
+      <a href="#s-60" class="sidebar-link"><span class="link-icon">📌</span>60. Status</a>
+    </div>
+  </nav>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div id="main-content">
+  <main class="chapter-content">
+    
+    <!-- MODULE HERO -->
+    <div class="chapter-hero">
+      <div class="chapter-breadcrumb">
+        <a href="../index.html">AIML MiniBook</a>
+        <span>/</span>
+        <a href="index.html">Coding Lab</a>
+        <span>/</span>
+        <span>CODE-U4-02</span>
+      </div>
+      <div class="chapter-num"><span class="track-badge track-c4">Track 4: Advanced AI & Reinforcement Learning</span></div>
+      <h1 class="chapter-title">Policy Gradients &amp; REINFORCE Algorithm</h1>
+      <p class="chapter-desc">Parameterized Policy Networks, Trajectory Sampling, Discounted Cumulative Returns, Likelihood-Ratio Gradient Estimator, and CartPole Balancing</p>
+
+      <div class="chapter-meta">
+        <span class="chapter-meta-item">⏱️ ~55 min lab</span>
+        <span class="chapter-meta-item">🎓 DU B.Tech DSC-14</span>
+        <span class="chapter-meta-item uni-badge">POLICY-GRADIENT</span> <span class="chapter-meta-item uni-badge">REINFORCE</span> <span class="chapter-meta-item uni-badge">MONTE-CARLO-RL</span> <span class="chapter-meta-item uni-badge">PYTORCH</span> <span class="chapter-meta-item uni-badge">CARTPOLE</span>
+      </div>
+
+      <div class="lab-meta-grid">
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Prerequisites</div>
+          <div class="lab-meta-value">CODE-U4-01 Q-Learning, CODE-U3-03 Backpropagation</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Main Book Concept</div>
+          <div class="lab-meta-value">Ch 42 Policy Gradient Methods</div>
+        </div>
+        <div class="lab-meta-box">
+          <div class="lab-meta-label">Math Companion Layer</div>
+          <div class="lab-meta-value">Policy Gradient Theorem ∇_θ J(θ) = E[∑ ∇_θ log π_θ(a_t|s_t) G_t], Likelihood ratio trick</div>
+        </div>
+        <div class="lab-meta-box" style="grid-column: 1 / -1;">
+          <div class="lab-meta-label">AI / Machine Learning Connections</div>
+          <div class="lab-meta-value">Continuous action spaces, Stochastic policies, LLM Reinforcement Learning from Human Feedback (RLHF), Robotics control</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lab-meta-card"><h1>CODE-U4-02 — Policy Gradient Methods and REINFORCE</h1>
+<blockquote>
+<p><strong>Purpose:</strong> Move from learning action values to learning a policy directly, derive the core policy-gradient idea, implement a simple REINFORCE agent in PyTorch, and understand why sampled rewards can produce high-variance learning signals.</p>
+</blockquote>
+<p>The conceptual transition is:</p>
+<div class="ascii-box"><pre>Q-learning
+→ learn which actions are valuable
+
+Policy Gradient
+→ learn the policy itself</pre></div>
+<p>The core pipeline is:</p>
+<div class="ascii-box"><pre>state
+ ↓
+policy network
+ ↓
+action probabilities
+ ↓
+sample action
+ ↓
+environment
+ ↓
+rewards
+ ↓
+return
+ ↓
+log probability × return
+ ↓
+policy gradient
+ ↓
+optimizer update</pre></div>
+<hr /></div>
+
+    <!-- TOC ACCORDION -->
+    <div class="chapter-toc-wrap">
+      <details class="chapter-toc-details">
+        <summary class="chapter-toc-summary">
+          <span>📋 Jump to Section in CODE-U4-02 (35 Sections)</span>
+          <span class="toc-arrow">▾</span>
+        </summary>
+        <ul class="chapter-toc-list">
+          <li class="toc-item"><a href="#s-01"><span class="toc-num">01</span><span class="toc-name">Course Position</span></a></li>
+        <li class="toc-item"><a href="#s-02"><span class="toc-num">02</span><span class="toc-name">Coding Objective</span></a></li>
+        <li class="toc-item"><a href="#s-03"><span class="toc-num">03</span><span class="toc-name">Value-Based vs Policy-Based Learning</span></a></li>
+        <li class="toc-item"><a href="#s-04"><span class="toc-num">04</span><span class="toc-name">Why Use a Stochastic Policy?</span></a></li>
+        <li class="toc-item"><a href="#s-05"><span class="toc-num">05</span><span class="toc-name">Parameterized Policy</span></a></li>
+        <li class="toc-item"><a href="#s-09"><span class="toc-num">09</span><span class="toc-name">One-Step Intuition</span></a></li>
+        <li class="toc-item"><a href="#s-10"><span class="toc-num">10</span><span class="toc-name">Discounted Returns</span></a></li>
+        <li class="toc-item"><a href="#s-11"><span class="toc-num">11</span><span class="toc-name">Test Returns</span></a></li>
+        <li class="toc-item"><a href="#s-12"><span class="toc-num">12</span><span class="toc-name">Normalize Returns</span></a></li>
+        <li class="toc-item"><a href="#s-13"><span class="toc-num">13</span><span class="toc-name">Why Normalization Can Help</span></a></li>
+        <li class="toc-item"><a href="#s-14"><span class="toc-num">14</span><span class="toc-name">Build a Tiny Policy Network</span></a></li>
+        <li class="toc-item"><a href="#s-15"><span class="toc-num">15</span><span class="toc-name">Why Output Logits Instead of Softmax?</span></a></li>
+        <li class="toc-item"><a href="#s-33"><span class="toc-num">33</span><span class="toc-name">Continuous-Action Preview</span></a></li>
+        <li class="toc-item"><a href="#s-39"><span class="toc-num">39</span><span class="toc-name">Practical Lab</span></a></li>
+        <li class="toc-item"><a href="#s-40"><span class="toc-num">40</span><span class="toc-name">Empirical Distribution Exercise</span></a></li>
+        <li class="toc-item"><a href="#s-41"><span class="toc-num">41</span><span class="toc-name">Policy Gradient Numerical</span></a></li>
+        <li class="toc-item"><a href="#s-42"><span class="toc-num">42</span><span class="toc-name">Policy Gradient vs Q-Learning Decision Process</span></a></li>
+        <li class="toc-item"><a href="#s-43"><span class="toc-num">43</span><span class="toc-name">Why Policy Gradients Are Useful</span></a></li>
+        <li class="toc-item"><a href="#s-44"><span class="toc-num">44</span><span class="toc-name">REINFORCE Limitation — High Variance</span></a></li>
+        <li class="toc-item"><a href="#s-45"><span class="toc-num">45</span><span class="toc-name">REINFORCE vs TD Learning</span></a></li>
+        <li class="toc-item"><a href="#s-46"><span class="toc-num">46</span><span class="toc-name">Actor-Critic Bridge</span></a></li>
+        <li class="toc-item"><a href="#s-47"><span class="toc-num">47</span><span class="toc-name">Training Log</span></a></li>
+        <li class="toc-item"><a href="#s-48"><span class="toc-num">48</span><span class="toc-name">RL Debugging Protocol</span></a></li>
+        <li class="toc-item"><a href="#s-49"><span class="toc-num">49</span><span class="toc-name">Gradient Inspection</span></a></li>
+        <li class="toc-item"><a href="#s-50"><span class="toc-num">50</span><span class="toc-name">Practical Challenge</span></a></li>
+        <li class="toc-item"><a href="#s-51"><span class="toc-num">51</span><span class="toc-name">Master Comparison Experiment</span></a></li>
+        <li class="toc-item"><a href="#s-52"><span class="toc-num">52</span><span class="toc-name">Exam Connection</span></a></li>
+        <li class="toc-item"><a href="#s-53"><span class="toc-num">53</span><span class="toc-name">Viva Questions</span></a></li>
+        <li class="toc-item"><a href="#s-54"><span class="toc-num">54</span><span class="toc-name">One-Screen Formula Map</span></a></li>
+        <li class="toc-item"><a href="#s-55"><span class="toc-num">55</span><span class="toc-name">Connection to the Previous File</span></a></li>
+        <li class="toc-item"><a href="#s-56"><span class="toc-num">56</span><span class="toc-name">Connection to Deep Learning</span></a></li>
+        <li class="toc-item"><a href="#s-57"><span class="toc-num">57</span><span class="toc-name">Mastery Gate</span></a></li>
+        <li class="toc-item"><a href="#s-58"><span class="toc-num">58</span><span class="toc-name">Source Notes</span></a></li>
+        <li class="toc-item"><a href="#s-59"><span class="toc-num">59</span><span class="toc-name">Expansion Boundary</span></a></li>
+        <li class="toc-item"><a href="#s-60"><span class="toc-num">60</span><span class="toc-name">Status</span></a></li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- SECTIONS -->
+    
+    <section id="s-01" class="section-block">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-heading">Course Position</h2>
+      </div>
+      <div class="section-body">
+        <div class="diagram-box"><pre class="mermaid">
+graph TD
+    Obs["State s_t"] --> Net["Policy Network π_θ(a|s)"]
+    Net --> Dist["Categorical Action Distribution"]
+    Dist --> Sample["Sample Action a_t ~ π_θ(a|s_t)"]
+    Sample --> Rollout["Execute Full Episode: Collect (s_t, a_t, r_t)"]
+    Rollout --> Ret["Calculate Cumulative Returns G_t = ∑ γ^(k-t) r_k"]
+    Ret --> Loss["Policy Loss: ℒ = - ∑ log π_θ(a_t|s_t) · G_t"]
+    Loss --> Grad["Backprop & Update Policy Weights θ"]
+    style Net fill:#1e293b,stroke:#ec4899,color:#f8fafc
+    style Loss fill:#7f1d1d,stroke:#ef4444,color:#ffffff
+    style Grad fill:#065f46,stroke:#34d399,color:#ffffff,stroke-width:2px
+</pre></div>
+<p>The official DSC-14 Unit IV scope includes <strong>Policy Gradients</strong>.</p>
+<p>The supplied course material defines policy-gradient learning around:</p>
+<ul>
+<li>a parameterized policy;</li>
+<li>action probabilities;</li>
+<li>sampled returns;</li>
+<li>gradient-based policy updates.</li>
+</ul>
+<p>The completed Q-learning coding chapter established the value-based branch.</p>
+<p>This chapter develops the policy-based branch.</p>
+<p><strong>Source boundary:</strong> the syllabus and supplied Main/Exam material define the course boundary and conceptual progression. The explicit REINFORCE derivation, PyTorch policy network, categorical sampling workflow, return normalization experiment and training implementation are standard reinforcement-learning coding expansion.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-02" class="section-block">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-heading">Coding Objective</h2>
+      </div>
+      <div class="section-body">
+        <div class="teacher-box"><div class="teacher-box-title"><span>👨‍🏫</span> Teacher Intuition — Bilingual Implementation Model</div>
+
+Q-Learning values seekhta hai, fir maximum value wala action chunta hai.
+Policy Gradient direct action lene ki policy $\pi_\theta(a|s)$ ko train karta hai.
+Funda bohot seedha hai: 'Episode chalao. Agar episode accha raha (high return $G_t$), toh jin actions ne ye result diya unki probability badha do. Agar bura raha, toh probability ghata do!'
+Log-derivative trick $\nabla \log \pi$ hume bina environment ki dynamics jaane direct gradient nikalne ki superpower deti hai!
+
+</div>
+
+<p>By the end of this chapter you should be able to:</p>
+<ul>
+<li>distinguish policy-based and value-based reinforcement learning;</li>
+<li>parameterize a stochastic policy;</li>
+<li>turn network outputs into an action distribution;</li>
+<li>sample actions;</li>
+<li>record log probabilities;</li>
+<li>calculate discounted returns;</li>
+<li>construct a REINFORCE loss;</li>
+<li>train a policy network;</li>
+<li>understand why policy-gradient updates are stochastic;</li>
+<li>use a baseline/advantage conceptually;</li>
+<li>compare policy gradients with Q-learning;</li>
+<li>debug action-distribution and tensor-shape errors;</li>
+<li>evaluate a learned policy separately from training exploration.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-03" class="section-block">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-heading">Value-Based vs Policy-Based Learning</h2>
+      </div>
+      <div class="section-body">
+        <p>Q-learning:</p>
+<div class="ascii-box"><pre>state
+ ↓
+Q(s,a)
+ ↓
+choose high-value action</pre></div>
+<p>Policy gradient:</p>
+<div class="ascii-box"><pre>state
+ ↓
+πθ(a|s)
+ ↓
+sample action</pre></div>
+<p>The difference is fundamental.</p>
+<h3>Q-learning</h3>
+<p>The primary learned object is:</p>
+<div class="formula-math">\[
+Q(s,a).
+\]</div>
+<h3>Policy gradient</h3>
+<p>The primary learned object is:</p>
+<div class="formula-math">\[
+\boxed{
+\pi_\theta(a|s)
+}
+\]</div>
+<p>a parameterized probability distribution over actions.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-04" class="section-block">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-heading">Why Use a Stochastic Policy?</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose a state has three possible actions.</p>
+<p>The policy might output:</p>
+<div class="ascii-box"><pre>left  = 0.10
+right = 0.70
+up    = 0.20</pre></div>
+<p>The agent does not have to behave deterministically.</p>
+<p>Sampling allows exploration naturally.</p>
+<p>As learning progresses, the probability distribution can shift.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>early:
+[0.33, 0.34, 0.33]
+
+after learning:
+[0.05, 0.90, 0.05]</pre></div>
+<p>This is different from epsilon-greedy exploration because the policy itself represents the action-selection distribution.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-05" class="section-block">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-heading">Parameterized Policy</h2>
+      </div>
+      <div class="section-body">
+        <p>Let:</p>
+<div class="formula-math">\[
+\theta
+\]</div>
+<p>represent the network parameters.</p>
+<p>Then:</p>
+<div class="formula-math">\[
+\boxed{
+\pi_\theta(a|s)
+}
+\]</div>
+<p>means:</p>
+<blockquote>
+<p>probability of taking action \(a\) in state \(s\) under parameters \(\theta\).</p>
+</blockquote>
+<p>A neural network can map state features to logits:</p>
+<div class="formula-math">\[
+z=f_\theta(s).
+\]</div>
+<p>Then softmax converts logits into action probabilities:</p>
+<div class="formula-math">\[
+\pi_\theta(a|s)
+=
+\frac{e^{z_a}}
+{\sum_j e^{z_j}}.
+\]</div>
+<p>In PyTorch, a categorical distribution can be parameterized directly by logits or probabilities. The current PyTorch documentation provides <code>torch.distributions.Categorical</code> with <code>sample()</code> and <code>log_prob()</code>, and explicitly describes REINFORCE using these operations. turn114329search0cite</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-09" class="section-block">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-heading">One-Step Intuition</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+\log\pi_\theta(a|s)
+\]</div>
+<p>changes when the policy parameters move.</p>
+<p>If the observed return is:</p>
+<div class="formula-math">\[
+G=+10
+\]</div>
+<p>then:</p>
+<div class="formula-math">\[
+-G\log\pi(a|s)
+\]</div>
+<p>encourages increasing the probability of the chosen action.</p>
+<p>If:</p>
+<div class="formula-math">\[
+G=-10
+\]</div>
+<p>the sign reverses, encouraging the policy away from that action.</p>
+<p>This is a simplified intuition for the REINFORCE update.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-10" class="section-block">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-heading">Discounted Returns</h2>
+      </div>
+      <div class="section-body">
+        <p>Given episode rewards:</p>
+<div class="ascii-box"><pre>r₀, r₁, ..., r_{T-1}</pre></div>
+<p>compute:</p>
+<div class="formula-math">\[
+G_t=
+r_t+\gamma r_{t+1}
++\gamma^2r_{t+2}
++\cdots.
+\]</div>
+<p>Python:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import numpy as np</code></pre></div>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def discounted_returns(
+    rewards,
+    gamma,
+):
+    returns = np.zeros(
+        len(rewards),
+        dtype=float,
+    )
+
+    running = 0.0
+
+    for t in reversed(
+        range(len(rewards))
+    ):
+        running = (
+            rewards[t]
+            + gamma * running
+        )
+
+        returns[t] = running
+
+    return returns</code></pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-11" class="section-block">
+      <div class="section-header">
+        <span class="section-num">11</span>
+        <h2 class="section-heading">Test Returns</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">rewards = [
+    1.0,
+    2.0,
+    3.0,
+]</code></pre></div>
+<p>and:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">gamma = 0.5</code></pre></div>
+<p>Then:</p>
+<div class="formula-math">\[
+G_2=3
+\]</div>
+<div class="formula-math">\[
+G_1=2+0.5(3)=3.5
+\]</div>
+<div class="formula-math">\[
+G_0=1+0.5(2)+0.5^2(3)
+\]</div>
+<div class="formula-math">\[
+=1+1+0.75
+=2.75.
+\]</div>
+<p>Verify:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">returns = discounted_returns(
+    rewards,
+    gamma=0.5,
+)
+
+print(returns)</code></pre></div>
+<p>Expected:</p>
+<div class="ascii-box"><pre>[2.75, 3.5, 3.0]</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-12" class="section-block">
+      <div class="section-header">
+        <span class="section-num">12</span>
+        <h2 class="section-heading">Normalize Returns</h2>
+      </div>
+      <div class="section-body">
+        <p>Policy-gradient estimates can be noisy.</p>
+<p>A common practical experiment is to standardize sampled returns:</p>
+<div class="formula-math">\[
+\boxed{
+\hat G_t=
+\frac{
+G_t-\mu_G
+}{
+\sigma_G+\epsilon
+}
+}
+\]</div>
+<p>Implementation:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">def normalize_returns(
+    returns,
+    eps=1e-8,
+):
+    returns = np.asarray(
+        returns,
+        dtype=float,
+    )
+
+    mean = returns.mean()
+    std = returns.std()
+
+    return (
+        returns - mean
+    ) / (
+        std + eps
+    )</code></pre></div>
+<p>This changes the scale of the learning signal.</p>
+<p>It does not change the underlying goal of maximizing expected return.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-13" class="section-block">
+      <div class="section-header">
+        <span class="section-num">13</span>
+        <h2 class="section-heading">Why Normalization Can Help</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose one episode produces:</p>
+<div class="ascii-box"><pre>returns ≈ 0 to 2</pre></div>
+<p>and another produces:</p>
+<div class="ascii-box"><pre>returns ≈ 0 to 500</pre></div>
+<p>The second episode can dominate gradient magnitude.</p>
+<p>Normalization can make optimization numerically better behaved.</p>
+<p>But:</p>
+<blockquote>
+<p>It is a variance/scale-control technique, not a universal guarantee of better performance.</p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-14" class="section-block">
+      <div class="section-header">
+        <span class="section-num">14</span>
+        <h2 class="section-heading">Build a Tiny Policy Network</h2>
+      </div>
+      <div class="section-body">
+        <p>Use PyTorch:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">import torch
+import torch.nn as nn
+from torch.distributions import Categorical</code></pre></div>
+<p>Model:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">class PolicyNetwork(nn.Module):
+    def __init__(
+        self,
+        state_dim,
+        action_dim,
+        hidden_dim=64,
+    ):
+        super().__init__()
+
+        self.network = nn.Sequential(
+            nn.Linear(
+                state_dim,
+                hidden_dim,
+            ),
+            nn.ReLU(),
+            nn.Linear(
+                hidden_dim,
+                action_dim,
+            ),
+        )
+
+    def forward(self, state):
+        return self.network(state)</code></pre></div>
+<p>The network outputs <strong>logits</strong>, not probabilities.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-15" class="section-block">
+      <div class="section-header">
+        <span class="section-num">15</span>
+        <h2 class="section-heading">Why Output Logits Instead of Softmax?</h2>
+      </div>
+      <div class="section-body">
+        <p><code>Categorical</code> can accept logits directly.</p>
+<p>That is convenient and numerically preferable to manually computing probabilities in many situations.</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">logits = policy_network(state)
+dist = Categorical(
+    logits=logits
+)</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">action = dist.sample()
+log_prob = dist.log_prob(action)</code></pre></div>
+<p>The current PyTorch documentation supports both <code>probs=</code> and <code>logits=</code> for <code>Categorical</code>, and states that logits are interpreted as unnormalized log probabilities. turn114329search0cite</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-33" class="section-block">
+      <div class="section-header">
+        <span class="section-num">33</span>
+        <h2 class="section-heading">Continuous-Action Preview</h2>
+      </div>
+      <div class="section-body">
+        <p>For discrete actions:</p>
+<div class="ascii-box"><pre>Categorical</pre></div>
+<p>is a natural distribution.</p>
+<p>For continuous actions, a common family is:</p>
+<div class="ascii-box"><pre>Normal</pre></div>
+<p>The policy might output:</p>
+<div class="ascii-box"><pre>mean
+standard deviation</pre></div>
+<p>and sample a continuous action.</p>
+<p>PyTorch's distribution documentation also describes pathwise and score-function gradient estimators and gives <code>Normal</code> as an example for reparameterized sampling. turn114329search0cite</p>
+<p>For your first policy-gradient implementation, however, the custom deterministic grid world remains preferable because the state/action space is transparent.</p>
+<p>Then move to Gymnasium once the algorithm is understood.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-39" class="section-block">
+      <div class="section-header">
+        <span class="section-num">39</span>
+        <h2 class="section-heading">Practical Lab</h2>
+      </div>
+      <div class="section-body">
+        <h2>Task A — Returns</h2>
+<p>Implement and verify discounted-return calculation.</p>
+<h2>Task B — Distribution</h2>
+<p>Create a two-action categorical policy and sample 1,000 actions.</p>
+<p>Estimate the empirical frequencies.</p>
+<p>Compare them with the predicted probabilities.</p>
+<h2>Task C — Log probability</h2>
+<p>For sampled actions, record:</p>
+<div class="ascii-box"><pre>probability
+log probability</pre></div>
+<h2>Task D — REINFORCE</h2>
+<p>Train the policy on the custom grid world.</p>
+<h2>Task E — Baseline</h2>
+<p>Compare raw and normalized returns.</p>
+<h2>Task F — Multi-seed</h2>
+<p>Run five seeds.</p>
+<h2>Task G — Compare</h2>
+<p>Compare REINFORCE with tabular Q-learning on the same environment.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-40" class="section-block">
+      <div class="section-header">
+        <span class="section-num">40</span>
+        <h2 class="section-heading">Empirical Distribution Exercise</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="ascii-box"><pre>P(action 0) = 0.2
+P(action 1) = 0.8</pre></div>
+<p>Sample:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">samples = []
+
+for _ in range(1000):
+    action = distribution.sample().item()
+    samples.append(action)</code></pre></div>
+<p>Then:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">counts = np.bincount(
+    samples,
+    minlength=2,
+)
+
+frequencies = (
+    counts / counts.sum()
+)
+
+print(frequencies)</code></pre></div>
+<p>You should obtain empirical frequencies approximately near:</p>
+<div class="ascii-box"><pre>[0.2, 0.8]</pre></div>
+<p>The exact result will vary due to finite sampling.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-41" class="section-block">
+      <div class="section-header">
+        <span class="section-num">41</span>
+        <h2 class="section-heading">Policy Gradient Numerical</h2>
+      </div>
+      <div class="section-body">
+        <p>Suppose:</p>
+<div class="formula-math">\[
+G=8
+\]</div>
+<p>and:</p>
+<div class="formula-math">\[
+\log\pi_\theta(a|s)=\log(0.25).
+\]</div>
+<p>Then one scalar contribution to the loss is:</p>
+<div class="formula-math">\[
+-8\log(0.25).
+\]</div>
+<p>Because:</p>
+<div class="formula-math">\[
+\log(0.25)\lt 0,
+\]</div>
+<p>the contribution is positive.</p>
+<p>The optimizer works through the derivative of the log-probability with respect to the policy parameters.</p>
+<p>You do not need to calculate a complete neural-network gradient by hand for every parameter in an exam.</p>
+<p>The important exam-level understanding is:</p>
+<div class="ascii-box"><pre>return
+×
+log-probability gradient</pre></div>
+<p>forms the policy-learning signal.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-42" class="section-block">
+      <div class="section-header">
+        <span class="section-num">42</span>
+        <h2 class="section-heading">Policy Gradient vs Q-Learning Decision Process</h2>
+      </div>
+      <div class="section-body">
+        <p>Q-learning:</p>
+<div class="ascii-box"><pre>state
+ ↓
+Q values
+ ↓
+argmax / epsilon-greedy
+ ↓
+action</pre></div>
+<p>REINFORCE:</p>
+<div class="ascii-box"><pre>state
+ ↓
+policy logits
+ ↓
+probability distribution
+ ↓
+sample
+ ↓
+action</pre></div>
+<p>Memory anchor:</p>
+<blockquote>
+<p><strong>Q-learning learns values and derives actions; policy gradients learn action probabilities directly.</strong></p>
+</blockquote>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-43" class="section-block">
+      <div class="section-header">
+        <span class="section-num">43</span>
+        <h2 class="section-heading">Why Policy Gradients Are Useful</h2>
+      </div>
+      <div class="section-body">
+        <p>Policy gradients are attractive when:</p>
+<ul>
+<li>the policy itself is the object you want to optimize;</li>
+<li>the action space or policy representation makes direct parameterization convenient;</li>
+<li>stochastic policies are useful;</li>
+<li>continuous-action settings are relevant.</li>
+</ul>
+<p>The exact trade-offs depend heavily on the environment and algorithm variant.</p>
+<p>Do not treat “policy gradient” as one single algorithm.</p>
+<p>REINFORCE is the basic Monte-Carlo policy-gradient example.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-44" class="section-block">
+      <div class="section-header">
+        <span class="section-num">44</span>
+        <h2 class="section-heading">REINFORCE Limitation — High Variance</h2>
+      </div>
+      <div class="section-body">
+        <p>The update uses sampled returns.</p>
+<p>Different trajectories can produce very different:</p>
+<div class="formula-math">\[
+G_t.
+\]</div>
+<p>Therefore the gradient estimate can be noisy.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>trajectory A → high return
+trajectory B → low return
+trajectory C → medium return</pre></div>
+<p>The policy update changes according to the sampled outcomes.</p>
+<p>This explains why policy-gradient training can require many episodes.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-45" class="section-block">
+      <div class="section-header">
+        <span class="section-num">45</span>
+        <h2 class="section-heading">REINFORCE vs TD Learning</h2>
+      </div>
+      <div class="section-body">
+        <p>Q-learning:</p>
+<div class="ascii-box"><pre>bootstrapped target
+r + γ max Q(next)</pre></div>
+<p>REINFORCE:</p>
+<div class="ascii-box"><pre>sampled return
+G_t</pre></div>
+<p>Thus:</p>
+<div class="ascii-box"><pre>Q-learning → bootstrap from current value estimates
+
+REINFORCE → wait for sampled trajectory return</pre></div>
+<p>This is an important algorithmic comparison.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-46" class="section-block">
+      <div class="section-header">
+        <span class="section-num">46</span>
+        <h2 class="section-heading">Actor-Critic Bridge</h2>
+      </div>
+      <div class="section-body">
+        <p>A later improvement combines:</p>
+<div class="ascii-box"><pre>actor
+→ policy
+
+critic
+→ value estimate</pre></div>
+<p>The critic can estimate:</p>
+<div class="formula-math">\[
+V(s)
+\]</div>
+<p>and provide a baseline/advantage signal to the actor.</p>
+<p>Conceptually:</p>
+<div class="ascii-box"><pre>policy network
+   ↓
+action
+
+value network
+   ↓
+expected quality
+
+difference
+   ↓
+advantage
+   ↓
+better policy update</pre></div>
+<p>This is a bridge to more advanced RL algorithms.</p>
+<p>It is included here as a conceptual extension rather than a required full implementation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-47" class="section-block">
+      <div class="section-header">
+        <span class="section-num">47</span>
+        <h2 class="section-heading">Training Log</h2>
+      </div>
+      <div class="section-body">
+        <p>Record:</p>
+<div class="ascii-box"><pre>Environment:
+State representation:
+Action space:
+
+Policy architecture:
+Hidden size:
+Output dimension:
+
+Optimizer:
+Learning rate:
+
+Gamma:
+Return normalization:
+Baseline:
+Entropy coefficient:
+
+Episodes:
+
+Mean return:
+Evaluation success:
+Seed:</pre></div>
+<p>For RL, also record:</p>
+<div class="ascii-box"><pre>reward function
+episode length limit
+termination/truncation rules</pre></div>
+<p>These choices can materially affect results.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-48" class="section-block">
+      <div class="section-header">
+        <span class="section-num">48</span>
+        <h2 class="section-heading">RL Debugging Protocol</h2>
+      </div>
+      <div class="section-body">
+        <p>When REINFORCE appears not to learn:</p>
+<div class="ascii-box"><pre>1. Verify environment rewards.
+2. Verify action space.
+3. Verify logits shape.
+4. Verify probability distribution sums to 1.
+5. Verify sampled action is valid.
+6. Verify log_prob has gradient.
+7. Verify returns are correct.
+8. Verify the negative sign.
+9. Inspect gradient norms.
+10. Try a tiny deterministic environment.
+11. Try normalized returns.
+12. Run multiple seeds.</pre></div>
+<p>Do not immediately increase the network size.</p>
+<p>First verify the learning signal.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-49" class="section-block">
+      <div class="section-header">
+        <span class="section-num">49</span>
+        <h2 class="section-heading">Gradient Inspection</h2>
+      </div>
+      <div class="section-body">
+        <p>After:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">loss.backward()</code></pre></div>
+<p>inspect:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">for name, parameter in policy.named_parameters():
+    if parameter.grad is not None:
+        print(
+            name,
+            &quot;grad norm =&quot;,
+            parameter.grad.norm().item(),
+        )</code></pre></div>
+<p>Potential problems:</p>
+<div class="ascii-box"><pre>all zero</pre></div>
+<p>or:</p>
+<div class="ascii-box"><pre>extremely large</pre></div>
+<p>can indicate an implementation or optimization issue.</p>
+<p>But zero gradients can also be legitimate for particular parameter states.</p>
+<p>Interpret them with the surrounding computation.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-50" class="section-block">
+      <div class="section-header">
+        <span class="section-num">50</span>
+        <h2 class="section-heading">Practical Challenge</h2>
+      </div>
+      <div class="section-body">
+        <p>Implement:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">class ReinforceAgent:
+    def __init__(...):
+        ...
+
+    def select_action(...):
+        ...
+
+    def collect_episode(...):
+        ...
+
+    def compute_returns(...):
+        ...
+
+    def update(...):
+        ...
+
+    def evaluate(...):
+        ...</code></pre></div>
+<p>Requirements:</p>
+<ul>
+<li>PyTorch;</li>
+<li>categorical policy;</li>
+<li>log-probability recording;</li>
+<li>discounted returns;</li>
+<li>REINFORCE loss;</li>
+<li>reproducible seed;</li>
+<li>optional return normalization;</li>
+<li>evaluation without exploration noise;</li>
+<li>training history.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-51" class="section-block">
+      <div class="section-header">
+        <span class="section-num">51</span>
+        <h2 class="section-heading">Master Comparison Experiment</h2>
+      </div>
+      <div class="section-body">
+        <p>Build:</p>
+<div class="ascii-box"><pre>Agent A → Q-learning
+Agent B → REINFORCE</pre></div>
+<p>on the same small environment.</p>
+<p>Keep as much as possible identical:</p>
+<div class="ascii-box"><pre>environment
+reward
+episode limit
+training budget
+seed set
+evaluation protocol</pre></div>
+<p>Record:</p>
+<div class="ascii-box"><pre>mean return
+success rate
+training curve
+time
+parameter/table size</pre></div>
+<p>Then explain:</p>
+<blockquote>
+<p>Which algorithm learned faster, which was more stable, and why might the observed result depend on the environment?</p>
+</blockquote>
+<p>This turns the two Unit IV algorithms into a meaningful comparison instead of two isolated definitions.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-52" class="section-block">
+      <div class="section-header">
+        <span class="section-num">52</span>
+        <h2 class="section-heading">Exam Connection</h2>
+      </div>
+      <div class="section-body">
+        <h3>2-mark questions</h3>
+<ul>
+<li>Define policy gradient.</li>
+<li>What is a parameterized policy?</li>
+<li>What is REINFORCE?</li>
+<li>What is a policy network?</li>
+<li>What is a baseline?</li>
+<li>What is advantage?</li>
+</ul>
+<h3>5-mark question</h3>
+<blockquote>
+<p>Explain policy-gradient learning.</p>
+</blockquote>
+<p>Suggested answer structure:</p>
+<ol>
+<li>define policy;</li>
+<li>parameterize policy with \(\theta\);</li>
+<li>sample action;</li>
+<li>collect rewards;</li>
+<li>calculate return;</li>
+<li>use \(\log\pi_\theta(a|s)\);</li>
+<li>update parameters in the direction that increases expected return.</li>
+</ol>
+<h3>10-mark question</h3>
+<blockquote>
+<p>Explain the REINFORCE algorithm with mathematical formulation.</p>
+</blockquote>
+<p>Include:</p>
+<div class="formula-math">\[
+J(\theta)=E[G]
+\]</div>
+<div class="formula-math">\[
+\nabla_\theta J
+\approx
+\sum_t
+G_t
+\nabla_\theta\log\pi_\theta(a_t|s_t)
+\]</div>
+<p>and:</p>
+<div class="ascii-box"><pre>trajectory collection
+→ return calculation
+→ policy loss
+→ backpropagation
+→ optimizer step</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-53" class="section-block">
+      <div class="section-header">
+        <span class="section-num">53</span>
+        <h2 class="section-heading">Viva Questions</h2>
+      </div>
+      <div class="section-body">
+        <div class="confusion-box"><div class="confusion-box-title"><span>⚠️</span> University Lab Viva Trap & Runtime Gotcha</div>
+
+**Minus Sign in Policy Loss & Full Return Normalization:**
+1. PyTorch optimizers MINIMIZE losses. Since we want to MAXIMIZE expected return, policy loss MUST have a minus sign: `loss = -(log_prob * G).sum()`.
+2. Raw returns $G_t$ have high variance. Subtracting a baseline or standardizing returns `(G - G.mean()) / (G.std() + 1e-8)` stabilizes gradient variance and prevents training collapse!
+
+</div>
+
+<h3>Q1. What does a policy gradient learn?</h3>
+<p>The parameters of a policy that directly determines action probabilities.</p>
+<h3>Q2. What is REINFORCE?</h3>
+<p>A Monte-Carlo policy-gradient method using sampled returns to estimate the gradient.</p>
+<h3>Q3. Why do we use log probability?</h3>
+<p>The log-derivative form gives a practical likelihood-ratio/score-function gradient estimator.</p>
+<h3>Q4. Why is there a negative sign in the loss?</h3>
+<p>Deep-learning optimizers minimize losses, while policy-gradient objectives are naturally written as maximization of expected return.</p>
+<h3>Q5. Why sample actions?</h3>
+<p>A stochastic policy supports exploration and defines a probability distribution over actions.</p>
+<h3>Q6. What is a baseline?</h3>
+<p>A quantity subtracted from returns to reduce variance of the policy-gradient estimator under suitable conditions.</p>
+<h3>Q7. What is advantage?</h3>
+<p>A relative learning signal often written as:</p>
+<div class="formula-math">\[
+A(s,a)=Q(s,a)-V(s).
+\]</div>
+<p>In Monte-Carlo settings an estimate such as \(G_t-V(s_t)\) may be used.</p>
+<h3>Q8. How does Q-learning differ from REINFORCE?</h3>
+<p>Q-learning learns action values; REINFORCE directly optimizes policy parameters.</p>
+<h3>Q9. Why can REINFORCE be noisy?</h3>
+<p>Its gradient estimate depends on sampled trajectories and returns.</p>
+<h3>Q10. What is the actor-critic idea?</h3>
+<p>Use one model to represent the policy and another to estimate value/advantage for a lower-variance learning signal.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-54" class="section-block">
+      <div class="section-header">
+        <span class="section-num">54</span>
+        <h2 class="section-heading">One-Screen Formula Map</h2>
+      </div>
+      <div class="section-body">
+        <h3>Policy</h3>
+<div class="formula-math">\[
+\boxed{
+\pi_\theta(a|s)
+}
+\]</div>
+<h3>Return</h3>
+<div class="formula-math">\[
+\boxed{
+G_t=
+\sum_{k=0}^{T-t-1}
+\gamma^kR_{t+k}
+}
+\]</div>
+<h3>REINFORCE gradient</h3>
+<div class="formula-math">\[
+\boxed{
+\nabla_\theta J
+\approx
+\sum_t
+G_t
+\nabla_\theta
+\log\pi_\theta(a_t|s_t)
+}
+\]</div>
+<h3>Practical minimization loss</h3>
+<div class="formula-math">\[
+\boxed{
+L_{PG}
+=
+-
+\sum_t
+G_t
+\log\pi_\theta(a_t|s_t)
+}
+\]</div>
+<h3>Advantage-style signal</h3>
+<div class="formula-math">\[
+\boxed{
+A_t\approx G_t-V(s_t)
+}
+\]</div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-55" class="section-block">
+      <div class="section-header">
+        <span class="section-num">55</span>
+        <h2 class="section-heading">Connection to the Previous File</h2>
+      </div>
+      <div class="section-body">
+        <p>The Unit IV RL path is:</p>
+<div class="ascii-box"><pre>CODE-U4-01
+MDP
+ ↓
+returns
+ ↓
+Q-values
+ ↓
+Q-learning
+ ↓
+value-based control
+
+CODE-U4-02
+policy
+ ↓
+action distribution
+ ↓
+trajectory
+ ↓
+return
+ ↓
+policy gradient
+ ↓
+direct policy optimization</pre></div>
+<p>The important contrast is:</p>
+<div class="ascii-box"><pre>Q-learning
+→ value first
+
+REINFORCE
+→ policy first</pre></div>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-56" class="section-block">
+      <div class="section-header">
+        <span class="section-num">56</span>
+        <h2 class="section-heading">Connection to Deep Learning</h2>
+      </div>
+      <div class="section-body">
+        <p>Policy gradients combine two worlds already learned:</p>
+<div class="ascii-box"><pre>Unit III
+neural network
+   ↓
+parameters
+   ↓
+gradient
+   ↓
+optimizer</pre></div>
+<p>with:</p>
+<div class="ascii-box"><pre>Unit IV
+state
+   ↓
+action
+   ↓
+reward
+   ↓
+return</pre></div>
+<p>Together:</p>
+<div class="ascii-box"><pre>state
+ ↓
+neural policy
+ ↓
+action distribution
+ ↓
+trajectory
+ ↓
+reward
+ ↓
+return
+ ↓
+policy loss
+ ↓
+backpropagation
+ ↓
+gradient optimizer</pre></div>
+<p>This is a major conceptual bridge between deep learning and reinforcement learning.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-57" class="section-block">
+      <div class="section-header">
+        <span class="section-num">57</span>
+        <h2 class="section-heading">Mastery Gate</h2>
+      </div>
+      <div class="section-body">
+        <p>Do not move forward until you can:</p>
+<ul>
+<li>[ ] distinguish value-based and policy-based RL;</li>
+<li>[ ] define a parameterized policy;</li>
+<li>[ ] explain stochastic action selection;</li>
+<li>[ ] calculate discounted returns;</li>
+<li>[ ] explain the log-probability term;</li>
+<li>[ ] write the REINFORCE gradient;</li>
+<li>[ ] explain the negative-loss conversion;</li>
+<li>[ ] implement a categorical policy;</li>
+<li>[ ] collect a trajectory;</li>
+<li>[ ] calculate returns;</li>
+<li>[ ] implement REINFORCE;</li>
+<li>[ ] evaluate greedily;</li>
+<li>[ ] explain high variance;</li>
+<li>[ ] explain baseline/advantage intuition;</li>
+<li>[ ] compare Q-learning and REINFORCE.</li>
+</ul>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-58" class="section-block">
+      <div class="section-header">
+        <span class="section-num">58</span>
+        <h2 class="section-heading">Source Notes</h2>
+      </div>
+      <div class="section-body">
+        <h2>Official course boundary</h2>
+<p>The DSC-14 syllabus explicitly includes <strong>Policy Gradients</strong> in Unit IV reinforcement learning.</p>
+<h2>Supplied course material</h2>
+<p>The stored Main/Exam Book material defines the policy-gradient path as:</p>
+<div class="ascii-box"><pre>policy
+ ↓
+action probability
+ ↓
+trajectory
+ ↓
+return
+ ↓
+gradient
+ ↓
+policy update</pre></div>
+<p>and emphasizes the distinction between learning values and learning a policy directly.</p>
+<h2>Structured external source</h2>
+<p>The master learning guide identifies <strong>NPTEL Reinforcement Learning (IIT Madras)</strong> as the structured source for the Unit IV RL progression.</p>
+<h2>Current framework reference</h2>
+<p>The current PyTorch <code>torch.distributions</code> documentation explains score-function estimators and gives a REINFORCE pattern based on:</p>
+<div class="code-block"><div class="code-header"><span class="code-lang">PYTHON</span><button class="code-copy" title="Copy code" aria-label="Copy code">📋 Copy</button></div><pre><code class="language-python">Categorical(...)
+sample()
+log_prob()
+loss.backward()</code></pre></div>
+<p>It also distinguishes this score-function estimator from pathwise/reparameterization-based estimators. turn114329search0cite</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-59" class="section-block">
+      <div class="section-header">
+        <span class="section-num">59</span>
+        <h2 class="section-heading">Expansion Boundary</h2>
+      </div>
+      <div class="section-body">
+        <p>The following are coding-book expansion:</p>
+<ul>
+<li>NumPy return utilities;</li>
+<li>PyTorch policy network;</li>
+<li>categorical action sampling;</li>
+<li>custom GridWorld integration;</li>
+<li>REINFORCE training loop;</li>
+<li>return normalization experiment;</li>
+<li>baseline/advantage bridge;</li>
+<li>entropy preview;</li>
+<li>multi-seed comparison;</li>
+<li>Q-learning vs REINFORCE experiment.</li>
+</ul>
+<p>These additions operationalize the syllabus concept without claiming that every implementation detail appears in the supplied course notes.</p>
+<hr />
+      </div>
+    </section>
+
+    <section id="s-60" class="section-block">
+      <div class="section-header">
+        <span class="section-num">60</span>
+        <h2 class="section-heading">Status</h2>
+      </div>
+      <div class="section-body">
+        <p><strong><code>CODE-U4-02</code> — COMPLETE</strong></p>
+      </div>
+    </section>
+
+    <!-- MODULE NAVIGATION FOOTER -->
+    <nav class="chapter-nav-footer">
+      <a href="code-u4-01-mdp-q-learning.html" class="nav-btn prev-chapter">
+        <span class="nav-dir">Previous</span>
+        <span class="nav-title">← Unit 4 Lab 01 — Q-Learning</span>
+      </a>
+      <a href="index.html" class="nav-btn" style="text-align:center;">
+        <span class="nav-dir">Hub</span>
+        <span class="nav-title">💻 Coding Index</span>
+      </a>
+      <a href="code-u4-03-nlp-text-classification.html" class="nav-btn next-chapter">
+        <span class="nav-dir">Next</span>
+        <span class="nav-title">Next: Unit 4 Lab 03 — NLP Pipeline →</span>
+      </a>
+    </nav>
+  </main>
+</div>
+
+<!-- SEARCH MODAL -->
+<div id="search-modal" role="dialog" aria-modal="true" aria-label="Search content">
+  <div class="search-backdrop"></div>
+  <div class="search-box">
+    <div class="search-input-wrap"><span class="s-icon">🔍</span><input id="search-input" type="text" placeholder="Search lab implementations, functions, algorithms…" autocomplete="off"></div>
+    <div id="search-results"></div>
+    <div class="search-hint"><span><kbd>↵</kbd> to navigate</span><span><kbd>Esc</kbd> to close</span><span><kbd>Ctrl+K</kbd> to open</span></div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav id="mobile-nav">
+  <button class="mobile-nav-btn" onclick="SidebarManager?.toggle()"><span class="icon">☰</span>Menu</button>
+  <a href="index.html" class="mobile-nav-btn"><span class="icon">💻</span>Lab Hub</a>
+  <a href="code-u4-02-policy-gradients-reinforce.html" class="mobile-nav-btn active"><span class="icon">📖</span>CODE-U4-02</a>
+  <button class="mobile-nav-btn" onclick="SearchManager?.open()"><span class="icon">🔍</span>Search</button>
+</nav>
+
+<div id="toast-container"></div>
+
+<!-- ENGINE SCRIPTS -->
+<script src="../assets/js/state.js"></script>
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/modes.js"></script>
+<script src="../assets/js/tts.js"></script>
+<script src="../assets/js/timer-settings.js"></script>
+<script src="../assets/js/timer.js"></script>
+<script src="../assets/js/timer-analytics.js"></script>
+<script src="../assets/js/timer-notifications.js"></script>
+<script src="../assets/js/timer-ui.js"></script>
+<script src="../assets/js/print.js"></script>
+<script src="../assets/js/notes.js"></script>
+<script src="../assets/js/glossary.js"></script>
+
+<!-- MATHJAX CONFIGURATION -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<!-- MERMAID INITIALIZATION -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light' && document.documentElement.getAttribute('data-theme') !== 'paper';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        background: isDark ? '#000000' : '#F6F2E9',
+        primaryColor: isDark ? '#11161D' : '#EDE8DC',
+        primaryTextColor: isDark ? '#F0EDE6' : '#172433',
+        primaryBorderColor: isDark ? '#6AA5E0' : '#17365D',
+        lineColor: isDark ? '#6AA5E0' : '#17365D'
+      }
+    });
+  });
+</script>
+</body>
+</html>

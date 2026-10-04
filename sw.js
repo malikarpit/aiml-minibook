@@ -3,11 +3,12 @@
  * Network-First for Navigation (always fresh HTML) + Cache-First for static assets
  */
 
-const CACHE_NAME    = 'aiml-minibook-v7';
-const RUNTIME_CACHE = 'aiml-minibook-runtime-v7';
+const CACHE_NAME    = 'aiml-minibook-v8';
+const RUNTIME_CACHE = 'aiml-minibook-runtime-v8';
 const ASSETS = [
   './',
   './index.html',
+  './master-audit.html',
   './progress.html',
   './exams/mock-exam.html',
   './exams/unit-quiz.html',
@@ -27,7 +28,19 @@ const ASSETS = [
   './coding/code-u2-05-classification-metrics-roc.html',
   './coding/code-u2-06-ridge-lasso-regularization.html',
   './coding/code-u2-07-ml-evaluation-comparison.html',
+  './coding/code-u2-08-knn-svm-practical-comparison.html',
   './coding/code-u3-01-neuron-perceptron.html',
+  './coding/code-u3-02-mlp-forward-propagation.html',
+  './coding/code-u3-03-backpropagation-scratch.html',
+  './coding/code-u3-04-cnn-image-classification.html',
+  './coding/code-u3-05-rnn-lstm-sequence-modelling.html',
+  './coding/code-u4-01-mdp-q-learning.html',
+  './coding/code-u4-02-policy-gradients-reinforce.html',
+  './coding/code-u4-03-nlp-text-classification.html',
+  './coding/code-u4-04-autoencoders-pytorch.html',
+  './coding/code-u4-05-gans-pytorch.html',
+  './coding/code-23-debugging-testing-reproducibility.html',
+  './coding/code-24-coding-capstone-checklist.html',
   './math/index.html',
   './math/m01-mathematical-notation.html',
   './math/m02-algebra-foundations.html',
