@@ -67,7 +67,7 @@
     autoInit: true,
     autoSaveSession: true,
     keyboardShortcut: true,
-    clickableStart: true,
+    clickableStart: false,
     enableMutationProtection: true,
     enableHighlighting: true,
     pronunciationDictionary: {},
@@ -1207,96 +1207,6 @@
         btn.setAttribute('aria-label', (isPlaying && !isPaused) ? 'Pause text to speech' : (isPaused ? 'Resume text to speech' : 'Play text to speech'));
       }
       if (panel) panel.classList.toggle('visible', isPlaying || isPaused);
-    });
-
-    // 10. Inline click-to-read on any paragraph / heading / list item
-    // Adds a subtle 🔊 cursor hint on hover; click starts reading from that element.
-    const READABLE = 'p, li, h1, h2, h3, h4, h5, h6, blockquote, td, th';
-    const SKIP_INSIDE = '#sidebar, nav, header, #tts-panel, #pomodoro, #mode-panel, #search-modal, #mobile-nav, footer';
-    let activeEl = null;
-
-    function _isSkipped(el) {
-      return el.closest(SKIP_INSIDE) !== null;
-    }
-
-    // Inject a tiny tooltip style once
-    if (!document.getElementById('tts-inline-style')) {
-      const s = document.createElement('style');
-      s.id = 'tts-inline-style';
-      s.textContent = `
-        .tts-readable-hover { outline: 1px dashed color-mix(in srgb, var(--em-accent,#46645f) 55%, transparent) !important; border-radius: 4px; cursor: pointer; }
-        .tts-reading-active  { outline: 2px solid color-mix(in srgb, var(--em-accent,#46645f) 72%, transparent) !important; border-radius: 4px; background: var(--em-accent-soft,#e7eeec) !important; }
-        .tts-inline-tip {
-          position: fixed; bottom: 88px; right: 24px; background: var(--em-surface-1,#fefdfc);
-          color: var(--em-text,#252624); border: 1px solid var(--em-border,#d6d3cb); font-size: 11px; padding: 4px 10px; border-radius: var(--em-radius-sm,6px);
-          pointer-events: none; opacity: 0; transition: opacity 160ms ease; z-index: 9999;
-        }
-        .tts-inline-tip.show { opacity: 1; }
-      `;
-      document.head.appendChild(s);
-    }
-    const tip = document.createElement('div');
-    tip.className = 'tts-inline-tip';
-    tip.textContent = 'Read from here';
-    document.body.appendChild(tip);
-
-    document.addEventListener('mouseover', (e) => {
-      const el = e.target.closest(READABLE);
-      if (!el || _isSkipped(el)) { tip.classList.remove('show'); return; }
-      if (activeEl && activeEl !== el) activeEl.classList.remove('tts-readable-hover');
-      el.classList.add('tts-readable-hover');
-      activeEl = el;
-      tip.classList.add('show');
-    });
-    document.addEventListener('mouseout', (e) => {
-      const el = e.target.closest(READABLE);
-      if (el) { el.classList.remove('tts-readable-hover'); tip.classList.remove('show'); }
-    });
-    document.addEventListener('click', (e) => {
-      const el = e.target.closest(READABLE);
-      if (!el || _isSkipped(el)) return;
-      // Skip if clicking an interactive child (link, button, input)
-      if (e.target.closest('a, button, input, select, label, [role="button"]')) return;
-      const tag = el.tagName.toLowerCase();
-      const state = manager.getState();
-      // Headings need Ctrl/Cmd (they may contain anchor links)
-      // Pure content elements (p, li, blockquote, td, th) always trigger on single click
-      const isContent = ['p','li','blockquote','td','th'].includes(tag);
-      const isHeadingWithModifier = /^h[1-6]$/.test(tag) && (e.ctrlKey || e.metaKey);
-      const isTTSActive = state === STATES.PLAYING || state === STATES.PAUSED;
-      if (!isContent && !isHeadingWithModifier && !isTTSActive) return;
-      e.preventDefault();
-      document.querySelectorAll('.tts-reading-active').forEach(x => x.classList.remove('tts-reading-active'));
-      el.classList.add('tts-reading-active');
-      // Build text from this element to end of its section
-      const container = el.closest('[data-search-section]') || el.closest('section') || el.closest('article') || el.parentElement;
-      const allReadable = container
-        ? [...container.querySelectorAll(READABLE)].filter(x => !_isSkipped(x))
-        : [el];
-      const startIdx = allReadable.indexOf(el);
-      const subset = startIdx >= 0 ? allReadable.slice(startIdx) : [el];
-      const text = subset.map(e2 => {
-        const t2 = e2.tagName.toLowerCase();
-        const content = e2.textContent.trim();
-        if (!content) return '';
-        if (/^h[1-6]$/.test(t2)) return `Section: ${content}.`;
-        return content;
-      }).filter(Boolean).join('\n');
-      manager.speak(text, { source: 'inline-click', label: el.textContent.trim().replace(/\s+/g, ' ').slice(0, 40) });
-      manager.engine.addEventListener('queueend', () => el.classList.remove('tts-reading-active'), { once: true });
-    });
-
-    // 11. Double-click any text to read just that element (no modifier key needed)
-    document.addEventListener('dblclick', (e) => {
-      const el = e.target.closest(READABLE);
-      if (!el || _isSkipped(el)) return;
-      e.preventDefault();
-      document.querySelectorAll('.tts-reading-active').forEach(x => x.classList.remove('tts-reading-active'));
-      el.classList.add('tts-reading-active');
-      const tag = el.tagName.toLowerCase();
-      const text = /^h[1-6]$/.test(tag) ? `Section: ${el.textContent.trim()}` : el.textContent.trim();
-      manager.speak(text, { source: 'dblclick', label: el.textContent.trim().replace(/\s+/g, ' ').slice(0, 40) });
-      manager.engine.addEventListener('queueend', () => el.classList.remove('tts-reading-active'), { once: true });
     });
   });
 })(window);
