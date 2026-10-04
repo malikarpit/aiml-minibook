@@ -164,14 +164,13 @@ A self-contained mathematical depth layer that deepens derivations, vector geome
 
 ---
 
-## ⚖️ Integrated System Index & Gap Audit (MASTER-00)
+## ⚖️ Engineering Specifications & Release Verification
 
-The MiniBook includes a dedicated system control center: **[MASTER-00 — AI/ML Integrated System Index & Gap Audit](master-audit.html)**:
-- **100% Curriculum Completeness Audit:** 50 Main Book chapters, 25 Math modules, 26 Coding modules, and 7 Exam decks verified with 0 content gaps.
+The codebase includes an internal engineering verification and quality specification suite (`MASTER-00` through `MASTER-05` in `master/sources/`):
+- **100% Curriculum Completeness Audit:** 54 Main Book chapters, 25 Math modules, 26 Coding modules, and 4 Exam suites verified with 0 content gaps.
 - **Syllabus-to-Practical Coverage Matrix:** BFS/DFS, Decision Tree, k-NN, SVM, Confusion Matrix, Model Comparison, Neural Networks, CNN, Q-Learning, NLP, and GANs verified against DU DSC-14 requirements.
 - **Universal 8-Step Practical Explanation Chain:** Input → Representation → Algorithm → Parameters → Loss/Reward → Training/Update → Output → Evaluation.
-- **Master Knowledge Graph & Prerequisite Spine:** Visual dependency graph spanning Classical AI, Supervised Learning, Deep Learning, and Reinforcement Learning.
-- **Interactive Global QA Checklists:** Content, Mathematics, Coding, Examination, and Web Application checklists persisted in local browser storage.
+- **Master Knowledge Graph & Prerequisite Spine:** Dependency graph spanning Classical AI, Supervised Learning, Deep Learning, and Reinforcement Learning.
 - **Canonical ID Architecture:** Structured ID scheme (`K-`, `M-`, `CL-`, `E-`, `F-`, `D-`, `RS-`) unifying all layers into a single stable graph.
 
 ---
