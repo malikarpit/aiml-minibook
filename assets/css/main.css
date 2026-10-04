@@ -720,6 +720,12 @@ hr { border: 0; border-top: 1px solid var(--em-border); margin: var(--em-space-8
   padding: var(--em-space-12) clamp(20px, 4vw, 48px) 120px;
   box-sizing: border-box;
 }
+.deck-container,
+.exam-container,
+.quiz-container,
+.paper-container {
+  box-sizing: border-box;
+}
 /* Prose measure; wide objects (figures, tables, matrices) may use the full shell. */
 .content-inner > section,
 .chapter-content > section,
@@ -752,10 +758,14 @@ hr { border: 0; border-top: 1px solid var(--em-border); margin: var(--em-space-8
 }
 
 /* Section Framing & Headers Across All Layers */
+[id],
+.section-block,
+.content-section {
+  scroll-margin-top: calc(var(--header-h) + 24px);
+}
 .section-block,
 .content-section {
   margin-bottom: var(--em-space-12);
-  scroll-margin-top: calc(var(--header-h) + 24px);
   position: relative;
 }
 
