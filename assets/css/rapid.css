@@ -1,0 +1,832 @@
+/*
+ * AI & MACHINE LEARNING MINIBOOK — RAPID STUDY LAYER
+ * rapid.css — Styling for Learn Fast & Last-Minute Revision Hubs
+ *
+ * Implements RAPID-00 & RAPID-01 Specifications:
+ *   - D3 Rapid Learning Cards
+ *   - D4 Recall & Cheat Sheet Strips
+ *   - Time Presets: 3-4 Days, 2 Days, 1 Day, Tonight
+ *   - Last-Minute Modes: Read, Recall (Flashcards), Questions
+ *   - Top bar quick pills (.rapid-pill-fast, .rapid-pill-rev)
+ */
+
+/* ─────────────────────────────────────────────────────────────────────
+   01 · TOP BAR QUICK-ACTION PILLS (Header Integration)
+   ───────────────────────────────────────────────────────────────────── */
+.rapid-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  height: 32px;
+  border-radius: var(--em-radius-full, 9999px);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-decoration: none;
+  line-height: 1;
+  transition: all var(--em-motion-fast, 150ms) var(--em-ease, cubic-bezier(0.4, 0, 0.2, 1));
+  white-space: nowrap;
+}
+
+.rapid-pill-fast {
+  background: rgba(30, 144, 255, 0.12);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+.rapid-pill-fast:hover {
+  background: rgba(30, 144, 255, 0.25);
+  border-color: #38bdf8;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(56, 189, 248, 0.25);
+}
+
+.rapid-pill-rev {
+  background: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+  border: 1px solid rgba(248, 113, 113, 0.35);
+}
+.rapid-pill-rev:hover {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: #f87171;
+  color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(248, 113, 113, 0.25);
+}
+
+/* Light Theme overrides for pills */
+[data-theme="light"] .rapid-pill-fast {
+  background: rgba(2, 132, 199, 0.10);
+  color: #0284c7;
+  border-color: rgba(2, 132, 199, 0.35);
+}
+[data-theme="light"] .rapid-pill-rev {
+  background: rgba(220, 38, 38, 0.10);
+  color: #dc2626;
+  border-color: rgba(220, 38, 38, 0.35);
+}
+
+@media (max-width: 680px) {
+  .rapid-pill-btn .pill-text {
+    display: none;
+  }
+  .rapid-pill-btn {
+    padding: 0 8px;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   02 · RAPID HERO & COCKPIT HEADER
+   ───────────────────────────────────────────────────────────────────── */
+.rapid-hero {
+  background: linear-gradient(135deg, var(--em-surface-1) 0%, var(--em-surface-2) 100%);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-lg, 12px);
+  padding: var(--em-space-6, 24px) var(--em-space-6, 24px);
+  margin-bottom: var(--em-space-6, 24px);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--sh-md, 0 4px 12px rgba(0,0,0,0.1));
+}
+
+.rapid-hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #38bdf8 0%, #a855f7 50%, #f43f5e 100%);
+}
+
+.rapid-badge-strip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.rapid-mode-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 3px 9px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.badge-fast {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+.badge-rev {
+  background: rgba(244, 63, 94, 0.15);
+  color: #f43f5e;
+  border: 1px solid rgba(244, 63, 94, 0.35);
+}
+
+.rapid-title {
+  font-family: var(--font-display, inherit);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--em-text);
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+
+.rapid-subtitle {
+  font-size: 1.05rem;
+  color: var(--em-text-secondary);
+  line-height: 1.55;
+  max-width: 75ch;
+  margin-bottom: 20px;
+}
+
+/* Stats Ribbon */
+.rapid-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--em-border);
+}
+
+.rapid-stat-item {
+  background: var(--em-surface-1);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-md, 8px);
+  padding: 10px 14px;
+}
+
+.rapid-stat-num {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--em-text);
+  line-height: 1;
+  margin-bottom: 4px;
+  font-family: var(--font-mono, monospace);
+}
+
+.rapid-stat-label {
+  font-size: 0.74rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--em-text-secondary);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   03 · TIME PRESETS BAR (3-4 Days, 2 Days, 1 Day, Tonight)
+   ───────────────────────────────────────────────────────────────────── */
+.time-control-box {
+  background: var(--em-surface-1);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-md, 8px);
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.time-control-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.time-control-title {
+  font-size: 0.84rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--em-text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.time-status-hint {
+  font-size: 0.80rem;
+  color: var(--em-text-secondary);
+}
+
+.time-presets-strip {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.time-preset-pill {
+  padding: 8px 16px;
+  border-radius: var(--em-radius-sm, 6px);
+  background: var(--em-surface-2);
+  border: 1px solid var(--em-border);
+  color: var(--em-text-secondary);
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--em-motion-fast, 150ms) var(--em-ease);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.time-preset-pill:hover {
+  background: var(--em-surface-3);
+  color: var(--em-text);
+  border-color: var(--em-border-strong);
+}
+
+.time-preset-pill.active {
+  background: var(--em-accent);
+  color: #ffffff;
+  border-color: var(--em-accent);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   04 · UNIT & TOPIC FILTER BAR
+   ───────────────────────────────────────────────────────────────────── */
+.rapid-filters-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter-row-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--em-text-secondary);
+  min-width: 60px;
+}
+
+.filter-chip-group {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-chip {
+  padding: 5px 12px;
+  border-radius: var(--em-radius-full, 9999px);
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: var(--em-surface-1);
+  border: 1px solid var(--em-border);
+  color: var(--em-text-secondary);
+  cursor: pointer;
+  transition: all var(--em-motion-fast, 150ms) var(--em-ease);
+}
+
+.filter-chip:hover {
+  background: var(--em-surface-2);
+  color: var(--em-text);
+  border-color: var(--em-border-strong);
+}
+
+.filter-chip.active {
+  background: var(--em-surface-3);
+  border-color: var(--em-accent);
+  color: var(--em-accent);
+  font-weight: 700;
+}
+
+/* Quick Search / Filter in rapid bar */
+.rapid-search-input {
+  flex: 1;
+  min-width: 220px;
+  max-width: 360px;
+  padding: 6px 12px;
+  border-radius: var(--em-radius-sm, 6px);
+  background: var(--em-surface-1);
+  border: 1px solid var(--em-border);
+  color: var(--em-text);
+  font-size: 0.84rem;
+  outline: none;
+  transition: border-color var(--em-motion-fast, 150ms) var(--em-ease);
+}
+.rapid-search-input:focus {
+  border-color: var(--em-accent);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   05 · LAST-MINUTE MODE SWITCHER (Read / Recall / Questions)
+   ───────────────────────────────────────────────────────────────────── */
+.rev-mode-switch-box {
+  background: var(--em-surface-2);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-md, 8px);
+  padding: 6px;
+  display: inline-flex;
+  gap: 4px;
+  margin-bottom: 24px;
+}
+
+.rev-mode-btn {
+  padding: 8px 18px;
+  border-radius: var(--em-radius-sm, 6px);
+  font-size: 0.86rem;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  color: var(--em-text-secondary);
+  cursor: pointer;
+  transition: all var(--em-motion-fast, 150ms) var(--em-ease);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rev-mode-btn:hover {
+  color: var(--em-text);
+}
+
+.rev-mode-btn.active {
+  background: var(--em-surface-1);
+  color: var(--em-text);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+  font-weight: 700;
+}
+
+/* Reveal All / Hide All bar */
+.reveal-controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding: 8px 14px;
+  background: var(--em-surface-1);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-sm, 6px);
+}
+
+.reveal-controls-btn {
+  background: var(--em-surface-2);
+  border: 1px solid var(--em-border);
+  color: var(--em-text);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: var(--em-radius-sm, 6px);
+  cursor: pointer;
+  transition: background var(--em-motion-fast, 150ms) var(--em-ease);
+}
+.reveal-controls-btn:hover {
+  background: var(--em-surface-3);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   06 · D3 LEARN FAST TOPIC CARD
+   ───────────────────────────────────────────────────────────────────── */
+.lf-card {
+  background: var(--em-surface-1);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-md, 8px);
+  padding: var(--em-space-5, 20px);
+  margin-bottom: 24px;
+  transition: border-color var(--em-motion-fast, 150ms) var(--em-ease),
+              box-shadow var(--em-motion-fast, 150ms) var(--em-ease);
+  position: relative;
+}
+
+.lf-card:hover {
+  border-color: var(--em-border-strong);
+  box-shadow: var(--sh-md, 0 4px 12px rgba(0,0,0,0.1));
+}
+
+.lf-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--em-border);
+  flex-wrap: wrap;
+}
+
+.lf-card-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lf-topic-num {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--em-accent);
+}
+
+.lf-topic-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--em-text);
+  line-height: 1.25;
+  margin: 0;
+}
+
+.lf-card-badges {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.priority-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+.priority-p1 {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+.priority-p2 {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+.tag-badge {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--em-surface-2);
+  color: var(--em-text-secondary);
+  border: 1px solid var(--em-border);
+}
+
+/* Card Section Blocks */
+.lf-block {
+  margin: 14px 0;
+}
+
+.lf-block-label {
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--em-text-secondary);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lf-def-text {
+  font-size: 0.96rem;
+  line-height: 1.6;
+  color: var(--em-text);
+  font-weight: 500;
+}
+
+/* Intuition Box in Card */
+.lf-intuition {
+  background: rgba(56, 189, 248, 0.08);
+  border-left: 3px solid #38bdf8;
+  padding: 10px 14px;
+  border-radius: 0 var(--em-radius-sm, 6px) var(--em-radius-sm, 6px) 0;
+  font-size: 0.90rem;
+  line-height: 1.55;
+  color: var(--em-text);
+  margin: 12px 0;
+}
+
+/* Core Points List */
+.lf-points-list {
+  margin: 8px 0;
+  padding-left: 20px;
+  font-size: 0.90rem;
+  line-height: 1.6;
+  color: var(--em-text);
+}
+.lf-points-list li {
+  margin-bottom: 5px;
+}
+
+/* Formula Highlight in Card */
+.lf-formula {
+  background: var(--em-surface-2);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-sm, 6px);
+  padding: 10px 14px;
+  margin: 10px 0;
+  text-align: center;
+}
+
+/* Card Footer / Deep Bridges */
+.lf-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  margin-top: 16px;
+  border-top: 1px dashed var(--em-border);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.lf-exam-ask {
+  font-size: 0.82rem;
+  color: var(--em-text-secondary);
+}
+.lf-exam-ask strong {
+  color: var(--em-text);
+}
+
+.lf-bridge-link {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--em-accent);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.lf-bridge-link:hover {
+  text-decoration: underline;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   07 · D4 LAST-MINUTE REVISION STRIP & RECALL CARDS
+   ───────────────────────────────────────────────────────────────────── */
+.rev-strip {
+  background: var(--em-surface-1);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-md, 8px);
+  padding: 14px 18px;
+  margin-bottom: 14px;
+  transition: all var(--em-motion-fast, 150ms) var(--em-ease);
+}
+
+.rev-strip:hover {
+  border-color: var(--em-border-strong);
+}
+
+.rev-strip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.rev-strip-title {
+  font-size: 1.10rem;
+  font-weight: 700;
+  color: var(--em-text);
+  margin: 0;
+}
+
+.rev-triggers {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.rev-trigger-pill {
+  font-size: 0.70rem;
+  font-family: var(--font-mono, monospace);
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--em-surface-2);
+  color: var(--em-text-secondary);
+  border: 1px solid var(--em-border);
+}
+
+/* Active Recall Interactive Card */
+.recall-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 8px 0;
+}
+
+.recall-item {
+  background: var(--em-surface-2);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-sm, 6px);
+  overflow: hidden;
+  transition: border-color var(--em-motion-fast, 150ms) var(--em-ease);
+}
+
+.recall-prompt-bar {
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--em-text);
+  background: var(--em-surface-2);
+}
+
+.recall-prompt-bar:hover {
+  background: var(--em-surface-3);
+}
+
+.recall-reveal-btn {
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--em-surface-1);
+  border: 1px solid var(--em-border);
+  color: var(--em-accent);
+  transition: all var(--em-motion-fast, 150ms) var(--em-ease);
+}
+
+.recall-answer-box {
+  padding: 12px 14px;
+  border-top: 1px solid var(--em-border);
+  background: var(--em-surface-1);
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--em-text);
+  display: none;
+}
+
+.recall-item.revealed .recall-answer-box {
+  display: block;
+}
+
+.recall-item.revealed .recall-reveal-btn {
+  background: var(--em-accent);
+  color: #ffffff;
+  border-color: var(--em-accent);
+}
+
+/* 60-Second Speed Run Box */
+.speedrun-box {
+  background: var(--em-surface-2);
+  border: 1px solid var(--em-border);
+  border-left: 4px solid var(--em-accent);
+  border-radius: var(--em-radius-md, 8px);
+  padding: 14px 18px;
+  margin-bottom: 24px;
+}
+
+.speedrun-title {
+  font-size: 0.86rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--em-accent);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.speedrun-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 8px 16px;
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.speedrun-item {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.speedrun-key {
+  font-weight: 700;
+  color: var(--em-text);
+  white-space: nowrap;
+}
+
+.speedrun-arrow {
+  color: var(--em-accent);
+}
+
+.speedrun-val {
+  color: var(--em-text-secondary);
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   08 · QUESTIONS SKELETON MODE
+   ───────────────────────────────────────────────────────────────────── */
+.q-skeleton-card {
+  background: var(--em-surface-1);
+  border: 1px solid var(--em-border);
+  border-radius: var(--em-radius-md, 8px);
+  padding: 14px 18px;
+  margin-bottom: 16px;
+}
+
+.q-skeleton-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.q-skeleton-title {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--em-text);
+}
+
+.q-marks-pill {
+  font-size: 0.70rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  background: rgba(168, 85, 247, 0.15);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.35);
+}
+
+.q-steps-list {
+  padding-left: 20px;
+  font-size: 0.86rem;
+  line-height: 1.6;
+  color: var(--em-text);
+  margin: 6px 0;
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   09 · PRINT / EMERGENCY CHEAT-SHEET STYLES
+   ───────────────────────────────────────────────────────────────────── */
+@media print {
+  #main-header, #sidebar, #sidebar-overlay, .rapid-filters-wrap,
+  .time-control-box, .rev-mode-switch-box, .reveal-controls-bar,
+  .rapid-pill-btn, .lf-card-footer, #toast-container {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 9pt !important;
+  }
+
+  .content-inner {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .rapid-hero {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 0 10px 0 !important;
+    margin-bottom: 10px !important;
+  }
+
+  .lf-card, .rev-strip, .q-skeleton-card {
+    page-break-inside: avoid;
+    border: 1px solid #cccccc !important;
+    box-shadow: none !important;
+    margin-bottom: 10px !important;
+    padding: 8px 12px !important;
+  }
+
+  /* Force all recall answers open when printing! */
+  .recall-answer-box {
+    display: block !important;
+    border-top: 1px solid #eee !important;
+  }
+}
