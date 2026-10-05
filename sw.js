@@ -3,8 +3,8 @@
  * Network-First for Navigation (always fresh HTML) + Cache-First for static assets
  */
 
-const CACHE_NAME    = 'aiml-minibook-v10';
-const RUNTIME_CACHE = 'aiml-minibook-runtime-v10';
+const CACHE_NAME    = 'aiml-minibook-v11';
+const RUNTIME_CACHE = 'aiml-minibook-runtime-v11';
 const ASSETS = [
   './',
   './index.html',
